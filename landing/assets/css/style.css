@@ -754,6 +754,7 @@ h6 {
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  padding: 1rem 0.5rem 2rem;
 }
 
 .courses-carousel::-webkit-scrollbar {

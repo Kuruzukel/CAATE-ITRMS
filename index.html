@@ -582,6 +582,24 @@
         border: 1px solid rgba(54, 145, 191, 0.2);
       }
 
+      .main-hero-lower-curl {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        display: block;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+      }
+
+      .main-hero-lower-curl svg {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
       /* ==================== About Section (Light) ==================== */
       .about {
         padding: 6rem 0;
@@ -707,8 +725,45 @@
           var(--darker-azure) 100%
         );
         position: relative;
-        overflow: hidden;
+        overflow: visible;
         scroll-margin-top: 100px;
+      }
+
+      .main-courses-upper-curl {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        display: block;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        transform: scaleY(-1);
+      }
+
+      .main-courses-upper-curl svg {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
+      .main-courses-lower-curl {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        display: block;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+      }
+
+      .main-courses-lower-curl svg {
+        display: block;
+        width: 100%;
+        height: 100%;
       }
 
       .courses-wrapper {
@@ -1514,6 +1569,13 @@
 
         </div>
 
+
+      <div class="main-hero-lower-curl">
+          <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
+            style="display: block; width: 100%; height: 60px">
+            <path d="M0,60 Q180,100 360,60 T720,60 T1080,60 T1440,60 L1440,120 L0,120 Z" fill="#163856" opacity="0.5" />
+            <path d="M0,80 Q180,40 360,80 T720,80 T1080,80 T1440,80 L1440,120 L0,120 Z" fill="#12395a" opacity="0.7" />
+            <path d="M0,100 Q180,60 360,100 T720,100 T1080,100 T1440,100 L1440,120 L0,120 Z" fill="#FFFFFF" />
     </section>
 
     <!-- About Section -->
@@ -1589,6 +1651,14 @@
 
     <!-- Courses Section -->
     <section class="courses dark-section" id="courses">
+      <div class="main-courses-upper-curl">
+        <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
+          style="display: block; width: 100%; height: 60px">
+          <path d="M0,60 Q180,100 360,60 T720,60 T1080,60 T1440,60 L1440,120 L0,120 Z" fill="#ffffff" opacity="0.5" />
+          <path d="M0,80 Q180,40 360,80 T720,80 T1080,80 T1440,80 L1440,120 L0,120 Z" fill="#ffffff" opacity="0.7" />
+          <path d="M0,100 Q180,60 360,100 T720,100 T1080,100 T1440,100 L1440,120 L0,120 Z" fill="#ffffff" />
+        </svg>
+      </div>
       <div class="container">
         <h2 class="section-title section-title-light reveal">
           Our Programs & Courses
@@ -1946,6 +2016,14 @@
             </button>
           </div>
         </div>
+      </div>
+      <div class="main-courses-lower-curl">
+        <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
+          style="display: block; width: 100%; height: 60px">
+          <path d="M0,60 Q180,100 360,60 T720,60 T1080,60 T1440,60 L1440,120 L0,120 Z" fill="#ffffff" opacity="0.5" />
+          <path d="M0,80 Q180,40 360,80 T720,80 T1080,80 T1440,80 L1440,120 L0,120 Z" fill="#ffffff" opacity="0.7" />
+          <path d="M0,100 Q180,60 360,100 T720,100 T1080,100 T1440,100 L1440,120 L0,120 Z" fill="#ffffff" />
+        </svg>
       </div>
     </section>
 

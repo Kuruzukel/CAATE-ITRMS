@@ -1,4 +1,3 @@
-// ==================== Navbar Scroll Effect ====================
 const navbar = document.getElementById("navbar");
 
 window.addEventListener("scroll", () => {
@@ -9,7 +8,6 @@ window.addEventListener("scroll", () => {
   }
 });
 
-// ==================== Mobile Menu Toggle ====================
 const mobileMenuToggle = document.getElementById("mobileMenuToggle");
 const mobileMenu = document.getElementById("mobileMenu");
 
@@ -36,7 +34,6 @@ mobileMenuLinks.forEach((link) => {
   });
 });
 
-// Close mobile menu when clicking outside
 document.addEventListener("click", (e) => {
   if (!mobileMenu.contains(e.target) && !mobileMenuToggle.contains(e.target)) {
     mobileMenu.classList.remove("active");
@@ -46,7 +43,6 @@ document.addEventListener("click", (e) => {
   }
 });
 
-// ==================== Active Navigation Link ====================
 const sections = document.querySelectorAll("section[id]");
 const navLinks = document.querySelectorAll(".nav-link");
 
@@ -70,14 +66,13 @@ window.addEventListener("scroll", () => {
   });
 });
 
-// ==================== Courses Carousel ====================
 const carousel = document.getElementById("coursesCarousel");
 const prevBtn = document.getElementById("prevBtn");
 const nextBtn = document.getElementById("nextBtn");
 const dots = document.querySelectorAll(".carousel-dot");
 
 let currentIndex = 0;
-const cardWidth = 350 + 24; // card width + gap
+const cardWidth = 350 + 24;
 const cardsPerView =
   Math.floor(carousel.parentElement.clientWidth / cardWidth) || 1;
 const maxIndex = Math.ceil(12 / cardsPerView) - 1;
@@ -89,7 +84,6 @@ function updateCarousel() {
     behavior: "smooth",
   });
 
-  // Update dots
   dots.forEach((dot, index) => {
     dot.classList.toggle("active", index === currentIndex);
   });
@@ -112,7 +106,6 @@ dots.forEach((dot, index) => {
   });
 });
 
-// Touch/Swipe support for carousel
 let touchStartX = 0;
 let touchEndX = 0;
 
@@ -131,17 +124,14 @@ function handleSwipe() {
 
   if (Math.abs(diff) > swipeThreshold) {
     if (diff > 0) {
-      // Swipe left - next
       currentIndex = Math.min(maxIndex, currentIndex + 1);
     } else {
-      // Swipe right - previous
       currentIndex = Math.max(0, currentIndex - 1);
     }
     updateCarousel();
   }
 }
 
-// ==================== Scroll Reveal Animation ====================
 const revealElements = document.querySelectorAll(".reveal");
 
 function reveal() {
@@ -157,9 +147,8 @@ function reveal() {
 }
 
 window.addEventListener("scroll", reveal);
-reveal(); // Initial check
+reveal();
 
-// ==================== Smooth Scroll for Anchor Links ====================
 document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
   anchor.addEventListener("click", function (e) {
     e.preventDefault();
@@ -179,27 +168,18 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
   });
 });
 
-// ==================== Contact Form Handling ====================
 const contactForm = document.getElementById("contactForm");
 
 contactForm.addEventListener("submit", function (e) {
   e.preventDefault();
 
-  // Get form data
   const formData = new FormData(this);
   const data = Object.fromEntries(formData);
-
-  // Here you would typically send the data to a server
   console.log("Form submitted:", data);
-
-  // Show success message
   alert("Thank you for your message! We will get back to you soon.");
-
-  // Reset form
   this.reset();
 });
 
-// ==================== Parallax Effect for Orbs ====================
 window.addEventListener("scroll", () => {
   const scrolled = window.pageYOffset;
   const orbs = document.querySelectorAll(".orb");
@@ -210,7 +190,6 @@ window.addEventListener("scroll", () => {
   });
 });
 
-// ==================== Intersection Observer for Performance ====================
 const observerOptions = {
   root: null,
   rootMargin: "0px",
@@ -229,7 +208,6 @@ revealElements.forEach((element) => {
   observer.observe(element);
 });
 
-// ==================== Counter Animation for Stats ====================
 function animateCounter(element, target, duration = 2000) {
   let start = 0;
   const increment = target / (duration / 16);
@@ -248,7 +226,6 @@ function animateCounter(element, target, duration = 2000) {
   updateCounter();
 }
 
-// Animate stats when hero section is visible
 const heroSection = document.querySelector(".hero");
 let statsAnimated = false;
 
@@ -278,12 +255,10 @@ const statsObserver = new IntersectionObserver(
 
 statsObserver.observe(heroSection);
 
-// ==================== Preloader (Optional) ====================
 window.addEventListener("load", () => {
   document.body.classList.add("loaded");
 });
 
-// ==================== Resize Handler for Carousel ====================
 let resizeTimeout;
 window.addEventListener("resize", () => {
   clearTimeout(resizeTimeout);

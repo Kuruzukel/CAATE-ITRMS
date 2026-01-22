@@ -570,7 +570,7 @@ h6 {
 }
 
 .hero-logo {
-  width: 230px;
+  width: 205px;
   height: auto;
   object-fit: contain;
   background: linear-gradient(145deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.6));
@@ -1531,7 +1531,7 @@ h6 {
   }
 
   .hero-logo {
-    width: 120px;
+    width: 180px;
   }
 
   .hero-image {
@@ -1647,8 +1647,12 @@ h6 {
     min-height: auto;
   }
 
+  .hero-logo {
+    width: 130px;
+  }
+
   .hero-title {
-    font-size: 2rem;
+    font-size: 1.5rem;
   }
 
   .hero-description {
@@ -1726,6 +1730,23 @@ h6 {
     width: 55px;
   }
 
+  .hero-logos {
+    gap: 1.5rem;
+    padding: 1rem 1.5rem;
+  }
+
+  .hero-logo {
+    width: 100px;
+  }
+
+  .hero-title {
+    font-size: 1.5rem;
+  }
+
+  .hero-description {
+    font-size: 0.9375rem;
+  }
+
   .hero-buttons {
     flex-direction: column;
     width: 100%;
@@ -1755,6 +1776,34 @@ h6 {
 @media (max-width: 320px) {
   .navbar {
     padding: 0.5rem 1rem;
+  }
+
+  .hero-logos {
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .hero-logo {
+    width: 90px;
+  }
+
+  .hero-title {
+    font-size: 1rem;
+    letter-spacing: 1px;
+  }
+
+  .hero-description {
+    font-size: 0.875rem;
+    padding: 0 0.5rem;
+  }
+
+  .hero-buttons {
+    gap: 0.75rem;
+  }
+
+  .hero-buttons .btn {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.875rem;
   }
 }
 

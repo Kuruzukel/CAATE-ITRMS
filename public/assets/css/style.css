@@ -319,7 +319,9 @@ h6 {
   height: 130px;
   width: auto;
   object-fit: contain;
-  margin-bottom: 1rem;
+  display: block;
+  margin-left: 0;
+  margin-right: auto;
 }
 
 .navbar-logo-text {
@@ -1356,6 +1358,7 @@ h6 {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  align-items: flex-start;
 }
 
 .footer-brand .navbar-logo-text {
@@ -1557,6 +1560,22 @@ h6 {
 
   .footer-content {
     grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 900px) {
+  .navbar-actions .btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.8125rem;
+  }
+
+  .navbar-nav {
+    gap: 0.25rem;
+  }
+
+  .nav-link {
+    padding: 0.5rem 0.875rem;
+    font-size: 0.875rem;
   }
 }
 

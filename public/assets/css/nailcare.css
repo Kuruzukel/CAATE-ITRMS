@@ -319,7 +319,7 @@ avbar Center Text Styling */
 
 /* Navbar Center Text Styling */
 .navbar-center-text {
-    font-size:  1.4rem;
+    font-size: 1.4rem;
     font-weight: 600;
     color: var(--white);
     text-align: center;
@@ -334,37 +334,37 @@ avbar Center Text Styling */
 /* Responsive styles for mobile devices */
 @media (max-width: 1100px) {
     .navbar-center-text {
-        font-size:  1.1rem;
+        font-size: 1.1rem;
     }
 }
 
 @media (max-width: 880px) {
     .navbar-center-text {
-        font-size:  1rem;
+        font-size: 1rem;
     }
 }
 
 @media (max-width: 768px) {
     .navbar-center-text {
-        font-size:    0.9rem;
+        font-size: 0.9rem;
     }
 }
 
 @media (max-width: 480px) {
     .navbar-center-text {
-        font-size:  1.5rem;
+        font-size: 1.5rem;
     }
 }
 
 @media (max-width: 375px) {
     .navbar-center-text {
-        font-size:  1.5rem;
+        font-size: 1.5rem;
     }
 }
 
 @media (max-width: 320px) {
     .navbar-center-text {
-        font-size:  1.5rem;
+        font-size: 1.5rem;
         padding: 0 0.5rem;
     }
 }
@@ -457,4 +457,10 @@ Override style.css to keep navbar-actions visible */
     .navbar-actions {
         display: flex !important;
     }
+}
+
+/* CAA
+TE short text font size */
+.navbar-short-text {
+    font-size: 1.5rem !important;
 }

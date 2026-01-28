@@ -488,6 +488,76 @@
     statisticsChart.render();
   }
 
+  // Welcome Statistics Chart
+  // --------------------------------------------------------------------
+  const chartWelcomeStatistics = document.querySelector('#welcomeStatisticsChart'),
+    welcomeChartConfig = {
+      chart: {
+        height: 165,
+        width: 130,
+        type: 'donut'
+      },
+      labels: ['Enrolled', 'Pending', 'Completed'],
+      series: [72, 18, 10],
+      colors: [config.colors.success, config.colors.warning, config.colors.primary],
+      stroke: {
+        width: 5,
+        colors: cardColor
+      },
+      dataLabels: {
+        enabled: false,
+        formatter: function (val, opt) {
+          return parseInt(val) + '%';
+        }
+      },
+      legend: {
+        show: false
+      },
+      grid: {
+        padding: {
+          top: 0,
+          bottom: 0,
+          right: 15
+        }
+      },
+      plotOptions: {
+        pie: {
+          donut: {
+            size: '75%',
+            labels: {
+              show: true,
+              value: {
+                fontSize: '1.5rem',
+                fontFamily: 'Public Sans',
+                color: headingColor,
+                offsetY: -15,
+                formatter: function (val) {
+                  return parseInt(val) + '%';
+                }
+              },
+              name: {
+                offsetY: 20,
+                fontFamily: 'Public Sans'
+              },
+              total: {
+                show: true,
+                fontSize: '0.8125rem',
+                color: axisColor,
+                label: 'Today',
+                formatter: function (w) {
+                  return '72%';
+                }
+              }
+            }
+          }
+        }
+      }
+    };
+  if (typeof chartWelcomeStatistics !== undefined && chartWelcomeStatistics !== null) {
+    const welcomeChart = new ApexCharts(chartWelcomeStatistics, welcomeChartConfig);
+    welcomeChart.render();
+  }
+
   // Income Chart - Area chart
   // --------------------------------------------------------------------
   const incomeChartEl = document.querySelector('#incomeChart'),

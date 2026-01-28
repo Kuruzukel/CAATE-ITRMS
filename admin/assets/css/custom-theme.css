@@ -179,6 +179,13 @@
     color: var(--white) !important;
 }
 
+.app-brand-logo img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
 /* Navbar Styles */
 .navbar {
     background-color: #0f2942 !important;
@@ -187,6 +194,9 @@
     border-bottom: 1px solid rgba(54, 145, 191, 0.2);
     border-radius: var(--border-radius-md) !important;
     margin-bottom: 1.5rem;
+    padding-top: 0.7rem !important;
+    padding-bottom: 0.7rem !important;
+    min-height: 60px;
 }
 
 .layout-navbar {
@@ -564,4 +574,13 @@ footer .container-xxl,
 .navbar .dropdown-item:hover {
     background-color: rgba(54, 145, 191, 0.2) !important;
     color: var(--white) !important;
+}
+
+/* Layout Page Padding Top for Desktop */
+@media (min-width: 1200px) {
+
+    .layout-menu-fixed:not(.layout-menu-collapsed) .layout-page,
+    .layout-menu-fixed-offcanvas:not(.layout-menu-collapsed) .layout-page {
+        padding-top: 0.7rem !important;
+    }
 }

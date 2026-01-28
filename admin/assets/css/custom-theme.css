@@ -165,8 +165,10 @@
 }
 
 /* Remove default margin from menu items */
-.menu-vertical .menu-inner>.menu-item {
+.layout-menu.menu-vertical .menu-inner>.menu-item {
     margin: 0 !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
 }
 
 .menu-inner>.menu-item::after {
@@ -282,7 +284,7 @@
     justify-content: center !important;
     width: 100% !important;
     padding: 0.75rem 1rem 1rem 1rem !important;
-    margin-bottom: 1rem !important;
+    margin-bottom: 0.5rem !important;
     border-bottom: 1px solid rgba(54, 145, 191, 0.3) !important;
     box-shadow: 0 1px 2px rgba(54, 145, 191, 0.2) !important;
 }
@@ -307,8 +309,8 @@
 }
 
 .app-brand-logo img {
-    width: 100px !important;
-    height: 100px !important;
+    width: 150px !important;
+    height: 150px !important;
     border-radius: 50%;
     object-fit: cover;
 }
@@ -1019,4 +1021,26 @@ footer span,
 .menu-sub>.menu-item:hover>.menu-link::before {
     background-color: rgba(54, 145, 191, 0.5) !important;
     border: 3px solid rgba(54, 145, 191, 0.3) !important;
+}
+
+
+/* Hide unwanted sidebar menu items - keep only custom CAATE menu items */
+.menu-inner>.menu-item:has(.menu-link[href*="layouts"]),
+.menu-inner>.menu-header:has(.menu-header-text:contains("Pages")),
+.menu-inner>.menu-item:has(.menu-link[data-i18n="Account Settings"]),
+.menu-inner>.menu-item:has(.menu-link[data-i18n="Authentications"]),
+.menu-inner>.menu-item:has(.menu-link[data-i18n="Misc"]),
+.menu-inner>.menu-header:has(.menu-header-text:contains("Components")),
+.menu-inner>.menu-item:has(.menu-link[href*="cards-basic"]),
+.menu-inner>.menu-item:has(.menu-link[data-i18n="User interface"]),
+.menu-inner>.menu-item:has(.menu-link[data-i18n="Extended UI"]),
+.menu-inner>.menu-item:has(.menu-link[href*="icons-boxicons"]),
+.menu-inner>.menu-header:has(.menu-header-text:contains("Forms")),
+.menu-inner>.menu-item:has(.menu-link[data-i18n="Form Elements"]),
+.menu-inner>.menu-item:has(.menu-link[data-i18n="Form Layouts"]),
+.menu-inner>.menu-item:has(.menu-link[href*="tables-basic"]),
+.menu-inner>.menu-header:nth-last-child(-n+3),
+.menu-inner>.menu-item:has(.menu-link[href*="github"]),
+.menu-inner>.menu-item:has(.menu-link[href*="themeselection"]) {
+    display: none !important;
 }

@@ -16329,7 +16329,7 @@ html:not(.layout-menu-fixed) .menu-inner-shadow {
 }
 
 .menu-vertical .menu-inner>.menu-item {
-  margin: 0.0625rem 0;
+  margin: 0;
 }
 
 .menu-vertical .menu-inner>.menu-item .menu-link {

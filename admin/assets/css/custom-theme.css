@@ -194,15 +194,13 @@
     border-bottom: 1px solid rgba(54, 145, 191, 0.2);
     border-radius: var(--border-radius-md) !important;
     margin-bottom: 1.5rem;
-    padding-top: 0.7rem !important;
-    padding-bottom: 0.7rem !important;
-    min-height: 60px;
 }
 
 .layout-navbar {
     background-color: #0f2942 !important;
     background: linear-gradient(90deg, #0f2942 0%, #0a1f33 100%) !important;
     border-radius: var(--border-radius-md) !important;
+    margin-top: 1.5rem !important;
 }
 
 .bg-navbar-theme {

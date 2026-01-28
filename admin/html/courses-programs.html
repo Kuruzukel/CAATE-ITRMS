@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="../assets/"
+    data-template="vertical-menu-template-free">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+
+    <title>Courses & Programs | CAATE Admin Dashboard</title>
+
+    <meta name="description" content="" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="../assets/img/favicon/favicon.ico" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+        rel="stylesheet" />
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="../assets/vendor/fonts/boxicons.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="../assets/vendor/css/core.css" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="../assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="../assets/css/demo.css" />
+
+    <!-- CAATE Custom Theme -->
+    <link rel="stylesheet" href="../assets/css/custom-theme.css" />
+
+    <!-- Vendors CSS -->
+    <link rel="stylesheet" href="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+
+    <!-- Helpers -->
+    <script src="../assets/vendor/js/helpers.js"></script>
+    <script src="../assets/js/config.js"></script>
+</head>
+
+<body>
+    <!-- Layout wrapper -->
+    <div class="layout-wrapper layout-content-navbar">
+        <div class="layout-container">
+            <!-- Menu -->
+            <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+                <div class="app-brand demo">
+                    <a href="index.html" class="app-brand-link">
+                        <span class="app-brand-logo demo">
+                            <img src="../../img/ADMINCAATELOGO.png" alt="CAATE Logo">
+                        </span>
+                        <span class="app-brand-text demo menu-text fw-bolder">ADMIN DASHBOARD</span>
+                    </a>
+                </div>
+
+                <div class="menu-inner-shadow"></div>
+
+                <ul class="menu-inner py-1">
+                    <!-- Dashboard -->
+                    <li class="menu-item">
+                        <a href="index.html" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                            <div data-i18n="Analytics">Dashboard</div>
+                        </a>
+                    </li>
+
+                    <!-- Manage Trainees -->
+                    <li class="menu-item">
+                        <a href="manage-trainees.html" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-user"></i>
+                            <div data-i18n="Manage Trainees">Manage Trainees</div>
+                        </a>
+                    </li>
+
+                    <!-- Courses & Programs -->
+                    <li class="menu-item active">
+                        <a href="courses-programs.html" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-book-open"></i>
+                            <div data-i18n="Courses & Programs">Courses & Programs</div>
+                        </a>
+                    </li>
+                </ul>
+            </aside>
+            <!-- / Menu -->
+
+            <!-- Layout container -->
+            <div class="layout-page">
+                <!-- Navbar -->
+                <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
+                    id="layout-navbar">
+                    <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+                        <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+                            <i class="fas fa-bars"></i>
+                        </a>
+                    </div>
+
+                    <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+                        <!-- Search -->
+                        <div class="navbar-nav align-items-center">
+                            <div class="nav-item d-flex align-items-center position-relative">
+                                <i class="bx bx-search fs-4 lh-0 position-absolute"
+                                    style="left: 12px; z-index: 10;"></i>
+                                <input type="text" class="form-control border-0 shadow-none"
+                                    placeholder="Search courses..." aria-label="Search..."
+                                    style="padding-left: 40px;" />
+                            </div>
+                        </div>
+                        <!-- /Search -->
+
+                        <ul class="navbar-nav flex-row align-items-center ms-auto">
+                            <!-- User -->
+                            <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                                <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);"
+                                    data-bs-toggle="dropdown">
+                                    <div class="avatar avatar-online">
+                                        <img src="/img/AVATARNIKEL.jpg" alt class="w-px-40 h-auto rounded-circle" />
+                                    </div>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li>
+                                        <a class="dropdown-item" href="#">
+                                            <div class="d-flex">
+                                                <div class="flex-shrink-0 me-3">
+                                                    <div class="avatar avatar-online">
+                                                        <img src="/img/AVATARNIKEL.jpg" alt
+                                                            class="w-px-40 h-auto rounded-circle" />
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <span class="fw-semibold d-block">KEL</span>
+                                                    <small class="text-muted">Admin</small>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <div class="dropdown-divider"></div>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="auth-login-basic.html">
+                                            <i class="bx bx-power-off me-2"></i>
+                                            <span class="align-middle">Log Out</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <!--/ User -->
+                        </ul>
+                    </div>
+                </nav>
+                <!-- / Navbar -->
+
+                <!-- Content wrapper -->
+                <div class="content-wrapper">
+                    <!-- Content -->
+                    <div class="container-xxl flex-grow-1 container-p-y">
+
+                        <!-- Courses Grid -->
+                        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+
+                            <!-- Course 1 -->
+                            <div class="col">
+                                <div class="card h-100">
+                                    <img src="https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&h=250&fit=crop"
+                                        class="card-img-top" alt="Nail Care Services NC II"
+                                        style="height: 200px; object-fit: cover;" />
+                                    <div class="card-body d-flex flex-column">
+                                        <span class="badge bg-primary mb-2 align-self-start">NC II - SOCBCN220</span>
+                                        <h5 class="card-title">Beauty Care (Nail Care) Services NC II</h5>
+                                        <p class="card-text flex-grow-1">Master professional nail care techniques
+                                            including manicure, pedicure, nail art, and enhancement services.</p>
+                                        <div class="d-flex justify-content-between align-items-center mt-3">
+                                            <small><i class="fas fa-clock me-1"></i> 307 Hours (39 Days)</small>
+                                            <button class="btn btn-sm btn-outline-primary">
+                                                <i class="bx bx-edit"></i> Edit
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Course 2 -->
+                            <div class="col">
+                                <div class="card h-100">
+                                    <img src="https://images.unsplash.com/photo-1552693673-1bf958298935?w=400&h=250&fit=crop"
+                                        class="card-img-top" alt="Skin Care Services NC II"
+                                        style="height: 200px; object-fit: cover;" />
+                                    <div class="card-body d-flex flex-column">
+                                        <span class="badge bg-primary mb-2 align-self-start">NC II - SOCBEC219</span>
+                                        <h5 class="card-title">Beauty Care (Skin Care) Services NC II</h5>
+                                        <p class="card-text flex-grow-1">Develop expertise in professional skincare
+                                            treatments, facial therapies, and comprehensive skin analysis techniques.
+                                        </p>
+                                        <div class="d-flex justify-content-between align-items-center mt-3">
+                                            <small><i class="fas fa-clock me-1"></i> 421 Hours (53 Days)</small>
+                                            <button class="btn btn-sm btn-outline-primary">
+                                                <i class="bx bx-edit"></i> Edit
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Course 3 -->
+                            <div class="col">
+                                <div class="card h-100">
+                                    <img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=400&h=250&fit=crop"
+                                        class="card-img-top" alt="Aesthetic Services Level III"
+                                        style="height: 200px; object-fit: cover;" />
+                                    <div class="card-body d-flex flex-column">
+                                        <span class="badge bg-info mb-2 align-self-start">Level III</span>
+                                        <h5 class="card-title">Aesthetic Services Level III</h5>
+                                        <p class="card-text flex-grow-1">Advance your career with comprehensive
+                                            aesthetic services training and modern beauty technologies.</p>
+                                        <div class="d-flex justify-content-between align-items-center mt-3">
+                                            <small><i class="fas fa-clock me-1"></i> 80 Hours (10 Days)</small>
+                                            <button class="btn btn-sm btn-outline-primary">
+                                                <i class="bx bx-edit"></i> Edit
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Course 4 -->
+                            <div class="col">
+                                <div class="card h-100">
+                                    <img src="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?w=400&h=250&fit=crop"
+                                        class="card-img-top" alt="Advanced Skin Care Services"
+                                        style="height: 200px; object-fit: cover;" />
+                                    <div class="card-body d-flex flex-column">
+                                        <span class="badge bg-info mb-2 align-self-start">Level III</span>
+                                        <h5 class="card-title">Advanced Skin Care Services Level III</h5>
+                                        <p class="card-text flex-grow-1">Master specialized techniques in anti-aging
+                                            treatments, corrective skincare, and clinical-grade procedures.</p>
+                                        <div class="d-flex justify-content-between align-items-center mt-3">
+                                            <small><i class="fas fa-clock me-1"></i> 100 Hours (13 Days)</small>
+                                            <button class="btn btn-sm btn-outline-primary">
+                                                <i class="bx bx-edit"></i> Edit
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Course 5 -->
+                            <div class="col">
+                                <div class="card h-100">
+                                    <img src="https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=400&h=250&fit=crop"
+                                        class="card-img-top" alt="Permanent Make-Up Tattoo Services"
+                                        style="height: 200px; object-fit: cover;" />
+                                    <div class="card-body d-flex flex-column">
+                                        <span class="badge bg-info mb-2 align-self-start">Level III</span>
+                                        <h5 class="card-title">Permanent Make-Up Tattoo Services Level III</h5>
+                                        <p class="card-text flex-grow-1">Learn precision techniques for eyebrow
+                                            microblading, eyeliner tattooing, and lip pigmentation services.</p>
+                                        <div class="d-flex justify-content-between align-items-center mt-3">
+                                            <small><i class="fas fa-clock me-1"></i> 100 Hours (13 Days)</small>
+                                            <button class="btn btn-sm btn-outline-primary">
+                                                <i class="bx bx-edit"></i> Edit
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Course 6 -->
+                            <div class="col">
+                                <div class="card h-100">
+                                    <img src="https://northshoremedicalclinic.ca/wp-content/uploads/2022/05/PRP-for-Hair-Loss.jpg"
+                                        class="card-img-top" alt="Collagen Induction Therapy"
+                                        style="height: 200px; object-fit: cover;" />
+                                    <div class="card-body d-flex flex-column">
+                                        <span class="badge bg-warning mb-2 align-self-start">Specialized</span>
+                                        <h5 class="card-title">Perform Collagen Induction Therapy & Hair Loss Treatment
+                                        </h5>
+                                        <p class="card-text flex-grow-1">Master advanced microneedling techniques for
+                                            skin rejuvenation and evidence-based hair loss treatments.</p>
+                                        <div class="d-flex justify-content-between align-items-center mt-3">
+                                            <small><i class="fas fa-clock me-1"></i> 8 Hours (1 Day)</small>
+                                            <button class="btn btn-sm btn-outline-primary">
+                                                <i class="bx bx-edit"></i> Edit
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Course 7 -->
+                            <div class="col">
+                                <div class="card h-100">
+                                    <img src="https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?w=400&h=250&fit=crop"
+                                        class="card-img-top" alt="Advanced Facial Treatment"
+                                        style="height: 200px; object-fit: cover;" />
+                                    <div class="card-body d-flex flex-column">
+                                        <span class="badge bg-warning mb-2 align-self-start">Specialized</span>
+                                        <h5 class="card-title">Perform Advanced Facial Treatment & Chemical Skin Peeling
+                                        </h5>
+                                        <p class="card-text flex-grow-1">Gain expertise in advanced facial protocols and
+                                            controlled chemical exfoliation for skin transformation.</p>
+                                        <div class="d-flex justify-content-between align-items-center mt-3">
+                                            <small><i class="fas fa-clock me-1"></i> 16 Hours (2 Days)</small>
+                                            <button class="btn btn-sm btn-outline-primary">
+                                                <i class="bx bx-edit"></i> Edit
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Course 8 -->
+                            <div class="col">
+                                <div class="card h-100">
+                                    <img src="https://omyguard.com/cdn/shop/articles/What_are_the_benefits_and_differences_of_blue_light_therapy_and_red_light_therapy.png?v=1721188964&width=1000"
+                                        class="card-img-top" alt="Light Therapy & Heat Therapy"
+                                        style="height: 200px; object-fit: cover;" />
+                                    <div class="card-body d-flex flex-column">
+                                        <span class="badge bg-warning mb-2 align-self-start">Specialized</span>
+                                        <h5 class="card-title">Perform Light Therapy & Heat Therapy</h5>
+                                        <p class="card-text flex-grow-1">Master LED therapy, infrared treatments, and
+                                            thermal modalities for skin rejuvenation and healing.</p>
+                                        <div class="d-flex justify-content-between align-items-center mt-3">
+                                            <small><i class="fas fa-clock me-1"></i> 16 Hours (2 Days)</small>
+                                            <button class="btn btn-sm btn-outline-primary">
+                                                <i class="bx bx-edit"></i> Edit
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Course 9 -->
+                            <div class="col">
+                                <div class="card h-100">
+                                    <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=400&h=250&fit=crop"
+                                        class="card-img-top" alt="Trainers Methodology"
+                                        style="height: 200px; object-fit: cover;" />
+                                    <div class="card-body d-flex flex-column">
+                                        <span class="badge bg-secondary mb-2 align-self-start">Level I</span>
+                                        <h5 class="card-title">Trainers Methodology Level I</h5>
+                                        <p class="card-text flex-grow-1">Develop essential training and facilitation
+                                            skills to become a certified TESDA beauty educator.</p>
+                                        <div class="d-flex justify-content-between align-items-center mt-3">
+                                            <small><i class="fas fa-clock me-1"></i> 264 Hours (33 Days)</small>
+                                            <button class="btn btn-sm btn-outline-primary">
+                                                <i class="bx bx-edit"></i> Edit
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Course 10 -->
+                            <div class="col">
+                                <div class="card h-100">
+                                    <img src="https://tse3.mm.bing.net/th/id/OIP.f7lQ7Rt0CCBsxUWqGsYPwQHaE8?pid=Api&P=0&h=180"
+                                        class="card-img-top" alt="Eyelash and Eyebrow Services"
+                                        style="height: 200px; object-fit: cover;" />
+                                    <div class="card-body d-flex flex-column">
+                                        <span class="badge bg-info mb-2 align-self-start">Level III</span>
+                                        <h5 class="card-title">Eyelash and Eyebrow Services Level III</h5>
+                                        <p class="card-text flex-grow-1">Perfect eyelash extensions, lash lifting, brow
+                                            lamination, tinting, and professional shaping techniques.</p>
+                                        <div class="d-flex justify-content-between align-items-center mt-3">
+                                            <small><i class="fas fa-clock me-1"></i> 80 Hours (10 Days)</small>
+                                            <button class="btn btn-sm btn-outline-primary">
+                                                <i class="bx bx-edit"></i> Edit
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!-- / Content -->
+
+                    <!-- Footer -->
+                    <footer class="content-footer footer bg-footer-theme">
+                        <div
+                            class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
+                            <div class="mb-2 mb-md-0">
+                                ©
+                                <script>
+                                    document.write(new Date().getFullYear());
+                                </script>
+                                , Creative Aesthetic Academy & Technical Education Inc.
+                            </div>
+                        </div>
+                    </footer>
+                    <!-- / Footer -->
+
+                    <div class="content-backdrop fade"></div>
+                </div>
+                <!-- Content wrapper -->
+            </div>
+            <!-- / Layout page -->
+        </div>
+
+        <!-- Overlay -->
+        <div class="layout-overlay layout-menu-toggle"></div>
+    </div>
+    <!-- / Layout wrapper -->
+
+    <!-- Core JS -->
+    <script src="../assets/vendor/libs/jquery/jquery.js"></script>
+    <script src="../assets/vendor/libs/popper/popper.js"></script>
+    <script src="../assets/vendor/js/bootstrap.js"></script>
+    <script src="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+    <script src="../assets/vendor/js/menu.js"></script>
+
+    <!-- Main JS -->
+    <script src="../assets/js/main.js"></script>
+</body>
+
+</html>

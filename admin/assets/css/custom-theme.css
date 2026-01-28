@@ -383,7 +383,7 @@ a:hover {
 }
 
 ::-webkit-scrollbar-track {
-    background: var(--lighter-blue);
+    background: #c5e3f5;
     border-radius: var(--border-radius-sm);
 }
 

@@ -53,6 +53,43 @@
     
     <!-- ESCAATE Custom Theme -->
     <link rel="stylesheet" href="../assets/css/custom-theme.css" />
+    
+    <!-- Custom Menu Toggle Styles -->
+    <style>
+      .layout-menu.menu-hidden {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+      }
+      
+      .layout-menu {
+        transition: transform 0.3s ease, width 0.3s ease;
+      }
+      
+      .layout-menu-toggle {
+        cursor: pointer;
+      }
+      
+      /* Show hamburger menu on all screen sizes */
+      .layout-menu-toggle.d-xl-none {
+        display: flex !important;
+      }
+
+      /* Layout page expansion when menu is hidden */
+      .layout-page {
+        transition: margin-left 0.3s ease, padding-left 0.3s ease;
+      }
+
+      /* When menu is hidden, expand layout page to the left */
+      body:has(.layout-menu.menu-hidden) .layout-page {
+        margin-left: 0 !important;
+        padding-left: 0 !important;
+      }
+
+      /* Adjust layout container when menu is hidden */
+      body:has(.layout-menu.menu-hidden) .layout-container {
+        padding-left: 0 !important;
+      }
+    </style>
 
     <!-- Vendors CSS -->
     <link rel="stylesheet" href="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
@@ -850,6 +887,40 @@
 
     <!-- Page JS -->
     <script src="../assets/js/dashboards-analytics.js"></script>
+
+    <!-- Custom Menu Toggle Script -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const menuToggle = document.querySelector('.layout-menu-toggle');
+        const layoutMenu = document.getElementById('layout-menu');
+        const layoutOverlay = document.querySelector('.layout-overlay');
+        const layoutContainer = document.querySelector('.layout-container');
+
+        if (menuToggle && layoutMenu) {
+          menuToggle.addEventListener('click', function (e) {
+            e.preventDefault();
+            layoutMenu.classList.toggle('menu-hidden');
+
+            // Toggle class on layout container to expand content
+            if (layoutContainer) {
+              layoutContainer.classList.toggle('menu-collapsed');
+            }
+          });
+        }
+
+        // Also toggle when clicking the overlay
+        if (layoutOverlay && layoutMenu) {
+          layoutOverlay.addEventListener('click', function () {
+            layoutMenu.classList.toggle('menu-hidden');
+
+            // Toggle class on layout container
+            if (layoutContainer) {
+              layoutContainer.classList.toggle('menu-collapsed');
+            }
+          });
+        }
+      });
+    </script>
 
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>

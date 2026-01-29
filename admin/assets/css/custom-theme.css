@@ -343,10 +343,14 @@
     border: 1px solid rgba(54, 145, 191, 0.3) !important;
     border-radius: var(--border-radius-md) !important;
     margin-top: 1.5rem !important;
+    margin-left: 1.625rem !important;
+    margin-right: 1.625rem !important;
     box-shadow: 0 10px 40px rgba(22, 56, 86, 0.5),
         0 4px 12px rgba(54, 145, 191, 0.3),
         inset 0 1px 0 rgba(255, 255, 255, 0.15),
         0 0 0 1px rgba(54, 145, 191, 0.1) !important;
+    box-sizing: border-box !important;
+    width: auto !important;
 }
 
 .bg-navbar-theme {
@@ -811,8 +815,10 @@ footer,
     margin-bottom: 1.5rem !important;
     color: var(--white) !important;
     padding: 0 !important;
-    margin-left: 1.5rem;
-    margin-right: 1.5rem;
+    margin-left: 1.625rem;
+    margin-right: 1.625rem;
+    box-sizing: border-box !important;
+    width: auto !important;
 }
 
 footer .container-xxl,
@@ -820,8 +826,8 @@ footer .container-xxl,
     background-color: transparent !important;
     color: var(--white) !important;
     max-width: 100% !important;
-    padding-left: 1.5rem !important;
-    padding-right: 1.5rem !important;
+    padding-left: 1.625rem !important;
+    padding-right: 1.625rem !important;
 }
 
 .footer-link {
@@ -1099,4 +1105,158 @@ footer span,
     flex-direction: column !important;
     align-items: center !important;
     justify-content: center !important;
+}
+
+
+/* ========================================
+   HAMBURGER MENU TOGGLE FUNCTIONALITY
+   ======================================== */
+
+/* Menu Toggle Styles */
+.layout-menu {
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    transform: translateX(0);
+    opacity: 1;
+    position: fixed;
+    z-index: 1100;
+}
+
+.layout-menu.menu-hidden {
+    transform: translateX(-100%);
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Show hamburger menu on all screen sizes */
+.layout-menu-toggle.navbar-nav {
+    display: flex !important;
+}
+
+/* Hamburger icon styling */
+.layout-menu-toggle {
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.layout-menu-toggle:hover {
+    transform: scale(1.1);
+}
+
+.layout-menu-toggle:active {
+    transform: scale(0.95);
+}
+
+/* Overlay styling when menu is visible */
+.layout-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1050;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.layout-menu:not(.menu-hidden)~.layout-overlay {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Adjust layout page when menu is hidden */
+.layout-menu.menu-hidden~.layout-page {
+    margin-left: 0 !important;
+}
+
+/* Make layout container expand when menu is hidden */
+.layout-container {
+    transition: padding-left 0.3s ease;
+}
+
+.layout-container.menu-collapsed {
+    padding-left: 0 !important;
+}
+
+.layout-container.menu-collapsed .layout-page {
+    margin-left: 0 !important;
+}
+
+/* Expand layout page to full width when menu is hidden */
+.layout-page {
+    transition: margin-left 0.3s ease;
+}
+
+
+/* Additional layout expansion rules for menu toggle */
+.layout-container.menu-collapsed .layout-page {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+.layout-container.menu-collapsed .content-wrapper {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+.layout-container.menu-collapsed .layout-navbar {
+    left: 0 !important;
+    width: auto !important;
+    margin-left: 1.625rem !important;
+    margin-right: 1.625rem !important;
+    max-width: none !important;
+}
+
+/* Ensure footer maintains proper spacing when menu is collapsed */
+.layout-container.menu-collapsed .content-footer,
+.layout-container.menu-collapsed footer {
+    margin-left: 1.625rem !important;
+    margin-right: 1.625rem !important;
+    width: auto !important;
+    max-width: none !important;
+}
+
+
+/* Ensure navbar maintains proper spacing on all screen sizes */
+@media (max-width: 1199.98px) {
+    .layout-navbar {
+        margin-left: 1.625rem !important;
+        margin-right: 1.625rem !important;
+    }
+}
+
+/* When menu is hidden on mobile, ensure navbar has proper margins */
+@media (max-width: 991.98px) {
+    .layout-menu.menu-hidden~.layout-page .layout-navbar {
+        margin-left: 1.625rem !important;
+        margin-right: 1.625rem !important;
+    }
+}
+
+
+/* Ensure content container maintains proper padding when menu is collapsed */
+.layout-container.menu-collapsed .container-xxl {
+    padding-left: 1.625rem !important;
+    padding-right: 1.625rem !important;
+    max-width: 100% !important;
+}
+
+/* Override any conflicting width settings */
+.layout-container.menu-collapsed .layout-navbar {
+    max-width: none !important;
+}
+
+.layout-container.menu-collapsed .layout-navbar .container-xxl {
+    max-width: 100% !important;
+    padding-left: 1.625rem !important;
+    padding-right: 1.625rem !important;
+}
+
+.layout-container.menu-collapsed .content-footer .container-xxl {
+    max-width: 100% !important;
+    padding-left: 1.625rem !important;
+    padding-right: 1.625rem !important;
 }

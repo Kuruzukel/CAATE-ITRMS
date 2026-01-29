@@ -1260,3 +1260,79 @@ footer span,
     padding-left: 1.625rem !important;
     padding-right: 1.625rem !important;
 }
+
+
+/* ========================================
+   AUTO-HIDE SIDEBAR ON SCREENS BELOW 1200px
+   ======================================== */
+@media (max-width: 1199.98px) {
+
+    /* Automatically hide/close the sidebar menu */
+    .layout-menu {
+        transform: translateX(-100%) !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+    }
+
+    /* Add menu-hidden class behavior */
+    .layout-menu:not(.menu-visible) {
+        transform: translateX(-100%) !important;
+    }
+
+    /* Expand layout page to full width when sidebar is hidden */
+    .layout-page {
+        margin-left: 0 !important;
+        padding-left: 0 !important;
+        width: 100% !important;
+    }
+
+    /* Adjust layout container */
+    .layout-container {
+        padding-left: 0 !important;
+    }
+
+    /* Fix navbar positioning - remove extra left margin */
+    .layout-navbar {
+        margin-left: 1rem !important;
+        margin-right: 1rem !important;
+        left: 0 !important;
+        width: calc(100% - 2rem) !important;
+        max-width: none !important;
+    }
+
+    /* Ensure navbar container spans properly */
+    .layout-navbar .container-xxl {
+        max-width: 100% !important;
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+
+    /* Ensure content wrapper uses full width */
+    .content-wrapper {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    /* Fix content container */
+    .container-xxl.flex-grow-1.container-p-y {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+        max-width: 100% !important;
+    }
+
+    /* Fix footer positioning */
+    .content-footer,
+    footer {
+        margin-left: 1rem !important;
+        margin-right: 1rem !important;
+        width: calc(100% - 2rem) !important;
+        max-width: none !important;
+    }
+
+    /* Keep hamburger menu visible so users can toggle sidebar if needed */
+    .layout-menu-toggle {
+        display: flex !important;
+    }
+}

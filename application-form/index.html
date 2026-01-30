@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TESDA Appointment Booking</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="navbar" id="navbar">
+  <div class="navbar-content">
+    <a href="#home" class="navbar-logo">
+      <img src="img/CAATELOGOROUNDED.png" alt="CAATE Logo" class="navbar-logo-img">
+    </a>
+
+    <span class="navbar-center-text">Creative Aesthetics Academy & Technical Education Inc.</span>
+
+    <div class="navbar-actions">
+      <a href="index.html" class="btn btn-outline">
+        <i class="fas fa-arrow-left"></i> Back
+      </a>
+    </div>
+    <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+      <i class="fas fa-bars"></i>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <div class="navbar-actions">
+    <a href="index.html" class="btn btn-outline">
+      <i class="fas fa-arrow-left"></i> Back
+    </a>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- Steps Indicator -->
+  <div class="steps">
+    <div class="step active">
+      <div class="step-number">1</div>
+      <div class="step-text">Personal Info</div>
+    </div>
+    <div class="step">
+      <div class="step-number">2</div>
+      <div class="step-text">Appointment Details</div>
+    </div>
+    <div class="step">
+      <div class="step-number">3</div>
+      <div class="step-text">Confirmation</div>
+    </div>
+  </div>
+
+  <!-- Card -->
+  <div class="card">
+    <div class="section-header">
+      <div class="section-icon">
+        <i class="fas fa-user"></i>
+      </div>
+      <div>
+        <h3>Personal Information</h3>
+        <p class="section-description">Please provide your basic details</p>
+      </div>
+    </div>
+
+    <form>
+      <div class="form-row">
+        <div class="form-group">
+          <label><i class="fas fa-user-circle"></i> Full Name <span class="required">*</span></label>
+          <input type="text" placeholder="Enter your full name" required />
+        </div>
+        <div class="form-group">
+          <label><i class="fas fa-envelope"></i> Email Address <span class="required">*</span></label>
+          <input type="email" placeholder="your.email@example.com" required />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label><i class="fas fa-phone"></i> Contact Number <span class="required">*</span></label>
+          <input type="tel" placeholder="09XX XXX XXXX" pattern="[0-9]{11}" maxlength="11" required oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
+        </div>
+        <div class="form-group">
+          <label><i class="fas fa-map-marker-alt"></i> Address</label>
+          <input type="text" placeholder="Street, City, Province" />
+        </div>
+      </div>
+
+      <div class="section-divider"></div>
+
+      <div class="section-header">
+        <div class="section-icon">
+          <i class="fas fa-calendar-check"></i>
+        </div>
+        <div>
+          <h3>Appointment Details</h3>
+          <p class="section-description">Choose your preferred schedule</p>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label><i class="fas fa-briefcase"></i> Service Type <span class="required">*</span></label>
+          <select required>
+            <option value="">-- Select a service --</option>
+            <option>Assessment</option>
+            <option>Enrollment</option>
+            <option>Certification</option>
+            <option>Inquiry</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label><i class="fas fa-calendar-alt"></i> Preferred Date <span class="required">*</span></label>
+          <input type="date" required />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label><i class="fas fa-clock"></i> Preferred Time <span class="required">*</span></label>
+          <select required>
+            <option value="">-- Select time slot --</option>
+            <option>8:00 AM – 10:00 AM</option>
+            <option>10:00 AM – 12:00 PM</option>
+            <option>1:00 PM – 3:00 PM</option>
+            <option>3:00 PM – 5:00 PM</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label><i class="fas fa-comment-dots"></i> Additional Notes</label>
+          <textarea rows="3" placeholder="Any special requests or information we should know..."></textarea>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-submit">
+          <i class="fas fa-check-circle"></i> Confirm Appointment
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <footer>
+    <p>© 2026 Creative Aesthetics Academy and Technical Education Inc.</p>
+    <p class="footer-links">
+      <a href="#">Privacy Policy</a> • 
+      <a href="#">Terms of Service</a> • 
+      <a href="#">Contact Support</a>
+    </p>
+  </footer>
+
+</div>
+
+<script>
+  // Mobile menu toggle
+  const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+  const mobileMenu = document.getElementById('mobileMenu');
+
+  if (mobileMenuToggle) {
+    mobileMenuToggle.addEventListener('click', () => {
+      mobileMenu.classList.toggle('active');
+    });
+  }
+
+  // Navbar scroll effect
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 50) {
+      navbar.classList.add('scrolled');
+    } else {
+      navbar.classList.remove('scrolled');
+    }
+  });
+</script>
+
+</body>
+</html>

@@ -56,6 +56,10 @@
     <!-- Page CSS -->
     <!-- Page -->
     <link rel="stylesheet" href="assets/css/page-auth.css" />
+    
+    <!-- Custom Auth Styles - CAATE Theme -->
+    <link rel="stylesheet" href="assets/css/auth-custom.css" />
+    
     <!-- Helpers -->
     <script src="assets/js/helpers.js"></script>
 
@@ -77,13 +81,13 @@
               <div class="app-brand justify-content-center">
                 <a href="../admin/html/index.html" class="app-brand-link gap-2">
                   <span class="app-brand-logo demo">
-                    <img src="../img/CAATE_META_LOGO.png" alt="CAATE Logo" style="width: 40px; height: 40px;">
+                    <img src="../img/CAATELOGOGRADIENT.png" alt="CAATE Logo" style="width: 40px; height: 40px;">
                   </span>
                   <span class="app-brand-text demo text-body fw-bolder">CAATE</span>
                 </a>
               </div>
               <!-- /Logo -->
-              <h4 class="mb-2">Welcome to CAATE! 👋</h4>
+              <h4 class="mb-2">Welcome to CAATE!</h4>
               <p class="mb-4">Please sign-in to your account and start the adventure</p>
 
               <form id="formAuthentication" class="mb-3" action="../admin/html/index.html" method="POST">
@@ -105,16 +109,18 @@
                       <small>Forgot Password?</small>
                     </a>
                   </div>
-                  <div class="input-group input-group-merge">
+                  <div class="position-relative">
                     <input
                       type="password"
                       id="password"
-                      class="form-control"
+                      class="form-control password-input-with-icon"
                       name="password"
                       placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
                       aria-describedby="password"
                     />
-                    <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                    <span class="password-toggle-icon cursor-pointer" onclick="togglePassword()">
+                      <i class="bx bx-hide" id="toggleIcon"></i>
+                    </span>
                   </div>
                 </div>
                 <div class="mb-3">
@@ -159,5 +165,22 @@
     <script src="assets/js/main.js"></script>
 
     <!-- Page JS -->
+    <script>
+      // Toggle password visibility
+      function togglePassword() {
+        const passwordInput = document.getElementById('password');
+        const toggleIcon = document.getElementById('toggleIcon');
+
+        if (passwordInput.type === 'password') {
+          passwordInput.type = 'text';
+          toggleIcon.classList.remove('bx-hide');
+          toggleIcon.classList.add('bx-show');
+        } else {
+          passwordInput.type = 'password';
+          toggleIcon.classList.remove('bx-show');
+          toggleIcon.classList.add('bx-hide');
+        }
+      }
+    </script>
   </body>
 </html>

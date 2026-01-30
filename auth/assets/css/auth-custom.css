@@ -1,0 +1,466 @@
+/* CAATE Auth Login Custom Styles */
+:root {
+    /* Primary Colors - Matching Admin Dashboard */
+    --primary-blue: #3691bf;
+    --primary-blue-dark: #325596;
+    --primary-blue-light: #3a6385;
+    --accent-blue: #3691bf;
+    --dark-azure: #163856;
+    --darker-azure: #12395a;
+    --light-blue: #e8f4fc;
+    --lighter-blue: #f0f7fb;
+
+    /* Text Colors */
+    --white: #ffffff;
+    --text-dark: #1e293b;
+    --text-medium: #475569;
+    --text-light: #64748b;
+    --text-white: #ffffff;
+
+    /* Glass Effects */
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-bg-dark: rgba(22, 56, 86, 0.85);
+    --glass-border: rgba(255, 255, 255, 0.5);
+    --glass-border-dark: rgba(54, 145, 191, 0.3);
+
+    /* Shadows */
+    --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+    --shadow-glass: 0 8px 32px rgba(22, 56, 86, 0.2);
+
+    /* Border Radius */
+    --border-radius-sm: 12px;
+    --border-radius-md: 20px;
+    --border-radius-lg: 30px;
+    --border-radius-pill: 50px;
+
+    /* Transitions */
+    --transition-fast: 0.2s ease;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease;
+}
+
+/* Body Background - Light Blue like Admin Dashboard */
+body {
+    background-image: url('../../../img/CAATEBGEDITED.png') !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    background-attachment: fixed !important;
+    min-height: 100vh;
+    position: relative;
+}
+
+/* Remove blur overlay - keep background crisp and clear */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(10, 31, 51, 0.15);
+    z-index: -1;
+}
+
+/* Container Background */
+.container-xxl {
+    background-color: transparent !important;
+}
+
+.authentication-wrapper {
+    background-color: transparent !important;
+}
+
+/* Card Styles with Glassmorphism - Matching Admin Dashboard Navbar */
+.card {
+    border-radius: var(--border-radius-md) !important;
+    box-shadow: 0 10px 40px rgba(22, 56, 86, 0.5),
+        0 4px 12px rgba(54, 145, 191, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15),
+        0 0 0 1px rgba(54, 145, 191, 0.1) !important;
+    border: 1px solid rgba(54, 145, 191, 0.3) !important;
+    transition: all var(--transition-normal);
+    /* Glassmorphism effect with navbar gradient */
+    background: linear-gradient(90deg, rgba(15, 41, 66, 0.95) 0%, rgba(10, 31, 51, 0.95) 100%) !important;
+    backdrop-filter: blur(20px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+    color: var(--white) !important;
+    width: 100% !important;
+    margin: 0 auto !important;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Add subtle shine effect like navbar */
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg,
+            transparent 0%,
+            rgba(54, 145, 191, 0.5) 50%,
+            transparent 100%);
+}
+
+.card:hover {
+    box-shadow: 0 15px 50px rgba(22, 56, 86, 0.6),
+        0 6px 20px rgba(54, 145, 191, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2),
+        0 0 0 1px rgba(54, 145, 191, 0.2),
+        0 0 30px rgba(54, 145, 191, 0.2) !important;
+    transform: translateY(-4px);
+    border: 1px solid rgba(54, 145, 191, 0.5) !important;
+}
+
+.card-body {
+    color: var(--white) !important;
+    padding: 2.5rem !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border-radius: var(--border-radius-md) !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* App Brand Logo */
+.app-brand {
+    margin-bottom: 1.5rem !important;
+}
+
+.app-brand-logo img {
+    width: 60px !important;
+    height: 60px !important;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 4px 12px rgba(54, 145, 191, 0.3);
+}
+
+.app-brand-text {
+    color: var(--white) !important;
+    font-size: 1.5rem !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+}
+
+/* Headings and Text */
+h4,
+h5,
+h6 {
+    color: var(--white) !important;
+}
+
+p {
+    color: rgba(255, 255, 255, 0.85) !important;
+}
+
+/* Form Labels */
+.form-label {
+    color: var(--white) !important;
+    font-weight: 500 !important;
+}
+
+/* Form Controls */
+.form-control {
+    background-color: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(54, 145, 191, 0.25) !important;
+    color: var(--white) !important;
+    border-radius: var(--border-radius-sm) !important;
+    transition: all var(--transition-fast);
+    padding: 0.75rem 1rem !important;
+    font-size: 0.95rem !important;
+    backdrop-filter: blur(5px) !important;
+    -webkit-backdrop-filter: blur(5px) !important;
+}
+
+.form-control::placeholder {
+    color: rgba(255, 255, 255, 0.4) !important;
+}
+
+.form-control:focus {
+    background-color: rgba(255, 255, 255, 0.12) !important;
+    border-color: var(--primary-blue) !important;
+    box-shadow: 0 0 0 0.2rem rgba(54, 145, 191, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+    color: var(--white) !important;
+    transform: translateY(-1px);
+}
+
+/* Input Group */
+.input-group-text {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(54, 145, 191, 0.3) !important;
+    color: var(--white) !important;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.input-group-text:hover {
+    background-color: rgba(255, 255, 255, 0.15) !important;
+    border-color: var(--primary-blue) !important;
+}
+
+/* Checkbox */
+.form-check-input {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(54, 145, 191, 0.3) !important;
+}
+
+.form-check-input:checked {
+    background-color: var(--primary-blue) !important;
+    border-color: var(--primary-blue) !important;
+}
+
+.form-check-input:focus {
+    border-color: var(--primary-blue) !important;
+    box-shadow: 0 0 0 0.2rem rgba(54, 145, 191, 0.25) !important;
+}
+
+.form-check-label {
+    color: var(--white) !important;
+}
+
+/* Primary Button - Matching Admin Dashboard */
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%) !important;
+    border: none !important;
+    color: var(--white) !important;
+    transition: all var(--transition-normal);
+    border-radius: var(--border-radius-sm) !important;
+    font-weight: 600 !important;
+    padding: 0.75rem 1.5rem !important;
+    font-size: 1rem !important;
+    letter-spacing: 0.5px !important;
+    text-transform: uppercase !important;
+    position: relative !important;
+    overflow: hidden !important;
+    box-shadow: 0 4px 15px rgba(54, 145, 191, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+}
+
+.btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.btn-primary:hover::before {
+    left: 100%;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+    background: linear-gradient(135deg, var(--primary-blue-dark) 0%, var(--darker-azure) 100%) !important;
+    box-shadow: 0 8px 25px rgba(54, 145, 191, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3),
+        0 0 20px rgba(54, 145, 191, 0.3) !important;
+    transform: translateY(-2px) scale(1.02);
+}
+
+.btn-primary:active {
+    transform: translateY(0) scale(0.98);
+}
+
+/* Links */
+a {
+    color: var(--primary-blue) !important;
+    transition: color var(--transition-fast);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--lighter-blue) !important;
+}
+
+/* Text Center */
+.text-center span {
+    color: rgba(255, 255, 255, 0.85) !important;
+}
+
+/* Small Text */
+small {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+small:hover {
+    color: var(--lighter-blue) !important;
+}
+
+/* Password Toggle Icon */
+.bx-hide,
+.bx-show {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* Responsive Design */
+@media (max-width: 576px) {
+    .card {
+        margin: 1rem;
+        max-width: 95% !important;
+    }
+
+    .card-body {
+        padding: 1.5rem !important;
+    }
+
+    .app-brand-logo img {
+        width: 50px !important;
+        height: 50px !important;
+    }
+
+    .app-brand-text {
+        font-size: 1.25rem !important;
+    }
+}
+
+@media (min-width: 577px) and (max-width: 768px) {
+    .card {
+        max-width: 600px !important;
+    }
+}
+
+@media (min-width: 769px) {
+    .card {
+        max-width: 700px !important;
+    }
+}
+
+/* Animation for Card */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* Scrollbar Customization */
+::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(197, 227, 245, 0.3);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 10px;
+    margin: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, rgba(54, 145, 191, 0.8) 0%, rgba(50, 85, 150, 0.8) 100%);
+    backdrop-filter: blur(10px) saturate(180%);
+    -webkit-backdrop-filter: blur(10px) saturate(180%);
+    border-radius: 10px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 2px 8px rgba(22, 56, 86, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, rgba(54, 145, 191, 1) 0%, rgba(50, 85, 150, 1) 100%);
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 4px 12px rgba(22, 56, 86, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4),
+        0 0 15px rgba(54, 145, 191, 0.3);
+}
+
+
+/* Password Input with Icon Inside */
+.position-relative {
+    position: relative;
+}
+
+.password-input-with-icon {
+    padding-right: 45px !important;
+}
+
+.password-toggle-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    transition: all var(--transition-fast);
+}
+
+.password-toggle-icon:hover {
+    background-color: rgba(54, 145, 191, 0.2);
+}
+
+.password-toggle-icon i {
+    color: rgba(255, 255, 255, 0.7) !important;
+    font-size: 1.25rem;
+    transition: color var(--transition-fast);
+}
+
+.password-toggle-icon:hover i {
+    color: var(--primary-blue) !important;
+}
+
+
+/* Override Authentication Inner Width */
+.authentication-wrapper.authentication-basic .authentication-inner {
+    max-width: 600px !important;
+    position: relative;
+}
+
+
+/* Override Authentication Wrapper Width */
+.authentication-wrapper {
+    max-width: 480px !important;
+    margin: 0 auto !important;
+    width: 100% !important;
+}
+
+.authentication-wrapper.authentication-basic .authentication-inner {
+    max-width: 100% !important;
+    width: 100% !important;
+}
+
+/* Responsive Width Adjustments */
+@media (max-width: 576px) {
+    .authentication-wrapper {
+        max-width: 95% !important;
+    }
+}
+
+@media (min-width: 577px) and (max-width: 768px) {
+    .authentication-wrapper {
+        max-width: 450px !important;
+    }
+}
+
+@media (min-width: 769px) {
+    .authentication-wrapper {
+        max-width: 480px !important;
+    }
+}

@@ -1,0 +1,2943 @@
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    overflow-x: hidden;
+    width: 100%;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    padding: 20px;
+    line-height: 1.4;
+    -webkit-overflow-scrolling: touch;
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
+    position: relative;
+}
+
+@media screen and (max-width: 768px) {
+    body {
+        padding: 5px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    body {
+        padding: 2px;
+    }
+}
+
+.container {
+    max-width: 210mm;
+    margin: 0 auto;
+    background: white;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    width: 100%;
+    position: relative;
+}
+
+@media screen and (max-width: 768px) {
+    .container {
+        max-width: 100%;
+        padding: 10px;
+        margin: 0;
+    }
+}
+
+/* Form Code at Top - Outside Header */
+.form-code-top {
+    text-align: right;
+    font-size: 11px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    padding-right: 10px;
+}
+
+/* Header Styles */
+.form-header {
+    border: 2px solid #000;
+    padding: 15px;
+    margin-bottom: 10px;
+}
+
+@media screen and (max-width: 768px) {
+    .form-header {
+        padding: 8px;
+    }
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.logo-section {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    flex: 1;
+}
+
+@media screen and (max-width: 768px) {
+    .logo-section {
+        flex-direction: column;
+        gap: 8px;
+        align-items: flex-start;
+    }
+}
+
+.tesda-logo {
+    width: 80px;
+    height: 80px;
+    flex-shrink: 0;
+    background: transparent;
+}
+
+@media screen and (max-width: 768px) {
+    .tesda-logo {
+        width: 50px;
+        height: 50px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .tesda-logo {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+.tesda-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    mix-blend-mode: multiply;
+    background: transparent;
+}
+
+.header-text h1 {
+    font-size: 18px;
+    font-weight: bold;
+    color: #000;
+    margin-bottom: 5px;
+}
+
+@media screen and (max-width: 768px) {
+    .header-text h1 {
+        font-size: 12px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .header-text h1 {
+        font-size: 10px;
+    }
+}
+
+.tagline {
+    font-size: 11px;
+    font-style: italic;
+    color: #333;
+}
+
+@media screen and (max-width: 768px) {
+    .tagline {
+        font-size: 8px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .tagline {
+        font-size: 7px;
+    }
+}
+
+.form-code {
+    font-size: 10px;
+    text-align: right;
+    white-space: nowrap;
+}
+
+/* Form Title Section */
+.form-title-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border: 2px solid #000;
+    padding: 10px;
+    margin-bottom: 10px;
+    gap: 15px;
+    flex-wrap: nowrap;
+    position: relative;
+}
+
+@media screen and (max-width: 768px) {
+    .form-title-section {
+        flex-direction: column;
+        padding: 8px;
+        gap: 10px;
+    }
+}
+
+.title-and-reference {
+    flex: 1;
+}
+
+.form-title {
+    font-size: 28px;
+    font-weight: bold;
+    color: #0066cc;
+    margin-bottom: 10px;
+}
+
+/* Reference Number Section */
+.reference-section {
+    margin-bottom: 10px;
+    overflow-x: auto;
+}
+
+.reference-label {
+    font-weight: bold;
+    font-size: 11px;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.reference-grid {
+    display: flex;
+    gap: 0;
+    align-items: flex-start;
+    min-width: min-content;
+}
+
+@media screen and (max-width: 768px) {
+    .reference-section {
+        overflow-x: scroll;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .reference-grid {
+        min-width: 500px;
+    }
+    
+    .reference-label {
+        font-size: 10px;
+    }
+}
+
+.box-column {
+    display: flex;
+    gap: 0;
+}
+
+.reference-labels {
+    display: flex;
+    gap: 0;
+    margin-top: 3px;
+}
+
+.ref-label {
+    font-size: 8px;
+    text-align: center;
+    line-height: 1.1;
+    padding: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.yellow-label {
+    width: 50px;
+}
+
+.blue-label {
+    width: 50px;
+}
+
+.pink-label {
+    width: 50px;
+}
+
+.green-label {
+    width: 50px;
+}
+
+.orange-label {
+    width: 75px;
+}
+
+.purple-label {
+    width: 175px;
+}
+
+.reference-boxes-inline {
+    display: flex;
+    gap: 3px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.inline-label {
+    font-size: 8px;
+    text-align: center;
+    line-height: 1.1;
+    margin: 0 5px;
+    max-width: 60px;
+}
+
+.box-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+}
+
+.box-group > input {
+    display: inline-block;
+}
+
+.box-label-below {
+    font-size: 8px;
+    text-align: center;
+    line-height: 1.1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.box-label-below span {
+    display: block;
+}
+
+.box-label-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 3px;
+}
+
+.box-label-small {
+    font-size: 7px;
+    line-height: 1.1;
+    text-align: center;
+}
+
+/* ULI Section */
+.uli-section {
+    margin-top: 10px;
+    overflow-x: auto;
+}
+
+.uli-label {
+    font-weight: bold;
+    font-size: 11px;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.uli-grid {
+    display: grid;
+    grid-template-columns: repeat(22, 25px);
+    gap: 0;
+    align-items: start;
+    min-width: min-content;
+    position: relative;
+}
+
+.note-italic {
+    font-size: 9px;
+    font-style: italic;
+    margin-top: 5px;
+    text-align: left;
+    display: block;
+    grid-column: 8 / span 15;
+    grid-row: 2;
+}
+
+@media screen and (max-width: 768px) {
+    .uli-section {
+        overflow-x: scroll;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .uli-grid {
+        min-width: 450px;
+    }
+    
+    .uli-label {
+        font-size: 10px;
+    }
+}
+
+.uli-dash {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0;
+    padding: 0 2px;
+    line-height: 25px;
+}
+
+.uli-boxes {
+    display: flex;
+    gap: 2px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.dash {
+    font-size: 14px;
+    font-weight: bold;
+    margin: 0 2px;
+}
+
+.note-small {
+    font-size: 9px;
+    font-style: italic;
+    margin-top: 5px;
+}
+
+/* Picture Box - Passport Size (2x2 inches = 51mm x 51mm) */
+.picture-box {
+    width: 150px;
+    height: 200px;
+    border: 2px solid #000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    background-color: #fff;
+    transition: background-color 0.2s;
+    flex-shrink: 0;
+    padding: 15px 10px;
+    margin: 0;
+}
+
+@media screen and (max-width: 768px) {
+    .picture-box {
+        width: 100px;
+        height: 130px;
+        padding: 10px 8px;
+        margin: 0 auto;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .picture-box {
+        width: 80px;
+        height: 110px;
+        padding: 8px 5px;
+    }
+}
+
+.picture-box:hover {
+    background-color: #f9f9f9;
+}
+
+.picture-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.picture-text {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.picture-description {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    font-size: 11px;
+    font-style: italic;
+}
+
+.upload-icon {
+    font-size: 48px;
+    font-weight: 300;
+    color: #666;
+    line-height: 1;
+}
+
+.upload-text {
+    font-size: 14px;
+    color: #666;
+    font-weight: 500;
+}
+
+.picture-label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.picture-content small {
+    font-size: 10px;
+    line-height: 1.3;
+}
+
+.photo-input {
+    display: none;
+}
+
+.uploaded-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+}
+
+.upload-label {
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #0066cc;
+    color: white;
+    padding: 4px 10px;
+    font-size: 9px;
+    border-radius: 3px;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.upload-label:hover {
+    background-color: #0052a3;
+}
+
+/* Form Sections */
+.form-section {
+    margin-bottom: 15px;
+    border: 1px solid #000;
+    padding: 10px;
+}
+
+/* Uppercase all text inputs */
+input[type="text"],
+input[type="tel"],
+input[type="email"],
+textarea {
+    text-transform: uppercase;
+}
+
+.section-label {
+    font-weight: bold;
+    font-size: 12px;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.section-number {
+    font-weight: bold;
+    font-size: 13px;
+    margin-bottom: 10px;
+    white-space: nowrap;
+    display: inline-block;
+}
+
+@media screen and (max-width: 768px) {
+    .section-number {
+        font-size: 11px;
+        white-space: nowrap;
+        display: inline-block;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .section-number {
+        font-size: 10px;
+        white-space: nowrap;
+        display: inline-block;
+    }
+}
+
+.subsection-label {
+    font-size: 11px;
+    font-weight: bold;
+    margin: 15px 0 8px 0;
+    display: block;
+    clear: both;
+}
+
+/* Reference Number Boxes */
+.reference-boxes {
+    display: flex;
+    gap: 3px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.color-box {
+    width: 25px;
+    height: 25px;
+    border: 1px solid #000;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.color-box.yellow {
+    background-color: #fff9c4;
+}
+
+.color-box.blue {
+    background-color: #bbdefb;
+}
+
+.color-box.pink {
+    background-color: #f8bbd0;
+}
+
+.color-box.green {
+    background-color: #c8e6c9;
+}
+
+.color-box.orange {
+    background-color: #ffe0b2;
+}
+
+.box-label {
+    font-size: 8px;
+    margin: 0 5px;
+    text-align: center;
+    max-width: 60px;
+}
+
+/* ULI Boxes */
+.uli-boxes {
+    display: flex;
+    gap: 3px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.uli-box {
+    width: 25px;
+    height: 25px;
+    border: 1px solid #000;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.uli-box.pink {
+    background-color: #f8bbd0;
+}
+
+.uli-box.green {
+    background-color: #c8e6c9;
+}
+
+.uli-box.orange {
+    background-color: #ffe0b2;
+}
+
+.color-box.purple,
+.uli-box.purple {
+    background-color: #e1bee7;
+}
+
+.note {
+    font-size: 8px;
+    font-style: italic;
+    margin-top: 4px;
+}
+
+/* Signature Section */
+.signature-section {
+    display: flex;
+    gap: 40px;
+    margin: 15px 0;
+    padding: 10px;
+}
+
+.signature-field {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.signature-input,
+.date-input {
+    border: none;
+    border-bottom: 2px solid #000;
+    padding: 5px;
+    font-size: 14px;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    overflow: visible;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.3;
+}
+
+.signature-field label {
+    font-size: 11px;
+    text-align: center;
+}
+
+/* Form Rows */
+.form-row {
+    margin-bottom: 10px;
+    border: 1px solid #000;
+    padding: 8px;
+}
+
+.form-row.full-width {
+    border: 1px solid #000;
+    padding: 0;
+    margin-bottom: 0;
+    display: flex;
+    align-items: stretch;
+    min-height: 40px;
+}
+
+.blue-label {
+    color: #0066cc;
+    font-weight: bold;
+    font-size: 12px;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.blue-label-landscape {
+    color: #0066cc;
+    font-weight: bold;
+    font-size: 12px;
+    background-color: #fff;
+    padding: 10px 15px;
+    border-right: 1px solid #000;
+    min-width: 280px;
+    max-width: 280px;
+    display: flex;
+    align-items: center;
+    white-space: normal;
+    line-height: 1.3;
+    flex-shrink: 0;
+}
+
+.full-width-input {
+    width: 100%;
+    border: none;
+    padding: 10px 15px;
+    font-size: 13px;
+    flex: 1;
+    background: white;
+    text-transform: uppercase;
+    overflow: visible;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    min-height: 40px;
+    line-height: 1.4;
+}
+
+/* Checkbox Rows */
+.checkbox-row {
+    display: flex;
+    gap: 20px;
+    padding: 8px;
+    border: 1px solid #000;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+}
+
+.checkbox-row.multi-column {
+    justify-content: space-between;
+}
+
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.checkbox-group input[type="checkbox"] {
+    width: 15px;
+    height: 15px;
+}
+
+.checkbox-group label {
+    font-size: 11px;
+}
+
+/* Name Grid */
+.name-grid {
+    margin: 10px 0;
+}
+
+.name-row {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 5px;
+    border: 1px solid #000;
+    padding: 5px;
+}
+
+.name-label {
+    font-size: 10px;
+    font-weight: bold;
+    min-width: 70px;
+}
+
+.name-checkbox {
+    width: 15px;
+    height: 15px;
+}
+
+.letter-boxes {
+    display: flex;
+    gap: 2px;
+    flex: 1;
+}
+
+.letter-box {
+    width: 20px;
+    height: 25px;
+    border: 1px solid #000;
+    text-align: center;
+    font-size: 12px;
+    text-transform: uppercase;
+}
+
+.middle-note,
+.extension-note {
+    font-size: 9px;
+    font-weight: normal;
+    text-align: center;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.name-labels-right {
+    display: flex;
+    gap: 30px;
+    margin-left: 15px;
+    align-items: flex-start;
+}
+
+.middle-initial-section,
+.extension-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.middle-initial-boxes {
+    display: flex;
+    gap: 2px;
+}
+
+.middle-initial-box {
+    width: 25px;
+    height: 25px;
+}
+
+.extension-boxes {
+    display: flex;
+    gap: 2px;
+}
+
+.extension-box {
+    width: 25px;
+    height: 25px;
+}
+
+@media screen and (max-width: 768px) {
+    .name-labels-right {
+        flex-direction: column;
+        gap: 15px;
+        margin-left: 10px;
+    }
+    
+    .middle-note,
+    .extension-note {
+        font-size: 8px;
+    }
+    
+    .middle-initial-box,
+    .extension-box {
+        width: 22px;
+        height: 22px;
+    }
+}
+
+/* Address Grid */
+.address-grid {
+    margin: 10px 0;
+}
+
+.address-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.address-field-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.address-field-wrapper.small {
+    flex: 0.3;
+}
+
+.address-input {
+    flex: 1;
+    border: 1px solid #000;
+    padding: 8px;
+    font-size: 11px;
+    width: 100%;
+    text-transform: uppercase;
+    overflow: visible;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    min-height: 35px;
+    line-height: 1.3;
+}
+
+.address-input.small {
+    flex: 0.3;
+}
+
+/* Parents Row */
+.parents-row {
+    display: flex;
+    gap: 20px;
+    margin: 10px 0;
+}
+
+.parent-field {
+    flex: 1;
+}
+
+.parent-input {
+    width: 100%;
+    border: 1px solid #000;
+    padding: 5px;
+    font-size: 11px;
+    text-transform: uppercase;
+    overflow: visible;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    min-height: 30px;
+    line-height: 1.3;
+}
+
+/* Details Grid */
+.details-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin: 10px 0;
+}
+
+/* Make sections 2.7 and 2.8 appear in first row, 2.9 in second row left side */
+.details-grid .detail-section:nth-child(3) {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+.details-grid .detail-section:nth-child(4) {
+    grid-column: 2;
+    grid-row: 2;
+}
+
+.details-grid .detail-section:nth-child(5) {
+    grid-column: 1;
+    grid-row: 3;
+}
+
+.detail-section {
+    border: 1px solid #000;
+    padding: 8px;
+}
+
+.detail-label {
+    font-size: 10px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.contact-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.contact-inputs input {
+    border: 1px solid #000;
+    padding: 4px;
+    font-size: 10px;
+    text-transform: uppercase;
+    overflow: visible;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    min-height: 25px;
+    line-height: 1.3;
+}
+
+/* Birth Row */
+.birth-row {
+    display: flex;
+    gap: 15px;
+    align-items: flex-end;
+    margin: 10px 0;
+}
+
+.birth-field {
+    flex: 1;
+}
+
+.birth-field.small {
+    flex: 0.3;
+}
+
+.birth-boxes {
+    display: flex;
+    gap: 5px;
+}
+
+.birth-box {
+    width: 50px;
+    height: 30px;
+    border: 1px solid #000;
+    text-align: center;
+    font-size: 12px;
+    padding: 5px;
+}
+
+.birthplace-input,
+.age-input {
+    width: 100%;
+    border: 1px solid #000;
+    padding: 5px;
+    font-size: 11px;
+    text-transform: uppercase;
+    overflow: visible;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    min-height: 30px;
+    line-height: 1.3;
+}
+
+/* Buttons */
+.button-container {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin: 30px 0;
+    flex-wrap: wrap;
+}
+
+.button-container-fixed {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.btn-next,
+.btn-print,
+.btn-save {
+    padding: 12px 30px;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-print-fixed {
+    padding: 15px 35px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    background-color: #4caf50;
+    color: white;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    transition: all 0.3s;
+}
+
+.btn-print-fixed:hover {
+    background-color: #45a049;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+    transform: translateY(-2px);
+}
+
+.btn-next {
+    background-color: #0066cc;
+    color: white;
+}
+
+.btn-next:hover {
+    background-color: #0052a3;
+}
+
+.btn-print {
+    background-color: #4caf50;
+    color: white;
+}
+
+.btn-print:hover {
+    background-color: #45a049;
+}
+
+.btn-save {
+    background-color: #ff9800;
+    color: white;
+}
+
+.btn-save:hover {
+    background-color: #f57c00;
+}
+
+.btn-print svg,
+.btn-save svg {
+    vertical-align: middle;
+}
+
+/* Page Break */
+.page-break {
+    page-break-after: always;
+    display: none;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+
+    .container {
+        padding: 10px;
+    }
+
+    .form-code-top {
+        font-size: 9px;
+    }
+
+    .header-text h1 {
+        font-size: 14px;
+    }
+
+    .tagline {
+        font-size: 9px;
+    }
+
+    .form-title {
+        font-size: 18px;
+    }
+
+    .form-title-section {
+        flex-direction: column;
+    }
+
+    .title-and-reference {
+        width: 100%;
+    }
+
+    .form-title {
+        font-size: 18px;
+    }
+
+    .reference-grid,
+    .uli-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0;
+    }
+
+    .uli-dash {
+        font-size: 14px;
+        padding: 0 1px;
+    }
+
+    .box-column {
+        margin-bottom: 5px;
+    }
+
+    .reference-labels {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0;
+    }
+
+    .ref-label {
+        font-size: 7px;
+        padding: 1px;
+    }
+
+    .yellow-label {
+        width: 50px;
+    }
+
+    .blue-label {
+        width: 50px;
+    }
+
+    .pink-label {
+        width: 50px;
+    }
+
+    .green-label {
+        width: 50px;
+    }
+
+    .orange-label {
+        width: 75px;
+    }
+
+    .purple-label {
+        width: 175px;
+    }
+
+    .reference-boxes-inline {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2px;
+    }
+
+    .inline-label {
+        font-size: 7px;
+        max-width: 50px;
+        margin: 0 3px;
+    }
+
+    .box-group {
+        margin-bottom: 5px;
+    }
+
+    .box-label-below {
+        font-size: 7px;
+    }
+
+    .box-label-small {
+        font-size: 6px;
+    }
+
+    .picture-box {
+        width: 120px;
+        height: 160px;
+        font-size: 10px;
+        margin: 0 auto;
+        padding: 10px 8px;
+    }
+
+    .picture-text {
+        font-size: 14px;
+    }
+
+    .picture-description {
+        font-size: 9px;
+    }
+
+    .picture-box:hover {
+        background-color: #f9f9f9;
+    }
+
+    .upload-icon {
+        font-size: 36px;
+    }
+
+    .upload-text {
+        font-size: 11px;
+    }
+
+    .uploaded-photo {
+        object-fit: cover;
+    }
+
+    .upload-label {
+        font-size: 8px;
+        padding: 3px 8px;
+    }
+
+    .logo-section {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .tesda-logo {
+        width: 60px;
+        height: 60px;
+        background: transparent;
+    }
+
+    .tesda-logo img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        mix-blend-mode: multiply;
+    }
+
+    .reference-boxes,
+    .uli-boxes {
+        justify-content: flex-start;
+    }
+
+    .color-box,
+    .uli-box {
+        width: 20px;
+        height: 20px;
+        font-size: 12px;
+    }
+
+    .box-label {
+        font-size: 7px;
+        max-width: 50px;
+    }
+
+    .signature-section {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .details-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .birth-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .birth-field.small {
+        flex: 1;
+    }
+
+    .parents-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .address-row {
+        flex-direction: column;
+    }
+
+    .address-field-wrapper {
+        width: 100%;
+    }
+
+    .address-field-wrapper.small {
+        flex: 1;
+    }
+
+    .address-input {
+        width: 100%;
+        padding: 8px;
+    }
+
+    .letter-boxes {
+        flex-wrap: wrap;
+    }
+
+    .form-row.full-width {
+        flex-direction: column;
+    }
+
+    .blue-label-landscape {
+        font-size: 12px;
+        min-width: auto;
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #000;
+        white-space: normal;
+    }
+
+    .full-width-input {
+        padding: 8px;
+    }
+
+    .button-container {
+        flex-direction: column;
+    }
+
+    .btn-next,
+    .btn-print,
+    .btn-save {
+        width: 100%;
+    }
+}
+
+/* Print Styles */
+@media print {
+    @page {
+        size: 8.5in 13in;
+        margin: 0.3in 0.4in;
+    }
+
+    body {
+        background: white;
+        margin: 0 !important;
+        padding: 0 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        font-size: 9px !important;
+        line-height: 1.2 !important;
+    }
+
+    /* Hide any auto-generated content */
+    body::before,
+    body::after,
+    html::before,
+    html::after {
+        content: none !important;
+        display: none !important;
+        visibility: hidden !important;
+    }
+
+    .container {
+        max-width: 100%;
+        box-shadow: none;
+        padding: 3px !important;
+        margin: 0;
+    }
+
+    .no-print {
+        display: none !important;
+        visibility: hidden !important;
+    }
+
+    .button-container-fixed {
+        display: none !important;
+        visibility: hidden !important;
+    }
+
+    /* Compact header */
+    .form-header {
+        padding: 3px !important;
+        margin-bottom: 2px !important;
+    }
+
+    .header-text h1 {
+        font-size: 13px !important;
+        margin-bottom: 1px !important;
+        line-height: 1.1 !important;
+    }
+
+    .tagline {
+        font-size: 8px !important;
+    }
+
+    .tesda-logo {
+        width: 55px !important;
+        height: 55px !important;
+    }
+
+    .form-code-top {
+        margin-bottom: 1px !important;
+        font-size: 7px !important;
+    }
+
+    .page-break {
+        display: block;
+        page-break-after: always;
+        height: 0;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Compact spacing for all sections */
+    .form-section {
+        margin-bottom: 3px !important;
+        padding: 4px !important;
+        page-break-inside: auto;
+    }
+
+    .profile-section {
+        page-break-after: auto !important;
+        margin-bottom: 2px !important;
+    }
+
+    /* Section headers */
+    .section-number {
+        margin-bottom: 3px !important;
+        font-size: 10px !important;
+        page-break-after: avoid;
+        line-height: 1.2 !important;
+        padding: 0 !important;
+    }
+
+    .subsection-label {
+        margin: 2px 0 1px 0 !important;
+        font-size: 9px !important;
+        line-height: 1.2 !important;
+    }
+
+    /* Keep all borders and styles exactly as shown */
+    .form-header,
+    .form-section,
+    .form-row,
+    .form-row.full-width,
+    .checkbox-row,
+    .name-row,
+    .detail-section {
+        border: 1px solid #000 !important;
+    }
+
+    .form-row.full-width {
+        display: flex !important;
+        align-items: stretch !important;
+        min-height: 40px !important;
+        page-break-inside: avoid;
+    }
+
+    .blue-label-landscape {
+        min-width: 280px !important;
+        max-width: 280px !important;
+        flex-shrink: 0 !important;
+        border-right: 1px solid #000 !important;
+        padding: 10px 15px !important;
+        font-size: 12px !important;
+        white-space: normal !important;
+        line-height: 1.3 !important;
+    }
+
+    .full-width-input {
+        padding: 10px 15px !important;
+        border: none !important;
+    }
+
+    /* Form title section - keep layout */
+    .form-title-section {
+        border: 2px solid #000 !important;
+        page-break-inside: avoid;
+        margin-bottom: 3px !important;
+        padding: 5px !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: flex-start !important;
+        flex-wrap: nowrap !important;
+        gap: 10px !important;
+    }
+
+    .form-title {
+        font-size: 20px !important;
+        margin-bottom: 3px !important;
+        line-height: 1.2 !important;
+    }
+
+    .picture-box {
+        border: 2px solid #000 !important;
+        flex-shrink: 0 !important;
+        width: 120px !important;
+        height: 160px !important;
+        page-break-inside: avoid;
+        margin: 0 !important;
+        padding: 8px 6px !important;
+    }
+
+    .picture-text {
+        font-size: 12px !important;
+    }
+
+    .picture-description {
+        font-size: 8px !important;
+    }
+
+    /* Add spacing between sections */
+    .signature-section {
+        margin: 3px 0 !important;
+        page-break-inside: avoid;
+        display: flex !important;
+        gap: 15px !important;
+    }
+
+    .signature-field {
+        flex: 1 !important;
+    }
+
+    .signature-field label {
+        font-size: 8px !important;
+    }
+
+    .signature-input,
+    .date-input {
+        padding: 1px !important;
+        font-size: 9px !important;
+    }
+
+    .checkbox-row {
+        margin-bottom: 2px !important;
+        padding: 3px !important;
+        page-break-inside: avoid;
+    }
+
+    /* Keep input styling visible */
+    input[type="text"],
+    input[type="tel"],
+    input[type="email"],
+    input[type="date"],
+    input[type="number"],
+    input[type="time"],
+    textarea {
+        border: 1px solid #000 !important;
+        background: white !important;
+        padding: 2px !important;
+        font-size: 9px !important;
+    }
+
+    /* Signature and date inputs as lines */
+    .signature-input,
+    .date-input,
+    .signature-line {
+        border: none !important;
+        border-bottom: 2px solid #000 !important;
+        background: transparent !important;
+        padding: 3px 0 !important;
+        box-shadow: none !important;
+    }
+
+    /* Admission slip signature lines */
+    .signature-row-admission input[type="text"],
+    .signature-row-admission input[type="date"] {
+        border: none !important;
+        border-bottom: 2px solid #000 !important;
+        background: transparent !important;
+        padding: 3px 0 !important;
+        box-shadow: none !important;
+    }
+
+    .full-width-input {
+        border: none !important;
+        border-bottom: 1px solid #000 !important;
+        padding: 6px 10px !important;
+        font-size: 10px !important;
+    }
+
+    input[type="checkbox"] {
+        border: 1px solid #000 !important;
+        width: 11px !important;
+        height: 11px !important;
+    }
+
+    /* Preserve all background colors */
+    .color-box,
+    .uli-box,
+    .letter-box,
+    .birth-box,
+    .color-box-small {
+        border: 1px solid #000 !important;
+        print-color-adjust: exact !important;
+        -webkit-print-color-adjust: exact !important;
+    }
+
+    .color-box.yellow,
+    .color-box-small.yellow {
+        background-color: #fff9c4 !important;
+        print-color-adjust: exact !important;
+        -webkit-print-color-adjust: exact !important;
+    }
+
+    .color-box.blue,
+    .uli-box.blue,
+    .color-box-small.blue {
+        background-color: #bbdefb !important;
+        print-color-adjust: exact !important;
+        -webkit-print-color-adjust: exact !important;
+    }
+
+    .color-box.pink,
+    .uli-box.pink,
+    .color-box-small.pink {
+        background-color: #f8bbd0 !important;
+        print-color-adjust: exact !important;
+        -webkit-print-color-adjust: exact !important;
+    }
+
+    .color-box.green,
+    .uli-box.green,
+    .color-box-small.green {
+        background-color: #c8e6c9 !important;
+        print-color-adjust: exact !important;
+        -webkit-print-color-adjust: exact !important;
+    }
+
+    .color-box.orange,
+    .uli-box.orange,
+    .color-box-small.orange {
+        background-color: #ffe0b2 !important;
+        print-color-adjust: exact !important;
+        -webkit-print-color-adjust: exact !important;
+    }
+
+    .color-box.purple,
+    .uli-box.purple,
+    .color-box-small.purple {
+        background-color: #e1bee7 !important;
+        print-color-adjust: exact !important;
+        -webkit-print-color-adjust: exact !important;
+    }
+
+    /* Keep blue text colors */
+    .blue-label,
+    .blue-label-landscape,
+    .form-title {
+        color: #0066cc !important;
+        print-color-adjust: exact !important;
+        -webkit-print-color-adjust: exact !important;
+    }
+
+    /* Preserve table styles */
+    .data-table {
+        margin-bottom: 3px !important;
+        page-break-inside: auto;
+        font-size: 8px !important;
+        width: 100% !important;
+    }
+
+    .data-table th {
+        background-color: #e3f2fd !important;
+        print-color-adjust: exact !important;
+        -webkit-print-color-adjust: exact !important;
+        padding: 2px 3px !important;
+        font-size: 8px !important;
+        line-height: 1.2 !important;
+        height: auto !important;
+    }
+
+    .data-table td {
+        padding: 2px !important;
+        height: auto !important;
+        line-height: 1.2 !important;
+    }
+
+    .table-input {
+        font-size: 8px !important;
+        padding: 2px !important;
+        height: auto !important;
+        line-height: 1.2 !important;
+        font-weight: bold !important;
+    }
+
+    .note-small {
+        font-size: 7px !important;
+        margin-top: 2px !important;
+        margin-bottom: 2px !important;
+    }
+
+    /* Keep images and logos */
+    svg,
+    .tesda-logo img,
+    .uploaded-photo,
+    .uploaded-photo-admission {
+        print-color-adjust: exact !important;
+        -webkit-print-color-adjust: exact !important;
+    }
+
+    /* Maintain layout */
+    .reference-grid,
+    .uli-grid,
+    .reference-labels,
+    .form-title-section {
+        display: flex !important;
+    }
+
+    .reference-section,
+    .uli-section {
+        margin-bottom: 3px !important;
+        page-break-inside: avoid;
+    }
+
+    .reference-label,
+    .uli-label {
+        font-size: 8px !important;
+        margin-bottom: 1px !important;
+    }
+
+    .color-box,
+    .uli-box {
+        width: 18px !important;
+        height: 18px !important;
+        font-size: 10px !important;
+    }
+
+    .ref-label {
+        font-size: 5px !important;
+        padding: 0px !important;
+        line-height: 1 !important;
+    }
+
+    .note-italic {
+        font-size: 6px !important;
+        margin-top: 1px !important;
+    }
+
+    /* Admission slip - merge with section 6 */
+    .admission-slip {
+        page-break-before: avoid !important;
+        page-break-after: auto !important;
+        margin-top: 2px !important;
+        padding: 0 !important;
+        page-break-inside: avoid;
+    }
+
+    .admission-header {
+        padding: 2px !important;
+        margin-top: 0px !important;
+    }
+
+    .admission-header h2 {
+        font-size: 11px !important;
+        margin: 0 !important;
+        line-height: 1.1 !important;
+    }
+
+    .admission-content {
+        padding: 3px !important;
+        gap: 4px !important;
+    }
+
+    .admission-reference {
+        padding: 2px !important;
+        margin-bottom: 1px !important;
+    }
+
+    .admission-row {
+        margin-bottom: 1px !important;
+        gap: 4px !important;
+    }
+
+    .admission-field label {
+        font-size: 7px !important;
+        margin-bottom: 0px !important;
+        line-height: 1.1 !important;
+    }
+
+    .admission-input {
+        padding: 1px !important;
+        font-size: 8px !important;
+        line-height: 1.1 !important;
+    }
+
+    .processing-section {
+        padding: 2px !important;
+        margin: 1px 0 !important;
+    }
+
+    .processing-section h4 {
+        font-size: 8px !important;
+        margin-bottom: 1px !important;
+        line-height: 1.1 !important;
+    }
+
+    .requirements-row {
+        padding: 2px !important;
+        margin: 1px 0 !important;
+        gap: 4px !important;
+    }
+
+    .req-label {
+        font-size: 7px !important;
+        margin-bottom: 1px !important;
+        line-height: 1.1 !important;
+    }
+
+    .checkbox-list {
+        gap: 1px !important;
+    }
+
+    .checkbox-list .checkbox-group {
+        margin-bottom: 1px !important;
+    }
+
+    .checkbox-list .checkbox-group label {
+        font-size: 7px !important;
+        line-height: 1.1 !important;
+    }
+
+    .signature-row-admission {
+        margin: 2px 0 !important;
+        gap: 6px !important;
+    }
+
+    .signature-box {
+        padding: 2px !important;
+    }
+
+    .signature-box label {
+        font-size: 7px !important;
+        margin-bottom: 1px !important;
+        line-height: 1.1 !important;
+    }
+
+    .signature-line {
+        padding: 1px !important;
+        font-size: 8px !important;
+        line-height: 1.1 !important;
+    }
+
+    .date-field {
+        margin-top: 1px !important;
+    }
+
+    .date-field label {
+        font-size: 7px !important;
+        line-height: 1.1 !important;
+    }
+
+    .date-input-small {
+        padding: 1px !important;
+        font-size: 7px !important;
+        line-height: 1.1 !important;
+    }
+
+    .admission-note {
+        padding: 2px !important;
+        margin-top: 1px !important;
+    }
+
+    .admission-note p {
+        font-size: 9px !important;
+        margin: 0 !important;
+        line-height: 1.1 !important;
+    }
+
+    .picture-box-admission {
+        width: 85px !important;
+        height: 110px !important;
+        padding: 4px 3px !important;
+    }
+
+    .picture-text-admission {
+        font-size: 9px !important;
+        line-height: 1.1 !important;
+    }
+
+    .picture-desc-admission {
+        font-size: 7px !important;
+        line-height: 1.1 !important;
+    }
+
+    .color-box-small {
+        width: 17px !important;
+        height: 17px !important;
+        font-size: 9px !important;
+    }
+
+    .reference-label {
+        font-size: 8px !important;
+        margin-bottom: 1px !important;
+    }
+
+    /* Ensure proper spacing for name grid */
+    .name-grid {
+        margin: 2px 0 !important;
+    }
+
+    .name-row {
+        margin-bottom: 1px !important;
+        padding: 1px !important;
+        page-break-inside: avoid;
+    }
+
+    .name-label {
+        font-size: 7px !important;
+        min-width: 50px !important;
+    }
+
+    .letter-box {
+        width: 15px !important;
+        height: 18px !important;
+        font-size: 9px !important;
+    }
+
+    .middle-initial-box,
+    .extension-box {
+        width: 18px !important;
+        height: 18px !important;
+        font-size: 9px !important;
+    }
+
+    .middle-note,
+    .extension-note {
+        font-size: 6px !important;
+        margin-bottom: 1px !important;
+    }
+
+    /* Address and details spacing */
+    .address-grid,
+    .details-grid {
+        margin: 2px 0 !important;
+    }
+
+    .address-row {
+        margin-bottom: 2px !important;
+        display: flex !important;
+        gap: 4px !important;
+    }
+
+    .address-field-wrapper {
+        flex: 1 !important;
+    }
+
+    .address-input {
+        padding: 3px !important;
+        width: 100% !important;
+        font-size: 8px !important;
+    }
+
+    .parents-row {
+        margin: 2px 0 !important;
+        display: flex !important;
+        gap: 10px !important;
+    }
+
+    .parent-field {
+        flex: 1 !important;
+    }
+
+    .parent-input {
+        padding: 3px !important;
+        font-size: 8px !important;
+    }
+
+    /* Section headers */
+    .section-number {
+        margin-bottom: 1px !important;
+        font-size: 8px !important;
+        page-break-after: avoid;
+        line-height: 1 !important;
+        padding: 1px 0 !important;
+    }
+
+    .subsection-label {
+        margin: 1px 0 0px 0 !important;
+        font-size: 7px !important;
+        line-height: 1 !important;
+    }
+
+    /* Form sections spacing */
+    .form-section {
+        margin-bottom: 1px !important;
+        padding: 2px !important;
+        page-break-inside: auto;
+    }
+
+    .profile-section {
+        page-break-after: always !important;
+        margin-bottom: 0px !important;
+    }
+
+    /* Details grid */
+    .details-grid {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 2px !important;
+        margin: 1px 0 !important;
+    }
+
+    .detail-section {
+        padding: 2px !important;
+    }
+
+    .detail-label {
+        font-size: 6px !important;
+        margin-bottom: 1px !important;
+        line-height: 1 !important;
+    }
+
+    .checkbox-group {
+        margin-bottom: 0px !important;
+    }
+
+    .checkbox-group label {
+        font-size: 6px !important;
+        line-height: 1 !important;
+    }
+
+    /* Birth row */
+    .birth-row {
+        display: flex !important;
+        gap: 4px !important;
+        margin: 1px 0 !important;
+    }
+
+    .birth-field {
+        flex: 1 !important;
+    }
+
+    .birth-field.small {
+        flex: 0.3 !important;
+    }
+
+    .birth-box {
+        width: 35px !important;
+        height: 20px !important;
+        font-size: 8px !important;
+        padding: 1px !important;
+    }
+
+    .birthplace-input,
+    .age-input {
+        padding: 3px !important;
+        font-size: 8px !important;
+    }
+}
+
+
+/* Page 2 Styles */
+.page-2 {
+    margin-top: 40px;
+}
+
+/* Table Styles */
+.table-container {
+    overflow-x: auto;
+    margin: 10px 0;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+    table-layout: fixed;
+}
+
+/* Work Experience Table - Section 3 */
+.data-table.work-experience col:nth-child(1) { width: 25%; } /* Name of Company */
+.data-table.work-experience col:nth-child(2) { width: 15%; } /* Position */
+.data-table.work-experience col:nth-child(3) { width: 15%; } /* Inclusive Dates */
+.data-table.work-experience col:nth-child(4) { width: 12%; } /* Monthly Salary */
+.data-table.work-experience col:nth-child(5) { width: 18%; } /* Status of Appointment */
+.data-table.work-experience col:nth-child(6) { width: 15%; } /* No. of Yrs. Working Exp. */
+
+/* Training/Seminars Table - Section 4 */
+.data-table.training-seminars col:nth-child(1) { width: 30%; } /* Title */
+.data-table.training-seminars col:nth-child(2) { width: 20%; } /* Venue */
+.data-table.training-seminars col:nth-child(3) { width: 18%; } /* Inclusive Dates */
+.data-table.training-seminars col:nth-child(4) { width: 12%; } /* No. of Hours */
+.data-table.training-seminars col:nth-child(5) { width: 20%; } /* Conducted By */
+
+/* Licensure Examination Table - Section 5 */
+.data-table.licensure-exam col:nth-child(1) { width: 25%; } /* Title */
+.data-table.licensure-exam col:nth-child(2) { width: 12%; } /* Year Taken */
+.data-table.licensure-exam col:nth-child(3) { width: 20%; } /* Examination Venue */
+.data-table.licensure-exam col:nth-child(4) { width: 10%; } /* Rating */
+.data-table.licensure-exam col:nth-child(5) { width: 18%; } /* Remarks */
+.data-table.licensure-exam col:nth-child(6) { width: 15%; } /* Expiry Date */
+
+/* Competency Assessment Table - Section 6 */
+.data-table.competency-assessment col:nth-child(1) { width: 20%; } /* Title */
+.data-table.competency-assessment col:nth-child(2) { width: 15%; } /* Qualification Level */
+.data-table.competency-assessment col:nth-child(3) { width: 15%; } /* Industry Sector */
+.data-table.competency-assessment col:nth-child(4) { width: 18%; } /* Certificate Number */
+.data-table.competency-assessment col:nth-child(5) { width: 16%; } /* Date of Issuance */
+.data-table.competency-assessment col:nth-child(6) { width: 16%; } /* Expiration Date */
+
+.data-table th {
+    background-color: #e3f2fd;
+    border: 1px solid #000;
+    padding: 8px;
+    text-align: left;
+    font-weight: bold;
+    font-size: 10px;
+    vertical-align: top;
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.3;
+    height: auto;
+}
+
+.data-table td {
+    border: 1px solid #000;
+    padding: 0;
+    vertical-align: middle;
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.4;
+    height: auto;
+    background: white;
+}
+
+.table-input {
+    width: 100%;
+    border: none;
+    padding: 6px;
+    font-size: 10px;
+    font-weight: bold;
+    background: white;
+    text-transform: uppercase;
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-all;
+    line-height: 1.4;
+    height: auto;
+    min-height: 30px;
+    resize: none;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+    display: block;
+    overflow: visible;
+}
+
+/* Declaration Section */
+.declaration-section {
+    background-color: #f9f9f9;
+}
+
+.declaration-text {
+    font-size: 11px;
+    line-height: 1.6;
+    margin-bottom: 15px;
+    text-align: justify;
+}
+
+/* Office Use Section */
+.office-use {
+    background-color: #fff9c4;
+    border: 2px solid #000;
+}
+
+.remarks-textarea {
+    width: 100%;
+    border: 1px solid #000;
+    padding: 8px;
+    font-size: 11px;
+    font-family: Arial, sans-serif;
+    resize: vertical;
+}
+
+/* Responsive adjustments for Page 2 */
+@media screen and (max-width: 768px) {
+    .page-2 {
+        margin-top: 20px;
+    }
+
+    .data-table {
+        font-size: 9px;
+        min-width: 100%;
+        table-layout: auto;
+    }
+
+    .data-table th {
+        font-size: 8px;
+        padding: 5px;
+        white-space: normal;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        line-height: 1.3;
+        vertical-align: top;
+    }
+
+    .table-input {
+        font-size: 9px;
+        white-space: normal;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        line-height: 1.3;
+    }
+
+    .table-container {
+        overflow-x: scroll;
+    }
+}
+
+/* Admission Slip Styles */
+.admission-slip {
+    border: 2px solid #000;
+    margin-top: 10px;
+    page-break-before: auto;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+.admission-header {
+    background-color: #b3e5fc;
+    padding: 15px;
+    text-align: center;
+    border-bottom: 2px solid #000;
+}
+
+.admission-header h2 {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.admission-reference {
+    padding: 15px;
+    border-bottom: 1px solid #000;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.reference-grid-small {
+    display: flex;
+    gap: 0;
+    margin-top: 5px;
+    min-width: min-content;
+}
+
+.color-box-small {
+    width: 30px;
+    height: 30px;
+    border: 1px solid #000;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+@media screen and (max-width: 768px) {
+    .admission-slip {
+        margin-top: 20px;
+    }
+
+    .admission-header {
+        padding: 10px;
+    }
+
+    .admission-header h2 {
+        font-size: 16px;
+    }
+
+    .admission-reference {
+        padding: 10px;
+        overflow-x: scroll;
+    }
+
+    .reference-grid-small {
+        min-width: 450px;
+    }
+
+    .color-box-small {
+        width: 25px;
+        height: 25px;
+        font-size: 12px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .admission-header h2 {
+        font-size: 14px;
+    }
+
+    .admission-reference {
+        padding: 8px;
+    }
+
+    .color-box-small {
+        width: 22px;
+        height: 22px;
+        font-size: 11px;
+    }
+}
+
+.color-box-small.yellow {
+    background-color: #fff9c4;
+}
+
+.color-box-small.blue {
+    background-color: #bbdefb;
+}
+
+.color-box-small.pink {
+    background-color: #f8bbd0;
+}
+
+.color-box-small.green {
+    background-color: #c8e6c9;
+}
+
+.color-box-small.orange {
+    background-color: #ffe0b2;
+}
+
+.color-box-small.purple {
+    background-color: #e1bee7;
+}
+
+.admission-content {
+    display: flex;
+    padding: 15px;
+    gap: 15px;
+    width: 100%;
+}
+
+@media screen and (max-width: 768px) {
+    .admission-content {
+        flex-direction: column;
+        padding: 10px;
+        gap: 10px;
+    }
+}
+
+.admission-left {
+    flex: 1;
+    width: 100%;
+}
+
+.admission-picture {
+    flex-shrink: 0;
+}
+
+@media screen and (max-width: 768px) {
+    .admission-picture {
+        margin: 10px auto;
+        display: flex;
+        justify-content: center;
+    }
+}
+
+.admission-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+@media screen and (max-width: 768px) {
+    .admission-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+.admission-field {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.admission-field label {
+    font-size: 11px;
+    font-weight: bold;
+    margin-bottom: 3px;
+}
+
+@media screen and (max-width: 768px) {
+    .admission-field label {
+        font-size: 10px;
+    }
+}
+
+.admission-input {
+    border: 1px solid #000;
+    padding: 5px;
+    font-size: 11px;
+    width: 100%;
+    text-transform: uppercase;
+    overflow: visible;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    min-height: 30px;
+    line-height: 1.3;
+}
+
+@media screen and (max-width: 768px) {
+    .admission-input {
+        font-size: 10px;
+        padding: 4px;
+    }
+}
+
+.admission-field-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0;
+}
+
+.admission-field-small {
+    display: flex;
+    flex-direction: column;
+}
+
+.admission-field-small label {
+    font-size: 10px;
+    font-weight: bold;
+    margin-bottom: 2px;
+}
+
+@media screen and (max-width: 768px) {
+    .admission-field-small label {
+        font-size: 9px;
+    }
+}
+
+.processing-section {
+    border: 1px solid #000;
+    padding: 10px;
+    margin: 15px 0;
+}
+
+.processing-section h4 {
+    font-size: 11px;
+    font-style: italic;
+    margin-bottom: 8px;
+}
+
+.requirements-row {
+    display: flex;
+    gap: 15px;
+    border: 1px solid #000;
+    padding: 10px;
+    margin: 10px 0;
+    width: 100%;
+}
+
+@media screen and (max-width: 768px) {
+    .requirements-row {
+        flex-direction: column;
+        gap: 10px;
+        padding: 8px;
+    }
+}
+
+.requirements-col,
+.remarks-col {
+    flex: 1;
+    min-width: 0;
+}
+
+.req-label {
+    font-size: 11px;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 8px;
+}
+
+@media screen and (max-width: 768px) {
+    .req-label {
+        font-size: 10px;
+    }
+}
+
+.checkbox-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.others-input {
+    border: none;
+    border-bottom: 1px solid #000;
+    margin-left: 5px;
+    flex: 1;
+    font-size: 10px;
+    min-width: 0;
+    text-transform: uppercase;
+    overflow: visible;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.3;
+}
+
+@media screen and (max-width: 768px) {
+    .others-input {
+        font-size: 9px;
+        margin-left: 0;
+        margin-top: 5px;
+        width: 100%;
+    }
+}
+
+.signature-row-admission {
+    display: flex;
+    gap: 20px;
+    margin: 20px 0;
+    width: 100%;
+}
+
+@media screen and (max-width: 768px) {
+    .signature-row-admission {
+        flex-direction: column;
+        gap: 15px;
+    }
+}
+
+.signature-box {
+    flex: 1;
+    border: 1px solid #000;
+    padding: 10px;
+    min-width: 0;
+}
+
+@media screen and (max-width: 768px) {
+    .signature-box {
+        padding: 8px;
+    }
+}
+
+.signature-line {
+    width: 100%;
+    border: none;
+    border-bottom: 2px solid #000;
+    padding: 5px 0;
+    margin-bottom: 5px;
+    font-size: 11px;
+    text-transform: uppercase;
+    overflow: visible;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.3;
+}
+
+@media screen and (max-width: 768px) {
+    .signature-line {
+        font-size: 10px;
+    }
+}
+
+.signature-box label {
+    font-size: 10px;
+    text-align: center;
+    display: block;
+    margin-bottom: 10px;
+}
+
+@media screen and (max-width: 768px) {
+    .signature-box label {
+        font-size: 9px;
+    }
+}
+
+.date-field {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 5px;
+}
+
+.date-field label {
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.date-input-small {
+    border: 1px solid #000;
+    padding: 3px;
+    font-size: 10px;
+    flex: 1;
+}
+
+.admission-note {
+    border: 1px solid #000;
+    padding: 10px;
+    text-align: center;
+    background-color: #f0f0f0;
+}
+
+.admission-note p {
+    font-size: 12px;
+    color: #0066cc;
+    font-weight: bold;
+    margin: 0;
+}
+
+/* Picture Box for Admission Slip */
+.picture-box-admission {
+    width: 51mm;
+    height: 51mm;
+    border: 2px solid #000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    background-color: #fff;
+    padding: 15px 10px;
+}
+
+.picture-box-admission:hover {
+    background-color: #f9f9f9;
+}
+
+.picture-content-admission {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.picture-text-admission {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.picture-desc-admission {
+    font-size: 10px;
+    font-style: italic;
+}
+
+.uploaded-photo-admission {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+}
+
+/* Responsive for Admission Slip */
+@media screen and (max-width: 768px) {
+    .admission-content {
+        flex-direction: column;
+    }
+
+    .admission-picture {
+        margin: 0 auto;
+    }
+
+    .requirements-row {
+        flex-direction: column;
+    }
+
+    .signature-row-admission {
+        flex-direction: column;
+    }
+
+    .reference-grid-small {
+        flex-wrap: wrap;
+    }
+
+    .color-box-small {
+        width: 25px;
+        height: 25px;
+        font-size: 12px;
+    }
+}
+
+/* Print styles for Admission Slip */
+@media print {
+    .admission-header {
+        background-color: #b3e5fc !important;
+        print-color-adjust: exact !important;
+        -webkit-print-color-adjust: exact !important;
+    }
+
+    .admission-note {
+        background-color: #f0f0f0 !important;
+        print-color-adjust: exact !important;
+        -webkit-print-color-adjust: exact !important;
+    }
+
+    .admission-slip {
+        border: 2px solid #000 !important;
+        page-break-before: auto !important;
+    }
+}
+
+
+/* Enhanced Mobile Responsiveness */
+@media screen and (max-width: 480px) {
+    body {
+        padding: 5px;
+    }
+
+    .container {
+        padding: 5px;
+    }
+
+    .form-code-top {
+        font-size: 8px;
+    }
+
+    .header-text h1 {
+        font-size: 10px;
+    }
+
+    .tagline {
+        font-size: 7px;
+    }
+
+    .form-title {
+        font-size: 14px;
+    }
+
+    .tesda-logo {
+        width: 40px;
+        height: 40px;
+    }
+
+    .color-box,
+    .uli-box {
+        width: 18px;
+        height: 18px;
+        font-size: 10px;
+    }
+
+    .picture-box {
+        width: 90px;
+        height: 120px;
+    }
+
+    .picture-text {
+        font-size: 11px;
+    }
+
+    .picture-description {
+        font-size: 7px;
+    }
+
+    .blue-label-landscape {
+        font-size: 10px;
+        padding: 6px 8px;
+    }
+
+    .section-number {
+        font-size: 11px;
+    }
+
+    .data-table {
+        font-size: 8px;
+        min-width: 500px;
+        table-layout: auto;
+    }
+
+    .data-table th {
+        font-size: 7px;
+        padding: 4px 2px;
+        white-space: normal;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        line-height: 1.3;
+        vertical-align: top;
+    }
+
+    .table-input {
+        font-size: 8px;
+        padding: 2px;
+        white-space: normal;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        line-height: 1.3;
+        font-weight: bold;
+        min-height: 25px;
+    }
+
+    .letter-box {
+        width: 16px;
+        height: 20px;
+        font-size: 10px;
+    }
+
+    .btn-print-fixed {
+        padding: 10px 20px;
+        font-size: 12px;
+    }
+
+    .admission-header h2 {
+        font-size: 14px;
+    }
+
+    .color-box-small {
+        width: 20px;
+        height: 20px;
+        font-size: 10px;
+    }
+
+    .ref-label {
+        font-size: 6px;
+    }
+}
+
+/* Tablet Landscape */
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+    .container {
+        padding: 15px;
+    }
+
+    .form-title {
+        font-size: 22px;
+    }
+
+    .header-text h1 {
+        font-size: 16px;
+    }
+
+    .picture-box {
+        width: 130px;
+        height: 170px;
+    }
+
+    .data-table {
+        font-size: 10px;
+    }
+
+    .data-table th {
+        font-size: 9px;
+        padding: 6px;
+    }
+
+    .table-container {
+        overflow-x: auto;
+    }
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) and (pointer: coarse) {
+    input[type="text"],
+    input[type="tel"],
+    input[type="email"],
+    input[type="date"],
+    input[type="number"],
+    input[type="time"],
+    textarea {
+        font-size: 16px !important;
+    }
+
+    .btn-print-fixed {
+        padding: 15px 30px;
+        font-size: 16px;
+    }
+
+    .checkbox-group input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+    }
+}

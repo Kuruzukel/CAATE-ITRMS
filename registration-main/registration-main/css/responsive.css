@@ -1,0 +1,52 @@
+/* ===== RESPONSIVE STYLES ===== */
+
+@media (max-width: 640px) {
+    .form-content {
+        padding: 1rem;
+    }
+
+    .card {
+        padding: 1rem;
+    }
+
+    .header-banner {
+        flex-direction: column;
+        padding: 0.5rem 1rem;
+        text-align: center;
+    }
+
+    .header-banner-content {
+        text-align: center;
+    }
+
+    .header-banner-content h2 {
+        font-size: 0.9rem !important;
+    }
+
+    .header-banner-content p {
+        font-size: 0.75rem !important;
+    }
+
+    .header-banner-code {
+        border-left: none;
+        border-top: 1px solid #000;
+        padding-left: 0;
+        padding-top: 0.5rem;
+        margin-top: 0.5rem;
+    }
+
+    .header h1 {
+        font-size: 1.25rem;
+        padding: 0 1rem;
+        margin: 1rem 0 0.5rem 0;
+    }
+
+    .header > p {
+        font-size: 0.85rem;
+        padding: 0 1rem 1rem 1rem;
+    }
+
+    button {
+        width: 100%;
+    }
+}

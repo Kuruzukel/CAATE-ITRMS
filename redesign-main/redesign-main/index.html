@@ -1,12 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CAATE Application Form</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="image/CAATE.png" type="image/png" />
+
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
+
 <body>
     <!-- Navigation -->
     <nav class="navbar" id="navbar">
@@ -15,14 +21,14 @@
                 <img src="image/CAATE.png" alt="CAATE Logo" class="navbar-logo-img">
                 <span class="navbar-logo-text">CAATE</span>
             </a>
-            
+
             <div class="navbar-nav">
                 <a href="#application" class="nav-link">Application Form</a>
             </div>
             <div class="navbar-actions">
                 <a href="#" class="btn btn-primary">Return</a>
             </div>
-            
+
             <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
                 <i class="fas fa-bars"></i>
             </button>
@@ -63,13 +69,14 @@
             <!-- Application Information Section -->
             <section class="form-section">
                 <h2 class="section-header">Application Information</h2>
-                
+
                 <div class="reference-section">
                     <div class="form-group">
                         <label for="referenceNumber">REFERENCE NUMBER:</label>
                         <div class="reference-inputs">
                             <div class="reference-input-group">
-                                <input type="text" id="referenceQualifiable" placeholder="Q" maxlength="1" title="Qualifiable">
+                                <input type="text" id="referenceQualifiable" placeholder="Q" maxlength="1"
+                                    title="Qualifiable">
                                 <small>Qualifiable</small>
                             </div>
                             <div class="reference-input-group">
@@ -81,7 +88,8 @@
                                 <small>Region</small>
                             </div>
                             <div class="reference-input-group">
-                                <input type="text" id="referenceProvince" placeholder="PP" maxlength="2" title="Province">
+                                <input type="text" id="referenceProvince" placeholder="PP" maxlength="2"
+                                    title="Province">
                                 <small>Province</small>
                             </div>
                             <div class="reference-input-group">
@@ -98,7 +106,8 @@
 
                     <div class="form-group">
                         <label for="uli">UNIQUE LEARNERS IDENTIFIER (ULI):</label>
-                        <input type="text" id="uli" name="uli" placeholder="to be filled-out by the Processing Officer" readonly class="readonly-field">
+                        <input type="text" id="uli" name="uli" placeholder="to be filled-out by the Processing Officer"
+                            readonly class="readonly-field">
                     </div>
                 </div>
 
@@ -107,7 +116,8 @@
                         <label>PICTURE <span class="required">*</span></label>
                         <div class="picture-container">
                             <div class="picture-placeholder" id="picturePlaceholder">
-                                <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
                                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                                     <polyline points="17 8 12 3 7 8"></polyline>
                                     <line x1="12" y1="3" x2="12" y2="15"></line>
@@ -115,16 +125,19 @@
                                 <span>Click To Insert Picture</span>
                                 <small>colored, passport size</small>
                             </div>
-                            <input type="file" id="picture" name="picture" accept="image/*" style="display: none;" onchange="handlePictureUpload(event)">
+                            <input type="file" id="picture" name="picture" accept="image/*" style="display: none;"
+                                onchange="handlePictureUpload(event)">
                             <img id="picturePreview" style="display: none;">
                         </div>
                     </div>
                     <div class="signature-section">
                         <div class="form-group">
-                            <label for="applicantSignature">Applicant's Signature <span class="required">*</span></label>
+                            <label for="applicantSignature">Applicant's Signature <span
+                                    class="required">*</span></label>
                             <div class="canvas-wrapper">
                                 <canvas id="signatureCanvas" width="300" height="100"></canvas>
-                                <button type="button" class="btn-clear" onclick="clearSignature()">Clear Signature</button>
+                                <button type="button" class="btn-clear" onclick="clearSignature()">Clear
+                                    Signature</button>
                             </div>
                         </div>
                         <div class="form-group">
@@ -136,7 +149,8 @@
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="schoolName">Name of School/Training Center/Company: <span class="required">*</span></label>
+                        <label for="schoolName">Name of School/Training Center/Company: <span
+                                class="required">*</span></label>
                         <input type="text" id="schoolName" name="schoolName" required>
                     </div>
                     <div class="form-group">
@@ -146,7 +160,8 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="assessmentTitle">Title of Assessment applied for: <span class="required">*</span></label>
+                    <label for="assessmentTitle">Title of Assessment applied for: <span
+                            class="required">*</span></label>
                     <input type="text" id="assessmentTitle" name="assessmentTitle" required>
                 </div>
 
@@ -436,7 +451,8 @@
                                 <td><input type="text" name="workSalary[]"></td>
                                 <td><input type="text" name="workStatus[]"></td>
                                 <td><input type="number" name="workYears[]" step="0.1"></td>
-                                <td><button type="button" class="btn-remove" onclick="removeWorkRow(this)">Remove</button></td>
+                                <td><button type="button" class="btn-remove"
+                                        onclick="removeWorkRow(this)">Remove</button></td>
                             </tr>
                         </tbody>
                     </table>
@@ -467,11 +483,13 @@
                                 <td><input type="text" name="trainingDates[]" placeholder="MM/YYYY - MM/YYYY"></td>
                                 <td><input type="number" name="trainingHours[]"></td>
                                 <td><input type="text" name="trainingConductedBy[]"></td>
-                                <td><button type="button" class="btn-remove" onclick="removeTrainingRow(this)">Remove</button></td>
+                                <td><button type="button" class="btn-remove"
+                                        onclick="removeTrainingRow(this)">Remove</button></td>
                             </tr>
                         </tbody>
                     </table>
-                    <button type="button" class="btn-add-row" onclick="addTrainingRow()">+ Add Training/Seminar Row</button>
+                    <button type="button" class="btn-add-row" onclick="addTrainingRow()">+ Add Training/Seminar
+                        Row</button>
                     <small class="helper-text">(For more information, please use separate sheet)</small>
                 </div>
             </section>
@@ -500,11 +518,13 @@
                                 <td><input type="text" name="licensureRating[]"></td>
                                 <td><input type="text" name="licensureRemarks[]"></td>
                                 <td><input type="date" name="licensureExpiry[]"></td>
-                                <td><button type="button" class="btn-remove" onclick="removeLicensureRow(this)">Remove</button></td>
+                                <td><button type="button" class="btn-remove"
+                                        onclick="removeLicensureRow(this)">Remove</button></td>
                             </tr>
                         </tbody>
                     </table>
-                    <button type="button" class="btn-add-row" onclick="addLicensureRow()">+ Add Licensure Exam Row</button>
+                    <button type="button" class="btn-add-row" onclick="addLicensureRow()">+ Add Licensure Exam
+                        Row</button>
                     <small class="helper-text">(For more information, please use separate sheet)</small>
                 </div>
             </section>
@@ -533,11 +553,13 @@
                                 <td><input type="text" name="competencyCert[]"></td>
                                 <td><input type="date" name="competencyIssuance[]"></td>
                                 <td><input type="date" name="competencyExpiry[]"></td>
-                                <td><button type="button" class="btn-remove" onclick="removeCompetencyRow(this)">Remove</button></td>
+                                <td><button type="button" class="btn-remove"
+                                        onclick="removeCompetencyRow(this)">Remove</button></td>
                             </tr>
                         </tbody>
                     </table>
-                    <button type="button" class="btn-add-row" onclick="addCompetencyRow()">+ Add Competency Assessment Row</button>
+                    <button type="button" class="btn-add-row" onclick="addCompetencyRow()">+ Add Competency Assessment
+                        Row</button>
                     <small class="helper-text">(For more information, please use separate sheet)</small>
                 </div>
             </section>
@@ -551,27 +573,33 @@
                         <div class="admission-reference-section">
                             <div class="admission-reference-inputs">
                                 <div class="admission-reference-input-group">
-                                    <input type="text" id="admissionReferenceQualifiable" readonly class="readonly-field admission-ref-input">
+                                    <input type="text" id="admissionReferenceQualifiable" readonly
+                                        class="readonly-field admission-ref-input">
                                     <small>Qual-alpha code</small>
                                 </div>
                                 <div class="admission-reference-input-group">
-                                    <input type="text" id="admissionReferenceYY" readonly class="readonly-field admission-ref-input">
+                                    <input type="text" id="admissionReferenceYY" readonly
+                                        class="readonly-field admission-ref-input">
                                     <small>YY</small>
                                 </div>
                                 <div class="admission-reference-input-group">
-                                    <input type="text" id="admissionReferenceRegion" readonly class="readonly-field admission-ref-input">
+                                    <input type="text" id="admissionReferenceRegion" readonly
+                                        class="readonly-field admission-ref-input">
                                     <small>Region</small>
                                 </div>
                                 <div class="admission-reference-input-group">
-                                    <input type="text" id="admissionReferenceProvince" readonly class="readonly-field admission-ref-input">
+                                    <input type="text" id="admissionReferenceProvince" readonly
+                                        class="readonly-field admission-ref-input">
                                     <small>Province</small>
                                 </div>
                                 <div class="admission-reference-input-group">
-                                    <input type="text" id="admissionReferenceNumber" readonly class="readonly-field admission-ref-input">
+                                    <input type="text" id="admissionReferenceNumber" readonly
+                                        class="readonly-field admission-ref-input">
                                     <small>Number Series</small>
                                 </div>
                                 <div class="admission-reference-input-group">
-                                    <input type="text" id="admissionReferenceSeries" readonly class="readonly-field admission-ref-input">
+                                    <input type="text" id="admissionReferenceSeries" readonly
+                                        class="readonly-field admission-ref-input">
                                     <small>Number Series</small>
                                 </div>
                             </div>
@@ -625,7 +653,8 @@
                             <label class="checkbox-label">
                                 <input type="checkbox" name="requirements[]" value="others">
                                 <span>Others. Pls. specify</span>
-                                <input type="text" id="otherRequirements" name="otherRequirements" placeholder="Specify" class="inline-input">
+                                <input type="text" id="otherRequirements" name="otherRequirements" placeholder="Specify"
+                                    class="inline-input">
                             </label>
                         </div>
                     </div>
@@ -652,27 +681,32 @@
                         </div>
                         <div class="form-group">
                             <label for="applicantNamePrint">Printed Name & Signature of Applicant</label>
-                            <input type="text" id="applicantNamePrint" name="applicantNamePrint" readonly class="readonly-field">
+                            <input type="text" id="applicantNamePrint" name="applicantNamePrint" readonly
+                                class="readonly-field">
                             <label for="applicantDatePrint" class="sub-label">Date:</label>
-                            <input type="date" id="applicantDatePrint" name="applicantDatePrint" readonly class="readonly-field">
+                            <input type="date" id="applicantDatePrint" name="applicantDatePrint" readonly
+                                class="readonly-field">
                         </div>
                     </div>
                     <div class="admission-picture">
                         <label>PICTURE</label>
                         <div class="picture-container">
                             <div class="picture-placeholder" id="admissionPicturePlaceholder">
-                                <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
                                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                                     <polyline points="17 8 12 3 7 8"></polyline>
                                     <line x1="12" y1="3" x2="12" y2="15"></line>
                                 </svg>
                                 <span>Click To Insert Picture (Passport size)</span>
                             </div>
-                            <input type="file" id="admissionPicture" name="admissionPicture" accept="image/*" style="display: none;" onchange="handleAdmissionPictureUpload(event)">
+                            <input type="file" id="admissionPicture" name="admissionPicture" accept="image/*"
+                                style="display: none;" onchange="handleAdmissionPictureUpload(event)">
                             <img id="admissionPicturePreview" style="display: none;">
                         </div>
                     </div>
-                    <p class="admission-note"><strong>Note:</strong> Please bring this Admission Slip on your assessment date.</p>
+                    <p class="admission-note"><strong>Note:</strong> Please bring this Admission Slip on your assessment
+                        date.</p>
                 </div>
             </section>
 
@@ -686,8 +720,10 @@
 
     <script src="script.js"></script>
 </body>
+
 </html>
-            
-    <script src="script.js"></script>
+
+<script src="script.js"></script>
 </body>
+
 </html>

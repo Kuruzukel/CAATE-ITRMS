@@ -166,32 +166,34 @@
                                     </div>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end">
-                                    <li>
-                                        <a class="dropdown-item" href="#">
-                                            <div class="d-flex">
-                                                <div class="flex-shrink-0 me-3">
-                                                    <div class="avatar avatar-online">
-                                                        <img src="/img/AVATARNIKEL.jpg" alt
-                                                            class="w-px-40 h-auto rounded-circle" />
-                                                    </div>
-                                                </div>
-                                                <div class="flex-grow-1">
-                                                    <span class="fw-semibold d-block">KEL</span>
-                                                    <small class="text-muted">Admin</small>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <div class="dropdown-divider"></div>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="auth-login-basic.html">
-                                            <i class="bx bx-power-off me-2"></i>
-                                            <span class="align-middle">Log Out</span>
-                                        </a>
-                                    </li>
-                                </ul>
+                                                                        <li><a class="dropdown-item"
+                                                                                href="javascript:void(0);"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#viewProfileModal"><i
+                                                                                    class="bx bx-show me-2"></i>View
+                                                                                Profile</a></li>
+                                                                        <li><a class="dropdown-item"
+                                                                                href="javascript:void(0);"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#notifyModal"><i
+                                                                                    class="bx bx-bell me-2"></i>Send
+                                                                                Notification</a></li>
+                                                                        <li><a class="dropdown-item"
+                                                                                href="javascript:void(0);"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#addNoteModal"><i
+                                                                                    class="bx bx-note me-2"></i>Add
+                                                                                Note</a></li>
+                                                                        <li>
+                                                                            <hr class="dropdown-divider">
+                                                                        </li>
+                                                                        <li><a class="dropdown-item text-danger"
+                                                                                href="javascript:void(0);"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#archiveModal"><i
+                                                                                    class="bx bx-archive me-2"></i>Archive</a>
+                                                                        </li>
+                                                                    </ul>
                             </li>
                             <!--/ User -->
                         </ul>
@@ -270,14 +272,15 @@
                             </div>
                         </div>
 
-                        <!-- No-Appointment List -->
+                        <!-- Appointment List -->
                         <div class="row mb-4">
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-header d-flex justify-content-between align-items-center">
-                                        <h5 class="mb-0">No-Appointment List</h5>
+                                        <h5 class="mb-0">Appointment List</h5>
                                         <div>
-                                            <button type="button" class="btn btn-outline-secondary btn-sm me-2">
+                                            <button type="button" class="btn btn-outline-secondary btn-sm me-2"
+                                                data-bs-toggle="collapse" data-bs-target="#filterPanel">
                                                 <i class="bx bx-filter"></i> Filter
                                             </button>
                                             <button type="button" class="btn btn-primary btn-sm">
@@ -286,14 +289,70 @@
                                         </div>
                                     </div>
                                     <div class="card-body">
+                                        <!-- Filter Panel -->
+                                        <div class="collapse mb-3" id="filterPanel">
+                                            <div class="card card-body bg-light">
+                                                <div class="row g-3">
+                                                    <div class="col-md-3">
+                                                        <label class="form-label">Search</label>
+                                                        <input type="text" class="form-control"
+                                                            placeholder="Name, email, contact...">
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <label class="form-label">Status</label>
+                                                        <select class="form-select">
+                                                            <option value="">All Status</option>
+                                                            <option value="no-appointment">No Appointment</option>
+                                                            <option value="walk-in">Walk-In</option>
+                                                            <option value="overdue">Overdue</option>
+                                                            <option value="scheduled">Scheduled</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <label class="form-label">Course/Service</label>
+                                                        <select class="form-select">
+                                                            <option value="">All Courses</option>
+                                                            <option value="beauty-care">Beauty Care NC II</option>
+                                                            <option value="nail-care">Nail Care</option>
+                                                            <option value="permanent-makeup">Permanent Makeup</option>
+                                                            <option value="facial">Facial Treatment</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <label class="form-label">Registration Type</label>
+                                                        <select class="form-select">
+                                                            <option value="">All Types</option>
+                                                            <option value="online">Online</option>
+                                                            <option value="walk-in">Walk-In</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <label class="form-label">Date Range</label>
+                                                        <select class="form-select">
+                                                            <option value="">All Dates</option>
+                                                            <option value="today">Today</option>
+                                                            <option value="week">This Week</option>
+                                                            <option value="month">This Month</option>
+                                                            <option value="overdue">Overdue (7+ days)</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-1 d-flex align-items-end">
+                                                        <button type="button" class="btn btn-outline-secondary w-100">
+                                                            <i class="bx bx-reset"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="table-responsive text-nowrap">
                                             <table class="table table-hover">
                                                 <thead>
                                                     <tr>
                                                         <th>Name</th>
-                                                        <th>Role</th>
-                                                        <th>Service / Course</th>
-                                                        <th>Date Registered</th>
+                                                        <th>Email</th>
+                                                        <th>Phone Number</th>
+                                                        <th>Service</th>
+                                                        <th>Date & Time</th>
                                                         <th>Status</th>
                                                         <th>Actions</th>
                                                     </tr>
@@ -301,431 +360,340 @@
                                                 <tbody class="table-border-bottom-0">
                                                     <tr>
                                                         <td>
-                                                            <div class="d-flex align-items-center">
-                                                                <div class="avatar avatar-sm me-3">
-                                                                    <span
-                                                                        class="avatar-initial rounded-circle bg-label-primary">AC</span>
-                                                                </div>
-                                                                <strong>Ana Cruz</strong>
-                                                            </div>
+                                                            <strong>Ana Cruz</strong>
                                                         </td>
-                                                        <td>Trainee</td>
-                                                        <td>Beauty Care NC II</td>
-                                                        <td>Jan 28, 2026</td>
-                                                        <td><span class="badge bg-warning">No Appointment</span></td>
-                                                        <td>
-                                                            <button type="button" class="btn btn-sm btn-primary"
-                                                                data-bs-toggle="modal" data-bs-target="#assignModal">
-                                                                <i class="bx bx-calendar-plus"></i> Assign
-                                                            </button>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <div class="d-flex align-items-center">
-                                                                <div class="avatar avatar-sm me-3">
-                                                                    <span
-                                                                        class="avatar-initial rounded-circle bg-label-info">MR</span>
-                                                                </div>
-                                                                <strong>Mark Reyes</strong>
-                                                            </div>
-                                                        </td>
-                                                        <td>Client</td>
+                                                        <td>ana.cruz@email.com</td>
+                                                        <td>+63 912 345 6789</td>
                                                         <td>Facial Treatment</td>
-                                                        <td>Jan 29, 2026</td>
-                                                        <td><span class="badge bg-primary">Walk-In</span></td>
                                                         <td>
-                                                            <button type="button" class="btn btn-sm btn-primary"
-                                                                data-bs-toggle="modal" data-bs-target="#assignModal">
-                                                                <i class="bx bx-calendar-plus"></i> Schedule
-                                                            </button>
+                                                            <span class="text-muted">Not set</span>
+                                                        </td>
+                                                        <td>
+                                                            <span class="badge bg-warning">Pending</span>
+                                                        </td>
+                                                        <td>
+                                                            <div class="btn-group" role="group">
+                                                                <button type="button" class="btn btn-sm btn-primary"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#assignModal">
+                                                                    <i class="bx bx-calendar-plus"></i> Assign
+                                                                </button>
+                                                                <button type="button" class="btn btn-sm btn-primary dropdown-toggle dropdown-toggle-split"
+                                                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                                                        <span class="visually-hidden">Toggle Dropdown</span>
+                                                                    </button>
+                                                                    <ul class="dropdown-menu dropdown-menu-end">
+                                                                        <li><a class="dropdown-item"
+                                                                                href="javascript:void(0);"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#viewProfileModal"><i
+                                                                                    class="bx bx-show me-2"></i>View
+                                                                                Profile</a></li>
+                                                                        <li><a class="dropdown-item"
+                                                                                href="javascript:void(0);"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#notifyModal"><i
+                                                                                    class="bx bx-bell me-2"></i>Send
+                                                                                Notification</a></li>
+                                                                        <li><a class="dropdown-item"
+                                                                                href="javascript:void(0);"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#addNoteModal"><i
+                                                                                    class="bx bx-note me-2"></i>Add
+                                                                                Note</a></li>
+                                                                        <li>
+                                                                            <hr class="dropdown-divider">
+                                                                        </li>
+                                                                        <li><a class="dropdown-item text-danger"
+                                                                                href="javascript:void(0);"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#archiveModal"><i
+                                                                                    class="bx bx-archive me-2"></i>Archive</a>
+                                                                        </li>
+                                                                    </ul>
+                                                            </div>
                                                         </td>
                                                     </tr>
                                                     <tr>
                                                         <td>
-                                                            <div class="d-flex align-items-center">
-                                                                <div class="avatar avatar-sm me-3">
-                                                                    <span
-                                                                        class="avatar-initial rounded-circle bg-label-danger">JL</span>
-                                                                </div>
-                                                                <strong>Jenny Lim</strong>
-                                                            </div>
+                                                            <strong>Mark Reyes</strong>
                                                         </td>
-                                                        <td>Trainee</td>
-                                                        <td>Nail Care</td>
-                                                        <td>Jan 20, 2026</td>
-                                                        <td><span class="badge bg-danger">Overdue</span></td>
-                                                        <td>
-                                                            <button type="button" class="btn btn-sm btn-warning"
-                                                                data-bs-toggle="modal" data-bs-target="#notifyModal">
-                                                                <i class="bx bx-bell"></i> Notify
-                                                            </button>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <div class="d-flex align-items-center">
-                                                                <div class="avatar avatar-sm me-3">
-                                                                    <span
-                                                                        class="avatar-initial rounded-circle bg-label-warning">RT</span>
-                                                                </div>
-                                                                <strong>Rosa Torres</strong>
-                                                            </div>
-                                                        </td>
-                                                        <td>Trainee</td>
-                                                        <td>Permanent Makeup</td>
-                                                        <td>Jan 27, 2026</td>
-                                                        <td><span class="badge bg-warning">No Appointment</span></td>
-                                                        <td>
-                                                            <button type="button" class="btn btn-sm btn-primary"
-                                                                data-bs-toggle="modal" data-bs-target="#assignModal">
-                                                                <i class="bx bx-calendar-plus"></i> Assign
-                                                            </button>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <div class="d-flex align-items-center">
-                                                                <div class="avatar avatar-sm me-3">
-                                                                    <span
-                                                                        class="avatar-initial rounded-circle bg-label-success">PG</span>
-                                                                </div>
-                                                                <strong>Pedro Garcia</strong>
-                                                            </div>
-                                                        </td>
-                                                        <td>Client</td>
+                                                        <td>mark.reyes@email.com</td>
+                                                        <td>+63 917 234 5678</td>
                                                         <td>Skin Care Treatment</td>
-                                                        <td>Jan 30, 2026</td>
-                                                        <td><span class="badge bg-primary">Walk-In</span></td>
                                                         <td>
-                                                            <button type="button" class="btn btn-sm btn-primary"
-                                                                data-bs-toggle="modal" data-bs-target="#assignModal">
-                                                                <i class="bx bx-calendar-plus"></i> Schedule
-                                                            </button>
+                                                            <strong>Feb 5, 2026</strong><br>
+                                                            <small class="text-muted">2:00 PM - 3:30 PM</small>
+                                                        </td>
+                                                        <td>
+                                                            <span class="badge bg-success">Confirmed</span>
+                                                        </td>
+                                                        <td>
+                                                            <div class="btn-group" role="group">
+                                                                <button type="button" class="btn btn-sm btn-primary"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#assignModal">
+                                                                    <i class="bx bx-calendar-plus"></i> Assign
+                                                                </button>
+                                                                <button type="button" class="btn btn-sm btn-primary dropdown-toggle dropdown-toggle-split"
+                                                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                                                        <span class="visually-hidden">Toggle Dropdown</span>
+                                                                    </button>
+                                                                    <ul class="dropdown-menu dropdown-menu-end">
+                                                                        <li><a class="dropdown-item"
+                                                                                href="javascript:void(0);"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#viewProfileModal"><i
+                                                                                    class="bx bx-show me-2"></i>View
+                                                                                Profile</a></li>
+                                                                        <li><a class="dropdown-item"
+                                                                                href="javascript:void(0);"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#notifyModal"><i
+                                                                                    class="bx bx-bell me-2"></i>Send
+                                                                                Notification</a></li>
+                                                                        <li><a class="dropdown-item"
+                                                                                href="javascript:void(0);"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#addNoteModal"><i
+                                                                                    class="bx bx-note me-2"></i>Add
+                                                                                Note</a></li>
+                                                                        <li>
+                                                                            <hr class="dropdown-divider">
+                                                                        </li>
+                                                                        <li><a class="dropdown-item text-danger"
+                                                                                href="javascript:void(0);"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#archiveModal"><i
+                                                                                    class="bx bx-archive me-2"></i>Archive</a>
+                                                                        </li>
+                                                                    </ul>
+                                                            </div>
                                                         </td>
                                                     </tr>
                                                     <tr>
                                                         <td>
-                                                            <div class="d-flex align-items-center">
-                                                                <div class="avatar avatar-sm me-3">
-                                                                    <span
-                                                                        class="avatar-initial rounded-circle bg-label-danger">MS</span>
-                                                                </div>
-                                                                <strong>Maria Santos</strong>
+                                                            <strong>Jenny Lim</strong>
+                                                        </td>
+                                                        <td>jenny.lim@email.com</td>
+                                                        <td>+63 918 345 6789</td>
+                                                        <td>Nail Care Service</td>
+                                                        <td>
+                                                            <span class="text-muted">Not set</span>
+                                                        </td>
+                                                        <td>
+                                                            <span class="badge bg-warning">Pending</span>
+                                                        </td>
+                                                        <td>
+                                                            <div class="btn-group" role="group">
+                                                                <button type="button" class="btn btn-sm btn-primary"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#assignModal">
+                                                                    <i class="bx bx-calendar-plus"></i> Assign
+                                                                </button>
+                                                                <button type="button" class="btn btn-sm btn-primary dropdown-toggle dropdown-toggle-split"
+                                                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                                                        <span class="visually-hidden">Toggle Dropdown</span>
+                                                                    </button>
+                                                                    <ul class="dropdown-menu dropdown-menu-end">
+                                                                        <li><a class="dropdown-item"
+                                                                                href="javascript:void(0);"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#viewProfileModal"><i
+                                                                                    class="bx bx-show me-2"></i>View
+                                                                                Profile</a></li>
+                                                                        <li><a class="dropdown-item"
+                                                                                href="javascript:void(0);"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#notifyModal"><i
+                                                                                    class="bx bx-bell me-2"></i>Send
+                                                                                Notification</a></li>
+                                                                        <li><a class="dropdown-item"
+                                                                                href="javascript:void(0);"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#addNoteModal"><i
+                                                                                    class="bx bx-note me-2"></i>Add
+                                                                                Note</a></li>
+                                                                        <li>
+                                                                            <hr class="dropdown-divider">
+                                                                        </li>
+                                                                        <li><a class="dropdown-item text-danger"
+                                                                                href="javascript:void(0);"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#archiveModal"><i
+                                                                                    class="bx bx-archive me-2"></i>Archive</a>
+                                                                        </li>
+                                                                    </ul>
                                                             </div>
                                                         </td>
-                                                        <td>Trainee</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <strong>Rosa Torres</strong>
+                                                        </td>
+                                                        <td>rosa.torres@email.com</td>
+                                                        <td>+63 919 456 7890</td>
+                                                        <td>Permanent Makeup</td>
+                                                        <td>
+                                                            <strong>Feb 3, 2026</strong><br>
+                                                            <small class="text-muted">10:00 AM - 12:00 PM</small>
+                                                        </td>
+                                                        <td>
+                                                            <span class="badge bg-success">Confirmed</span>
+                                                        </td>
+                                                        <td>
+                                                            <div class="btn-group" role="group">
+                                                                <button type="button" class="btn btn-sm btn-primary"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#assignModal">
+                                                                    <i class="bx bx-calendar-plus"></i> Assign
+                                                                </button>
+                                                                <button type="button" class="btn btn-sm btn-primary dropdown-toggle dropdown-toggle-split"
+                                                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                                                        <span class="visually-hidden">Toggle Dropdown</span>
+                                                                    </button>
+                                                                    <ul class="dropdown-menu dropdown-menu-end">
+                                                                        <li><a class="dropdown-item"
+                                                                                href="javascript:void(0);"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#viewProfileModal"><i
+                                                                                    class="bx bx-show me-2"></i>View
+                                                                                Profile</a></li>
+                                                                        <li><a class="dropdown-item"
+                                                                                href="javascript:void(0);"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#notifyModal"><i
+                                                                                    class="bx bx-bell me-2"></i>Send
+                                                                                Notification</a></li>
+                                                                        <li><a class="dropdown-item"
+                                                                                href="javascript:void(0);"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#addNoteModal"><i
+                                                                                    class="bx bx-note me-2"></i>Add
+                                                                                Note</a></li>
+                                                                        <li>
+                                                                            <hr class="dropdown-divider">
+                                                                        </li>
+                                                                        <li><a class="dropdown-item text-danger"
+                                                                                href="javascript:void(0);"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#archiveModal"><i
+                                                                                    class="bx bx-archive me-2"></i>Archive</a>
+                                                                        </li>
+                                                                    </ul>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <strong>Pedro Garcia</strong>
+                                                        </td>
+                                                        <td>pedro.garcia@email.com</td>
+                                                        <td>+63 920 567 8901</td>
                                                         <td>Advanced Skin Care</td>
-                                                        <td>Jan 18, 2026</td>
-                                                        <td><span class="badge bg-danger">Overdue</span></td>
                                                         <td>
-                                                            <button type="button" class="btn btn-sm btn-warning"
-                                                                data-bs-toggle="modal" data-bs-target="#notifyModal">
-                                                                <i class="bx bx-bell"></i> Notify
-                                                            </button>
+                                                            <strong>Feb 1, 2026</strong><br>
+                                                            <small class="text-muted">3:00 PM - 5:00 PM</small>
                                                         </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Trainer Schedule & Time In/Out -->
-                        <div class="row mb-4">
-                            <!-- Trainer Schedule -->
-                            <div class="col-lg-6 mb-4">
-                                <div class="card h-100">
-                                    <div class="card-header">
-                                        <h5 class="mb-0">Today's Schedule</h5>
-                                    </div>
-                                    <div class="card-body">
-                                        <ul class="p-0 m-0" style="list-style: none;">
-                                            <li class="d-flex mb-3 pb-3"
-                                                style="border-bottom: 1px solid rgba(54, 145, 191, 0.1);">
-                                                <div class="avatar flex-shrink-0 me-3">
-                                                    <span class="avatar-initial rounded-circle bg-label-primary">
-                                                        <i class="bx bx-time"></i>
-                                                    </span>
-                                                </div>
-                                                <div
-                                                    class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                                    <div class="me-2">
-                                                        <h6 class="mb-0">Maria Rodriguez</h6>
-                                                        <small class="text-muted">Beauty Care (Skin Care) NC II</small>
-                                                    </div>
-                                                    <div class="user-progress text-end">
-                                                        <h6 class="mb-0">8:00 AM - 12:00 PM</h6>
-                                                        <small class="text-success">Room 101</small>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="d-flex mb-3 pb-3"
-                                                style="border-bottom: 1px solid rgba(54, 145, 191, 0.1);">
-                                                <div class="avatar flex-shrink-0 me-3">
-                                                    <span class="avatar-initial rounded-circle bg-label-success">
-                                                        <i class="bx bx-time"></i>
-                                                    </span>
-                                                </div>
-                                                <div
-                                                    class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                                    <div class="me-2">
-                                                        <h6 class="mb-0">John Santos</h6>
-                                                        <small class="text-muted">Beauty Care (Nail Care) NC II</small>
-                                                    </div>
-                                                    <div class="user-progress text-end">
-                                                        <h6 class="mb-0">1:00 PM - 5:00 PM</h6>
-                                                        <small class="text-success">Room 102</small>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="d-flex mb-3 pb-3"
-                                                style="border-bottom: 1px solid rgba(54, 145, 191, 0.1);">
-                                                <div class="avatar flex-shrink-0 me-3">
-                                                    <span class="avatar-initial rounded-circle bg-label-info">
-                                                        <i class="bx bx-time"></i>
-                                                    </span>
-                                                </div>
-                                                <div
-                                                    class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                                    <div class="me-2">
-                                                        <h6 class="mb-0">Lisa Cruz</h6>
-                                                        <small class="text-muted">Permanent Make-Up Tattoo Level
-                                                            III</small>
-                                                    </div>
-                                                    <div class="user-progress text-end">
-                                                        <h6 class="mb-0">9:00 AM - 1:00 PM</h6>
-                                                        <small class="text-success">Room 103</small>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="d-flex">
-                                                <div class="avatar flex-shrink-0 me-3">
-                                                    <span class="avatar-initial rounded-circle bg-label-warning">
-                                                        <i class="bx bx-time"></i>
-                                                    </span>
-                                                </div>
-                                                <div
-                                                    class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                                    <div class="me-2">
-                                                        <h6 class="mb-0">Robert Garcia</h6>
-                                                        <small class="text-muted">Trainers Methodology Level I</small>
-                                                    </div>
-                                                    <div class="user-progress text-end">
-                                                        <h6 class="mb-0">2:00 PM - 6:00 PM</h6>
-                                                        <small class="text-success">Room 104</small>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Time In / Time Out -->
-                            <div class="col-lg-6 mb-4">
-                                <div class="card h-100">
-                                    <div class="card-header">
-                                        <h5 class="mb-0">Time In / Time Out Today</h5>
-                                    </div>
-                                    <div class="card-body">
-                                        <ul class="p-0 m-0" style="list-style: none;">
-                                            <li class="d-flex mb-3 pb-3"
-                                                style="border-bottom: 1px solid rgba(54, 145, 191, 0.1);">
-                                                <div class="avatar flex-shrink-0 me-3">
-                                                    <span class="avatar-initial rounded-circle bg-label-success">
-                                                        <i class="bx bx-log-in"></i>
-                                                    </span>
-                                                </div>
-                                                <div
-                                                    class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                                    <div class="me-2">
-                                                        <h6 class="mb-0">Maria Rodriguez</h6>
-                                                        <small class="text-muted">Senior Trainer</small>
-                                                    </div>
-                                                    <div class="user-progress text-end">
-                                                        <h6 class="mb-0 text-success">7:45 AM</h6>
-                                                        <small class="text-muted">Time In</small>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="d-flex mb-3 pb-3"
-                                                style="border-bottom: 1px solid rgba(54, 145, 191, 0.1);">
-                                                <div class="avatar flex-shrink-0 me-3">
-                                                    <span class="avatar-initial rounded-circle bg-label-success">
-                                                        <i class="bx bx-log-in"></i>
-                                                    </span>
-                                                </div>
-                                                <div
-                                                    class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                                    <div class="me-2">
-                                                        <h6 class="mb-0">John Santos</h6>
-                                                        <small class="text-muted">Trainer</small>
-                                                    </div>
-                                                    <div class="user-progress text-end">
-                                                        <h6 class="mb-0 text-success">12:50 PM</h6>
-                                                        <small class="text-muted">Time In</small>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="d-flex mb-3 pb-3"
-                                                style="border-bottom: 1px solid rgba(54, 145, 191, 0.1);">
-                                                <div class="avatar flex-shrink-0 me-3">
-                                                    <span class="avatar-initial rounded-circle bg-label-success">
-                                                        <i class="bx bx-log-in"></i>
-                                                    </span>
-                                                </div>
-                                                <div
-                                                    class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                                    <div class="me-2">
-                                                        <h6 class="mb-0">Lisa Cruz</h6>
-                                                        <small class="text-muted">Trainer</small>
-                                                    </div>
-                                                    <div class="user-progress text-end">
-                                                        <h6 class="mb-0 text-success">8:30 AM</h6>
-                                                        <small class="text-muted">Time In</small>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="d-flex">
-                                                <div class="avatar flex-shrink-0 me-3">
-                                                    <span class="avatar-initial rounded-circle bg-label-danger">
-                                                        <i class="bx bx-log-out"></i>
-                                                    </span>
-                                                </div>
-                                                <div
-                                                    class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                                    <div class="me-2">
-                                                        <h6 class="mb-0">Sarah Mendez</h6>
-                                                        <small class="text-muted">Staff</small>
-                                                    </div>
-                                                    <div class="user-progress text-end">
-                                                        <h6 class="mb-0 text-danger">5:00 PM</h6>
-                                                        <small class="text-muted">Time Out</small>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Staff Management -->
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="card">
-                                    <div class="card-header d-flex justify-content-between align-items-center">
-                                        <h5 class="mb-0">Staff Management</h5>
-                                        <button type="button" class="btn btn-primary btn-sm">
-                                            <i class="bx bx-plus"></i> Add Staff
-                                        </button>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="table-responsive text-nowrap">
-                                            <table class="table table-hover">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Staff Member</th>
-                                                        <th>Position</th>
-                                                        <th>Department</th>
-                                                        <th>Status</th>
-                                                        <th>Actions</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody class="table-border-bottom-0">
-                                                    <tr>
                                                         <td>
-                                                            <div class="d-flex align-items-center">
-                                                                <div class="avatar avatar-sm me-3">
-                                                                    <span
-                                                                        class="avatar-initial rounded-circle bg-label-primary">SM</span>
-                                                                </div>
-                                                                <strong>Sarah Mendez</strong>
-                                                            </div>
+                                                            <span class="badge bg-danger">Cancelled</span>
                                                         </td>
-                                                        <td>Registrar</td>
-                                                        <td>Administration</td>
-                                                        <td><span class="badge bg-success">Active</span></td>
                                                         <td>
-                                                            <div class="dropdown">
-                                                                <button type="button"
-                                                                    class="btn p-0 dropdown-toggle hide-arrow"
-                                                                    data-bs-toggle="dropdown">
-                                                                    <i class="bx bx-dots-vertical-rounded"></i>
+                                                            <div class="btn-group" role="group">
+                                                                <button type="button" class="btn btn-sm btn-primary"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#assignModal">
+                                                                    <i class="bx bx-calendar-plus"></i> Assign
                                                                 </button>
-                                                                <div class="dropdown-menu">
-                                                                    <a class="dropdown-item"
-                                                                        href="javascript:void(0);"><i
-                                                                            class="bx bx-edit-alt me-1"></i> Edit</a>
-                                                                    <a class="dropdown-item"
-                                                                        href="javascript:void(0);"><i
-                                                                            class="bx bx-show me-1"></i> View</a>
-                                                                </div>
+                                                                <button type="button" class="btn btn-sm btn-primary dropdown-toggle dropdown-toggle-split"
+                                                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                                                        <span class="visually-hidden">Toggle Dropdown</span>
+                                                                    </button>
+                                                                    <ul class="dropdown-menu dropdown-menu-end">
+                                                                        <li><a class="dropdown-item"
+                                                                                href="javascript:void(0);"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#viewProfileModal"><i
+                                                                                    class="bx bx-show me-2"></i>View
+                                                                                Profile</a></li>
+                                                                        <li><a class="dropdown-item"
+                                                                                href="javascript:void(0);"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#notifyModal"><i
+                                                                                    class="bx bx-bell me-2"></i>Send
+                                                                                Notification</a></li>
+                                                                        <li><a class="dropdown-item"
+                                                                                href="javascript:void(0);"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#addNoteModal"><i
+                                                                                    class="bx bx-note me-2"></i>Add
+                                                                                Note</a></li>
+                                                                        <li>
+                                                                            <hr class="dropdown-divider">
+                                                                        </li>
+                                                                        <li><a class="dropdown-item text-danger"
+                                                                                href="javascript:void(0);"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#archiveModal"><i
+                                                                                    class="bx bx-archive me-2"></i>Archive</a>
+                                                                        </li>
+                                                                    </ul>
                                                             </div>
                                                         </td>
                                                     </tr>
                                                     <tr>
                                                         <td>
-                                                            <div class="d-flex align-items-center">
-                                                                <div class="avatar avatar-sm me-3">
-                                                                    <span
-                                                                        class="avatar-initial rounded-circle bg-label-success">DL</span>
-                                                                </div>
-                                                                <strong>David Lopez</strong>
-                                                            </div>
+                                                            <strong>Maria Santos</strong>
                                                         </td>
-                                                        <td>IT Support</td>
-                                                        <td>Technical</td>
-                                                        <td><span class="badge bg-success">Active</span></td>
+                                                        <td>maria.santos@email.com</td>
+                                                        <td>+63 921 678 9012</td>
+                                                        <td>Eyelash Extension</td>
                                                         <td>
-                                                            <div class="dropdown">
-                                                                <button type="button"
-                                                                    class="btn p-0 dropdown-toggle hide-arrow"
-                                                                    data-bs-toggle="dropdown">
-                                                                    <i class="bx bx-dots-vertical-rounded"></i>
+                                                            <span class="text-muted">Not set</span>
+                                                        </td>
+                                                        <td>
+                                                            <span class="badge bg-warning">Pending</span>
+                                                        </td>
+                                                        <td>
+                                                            <div class="btn-group" role="group">
+                                                                <button type="button" class="btn btn-sm btn-primary"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#assignModal">
+                                                                    <i class="bx bx-calendar-plus"></i> Assign
                                                                 </button>
-                                                                <div class="dropdown-menu">
-                                                                    <a class="dropdown-item"
-                                                                        href="javascript:void(0);"><i
-                                                                            class="bx bx-edit-alt me-1"></i> Edit</a>
-                                                                    <a class="dropdown-item"
-                                                                        href="javascript:void(0);"><i
-                                                                            class="bx bx-show me-1"></i> View</a>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <div class="d-flex align-items-center">
-                                                                <div class="avatar avatar-sm me-3">
-                                                                    <span
-                                                                        class="avatar-initial rounded-circle bg-label-info">ER</span>
-                                                                </div>
-                                                                <strong>Emma Rivera</strong>
-                                                            </div>
-                                                        </td>
-                                                        <td>Finance Officer</td>
-                                                        <td>Finance</td>
-                                                        <td><span class="badge bg-success">Active</span></td>
-                                                        <td>
-                                                            <div class="dropdown">
-                                                                <button type="button"
-                                                                    class="btn p-0 dropdown-toggle hide-arrow"
-                                                                    data-bs-toggle="dropdown">
-                                                                    <i class="bx bx-dots-vertical-rounded"></i>
-                                                                </button>
-                                                                <div class="dropdown-menu">
-                                                                    <a class="dropdown-item"
-                                                                        href="javascript:void(0);"><i
-                                                                            class="bx bx-edit-alt me-1"></i> Edit</a>
-                                                                    <a class="dropdown-item"
-                                                                        href="javascript:void(0);"><i
-                                                                            class="bx bx-show me-1"></i> View</a>
-                                                                </div>
+                                                                <button type="button" class="btn btn-sm btn-primary dropdown-toggle dropdown-toggle-split"
+                                                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                                                        <span class="visually-hidden">Toggle Dropdown</span>
+                                                                    </button>
+                                                                    <ul class="dropdown-menu dropdown-menu-end">
+                                                                        <li><a class="dropdown-item"
+                                                                                href="javascript:void(0);"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#viewProfileModal"><i
+                                                                                    class="bx bx-show me-2"></i>View
+                                                                                Profile</a></li>
+                                                                        <li><a class="dropdown-item"
+                                                                                href="javascript:void(0);"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#notifyModal"><i
+                                                                                    class="bx bx-bell me-2"></i>Send
+                                                                                Notification</a></li>
+                                                                        <li><a class="dropdown-item"
+                                                                                href="javascript:void(0);"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#addNoteModal"><i
+                                                                                    class="bx bx-note me-2"></i>Add
+                                                                                Note</a></li>
+                                                                        <li>
+                                                                            <hr class="dropdown-divider">
+                                                                        </li>
+                                                                        <li><a class="dropdown-item text-danger"
+                                                                                href="javascript:void(0);"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#archiveModal"><i
+                                                                                    class="bx bx-archive me-2"></i>Archive</a>
+                                                                        </li>
+                                                                    </ul>
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -792,8 +760,8 @@
                             <input type="text" class="form-control" value="Ana Cruz" readonly />
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Service / Course</label>
-                            <input type="text" class="form-control" value="Beauty Care NC II" readonly />
+                            <label class="form-label">Service</label>
+                            <input type="text" class="form-control" value="Facial Treatment" readonly />
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
@@ -806,25 +774,8 @@
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Trainer / Staff</label>
-                            <select class="form-select" required>
-                                <option value="">Select Trainer</option>
-                                <option value="1">Maria Rodriguez - Skin Care</option>
-                                <option value="2">John Santos - Nail Care</option>
-                                <option value="3">Lisa Cruz - Permanent Makeup</option>
-                                <option value="4">Robert Garcia - Trainers Methodology</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Room</label>
-                            <select class="form-select" required>
-                                <option value="">Select Room</option>
-                                <option value="101">Room 101</option>
-                                <option value="102">Room 102</option>
-                                <option value="103">Room 103</option>
-                                <option value="104">Room 104</option>
-                                <option value="105">Room 105</option>
-                            </select>
+                            <label class="form-label">Staff</label>
+                            <input type="text" class="form-control" placeholder="Enter staff name" required />
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Notes (Optional)</label>
@@ -900,25 +851,13 @@ Thank you!</textarea>
         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">User Profile</h5>
+                    <h5 class="modal-title">Appointment Details</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-md-4 text-center mb-3">
-                            <div class="avatar avatar-xl mx-auto mb-3">
-                                <span class="avatar-initial rounded-circle bg-label-primary"
-                                    style="font-size: 3rem;">AC</span>
-                            </div>
-                            <h5>Ana Cruz</h5>
-                            <span class="badge bg-warning">No Appointment</span>
-                        </div>
-                        <div class="col-md-8">
-                            <h6 class="mb-3">Personal Information</h6>
-                            <div class="row mb-2">
-                                <div class="col-sm-4"><strong>Role:</strong></div>
-                                <div class="col-sm-8">Trainee</div>
-                            </div>
+                        <div class="col-md-12">
+                            <h6 class="mb-3">Contact Information</h6>
                             <div class="row mb-2">
                                 <div class="col-sm-4"><strong>Email:</strong></div>
                                 <div class="col-sm-8">ana.cruz@email.com</div>
@@ -928,22 +867,34 @@ Thank you!</textarea>
                                 <div class="col-sm-8">+63 912 345 6789</div>
                             </div>
                             <div class="row mb-2">
-                                <div class="col-sm-4"><strong>Registration Date:</strong></div>
-                                <div class="col-sm-8">Jan 28, 2026</div>
+                                <div class="col-sm-4"><strong>Contacted:</strong></div>
+                                <div class="col-sm-8">Jan 28, 2026 at 10:30 AM</div>
                             </div>
                             <hr />
-                            <h6 class="mb-3">Enrollment Details</h6>
+                            <h6 class="mb-3">Appointment Information</h6>
                             <div class="row mb-2">
-                                <div class="col-sm-4"><strong>Course:</strong></div>
-                                <div class="col-sm-8">Beauty Care NC II</div>
+                                <div class="col-sm-4"><strong>Service:</strong></div>
+                                <div class="col-sm-8">Facial Treatment</div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-sm-4"><strong>Date & Time:</strong></div>
+                                <div class="col-sm-8"><span class="text-muted">Not set</span></div>
                             </div>
                             <div class="row mb-2">
                                 <div class="col-sm-4"><strong>Status:</strong></div>
-                                <div class="col-sm-8"><span class="badge bg-info">Enrolled</span></div>
+                                <div class="col-sm-8"><span class="badge bg-warning">Pending</span></div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-sm-4"><strong>Assigned Staff:</strong></div>
+                                <div class="col-sm-8"><span class="text-muted">Not assigned</span></div>
                             </div>
                             <hr />
-                            <h6 class="mb-3">Notes</h6>
-                            <p class="text-muted">New trainee, needs initial consultation and orientation.</p>
+                            <h6 class="mb-3">Admin Notes</h6>
+                            <div class="alert alert-secondary mb-2">
+                                <small class="text-muted d-block mb-1"><i class="bx bx-time"></i> Jan 28, 2026 -
+                                    Admin</small>
+                                <p class="mb-0">Walk-in client, requested afternoon schedule.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -951,6 +902,89 @@ Thank you!</textarea>
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                         data-bs-target="#assignModal">Assign Appointment</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Note Modal -->
+    <div class="modal fade" id="addNoteModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Admin Note</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label class="form-label">User</label>
+                            <input type="text" class="form-control" value="Ana Cruz" readonly />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Note <small class="text-muted">(Only visible to
+                                    admin/staff)</small></label>
+                            <textarea class="form-control" rows="4"
+                                placeholder="Example: Walk-in, requested afternoon schedule..."></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Priority</label>
+                            <select class="form-select">
+                                <option value="normal">Normal</option>
+                                <option value="important">Important</option>
+                                <option value="urgent">Urgent</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary">Save Note</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Archive Modal -->
+    <div class="modal fade" id="archiveModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Archive Record</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-warning">
+                        <i class="bx bx-error-circle me-2"></i>
+                        <strong>Warning:</strong> This will archive the user record. You can restore it later from the
+                        archive.
+                    </div>
+                    <form>
+                        <div class="mb-3">
+                            <label class="form-label">User</label>
+                            <input type="text" class="form-control" value="Ana Cruz" readonly />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Reason for Archiving</label>
+                            <select class="form-select" required>
+                                <option value="">Select reason...</option>
+                                <option value="inactive">Inactive User</option>
+                                <option value="duplicate">Duplicate Entry</option>
+                                <option value="no-show">No-Show Record</option>
+                                <option value="cancelled">Cancelled Enrollment</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Additional Notes (Optional)</label>
+                            <textarea class="form-control" rows="3"
+                                placeholder="Add any additional information..."></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger">Archive Record</button>
                 </div>
             </div>
         </div>

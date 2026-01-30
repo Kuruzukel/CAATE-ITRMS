@@ -819,6 +819,8 @@ footer,
     margin-right: 1.625rem;
     box-sizing: border-box !important;
     width: auto !important;
+    position: relative !important;
+    z-index: 10 !important;
 }
 
 footer .container-xxl,
@@ -873,11 +875,11 @@ footer span,
     background-color: #0f2942 !important;
     border: 1px solid rgba(54, 145, 191, 0.3) !important;
     padding: 0.5rem !important;
-    margin-top: 0.5rem !important;
+    margin: 0 !important;
 }
 
 .navbar .dropdown-menu.dropdown-menu-end {
-    margin-top: 0.5rem !important;
+    margin: 0 !important;
 }
 
 .navbar .dropdown-item {
@@ -1381,4 +1383,434 @@ body:has(.layout-menu.menu-hidden) .layout-container {
     min-height: 85vh;
     padding-top: 1.5rem;
     padding-bottom: 1.5rem;
+}
+
+/* Fix Popper.js CSS transition warning - only transition opacity and background */
+.dropdown-menu {
+    transition: opacity 0.15s ease, visibility 0.15s ease, background-color 0.15s ease !important;
+    /* Remove transform, top, right, bottom, left from transitions */
+}
+
+.dropdown-menu.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Remove margin from dropdown menus to fix Popper.js margin warning */
+.dropdown-menu {
+    margin: 0 !important;
+}
+
+
+/* Fix dropdown menu z-index and visibility issues */
+.table .dropdown-menu {
+    z-index: 9999 !important;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+    position: absolute !important;
+}
+
+/* Ensure table rows don't interfere with dropdowns */
+.table tbody tr {
+    position: relative;
+    z-index: 1;
+}
+
+/* When dropdown is open, increase z-index of parent row */
+.table tbody tr:has(.dropdown-menu.show) {
+    z-index: 9998 !important;
+    position: relative;
+}
+
+/* Keep the row with open dropdown fully visible */
+.table tbody tr:has(.dropdown-menu.show) .btn-group {
+    z-index: 9998 !important;
+    position: relative;
+}
+
+/* Allow overflow to be visible so dropdown doesn't get cut off */
+.table-responsive {
+    overflow: visible !important;
+}
+
+/* Ensure card body doesn't clip dropdown */
+.card-body {
+    overflow: visible !important;
+}
+
+/* Ensure card doesn't clip dropdown */
+.card {
+    overflow: visible !important;
+}
+
+/* Ensure dropdown toggle button stays visible */
+.btn-group .dropdown-toggle {
+    position: relative;
+    z-index: 2;
+}
+
+/* Dropdown menu positioning fix */
+.dropdown-menu.show {
+    display: block;
+    position: absolute !important;
+    z-index: 9999 !important;
+}
+
+/* Ensure content wrapper doesn't interfere */
+.content-wrapper {
+    position: relative;
+    z-index: auto !important;
+}
+
+/* Ensure layout page doesn't interfere */
+.layout-page {
+    position: relative;
+    z-index: auto !important;
+}
+
+
+/* Remove transform scale on hover for table action buttons */
+.table .btn-group .btn:hover,
+.table .btn-group .btn:focus,
+.table .btn-group .btn:active {
+    transform: none !important;
+}
+
+/* Remove transform from primary buttons in tables */
+.table .btn-primary:hover,
+.table .btn-primary:focus,
+.table .btn-primary:active {
+    transform: none !important;
+}
+
+/* Remove transform from dropdown toggle buttons in tables */
+.table .dropdown-toggle:hover,
+.table .dropdown-toggle:focus,
+.table .dropdown-toggle:active {
+    transform: none !important;
+}
+
+
+/* Force last 2 rows to open dropdown upward (dropup) */
+.table tbody tr:nth-last-child(1) .dropdown-menu,
+.table tbody tr:nth-last-child(2) .dropdown-menu {
+    bottom: 100% !important;
+    top: auto !important;
+    margin-bottom: 0.125rem !important;
+    margin-top: 0 !important;
+}
+
+
+/* Redesign dropdown menu for table actions with color palette */
+.table .dropdown-menu {
+    background-color: #0f2942 !important;
+    background: linear-gradient(135deg, #0f2942 0%, #0a1f33 100%) !important;
+    backdrop-filter: blur(20px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+    border: 1px solid rgba(54, 145, 191, 0.4) !important;
+    border-radius: var(--border-radius-md) !important;
+    box-shadow: 0 10px 40px rgba(22, 56, 86, 0.6),
+        0 4px 12px rgba(54, 145, 191, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15),
+        0 0 0 1px rgba(54, 145, 191, 0.2) !important;
+    padding: 0.5rem !important;
+    min-width: 200px !important;
+}
+
+/* Dropdown items styling */
+.table .dropdown-menu .dropdown-item {
+    color: rgba(255, 255, 255, 0.9) !important;
+    padding: 0.65rem 1rem !important;
+    border-radius: var(--border-radius-sm) !important;
+    transition: all var(--transition-fast) !important;
+    margin: 0.15rem 0 !important;
+    font-weight: 500 !important;
+}
+
+/* Dropdown item hover effect */
+.table .dropdown-menu .dropdown-item:hover,
+.table .dropdown-menu .dropdown-item:focus {
+    background: rgba(54, 145, 191, 0.3) !important;
+    backdrop-filter: blur(15px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(15px) saturate(180%) !important;
+    border: 1px solid rgba(54, 145, 191, 0.4) !important;
+    color: var(--white) !important;
+    box-shadow: 0 4px 16px rgba(54, 145, 191, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+    transform: translateX(4px) !important;
+}
+
+/* Dropdown item active state */
+.table .dropdown-menu .dropdown-item:active {
+    background: rgba(54, 145, 191, 0.4) !important;
+    color: var(--white) !important;
+}
+
+/* Dropdown item icons */
+.table .dropdown-menu .dropdown-item i {
+    color: rgba(54, 145, 191, 0.9) !important;
+    transition: color var(--transition-fast) !important;
+}
+
+.table .dropdown-menu .dropdown-item:hover i,
+.table .dropdown-menu .dropdown-item:focus i {
+    color: var(--white) !important;
+}
+
+/* Archive item (danger) styling */
+.table .dropdown-menu .dropdown-item.text-danger {
+    color: rgba(239, 68, 68, 0.9) !important;
+}
+
+.table .dropdown-menu .dropdown-item.text-danger:hover,
+.table .dropdown-menu .dropdown-item.text-danger:focus {
+    background: rgba(239, 68, 68, 0.2) !important;
+    border: 1px solid rgba(239, 68, 68, 0.4) !important;
+    color: rgba(239, 68, 68, 1) !important;
+}
+
+.table .dropdown-menu .dropdown-item.text-danger i {
+    color: rgba(239, 68, 68, 0.9) !important;
+}
+
+.table .dropdown-menu .dropdown-item.text-danger:hover i,
+.table .dropdown-menu .dropdown-item.text-danger:focus i {
+    color: rgba(239, 68, 68, 1) !important;
+}
+
+/* Dropdown divider styling */
+.table .dropdown-menu .dropdown-divider {
+    border-top: 1px solid rgba(54, 145, 191, 0.3) !important;
+    margin: 0.5rem 0 !important;
+    box-shadow: 0 1px 2px rgba(54, 145, 191, 0.2) !important;
+}
+
+
+/* Redesign form controls in cards to match color palette */
+.card .form-control,
+.card .form-select {
+    background-color: rgba(15, 41, 66, 0.6) !important;
+    background: linear-gradient(135deg, rgba(15, 41, 66, 0.6) 0%, rgba(10, 31, 51, 0.6) 100%) !important;
+    backdrop-filter: blur(10px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(10px) saturate(180%) !important;
+    border: 1px solid rgba(54, 145, 191, 0.3) !important;
+    border-radius: var(--border-radius-sm) !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+    padding: 0.5rem 0.875rem !important;
+    transition: all var(--transition-fast) !important;
+}
+
+.card .form-control::placeholder,
+.card .form-select::placeholder {
+    color: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Form control focus state */
+.card .form-control:focus,
+.card .form-select:focus {
+    background-color: rgba(15, 41, 66, 0.8) !important;
+    background: linear-gradient(135deg, rgba(15, 41, 66, 0.8) 0%, rgba(10, 31, 51, 0.8) 100%) !important;
+    border: 1px solid rgba(54, 145, 191, 0.6) !important;
+    box-shadow: 0 0 0 0.2rem rgba(54, 145, 191, 0.25),
+        0 4px 12px rgba(54, 145, 191, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+    color: var(--white) !important;
+}
+
+/* Form control hover state */
+.card .form-control:hover,
+.card .form-select:hover {
+    border: 1px solid rgba(54, 145, 191, 0.4) !important;
+    box-shadow: 0 2px 8px rgba(54, 145, 191, 0.15) !important;
+}
+
+/* Form select dropdown arrow */
+.card .form-select {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%233691bf' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 0.75rem center !important;
+    background-size: 16px 12px !important;
+    padding-right: 2.5rem !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+}
+
+/* Form labels in cards */
+.card .form-label {
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-weight: 600 !important;
+    margin-bottom: 0.5rem !important;
+}
+
+/* Input group styling */
+.card .input-group-text {
+    background-color: rgba(15, 41, 66, 0.6) !important;
+    background: linear-gradient(135deg, rgba(15, 41, 66, 0.6) 0%, rgba(10, 31, 51, 0.6) 100%) !important;
+    backdrop-filter: blur(10px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(10px) saturate(180%) !important;
+    border: 1px solid rgba(54, 145, 191, 0.3) !important;
+    color: rgba(54, 145, 191, 0.9) !important;
+}
+
+/* Search input specific styling */
+.card input[type="search"],
+.card input[type="text"].form-control {
+    padding-left: 2.5rem !important;
+}
+
+/* Date input styling */
+.card input[type="date"] {
+    color-scheme: dark !important;
+}
+
+/* Disabled form controls */
+.card .form-control:disabled,
+.card .form-select:disabled {
+    background-color: rgba(15, 41, 66, 0.4) !important;
+    border: 1px solid rgba(54, 145, 191, 0.2) !important;
+    color: rgba(255, 255, 255, 0.5) !important;
+    opacity: 0.6 !important;
+}
+
+/* Readonly form controls */
+.card .form-control[readonly] {
+    background-color: rgba(15, 41, 66, 0.4) !important;
+    border: 1px solid rgba(54, 145, 191, 0.2) !important;
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+
+/* Style select dropdown options */
+.card .form-select option {
+    background-color: #0f2942 !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+    padding: 0.5rem !important;
+}
+
+.card .form-select option:hover,
+.card .form-select option:focus,
+.card .form-select option:checked {
+    background-color: rgba(54, 145, 191, 0.3) !important;
+    color: var(--white) !important;
+}
+
+/* Style the select dropdown list container */
+.card select.form-select {
+    color-scheme: dark !important;
+}
+
+/* Additional styling for better appearance */
+.card .form-select optgroup {
+    background-color: #0a1f33 !important;
+    color: rgba(54, 145, 191, 0.9) !important;
+    font-weight: 600 !important;
+}
+
+
+/* Redesign outline-secondary buttons (like Reset button) */
+.card .btn-outline-secondary {
+    background-color: transparent !important;
+    background: linear-gradient(135deg, rgba(54, 145, 191, 0.1) 0%, rgba(50, 85, 150, 0.1) 100%) !important;
+    backdrop-filter: blur(10px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(10px) saturate(180%) !important;
+    border: 1px solid rgba(54, 145, 191, 0.4) !important;
+    color: rgba(54, 145, 191, 0.9) !important;
+    border-radius: var(--border-radius-sm) !important;
+    transition: all var(--transition-normal) !important;
+    font-weight: 600 !important;
+}
+
+.card .btn-outline-secondary:hover,
+.card .btn-outline-secondary:focus {
+    background: linear-gradient(135deg, rgba(54, 145, 191, 0.25) 0%, rgba(50, 85, 150, 0.25) 100%) !important;
+    backdrop-filter: blur(15px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(15px) saturate(180%) !important;
+    border: 1px solid rgba(54, 145, 191, 0.6) !important;
+    color: var(--white) !important;
+    box-shadow: 0 4px 16px rgba(54, 145, 191, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+}
+
+.card .btn-outline-secondary:active {
+    background: linear-gradient(135deg, rgba(54, 145, 191, 0.35) 0%, rgba(50, 85, 150, 0.35) 100%) !important;
+    border: 1px solid rgba(54, 145, 191, 0.7) !important;
+    color: var(--white) !important;
+}
+
+.card .btn-outline-secondary i {
+    color: rgba(54, 145, 191, 0.9) !important;
+    transition: color var(--transition-fast) !important;
+}
+
+.card .btn-outline-secondary:hover i,
+.card .btn-outline-secondary:focus i {
+    color: var(--white) !important;
+}
+
+
+/* Fix button alignment and icon centering */
+.card .btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.5rem !important;
+}
+
+.card .btn i {
+    display: inline-flex !important;
+    align-items: center !important;
+    font-size: 1.1rem !important;
+}
+
+/* Special styling for Filter button to make it more visible */
+.card .btn-outline-secondary[data-bs-toggle="collapse"] {
+    background: linear-gradient(135deg, rgba(54, 145, 191, 0.3) 0%, rgba(50, 85, 150, 0.3) 100%) !important;
+    border: 1px solid rgba(54, 145, 191, 0.6) !important;
+    color: var(--white) !important;
+    font-weight: 600 !important;
+}
+
+.card .btn-outline-secondary[data-bs-toggle="collapse"] i {
+    color: var(--white) !important;
+}
+
+.card .btn-outline-secondary[data-bs-toggle="collapse"]:hover,
+.card .btn-outline-secondary[data-bs-toggle="collapse"]:focus {
+    background: linear-gradient(135deg, rgba(54, 145, 191, 0.5) 0%, rgba(50, 85, 150, 0.5) 100%) !important;
+    border: 1px solid rgba(54, 145, 191, 0.8) !important;
+    color: var(--white) !important;
+    box-shadow: 0 4px 16px rgba(54, 145, 191, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+}
+
+.card .btn-outline-secondary[data-bs-toggle="collapse"]:active {
+    background: linear-gradient(135deg, rgba(54, 145, 191, 0.6) 0%, rgba(50, 85, 150, 0.6) 100%) !important;
+    border: 1px solid rgba(54, 145, 191, 0.9) !important;
+}
+
+/* When filter panel is expanded, make button more prominent */
+.card .btn-outline-secondary[data-bs-toggle="collapse"][aria-expanded="true"] {
+    background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%) !important;
+    border: 1px solid var(--primary-blue) !important;
+    color: var(--white) !important;
+    box-shadow: 0 4px 12px rgba(54, 145, 191, 0.4) !important;
+}
+
+
+/* Add search icon to search input field */
+.card input[type="text"].form-control[placeholder*="Name"],
+.card input[type="text"].form-control[placeholder*="email"],
+.card input[type="search"] {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3e%3cpath fill='none' stroke='%233691bf' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'/%3e%3c/svg%3e") !important;
+    background-repeat: no-repeat !important;
+    background-position: left 0.875rem center !important;
+    background-size: 1.25rem !important;
+    padding-left: 2.75rem !important;
+}
+
+/* Search icon color on focus */
+.card input[type="text"].form-control[placeholder*="Name"]:focus,
+.card input[type="text"].form-control[placeholder*="email"]:focus,
+.card input[type="search"]:focus {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3e%3cpath fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'/%3e%3c/svg%3e") !important;
 }

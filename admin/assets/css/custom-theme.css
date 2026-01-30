@@ -2025,3 +2025,66 @@ body:has(.layout-menu.menu-hidden) .layout-container {
     border-top: 1px solid rgba(54, 145, 191, 0.3) !important;
     opacity: 1 !important;
 }
+
+
+/* Trainee Modals Styling */
+#editTraineeModal .modal-content,
+#viewTraineeModal .modal-content,
+#deleteTraineeModal .modal-content {
+    background: linear-gradient(135deg, #0f2942 0%, #0a1f33 100%);
+    border: 1px solid rgba(99, 179, 237, 0.3);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+#editTraineeModal .modal-header,
+#viewTraineeModal .modal-header,
+#deleteTraineeModal .modal-header {
+    border-bottom: 1px solid rgba(99, 179, 237, 0.2);
+}
+
+#editTraineeModal .modal-footer,
+#viewTraineeModal .modal-footer,
+#deleteTraineeModal .modal-footer {
+    border-top: 1px solid rgba(99, 179, 237, 0.2);
+}
+
+#editTraineeModal .form-label,
+#viewTraineeModal h6,
+#viewTraineeModal p strong {
+    color: #ffffff !important;
+}
+
+#editTraineeModal .form-control,
+#editTraineeModal .form-select {
+    background: rgba(15, 41, 66, 0.6);
+    border: 1px solid rgba(99, 179, 237, 0.3);
+    color: #ffffff;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+#editTraineeModal .form-control:focus,
+#editTraineeModal .form-select:focus {
+    background: rgba(15, 41, 66, 0.8);
+    border-color: #63b3ed;
+    box-shadow: 0 0 0 0.2rem rgba(99, 179, 237, 0.25);
+    color: #ffffff;
+}
+
+#editTraineeModal .form-select option {
+    background: #0f2942;
+    color: #ffffff;
+}
+
+#viewTraineeModal .alert-info {
+    background: rgba(99, 179, 237, 0.1);
+    border: 1px solid rgba(99, 179, 237, 0.3);
+    color: #ffffff;
+}
+
+#deleteTraineeModal .alert-danger {
+    background: rgba(220, 53, 69, 0.1);
+    border: 1px solid rgba(220, 53, 69, 0.3);
+    color: #ffffff;
+}

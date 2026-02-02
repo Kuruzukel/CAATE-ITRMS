@@ -283,23 +283,27 @@
                                 <div class="card">
                                     <div class="card-header d-flex justify-content-between align-items-center">
                                         <h5 class="mb-0">All Trainees</h5>
-                                        <button type="button" class="btn btn-primary">
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                            data-bs-target="#addTraineeModal">
                                             <i class="bx bx-plus"></i> Add New Trainee
                                         </button>
                                     </div>
                                     <div class="card-body">
                                         <!-- Filter Panel -->
                                         <div class="mb-3">
-                                            <div class="card card-body bg-light">
+                                            <div class="card card-body"
+                                                style="background-color: #1a2332; border: 1px solid #2d3e52;">
                                                 <div class="row g-3">
                                                     <div class="col-md-3">
-                                                        <label class="form-label">Search</label>
+                                                        <label class="form-label" style="color: #b8c5d6;">Search</label>
                                                         <input type="text" class="form-control"
-                                                            placeholder="Name, ID, Email">
+                                                            placeholder="Name, ID, Email"
+                                                            style="background-color: #243447; border: 1px solid #3d4f63; color: #b8c5d6;">
                                                     </div>
                                                     <div class="col-md-2">
-                                                        <label class="form-label">Status</label>
-                                                        <select class="form-select">
+                                                        <label class="form-label" style="color: #b8c5d6;">Status</label>
+                                                        <select class="form-select"
+                                                            style="background-color: #243447; border: 1px solid #3d4f63; color: #b8c5d6;">
                                                             <option value="">All Status</option>
                                                             <option value="enrolled">Enrolled</option>
                                                             <option value="pending">Pending</option>
@@ -307,8 +311,9 @@
                                                         </select>
                                                     </div>
                                                     <div class="col-md-3">
-                                                        <label class="form-label">Course</label>
-                                                        <select class="form-select">
+                                                        <label class="form-label" style="color: #b8c5d6;">Course</label>
+                                                        <select class="form-select"
+                                                            style="background-color: #243447; border: 1px solid #3d4f63; color: #b8c5d6;">
                                                             <option value="">All Courses</option>
                                                             <option value="beauty-skin">Beauty Care (Skin Care) NC II
                                                             </option>
@@ -333,8 +338,10 @@
                                                         </select>
                                                     </div>
                                                     <div class="col-md-3">
-                                                        <label class="form-label">Enrollment Date</label>
-                                                        <select class="form-select">
+                                                        <label class="form-label" style="color: #b8c5d6;">Enrollment
+                                                            Date</label>
+                                                        <select class="form-select"
+                                                            style="background-color: #243447; border: 1px solid #3d4f63; color: #b8c5d6;">
                                                             <option value="">All Dates</option>
                                                             <option value="today">Today</option>
                                                             <option value="week">This Week</option>
@@ -344,7 +351,8 @@
                                                         </select>
                                                     </div>
                                                     <div class="col-md-1 d-flex align-items-end">
-                                                        <button type="button" class="btn btn-outline-secondary w-100">
+                                                        <button type="button" class="btn btn-outline-secondary w-100"
+                                                            style="border-color: #3d4f63; color: #b8c5d6;">
                                                             <i class="bx bx-reset"></i>
                                                         </button>
                                                     </div>
@@ -810,6 +818,75 @@
         <div class="layout-overlay layout-menu-toggle"></div>
     </div>
     <!-- / Layout wrapper -->
+
+    <!-- Add Trainee Modal -->
+    <div class="modal fade" id="addTraineeModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add New Trainee</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="row">
+                            <div class="col mb-3">
+                                <label for="addTraineeName" class="form-label">Full Name</label>
+                                <input type="text" id="addTraineeName" class="form-control"
+                                    placeholder="Enter full name">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col mb-3">
+                                <label for="addTraineeEmail" class="form-label">Email</label>
+                                <input type="email" id="addTraineeEmail" class="form-control" placeholder="Enter email">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col mb-3">
+                                <label for="addTraineePhone" class="form-label">Phone Number</label>
+                                <input type="text" id="addTraineePhone" class="form-control"
+                                    placeholder="Enter phone number">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col mb-3">
+                                <label for="addTraineeCourse" class="form-label">Course</label>
+                                <select id="addTraineeCourse" class="form-select">
+                                    <option value="">Select a course</option>
+                                    <option>Beauty Care (Skin Care) NC II</option>
+                                    <option>Beauty Care (Nail Care) NC II</option>
+                                    <option>Trainers Methodology Level I</option>
+                                    <option>Eyelash & Eyebrow Services Level III</option>
+                                    <option>Aesthetic Services Level II</option>
+                                    <option>Aesthetic Services Level III</option>
+                                    <option>Advanced Skin Care Level IV</option>
+                                    <option>Permanent Makeup Tattoo Level III</option>
+                                    <option>Collagen & Hairloss Treatment</option>
+                                    <option>Facial Peeling & Chemical Peeling</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col mb-3">
+                                <label for="addTraineeStatus" class="form-label">Status</label>
+                                <select id="addTraineeStatus" class="form-select">
+                                    <option value="">Select status</option>
+                                    <option>Enrolled</option>
+                                    <option>Pending</option>
+                                    <option>Completed</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary">Add Trainee</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Edit Trainee Modal -->
     <div class="modal fade" id="editTraineeModal" tabindex="-1" aria-hidden="true">

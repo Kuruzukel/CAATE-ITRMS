@@ -282,8 +282,9 @@
                                 <div class="card">
                                     <div class="card-header d-flex justify-content-between align-items-center">
                                         <h5 class="mb-0">Enrollment History</h5>
-                                        <button type="button" class="btn btn-primary btn-sm">
-                                            <i class="bx bx-download"></i> Export
+                                        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                                            data-bs-target="#printExportModal">
+                                            <i class="bx bx-download"></i> Print/Export
                                         </button>
                                     </div>
                                     <div class="card-body">
@@ -585,6 +586,36 @@
         <div class="layout-overlay layout-menu-toggle"></div>
     </div>
     <!-- / Layout wrapper -->
+
+    <!-- Print/Export Modal -->
+    <div class="modal fade" id="printExportModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Print / Export</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="mb-4">Select an option to export or print the enrollment records:</p>
+                    <div class="d-grid gap-3">
+                        <button type="button"
+                            class="btn btn-outline-primary d-flex align-items-center justify-content-center gap-2">
+                            <i class="bx bx-printer"></i>
+                            Print Records
+                        </button>
+                        <button type="button"
+                            class="btn btn-outline-success d-flex align-items-center justify-content-center gap-2">
+                            <i class="bx bx-file-export"></i>
+                            Export as CSV
+                        </button>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Core JS -->
     <script src="../assets/vendor/libs/jquery/jquery.js"></script>

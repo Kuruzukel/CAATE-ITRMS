@@ -47,3 +47,97 @@
     color: #28a745;
     margin-top: 5px;
 }
+
+/* Professional Custom Scrollbar for Equipment Table */
+.table-responsive {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(54, 145, 191, 0.9) rgba(15, 41, 66, 0.2);
+    overflow-y: scroll !important;
+    overflow-x: auto !important;
+}
+
+.table-responsive::-webkit-scrollbar {
+    width: 14px;
+    height: 14px;
+}
+
+.table-responsive::-webkit-scrollbar-track {
+    background: linear-gradient(180deg, rgba(15, 41, 66, 0.15) 0%, rgba(15, 41, 66, 0.25) 100%);
+    backdrop-filter: blur(15px) saturate(150%);
+    -webkit-backdrop-filter: blur(15px) saturate(150%);
+    border-radius: 12px;
+    margin: 6px;
+    border: 1px solid rgba(54, 145, 191, 0.15);
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.15),
+        inset 0 -1px 2px rgba(255, 255, 255, 0.05);
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg,
+            rgba(54, 145, 191, 0.95) 0%,
+            rgba(50, 85, 150, 0.95) 50%,
+            rgba(22, 56, 86, 0.95) 100%);
+    backdrop-filter: blur(15px) saturate(200%);
+    -webkit-backdrop-filter: blur(15px) saturate(200%);
+    border-radius: 12px;
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 3px 10px rgba(22, 56, 86, 0.4),
+        inset 0 1px 2px rgba(255, 255, 255, 0.4),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.2),
+        0 0 20px rgba(54, 145, 191, 0.2);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+.table-responsive::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg,
+            rgba(54, 145, 191, 1) 0%,
+            rgba(50, 85, 150, 1) 50%,
+            rgba(22, 56, 86, 1) 100%);
+    border: 2.5px solid rgba(255, 255, 255, 0.45);
+    box-shadow: 0 5px 18px rgba(22, 56, 86, 0.6),
+        inset 0 2px 4px rgba(255, 255, 255, 0.5),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.25),
+        0 0 30px rgba(54, 145, 191, 0.5),
+        0 0 50px rgba(54, 145, 191, 0.2);
+    transform: scale(1.05);
+}
+
+.table-responsive::-webkit-scrollbar-thumb:active {
+    background: linear-gradient(135deg,
+            rgba(50, 85, 150, 1) 0%,
+            rgba(22, 56, 86, 1) 50%,
+            rgba(15, 41, 66, 1) 100%);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 2px 8px rgba(22, 56, 86, 0.7),
+        inset 0 1px 3px rgba(255, 255, 255, 0.3),
+        inset 0 -1px 3px rgba(0, 0, 0, 0.3),
+        0 0 15px rgba(54, 145, 191, 0.3);
+    transform: scale(0.98);
+}
+
+/* Scrollbar Corner with Glassmorphism */
+.table-responsive::-webkit-scrollbar-corner {
+    background: linear-gradient(135deg, rgba(15, 41, 66, 0.2) 0%, rgba(15, 41, 66, 0.3) 100%);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-radius: 12px;
+    border: 1px solid rgba(54, 145, 191, 0.15);
+}
+
+/* Add subtle animation on scroll */
+@keyframes scrollGlow {
+
+    0%,
+    100% {
+        box-shadow: 0 3px 10px rgba(22, 56, 86, 0.4),
+            inset 0 1px 2px rgba(255, 255, 255, 0.4),
+            0 0 20px rgba(54, 145, 191, 0.2);
+    }
+
+    50% {
+        box-shadow: 0 3px 10px rgba(22, 56, 86, 0.4),
+            inset 0 1px 2px rgba(255, 255, 255, 0.4),
+            0 0 25px rgba(54, 145, 191, 0.3);
+    }
+}

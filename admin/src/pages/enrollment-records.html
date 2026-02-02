@@ -234,13 +234,13 @@
                                     <div class="card-body">
                                         <div class="card-title d-flex align-items-start justify-content-between">
                                             <div class="avatar flex-shrink-0">
-                                                <i class="bx bx-money" style="font-size: 2rem; color: #10b981;"></i>
+                                                <i class="bx bx-award" style="font-size: 2rem; color: #10b981;"></i>
                                             </div>
                                         </div>
-                                        <span class="fw-semibold d-block mb-1">Total Revenue</span>
-                                        <h3 class="card-title mb-2">₱2.4M</h3>
+                                        <span class="fw-semibold d-block mb-1">Graduated</span>
+                                        <h3 class="card-title mb-2">1,245</h3>
                                         <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i>
-                                            +22.1%</small>
+                                            +18.2%</small>
                                     </div>
                                 </div>
                             </div>
@@ -249,13 +249,13 @@
                                     <div class="card-body">
                                         <div class="card-title d-flex align-items-start justify-content-between">
                                             <div class="avatar flex-shrink-0">
-                                                <i class="bx bx-gift" style="font-size: 2rem; color: #f59e0b;"></i>
+                                                <i class="bx bx-user-plus" style="font-size: 2rem; color: #f59e0b;"></i>
                                             </div>
                                         </div>
-                                        <span class="d-block mb-1">Scholarships</span>
-                                        <h3 class="card-title text-nowrap mb-2">124</h3>
+                                        <span class="fw-semibold d-block mb-1">New Scholar</span>
+                                        <h3 class="card-title mb-2">156</h3>
                                         <small class="text-warning fw-semibold"><i class="bx bx-right-arrow-alt"></i>
-                                            Active</small>
+                                            This Month</small>
                                     </div>
                                 </div>
                             </div>
@@ -264,13 +264,14 @@
                                     <div class="card-body">
                                         <div class="card-title d-flex align-items-start justify-content-between">
                                             <div class="avatar flex-shrink-0">
-                                                <i class="bx bx-time-five" style="font-size: 2rem; color: #ef4444;"></i>
+                                                <i class="bx bx-user-check"
+                                                    style="font-size: 2rem; color: #8b5cf6;"></i>
                                             </div>
                                         </div>
-                                        <span class="fw-semibold d-block mb-1">Pending Payments</span>
-                                        <h3 class="card-title mb-2">42</h3>
-                                        <small class="text-danger fw-semibold"><i class="bx bx-down-arrow-alt"></i>
-                                            Review</small>
+                                        <span class="fw-semibold d-block mb-1">Existing Scholar</span>
+                                        <h3 class="card-title mb-2">892</h3>
+                                        <small class="text-info fw-semibold"><i class="bx bx-right-arrow-alt"></i>
+                                            Active</small>
                                     </div>
                                 </div>
                             </div>
@@ -297,6 +298,7 @@
                                                         <th>Course</th>
                                                         <th>Date</th>
                                                         <th>Status</th>
+                                                        <th>Actions</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody class="table-border-bottom-0">
@@ -305,7 +307,25 @@
                                                         <td>Anna Cruz</td>
                                                         <td>Beauty Care (Skin Care) NC II</td>
                                                         <td>Jan 15, 2026</td>
-                                                        <td><span class="badge bg-success">Active</span></td>
+                                                        <td><span class="badge bg-success">Enrolled</span></td>
+                                                        <td>
+                                                            <div class="dropdown">
+                                                                <button type="button"
+                                                                    class="btn p-0 dropdown-toggle hide-arrow"
+                                                                    data-bs-toggle="dropdown">
+                                                                    <i class="bx bx-dots-vertical-rounded"></i>
+                                                                </button>
+                                                                <div class="dropdown-menu">
+                                                                    <a class="dropdown-item" href="javascript:void(0);">
+                                                                        <i class="bx bx-check me-1"></i> Approve
+                                                                    </a>
+                                                                    <a class="dropdown-item text-danger"
+                                                                        href="javascript:void(0);">
+                                                                        <i class="bx bx-x me-1"></i> Decline
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        </td>
                                                     </tr>
                                                     <tr>
                                                         <td><strong>#ENR-2026-002</strong></td>
@@ -313,20 +333,74 @@
                                                         <td>Trainers Methodology Level I</td>
                                                         <td>Jan 18, 2026</td>
                                                         <td><span class="badge bg-warning">Pending</span></td>
+                                                        <td>
+                                                            <div class="dropdown">
+                                                                <button type="button"
+                                                                    class="btn p-0 dropdown-toggle hide-arrow"
+                                                                    data-bs-toggle="dropdown">
+                                                                    <i class="bx bx-dots-vertical-rounded"></i>
+                                                                </button>
+                                                                <div class="dropdown-menu">
+                                                                    <a class="dropdown-item" href="javascript:void(0);">
+                                                                        <i class="bx bx-check me-1"></i> Approve
+                                                                    </a>
+                                                                    <a class="dropdown-item text-danger"
+                                                                        href="javascript:void(0);">
+                                                                        <i class="bx bx-x me-1"></i> Decline
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        </td>
                                                     </tr>
                                                     <tr>
                                                         <td><strong>#ENR-2026-003</strong></td>
                                                         <td>Maria Santos</td>
                                                         <td>Eyelash & Eyebrow Services Level III</td>
                                                         <td>Jan 10, 2026</td>
-                                                        <td><span class="badge bg-danger">Withdrawn</span></td>
+                                                        <td><span class="badge bg-danger">Cancelled</span></td>
+                                                        <td>
+                                                            <div class="dropdown">
+                                                                <button type="button"
+                                                                    class="btn p-0 dropdown-toggle hide-arrow"
+                                                                    data-bs-toggle="dropdown">
+                                                                    <i class="bx bx-dots-vertical-rounded"></i>
+                                                                </button>
+                                                                <div class="dropdown-menu">
+                                                                    <a class="dropdown-item" href="javascript:void(0);">
+                                                                        <i class="bx bx-check me-1"></i> Approve
+                                                                    </a>
+                                                                    <a class="dropdown-item text-danger"
+                                                                        href="javascript:void(0);">
+                                                                        <i class="bx bx-x me-1"></i> Decline
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        </td>
                                                     </tr>
                                                     <tr>
                                                         <td><strong>#ENR-2026-004</strong></td>
                                                         <td>Carlos Mendoza</td>
                                                         <td>Aesthetic Services Level III</td>
                                                         <td>Jan 20, 2026</td>
-                                                        <td><span class="badge bg-success">Active</span></td>
+                                                        <td><span class="badge bg-success">Enrolled</span></td>
+                                                        <td>
+                                                            <div class="dropdown">
+                                                                <button type="button"
+                                                                    class="btn p-0 dropdown-toggle hide-arrow"
+                                                                    data-bs-toggle="dropdown">
+                                                                    <i class="bx bx-dots-vertical-rounded"></i>
+                                                                </button>
+                                                                <div class="dropdown-menu">
+                                                                    <a class="dropdown-item" href="javascript:void(0);">
+                                                                        <i class="bx bx-check me-1"></i> Approve
+                                                                    </a>
+                                                                    <a class="dropdown-item text-danger"
+                                                                        href="javascript:void(0);">
+                                                                        <i class="bx bx-x me-1"></i> Decline
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        </td>
                                                     </tr>
                                                     <tr>
                                                         <td><strong>#ENR-2025-998</strong></td>
@@ -334,6 +408,149 @@
                                                         <td>Beauty Care (Nail Care) NC II</td>
                                                         <td>Dec 05, 2025</td>
                                                         <td><span class="badge bg-primary">Completed</span></td>
+                                                        <td>
+                                                            <div class="dropdown">
+                                                                <button type="button"
+                                                                    class="btn p-0 dropdown-toggle hide-arrow"
+                                                                    data-bs-toggle="dropdown">
+                                                                    <i class="bx bx-dots-vertical-rounded"></i>
+                                                                </button>
+                                                                <div class="dropdown-menu">
+                                                                    <a class="dropdown-item" href="javascript:void(0);">
+                                                                        <i class="bx bx-check me-1"></i> Approve
+                                                                    </a>
+                                                                    <a class="dropdown-item text-danger"
+                                                                        href="javascript:void(0);">
+                                                                        <i class="bx bx-x me-1"></i> Decline
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>#ENR-2026-005</strong></td>
+                                                        <td>Patricia Lim</td>
+                                                        <td>Advanced Skin Care Level IV</td>
+                                                        <td>Jan 22, 2026</td>
+                                                        <td><span class="badge bg-warning">Pending</span></td>
+                                                        <td>
+                                                            <div class="dropdown">
+                                                                <button type="button"
+                                                                    class="btn p-0 dropdown-toggle hide-arrow"
+                                                                    data-bs-toggle="dropdown">
+                                                                    <i class="bx bx-dots-vertical-rounded"></i>
+                                                                </button>
+                                                                <div class="dropdown-menu">
+                                                                    <a class="dropdown-item" href="javascript:void(0);">
+                                                                        <i class="bx bx-check me-1"></i> Approve
+                                                                    </a>
+                                                                    <a class="dropdown-item text-danger"
+                                                                        href="javascript:void(0);">
+                                                                        <i class="bx bx-x me-1"></i> Decline
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>#ENR-2026-006</strong></td>
+                                                        <td>Roberto Santos</td>
+                                                        <td>Permanent Makeup Tattoo Level III</td>
+                                                        <td>Jan 25, 2026</td>
+                                                        <td><span class="badge bg-success">Enrolled</span></td>
+                                                        <td>
+                                                            <div class="dropdown">
+                                                                <button type="button"
+                                                                    class="btn p-0 dropdown-toggle hide-arrow"
+                                                                    data-bs-toggle="dropdown">
+                                                                    <i class="bx bx-dots-vertical-rounded"></i>
+                                                                </button>
+                                                                <div class="dropdown-menu">
+                                                                    <a class="dropdown-item" href="javascript:void(0);">
+                                                                        <i class="bx bx-check me-1"></i> Approve
+                                                                    </a>
+                                                                    <a class="dropdown-item text-danger"
+                                                                        href="javascript:void(0);">
+                                                                        <i class="bx bx-x me-1"></i> Decline
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>#ENR-2026-007</strong></td>
+                                                        <td>Jasmine Torres</td>
+                                                        <td>Collagen & Hairloss Treatment</td>
+                                                        <td>Jan 28, 2026</td>
+                                                        <td><span class="badge bg-primary">Completed</span></td>
+                                                        <td>
+                                                            <div class="dropdown">
+                                                                <button type="button"
+                                                                    class="btn p-0 dropdown-toggle hide-arrow"
+                                                                    data-bs-toggle="dropdown">
+                                                                    <i class="bx bx-dots-vertical-rounded"></i>
+                                                                </button>
+                                                                <div class="dropdown-menu">
+                                                                    <a class="dropdown-item" href="javascript:void(0);">
+                                                                        <i class="bx bx-check me-1"></i> Approve
+                                                                    </a>
+                                                                    <a class="dropdown-item text-danger"
+                                                                        href="javascript:void(0);">
+                                                                        <i class="bx bx-x me-1"></i> Decline
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>#ENR-2026-008</strong></td>
+                                                        <td>Miguel Fernandez</td>
+                                                        <td>Facial Peeling & Chemical Peeling</td>
+                                                        <td>Jan 30, 2026</td>
+                                                        <td><span class="badge bg-danger">Cancelled</span></td>
+                                                        <td>
+                                                            <div class="dropdown">
+                                                                <button type="button"
+                                                                    class="btn p-0 dropdown-toggle hide-arrow"
+                                                                    data-bs-toggle="dropdown">
+                                                                    <i class="bx bx-dots-vertical-rounded"></i>
+                                                                </button>
+                                                                <div class="dropdown-menu">
+                                                                    <a class="dropdown-item" href="javascript:void(0);">
+                                                                        <i class="bx bx-check me-1"></i> Approve
+                                                                    </a>
+                                                                    <a class="dropdown-item text-danger"
+                                                                        href="javascript:void(0);">
+                                                                        <i class="bx bx-x me-1"></i> Decline
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>#ENR-2026-009</strong></td>
+                                                        <td>Veronica Diaz</td>
+                                                        <td>Aesthetic Services Level II</td>
+                                                        <td>Feb 01, 2026</td>
+                                                        <td><span class="badge bg-warning">Pending</span></td>
+                                                        <td>
+                                                            <div class="dropdown">
+                                                                <button type="button"
+                                                                    class="btn p-0 dropdown-toggle hide-arrow"
+                                                                    data-bs-toggle="dropdown">
+                                                                    <i class="bx bx-dots-vertical-rounded"></i>
+                                                                </button>
+                                                                <div class="dropdown-menu">
+                                                                    <a class="dropdown-item" href="javascript:void(0);">
+                                                                        <i class="bx bx-check me-1"></i> Approve
+                                                                    </a>
+                                                                    <a class="dropdown-item text-danger"
+                                                                        href="javascript:void(0);">
+                                                                        <i class="bx bx-x me-1"></i> Decline
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        </td>
                                                     </tr>
                                                 </tbody>
                                             </table>

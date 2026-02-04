@@ -62,7 +62,7 @@ function printCertificate() {
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
         </head>
         <body>
-            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px; width: 11in; height: 8.5in;">
+            <div style="padding: 40px; width: 11in; height: 8.5in;">
                 ${certificateContent}
             </div>
         </body>
@@ -75,3 +75,4 @@ function printCertificate() {
         printWindow.close();
     }, 500);
 }
+

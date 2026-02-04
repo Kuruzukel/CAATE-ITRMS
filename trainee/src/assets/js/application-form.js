@@ -339,7 +339,8 @@ window.addEventListener('load', function () {
 
         for (let key in data) {
             const field = form.elements[key];
-            if (field) {
+            if (field && field.type !== 'file') {
+                // Skip file inputs - they can't be programmatically set for security reasons
                 field.value = data[key];
             }
         }

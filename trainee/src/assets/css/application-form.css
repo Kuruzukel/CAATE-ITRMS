@@ -13,7 +13,7 @@
 /* Reference Number Section */
 .reference-inputs {
     display: flex;
-    gap: 10px;
+    gap: 5px;
     flex-wrap: wrap;
     align-items: flex-start;
 }
@@ -22,23 +22,79 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: relative;
+    padding-bottom: 24px;
 }
 
 .reference-input-group input {
-    width: 100px;
+    width: 60px !important;
     text-align: center;
     margin-bottom: 6px;
     font-weight: 600;
-    color: #2c3e50;
+    color: #2c3e50 !important;
     font-size: 0.95rem;
-    border: 2px solid #d0d5dd;
+    border: 2px solid #495057 !important;
     padding: 0.5rem;
+    background-color: #ffffff !important;
+}
+
+/* Add different background colors for each reference input group - matching screenshot */
+.reference-input-group:nth-child(1) input {
+    background-color: #9d9b6e !important;
+}
+
+.reference-input-group:nth-child(2) input,
+.reference-input-group:nth-child(3) input {
+    background-color: #b8d4f0 !important;
+}
+
+.reference-input-group:nth-child(4) input,
+.reference-input-group:nth-child(5) input {
+    background-color: #f0c8c8 !important;
+}
+
+.reference-input-group:nth-child(6) input,
+.reference-input-group:nth-child(7) input {
+    background-color: #c8d8a8 !important;
+}
+
+.reference-input-group:nth-child(8) input,
+.reference-input-group:nth-child(9) input,
+.reference-input-group:nth-child(10) input {
+    background-color: #f0d8a8 !important;
+}
+
+
+.reference-input-group:nth-child(11) input,
+.reference-input-group:nth-child(12) input,
+.reference-input-group:nth-child(13) input,
+.reference-input-group:nth-child(14) input,
+.reference-input-group:nth-child(15) input,
+.reference-input-group:nth-child(16) input {
+    background-color: #c8c8d8 !important;
+}
+
+/* Add gaps between logical groups */
+.reference-input-group:nth-child(2),
+.reference-input-group:nth-child(4),
+.reference-input-group:nth-child(6) {
+    margin-left: 20px;
+}
+
+/* Keep inputs within "Assigned to AC" and "Number Series" groups close together */
+.reference-input-group:nth-child(8) {
+    margin-left: 20px;
+}
+
+.reference-input-group:nth-child(11) {
+
+    margin-left: 20px;
 }
 
 .reference-input-group input::placeholder {
-    color: #6c757d;
-    font-weight: 600;
-    opacity: 1;
+    color: #9ca3af;
+    font-weight: 500;
+    opacity: 0.7;
     text-align: center;
 }
 
@@ -54,10 +110,17 @@
 
 .reference-input-group small {
     font-size: 0.75rem;
-    color: #ffffff;
-    font-weight: 700;
+    color: #2c3e50;
+    font-weight: 600;
     text-align: center;
-    margin-top: 2px;
+    margin-top: 4px;
+    display: block;
+    min-height: 18px;
+    white-space: nowrap;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: -22px;
 }
 
 /* Picture and Signature Section */

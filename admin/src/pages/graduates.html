@@ -1516,16 +1516,132 @@
 
     <!-- Export Confirmation Modal -->
     <div class="modal fade" id="exportModal" tabindex="-1" aria-labelledby="exportModalLabel">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exportModalLabel">Export Graduates List</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Are you sure you want to export the graduates list to CSV?</p>
-                    <p class="text-muted small mb-0">This will download a CSV file containing all graduate information.
-                    </p>
+                    <p>Select the courses and years you want to export:</p>
+                    <p class="text-muted small mb-3">Leave all unchecked to export all graduates.</p>
+
+                    <!-- Course Selection -->
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Courses</label>
+                        <div class="row g-2">
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input export-course-filter" type="checkbox"
+                                        value="Beauty Care (Nail Care) NC II" id="course1">
+                                    <label class="form-check-label" for="course1">Beauty Care (Nail Care) NC II</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input export-course-filter" type="checkbox"
+                                        value="Beauty Care (Skin Care) NC II" id="course2">
+                                    <label class="form-check-label" for="course2">Beauty Care (Skin Care) NC II</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input export-course-filter" type="checkbox"
+                                        value="Trainers Methodology Level I" id="course3">
+                                    <label class="form-check-label" for="course3">Trainers Methodology Level I</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input export-course-filter" type="checkbox"
+                                        value="Eyelash and Eyebrow Services Level III" id="course4">
+                                    <label class="form-check-label" for="course4">Eyelash and Eyebrow Services Level
+                                        III</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input export-course-filter" type="checkbox"
+                                        value="Aesthetic Services Level II" id="course5">
+                                    <label class="form-check-label" for="course5">Aesthetic Services Level II</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input export-course-filter" type="checkbox"
+                                        value="Aesthetic Services Level III" id="course6">
+                                    <label class="form-check-label" for="course6">Aesthetic Services Level III</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input export-course-filter" type="checkbox"
+                                        value="Advanced Skin Care Services Level III" id="course7">
+                                    <label class="form-check-label" for="course7">Advanced Skin Care Services Level
+                                        III</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input export-course-filter" type="checkbox"
+                                        value="Permanent Make-Up Tattoo Services Level III" id="course8">
+                                    <label class="form-check-label" for="course8">Permanent Make-Up Tattoo Services
+                                        Level III</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input export-course-filter" type="checkbox"
+                                        value="Perform Collagen Induction Therapy & Hair Loss Treatment" id="course9">
+                                    <label class="form-check-label" for="course9">Collagen Induction Therapy & Hair
+                                        Loss</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input export-course-filter" type="checkbox"
+                                        value="Perform Advanced Facial Treatment & Chemical Skin Peeling" id="course10">
+                                    <label class="form-check-label" for="course10">Advanced Facial Treatment & Chemical
+                                        Peeling</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input export-course-filter" type="checkbox"
+                                        value="Perform Light Therapy & Heat Therapy" id="course11">
+                                    <label class="form-check-label" for="course11">Light Therapy & Heat Therapy</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Year Selection -->
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Graduation Year</label>
+                        <div class="row g-2">
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <input class="form-check-input export-year-filter" type="checkbox" value="2026"
+                                        id="year1">
+                                    <label class="form-check-label" for="year1">2025</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <input class="form-check-input export-year-filter" type="checkbox" value="2025"
+                                        id="year2">
+                                    <label class="form-check-label" for="year2">2026</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <input class="form-check-input export-year-filter" type="checkbox" value="2024"
+                                        id="year3">
+                                    <label class="form-check-label" for="year3">2027</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -1823,7 +1939,7 @@
             // Re-apply hover effects after pagination updates
             function reapplyHoverEffects() {
                 document.querySelectorAll('.pagination .page-item:not(.disabled):not(.active) .page-link').forEach(link => {
-                    link.addEventListener('mouseenter', function() {
+                    link.addEventListener('mouseenter', function () {
                         if (!this.parentElement.classList.contains('active') && !this.parentElement.classList.contains('disabled')) {
                             this.style.setProperty('background-color', '#2d3e52', 'important');
                             this.style.setProperty('border-color', '#4a5f78', 'important');
@@ -1832,8 +1948,8 @@
                             this.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.3)';
                         }
                     });
-                    
-                    link.addEventListener('mouseleave', function() {
+
+                    link.addEventListener('mouseleave', function () {
                         if (!this.parentElement.classList.contains('active')) {
                             this.style.setProperty('background-color', '#243447', 'important');
                             this.style.setProperty('border-color', '#3d4f63', 'important');
@@ -1847,7 +1963,7 @@
 
             // Call reapplyHoverEffects after each page change
             const originalShowPage = showPage;
-            showPage = function(page) {
+            showPage = function (page) {
                 originalShowPage(page);
                 setTimeout(reapplyHoverEffects, 100);
             };
@@ -1895,12 +2011,16 @@
 
         // Export CSV functionality
         document.getElementById('confirmExportBtn').addEventListener('click', function () {
+            // Get selected courses and years
+            const selectedCourses = Array.from(document.querySelectorAll('.export-course-filter:checked')).map(cb => cb.value);
+            const selectedYears = Array.from(document.querySelectorAll('.export-year-filter:checked')).map(cb => cb.value);
+
             // Prepare CSV data
             const csvData = [
                 ['Name', 'Student ID', 'Course', 'Certification', 'Graduation Date', 'Email']
             ];
 
-            // Add all graduates data
+            // Add graduates data based on filters
             document.querySelectorAll('.view-graduate-btn').forEach(btn => {
                 const name = btn.getAttribute('data-name');
                 const id = btn.getAttribute('data-id');
@@ -1909,8 +2029,23 @@
                 const email = btn.getAttribute('data-email');
                 const certification = 'NC II - SOCBCN220';
 
-                csvData.push([name, id, course, certification, graduated, email]);
+                // Extract year from graduated date (e.g., "Jan 2026" -> "2026")
+                const graduatedYear = graduated.split(' ')[1];
+
+                // Check if this graduate matches the filters
+                const courseMatch = selectedCourses.length === 0 || selectedCourses.includes(course);
+                const yearMatch = selectedYears.length === 0 || selectedYears.includes(graduatedYear);
+
+                if (courseMatch && yearMatch) {
+                    csvData.push([name, id, course, certification, graduated, email]);
+                }
             });
+
+            // Check if any data to export
+            if (csvData.length === 1) {
+                alert('No graduates found matching the selected filters.');
+                return;
+            }
 
             // Convert to CSV string
             const csvContent = csvData.map(row => row.map(cell => `"${cell}"`).join(',')).join('\n');
@@ -1931,7 +2066,7 @@
             modal.hide();
 
             // Show success message
-            alert('Graduates list exported successfully!');
+            alert('Graduates list exported successfully! (' + (csvData.length - 1) + ' records)');
         });
 
         // Save Graduate Changes

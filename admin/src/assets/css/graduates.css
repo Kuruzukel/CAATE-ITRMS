@@ -1,0 +1,341 @@
+/* Graduates Page Styles */
+
+/* Graduate Cards */
+.graduate-card {
+    transition: all 0.3s ease;
+}
+
+.graduate-card .card {
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+.graduate-card .card:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    transform: translateY(-4px);
+}
+
+.graduate-card .card-img-top {
+    height: 200px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.graduate-card .card:hover .card-img-top {
+    transform: scale(1.05);
+}
+
+/* Badge Styling */
+.graduate-card .badge {
+    background-color: #5bc0de !important;
+    color: #ffffff !important;
+    font-weight: 500;
+    padding: 0.5rem 0.75rem;
+    border-radius: 4px;
+}
+
+/* Button Styling */
+.view-graduate-btn,
+.edit-graduate-btn {
+    border-radius: 4px !important;
+    transition: all 0.2s ease;
+    font-size: 0.875rem;
+}
+
+.view-graduate-btn {
+    border-color: #4285f4 !important;
+    color: #4285f4 !important;
+}
+
+.view-graduate-btn:hover {
+    background-color: #4285f4 !important;
+    color: #ffffff !important;
+    box-shadow: 0 2px 8px rgba(66, 133, 244, 0.3);
+}
+
+.edit-graduate-btn {
+    border-color: #6c757d !important;
+    color: #6c757d !important;
+}
+
+.edit-graduate-btn:hover {
+    background-color: #6c757d !important;
+    color: #ffffff !important;
+    box-shadow: 0 2px 8px rgba(108, 117, 125, 0.3);
+}
+
+/* Filter Panel */
+.filter-panel {
+    background-color: #1a2332 !important;
+    border: 1px solid #2d3e52 !important;
+    border-radius: 8px;
+    padding: 1.5rem;
+}
+
+.filter-panel .form-control,
+.filter-panel .form-select {
+    background-color: #243447 !important;
+    border: 1px solid #3d4f63 !important;
+    color: #b8c5d6 !important;
+    transition: all 0.2s ease;
+}
+
+.filter-panel .form-control:focus,
+.filter-panel .form-select:focus {
+    background-color: #2d3e52 !important;
+    border-color: #4a5f78 !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 0 0.2rem rgba(66, 133, 244, 0.25);
+}
+
+.filter-panel .form-label {
+    color: #b8c5d6 !important;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+/* Pagination */
+.pagination {
+    gap: 0.25rem;
+}
+
+.pagination .page-link {
+    background-color: #243447 !important;
+    border-color: #3d4f63 !important;
+    color: #b8c5d6 !important;
+    transition: all 0.3s ease !important;
+    border-radius: 4px;
+    padding: 0.5rem 0.75rem;
+}
+
+.pagination .page-link:hover:not(.disabled) {
+    background-color: #2d3e52 !important;
+    border-color: #4a5f78 !important;
+    color: #ffffff !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #4285f4 !important;
+    border-color: #4285f4 !important;
+    color: #ffffff !important;
+}
+
+.pagination .page-item.active .page-link:hover {
+    opacity: 0.85;
+    box-shadow: 0 4px 12px rgba(66, 133, 244, 0.5);
+}
+
+.pagination .page-item.disabled .page-link {
+    background-color: #1a2332 !important;
+    border-color: #2d3e52 !important;
+    color: #6c757d !important;
+    cursor: not-allowed;
+}
+
+/* Showing Text */
+.showing-text {
+    color: #b8c5d6 !important;
+    font-size: 0.875rem;
+}
+
+/* Statistics Cards */
+.stat-card {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    border: none;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.stat-card .avatar {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Modal Styles */
+.modal-content {
+    background-color: #f8f9fa;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+}
+
+.modal-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 1.5rem;
+}
+
+.modal-title {
+    font-weight: 600;
+    color: #1a2332;
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+.modal-footer {
+    background-color: #f8f9fa;
+    border-top: 1px solid #e0e0e0;
+    padding: 1rem 1.5rem;
+}
+
+/* Modal Form Inputs */
+.modal-body .form-control,
+.modal-body .form-select {
+    background-color: #ffffff;
+    border: 1px solid #d0d0d0;
+    color: #1a2332;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.modal-body .form-control:focus,
+.modal-body .form-select:focus {
+    background-color: #ffffff;
+    border-color: #4285f4;
+    color: #1a2332;
+    box-shadow: 0 0 0 0.2rem rgba(66, 133, 244, 0.25);
+}
+
+.modal-body .form-control:read-only {
+    background-color: #f0f0f0;
+    color: #6c757d;
+    cursor: not-allowed;
+}
+
+.modal-body .form-label {
+    color: #1a2332;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+/* Modal Image */
+.modal-body img {
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    transition: all 0.3s ease;
+}
+
+.modal-body img:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Export Modal */
+.export-course-filter,
+.export-year-filter {
+    cursor: pointer;
+}
+
+.export-course-filter:checked,
+.export-year-filter:checked {
+    background-color: #4285f4;
+    border-color: #4285f4;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .graduate-card .card {
+        margin-bottom: 1rem;
+    }
+
+    .filter-panel {
+        padding: 1rem;
+    }
+
+    .modal-body .row {
+        flex-direction: column;
+    }
+
+    .modal-body .col-md-6 {
+        margin-bottom: 1rem;
+    }
+
+    .pagination {
+        flex-wrap: wrap;
+    }
+
+    .pagination .page-link {
+        padding: 0.375rem 0.5rem;
+        font-size: 0.875rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .row-cols-1.row-cols-md-2.row-cols-lg-3.row-cols-xl-4 {
+        --bs-columns: 1;
+    }
+
+    .filter-panel .row {
+        flex-direction: column;
+    }
+
+    .filter-panel .col-md-4,
+    .filter-panel .col-md-3,
+    .filter-panel .col-md-1 {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+
+    .showing-text {
+        font-size: 0.75rem;
+    }
+
+    .pagination {
+        justify-content: center;
+    }
+}
+
+/* Animation */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.graduate-card {
+    animation: slideIn 0.3s ease-out;
+}
+
+/* Utility Classes */
+.text-muted {
+    color: #6c757d !important;
+}
+
+.fw-semibold {
+    font-weight: 600 !important;
+}
+
+.mb-0 {
+    margin-bottom: 0 !important;
+}
+
+.gap-2 {
+    gap: 0.5rem !important;
+}
+
+.gap-3 {
+    gap: 1rem !important;
+}
+
+.gap-4 {
+    gap: 1.5rem !important;
+}

@@ -34,6 +34,7 @@
     <link rel="stylesheet" href="../assets/css/custom-theme.css" />
 
     <!-- Enrollment CSS -->
+    <link rel="stylesheet" href="../assets/css/enrollment.css" />
     <link rel="stylesheet" href="../assets/css/application-form.css" />
 
     <!-- Vendors CSS -->
@@ -1189,43 +1190,13 @@
     <!-- Main JS -->
     <script src="../assets/js/main.js"></script>
 
+    <!-- Menu Toggle JS -->
+    <script src="../assets/js/menu-toggle.js"></script>
+
     <!-- Enrollment JS -->
-    <script src="../assets/js/application-form.js"></script>
+    <script src="../assets/js/enrollment.js"></script>
 
-    <!-- Menu Toggle Script -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const menuToggleBtn = document.querySelector('.menu-toggle-btn');
-            const layoutMenu = document.getElementById('layout-menu');
-            const layoutOverlay = document.querySelector('.layout-overlay');
-            const layoutContainer = document.querySelector('.layout-container');
 
-            if (menuToggleBtn && layoutMenu) {
-                menuToggleBtn.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    layoutMenu.classList.toggle('menu-hidden');
-
-                    // Toggle class on layout container to expand content
-                    if (layoutContainer) {
-                        layoutContainer.classList.toggle('menu-collapsed');
-                    }
-                });
-            }
-
-            // Also toggle when clicking the overlay
-            if (layoutOverlay && layoutMenu) {
-                layoutOverlay.addEventListener('click', function () {
-                    layoutMenu.classList.toggle('menu-hidden');
-
-                    // Toggle class on layout container
-                    if (layoutContainer) {
-                        layoutContainer.classList.toggle('menu-collapsed');
-                    }
-                });
-            }
-        });
-    </script>
 </body>
 
 </html>
-

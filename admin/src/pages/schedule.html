@@ -214,7 +214,8 @@
                 <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
                     id="layout-navbar">
                     <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
-                        <a class="nav-item nav-link px-0 me-xl-4 menu-toggle-btn" href="javascript:void(0)"><i class="fas fa-bars"></i></a>
+                        <a class="nav-item nav-link px-0 me-xl-4 menu-toggle-btn" href="javascript:void(0)"><i
+                                class="fas fa-bars"></i></a>
                     </div>
 
                     <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
@@ -414,42 +415,7 @@
     <!-- Schedule JS -->
     <script src="../assets/js/schedule.js"></script>
 
-    <!-- Menu Toggle Script -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const menuToggleBtn = document.querySelector('.menu-toggle-btn');
-            const layoutMenu = document.getElementById('layout-menu');
-            const layoutOverlay = document.querySelector('.layout-overlay');
-            const layoutContainer = document.querySelector('.layout-container');
 
-            if (menuToggleBtn && layoutMenu) {
-                menuToggleBtn.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    layoutMenu.classList.toggle('menu-hidden');
-
-                    // Toggle class on layout container to expand content
-                    if (layoutContainer) {
-                        layoutContainer.classList.toggle('menu-collapsed');
-                    }
-                });
-            }
-
-            // Also toggle when clicking the overlay
-            if (layoutOverlay && layoutMenu) {
-                layoutOverlay.addEventListener('click', function () {
-                    layoutMenu.classList.toggle('menu-hidden');
-
-                    // Toggle class on layout container
-                    if (layoutContainer) {
-                        layoutContainer.classList.toggle('menu-collapsed');
-                    }
-                });
-            }
-        });
-    </script>
 </body>
 
 </html>
-
-
-

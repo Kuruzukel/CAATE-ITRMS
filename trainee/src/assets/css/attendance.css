@@ -73,11 +73,117 @@
     cursor: pointer;
 }
 
+/* Image Preview Styles - Match System Dark Theme */
+#imagePreviewSection.image-preview-section {
+    padding: 1rem !important;
+    border: 2px solid #334155 !important;
+    border-radius: 8px !important;
+    background-color: #1e293b !important;
+    height: 200px !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3) !important;
+}
+
+#imagePreviewSection .image-preview-container {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    background-color: #0f172a !important;
+    border: 2px dashed #475569 !important;
+    border-radius: 6px !important;
+    padding: 1rem !important;
+    height: 100% !important;
+    position: relative !important;
+    transition: all 0.3s ease !important;
+}
+
+#imagePreviewSection .image-preview-container:hover {
+    border-color: #64748b !important;
+    background-color: #1e293b !important;
+}
+
+/* Image action buttons - Match System Dark Theme */
+#imageActionButtons.image-action-buttons {
+    position: absolute !important;
+    bottom: 12px !important;
+    right: 12px !important;
+    z-index: 10 !important;
+    display: flex !important;
+    gap: 8px !important;
+    background: rgba(30, 41, 59, 0.9) !important;
+    padding: 6px !important;
+    border-radius: 20px !important;
+    backdrop-filter: blur(10px) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+    border: 1px solid #475569 !important;
+}
+
+#viewImageBtn.image-view-btn,
+#removeImageBtn.image-remove-btn {
+    border-radius: 50% !important;
+    width: 40px !important;
+    height: 30px !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border: none !important;
+    font-size: 16px !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+}
+
+#viewImageBtn.image-view-btn {
+    background-color: #3b82f6 !important;
+    color: #ffffff !important;
+}
+
+#viewImageBtn.image-view-btn:hover {
+    background-color: #2563eb !important;
+    color: #ffffff !important;
+    transform: scale(1.1) !important;
+    box-shadow: 0 4px 8px rgba(59, 130, 246, 0.5) !important;
+}
+
+#removeImageBtn.image-remove-btn {
+    background-color: #ef4444 !important;
+    color: #ffffff !important;
+}
+
+#removeImageBtn.image-remove-btn:hover {
+    background-color: #dc2626 !important;
+    color: #ffffff !important;
+    transform: scale(1.1) !important;
+    box-shadow: 0 4px 8px rgba(239, 68, 68, 0.5) !important;
+}
+
+/* No image text styling - Match System Dark Theme */
+#noImageText {
+    color: #94a3b8 !important;
+}
+
+#noImageText i {
+    color: #64748b !important;
+    opacity: 0.7 !important;
+}
+
+#noImageText p {
+    color: #e2e8f0 !important;
+    font-weight: 500 !important;
+    margin-top: 0.75rem !important;
+    margin-bottom: 0.25rem !important;
+}
+
+#noImageText small {
+    color: #94a3b8 !important;
+    font-weight: 400 !important;
+}
+
 .image-preview {
-    max-width: 200px;
-    max-height: 200px;
-    margin-top: 1rem;
+    max-width: 100%;
+    max-height: 100%;
     border-radius: 8px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    object-fit: contain;
 }
 
 .upload-area {
@@ -87,13 +193,34 @@
     text-align: center;
     cursor: pointer;
     transition: all 0.3s ease;
+    background-color: transparent;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .upload-area:hover {
     background-color: rgba(59, 130, 246, 0.05);
+    border-color: #2563eb;
 }
 
 .upload-area.dragover {
     background-color: rgba(59, 130, 246, 0.1);
     border-color: #2563eb;
+    transform: scale(1.02);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .upload-area {
+        height: 150px;
+        padding: 1rem;
+    }
+
+    .image-preview-section {
+        margin-top: 1rem;
+        min-height: 150px;
+    }
 }

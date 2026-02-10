@@ -95,10 +95,68 @@ function handleImageUpload(file) {
     const reader = new FileReader();
     reader.onload = (e) => {
         const imagePreview = document.getElementById('imagePreview');
+        const noImageText = document.getElementById('noImageText');
+        const imageActionButtons = document.getElementById('imageActionButtons');
+
         imagePreview.src = e.target.result;
         imagePreview.style.display = 'block';
+        noImageText.style.display = 'none';
+        imageActionButtons.style.display = 'flex';
     };
     reader.readAsDataURL(file);
+}
+
+// Remove image preview
+function removeImagePreview() {
+    const imagePreview = document.getElementById('imagePreview');
+    const noImageText = document.getElementById('noImageText');
+    const imageActionButtons = document.getElementById('imageActionButtons');
+    const imageInput = document.getElementById('imageInput');
+
+    imagePreview.src = '';
+    imagePreview.style.display = 'none';
+    noImageText.style.display = 'block';
+    imageActionButtons.style.display = 'none';
+    imageInput.value = '';
+}
+
+// Show image in modal
+function showImageModal() {
+    const imagePreview = document.getElementById('imagePreview');
+    const modalImagePreview = document.getElementById('modalImagePreview');
+
+    if (imagePreview.src) {
+        modalImagePreview.src = imagePreview.src;
+        const modal = new bootstrap.Modal(document.getElementById('imagePreviewModal'));
+        modal.show();
+    }
+}
+
+// Show confirmation modal
+function showConfirmationModal(date, time) {
+    const selectedCourse = enrolledCourses.find(course => course.id === selectedCourseId);
+    const courseName = selectedCourse ? selectedCourse.name : 'Unknown Course';
+
+    // Update modal content
+    document.getElementById('modalCourseName').textContent = courseName;
+    document.getElementById('modalDate').textContent = new Date(date).toLocaleDateString();
+    document.getElementById('modalTime').textContent = time;
+
+    // Show modal
+    const modal = new bootstrap.Modal(document.getElementById('confirmationModal'));
+    modal.show();
+}
+
+// Submit attendance
+function submitAttendance(date, time) {
+    // Show success message
+    alert(`Attendance submitted successfully!\nCourse ID: ${selectedCourseId}\nDate: ${date}\nTime: ${time}`);
+
+    // Reset form
+    document.getElementById('attendanceFormElement').reset();
+
+    // Reset image preview
+    removeImagePreview();
 }
 
 // Initialize on page load
@@ -141,6 +199,16 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    // Remove image button
+    document.getElementById('removeImageBtn').addEventListener('click', () => {
+        removeImagePreview();
+    });
+
+    // View image button
+    document.getElementById('viewImageBtn').addEventListener('click', () => {
+        showImageModal();
+    });
+
     // Form submission
     document.getElementById('attendanceFormElement').addEventListener('submit', (e) => {
         e.preventDefault();
@@ -153,17 +221,30 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        alert(`Attendance submitted for course ID ${selectedCourseId}\nDate: ${date}\nTime: ${time}`);
-        // Reset form
-        document.getElementById('attendanceFormElement').reset();
-        imagePreview.style.display = 'none';
+        // Show confirmation modal
+        showConfirmationModal(date, time);
+    });
+
+    // Confirmation modal submit
+    document.getElementById('confirmSubmitBtn').addEventListener('click', () => {
+        const date = document.getElementById('attendanceDate').value;
+        const time = document.getElementById('attendanceTime').value;
+
+        // Hide modal
+        const modal = bootstrap.Modal.getInstance(document.getElementById('confirmationModal'));
+        modal.hide();
+
+        // Submit attendance
+        submitAttendance(date, time);
     });
 
     // Cancel button
     document.getElementById('cancelBtn').addEventListener('click', () => {
         document.getElementById('attendanceForm').style.display = 'none';
         document.getElementById('attendanceFormElement').reset();
-        imagePreview.style.display = 'none';
+
+        // Reset image preview
+        removeImagePreview();
 
         // Reset all course cards to default state
         document.querySelectorAll('.course-card').forEach(card => {

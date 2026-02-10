@@ -323,18 +323,53 @@
 
                                         <!-- Image Upload -->
                                         <div class="mb-3">
-                                            <label class="form-label">Upload Evidence Image</label>
-                                            <div class="upload-area" id="uploadArea">
-                                                <i class="bx bx-cloud-upload"
-                                                    style="font-size: 2rem; color: #3b82f6;"></i>
-                                                <p class="mt-2 mb-0">Drag and drop your image here or click to select
-                                                </p>
-                                                <small class="text-muted">Supported formats: JPG, PNG, GIF (Max
-                                                    5MB)</small>
-                                                <input type="file" id="imageInput" accept="image/*"
-                                                    style="display: none;" />
+                                            <div class="row">
+                                                <!-- Upload Area - Left Side -->
+                                                <div class="col-md-6">
+                                                    <label class="form-label">Upload Image</label>
+                                                    <div class="upload-area" id="uploadArea">
+                                                        <i class="bx bx-cloud-upload"
+                                                            style="font-size: 2rem; color: #3b82f6;"></i>
+                                                        <p class="mt-2 mb-0">Drag and drop your image here or click to
+                                                            select
+                                                        </p>
+                                                        <small class="text-muted">Supported formats: JPG, PNG, GIF (Max
+                                                            5MB)</small>
+                                                        <input type="file" id="imageInput" accept="image/*"
+                                                            style="display: none;" />
+                                                    </div>
+                                                </div>
+
+                                                <!-- Image Preview - Right Side -->
+                                                <div class="col-md-6">
+                                                    <label class="form-label">Image Preview</label>
+                                                    <div id="imagePreviewSection" class="image-preview-section">
+                                                        <div class="image-preview-container">
+                                                            <div id="noImageText" class="text-muted text-center">
+                                                                <i class="bx bx-image-alt"
+                                                                    style="font-size: 3rem; opacity: 0.3;"></i>
+                                                                <p class="mt-2 mb-0">No image selected</p>
+                                                                <small>Upload an image to see preview</small>
+                                                            </div>
+                                                            <img id="imagePreview" class="image-preview"
+                                                                style="display: none;" />
+                                                            <div class="image-action-buttons" style="display: none;"
+                                                                id="imageActionButtons">
+                                                                <button type="button"
+                                                                    class="btn btn-sm btn-primary image-view-btn"
+                                                                    id="viewImageBtn">
+                                                                    <i class="bx bx-show"></i>
+                                                                </button>
+                                                                <button type="button"
+                                                                    class="btn btn-sm btn-danger image-remove-btn"
+                                                                    id="removeImageBtn">
+                                                                    <i class="bx bx-trash"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <img id="imagePreview" class="image-preview" style="display: none;" />
                                         </div>
 
                                         <!-- Notes -->
@@ -380,6 +415,68 @@
         <div class="layout-overlay layout-menu-toggle"></div>
     </div>
     <!-- / Layout wrapper -->
+
+    <!-- Confirmation Modal -->
+    <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmationModalLabel">
+                        <i class="bx bx-check-circle me-2 text-success"></i>Confirm Attendance Submission
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-3">
+                        <i class="bx bx-info-circle text-primary" style="font-size: 3rem;"></i>
+                    </div>
+                    <p class="text-center mb-3">Are you sure you want to submit your attendance for:</p>
+                    <div class="alert alert-info">
+                        <strong id="modalCourseName"></strong><br>
+                        <small class="text-muted">
+                            <i class="bx bx-calendar me-1"></i><span id="modalDate"></span>
+                            <i class="bx bx-time ms-3 me-1"></i><span id="modalTime"></span>
+                        </small>
+                    </div>
+                    <p class="text-muted small text-center">Once submitted, this attendance record cannot be modified.
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        <i class="bx bx-x me-2"></i>Cancel
+                    </button>
+                    <button type="button" class="btn btn-primary" id="confirmSubmitBtn">
+                        <i class="bx bx-check me-2"></i>Yes, Submit Attendance
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Preview Modal -->
+    <div class="modal fade" id="imagePreviewModal" tabindex="-1" aria-labelledby="imagePreviewModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="imagePreviewModalLabel">
+                        <i class="bx bx-image me-2 text-primary"></i>Image Preview
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img id="modalImagePreview" class="img-fluid rounded"
+                        style="max-height: 70vh; object-fit: contain;" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bx bx-x me-2"></i>Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Core JS -->
     <script src="../assets/vendor/libs/jquery/jquery.js"></script>

@@ -237,44 +237,4 @@ document.addEventListener('DOMContentLoaded', function () {
         // Submit attendance
         submitAttendance(date, time);
     });
-
-    // Cancel button
-    document.getElementById('cancelBtn').addEventListener('click', () => {
-        document.getElementById('attendanceForm').style.display = 'none';
-        document.getElementById('attendanceFormElement').reset();
-
-        // Reset image preview
-        removeImagePreview();
-
-        // Reset all course cards to default state
-        document.querySelectorAll('.course-card').forEach(card => {
-            card.classList.remove('active');
-            card.style.border = '';
-            card.style.boxShadow = '';
-            card.style.transform = '';
-
-            const titleElement = card.querySelector('.card-title');
-            if (titleElement) {
-                titleElement.style.color = '';
-                titleElement.style.fontWeight = '';
-            }
-
-            const imageElement = card.querySelector('img');
-            if (imageElement) {
-                imageElement.style.border = '3px solid #3691bf';
-            }
-
-            const timeIcon = card.querySelector('.bx-time-five');
-            if (timeIcon) {
-                timeIcon.style.color = '';
-            }
-
-            const hoursText = card.querySelector('.text-muted');
-            if (hoursText) {
-                hoursText.style.color = '';
-            }
-        });
-
-        selectedCourseId = null;
-    });
 });

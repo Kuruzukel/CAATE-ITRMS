@@ -91,71 +91,129 @@ document.addEventListener('DOMContentLoaded', function () {
             {
                 id: '1',
                 title: 'Beauty Care Consultation',
-                start: '2024-02-15T10:00:00',
-                end: '2024-02-15T11:00:00',
+                start: '2026-02-15T10:00:00',
+                end: '2026-02-15T11:00:00',
                 backgroundColor: '#10b981',
                 borderColor: '#10b981',
                 extendedProps: {
                     client: 'Maria Santos',
                     service: 'Beauty Care (Skincare)',
                     status: 'confirmed',
-                    phone: '+63 912 345 6789'
+                    phone: '+63 912 345 6789',
+                    email: 'maria.santos@email.com',
+                    notes: 'First-time client, interested in anti-aging treatments'
                 }
             },
             {
                 id: '2',
                 title: 'Advanced Skincare Session',
-                start: '2024-02-16T14:00:00',
-                end: '2024-02-16T16:00:00',
+                start: '2026-02-16T14:00:00',
+                end: '2026-02-16T16:00:00',
                 backgroundColor: '#10b981',
                 borderColor: '#10b981',
                 extendedProps: {
                     client: 'Ana Cruz',
                     service: 'Advanced Skincare',
                     status: 'confirmed',
-                    phone: '+63 917 123 4567'
+                    phone: '+63 917 123 4567',
+                    email: 'ana.cruz@email.com',
+                    notes: 'Regular client, acne treatment follow-up'
                 }
             },
             {
                 id: '3',
                 title: 'Nail Care Appointment',
-                start: '2024-02-17T09:00:00',
-                end: '2024-02-17T10:30:00',
+                start: '2026-02-17T09:00:00',
+                end: '2026-02-17T10:30:00',
                 backgroundColor: '#f59e0b',
                 borderColor: '#f59e0b',
                 extendedProps: {
                     client: 'Lisa Garcia',
                     service: 'Beauty Care (Nail Care)',
                     status: 'pending',
-                    phone: '+63 905 987 6543'
+                    phone: '+63 905 987 6543',
+                    email: 'lisa.garcia@email.com',
+                    notes: 'Gel manicure and pedicure service'
                 }
             },
             {
                 id: '4',
                 title: 'Aesthetic Services',
-                start: '2024-02-18T13:00:00',
-                end: '2024-02-18T15:00:00',
+                start: '2026-02-18T13:00:00',
+                end: '2026-02-18T15:00:00',
                 backgroundColor: '#10b981',
                 borderColor: '#10b981',
                 extendedProps: {
                     client: 'Carmen Reyes',
                     service: 'Aesthetic Services',
                     status: 'confirmed',
-                    phone: '+63 920 456 7890'
+                    phone: '+63 920 456 7890',
+                    email: 'carmen.reyes@email.com',
+                    notes: 'Facial treatment and skin analysis'
                 }
             },
             {
                 id: '5',
                 title: 'Permanent Makeup Consultation',
-                start: '2024-02-19T11:00:00',
-                end: '2024-02-19T12:00:00',
+                start: '2026-02-19T11:00:00',
+                end: '2026-02-19T12:00:00',
                 backgroundColor: '#ef4444',
                 borderColor: '#ef4444',
                 extendedProps: {
                     client: 'Sofia Mendoza',
                     service: 'Permanent Makeup Tattoo',
                     status: 'cancelled',
-                    phone: '+63 918 765 4321'
+                    phone: '+63 918 765 4321',
+                    email: 'sofia.mendoza@email.com',
+                    notes: 'Client cancelled due to scheduling conflict'
+                }
+            },
+            {
+                id: '6',
+                title: 'Skincare Training Session',
+                start: '2026-02-20T10:00:00',
+                end: '2026-02-20T12:00:00',
+                backgroundColor: '#10b981',
+                borderColor: '#10b981',
+                extendedProps: {
+                    client: 'Jennifer Lopez',
+                    service: 'Beauty Care (Skincare)',
+                    status: 'confirmed',
+                    phone: '+63 915 234 5678',
+                    email: 'jennifer.lopez@email.com',
+                    notes: 'Hands-on training for skincare techniques'
+                }
+            },
+            {
+                id: '7',
+                title: 'Nail Art Workshop',
+                start: '2026-02-21T14:00:00',
+                end: '2026-02-21T17:00:00',
+                backgroundColor: '#f59e0b',
+                borderColor: '#f59e0b',
+                extendedProps: {
+                    client: 'Michelle Torres',
+                    service: 'Beauty Care (Nail Care)',
+                    status: 'pending',
+                    phone: '+63 908 876 5432',
+                    email: 'michelle.torres@email.com',
+                    notes: 'Advanced nail art techniques workshop'
+                }
+            },
+            {
+                id: '8',
+                title: 'Eyebrow Microblading',
+                start: '2026-02-22T09:00:00',
+                end: '2026-02-22T11:00:00',
+                backgroundColor: '#10b981',
+                borderColor: '#10b981',
+                extendedProps: {
+                    client: 'Rachel Kim',
+                    service: 'Permanent Makeup Tattoo',
+                    status: 'confirmed',
+                    phone: '+63 922 345 6789',
+                    email: 'rachel.kim@email.com',
+                    notes: 'Eyebrow microblading procedure'
                 }
             }
         ];
@@ -263,46 +321,68 @@ document.addEventListener('DOMContentLoaded', function () {
         const modalBody = document.getElementById('appointmentModalBody');
 
         if (modal && modalTitle && modalBody) {
-            modalTitle.textContent = event.title;
+            modalTitle.textContent = 'Appointment Details';
 
-            const startTime = event.start.toLocaleString();
-            const endTime = event.end ? event.end.toLocaleString() : 'N/A';
+            const startTime = event.start.toLocaleString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            const endTime = event.end ? event.end.toLocaleString('en-US', {
+                hour: '2-digit',
+                minute: '2-digit'
+            }) : 'N/A';
+
             const client = event.extendedProps.client || 'N/A';
             const service = event.extendedProps.service || 'N/A';
             const status = event.extendedProps.status || 'N/A';
             const phone = event.extendedProps.phone || 'N/A';
+            const email = event.extendedProps.email || 'N/A';
+            const notes = event.extendedProps.notes || 'No additional notes';
 
             modalBody.innerHTML = `
                 <div class="row">
-                    <div class="col-md-6">
-                        <strong>Client:</strong><br>
-                        <span>${client}</span>
-                    </div>
-                    <div class="col-md-6">
-                        <strong>Service:</strong><br>
-                        <span>${service}</span>
-                    </div>
-                </div>
-                <hr>
-                <div class="row">
-                    <div class="col-md-6">
-                        <strong>Start Time:</strong><br>
-                        <span>${startTime}</span>
-                    </div>
-                    <div class="col-md-6">
-                        <strong>End Time:</strong><br>
-                        <span>${endTime}</span>
-                    </div>
-                </div>
-                <hr>
-                <div class="row">
-                    <div class="col-md-6">
-                        <strong>Status:</strong><br>
-                        <span class="badge bg-${getStatusColor(status)}">${status.charAt(0).toUpperCase() + status.slice(1)}</span>
-                    </div>
-                    <div class="col-md-6">
-                        <strong>Phone:</strong><br>
-                        <span>${phone}</span>
+                    <div class="col-md-12">
+                        <h6 class="mb-3">Contact Information</h6>
+                        <div class="row mb-2">
+                            <div class="col-sm-4"><strong>Name:</strong></div>
+                            <div class="col-sm-8">${client}</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-sm-4"><strong>Email:</strong></div>
+                            <div class="col-sm-8">${email}</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-sm-4"><strong>Phone:</strong></div>
+                            <div class="col-sm-8">${phone}</div>
+                        </div>
+                        <hr />
+                        <h6 class="mb-3">Appointment Information</h6>
+                        <div class="row mb-2">
+                            <div class="col-sm-4"><strong>Service:</strong></div>
+                            <div class="col-sm-8">${service}</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-sm-4"><strong>Date & Time:</strong></div>
+                            <div class="col-sm-8">${startTime}</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-sm-4"><strong>End Time:</strong></div>
+                            <div class="col-sm-8">${endTime}</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-sm-4"><strong>Status:</strong></div>
+                            <div class="col-sm-8"><span class="badge bg-${getStatusColor(status)}">${status.charAt(0).toUpperCase() + status.slice(1)}</span></div>
+                        </div>
+                        <hr />
+                        <h6 class="mb-3">Admin Notes</h6>
+                        <div class="alert alert-secondary mb-2">
+                            <small class="text-muted d-block mb-1"><i class="bx bx-time"></i> ${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} - Admin</small>
+                            <p class="mb-0">${notes}</p>
+                        </div>
                     </div>
                 </div>
             `;
@@ -313,6 +393,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 bootstrapModal.show();
             } catch (error) {
                 console.error('Error showing modal:', error);
+                // Fallback: show modal without Bootstrap
+                modal.style.display = 'block';
+                modal.classList.add('show');
             }
         }
     }

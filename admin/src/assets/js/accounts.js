@@ -28,4 +28,24 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
+
+    // Password Toggle for View Modal
+    const toggleViewPassword = document.getElementById('toggleViewPassword');
+    const viewPasswordInput = document.getElementById('viewTraineePassword');
+    const viewPasswordIcon = document.getElementById('viewPasswordIcon');
+
+    if (toggleViewPassword && viewPasswordInput && viewPasswordIcon) {
+        toggleViewPassword.addEventListener('click', function () {
+            // Toggle password visibility
+            if (viewPasswordInput.type === 'password') {
+                viewPasswordInput.type = 'text';
+                viewPasswordIcon.classList.remove('bx-hide');
+                viewPasswordIcon.classList.add('bx-show');
+            } else {
+                viewPasswordInput.type = 'password';
+                viewPasswordIcon.classList.remove('bx-show');
+                viewPasswordIcon.classList.add('bx-hide');
+            }
+        });
+    }
 });

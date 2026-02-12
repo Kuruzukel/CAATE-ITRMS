@@ -18,7 +18,7 @@
     <img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" alt="License">
   </a>
   <a href="https://nodejs.org">
-    <img src="https://img.shields.io/badge/Node.js-v14+-339933?style=for-the-badge&logo=node.js&logoColor=white" alt="Node.js">
+    <img src="https://img.shields.io/badge/Node.js-v14+-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node.js">
   </a>
 </p>
 
@@ -247,15 +247,12 @@
 
 <div align="center">
 
-| Tool                                                                                                     | Purpose                           |
-| :------------------------------------------------------------------------------------------------------- | :-------------------------------- |
-| ![Webpack](https://img.shields.io/badge/Webpack-8DD6F9?style=for-the-badge&logo=webpack&logoColor=black) | Module bundler & asset management |
-| ![Gulp](https://img.shields.io/badge/Gulp-CF4647?style=for-the-badge&logo=gulp&logoColor=white)          | Task automation & build pipeline  |
-| ![npm](https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white)             | Package management                |
-| ![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white) | JavaScript runtime (v14+)         |
-
-</div>
-| ![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white) | JavaScript runtime (v14+)         |
+| Tool                                                                                                       | Purpose                           |
+| :--------------------------------------------------------------------------------------------------------- | :-------------------------------- |
+| ![Webpack](https://img.shields.io/badge/Webpack-8DD6F9?style=for-the-badge&logo=webpack&logoColor=black)   | Module bundler & asset management |
+| ![Gulp](https://img.shields.io/badge/Gulp-CF4647?style=for-the-badge&logo=gulp&logoColor=white)            | Task automation & build pipeline  |
+| ![npm](https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white)               | Package management                |
+| ![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white) | JavaScript runtime (v14+)         |
 
 </div>
 
@@ -617,25 +614,6 @@ _Integrated Training & Resource Management System_
 <sub>© 2026 CAATE-ITRMS. All Rights Reserved.</sub>
 
 <br><br>
-
-<a href="#">
-  <img src="https://img.shields.io/badge/⬆️_BACK_TO_TOP-4A90E2?style=for-the-badge&labelColor=2C3E50&logo=rocket&logoColor=white" alt="Back to Top"/>
-</a>
-
-<br><br>
-
-<sub>
-  <a href="https://github.com/Kuruzukel">GitHub</a> •
-  <a href="mailto:mikasaackerman.jme@gmail.com">Email</a> •
-  <a href="https://tesda.gov.ph">TESDA</a>
-</sub>
-
-<br><br>
-
-</div>
-</table>
-
-<br>
 
 <a href="#">
   <img src="https://img.shields.io/badge/⬆️_BACK_TO_TOP-4A90E2?style=for-the-badge&labelColor=2C3E50&logo=rocket&logoColor=white" alt="Back to Top"/>

@@ -1447,16 +1447,19 @@ footer span,
    ======================================== */
 @media (max-width: 1199.98px) {
 
-    /* Automatically hide/close the sidebar menu */
+    /* Automatically hide/close the sidebar menu by default */
     .layout-menu {
         transform: translateX(-100%) !important;
         opacity: 0 !important;
         pointer-events: none !important;
+        transition: transform 0.3s ease, opacity 0.3s ease !important;
     }
 
-    /* Add menu-hidden class behavior */
-    .layout-menu:not(.menu-visible) {
-        transform: translateX(-100%) !important;
+    /* Show menu when expanded */
+    .layout-menu-expanded .layout-menu {
+        transform: translateX(0) !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
     }
 
     /* Expand layout page to full width when sidebar is hidden */
@@ -1511,9 +1514,37 @@ footer span,
         max-width: none !important;
     }
 
-    /* Keep hamburger menu visible so users can toggle sidebar if needed */
+    /* Keep hamburger menu visible so users can toggle sidebar */
     .layout-menu-toggle {
         display: flex !important;
+    }
+}
+
+/* On screens 1200px and above, menu is visible by default but can be toggled */
+@media (min-width: 1200px) {
+
+    /* Menu visible by default */
+    .layout-menu {
+        transform: translateX(0) !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+    }
+
+    /* When collapsed on large screens */
+    .layout-menu-collapsed .layout-menu {
+        transform: translateX(-100%) !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+    }
+
+    /* Adjust layout page when menu is collapsed on large screens */
+    .layout-menu-collapsed .layout-page {
+        margin-left: 0 !important;
+    }
+
+    .layout-menu-collapsed .layout-navbar {
+        left: 0 !important;
+        margin-left: 1.625rem !important;
     }
 }
 
@@ -1522,22 +1553,33 @@ footer span,
    CUSTOM MENU TOGGLE STYLES
    ======================================== */
 
-.layout-menu.menu-hidden {
-    transform: translateX(-100%);
-    transition: transform 0.3s ease;
+/* Show hamburger menu on ALL screen sizes */
+.layout-menu-toggle.d-xl-none {
+    display: flex !important;
 }
 
-.layout-menu {
-    transition: transform 0.3s ease, width 0.3s ease;
+.layout-menu-toggle.navbar-nav {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+}
+
+.layout-menu-toggle .nav-link {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+}
+
+.layout-menu-toggle .nav-link i {
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
 }
 
 .layout-menu-toggle {
     cursor: pointer;
-}
-
-/* Show hamburger menu on all screen sizes */
-.layout-menu-toggle.d-xl-none {
-    display: flex !important;
 }
 
 /* Layout page expansion when menu is hidden */

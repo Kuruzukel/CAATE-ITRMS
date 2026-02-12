@@ -93,34 +93,58 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-// Menu Toggle Script
+// Menu Toggle Script - Works on ALL screen sizes
 document.addEventListener('DOMContentLoaded', function () {
     const menuToggleBtn = document.querySelector('.menu-toggle-btn');
     const layoutMenu = document.getElementById('layout-menu');
     const layoutOverlay = document.querySelector('.layout-overlay');
-    const layoutContainer = document.querySelector('.layout-container');
 
-    if (menuToggleBtn && layoutMenu) {
+    // Function to check if we're on a small screen
+    function isSmallScreen() {
+        return window.innerWidth < 1200;
+    }
+
+    if (menuToggleBtn) {
         menuToggleBtn.addEventListener('click', function (e) {
             e.preventDefault();
-            layoutMenu.classList.toggle('menu-hidden');
+            e.stopPropagation();
 
-            // Toggle class on layout container to expand content
-            if (layoutContainer) {
-                layoutContainer.classList.toggle('menu-collapsed');
+            if (isSmallScreen()) {
+                // On small screens, toggle expanded class
+                document.documentElement.classList.toggle('layout-menu-expanded');
+            } else {
+                // On large screens, toggle collapsed class
+                document.documentElement.classList.toggle('layout-menu-collapsed');
             }
         });
     }
 
-    // Also toggle when clicking the overlay
-    if (layoutOverlay && layoutMenu) {
-        layoutOverlay.addEventListener('click', function () {
-            layoutMenu.classList.toggle('menu-hidden');
+    // Close menu when clicking the overlay
+    if (layoutOverlay) {
+        layoutOverlay.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
 
-            // Toggle class on layout container
-            if (layoutContainer) {
-                layoutContainer.classList.toggle('menu-collapsed');
-            }
+            // Remove both classes to close menu
+            document.documentElement.classList.remove('layout-menu-expanded');
+            document.documentElement.classList.remove('layout-menu-collapsed');
         });
     }
+
+    // Handle window resize - adjust classes appropriately
+    function handleResize() {
+        if (isSmallScreen()) {
+            // On small screens, remove collapsed class
+            document.documentElement.classList.remove('layout-menu-collapsed');
+        } else {
+            // On large screens, remove expanded class
+            document.documentElement.classList.remove('layout-menu-expanded');
+        }
+    }
+
+    // Listen for window resize
+    window.addEventListener('resize', handleResize);
+
+    // Initial check
+    handleResize();
 });

@@ -220,7 +220,11 @@
 
 <br>
 
-## Tech Stack
+<div align="center">
+
+## 🛠️ Tech Stack
+
+</div>
 
 ### Frontend Technologies
 
@@ -233,9 +237,9 @@
 | ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)               | Client-side logic & interactivity |  ES6+   |
 | ![Bootstrap](https://img.shields.io/badge/Bootstrap-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white)                  | UI framework & components         | 4.x/5.x |
 | ![jQuery](https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white)                           | DOM manipulation & utilities      |   3.x   |
-| <img src="https://cdn.rawgit.com/RobinCK/vue-popper/4431e4cc/doc/logo.png" width="120" alt="Popper.js"/>                        | Tooltip & popover positioning     | Latest  |
+| ![Popper.js](https://img.shields.io/badge/Popper.js-FFC107?style=for-the-badge&logo=javascript&logoColor=black)                 | Tooltip & popover positioning     | Latest  |
 | ![Perfect Scrollbar](https://img.shields.io/badge/Perfect_Scrollbar-4A90E2?style=for-the-badge&logo=javascript&logoColor=white) | Custom scrollbar styling          | Latest  |
-| <img src="https://tse3.mm.bing.net/th/id/OIP.nQkUF3Z1BbqGPn3dLlgfuAHaD4?pid=Api&P=0&h=180" width="120" alt="Boxicons"/>         | Icon library                      | Latest  |
+| ![Boxicons](https://img.shields.io/badge/Boxicons-00D4FF?style=for-the-badge&logo=iconify&logoColor=white)                      | Icon library                      | Latest  |
 
 </div>
 
@@ -248,6 +252,9 @@
 | ![Webpack](https://img.shields.io/badge/Webpack-8DD6F9?style=for-the-badge&logo=webpack&logoColor=black) | Module bundler & asset management |
 | ![Gulp](https://img.shields.io/badge/Gulp-CF4647?style=for-the-badge&logo=gulp&logoColor=white)          | Task automation & build pipeline  |
 | ![npm](https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white)             | Package management                |
+| ![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white) | JavaScript runtime (v14+)         |
+
+</div>
 | ![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white) | JavaScript runtime (v14+)         |
 
 </div>
@@ -607,17 +614,25 @@ _Integrated Training & Resource Management System_
 
 <br>
 
-<table>
-<tr>
-<td align="center">
 <sub>© 2026 CAATE-ITRMS. All Rights Reserved.</sub>
-</td>
-</tr>
-<tr>
-<td align="center">
-<sub>Made with ❤️ in the Philippines 🇵🇭</sub>
-</td>
-</tr>
+
+<br><br>
+
+<a href="#">
+  <img src="https://img.shields.io/badge/⬆️_BACK_TO_TOP-4A90E2?style=for-the-badge&labelColor=2C3E50&logo=rocket&logoColor=white" alt="Back to Top"/>
+</a>
+
+<br><br>
+
+<sub>
+  <a href="https://github.com/Kuruzukel">GitHub</a> •
+  <a href="mailto:mikasaackerman.jme@gmail.com">Email</a> •
+  <a href="https://tesda.gov.ph">TESDA</a>
+</sub>
+
+<br><br>
+
+</div>
 </table>
 
 <br>

@@ -26,7 +26,15 @@ let menu, animate;
   menuToggler.forEach(item => {
     item.addEventListener('click', event => {
       event.preventDefault();
-      window.Helpers.toggleCollapsed();
+      // Custom toggle logic for all screen sizes
+      const isSmallScreen = window.innerWidth < 1200;
+      if (isSmallScreen) {
+        // On small screens (< 1200px), toggle expanded class
+        document.documentElement.classList.toggle('layout-menu-expanded');
+      } else {
+        // On large screens (>= 1200px), toggle collapsed class
+        document.documentElement.classList.toggle('layout-menu-collapsed');
+      }
     });
   });
 

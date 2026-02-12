@@ -1,7 +1,7 @@
 /**
- * Custom Menu Toggle Script
- * Handles menu toggle on ALL screen sizes
- * Works across all admin pages
+ * Custom Menu Toggle Script - Close Button and Overlay Handler
+ * Handles menu close button and overlay clicks
+ * Main toggle logic is in main.js to avoid conflicts
  */
 
 (function () {
@@ -10,7 +10,6 @@
     // Wait for DOM to be ready
     document.addEventListener('DOMContentLoaded', function () {
         const layoutOverlay = document.querySelector('.layout-overlay');
-        const menuToggleBtn = document.querySelector('.menu-toggle-btn');
         const menuCloseBtn = document.querySelector('.menu-close-btn');
 
         // Function to check if we're on a small screen
@@ -22,22 +21,6 @@
         function closeMenu() {
             document.documentElement.classList.remove('layout-menu-expanded');
             document.documentElement.classList.remove('layout-menu-collapsed');
-        }
-
-        // Toggle menu when clicking the hamburger button
-        if (menuToggleBtn) {
-            menuToggleBtn.addEventListener('click', function (e) {
-                e.preventDefault();
-                e.stopPropagation();
-
-                if (isSmallScreen()) {
-                    // On small screens, toggle expanded class
-                    document.documentElement.classList.toggle('layout-menu-expanded');
-                } else {
-                    // On large screens, toggle collapsed class
-                    document.documentElement.classList.toggle('layout-menu-collapsed');
-                }
-            });
         }
 
         // Close button functionality
@@ -69,8 +52,12 @@
             }
         }
 
-        // Listen for window resize
-        window.addEventListener('resize', handleResize);
+        // Listen for window resize with debounce
+        let resizeTimer;
+        window.addEventListener('resize', function () {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(handleResize, 100);
+        });
 
         // Initial check
         handleResize();

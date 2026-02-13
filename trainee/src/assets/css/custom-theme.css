@@ -406,6 +406,13 @@
     box-shadow: 0 0 0 0.2rem rgba(54, 145, 191, 0.25) !important;
 }
 
+/* Ensure search input has consistent styling */
+.navbar .nav-item.position-relative .form-control {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    color: var(--white) !important;
+}
+
 /* Dropdown Styles */
 .dropdown-menu {
     border-radius: var(--border-radius-md) !important;

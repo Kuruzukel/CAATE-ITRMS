@@ -2511,3 +2511,42 @@ nav.layout-navbar.navbar-detached.container-xxl,
         max-width: 150px !important;
     }
 }
+
+/* Responsive search bar for small screens (500px and below) */
+@media (max-width: 500px) {
+    .navbar .navbar-nav.align-items-center {
+        max-width: 120px !important;
+    }
+
+    .navbar .nav-item.position-relative {
+        width: 120px !important;
+        max-width: 120px !important;
+    }
+
+    .navbar .nav-item.position-relative .form-control {
+        width: 120px !important;
+        max-width: 120px !important;
+        font-size: 0.75rem !important;
+        padding-left: 35px !important;
+    }
+
+    .navbar .nav-item.position-relative .form-control::placeholder {
+        font-size: 0.7rem !important;
+    }
+
+    .navbar .nav-item.position-relative .bx-search {
+        font-size: 1rem !important;
+        left: 10px !important;
+    }
+
+    /* Adjust hamburger menu to the left */
+    .layout-menu-toggle.navbar-nav,
+    .layout-menu-toggle {
+        margin-left: -8px !important;
+    }
+
+    /* Adjust user dropdown to the right */
+    .navbar-dropdown.dropdown-user {
+        margin-right: -16px !important;
+    }
+}

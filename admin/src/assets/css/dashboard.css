@@ -1,0 +1,101 @@
+/* Admin dashboard – reuse trainee dashboard dropdown and layout tweaks */
+
+.navbar-dropdown.dropdown-user {
+    position: relative;
+}
+
+.navbar-dropdown.dropdown-user .nav-link {
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.navbar-dropdown.dropdown-user .avatar {
+    width: 40px;
+    height: 40px;
+    position: relative;
+    display: inline-block;
+}
+
+.navbar-dropdown.dropdown-user .avatar img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.navbar-dropdown.dropdown-user .dropdown-menu {
+    min-width: 240px;
+    padding: 0.5rem 0;
+    margin-top: 0.5rem;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    border-radius: 0.375rem;
+}
+
+.navbar-dropdown.dropdown-user .dropdown-item {
+    padding: 0.625rem 1.25rem;
+    font-size: 0.9375rem;
+    color: #697a8d;
+    transition: all 0.2s ease;
+}
+
+.navbar-dropdown.dropdown-user .dropdown-item:hover {
+    background-color: rgba(105, 122, 141, 0.04);
+    color: #566a7f;
+}
+
+.navbar-dropdown.dropdown-user .dropdown-item:active {
+    background-color: rgba(105, 122, 141, 0.08);
+}
+
+.navbar-dropdown.dropdown-user .dropdown-item i {
+    font-size: 1.125rem;
+    vertical-align: middle;
+}
+
+.navbar-dropdown.dropdown-user .dropdown-divider {
+    margin: 0.5rem 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.navbar-dropdown.dropdown-user .d-flex {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-dropdown.dropdown-user .flex-shrink-0 {
+    flex-shrink: 0;
+}
+
+.navbar-dropdown.dropdown-user .flex-grow-1 {
+    flex-grow: 1;
+}
+
+.navbar-dropdown.dropdown-user .fw-semibold {
+    font-weight: 600;
+    color: #566a7f;
+    font-size: 0.9375rem;
+}
+
+.navbar-dropdown.dropdown-user .text-muted {
+    color: #a1acb8 !important;
+    font-size: 0.8125rem;
+}
+
+.navbar-dropdown.dropdown-user .hide-arrow::after {
+    display: none !important;
+}
+
+/* Responsive adjustments for user dropdown */
+@media (max-width: 767px) {
+    .navbar-dropdown.dropdown-user .dropdown-menu {
+        min-width: 200px;
+    }
+
+    .navbar-dropdown.dropdown-user .dropdown-item {
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+    }
+}
+

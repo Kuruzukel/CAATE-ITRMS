@@ -62,6 +62,11 @@
     contain: layout style paint;
 }
 
+/* Allow navbar contents (like dropdowns) to overflow and render fully */
+.layout-navbar {
+    contain: none !important;
+}
+
 /* Use will-change for animated elements */
 .layout-menu,
 .layout-overlay {

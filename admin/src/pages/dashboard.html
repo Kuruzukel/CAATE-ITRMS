@@ -54,6 +54,9 @@
     <!-- ESCAATE Custom Theme -->
     <link rel="stylesheet" href="../assets/css/custom-theme.css" />
 
+    <!-- Dashboard CSS (shared styles with trainee dashboard) -->
+    <link rel="stylesheet" href="../assets/css/dashboard.css" />
+
     <!-- Admin Dashboard CSS -->
     <link rel="stylesheet" href="../assets/css/admin-dashboard.css" />
 
@@ -269,6 +272,64 @@
               <!-- /Search -->
 
               <ul class="navbar-nav flex-row align-items-center ms-auto" style="flex-shrink: 0; margin-left: auto;">
+                <!-- User -->
+                <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                  <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+                    <div class="avatar avatar-online">
+                      <img
+                        src="../assets/images/AVATARNIKEL.jpg"
+                        alt
+                        class="w-px-40 h-auto rounded-circle"
+                      />
+                    </div>
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-end">
+                    <li>
+                      <a class="dropdown-item" href="#">
+                        <div class="d-flex">
+                          <div class="flex-shrink-0 me-3">
+                            <div class="avatar avatar-online">
+                              <img
+                                src="../assets/images/AVATARNIKEL.jpg"
+                                alt
+                                class="w-px-40 h-auto rounded-circle"
+                              />
+                            </div>
+                          </div>
+                          <div class="flex-grow-1">
+                            <span class="fw-semibold d-block text-white">KEL</span>
+                            <small class="text-white">Admin</small>
+                          </div>
+                        </div>
+                      </a>
+                    </li>
+                    <li>
+                      <div class="dropdown-divider"></div>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="#">
+                        <i class="bx bx-user me-2"></i>
+                        <span class="align-middle">My Profile</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="#">
+                        <i class="bx bx-cog me-2"></i>
+                        <span class="align-middle">Settings</span>
+                      </a>
+                    </li>
+                    <li>
+                      <div class="dropdown-divider"></div>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="../../auth/src/pages/login.html">
+                        <i class="bx bx-power-off me-2"></i>
+                        <span class="align-middle">Log Out</span>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+                <!--/ User -->
               </ul>
             </div>
           </nav>
@@ -875,6 +936,9 @@
 
     <!-- Page JS -->
     <script src="../assets/js/dashboards-analytics.js"></script>
+
+    <!-- Dashboard JS (shared behavior with trainee dashboard) -->
+    <script src="../assets/js/dashboard.js"></script>
 
     <!-- Admin Dashboard JS -->
     <script src="../assets/js/admin-dashboard.js"></script>

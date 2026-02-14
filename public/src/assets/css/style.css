@@ -609,6 +609,7 @@ h6 {
   right: 0;
   bottom: 0;
   background: url("../images/CAATEBGX.png") center/cover no-repeat;
+  background-attachment: fixed;
   z-index: -2;
 }
 

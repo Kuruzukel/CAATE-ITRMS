@@ -1,6 +1,31 @@
 /* Import main styles from style.css */
 @import url('style.css');
 
+/* Hide scrollbar for all course pages */
+html {
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* IE and Edge */
+}
+
+html::-webkit-scrollbar {
+    display: none;
+    /* Chrome, Safari and Opera */
+}
+
+body {
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* IE and Edge */
+}
+
+body::-webkit-scrollbar {
+    display: none;
+    /* Chrome, Safari and Opera */
+}
+
 /* Course Hero Section Specific Styles */
 .course-hero {
     position: relative;

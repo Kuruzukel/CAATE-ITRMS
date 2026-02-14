@@ -40,6 +40,16 @@
 html {
   scroll-behavior: smooth;
   font-size: 16px;
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+}
+
+html::-webkit-scrollbar {
+  display: none;
+  /* Chrome, Safari and Opera */
 }
 
 body {
@@ -52,6 +62,16 @@ body {
   line-height: 1.6;
   overflow-x: hidden;
   background-color: var(--white);
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+}
+
+body::-webkit-scrollbar {
+  display: none;
+  /* Chrome, Safari and Opera */
 }
 
 h1,

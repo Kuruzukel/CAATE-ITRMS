@@ -4,15 +4,424 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="refresh" content="0; url=public/src/pages/index.html">
-    <title>Redirecting to CAATE...</title>
+
+    <title>CAATE | Creative Aesthetics Academy & Technical Education Inc.</title>
+    <link rel="icon" href="public/src/assets/images/CAATE_META_LOGO.png" type="image/png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <style>
+        :root {
+            --primary-blue: #3691bf;
+            --primary-blue-dark: #325596;
+            --dark-azure: #163856;
+            --darker-azure: #12395a;
+            --white: #ffffff;
+            --text-white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("img/CAATEBGx.png") center/cover no-repeat;
+            z-index: -2;
+        }
+
+        body::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(22, 56, 86, 0.8), rgba(18, 57, 90, 0.8));
+            z-index: -1;
+        }
+
+        /* Grid Overlay */
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            background-image:
+                linear-gradient(rgba(54, 145, 191, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(54, 145, 191, 0.08) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+
+        /* Animated Orbs */
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            pointer-events: none;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 500px;
+            height: 500px;
+            background: linear-gradient(135deg, rgba(54, 145, 191, 0.4), rgba(58, 99, 133, 0.3));
+            top: -150px;
+            right: -150px;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(135deg, rgba(54, 145, 191, 0.35), rgba(50, 85, 150, 0.25));
+            bottom: -100px;
+            left: -100px;
+            animation-delay: -3s;
+        }
+
+        .orb-3 {
+            width: 350px;
+            height: 350px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(54, 145, 191, 0.25));
+            top: 50%;
+            right: 20%;
+            animation-delay: -6s;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            33% {
+                transform: translate(30px, -30px) scale(1.1);
+            }
+
+            66% {
+                transform: translate(-20px, 20px) scale(0.9);
+            }
+        }
+
+        /* Main Container */
+        .container {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 40px;
+            max-width: 900px;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Hero Logos */
+        .hero-logos {
+            position: relative;
+            display: flex;
+            flex-direction: row;
+            gap: 2rem;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
+            padding: 1.5rem 2rem;
+            background: transparent;
+            border-radius: 30px;
+            perspective: 1500px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 40px;
+            animation: scaleIn 0.6s ease-out 0.2s both;
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .hero-logo {
+            width: 205px;
+            height: auto;
+            object-fit: contain;
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.6));
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(54, 145, 191, 0.4);
+            border-radius: 50%;
+            box-shadow:
+                0 15px 35px rgba(22, 56, 86, 0.25),
+                0 5px 15px rgba(0, 0, 0, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.6),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+            position: relative;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .hero-logo.caate-logo {
+            width: 205px;
+        }
+
+        .hero-logo.tesda-logo {
+            width: 205px;
+            padding: 20px;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .hero-logo::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(145deg, rgba(54, 145, 191, 0.1), transparent);
+            border-radius: 20px;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .hero-logo::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(54, 145, 191, 0.2), transparent 70%);
+            transform: translate(-50%, -50%) translateZ(-50px);
+            border-radius: 20px;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        /* Hero Title */
+        .hero-title {
+            color: var(--text-white);
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            letter-spacing: -0.5px;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            line-height: 1.4;
+            animation: fadeInUp 0.8s ease-out 0.3s both;
+        }
+
+        .highlight {
+            color: var(--primary-blue);
+            background: linear-gradient(135deg, #3691bf, #5ab3e0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 800;
+            display: block;
+            margin-top: 10px;
+        }
+
+        .hero-description {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+            font-weight: 400;
+            margin-bottom: 40px;
+            font-style: italic;
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+
+        /* Loading Spinner */
+        .loader-container {
+            margin-top: 30px;
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.8s ease-out 0.5s both;
+        }
+
+        .loader {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            border-top-color: var(--primary-blue);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-text {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.95rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        /* Lower Curl */
+        .lower-curl {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            z-index: 5;
+        }
+
+        .lower-curl svg {
+            display: block;
+            width: 100%;
+            height: 80px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-logos {
+                gap: 1.5rem;
+                padding: 1rem 1.5rem;
+            }
+
+            .hero-logo.caate-logo,
+            .hero-logo.tesda-logo {
+                width: 150px;
+            }
+
+            .hero-title {
+                font-size: 1.5rem;
+            }
+
+            .hero-description {
+                font-size: 0.95rem;
+            }
+
+            .lower-curl svg {
+                height: 60px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-logos {
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .hero-logo.caate-logo,
+            .hero-logo.tesda-logo {
+                width: 120px;
+                padding: 10px;
+            }
+
+            .hero-title {
+                font-size: 1.2rem;
+            }
+
+            .hero-description {
+                font-size: 0.85rem;
+            }
+        }
+    </style>
 </head>
 
 <body>
-    <p>Redirecting to CAATE website...</p>
+    <!-- Grid Overlay -->
+    <div class="grid-overlay"></div>
+
+    <!-- Animated Orbs -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="hero-logos">
+            <img src="public/src/assets/images/ROUNDCAATELOGO.png" alt="CAATE Logo" class="hero-logo caate-logo">
+            <img src="public/src/assets/images/TESDANOTEXTLOGO.png" alt="TESDA Logo" class="hero-logo tesda-logo">
+        </div>
+
+        <h1 class="hero-title">
+            A TRUSTED AESTHETIC ACADEMY SHAPING CERTIFIED BEAUTY EXPERTS
+            <span class="highlight">BEAUTY & AESTHETICS</span>
+        </h1>
+
+        <p class="hero-description">
+            "The first TESDA-Registered Aesthetic Academy & Accredited Assessment Center in Central & Northern Luzon"
+        </p>
+
+        <div class="loader-container">
+            <div class="loader"></div>
+            <p class="loading-text">Loading your experience...</p>
+        </div>
+    </div>
+
+    <!-- Lower Curl -->
+    <div class="lower-curl">
+        <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+            <path d="M0,60 Q180,100 360,60 T720,60 T1080,60 T1440,60 L1440,120 L0,120 Z"
+                fill="rgba(255, 255, 255, 0.1)" />
+            <path d="M0,80 Q180,40 360,80 T720,80 T1080,80 T1440,80 L1440,120 L0,120 Z"
+                fill="rgba(255, 255, 255, 0.15)" />
+            <path d="M0,100 Q180,60 360,100 T720,100 T1080,100 T1440,100 L1440,120 L0,120 Z"
+                fill="rgba(255, 255, 255, 0.2)" />
+        </svg>
+    </div>
+
     <script>
-        window.location.href = 'public/src/pages/index.html';
+        // Redirect after 2 seconds
+        setTimeout(function () {
+            window.location.href = 'public/src/pages/index.html';
+        }, 2000);
     </script>
+
 </body>
 
 </html>

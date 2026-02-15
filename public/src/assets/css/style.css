@@ -262,7 +262,7 @@ h6 {
 .container {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 0 1.5rem;
+  padding: 0 20rem;
   width: 100%;
   box-sizing: border-box;
 }
@@ -754,14 +754,13 @@ h6 {
 /* CAATE Logo - Specific Styling */
 .hero-logo.caate-logo {
   width: 205px;
-  padding: 15px;
   /* Adjust this to control image size inside the circle */
 }
 
 /* TESDA Logo - Specific Styling */
 .hero-logo.tesda-logo {
   width: 205px;
-  padding: 20px;
+  padding: 25px;
   /* Adjust this to control image size inside the circle */
 }
 
@@ -2057,7 +2056,17 @@ h6 {
   color: var(--primary-blue);
 }
 
+@media (max-width: 1086px) {
+  .container {
+    padding: 0 10rem !important;
+  }
+}
+
 @media (max-width: 1024px) {
+  .container {
+    padding: 0 7rem !important;
+  }
+
   .hero .container {
     grid-template-columns: 1fr;
     gap: 2rem;
@@ -2086,12 +2095,11 @@ h6 {
 
   .hero-logo.caate-logo {
     width: 180px;
-    padding: 12px;
   }
 
   .hero-logo.tesda-logo {
     width: 180px;
-    padding: 18px;
+    padding: 20px;
   }
 
   .hero-image {
@@ -2208,6 +2216,10 @@ h6 {
     display: block;
   }
 
+  .container {
+    padding: 0 6rem !important;
+  }
+
   .hero {
     padding: 7rem 0 3rem;
     min-height: auto;
@@ -2224,7 +2236,7 @@ h6 {
 
   .hero-logo.tesda-logo {
     width: 180px;
-    padding: 30px;
+    padding: 20px;
   }
 
   .hero-title {
@@ -2311,6 +2323,10 @@ h6 {
       0 0 20px rgba(54, 145, 191, 0.3);
   }
 
+  .container {
+    padding: 0 2rem !important;
+  }
+
   .hero-logos {
     gap: 1.25rem;
     padding: 2rem 1.5rem;
@@ -2322,7 +2338,7 @@ h6 {
 
   .hero-logo.tesda-logo {
     width: 180px;
-    padding: 30px;
+    padding: 20px;
   }
 
   .hero-title {
@@ -2380,7 +2396,7 @@ h6 {
 
   .hero-logo.tesda-logo {
     width: 150px;
-    padding: 30px;
+    padding: 20px;
   }
 
   .hero-title {
@@ -2438,7 +2454,6 @@ h6 {
 
   .hero-logo.caate-logo {
     width: 120px;
-    padding: 8px;
   }
 
   .hero-logo.tesda-logo {

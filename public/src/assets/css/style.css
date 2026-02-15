@@ -831,7 +831,7 @@ h6 {
 
 .main-hero-lower-curl {
   position: absolute;
-  bottom: 0;
+  bottom: -1px;
   left: 0;
   right: 0;
   width: 100%;
@@ -839,6 +839,7 @@ h6 {
   margin: 0;
   padding: 0;
   overflow: hidden;
+  line-height: 0;
 }
 
 .main-hero-lower-curl svg {
@@ -860,7 +861,7 @@ h6 {
 
 .main-about-upper-curl {
   position: absolute;
-  top: 0;
+  top: -1px;
   left: 0;
   right: 0;
   width: 100%;
@@ -869,6 +870,7 @@ h6 {
   padding: 0;
   overflow: hidden;
   transform: scaleY(-1);
+  line-height: 0;
 }
 
 .main-about-upper-curl svg {
@@ -1108,12 +1110,12 @@ h6 {
 
 .courses .container {
   position: relative;
-  z-index: 1;
+  z-index: 3;
 }
 
 .main-courses-upper-curl {
   position: absolute;
-  top: 0;
+  top: -1px;
   left: 0;
   right: 0;
   width: 100%;
@@ -1123,6 +1125,7 @@ h6 {
   overflow: hidden;
   transform: scaleY(-1);
   z-index: 1;
+  line-height: 0;
 }
 
 .main-courses-upper-curl svg {
@@ -1133,7 +1136,7 @@ h6 {
 
 .main-courses-lower-curl {
   position: absolute;
-  bottom: 0;
+  bottom: -1px;
   left: 0;
   right: 0;
   width: 100%;
@@ -1141,6 +1144,7 @@ h6 {
   margin: 0;
   padding: 0;
   overflow: hidden;
+  line-height: 0;
 }
 
 .main-courses-lower-curl svg {
@@ -1151,7 +1155,7 @@ h6 {
 
 .main-services-lower-curl {
   position: absolute;
-  bottom: 0;
+  bottom: -1px;
   left: 0;
   right: 0;
   width: 100%;
@@ -1159,6 +1163,7 @@ h6 {
   margin: 0;
   padding: 0;
   overflow: hidden;
+  line-height: 0;
 }
 
 .main-services-lower-curl svg {
@@ -1178,6 +1183,7 @@ h6 {
   padding: 0;
   overflow: hidden;
   transform: scaleY(-1);
+  line-height: 0;
 }
 
 .main-contact-upper-curl svg {
@@ -1196,6 +1202,7 @@ h6 {
   margin: 0;
   padding: 0;
   overflow: hidden;
+  line-height: 0;
 }
 
 .main-contact-lower-curl svg {

@@ -239,6 +239,7 @@ body::-webkit-scrollbar {
     margin: 0;
     padding: 0;
     overflow: hidden;
+    line-height: 0;
 }
 
 .main-course-hero-lower-curl svg {

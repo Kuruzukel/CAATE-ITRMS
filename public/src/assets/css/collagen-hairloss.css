@@ -453,7 +453,7 @@ bar logo size at 888px */
 
     .navbar-logo img,
     .navbar-logo-img {
-        height: 60px;
+        height: 70px !important;
         width: auto;
         object-fit: contain;
         flex-shrink: 0;

@@ -636,64 +636,6 @@ small:hover {
 }
 
 
-/* Registration Buttons Section */
-.registration-section {
-    padding-top: 0.9rem;
-    border-top: 1px solid rgba(54, 145, 191, 0.2);
-}
-
-.registration-buttons {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-}
-
-.btn-registration {
-    flex: 1;
-    min-width: 200px;
-    background: linear-gradient(135deg, rgba(54, 145, 191, 0.2) 0%, rgba(50, 85, 150, 0.2) 100%) !important;
-    border: 1px solid rgba(54, 145, 191, 0.4) !important;
-    color: var(--white) !important;
-    padding: 0.75rem 1rem !important;
-    border-radius: var(--border-radius-sm) !important;
-    font-weight: 500 !important;
-    font-size: 0.9rem !important;
-    transition: all var(--transition-normal);
-    backdrop-filter: blur(10px) !important;
-    -webkit-backdrop-filter: blur(10px) !important;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-}
-
-.btn-registration i {
-    font-size: 1.1rem;
-}
-
-.btn-registration:hover {
-    background: linear-gradient(135deg, rgba(54, 145, 191, 0.4) 0%, rgba(50, 85, 150, 0.4) 100%) !important;
-    border-color: rgba(54, 145, 191, 0.6) !important;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(54, 145, 191, 0.3) !important;
-}
-
-.btn-registration:active {
-    transform: translateY(0);
-}
-
-@media (max-width: 576px) {
-    .registration-buttons {
-        flex-direction: column;
-    }
-
-    .btn-registration {
-        min-width: 100%;
-    }
-}
-
-
 /* Highlight Create an Account Link */
 .highlight-link {
     color: var(--white) !important;
@@ -743,4 +685,152 @@ small:hover {
 .back-home-link:hover i {
     color: var(--primary-blue) !important;
     filter: drop-shadow(0 0 10px rgba(54, 145, 191, 0.6));
+}
+
+
+/* Hero Logos Styling - Copied from Public Index */
+.hero-logos {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    background: transparent;
+    border-radius: var(--border-radius-lg);
+    perspective: 1500px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 1.5rem;
+}
+
+.hero-logo {
+    width: 120px;
+    height: auto;
+    object-fit: contain;
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    border: 2px solid rgba(54, 145, 191, 0.5);
+    border-radius: 50%;
+    box-shadow:
+        0 20px 40px rgba(22, 56, 86, 0.3),
+        0 8px 20px rgba(54, 145, 191, 0.2),
+        inset 0 2px 0 rgba(255, 255, 255, 0.7),
+        inset 0 -2px 0 rgba(0, 0, 0, 0.1),
+        0 0 0 1px rgba(54, 145, 191, 0.1);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transform-style: preserve-3d;
+    position: relative;
+    cursor: pointer;
+    filter: brightness(1.05) contrast(1.1);
+}
+
+.hero-logo::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(145deg, rgba(54, 145, 191, 0.1), transparent);
+    border-radius: var(--border-radius-md);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.hero-logo::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(54, 145, 191, 0.2), transparent 70%);
+    transform: translate(-50%, -50%) translateZ(-50px);
+    border-radius: var(--border-radius-md);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.hero-logo:hover {
+    transform: translateY(-12px) translateZ(50px) rotateX(8deg) rotateY(-2deg);
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.75));
+    border-color: rgba(54, 145, 191, 0.6);
+    box-shadow:
+        0 25px 60px rgba(22, 56, 86, 0.35),
+        0 10px 25px rgba(54, 145, 191, 0.25),
+        0 0 0 1px rgba(54, 145, 191, 0.2),
+        inset 0 2px 0 rgba(255, 255, 255, 0.8),
+        inset 0 -2px 0 rgba(0, 0, 0, 0.15);
+}
+
+.hero-logo:hover::before {
+    opacity: 1;
+}
+
+.hero-logo:hover::after {
+    opacity: 1;
+}
+
+/* Responsive adjustments for hero logos */
+@media (max-width: 768px) {
+    .hero-logos {
+        gap: 1.5rem;
+        padding: 1rem 1.5rem;
+    }
+
+    .hero-logo.caate-logo {
+        width: 120px;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero-logos {
+        gap: 1rem;
+        padding: 0.75rem 1rem;
+    }
+
+    .hero-logo.caate-logo {
+        width: 100px;
+    }
+}
+
+
+/* Logo Floating Animation */
+@keyframes logoFloat {
+
+    0%,
+    100% {
+        transform: translateY(0px) scale(1);
+    }
+
+    50% {
+        transform: translateY(-10px) scale(1.02);
+    }
+}
+
+/* Add animation to hero-logo */
+.hero-logo {
+    /* animation: logoFloat 3s ease-in-out infinite; */
+}
+
+/* Enhanced hover effect for logo */
+.hero-logo:hover {
+    border-color: rgba(54, 145, 191, 0.8);
+    box-shadow:
+        0 30px 60px rgba(22, 56, 86, 0.4),
+        0 15px 30px rgba(54, 145, 191, 0.35),
+        inset 0 3px 0 rgba(255, 255, 255, 0.9),
+        inset 0 -3px 0 rgba(0, 0, 0, 0.15),
+        0 0 0 6px rgba(54, 145, 191, 0.2),
+        0 0 30px rgba(54, 145, 191, 0.4);
+    filter: brightness(1.15) contrast(1.15);
+}
+
+/* Glow effect on hover */
+.hero-logo:hover::after {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.2);
 }

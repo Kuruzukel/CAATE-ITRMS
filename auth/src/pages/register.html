@@ -90,16 +90,11 @@
           <!-- Register -->
           <div class="card register-card">
             <div class="card-body">
-              <!-- Logo -->
-              <div class="app-brand justify-content-center">
-                <a href="../../admin-panel/src/pages/dashboard.html" class="app-brand-link gap-2">
-                  <span class="app-brand-logo demo">
-                    <img src="../assets/images/CAATELOGOGRADIENT.png" alt="CAATE Logo" style="width: 40px; height: 40px;">
-                  </span>
-                  <span class="app-brand-text demo text-body fw-bolder">CAATE</span>
-                </a>
+              <!-- Hero Logos -->
+              <div class="hero-logos">
+                <img src="../assets/images/ROUNDCAATELOGO.png" alt="CAATE Logo" class="hero-logo caate-logo" />
               </div>
-              <!-- /Logo -->
+              <!-- /Hero Logos -->
               <h4 class="mb-2">REGISTER</h4>
               <p class="mb-4">Please enter your information and submit to create an account.</p>
 
@@ -108,14 +103,14 @@
                   <!-- Left Column -->
                   <div class="col-md-6">
                     <div class="mb-3">
-                      <label for="fullName" class="form-label">Full Name <span class="text-danger">*</span></label>
+                      <label for="username" class="form-label">Username <span class="text-danger">*</span></label>
                       <input
                         type="text"
                         class="form-control"
-                        id="fullName"
-                        name="fullName"
-                        placeholder="Enter your full name"
-                        autocomplete="name"
+                        id="username"
+                        name="username"
+                        placeholder="Enter your username"
+                        autocomplete="username"
                         required
                       />
                     </div>
@@ -134,16 +129,12 @@
                     </div>
 
                     <div class="mb-3">
-                      <label for="mobile" class="form-label">Mobile <span class="text-danger">*</span></label>
-                      <input
-                        type="tel"
-                        class="form-control"
-                        id="mobile"
-                        name="mobile"
-                        placeholder="Enter your mobile number"
-                        autocomplete="tel"
-                        required
-                      />
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="terms-conditions" required />
+                        <label class="form-check-label" for="terms-conditions">
+                          I agree to the <a href="javascript:void(0);">privacy policy & terms</a>
+                        </label>
+                      </div>
                     </div>
                   </div>
 
@@ -189,22 +180,6 @@
                         </span>
                       </div>
                     </div>
-
-                    <div class="mb-3">
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="terms-conditions" required />
-                        <label class="form-check-label" for="terms-conditions">
-                          I agree to the <a href="javascript:void(0);">privacy policy & terms</a>
-                        </label>
-                      </div>
-                    </div>
-
-                    <p class="mb-0">
-                      <span>Already have an account? </span>
-                      <a href="login.html" class="highlight-link">
-                        <strong>Sign in instead</strong>
-                      </a>
-                    </p>
                   </div>
                 </div>
 

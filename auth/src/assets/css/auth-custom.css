@@ -834,3 +834,58 @@ small:hover {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1.2);
 }
+
+
+/* Hidden Scrollbar for Container on Mobile */
+@media (max-width: 768px) {
+    .container-xxl {
+        max-height: 100vh;
+        overflow-y: auto;
+        overflow-x: hidden;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+
+    .container-xxl::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+
+/* Reorder form fields on mobile - Move terms checkbox below confirm password */
+@media (max-width: 768px) {
+    .register-card .row {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .register-card .col-md-6 {
+        width: 100%;
+        display: contents;
+    }
+
+    /* Username - order 1 */
+    .register-card .col-md-6:first-child>.mb-3:nth-child(1) {
+        order: 1;
+    }
+
+    /* Email - order 2 */
+    .register-card .col-md-6:first-child>.mb-3:nth-child(2) {
+        order: 2;
+    }
+
+    /* Password - order 3 */
+    .register-card .col-md-6:last-child>.mb-3:nth-child(1) {
+        order: 3;
+    }
+
+    /* Confirm Password - order 4 */
+    .register-card .col-md-6:last-child>.mb-3:nth-child(2) {
+        order: 4;
+    }
+
+    /* Terms checkbox - order 5 (below confirm password) */
+    .register-card .col-md-6:first-child>.mb-3:nth-child(3) {
+        order: 5;
+    }
+}

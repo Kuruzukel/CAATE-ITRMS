@@ -1,6 +1,53 @@
 /* Import main styles from style.css */
 @import url('style.css');
 
+/* Enhanced Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInFromLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -1000px 0;
+    }
+
+    100% {
+        background-position: 1000px 0;
+    }
+}
+
 /* Prevent horizontal overflow */
 *,
 *::before,
@@ -114,6 +161,31 @@ body::-webkit-scrollbar {
     margin-bottom: 1.5rem;
     text-transform: uppercase;
     letter-spacing: 1px;
+    animation: fadeInUp 0.6s ease-out;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.course-badge::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+.course-badge:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(54, 145, 191, 0.3);
+    border-color: rgba(54, 145, 191, 0.6);
+}
+
+.course-badge:hover::before {
+    left: 100%;
 }
 
 .course-hero-title {
@@ -122,6 +194,22 @@ body::-webkit-scrollbar {
     color: var(--text-dark);
     margin-bottom: 1.5rem;
     line-height: 1.2;
+    animation: fadeInUp 0.8s ease-out 0.2s both;
+    position: relative;
+}
+
+.course-hero-title::after {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-blue), var(--primary-blue-dark));
+    border-radius: 2px;
+    opacity: 0;
+    animation: fadeInUp 1s ease-out 0.4s both;
 }
 
 .course-hero-description {
@@ -129,6 +217,10 @@ body::-webkit-scrollbar {
     color: var(--text-medium);
     margin-bottom: 2rem;
     line-height: 1.7;
+    animation: fadeInUp 1s ease-out 0.4s both;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .course-hero-meta {
@@ -137,6 +229,7 @@ body::-webkit-scrollbar {
     gap: 3rem;
     margin-bottom: 2.5rem;
     flex-wrap: wrap;
+    animation: fadeInUp 1.2s ease-out 0.6s both;
 }
 
 .meta-item {
@@ -146,11 +239,26 @@ body::-webkit-scrollbar {
     color: var(--text-dark);
     font-size: 1rem;
     font-weight: 500;
+    padding: 0.75rem 1.5rem;
+    background: rgba(54, 145, 191, 0.05);
+    border-radius: var(--border-radius-lg);
+    transition: all 0.3s ease;
+}
+
+.meta-item:hover {
+    background: rgba(54, 145, 191, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(54, 145, 191, 0.15);
 }
 
 .meta-item i {
     color: var(--primary-blue);
     font-size: 1.25rem;
+    transition: transform 0.3s ease;
+}
+
+.meta-item:hover i {
+    transform: scale(1.1) rotate(5deg);
 }
 
 .course-hero-buttons {
@@ -158,6 +266,36 @@ body::-webkit-scrollbar {
     justify-content: center;
     gap: 1rem;
     flex-wrap: wrap;
+    animation: fadeInUp 1.4s ease-out 0.8s both;
+}
+
+.course-hero-buttons .btn {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.course-hero-buttons .btn::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s ease, height 0.6s ease;
+}
+
+.course-hero-buttons .btn:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.course-hero-buttons .btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(54, 145, 191, 0.3);
 }
 
 /* Responsive */
@@ -181,8 +319,7 @@ body::-webkit-scrollbar {
     }
 }
 
-/*
- Navbar Logo Text */
+/* Navbar Logo Text */
 .navbar-logo-text {
     font-size: 0.875rem;
     font-weight: 600;
@@ -221,12 +358,6 @@ body::-webkit-scrollbar {
         3px 3px 0 rgba(22, 56, 86, 0.1);
 }
 
-@media (max-width: 1024px) {
-    .navbar-center-text {
-        display: none;
-    }
-}
-
 
 /* Download Brochure Button Override */
 .course-hero-buttons .btn-outline-light {
@@ -241,8 +372,7 @@ body::-webkit-scrollbar {
     border-color: var(--primary-blue);
 }
 
-/* Co
-urse Hero Lower Curl */
+/* Course Hero Lower Curl */
 .main-course-hero-lower-curl {
     position: absolute;
     bottom: 0;
@@ -282,6 +412,26 @@ urse Hero Lower Curl */
     border: 1px solid rgba(54, 145, 191, 0.1);
     display: flex;
     flex-direction: column;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    animation: fadeInUp 0.6s ease-out both;
+}
+
+.competency-category:nth-child(1) {
+    animation-delay: 0.2s;
+}
+
+.competency-category:nth-child(2) {
+    animation-delay: 0.4s;
+}
+
+.competency-category:nth-child(3) {
+    animation-delay: 0.6s;
+}
+
+.competency-category:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(54, 145, 191, 0.15);
+    border-color: rgba(54, 145, 191, 0.3);
 }
 
 .competency-category h3 {
@@ -292,6 +442,28 @@ urse Hero Lower Curl */
     padding-bottom: 0.75rem;
     border-bottom: 2px solid var(--primary-blue);
     text-align: center;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.competency-category:hover h3 {
+    color: var(--primary-blue);
+}
+
+.competency-category h3::after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--primary-blue), transparent);
+    transition: width 0.4s ease;
+}
+
+.competency-category:hover h3::after {
+    width: 100%;
 }
 
 .competency-table {
@@ -328,8 +500,13 @@ urse Hero Lower Curl */
     font-size: 0.875rem;
 }
 
+.competency-table tbody tr {
+    transition: all 0.2s ease;
+}
+
 .competency-table tbody tr:hover {
-    background: rgba(54, 145, 191, 0.03);
+    background: rgba(54, 145, 191, 0.08);
+    transform: translateX(4px);
 }
 
 .competency-table tbody tr:last-child td {
@@ -389,11 +566,7 @@ urse Hero Lower Curl */
     }
 }
 
-@media (max-width: 768px) {
-    .navbar-center-text {
-        font-size: 0.9rem;
-    }
-}
+
 
 @media (max-width: 480px) {
     .navbar-center-text {
@@ -459,8 +632,7 @@ urse Hero Lower Curl */
     }
 }
 
-/* Nav
-bar logo size at 888px */
+/* Navbar logo size at 888px */
 @media (max-width: 888px) {
 
     .navbar-logo img,
@@ -472,8 +644,7 @@ bar logo size at 888px */
     }
 }
 
-/* Ensur
-e navbar actions and button are visible on all screen sizes */
+/* Ensure navbar actions and button are visible on all screen sizes */
 @media (max-width: 320px) {
     .navbar-actions {
         display: flex !important;
@@ -496,15 +667,15 @@ e navbar actions and button are visible on all screen sizes */
     }
 }
 
-/* O
-verride style.css to keep navbar-actions visible */
+/* Override style.css to keep navbar-actions visible */
 @media (max-width: 900px) {
     .navbar-actions {
         display: flex !important;
     }
 }
 
-/ * CAATE short text font size */ .navbar-short-text {
+/* CAATE short text font size */
+.navbar-short-text {
     font-size: 1.5rem !important;
 }
 

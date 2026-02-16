@@ -1,6 +1,53 @@
 /* Import main styles from style.css */
 @import url('style.css');
 
+/* Enhanced Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInFromLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -1000px 0;
+    }
+
+    100% {
+        background-position: 1000px 0;
+    }
+}
+
 /* Prevent horizontal overflow */
 *,
 *::before,
@@ -176,8 +223,7 @@ body::-webkit-scrollbar {
     }
 }
 
-/*
- Navbar Logo Text */
+/* Navbar Logo Text */
 .navbar-logo-text {
     font-size: 0.875rem;
     font-weight: 600;
@@ -230,8 +276,7 @@ body::-webkit-scrollbar {
     border-color: var(--primary-blue);
 }
 
-/* Co
-urse Hero Lower Curl */
+/* Course Hero Lower Curl */
 .main-course-hero-lower-curl {
     position: absolute;
     bottom: 0;
@@ -251,8 +296,7 @@ urse Hero Lower Curl */
     height: 100%;
 }
 
-/* C
-ompetencies Section */
+/* Competencies Section */
 .competencies-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -449,8 +493,7 @@ ompetencies Section */
     }
 }
 
-/* Na
-vbar logo size at 888px */
+/* Navbar logo size at 888px */
 @media (max-width: 888px) {
 
     .navbar-logo img,
@@ -462,8 +505,7 @@ vbar logo size at 888px */
     }
 }
 
-/* Ensure n
-avbar actions and button are visible on all screen sizes */
+/* Ensure navbar actions and button are visible on all screen sizes */
 @media (max-width: 320px) {
     .navbar-actions {
         display: flex !important;
@@ -486,8 +528,7 @@ avbar actions and button are visible on all screen sizes */
     }
 }
 
-/* O
-verride style.css to keep navbar-actions visible */
+/* Override style.css to keep navbar-actions visible */
 @media (max-width: 900px) {
     .navbar-actions {
         display: flex !important;

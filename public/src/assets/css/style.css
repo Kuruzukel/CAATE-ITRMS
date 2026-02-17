@@ -320,16 +320,20 @@ h6 {
 }
 
 .btn-secondary {
-  background: var(--glass-bg);
-  backdrop-filter: blur(10px);
+  background: linear-gradient(135deg, rgba(54, 145, 191, 0.15), rgba(58, 99, 133, 0.15));
   color: var(--primary-blue);
-  border: 2px solid var(--primary-blue);
+  border: 2px solid rgba(54, 145, 191, 0.6);
+  box-shadow: 0 4px 15px rgba(54, 145, 191, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .btn-secondary:hover {
-  background: var(--primary-blue);
+  background: linear-gradient(135deg, var(--primary-blue), var(--primary-blue-light));
   color: var(--white);
+  border-color: var(--primary-blue);
   transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(54, 145, 191, 0.4);
 }
 
 .btn-outline {

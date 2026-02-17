@@ -340,6 +340,18 @@ small:hover {
 }
 
 /* Responsive Design */
+@media (max-width: 768px) {
+
+    /* Remove shadow completely on mobile */
+    .card {
+        box-shadow: none !important;
+    }
+
+    .card:hover {
+        box-shadow: none !important;
+    }
+}
+
 @media (max-width: 576px) {
     .card {
         margin: 1rem;
@@ -811,10 +823,7 @@ small:hover {
     }
 }
 
-/* Add animation to hero-logo */
-.hero-logo {
-    /* animation: logoFloat 3s ease-in-out infinite; */
-}
+
 
 /* Enhanced hover effect for logo */
 .hero-logo:hover {

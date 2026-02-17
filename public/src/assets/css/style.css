@@ -418,7 +418,8 @@ h6 {
   height: 40px;
   flex-shrink: 0;
   width: 70px;
-  justify-content: center;
+  justify-content: flex-start;
+  margin-left: -0.5rem;
 }
 
 .navbar-logo img,
@@ -2343,9 +2344,14 @@ h6 {
     padding: 0.7rem 0.7rem;
   }
 
+  .navbar-content {
+    height: 40px;
+  }
+
   .navbar-title-mobile {
     display: block;
     font-size: 0.8rem;
+    line-height: 1;
   }
 
   .navbar-logo-img {

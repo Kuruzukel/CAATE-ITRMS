@@ -126,7 +126,8 @@ body::-webkit-scrollbar {
     height: 40px;
     flex-shrink: 0;
     width: 70px;
-    justify-content: center;
+    justify-content: flex-start;
+    margin-left: -0.5rem;
 }
 
 .navbar-logo img,

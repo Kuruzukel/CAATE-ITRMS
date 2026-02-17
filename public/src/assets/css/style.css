@@ -535,13 +535,27 @@ h6 {
   color: #000000;
   text-decoration: none;
   border-radius: var(--border-radius-pill);
-  transition: all var(--transition-fast);
+  transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
-.nav-link:hover,
+.nav-link:hover {
+  color: #000000;
+  background: rgba(54, 145, 191, 0.2);
+  box-shadow: 0 2px 8px rgba(54, 145, 191, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transform: scale(1.05) rotate(-1deg);
+}
+
 .nav-link.active {
   color: #000000;
   background: rgba(54, 145, 191, 0.2);
+  box-shadow: 0 2px 8px rgba(54, 145, 191, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transform: scale(1.05) rotate(-1deg);
+}
+
+.nav-link:active {
+  transform: scale(0.95) rotate(0deg);
 }
 
 .navbar-actions {
@@ -697,7 +711,7 @@ h6 {
   font-size: 1rem;
   text-decoration: none;
   background: transparent;
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   position: relative;
   overflow: hidden;
 }
@@ -710,16 +724,27 @@ h6 {
   width: 0;
   height: 100%;
   background: linear-gradient(90deg, rgba(54, 145, 191, 0.15), rgba(58, 99, 133, 0.1));
-  transition: width 0.4s ease;
+  transition: width 0.2s ease;
   border-radius: 14px;
   z-index: -1;
 }
 
 .mobile-menu .nav-link:hover {
-  background: linear-gradient(135deg, rgba(54, 145, 191, 0.12), rgba(58, 99, 133, 0.08));
-  color: var(--primary-blue-dark);
-  transform: translateX(5px);
-  box-shadow: 0 4px 12px rgba(54, 145, 191, 0.15);
+  background: linear-gradient(135deg,
+      rgba(54, 145, 191, 0.8),
+      rgba(50, 85, 150, 0.8));
+  color: var(--white);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transform: scale(1.05) rotate(-1deg);
+  box-shadow: 0 6px 20px rgba(54, 145, 191, 0.4);
+}
+
+.mobile-menu .nav-link.active {
+  color: #000000;
+  background: rgba(54, 145, 191, 0.2);
+  box-shadow: 0 2px 8px rgba(54, 145, 191, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transform: scale(1.05) rotate(-1deg);
 }
 
 .mobile-menu .nav-link:hover::before {
@@ -727,7 +752,7 @@ h6 {
 }
 
 .mobile-menu .nav-link:active {
-  transform: translateX(3px) scale(0.98);
+  transform: scale(0.95) rotate(0deg);
 }
 
 .mobile-menu .navbar-actions {
@@ -754,7 +779,7 @@ h6 {
 
 .mobile-menu .navbar-actions .btn-outline:hover {
   background: linear-gradient(135deg, rgba(54, 145, 191, 0.2), rgba(58, 99, 133, 0.15));
-  color: var(--primary-blue-dark);
+  color: var(--white);
   border-color: rgba(54, 145, 191, 0.6);
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(54, 145, 191, 0.25);

@@ -2373,7 +2373,7 @@ h6 {
   }
 
   .mobile-menu-toggle {
-    width: 60px;
+    width: 55px;
   }
 
   .navbar-nav,
@@ -2500,6 +2500,15 @@ h6 {
       0 0 20px rgba(54, 145, 191, 0.3);
   }
 
+  .mobile-menu-toggle {
+    width: 45px;
+    height: 45px;
+  }
+
+  .mobile-menu-toggle i {
+    font-size: 1.15rem;
+  }
+
   .hero .container {
     padding: 0 2rem !important;
   }
@@ -2548,7 +2557,7 @@ h6 {
   }
 
   .mobile-menu-toggle {
-    width: 55px;
+    width: 50px;
   }
 
   /* Hero dark section background adjustments for mobile */

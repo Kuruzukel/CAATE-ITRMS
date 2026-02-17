@@ -535,7 +535,8 @@ h6 {
   color: #000000;
   text-decoration: none;
   border-radius: var(--border-radius-pill);
-  transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  transition: transform 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55),
+    box-shadow 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
 .nav-link:hover {
@@ -543,7 +544,7 @@ h6 {
   background: rgba(54, 145, 191, 0.2);
   box-shadow: 0 2px 8px rgba(54, 145, 191, 0.15);
   border: 1px solid rgba(255, 255, 255, 0.3);
-  transform: scale(1.05) rotate(-1deg);
+  transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
 .nav-link.active {
@@ -551,11 +552,15 @@ h6 {
   background: rgba(54, 145, 191, 0.2);
   box-shadow: 0 2px 8px rgba(54, 145, 191, 0.15);
   border: 1px solid rgba(255, 255, 255, 0.3);
-  transform: scale(1.05) rotate(-1deg);
+  transition: none;
 }
 
-.nav-link:active {
-  transform: scale(0.95) rotate(0deg);
+.nav-link.active:hover {
+  color: #000000;
+  background: rgba(54, 145, 191, 0.2);
+  box-shadow: 0 2px 8px rgba(54, 145, 191, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
 .navbar-actions {
@@ -711,7 +716,8 @@ h6 {
   font-size: 1rem;
   text-decoration: none;
   background: transparent;
-  transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  transition: transform 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55),
+    box-shadow 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   position: relative;
   overflow: hidden;
 }
@@ -730,13 +736,11 @@ h6 {
 }
 
 .mobile-menu .nav-link:hover {
-  background: linear-gradient(135deg,
-      rgba(54, 145, 191, 0.8),
-      rgba(50, 85, 150, 0.8));
-  color: var(--white);
+  background: rgba(54, 145, 191, 0.2);
+  color: #000000;
   border: 1px solid rgba(255, 255, 255, 0.3);
-  transform: scale(1.05) rotate(-1deg);
-  box-shadow: 0 6px 20px rgba(54, 145, 191, 0.4);
+  box-shadow: 0 2px 8px rgba(54, 145, 191, 0.15);
+  transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
 .mobile-menu .nav-link.active {
@@ -744,16 +748,23 @@ h6 {
   background: rgba(54, 145, 191, 0.2);
   box-shadow: 0 2px 8px rgba(54, 145, 191, 0.15);
   border: 1px solid rgba(255, 255, 255, 0.3);
-  transform: scale(1.05) rotate(-1deg);
+  transition: none;
+  transform: none !important;
+}
+
+.mobile-menu .nav-link.active:hover {
+  background: rgba(54, 145, 191, 0.2);
+  color: #000000;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 2px 8px rgba(54, 145, 191, 0.15);
+  transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  transform: none !important;
 }
 
 .mobile-menu .nav-link:hover::before {
   width: 100%;
 }
 
-.mobile-menu .nav-link:active {
-  transform: scale(0.95) rotate(0deg);
-}
 
 .mobile-menu .navbar-actions {
   flex-direction: column;

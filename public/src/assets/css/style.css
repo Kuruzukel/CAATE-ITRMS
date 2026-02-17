@@ -547,22 +547,6 @@ h6 {
   transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
-.nav-link.active {
-  color: #000000;
-  background: rgba(54, 145, 191, 0.2);
-  box-shadow: 0 2px 8px rgba(54, 145, 191, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  transition: none;
-}
-
-.nav-link.active:hover {
-  color: #000000;
-  background: rgba(54, 145, 191, 0.2);
-  box-shadow: 0 2px 8px rgba(54, 145, 191, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-
 .navbar-actions {
   display: flex;
   align-items: center;
@@ -741,24 +725,6 @@ h6 {
   border: 1px solid rgba(255, 255, 255, 0.3);
   box-shadow: 0 2px 8px rgba(54, 145, 191, 0.15);
   transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-
-.mobile-menu .nav-link.active {
-  color: #000000;
-  background: rgba(54, 145, 191, 0.2);
-  box-shadow: 0 2px 8px rgba(54, 145, 191, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  transition: none;
-  transform: none !important;
-}
-
-.mobile-menu .nav-link.active:hover {
-  background: rgba(54, 145, 191, 0.2);
-  color: #000000;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 2px 8px rgba(54, 145, 191, 0.15);
-  transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  transform: none !important;
 }
 
 .mobile-menu .nav-link:hover::before {

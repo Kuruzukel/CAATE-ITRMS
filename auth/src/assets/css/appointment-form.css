@@ -68,6 +68,8 @@ body {
     /* Firefox */
     -ms-overflow-style: none;
     /* IE and Edge */
+    margin: 0;
+    padding: 0;
 }
 
 body::-webkit-scrollbar {
@@ -79,7 +81,7 @@ body::-webkit-scrollbar {
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 1.5rem;
+    padding: 0;
 }
 
 /* Navbar Styles */
@@ -361,7 +363,7 @@ div {
     min-height: 70vh;
     display: flex;
     align-items: center;
-    padding: 8rem 1.5rem 1.5rem;
+    padding: 8rem 0 1.5rem 0;
     overflow: hidden;
     background:
         var(--white) linear-gradient(rgba(54, 145, 191, 0.03) 1px, transparent 1px),
@@ -425,13 +427,12 @@ div {
 }
 
 .course-hero-description {
-    font-size: 1.125rem;
+    font-size: clamp(0.95rem, 2.5vw, 1.125rem);
     color: var(--text-medium);
     margin-bottom: 2rem;
     line-height: 1.7;
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
+    width: 100%;
+    padding: 0 1rem;
 }
 
 .course-hero-meta {
@@ -458,13 +459,14 @@ div {
 
 /* Appointment Form Container */
 .appointment-form-container {
-    max-width: 900px;
-    margin: 0 auto 4rem;
+    width: calc(100% - 2rem);
+    margin: 0 1rem 4rem 1rem;
     background: var(--white);
     border-radius: var(--border-radius-lg);
     padding: 2.5rem;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
     border: 1px solid rgba(54, 145, 191, 0.1);
+    box-sizing: border-box;
 }
 
 /* Form Sections */
@@ -870,6 +872,17 @@ textarea {
 
 /* Responsive Styles */
 
+@media (max-width: 1200px) {
+    .course-hero-description {
+        padding: 0 2rem;
+    }
+
+    .appointment-form-container {
+        width: calc(100% - 4rem);
+        margin: 0 2rem 4rem 2rem;
+    }
+}
+
 @media (max-width: 1024px) {
     .footer-content {
         grid-template-columns: 1fr 1fr;
@@ -886,7 +899,7 @@ textarea {
 
 @media (max-width: 768px) {
     .course-hero {
-        padding: 4rem 0 4rem;
+        padding: 4rem 0 4rem 0;
     }
 
     .course-hero-meta {
@@ -894,7 +907,13 @@ textarea {
         gap: 1rem;
     }
 
+    .course-hero-description {
+        padding: 0 1.5rem;
+    }
+
     .appointment-form-container {
+        width: calc(100% - 3rem);
+        margin: 0 1.5rem 4rem 1.5rem;
         padding: 1.5rem;
     }
 
@@ -936,11 +955,27 @@ textarea {
     .radio-group {
         gap: 1rem;
     }
+
+    .appointment-form-container {
+        width: calc(100% - 2rem);
+        margin: 0 1rem 4rem 1rem;
+        padding: 1.5rem;
+    }
+
+    .course-hero-description {
+        padding: 0 1rem;
+    }
 }
 
 @media (max-width: 320px) {
     .appointment-form-container {
+        width: calc(100% - 1rem);
+        margin: 0 0.5rem 4rem 0.5rem;
         padding: 1rem;
+    }
+
+    .course-hero-description {
+        padding: 0 0.5rem;
     }
 }
 

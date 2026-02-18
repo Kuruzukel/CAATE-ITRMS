@@ -510,56 +510,6 @@ small:hover {
     padding: 2rem !important;
 }
 
-/* Responsive Width Adjustments */
-@media (max-width: 576px) {
-    .authentication-wrapper {
-        max-width: 95% !important;
-    }
-
-    .register-card {
-        max-width: 100% !important;
-    }
-
-    .register-card .card-body {
-        padding: 1.5rem !important;
-    }
-
-    .col-md-6 {
-        flex: 0 0 100% !important;
-        max-width: 100% !important;
-    }
-}
-
-@media (min-width: 577px) and (max-width: 768px) {
-    .authentication-wrapper {
-        max-width: 550px !important;
-    }
-
-    .register-card {
-        max-width: 750px !important;
-    }
-
-    .col-md-6 {
-        flex: 0 0 100% !important;
-        max-width: 100% !important;
-    }
-}
-
-@media (min-width: 769px) {
-    .authentication-wrapper {
-        max-width: 900px !important;
-    }
-
-    .register-card {
-        max-width: 900px !important;
-    }
-
-    .col-md-6 {
-        flex: 0 0 50% !important;
-        max-width: 50% !important;
-    }
-}
-
 
 /* Animated Orbs Container */
 .orbs-container {

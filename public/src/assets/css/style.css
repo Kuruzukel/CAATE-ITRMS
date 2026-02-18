@@ -1256,17 +1256,17 @@ h6 {
   bottom: 0;
   background-image:
     repeating-linear-gradient(0deg,
-      rgba(54, 145, 191, 0.03) 0px,
-      rgba(54, 145, 191, 0.03) 1px,
+      rgba(54, 145, 191, 0.08) 0px,
+      rgba(54, 145, 191, 0.08) 1px,
       transparent 1px,
       transparent 50px),
     repeating-linear-gradient(90deg,
-      rgba(54, 145, 191, 0.03) 0px,
-      rgba(54, 145, 191, 0.03) 1px,
+      rgba(54, 145, 191, 0.08) 0px,
+      rgba(54, 145, 191, 0.08) 1px,
       transparent 1px,
       transparent 50px);
   pointer-events: none;
-  z-index: -2;
+  z-index: 0;
 }
 
 .courses .container {

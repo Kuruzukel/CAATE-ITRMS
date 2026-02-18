@@ -50,7 +50,14 @@ body {
     background-attachment: fixed !important;
     min-height: 100vh;
     position: relative;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+body::-webkit-scrollbar {
+    display: none;
 }
 
 /* Blur the background image */
@@ -847,40 +854,56 @@ small:hover {
 
 /* Hidden Scrollbar for Container on Mobile */
 @media (max-width: 768px) {
+    html {
+        -ms-overflow-style: none !important;
+        scrollbar-width: none !important;
+    }
+
+    html::-webkit-scrollbar {
+        display: none !important;
+    }
+
     body {
-        max-height: 100vh;
-        overflow-y: auto;
-        overflow-x: hidden;
-        -ms-overflow-style: none;
-        scrollbar-width: none;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        -ms-overflow-style: none !important;
+        scrollbar-width: none !important;
     }
 
     body::-webkit-scrollbar {
-        display: none;
+        display: none !important;
     }
 
     .container-xxl {
-        max-height: 100vh;
-        overflow-y: auto;
+        overflow-y: visible !important;
         overflow-x: hidden;
-        -ms-overflow-style: none;
-        scrollbar-width: none;
+        -ms-overflow-style: none !important;
+        scrollbar-width: none !important;
     }
 
     .container-xxl::-webkit-scrollbar {
-        display: none;
+        display: none !important;
     }
 
     .authentication-wrapper {
-        max-height: 100vh;
-        overflow-y: auto;
         overflow-x: hidden;
-        -ms-overflow-style: none;
-        scrollbar-width: none;
+        overflow-y: visible;
+        -ms-overflow-style: none !important;
+        scrollbar-width: none !important;
     }
 
     .authentication-wrapper::-webkit-scrollbar {
-        display: none;
+        display: none !important;
+    }
+
+    /* Hide all scrollbars on mobile */
+    * {
+        -ms-overflow-style: none !important;
+        scrollbar-width: none !important;
+    }
+
+    *::-webkit-scrollbar {
+        display: none !important;
     }
 }
 

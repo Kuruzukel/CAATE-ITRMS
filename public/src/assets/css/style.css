@@ -535,8 +535,8 @@ h6 {
   color: #000000;
   text-decoration: none;
   border-radius: var(--border-radius-pill);
-  transition: transform 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55),
-    box-shadow 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
 }
 
 .nav-link:hover {
@@ -544,7 +544,6 @@ h6 {
   background: rgba(54, 145, 191, 0.2);
   box-shadow: 0 2px 8px rgba(54, 145, 191, 0.15);
   border: 1px solid rgba(255, 255, 255, 0.3);
-  transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
 .navbar-actions {

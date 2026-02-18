@@ -352,7 +352,7 @@ h6 {
 .btn-outline-light {
   background: linear-gradient(135deg, rgba(54, 145, 191, 0.15), rgba(58, 99, 133, 0.15));
   color: var(--white);
-  border: 2px solid rgba(54, 145, 191, 0.6);
+  border: 2px solid rgba(255, 255, 255, 0.8);
   box-shadow: 0 4px 15px rgba(54, 145, 191, 0.2);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
@@ -361,7 +361,7 @@ h6 {
 .btn-outline-light:hover {
   background: linear-gradient(135deg, var(--primary-blue), var(--primary-blue-light));
   color: var(--white);
-  border-color: var(--primary-blue);
+  border-color: rgba(255, 255, 255, 1);
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(54, 145, 191, 0.4);
 }
@@ -1078,7 +1078,6 @@ h6 {
   color: var(--text-medium);
   margin-bottom: 1.5rem;
   line-height: 1.8;
-  text-align: justify;
 }
 
 .about-features {
@@ -2409,21 +2408,27 @@ h6 {
 
   .hero-logo.caate-logo {
     width: 180px;
+    opacity: 1 !important;
   }
 
   .hero-logo.tesda-logo {
     width: 180px;
     padding: 20px;
+    opacity: 1 !important;
   }
 
   .hero-title {
     font-size: 1.5rem;
     margin-bottom: 2rem;
+    opacity: 1 !important;
+    color: #fff !important;
   }
 
   .hero-description {
     font-size: 1.5rem;
     margin-bottom: 2rem;
+    opacity: 1 !important;
+    color: #e0e7ff !important;
   }
 
   .hero-stats {
@@ -2434,6 +2439,10 @@ h6 {
 
   .hero-buttons {
     margin-bottom: 2rem;
+  }
+
+  .hero-buttons .btn {
+    opacity: 1 !important;
   }
 
   .stat-item {
@@ -2529,14 +2538,26 @@ h6 {
 
   .hero-title {
     font-size: 1.5rem;
+    opacity: 1 !important;
+    color: #fff !important;
   }
 
   .hero-description {
     font-size: 1.3rem;
+    opacity: 1 !important;
+    color: #e0e7ff !important;
   }
 
   .hero-buttons {
     margin-bottom: 1.5rem;
+  }
+
+  .hero-buttons .btn {
+    opacity: 1 !important;
+  }
+
+  .hero-logo {
+    opacity: 1 !important;
   }
 
 }
@@ -2568,7 +2589,30 @@ h6 {
   }
 
   .hero.dark-section::after {
-    background: linear-gradient(135deg, rgba(22, 56, 86, 0.5), rgba(18, 57, 90, 0.5));
+    background: linear-gradient(135deg, rgba(22, 56, 86, 0.8), rgba(18, 57, 90, 0.8));
+  }
+
+  /* Ensure hero content is fully visible on mobile */
+  .hero-content {
+    opacity: 1 !important;
+  }
+
+  .hero-title {
+    opacity: 1 !important;
+    color: #fff !important;
+  }
+
+  .hero-description {
+    opacity: 1 !important;
+    color: #e0e7ff !important;
+  }
+
+  .hero-logo {
+    opacity: 1 !important;
+  }
+
+  .hero-buttons .btn {
+    opacity: 1 !important;
   }
 
   .hero-logos {
@@ -2640,21 +2684,27 @@ h6 {
 
   .hero-logo.caate-logo {
     width: 120px;
+    opacity: 1 !important;
   }
 
   .hero-logo.tesda-logo {
     width: 120px;
     padding: 15px;
+    opacity: 1 !important;
   }
 
   .hero-title {
     font-size: 1rem;
     letter-spacing: 1px;
+    opacity: 1 !important;
+    color: #fff !important;
   }
 
   .hero-description {
     font-size: 0.875rem;
     padding: 0 0.5rem;
+    opacity: 1 !important;
+    color: #e0e7ff !important;
   }
 
   .hero-buttons {
@@ -2664,6 +2714,7 @@ h6 {
   .hero-buttons .btn {
     padding: 0.75rem 1.5rem;
     font-size: 0.875rem;
+    opacity: 1 !important;
   }
 }
 

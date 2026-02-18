@@ -39,6 +39,37 @@ const preferredDateInput = document.getElementById('preferredDate');
 const today = new Date().toISOString().split('T')[0];
 preferredDateInput.setAttribute('min', today);
 
+// Safari date input placeholder fix
+function handleDatePlaceholder() {
+    const dateInput = preferredDateInput;
+
+    // Create a wrapper for the placeholder
+    if (!dateInput.value) {
+        dateInput.classList.add('date-empty');
+    }
+
+    dateInput.addEventListener('focus', function () {
+        this.classList.remove('date-empty');
+    });
+
+    dateInput.addEventListener('blur', function () {
+        if (!this.value) {
+            this.classList.add('date-empty');
+        }
+    });
+
+    dateInput.addEventListener('change', function () {
+        if (this.value) {
+            this.classList.remove('date-empty');
+        } else {
+            this.classList.add('date-empty');
+        }
+    });
+}
+
+// Initialize placeholder handling
+handleDatePlaceholder();
+
 // Handle Service Category Change
 serviceCategorySelect.addEventListener('change', function () {
     const selectedCategory = this.value;

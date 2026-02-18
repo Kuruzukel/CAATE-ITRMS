@@ -468,6 +468,8 @@ div {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
     border: 1px solid rgba(54, 145, 191, 0.1);
     box-sizing: border-box;
+    overflow: hidden;
+    max-width: 100%;
 }
 
 /* Form Sections */
@@ -506,6 +508,10 @@ div {
 .form-group {
     display: flex;
     flex-direction: column;
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+    position: relative;
 }
 
 .form-group.full-width {
@@ -541,6 +547,113 @@ textarea {
     color: var(--text-dark);
     transition: var(--transition);
     background: var(--white);
+    box-sizing: border-box;
+    max-width: 100%;
+}
+
+/* iOS Safari specific fixes for date input */
+input[type="date"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.875rem 1rem;
+    background-color: var(--white);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' fill='%234a5568'%3E%3Cpath d='M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 20px 20px;
+    padding-right: 2.75rem;
+    min-height: 48px;
+}
+
+/* iOS Safari date input text styling */
+input[type="date"]::-webkit-date-and-time-value {
+    text-align: left;
+    min-height: 1.2em;
+}
+
+input[type="date"]::-webkit-datetime-edit {
+    padding: 0;
+    display: inline-block;
+}
+
+input[type="date"]::-webkit-datetime-edit-fields-wrapper {
+    padding: 0;
+}
+
+input[type="date"]::-webkit-datetime-edit-text {
+    padding: 0 0.2em;
+}
+
+input[type="date"]::-webkit-datetime-edit-month-field,
+input[type="date"]::-webkit-datetime-edit-day-field,
+input[type="date"]::-webkit-datetime-edit-year-field {
+    padding: 0 0.2em;
+}
+
+/* Safari placeholder fix - hide default format when empty */
+input[type="date"].date-empty::-webkit-datetime-edit {
+    color: transparent;
+}
+
+input[type="date"].date-empty::before {
+    content: attr(placeholder);
+    color: var(--text-light);
+    position: absolute;
+    left: 1rem;
+    pointer-events: none;
+}
+
+input[type="date"]:focus.date-empty::before {
+    display: none;
+}
+
+input[type="date"]:focus.date-empty::-webkit-datetime-edit {
+    color: var(--text-dark);
+}
+
+input[type="date"][value=""]:not(:focus)::before {
+    content: attr(placeholder);
+    color: var(--text-light);
+}
+
+/* Date empty class for JavaScript-based placeholder */
+input[type="date"].date-empty::-webkit-datetime-edit-fields-wrapper {
+    color: transparent;
+}
+
+input[type="date"].date-empty::before {
+    content: attr(placeholder);
+    color: var(--text-light);
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+input[type="date"]:not(.date-empty)::before {
+    content: none;
+}
+
+input[type="date"]:not(.date-empty)::-webkit-datetime-edit-fields-wrapper {
+    color: var(--text-dark);
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    position: absolute;
+    right: 0.75rem;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    opacity: 0;
+}
+
+input[type="date"]::-webkit-inner-spin-button {
+    display: none;
 }
 
 input[type="text"]:focus,
@@ -579,6 +692,58 @@ select:disabled {
 textarea {
     resize: vertical;
     min-height: 100px;
+}
+
+/* iOS Safari Date Input Fix */
+input[type="date"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    position: relative;
+    background-color: var(--white);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%234a5568' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'%3E%3C/rect%3E%3Cline x1='16' y1='2' x2='16' y2='6'%3E%3C/line%3E%3Cline x1='8' y1='2' x2='8' y2='6'%3E%3C/line%3E%3Cline x1='3' y1='10' x2='21' y2='10'%3E%3C/line%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 20px 20px;
+    padding-right: 3rem;
+    min-height: 48px;
+    box-sizing: border-box;
+    max-width: 100%;
+    overflow: visible;
+}
+
+/* iOS Safari specific fixes */
+input[type="date"]::-webkit-date-and-time-value {
+    text-align: left;
+    min-height: 1.2em;
+}
+
+input[type="date"]::-webkit-datetime-edit {
+    padding: 0;
+    display: inline-block;
+}
+
+input[type="date"]::-webkit-datetime-edit-fields-wrapper {
+    padding: 0;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    opacity: 0;
+    z-index: 2;
+}
+
+/* Prevent overflow */
+input[type="date"]::-webkit-inner-spin-button,
+input[type="date"]::-webkit-clear-button {
+    display: none;
+    -webkit-appearance: none;
 }
 
 /* Radio Group */
@@ -923,6 +1088,93 @@ textarea {
         gap: 1.25rem;
     }
 
+    /* Enhanced label responsiveness for all form fields */
+    .form-group label {
+        font-size: 0.9rem;
+        word-wrap: break-word;
+        white-space: normal;
+        line-height: 1.5;
+        display: block;
+        margin-bottom: 0.6rem;
+    }
+
+    /* Enhanced date input responsiveness for iOS Safari */
+    input[type="date"] {
+        font-size: 16px !important;
+        padding: 0.875rem 0.75rem !important;
+        padding-right: 3rem !important;
+        min-height: 48px;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        -webkit-appearance: none !important;
+        -moz-appearance: none !important;
+        appearance: none !important;
+        overflow: visible !important;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%234a5568' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'%3E%3C/rect%3E%3Cline x1='16' y1='2' x2='16' y2='6'%3E%3C/line%3E%3Cline x1='8' y1='2' x2='8' y2='6'%3E%3C/line%3E%3Cline x1='3' y1='10' x2='21' y2='10'%3E%3C/line%3E%3C/svg%3E") !important;
+        background-repeat: no-repeat !important;
+        background-position: right 0.75rem center !important;
+        background-size: 18px 18px !important;
+    }
+
+    input[type="date"]::-webkit-calendar-picker-indicator {
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 24px !important;
+        height: 24px !important;
+        position: absolute !important;
+        right: 0.75rem !important;
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+        cursor: pointer !important;
+        opacity: 0 !important;
+        z-index: 2 !important;
+    }
+
+    /* Ensure date input text is visible on iOS */
+    input[type="date"]::-webkit-datetime-edit {
+        padding: 0 !important;
+        display: inline-block !important;
+        min-height: 1.2em !important;
+    }
+
+    input[type="date"]::-webkit-date-and-time-value {
+        text-align: left !important;
+        min-height: 1.2em !important;
+        display: block !important;
+    }
+
+    input[type="date"]::-webkit-datetime-edit-fields-wrapper {
+        padding: 0 !important;
+    }
+
+    input[type="date"]::-webkit-datetime-edit-text {
+        padding: 0 0.2em !important;
+    }
+
+    input[type="date"]::-webkit-datetime-edit-month-field,
+    input[type="date"]::-webkit-datetime-edit-day-field,
+    input[type="date"]::-webkit-datetime-edit-year-field {
+        padding: 0 0.2em !important;
+    }
+
+    /* Fix for iOS Safari date input container */
+    .form-group {
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow: visible !important;
+        position: relative !important;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    select {
+        font-size: 16px;
+        box-sizing: border-box;
+        max-width: 100%;
+    }
+
     .footer-content {
         grid-template-columns: 1fr;
         text-align: center;
@@ -966,6 +1218,56 @@ textarea {
     .course-hero-description {
         padding: 0 1rem;
     }
+
+    /* Additional date input optimization for small screens */
+    input[type="date"] {
+        font-size: 16px !important;
+        padding: 0.875rem 0.5rem !important;
+        padding-right: 3rem !important;
+        min-height: 50px;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        -webkit-text-size-adjust: 100% !important;
+        background-position: right 0.5rem center !important;
+        background-size: 18px 18px !important;
+    }
+
+    input[type="date"]::-webkit-calendar-picker-indicator {
+        right: 0.5rem !important;
+    }
+
+    input[type="date"]::-webkit-calendar-picker-indicator {
+        right: 0.5rem;
+        width: 18px;
+        height: 18px;
+    }
+
+    label {
+        font-size: 0.9rem;
+        line-height: 1.4;
+        word-wrap: break-word;
+    }
+
+    /* Ensure required asterisk is visible */
+    .required {
+        display: inline;
+        margin-left: 0.2rem;
+    }
+
+    /* Prevent horizontal overflow */
+    .form-group {
+        overflow: hidden;
+        max-width: 100%;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    select {
+        font-size: 16px;
+        padding: 0.875rem 0.5rem;
+    }
 }
 
 @media (max-width: 320px) {
@@ -977,6 +1279,113 @@ textarea {
 
     .course-hero-description {
         padding: 0 0.5rem;
+    }
+
+    /* Extra small screen optimizations */
+    label {
+        font-size: 0.85rem;
+    }
+
+    input[type="date"] {
+        font-size: 16px !important;
+        padding: 0.75rem 0.4rem !important;
+        padding-right: 2.5rem !important;
+        min-height: 48px;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        background-position: right 0.4rem center !important;
+        background-size: 16px 16px !important;
+    }
+
+    input[type="date"]::-webkit-calendar-picker-indicator {
+        right: 0.4rem !important;
+        width: 20px !important;
+        height: 20px !important;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    select {
+        font-size: 16px;
+        padding: 0.75rem 0.4rem;
+    }
+
+    .form-group {
+        overflow: hidden;
+    }
+}
+
+/* iOS Safari specific fixes */
+@supports (-webkit-touch-callout: none) {
+
+    /* Target iOS Safari specifically */
+    input[type="date"] {
+        position: relative;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        -webkit-appearance: none;
+        appearance: none;
+    }
+
+    input[type="date"]::-webkit-date-and-time-value {
+        text-align: left;
+        display: block;
+        width: 100%;
+    }
+
+    input[type="date"]::-webkit-datetime-edit {
+        display: inline-block;
+        width: calc(100% - 2.75rem);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    input[type="date"]::-webkit-calendar-picker-indicator {
+        position: absolute;
+        right: 0.75rem;
+        top: 50%;
+        transform: translateY(-50%);
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    .form-group {
+        position: relative;
+        overflow: hidden;
+    }
+
+    @media (max-width: 768px) {
+        input[type="date"] {
+            padding: 0.875rem 0.5rem;
+            padding-right: 2.5rem;
+        }
+
+        input[type="date"]::-webkit-datetime-edit {
+            width: calc(100% - 2.5rem);
+        }
+
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            right: 0.5rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        input[type="date"] {
+            padding: 0.875rem 0.4rem;
+            padding-right: 2.25rem;
+        }
+
+        input[type="date"]::-webkit-datetime-edit {
+            width: calc(100% - 2.25rem);
+        }
+
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            right: 0.4rem;
+        }
     }
 }
 

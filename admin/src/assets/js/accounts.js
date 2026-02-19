@@ -310,16 +310,12 @@ function updateStatistics(stats) {
     if (pendingElement) {
         pendingElement.textContent = stats.pending.toLocaleString();
     }
-
-    console.log('Statistics updated:', stats);
 }
 
 // View trainee details
 function viewTrainee(id) {
     const trainee = traineesData.find(t => t._id === id);
     if (!trainee) return;
-
-    console.log('Viewing trainee:', trainee); // Debug log
 
     // Populate view modal with separate name fields
     document.getElementById('viewTraineeId').value = trainee.student_id || trainee._id || '';
@@ -347,6 +343,19 @@ function viewTrainee(id) {
 function editTrainee(id) {
     const trainee = traineesData.find(t => t._id === id);
     if (!trainee) return;
+
+    // Store original trainee data for change detection
+    window.originalTraineeData = {
+        student_id: trainee.student_id || '',
+        first_name: trainee.first_name || '',
+        second_name: trainee.second_name || '',
+        middle_name: trainee.middle_name || '',
+        last_name: trainee.last_name || '',
+        suffix: trainee.suffix || '',
+        email: trainee.email || '',
+        phone: trainee.phone || '',
+        status: trainee.status || 'pending'
+    };
 
     // Populate edit modal with separate name fields
     document.getElementById('editTraineeId').value = trainee.student_id || '';
@@ -428,14 +437,12 @@ function showToast(message, type = 'success') {
     const toast = document.createElement('div');
     toast.className = `toast-notification ${type}`;
 
-    const icon = type === 'success' ? 'bx-check-circle' :
-        type === 'error' ? 'bx-error' :
-            type === 'warning' ? 'bx-error' : 'bx-info-circle';
+    const icon = type === 'success' ? 'bx-check' :
+        type === 'error' ? 'bx-x' :
+            type === 'warning' ? 'bx-error-alt' : 'bxs-info-circle';
 
     toast.innerHTML = `
-        <div class="toast-icon-wrapper">
-            <i class="bx ${icon} toast-icon"></i>
-        </div>
+        <i class="bx ${icon} toast-icon"></i>
         <div class="toast-content">
             <div class="toast-message">${message}</div>
         </div>
@@ -485,6 +492,28 @@ async function saveEditTrainee() {
     const phone = document.getElementById('editTraineePhone').value.trim();
     const status = document.getElementById('editTraineeStatus').value;
     const password = document.getElementById('editTraineePassword').value;
+
+    // Check if any changes were made
+    if (window.originalTraineeData) {
+        const hasChanges =
+            studentId !== window.originalTraineeData.student_id ||
+            firstName !== window.originalTraineeData.first_name ||
+            secondName !== window.originalTraineeData.second_name ||
+            middleName !== window.originalTraineeData.middle_name ||
+            lastName !== window.originalTraineeData.last_name ||
+            suffix !== window.originalTraineeData.suffix ||
+            email !== window.originalTraineeData.email ||
+            phone !== window.originalTraineeData.phone ||
+            status !== window.originalTraineeData.status ||
+            password !== ''; // Password field has value means it was changed
+
+        if (!hasChanges) {
+            showToast('No changes were made to the trainee', 'info');
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnText;
+            return;
+        }
+    }
 
     // Validate required fields
     if (!studentId || !firstName || !lastName || !email || !phone) {
@@ -542,6 +571,26 @@ async function saveEditTrainee() {
     // Validate password length if provided
     if (password && password.length < 6) {
         showError('Password must be at least 6 characters long');
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnText;
+        return;
+    }
+
+    // Check if any changes were made (compare with original data)
+    const hasChanges =
+        window.originalTraineeData.student_id !== studentId ||
+        window.originalTraineeData.first_name !== firstName ||
+        window.originalTraineeData.second_name !== secondName ||
+        window.originalTraineeData.middle_name !== middleName ||
+        window.originalTraineeData.last_name !== lastName ||
+        window.originalTraineeData.suffix !== suffix ||
+        window.originalTraineeData.email !== email ||
+        window.originalTraineeData.phone !== phone ||
+        window.originalTraineeData.status !== status.toLowerCase() ||
+        password !== ''; // Password change counts as a change
+
+    if (!hasChanges) {
+        showToast('No changes were made to the trainee', 'info');
         submitBtn.disabled = false;
         submitBtn.innerHTML = originalBtnText;
         return;
@@ -778,12 +827,12 @@ function showToast(message, type = 'success') {
     const toast = document.createElement('div');
     toast.className = `toast-notification ${type}`;
 
-    const icon = type === 'success' ? 'bx-check-circle' : 'bx-error';
+    const icon = type === 'success' ? 'bx-check' :
+        type === 'error' ? 'bx-x' :
+            type === 'warning' ? 'bx-error-alt' : 'bxs-info-circle';
 
     toast.innerHTML = `
-        <div class="toast-icon-wrapper">
-            <i class="bx ${icon} toast-icon"></i>
-        </div>
+        <i class="bx ${icon} toast-icon"></i>
         <div class="toast-content">
             <div class="toast-message">${message}</div>
         </div>

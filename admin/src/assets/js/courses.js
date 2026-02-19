@@ -527,14 +527,12 @@ function showToast(message, type = 'success') {
     const toast = document.createElement('div');
     toast.className = `toast-notification ${type}`;
 
-    const icon = type === 'success' ? 'bx-check-circle' :
-        type === 'error' ? 'bx-error' :
-            type === 'warning' ? 'bx-error' : 'bx-info-circle';
+    const icon = type === 'success' ? 'bx-check' :
+        type === 'error' ? 'bx-x' :
+            type === 'warning' ? 'bx-error-alt' : 'bxs-info-circle';
 
     toast.innerHTML = `
-        <div class="toast-icon-wrapper">
-            <i class="bx ${icon} toast-icon"></i>
-        </div>
+        <i class="bx ${icon} toast-icon"></i>
         <div class="toast-content">
             <div class="toast-message">${message}</div>
         </div>

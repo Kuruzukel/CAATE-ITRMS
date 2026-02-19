@@ -2659,79 +2659,68 @@ input[type="time"]::placeholder {
 
 .toast-notification.success {
     background: #f2faf5;
-    border-color: #a5debf;
+    border-color: #2fc584;
     color: #2fc584;
 }
 
 .toast-notification.error {
     background: #fff5f3;
-    border-color: #f6bfb1;
+    border-color: #de3e25;
     color: #de3e25;
 }
 
 .toast-notification.info {
     background: #f0f7ff;
-    border-color: #a8d1ff;
+    border-color: #0066cc;
     color: #0066cc;
 }
 
 .toast-notification.warning {
     background: #fff8e6;
-    border-color: #ffd966;
+    border-color: #cc8800;
     color: #cc8800;
 }
 
-.toast-icon-wrapper {
-    width: 48px;
-    height: 48px;
+.toast-icon {
+    width: 25px;
+    height: 25px;
+    font-size: 15px;
+    font-weight: bold;
+    flex-shrink: 0;
+    line-height: 1;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0;
-    position: relative;
-}
-
-.toast-notification.success .toast-icon-wrapper {
-    background-color: #2fc584;
-}
-
-.toast-notification.error .toast-icon-wrapper {
-    background-color: #de3e25;
-}
-
-.toast-notification.info .toast-icon-wrapper {
-    background-color: #0066cc;
-}
-
-.toast-notification.warning .toast-icon-wrapper {
-    background-color: #ff9800;
-}
-
-.toast-icon {
-    font-size: 42px;
-    flex-shrink: 0;
-    line-height: 1;
+    background-color: transparent;
 }
 
 .toast-notification.success .toast-icon {
-    color: #ffffff;
+    border: 3px solid #2fc584;
+    color: #2fc584;
 }
 
 .toast-notification.error .toast-icon {
-    color: #ffffff;
+    border: 3px solid #de3e25;
+    color: #de3e25;
 }
 
 .toast-notification.info .toast-icon {
-    color: #ffffff;
+    border: 3px solid #0066cc;
+    color: #0066cc !important;
+}
+
+/* Override Boxicons solid circle - show only the i */
+.toast-notification.info .toast-icon.bxs-info-circle::before {
+    content: "i" !important;
+    font-family: Arial, sans-serif !important;
+    font-style: normal !important;
+    font-weight: bold !important;
 }
 
 .toast-notification.warning .toast-icon {
-    color: #ffffff;
-}
-
-.toast-notification.warning .toast-icon {
-    color: #ffffff;
+    border: 3px solid #ff9800;
+    color: #ff9800;
 }
 
 .toast-content {
@@ -2764,6 +2753,7 @@ input[type="time"]::placeholder {
 
 .toast-message {
     font-size: 14px;
+    font-weight: 600;
     line-height: 1.5;
 }
 
@@ -2808,31 +2798,12 @@ input[type="time"]::placeholder {
     color: #de3e25;
 }
 
-/* Info Toast Styles - Blue Color */
-.toast-notification.info {
-    background: #e8f4fd;
-    border: 2px solid #2196f3 !important;
-}
-
-.toast-notification.info .toast-icon-wrapper {
-    background-color: rgba(33, 150, 243, 0.15);
-    border: 2px solid #2196f3;
-}
-
-.toast-notification.info .toast-icon {
-    color: #2196f3;
-}
-
-.toast-notification.info .toast-title {
-    color: #2196f3;
-}
-
-.toast-notification.info .toast-message {
-    color: #1565c0;
-}
-
 .toast-notification.info .toast-close {
-    color: #2196f3;
+    color: #0066cc;
+}
+
+.toast-notification.warning .toast-close {
+    color: #ff9800;
 }
 
 .toast-close:hover {

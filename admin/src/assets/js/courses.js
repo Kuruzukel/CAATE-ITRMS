@@ -9,8 +9,15 @@ let currentCourseId = null;
 let currentCourseCard = null;
 let editImageFile = null;
 let originalCourseData = {}; // Store original course data for comparison
+let pendingStatusChange = null; // Store pending status change data
 
 document.addEventListener('DOMContentLoaded', function () {
+    // Set current year in footer
+    const yearElement = document.getElementById('currentYear');
+    if (yearElement) {
+        yearElement.textContent = new Date().getFullYear();
+    }
+
     // Load courses from database
     loadCourses();
 
@@ -64,6 +71,68 @@ document.addEventListener('DOMContentLoaded', function () {
                 resetEditImagePreview();
             }
         }
+
+        // Handle enrollment status change - show confirmation modal
+        if (e.target.closest('.status-option')) {
+            e.preventDefault();
+            const statusLink = e.target.closest('.status-option');
+            const newStatus = statusLink.dataset.status;
+            const dropdownBtn = statusLink.closest('.dropdown').querySelector('.enrollment-status-btn');
+            const courseId = dropdownBtn.dataset.id;
+
+            // Find course title from the card
+            const card = dropdownBtn.closest('.card');
+            const courseTitle = card.querySelector('.card-title').textContent;
+
+            // Set confirmation modal content
+            const confirmBadge = document.getElementById('confirmStatusBadge');
+            const confirmCourseName = document.getElementById('confirmCourseName');
+
+            confirmBadge.textContent = newStatus;
+            confirmBadge.className = 'badge fs-6 px-3 py-2';
+
+            if (newStatus === 'Open Enrollment') {
+                confirmBadge.classList.add('bg-success');
+            } else if (newStatus === 'Closed') {
+                confirmBadge.classList.add('bg-danger');
+            } else {
+                confirmBadge.classList.add('bg-secondary');
+            }
+
+            confirmCourseName.textContent = courseTitle;
+
+            // Store data for confirmation
+            const confirmBtn = document.getElementById('confirmStatusChangeBtn');
+            confirmBtn.dataset.courseId = courseId;
+            confirmBtn.dataset.newStatus = newStatus;
+            confirmBtn.dataset.buttonElement = dropdownBtn.id || `btn-${courseId}`;
+
+            // Assign unique ID to button if it doesn't have one
+            if (!dropdownBtn.id) {
+                dropdownBtn.id = `btn-${courseId}`;
+            }
+
+            // Show confirmation modal
+            const modal = new bootstrap.Modal(document.getElementById('enrollmentStatusModal'));
+            modal.show();
+        }
+    });
+
+    // Handle confirmation button click
+    document.getElementById('confirmStatusChangeBtn').addEventListener('click', async function () {
+        const courseId = this.dataset.courseId;
+        const newStatus = this.dataset.newStatus;
+        const buttonElementId = this.dataset.buttonElement;
+        const buttonElement = document.getElementById(buttonElementId);
+
+        // Close confirmation modal
+        const modal = bootstrap.Modal.getInstance(document.getElementById('enrollmentStatusModal'));
+        modal.hide();
+
+        // Update enrollment status
+        if (buttonElement) {
+            await updateEnrollmentStatus(courseId, newStatus, buttonElement);
+        }
     });
 
     // Save changes
@@ -102,6 +171,126 @@ document.addEventListener('DOMContentLoaded', function () {
             await updateCourse(courseData);
         }
     });
+
+    // Handle enrollment status change - show confirmation modal
+    document.addEventListener('click', function (e) {
+        if (e.target.closest('.status-option')) {
+            e.preventDefault();
+            const statusOption = e.target.closest('.status-option');
+            const newStatus = statusOption.dataset.status;
+            const dropdownBtn = statusOption.closest('.dropdown').querySelector('.enrollment-status-btn');
+            const courseId = dropdownBtn.dataset.id;
+
+            // Store pending change data
+            pendingStatusChange = {
+                courseId: courseId,
+                newStatus: newStatus,
+                buttonElement: dropdownBtn
+            };
+
+            // Update confirmation modal badge
+            const confirmBadge = document.getElementById('confirmStatusBadge');
+            confirmBadge.textContent = newStatus;
+
+            // Set badge color based on status
+            confirmBadge.className = 'badge fs-6 px-3 py-2';
+            if (newStatus === 'Open Enrollment') {
+                confirmBadge.classList.add('bg-success');
+            } else if (newStatus === 'Closed') {
+                confirmBadge.classList.add('bg-danger');
+            } else {
+                confirmBadge.classList.add('bg-secondary');
+            }
+
+            // Show confirmation modal
+            const modal = new bootstrap.Modal(document.getElementById('enrollmentStatusModal'));
+            modal.show();
+        }
+    });
+
+    // Confirm status change
+    document.getElementById('confirmStatusChangeBtn').addEventListener('click', async function () {
+        if (!pendingStatusChange) return;
+
+        // Close confirmation modal properly
+        const modal = bootstrap.Modal.getInstance(document.getElementById('enrollmentStatusModal'));
+        if (modal) {
+            modal.hide();
+        }
+
+        // Clean up any leftover backdrops
+        setTimeout(() => {
+            const backdrops = document.querySelectorAll('.modal-backdrop');
+            backdrops.forEach(backdrop => backdrop.remove());
+            document.body.classList.remove('modal-open');
+            document.body.style.overflow = '';
+            document.body.style.paddingRight = '';
+        }, 300);
+
+        // Update enrollment status
+        await updateEnrollmentStatus(
+            pendingStatusChange.courseId,
+            pendingStatusChange.newStatus,
+            pendingStatusChange.buttonElement
+        );
+
+        // Clear pending change
+        pendingStatusChange = null;
+    });
+
+    // Handle cancel button click on enrollment status modal
+    const enrollmentModal = document.getElementById('enrollmentStatusModal');
+    if (enrollmentModal) {
+        // Clean up when modal is hidden
+        enrollmentModal.addEventListener('hidden.bs.modal', function () {
+            cleanupModalBackdrop();
+            pendingStatusChange = null;
+        });
+
+        // Also clean up when cancel button is clicked
+        const cancelButtons = enrollmentModal.querySelectorAll('[data-bs-dismiss="modal"]');
+        cancelButtons.forEach(btn => {
+            btn.addEventListener('click', function () {
+                cleanupModalBackdrop();
+                pendingStatusChange = null;
+            });
+        });
+    }
+
+    // Cleanup function for modal backdrop
+    function cleanupModalBackdrop() {
+        // First, move focus away from modal elements to prevent aria-hidden warning
+        const activeElement = document.activeElement;
+        if (activeElement && activeElement.closest('.modal')) {
+            // Move focus to body or a safe element
+            document.body.focus();
+            activeElement.blur();
+        }
+
+        setTimeout(() => {
+            // Remove all modal backdrops
+            const backdrops = document.querySelectorAll('.modal-backdrop');
+            backdrops.forEach(backdrop => backdrop.remove());
+
+            // Remove modal-open class from body
+            document.body.classList.remove('modal-open');
+
+            // Reset body styles
+            document.body.style.overflow = '';
+            document.body.style.paddingRight = '';
+            document.body.style.removeProperty('overflow');
+            document.body.style.removeProperty('padding-right');
+
+            // Ensure no lingering modal states
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.classList.remove('show');
+                modal.style.display = 'none';
+                modal.setAttribute('aria-hidden', 'true');
+                modal.removeAttribute('aria-modal');
+                modal.removeAttribute('role');
+            });
+        }, 100);
+    }
 
     // Menu toggle is handled by main.js - no need to duplicate here
 });
@@ -153,6 +342,54 @@ async function updateCourse(courseData) {
         // Restore button state
         saveBtn.disabled = false;
         saveBtn.innerHTML = originalText;
+    }
+}
+
+// Update enrollment status
+async function updateEnrollmentStatus(courseId, newStatus, buttonElement) {
+    const originalText = buttonElement.innerHTML;
+
+    try {
+        // Show loading state
+        buttonElement.disabled = true;
+        buttonElement.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i>';
+
+        const response = await fetch(`${API_BASE_URL}/courses/${courseId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                enrollment_status: newStatus
+            })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            // Update button with new status
+            let statusBadgeClass = 'bg-secondary';
+            if (newStatus === 'Open Enrollment') {
+                statusBadgeClass = 'bg-success';
+            } else if (newStatus === 'Closed') {
+                statusBadgeClass = 'bg-danger';
+            }
+
+            buttonElement.dataset.status = newStatus;
+            buttonElement.innerHTML = `<span class="badge ${statusBadgeClass}">${newStatus}</span>`;
+
+            showToast(`Enrollment status updated to "${newStatus}"`, 'success');
+        } else {
+            showToast(result.error || 'Failed to update enrollment status', 'error');
+            buttonElement.innerHTML = originalText;
+        }
+    } catch (error) {
+        console.error('Error updating enrollment status:', error);
+        showToast('Error updating enrollment status. Please try again.', 'error');
+        buttonElement.innerHTML = originalText;
+    } finally {
+        // Restore button state
+        buttonElement.disabled = false;
     }
 }
 

@@ -4,6 +4,17 @@
 
 'use strict';
 
+// Suppress Popper.js margin warnings (they're harmless and we've fixed them in CSS)
+(function () {
+  const originalWarn = console.warn;
+  console.warn = function (...args) {
+    if (args[0] && typeof args[0] === 'string' && args[0].includes('Popper: CSS "margin"')) {
+      return; // Suppress Popper margin warnings
+    }
+    originalWarn.apply(console, args);
+  };
+})();
+
 let menu, animate;
 
 (function () {

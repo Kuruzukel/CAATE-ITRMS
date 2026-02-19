@@ -3655,3 +3655,43 @@ input[type="time"]::placeholder {
 .position-relative .dropdown-menu {
     background: linear-gradient(135deg, #0f2942 0%, #0a1f33 100%) !important;
 }
+
+
+/* Fix Popper.js margin warning - remove ALL margins from popper elements */
+/* Bootstrap dropdowns, tooltips, and popovers should use offset modifier instead */
+.dropdown-menu,
+.dropdown-menu-end,
+.dropdown-menu-start,
+[data-popper-placement],
+[data-bs-popper],
+.tooltip,
+.popover,
+.bs-tooltip-auto,
+.bs-tooltip-top,
+.bs-tooltip-bottom,
+.bs-tooltip-start,
+.bs-tooltip-end,
+.bs-popover-auto,
+.bs-popover-top,
+.bs-popover-bottom,
+.bs-popover-start,
+.bs-popover-end,
+.tooltip-inner,
+.popover-body,
+.popover-header {
+    margin: 0 !important;
+    margin-top: 0 !important;
+    margin-right: 0 !important;
+    margin-bottom: 0 !important;
+    margin-left: 0 !important;
+}
+
+/* Remove margin from pseudo-elements as well */
+.dropdown-menu::before,
+.dropdown-menu::after,
+.tooltip::before,
+.tooltip::after,
+.popover::before,
+.popover::after {
+    margin: 0 !important;
+}

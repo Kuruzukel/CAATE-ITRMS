@@ -319,11 +319,7 @@
                         <div
                             class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
                             <div class="mb-2 mb-md-0">
-                                ©
-                                <script>
-                                    document.write(new Date().getFullYear());
-                                </script>
-                                , Creative Aesthetic Academy & Technical Education Inc.
+                                © <span id="currentYear"></span>, Creative Aesthetic Academy & Technical Education Inc.
                             </div>
                         </div>
                     </footer>
@@ -443,6 +439,70 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                         <i class="bx bx-x me-2"></i>Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enrollment Status Confirmation Modal -->
+    <div class="modal fade" id="enrollmentStatusModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="bx bx-info-circle me-2 text-primary"></i>Confirm Status Change
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="mb-3">Are you sure you want to change the enrollment status to:</p>
+                    <div class="text-center">
+                        <span id="confirmStatusBadge" class="badge fs-6 px-3 py-2"></span>
+                    </div>
+                    <p class="mt-3 mb-0 text-muted small">
+                        <i class="bx bx-info-circle me-1"></i>
+                        <span id="confirmCourseName"></span>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        <i class="bx bx-x me-2"></i>Cancel
+                    </button>
+                    <button type="button" class="btn btn-primary" id="confirmStatusChangeBtn">
+                        <i class="bx bx-check me-2"></i>Confirm
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enrollment Status Confirmation Modal -->
+    <div class="modal fade" id="enrollmentStatusModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="bx bx-info-circle me-2 text-primary"></i>Confirm Status Change
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="mb-3">Are you sure you want to change the enrollment status to:</p>
+                    <div class="text-center">
+                        <span id="confirmStatusBadge" class="badge fs-6 px-3 py-2"></span>
+                    </div>
+                    <p class="mt-3 mb-0 text-muted small">
+                        <i class="bx bx-info-circle me-1"></i>
+                        This will update the course enrollment status immediately.
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        <i class="bx bx-x me-2"></i>Cancel
+                    </button>
+                    <button type="button" class="btn btn-primary" id="confirmStatusChangeBtn">
+                        <i class="bx bx-check me-2"></i>Confirm
                     </button>
                 </div>
             </div>

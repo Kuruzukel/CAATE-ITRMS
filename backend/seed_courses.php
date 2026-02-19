@@ -119,6 +119,7 @@ try {
     foreach ($courses as $course) {
         $course['created_at'] = new MongoDB\BSON\UTCDateTime();
         $course['updated_at'] = new MongoDB\BSON\UTCDateTime();
+        $course['enrollment_status'] = 'Unpublished'; // Default enrollment status
         
         $result = $collection->insertOne($course);
         

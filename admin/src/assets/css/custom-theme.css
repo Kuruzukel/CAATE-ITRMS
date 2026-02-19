@@ -3193,7 +3193,7 @@ input[type="time"]::placeholder {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: calc(100vh - 200px);
+    min-height: 80vh;
     width: 100%;
     padding: 0;
     position: relative;
@@ -3202,6 +3202,7 @@ input[type="time"]::placeholder {
 .loading-content {
     text-align: center;
     width: 100%;
+    min-height: 80vh;
     position: relative;
     z-index: 1;
     /* Glassmorphism Card Effect - Same as card body */
@@ -3216,7 +3217,6 @@ input[type="time"]::placeholder {
         0 0 0 1px rgba(54, 145, 191, 0.1) !important;
     border: 1px solid rgba(54, 145, 191, 0.4) !important;
     overflow: hidden;
-    min-height: 400px;
     display: flex;
     flex-direction: column;
     align-items: center;

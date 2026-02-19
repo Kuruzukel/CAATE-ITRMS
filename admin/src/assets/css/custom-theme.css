@@ -2552,3 +2552,22 @@ input[type="date"]::placeholder,
 input[type="time"]::placeholder {
     color: rgba(255, 255, 255, 0.6) !important;
 }
+
+/* Prevent button focus state from persisting after modal closes */
+.modal .btn-primary:focus,
+.modal .btn-primary.focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.modal .btn-primary:not(:hover):not(:active) {
+    background-color: var(--primary-blue) !important;
+    border-color: var(--primary-blue) !important;
+    transform: none !important;
+}
+
+/* Remove focus ring from buttons after click */
+.btn:focus:not(:focus-visible) {
+    outline: none !important;
+    box-shadow: none !important;
+}

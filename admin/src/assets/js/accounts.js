@@ -72,6 +72,42 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
+
+    // Reset button state when Add Trainee modal is hidden
+    const addTraineeModal = document.getElementById('addTraineeModal');
+    if (addTraineeModal) {
+        addTraineeModal.addEventListener('hidden.bs.modal', function () {
+            const addButton = addTraineeModal.querySelector('.btn-primary');
+            if (addButton) {
+                addButton.disabled = false;
+                addButton.innerHTML = 'Add Trainee';
+                addButton.blur();
+                addButton.classList.remove('active', 'focus');
+                // Force remove focus styles with a slight delay
+                setTimeout(() => {
+                    addButton.blur();
+                }, 100);
+            }
+        });
+    }
+
+    // Reset button state when Edit Trainee modal is hidden
+    const editTraineeModal = document.getElementById('editTraineeModal');
+    if (editTraineeModal) {
+        editTraineeModal.addEventListener('hidden.bs.modal', function () {
+            const saveButton = editTraineeModal.querySelector('.btn-primary');
+            if (saveButton) {
+                saveButton.disabled = false;
+                saveButton.innerHTML = 'Save Changes';
+                saveButton.blur();
+                saveButton.classList.remove('active', 'focus');
+                // Force remove focus styles with a slight delay
+                setTimeout(() => {
+                    saveButton.blur();
+                }, 100);
+            }
+        });
+    }
 });
 
 

@@ -8,6 +8,7 @@ let courses = [];
 let currentCourseId = null;
 let currentCourseCard = null;
 let editImageFile = null;
+let originalCourseData = {}; // Store original course data for comparison
 
 document.addEventListener('DOMContentLoaded', function () {
     // Load courses from database
@@ -41,13 +42,22 @@ document.addEventListener('DOMContentLoaded', function () {
             currentCourseCard = btn.closest('.card');
             currentCourseId = btn.dataset.id;
 
-            document.getElementById('editCourseBadge').value = btn.dataset.badge;
-            document.getElementById('editCourseTitle').value = btn.dataset.title;
-            document.getElementById('editCourseDescription').value = btn.dataset.description;
-            document.getElementById('editCourseHours').value = btn.dataset.hours;
+            // Store original values for comparison
+            originalCourseData = {
+                badge: btn.dataset.badge,
+                title: btn.dataset.title,
+                description: btn.dataset.description,
+                hours: btn.dataset.hours,
+                image: btn.dataset.image || ''
+            };
+
+            document.getElementById('editCourseBadge').value = originalCourseData.badge;
+            document.getElementById('editCourseTitle').value = originalCourseData.title;
+            document.getElementById('editCourseDescription').value = originalCourseData.description;
+            document.getElementById('editCourseHours').value = originalCourseData.hours;
 
             // Load existing image if available
-            const imageUrl = btn.dataset.image;
+            const imageUrl = originalCourseData.image;
             if (imageUrl && imageUrl !== '') {
                 loadExistingImage(imageUrl);
             } else {
@@ -87,13 +97,8 @@ document.addEventListener('DOMContentLoaded', function () {
             };
             reader.readAsDataURL(editImageFile);
         } else {
-            // Keep existing image URL or base64
-            const imagePreview = document.getElementById('editImagePreview');
-            if (imagePreview.src && imagePreview.style.display !== 'none') {
-                courseData.image = imagePreview.src;
-            } else {
-                courseData.image = '';
-            }
+            // Keep the original image value (don't send if unchanged)
+            courseData.image = originalCourseData.image;
             await updateCourse(courseData);
         }
     });
@@ -122,9 +127,6 @@ async function updateCourse(courseData) {
         const result = await response.json();
 
         if (result.success) {
-            // Reload courses to reflect changes
-            await loadCourses();
-
             // Close modal
             const modal = bootstrap.Modal.getInstance(document.getElementById('editCourseModal'));
             modal.hide();
@@ -137,6 +139,8 @@ async function updateCourse(courseData) {
             if (result.modified === false) {
                 showToast('No changes were made to the course', 'info');
             } else {
+                // Only reload courses if changes were actually made
+                await loadCourses();
                 showToast('Course updated successfully!', 'success');
             }
         } else {
@@ -408,8 +412,6 @@ function handleEditImageFile(file) {
     const fileSizeKB = (file.size / 1024).toFixed(2);
     const fileSizeMB = (file.size / (1024 * 1024)).toFixed(2);
     const sizeText = file.size > 1024 * 1024 ? `${fileSizeMB} MB` : `${fileSizeKB} KB`;
-
-    console.log(`Image selected: ${file.name} (${sizeText})`);
 
     // Preview image
     const reader = new FileReader();

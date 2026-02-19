@@ -32,16 +32,47 @@ class Course {
     
     public function update($id, $data) {
         try {
+            // Get the existing document first
+            $existing = $this->collection->findOne(['_id' => new MongoDB\BSON\ObjectId($id)]);
+            
+            if (!$existing) {
+                return [
+                    'success' => false,
+                    'modified' => false,
+                    'matched' => false,
+                    'error' => 'Course not found'
+                ];
+            }
+            
+            // Check if any actual data changed (excluding updated_at)
+            $hasChanges = false;
+            foreach ($data as $key => $value) {
+                if ($key !== 'updated_at' && isset($existing[$key])) {
+                    // Compare values, handling different types
+                    $existingValue = $existing[$key];
+                    if ($existingValue != $value) {
+                        $hasChanges = true;
+                        break;
+                    }
+                } elseif ($key !== 'updated_at' && !isset($existing[$key])) {
+                    // New field being added
+                    $hasChanges = true;
+                    break;
+                }
+            }
+            
+            // Always update the updated_at timestamp
             $data['updated_at'] = new MongoDB\BSON\UTCDateTime();
+            
             $result = $this->collection->updateOne(
                 ['_id' => new MongoDB\BSON\ObjectId($id)],
                 ['$set' => $data]
             );
             
-            // Return both success status and whether changes were made
+            // Return both success status and whether actual changes were made
             return [
                 'success' => true,
-                'modified' => $result->getModifiedCount() > 0,
+                'modified' => $hasChanges,
                 'matched' => $result->getMatchedCount() > 0
             ];
         } catch (Exception $e) {

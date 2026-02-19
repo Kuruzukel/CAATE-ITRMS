@@ -1,59 +1,176 @@
 /* Courses Page Functionality */
 
+// API Configuration
+const API_BASE_URL = 'http://localhost/CAATE-ITRMS/backend/public/api/v1';
+
+// State
+let courses = [];
+let currentCourseId = null;
+let currentCourseCard = null;
+
 document.addEventListener('DOMContentLoaded', function () {
-    let currentCourseCard = null;
+    // Load courses from database
+    loadCourses();
 
     // When edit button is clicked, populate modal with course data
-    document.querySelectorAll('.edit-course-btn').forEach(btn => {
-        btn.addEventListener('click', function () {
-            currentCourseCard = this.closest('.card');
+    document.addEventListener('click', function (e) {
+        if (e.target.closest('.edit-course-btn')) {
+            const btn = e.target.closest('.edit-course-btn');
+            currentCourseCard = btn.closest('.card');
+            currentCourseId = btn.dataset.id;
 
-            document.getElementById('editCourseBadge').value = this.dataset.badge;
-            document.getElementById('editCourseTitle').value = this.dataset.title;
-            document.getElementById('editCourseDescription').value = this.dataset.description;
-            document.getElementById('editCourseHours').value = this.dataset.hours;
-            document.getElementById('editCourseImage').value = this.dataset.image;
-        });
+            document.getElementById('editCourseBadge').value = btn.dataset.badge;
+            document.getElementById('editCourseTitle').value = btn.dataset.title;
+            document.getElementById('editCourseDescription').value = btn.dataset.description;
+            document.getElementById('editCourseHours').value = btn.dataset.hours;
+            document.getElementById('editCourseImage').value = btn.dataset.image;
+        }
     });
 
     // Save changes
-    document.getElementById('saveCourseBtn').addEventListener('click', function () {
-        if (!currentCourseCard) return;
+    document.getElementById('saveCourseBtn').addEventListener('click', async function () {
+        if (!currentCourseId) return;
 
-        const badge = document.getElementById('editCourseBadge').value;
-        const title = document.getElementById('editCourseTitle').value;
-        const description = document.getElementById('editCourseDescription').value;
-        const hours = document.getElementById('editCourseHours').value;
-        const image = document.getElementById('editCourseImage').value;
+        const courseData = {
+            course_code: document.getElementById('editCourseBadge').value,
+            title: document.getElementById('editCourseTitle').value,
+            description: document.getElementById('editCourseDescription').value,
+            duration: document.getElementById('editCourseHours').value,
+            image: document.getElementById('editCourseImage').value
+        };
 
-        // Update the card
-        currentCourseCard.querySelector('.badge').textContent = badge;
-        currentCourseCard.querySelector('.card-title').textContent = title;
-        currentCourseCard.querySelector('.card-text').textContent = description;
-        currentCourseCard.querySelector('small').innerHTML = `<i class="fas fa-clock me-1"></i> ${hours}`;
+        try {
+            const response = await fetch(`${API_BASE_URL}/courses/${currentCourseId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(courseData)
+            });
 
-        if (image) {
-            currentCourseCard.querySelector('.card-img-top').src = image;
+            const result = await response.json();
+
+            if (result.success) {
+                // Update the card
+                currentCourseCard.querySelector('.badge').textContent = courseData.course_code;
+                currentCourseCard.querySelector('.card-title').textContent = courseData.title;
+                currentCourseCard.querySelector('.card-text').textContent = courseData.description;
+                currentCourseCard.querySelector('small').innerHTML = `<i class="fas fa-clock me-1"></i> ${courseData.duration}`;
+
+                if (courseData.image) {
+                    currentCourseCard.querySelector('.card-img-top').src = courseData.image;
+                }
+
+                // Update button data attributes
+                const editBtn = currentCourseCard.querySelector('.edit-course-btn');
+                editBtn.dataset.badge = courseData.course_code;
+                editBtn.dataset.title = courseData.title;
+                editBtn.dataset.description = courseData.description;
+                editBtn.dataset.hours = courseData.duration;
+                editBtn.dataset.image = courseData.image;
+
+                // Close modal
+                const modal = bootstrap.Modal.getInstance(document.getElementById('editCourseModal'));
+                modal.hide();
+
+                // Show success toast notification
+                showToast('Course updated successfully!', 'success');
+            } else {
+                showToast(result.error || 'Failed to update course', 'error');
+            }
+        } catch (error) {
+            console.error('Error updating course:', error);
+            showToast('Error updating course. Please try again.', 'error');
         }
-
-        // Update button data attributes
-        const editBtn = currentCourseCard.querySelector('.edit-course-btn');
-        editBtn.dataset.badge = badge;
-        editBtn.dataset.title = title;
-        editBtn.dataset.description = description;
-        editBtn.dataset.hours = hours;
-        editBtn.dataset.image = image;
-
-        // Close modal
-        const modal = bootstrap.Modal.getInstance(document.getElementById('editCourseModal'));
-        modal.hide();
-
-        // Show success toast notification
-        showToast('Course updated successfully!', 'success');
     });
 
     // Menu toggle is handled by main.js - no need to duplicate here
 });
+
+// Load courses from database
+async function loadCourses() {
+    const loadingSpinner = document.getElementById('loadingSpinner');
+    const coursesGrid = document.getElementById('coursesGrid');
+
+    console.log('Loading courses from:', `${API_BASE_URL}/courses`);
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/courses`);
+        console.log('Response status:', response.status);
+
+        const result = await response.json();
+        console.log('API Result:', result);
+
+        if (result.success && result.data) {
+            courses = result.data;
+            console.log('Courses loaded:', courses.length);
+
+            renderCourses(courses);
+
+            // Hide loading, show grid
+            if (loadingSpinner) loadingSpinner.style.display = 'none';
+            if (coursesGrid) coursesGrid.style.display = 'flex';
+        } else {
+            console.error('API returned error:', result);
+            if (loadingSpinner) loadingSpinner.style.display = 'none';
+            if (coursesGrid) {
+                coursesGrid.style.display = 'block';
+                coursesGrid.innerHTML = '<div class="col-12 text-center"><p>No courses found. Please add courses to the database.</p></div>';
+            }
+            showToast(result.error || 'No courses found', 'error');
+        }
+    } catch (error) {
+        console.error('Error loading courses:', error);
+        if (loadingSpinner) loadingSpinner.style.display = 'none';
+        if (coursesGrid) {
+            coursesGrid.style.display = 'block';
+            coursesGrid.innerHTML = '<div class="col-12 text-center"><p class="text-danger">Error loading courses. Check console for details.</p></div>';
+        }
+        showToast('Error loading courses. Please check your connection.', 'error');
+    }
+}
+
+// Render courses to the page
+function renderCourses(coursesData) {
+    const container = document.getElementById('coursesGrid');
+    if (!container) return;
+
+    container.innerHTML = '';
+
+    coursesData.forEach(course => {
+        const courseId = course._id.$oid || course._id;
+        const col = document.createElement('div');
+        col.className = 'col';
+
+        col.innerHTML = `
+            <div class="card h-100">
+                <img src="${course.image || 'https://via.placeholder.com/400x250'}"
+                    class="card-img-top" alt="${course.title}"
+                    style="height: 200px; object-fit: cover;" />
+                <div class="card-body d-flex flex-column">
+                    <span class="badge bg-primary mb-2 align-self-start">${course.course_code}</span>
+                    <h5 class="card-title">${course.title}</h5>
+                    <p class="card-text flex-grow-1">${course.description}</p>
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <small><i class="fas fa-clock me-1"></i> ${course.duration}</small>
+                        <button class="btn btn-sm btn-outline-primary edit-course-btn"
+                            data-bs-toggle="modal" data-bs-target="#editCourseModal"
+                            data-id="${courseId}"
+                            data-badge="${course.course_code}"
+                            data-title="${course.title}"
+                            data-description="${course.description}"
+                            data-hours="${course.duration}"
+                            data-image="${course.image || ''}">
+                            <i class="bx bx-edit"></i> Edit
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        container.appendChild(col);
+    });
+}
 
 // Toast notification function
 function showToast(message, type = 'success') {

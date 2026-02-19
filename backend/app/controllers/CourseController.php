@@ -1,0 +1,133 @@
+<?php
+
+require_once __DIR__ . '/../models/Course.php';
+
+class CourseController {
+    
+    public function index() {
+        header('Content-Type: application/json');
+        header('Access-Control-Allow-Origin: *');
+        
+        try {
+            $courseModel = new Course();
+            $courses = $courseModel->all();
+            
+            echo json_encode(['success' => true, 'data' => $courses]);
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+    
+    public function show($id) {
+        header('Content-Type: application/json');
+        header('Access-Control-Allow-Origin: *');
+        
+        try {
+            $courseModel = new Course();
+            $course = $courseModel->findById($id);
+            
+            if (!$course) {
+                http_response_code(404);
+                echo json_encode(['success' => false, 'error' => 'Course not found']);
+                return;
+            }
+            
+            echo json_encode(['success' => true, 'data' => $course]);
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+    
+    public function store() {
+        header('Content-Type: application/json');
+        header('Access-Control-Allow-Origin: *');
+        
+        try {
+            $data = json_decode(file_get_contents('php://input'), true);
+            
+            if (!$data) {
+                http_response_code(400);
+                echo json_encode(['success' => false, 'error' => 'Invalid JSON data']);
+                return;
+            }
+            
+            $courseModel = new Course();
+            $courseId = $courseModel->create($data);
+            
+            http_response_code(201);
+            echo json_encode([
+                'success' => true,
+                'message' => 'Course created successfully',
+                'id' => $courseId
+            ]);
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+    
+    public function update($id) {
+        header('Content-Type: application/json');
+        header('Access-Control-Allow-Origin: *');
+        
+        try {
+            $data = json_decode(file_get_contents('php://input'), true);
+            
+            if (!$data) {
+                http_response_code(400);
+                echo json_encode(['success' => false, 'error' => 'Invalid JSON data']);
+                return;
+            }
+            
+            $courseModel = new Course();
+            $result = $courseModel->update($id, $data);
+            
+            if ($result) {
+                echo json_encode(['success' => true, 'message' => 'Course updated successfully']);
+            } else {
+                http_response_code(404);
+                echo json_encode(['success' => false, 'error' => 'Course not found or no changes made']);
+            }
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+    
+    public function destroy($id) {
+        header('Content-Type: application/json');
+        header('Access-Control-Allow-Origin: *');
+        
+        try {
+            $courseModel = new Course();
+            $result = $courseModel->delete($id);
+            
+            if ($result) {
+                echo json_encode(['success' => true, 'message' => 'Course deleted successfully']);
+            } else {
+                http_response_code(404);
+                echo json_encode(['success' => false, 'error' => 'Course not found']);
+            }
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+}

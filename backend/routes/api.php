@@ -3,6 +3,7 @@
 require_once __DIR__ . '/../app/controllers/AuthController.php';
 require_once __DIR__ . '/../app/controllers/UserController.php';
 require_once __DIR__ . '/../app/controllers/TraineeController.php';
+require_once __DIR__ . '/../app/controllers/CourseController.php';
 
 function handleRequest($uri, $method) {
     // Remove base path if exists
@@ -28,6 +29,11 @@ function handleRequest($uri, $method) {
         'POST:/api/v1/trainees' => ['TraineeController', 'store'],
         'PUT:/api/v1/trainees/{id}' => ['TraineeController', 'update'],
         'DELETE:/api/v1/trainees/{id}' => ['TraineeController', 'destroy'],
+        'GET:/api/v1/courses' => ['CourseController', 'index'],
+        'GET:/api/v1/courses/{id}' => ['CourseController', 'show'],
+        'POST:/api/v1/courses' => ['CourseController', 'store'],
+        'PUT:/api/v1/courses/{id}' => ['CourseController', 'update'],
+        'DELETE:/api/v1/courses/{id}' => ['CourseController', 'destroy'],
     ];
     
     // Match route

@@ -2,7 +2,7 @@
 
 # CAATE-ITRMS
 
-<img src="admin/src/assets/images/CAATE_META_LOGO.png" alt="CAATE Logo" width="200"/>
+<img src="admin/src/assets/images/CAATE_META_LOGO.png" alt="CAATE Logo" width="200" style="border-radius: 50%;"/>
 
 ### Creative Aesthetic Academy & Technical Education Inc.
 

@@ -80,24 +80,42 @@ class CourseController {
     public function update($id) {
         header('Content-Type: application/json');
         header('Access-Control-Allow-Origin: *');
-        
+
         try {
             $data = json_decode(file_get_contents('php://input'), true);
-            
+
             if (!$data) {
                 http_response_code(400);
                 echo json_encode(['success' => false, 'error' => 'Invalid JSON data']);
                 return;
             }
-            
+
             $courseModel = new Course();
             $result = $courseModel->update($id, $data);
-            
-            if ($result) {
-                echo json_encode(['success' => true, 'message' => 'Course updated successfully']);
+
+            if ($result['success']) {
+                if ($result['modified']) {
+                    echo json_encode([
+                        'success' => true, 
+                        'message' => 'Course updated successfully',
+                        'modified' => true
+                    ]);
+                } else if ($result['matched']) {
+                    echo json_encode([
+                        'success' => true, 
+                        'message' => 'No changes were made',
+                        'modified' => false
+                    ]);
+                } else {
+                    http_response_code(404);
+                    echo json_encode(['success' => false, 'error' => 'Course not found']);
+                }
             } else {
-                http_response_code(404);
-                echo json_encode(['success' => false, 'error' => 'Course not found or no changes made']);
+                http_response_code(500);
+                echo json_encode([
+                    'success' => false, 
+                    'error' => $result['error'] ?? 'Failed to update course'
+                ]);
             }
         } catch (Exception $e) {
             http_response_code(500);
@@ -107,6 +125,7 @@ class CourseController {
             ]);
         }
     }
+
     
     public function destroy($id) {
         header('Content-Type: application/json');

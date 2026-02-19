@@ -2760,6 +2760,33 @@ input[type="time"]::placeholder {
     color: #de3e25;
 }
 
+/* Info Toast Styles - Blue Color */
+.toast-notification.info {
+    background: #e8f4fd;
+    border-color: #90caf9;
+}
+
+.toast-notification.info .toast-icon-wrapper {
+    background-color: rgba(33, 150, 243, 0.15);
+    border: 2px solid #2196f3;
+}
+
+.toast-notification.info .toast-icon {
+    color: #2196f3;
+}
+
+.toast-notification.info .toast-title {
+    color: #2196f3;
+}
+
+.toast-notification.info .toast-message {
+    color: #1565c0;
+}
+
+.toast-notification.info .toast-close {
+    color: #2196f3;
+}
+
 .toast-close:hover {
     background-color: rgba(0, 0, 0, 0.05);
     transform: scale(1.1);

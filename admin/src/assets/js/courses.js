@@ -16,6 +16,24 @@ document.addEventListener('DOMContentLoaded', function () {
     // Initialize image upload functionality for edit modal
     initializeEditImageUpload();
 
+    // Reset modal when closed
+    const editModal = document.getElementById('editCourseModal');
+    editModal.addEventListener('hidden.bs.modal', function () {
+        // Reset form
+        document.getElementById('editCourseForm').reset();
+
+        // Reset image state
+        editImageFile = null;
+        resetEditImagePreview();
+
+        // Clear file input
+        document.getElementById('editImageInput').value = '';
+
+        // Reset current course tracking
+        currentCourseId = null;
+        currentCourseCard = null;
+    });
+
     // When edit button is clicked, populate modal with course data
     document.addEventListener('click', function (e) {
         if (e.target.closest('.edit-course-btn')) {
@@ -42,11 +60,22 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('saveCourseBtn').addEventListener('click', async function () {
         if (!currentCourseId) return;
 
+        // Validate required fields
+        const badge = document.getElementById('editCourseBadge').value.trim();
+        const title = document.getElementById('editCourseTitle').value.trim();
+        const description = document.getElementById('editCourseDescription').value.trim();
+        const hours = document.getElementById('editCourseHours').value.trim();
+
+        if (!badge || !title || !description || !hours) {
+            showToast('Please fill in all required fields', 'error');
+            return;
+        }
+
         const courseData = {
-            badge: document.getElementById('editCourseBadge').value,
-            title: document.getElementById('editCourseTitle').value,
-            description: document.getElementById('editCourseDescription').value,
-            hours: document.getElementById('editCourseHours').value
+            badge: badge,
+            title: title,
+            description: description,
+            hours: hours
         };
 
         // If a new image file was uploaded, convert to base64
@@ -58,7 +87,7 @@ document.addEventListener('DOMContentLoaded', function () {
             };
             reader.readAsDataURL(editImageFile);
         } else {
-            // Keep existing image URL
+            // Keep existing image URL or base64
             const imagePreview = document.getElementById('editImagePreview');
             if (imagePreview.src && imagePreview.style.display !== 'none') {
                 courseData.image = imagePreview.src;
@@ -74,7 +103,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // Update course function
 async function updateCourse(courseData) {
+    const saveBtn = document.getElementById('saveCourseBtn');
+    const originalText = saveBtn.innerHTML;
+
     try {
+        // Show loading state
+        saveBtn.disabled = true;
+        saveBtn.innerHTML = '<i class="bx bx-loader-alt bx-spin me-2"></i>Saving...';
+
         const response = await fetch(`${API_BASE_URL}/courses/${currentCourseId}`, {
             method: 'PUT',
             headers: {
@@ -97,14 +133,22 @@ async function updateCourse(courseData) {
             editImageFile = null;
             resetEditImagePreview();
 
-            // Show success toast notification
-            showToast('Course updated successfully!', 'success');
+            // Show appropriate toast notification based on whether changes were made
+            if (result.modified === false) {
+                showToast('No changes were made to the course', 'info');
+            } else {
+                showToast('Course updated successfully!', 'success');
+            }
         } else {
             showToast(result.error || 'Failed to update course', 'error');
         }
     } catch (error) {
         console.error('Error updating course:', error);
         showToast('Error updating course. Please try again.', 'error');
+    } finally {
+        // Restore button state
+        saveBtn.disabled = false;
+        saveBtn.innerHTML = originalText;
     }
 }
 
@@ -175,11 +219,17 @@ function renderCourses(coursesData) {
             badgeClass = 'bg-primary';
         }
 
+        // Handle image display - use stored image or default placeholder
+        const imageUrl = course.image && course.image.trim() !== ''
+            ? course.image
+            : '../assets/images/CAATE_META_LOGO.png';
+
         col.innerHTML = `
             <div class="card h-100">
-                <img src="${course.image || 'https://via.placeholder.com/400x250'}"
+                <img src="${imageUrl}"
                     class="card-img-top" alt="${course.title}"
-                    style="height: 200px; object-fit: cover;" />
+                    style="height: 200px; object-fit: cover;"
+                    onerror="this.src='../assets/images/CAATE_META_LOGO.png'" />
                 <div class="card-body d-flex flex-column">
                     <span class="badge ${badgeClass} mb-2 align-self-start">${badge}</span>
                     <h5 class="card-title">${course.title}</h5>
@@ -354,6 +404,13 @@ function handleEditImageFile(file) {
 
     editImageFile = file;
 
+    // Show file info
+    const fileSizeKB = (file.size / 1024).toFixed(2);
+    const fileSizeMB = (file.size / (1024 * 1024)).toFixed(2);
+    const sizeText = file.size > 1024 * 1024 ? `${fileSizeMB} MB` : `${fileSizeKB} KB`;
+
+    console.log(`Image selected: ${file.name} (${sizeText})`);
+
     // Preview image
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -365,6 +422,8 @@ function handleEditImageFile(file) {
         imagePreview.style.display = 'block';
         noImageText.style.display = 'none';
         imageActionButtons.style.display = 'flex';
+
+        showToast(`Image loaded: ${file.name} (${sizeText})`, 'success');
     };
     reader.readAsDataURL(file);
 }

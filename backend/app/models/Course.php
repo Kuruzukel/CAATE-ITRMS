@@ -37,9 +37,20 @@ class Course {
                 ['_id' => new MongoDB\BSON\ObjectId($id)],
                 ['$set' => $data]
             );
-            return $result->getModifiedCount() > 0;
+            
+            // Return both success status and whether changes were made
+            return [
+                'success' => true,
+                'modified' => $result->getModifiedCount() > 0,
+                'matched' => $result->getMatchedCount() > 0
+            ];
         } catch (Exception $e) {
-            return false;
+            return [
+                'success' => false,
+                'modified' => false,
+                'matched' => false,
+                'error' => $e->getMessage()
+            ];
         }
     }
     

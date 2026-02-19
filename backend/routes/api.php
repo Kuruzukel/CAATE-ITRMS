@@ -13,6 +13,7 @@ function handleRequest($uri, $method) {
     
     // API Routes
     $routes = [
+        'GET:/api/v1/health' => ['TraineeController', 'health'],
         'POST:/api/v1/auth/register' => ['AuthController', 'register'],
         'POST:/api/v1/auth/login' => ['AuthController', 'login'],
         'POST:/api/v1/auth/logout' => ['AuthController', 'logout'],

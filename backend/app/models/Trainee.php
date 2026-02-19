@@ -31,11 +31,16 @@ class Trainee {
     }
     
     public function create($data) {
-        $data['created_at'] = new MongoDB\BSON\UTCDateTime();
-        $data['updated_at'] = new MongoDB\BSON\UTCDateTime();
-        
-        $result = $this->collection->insertOne($data);
-        return (string)$result->getInsertedId();
+        try {
+            $data['created_at'] = new MongoDB\BSON\UTCDateTime();
+            $data['updated_at'] = new MongoDB\BSON\UTCDateTime();
+            
+            $result = $this->collection->insertOne($data);
+            return (string)$result->getInsertedId();
+        } catch (Exception $e) {
+            error_log('Trainee creation error: ' . $e->getMessage());
+            throw new Exception('Failed to create trainee: ' . $e->getMessage());
+        }
     }
     
     public function update($id, $data) {

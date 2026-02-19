@@ -19,10 +19,31 @@ function getMongoConnection() {
         $connectionString .= DB_HOST . ":" . DB_PORT;
         
         $client = new MongoDB\Client($connectionString);
+        
+        // Test the connection
+        $client->listDatabases();
+        
         return $client->selectDatabase(DB_NAME);
+    } catch (MongoDB\Driver\Exception\ConnectionTimeoutException $e) {
+        http_response_code(500);
+        echo json_encode([
+            'success' => false,
+            'error' => 'MongoDB connection timeout. Is MongoDB running on ' . DB_HOST . ':' . DB_PORT . '?'
+        ]);
+        exit();
+    } catch (MongoDB\Driver\Exception\Exception $e) {
+        http_response_code(500);
+        echo json_encode([
+            'success' => false,
+            'error' => 'MongoDB error: ' . $e->getMessage()
+        ]);
+        exit();
     } catch (Exception $e) {
         http_response_code(500);
-        echo json_encode(['error' => 'Database connection failed: ' . $e->getMessage()]);
+        echo json_encode([
+            'success' => false,
+            'error' => 'Database connection failed: ' . $e->getMessage()
+        ]);
         exit();
     }
 }

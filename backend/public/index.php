@@ -5,6 +5,10 @@ $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
 if (strpos($requestUri, '/api/') !== false) {
     // API Request
+    // Disable error display for API requests
+    ini_set('display_errors', 0);
+    error_reporting(E_ALL);
+    
     header('Content-Type: application/json');
     header('Access-Control-Allow-Origin: *');
     header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
@@ -19,6 +23,30 @@ if (strpos($requestUri, '/api/') !== false) {
         http_response_code(200);
         exit();
     }
+
+    // Set error handler for API requests
+    set_error_handler(function($errno, $errstr, $errfile, $errline) {
+        http_response_code(500);
+        echo json_encode([
+            'success' => false,
+            'error' => 'Server error: ' . $errstr,
+            'file' => basename($errfile),
+            'line' => $errline
+        ]);
+        exit();
+    });
+
+    // Set exception handler for API requests
+    set_exception_handler(function($exception) {
+        http_response_code(500);
+        echo json_encode([
+            'success' => false,
+            'error' => $exception->getMessage(),
+            'file' => basename($exception->getFile()),
+            'line' => $exception->getLine()
+        ]);
+        exit();
+    });
 
     // Route handler
     $requestMethod = $_SERVER['REQUEST_METHOD'];

@@ -333,8 +333,10 @@ function editTrainee(id) {
     // Populate edit modal with separate name fields
     document.getElementById('editTraineeId').value = trainee._id;
     document.getElementById('editTraineeFirstName').value = trainee.first_name || '';
+    document.getElementById('editTraineeSecondName').value = trainee.second_name || '';
     document.getElementById('editTraineeMiddleName').value = trainee.middle_name || '';
     document.getElementById('editTraineeLastName').value = trainee.last_name || '';
+    document.getElementById('editTraineeSuffix').value = trainee.suffix || '';
     document.getElementById('editTraineeEmail').value = trainee.email;
     document.getElementById('editTraineePhone').value = trainee.phone;
     document.getElementById('editTraineeStatus').value = trainee.status || 'pending';
@@ -452,8 +454,10 @@ async function saveEditTrainee() {
 
     const id = document.getElementById('editTraineeId').value;
     const firstName = document.getElementById('editTraineeFirstName').value.trim();
+    const secondName = document.getElementById('editTraineeSecondName').value.trim();
     const middleName = document.getElementById('editTraineeMiddleName').value.trim();
     const lastName = document.getElementById('editTraineeLastName').value.trim();
+    const suffix = document.getElementById('editTraineeSuffix').value.trim();
     const email = document.getElementById('editTraineeEmail').value.trim();
     const phone = document.getElementById('editTraineePhone').value.trim();
     const status = document.getElementById('editTraineeStatus').value;
@@ -471,6 +475,12 @@ async function saveEditTrainee() {
     const namePattern = /^[A-Za-z\s\-']+$/;
     if (!namePattern.test(firstName)) {
         showError('First name should only contain letters, spaces, hyphens, and apostrophes');
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnText;
+        return;
+    }
+    if (secondName && !namePattern.test(secondName)) {
+        showError('Second name should only contain letters, spaces, hyphens, and apostrophes');
         submitBtn.disabled = false;
         submitBtn.innerHTML = originalBtnText;
         return;
@@ -516,8 +526,10 @@ async function saveEditTrainee() {
 
     const updateData = {
         first_name: firstName,
+        second_name: secondName,
         middle_name: middleName,
         last_name: lastName,
+        suffix: suffix,
         email: email,
         phone: phone,
         status: status.toLowerCase()
@@ -579,8 +591,10 @@ async function saveNewTrainee() {
 
     const id = document.getElementById('addTraineeId').value.trim();
     const firstName = document.getElementById('addTraineeFirstName').value.trim();
+    const secondName = document.getElementById('addTraineeSecondName').value.trim();
     const middleName = document.getElementById('addTraineeMiddleName').value.trim();
     const lastName = document.getElementById('addTraineeLastName').value.trim();
+    const suffix = document.getElementById('addTraineeSuffix').value.trim();
     const email = document.getElementById('addTraineeEmail').value.trim();
     const phone = document.getElementById('addTraineePhone').value.trim();
     const status = document.getElementById('addTraineeStatus').value;
@@ -607,6 +621,12 @@ async function saveNewTrainee() {
     const namePattern = /^[A-Za-z\s]+$/;
     if (!namePattern.test(firstName)) {
         showError('First name should only contain letters and spaces');
+        addButton.disabled = false;
+        addButton.innerHTML = originalText;
+        return;
+    }
+    if (secondName && !namePattern.test(secondName)) {
+        showError('Second name should only contain letters and spaces');
         addButton.disabled = false;
         addButton.innerHTML = originalText;
         return;
@@ -653,8 +673,10 @@ async function saveNewTrainee() {
     const newTraineeData = {
         trainee_id: id,
         first_name: firstName,
+        second_name: secondName,
         middle_name: middleName,
         last_name: lastName,
+        suffix: suffix,
         email: email,
         phone: phone,
         status: status.toLowerCase(),
@@ -669,6 +691,23 @@ async function saveNewTrainee() {
             },
             body: JSON.stringify(newTraineeData)
         });
+
+        // Check if response is JSON
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+            const text = await response.text();
+            console.error('Non-JSON response:', text);
+
+            // Try to extract error message from HTML
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(text, 'text/html');
+            const errorText = doc.body.textContent || text;
+
+            showError('Server error: ' + errorText.substring(0, 200));
+            addButton.disabled = false;
+            addButton.innerHTML = originalText;
+            return;
+        }
 
         const result = await response.json();
 
@@ -696,7 +735,7 @@ async function saveNewTrainee() {
         }
     } catch (error) {
         console.error('Error adding trainee:', error);
-        showError('Error connecting to server');
+        showError('Error connecting to server. Please check console for details.');
         addButton.disabled = false;
         addButton.innerHTML = originalText;
     }

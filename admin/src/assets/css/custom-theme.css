@@ -1326,11 +1326,6 @@ footer span,
     cursor: pointer;
 }
 
-/* Prevent overlay from affecting menu appearance */
-.layout-overlay:hover {
-    /* No hover effects on overlay */
-}
-
 /* Show overlay when menu is expanded on small screens */
 @media (max-width: 1199.98px) {
     .layout-menu-expanded .layout-overlay {

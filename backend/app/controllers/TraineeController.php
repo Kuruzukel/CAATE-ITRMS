@@ -4,6 +4,26 @@ require_once __DIR__ . '/../models/Trainee.php';
 
 class TraineeController {
     
+    public function health() {
+        header('Content-Type: application/json');
+        header('Access-Control-Allow-Origin: *');
+        
+        try {
+            $traineeModel = new Trainee();
+            echo json_encode([
+                'success' => true,
+                'message' => 'API and Database connection OK',
+                'mongodb' => 'Connected'
+            ]);
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+    
     public function index() {
         header('Content-Type: application/json');
         header('Access-Control-Allow-Origin: *');
@@ -34,17 +54,31 @@ class TraineeController {
         header('Content-Type: application/json');
         header('Access-Control-Allow-Origin: *');
         
-        $data = json_decode(file_get_contents('php://input'), true);
-        
-        $traineeModel = new Trainee();
-        $traineeId = $traineeModel->create($data);
-        
-        http_response_code(201);
-        echo json_encode([
-            'success' => true,
-            'message' => 'Trainee created successfully',
-            'id' => $traineeId
-        ]);
+        try {
+            $data = json_decode(file_get_contents('php://input'), true);
+            
+            if (!$data) {
+                http_response_code(400);
+                echo json_encode(['success' => false, 'error' => 'Invalid JSON data']);
+                return;
+            }
+            
+            $traineeModel = new Trainee();
+            $traineeId = $traineeModel->create($data);
+            
+            http_response_code(201);
+            echo json_encode([
+                'success' => true,
+                'message' => 'Trainee created successfully',
+                'id' => $traineeId
+            ]);
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'error' => $e->getMessage()
+            ]);
+        }
     }
     
     public function update($id) {

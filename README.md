@@ -2,7 +2,9 @@
 
 # CAATE-ITRMS
 
-<img src="admin/src/assets/images/CAATE_META_LOGO.png" alt="CAATE Logo" width="200" style="border-radius: 50%;"/>
+<p align="center">
+  <img src="admin/src/assets/images/CAATE_META_LOGO.png" alt="CAATE Logo" width="200" height="200" style="border-radius: 50%; object-fit: cover;"/>
+</p>
 
 ### Creative Aesthetic Academy & Technical Education Inc.
 
@@ -293,8 +295,6 @@
 CAATE-ITRMS/
 │
 ├── 📂 .git/                           # Git repository
-├── 📂 .qoder/                         # Qoder configuration
-│   └── skills/                        # Skills directory
 ├── 📂 .vscode/                        # VS Code settings
 │
 ├── 📂 admin/                          # Admin Dashboard Application
@@ -708,20 +708,6 @@ _Integrated Training & Resource Management System_
 <br>
 
 <sub>© 2026 CAATE-ITRMS. All Rights Reserved.</sub>
-
-<br><br>
-
-<a href="#">
-  <img src="https://img.shields.io/badge/⬆️_BACK_TO_TOP-4A90E2?style=for-the-badge&labelColor=2C3E50&logo=rocket&logoColor=white" alt="Back to Top"/>
-</a>
-
-<br><br>
-
-<sub>
-  <a href="https://github.com/Kuruzukel">GitHub</a> •
-  <a href="mailto:mikasaackerman.jme@gmail.com">Email</a> •
-  <a href="https://tesda.gov.ph">TESDA</a>
-</sub>
 
 <br><br>
 

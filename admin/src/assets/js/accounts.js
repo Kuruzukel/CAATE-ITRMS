@@ -527,6 +527,13 @@ async function saveNewTrainee() {
         return;
     }
 
+    // Validate ID (only numbers and special characters)
+    const idPattern = /^[0-9\-_@#$%&*]+$/;
+    if (!idPattern.test(id)) {
+        showError('ID should only contain numbers and special characters');
+        return;
+    }
+
     // Validate name fields (only letters and spaces)
     const namePattern = /^[A-Za-z\s]+$/;
     if (!namePattern.test(firstName)) {

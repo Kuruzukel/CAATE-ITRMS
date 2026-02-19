@@ -76,6 +76,23 @@
             z-index: 1050;
         }
 
+        /* Modal Width Adjustments */
+        #addTraineeModal .modal-dialog,
+        #editTraineeModal .modal-dialog,
+        #viewTraineeModal .modal-dialog {
+            max-width: 650px;
+        }
+
+        /* Input field spacing for modals */
+        #addTraineeModal .form-control,
+        #editTraineeModal .form-control,
+        #viewTraineeModal .form-control,
+        #addTraineeModal .form-select,
+        #editTraineeModal .form-select,
+        #viewTraineeModal .form-select {
+            padding: 0.625rem 1rem;
+        }
+
         /* Toast Notification Styles */
         .toast-container {
             position: fixed;
@@ -632,7 +649,7 @@
 
     <!-- Add Trainee Modal -->
     <div class="modal fade" id="addTraineeModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Add New Trainee</h5>
@@ -642,60 +659,70 @@
                     <form id="addTraineeForm">
                         <div class="mb-3">
                             <label for="addTraineeId" class="form-label">ID</label>
-                            <input type="text" id="addTraineeId" class="form-control" placeholder="Enter ID" required
-                                pattern="[A-Za-z0-9\-]+" title="Only letters, numbers, and hyphens allowed">
+                            <input type="text" id="addTraineeId" class="form-control"
+                                placeholder="Enter ID (numbers and special characters only)" required
+                                pattern="[0-9\-_@#$%&*!]+" title="Only numbers and special characters allowed"
+                                oninput="this.value = this.value.replace(/[A-Za-z]/g, '')">
                         </div>
-                        <div class="mb-3">
-                            <label for="addTraineeFirstName" class="form-label">First Name</label>
-                            <input type="text" id="addTraineeFirstName" class="form-control"
-                                placeholder="Enter first name" required pattern="[A-Za-z\s]+"
-                                title="Only letters and spaces allowed"
-                                oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')">
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="addTraineeFirstName" class="form-label">First Name</label>
+                                <input type="text" id="addTraineeFirstName" class="form-control"
+                                    placeholder="Enter first name" required pattern="[A-Za-z\s]+"
+                                    title="Only letters and spaces allowed"
+                                    oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="addTraineeMiddleName" class="form-label">Middle Name</label>
+                                <input type="text" id="addTraineeMiddleName" class="form-control"
+                                    placeholder="Enter middle name" pattern="[A-Za-z\s]*"
+                                    title="Only letters and spaces allowed"
+                                    oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="addTraineeLastName" class="form-label">Last Name</label>
+                                <input type="text" id="addTraineeLastName" class="form-control"
+                                    placeholder="Enter last name" required pattern="[A-Za-z\s]+"
+                                    title="Only letters and spaces allowed"
+                                    oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')">
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="addTraineeMiddleName" class="form-label">Middle Name</label>
-                            <input type="text" id="addTraineeMiddleName" class="form-control"
-                                placeholder="Enter middle name" pattern="[A-Za-z\s]*"
-                                title="Only letters and spaces allowed"
-                                oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="addTraineeEmail" class="form-label">Email Address</label>
+                                <input type="email" id="addTraineeEmail" class="form-control"
+                                    placeholder="Enter email address" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="addTraineePhone" class="form-label">Mobile Number</label>
+                                <input type="text" id="addTraineePhone" class="form-control"
+                                    placeholder="Enter mobile number" required pattern="[0-9]+"
+                                    title="Only numbers allowed"
+                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="addTraineeLastName" class="form-label">Last Name</label>
-                            <input type="text" id="addTraineeLastName" class="form-control"
-                                placeholder="Enter last name" required pattern="[A-Za-z\s]+"
-                                title="Only letters and spaces allowed"
-                                oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')">
-                        </div>
-                        <div class="mb-3">
-                            <label for="addTraineeEmail" class="form-label">Email Address</label>
-                            <input type="email" id="addTraineeEmail" class="form-control"
-                                placeholder="Enter email address" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="addTraineePhone" class="form-label">Mobile Number</label>
-                            <input type="text" id="addTraineePhone" class="form-control"
-                                placeholder="Enter mobile number" required pattern="[0-9]+" title="Only numbers allowed"
-                                oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-                        </div>
-                        <div class="mb-3">
-                            <label for="addTraineeStatus" class="form-label">Status</label>
-                            <select id="addTraineeStatus" class="form-select">
-                                <option value="pending">Pending</option>
-                                <option value="enrolled">Enrolled</option>
-                                <option value="completed">Completed</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="addTraineePassword" class="form-label">Password</label>
-                            <div class="position-relative">
-                                <input type="password" id="addTraineePassword" class="form-control"
-                                    placeholder="Enter password" style="padding-right: 40px;" required minlength="6">
-                                <button class="btn btn-link position-absolute top-50 end-0 translate-middle-y"
-                                    type="button" id="toggleAddPassword"
-                                    style="text-decoration: none; padding: 0 12px; z-index: 10;">
-                                    <i class="bx bx-hide" id="addPasswordIcon"
-                                        style="font-size: 1.2rem; color: #697a8d;"></i>
-                                </button>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="addTraineeStatus" class="form-label">Status</label>
+                                <select id="addTraineeStatus" class="form-select">
+                                    <option value="pending">Pending</option>
+                                    <option value="enrolled">Enrolled</option>
+                                    <option value="completed">Completed</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="addTraineePassword" class="form-label">Password</label>
+                                <div class="position-relative">
+                                    <input type="password" id="addTraineePassword" class="form-control"
+                                        placeholder="Enter password" style="padding-right: 40px;" required
+                                        minlength="6">
+                                    <button class="btn btn-link position-absolute top-50 end-0 translate-middle-y"
+                                        type="button" id="toggleAddPassword"
+                                        style="text-decoration: none; padding: 0 12px; z-index: 10;">
+                                        <i class="bx bx-hide" id="addPasswordIcon"
+                                            style="font-size: 1.2rem; color: #697a8d;"></i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </form>
@@ -710,7 +737,7 @@
 
     <!-- Edit Trainee Modal -->
     <div class="modal fade" id="editTraineeModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Trainee Details</h5>
@@ -745,39 +772,43 @@
                                     oninput="this.value = this.value.replace(/[^A-Za-z\s\-']/g, '')" required>
                             </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="editTraineeEmail" class="form-label">Email Address</label>
-                            <input type="email" id="editTraineeEmail" class="form-control"
-                                placeholder="Enter email address" required>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="editTraineeEmail" class="form-label">Email Address</label>
+                                <input type="email" id="editTraineeEmail" class="form-control"
+                                    placeholder="Enter email address" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="editTraineePhone" class="form-label">Mobile Number</label>
+                                <input type="text" id="editTraineePhone" class="form-control"
+                                    placeholder="Enter mobile number" pattern="[0-9]+" title="Only numbers allowed"
+                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="editTraineePhone" class="form-label">Mobile Number</label>
-                            <input type="text" id="editTraineePhone" class="form-control"
-                                placeholder="Enter mobile number" pattern="[0-9]+" title="Only numbers allowed"
-                                oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="editTraineeStatus" class="form-label">Status</label>
-                            <select id="editTraineeStatus" class="form-select">
-                                <option value="pending">Pending</option>
-                                <option value="enrolled">Enrolled</option>
-                                <option value="active">Active</option>
-                                <option value="completed">Completed</option>
-                                <option value="inactive">Inactive</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="editTraineePassword" class="form-label">Password (leave blank to keep
-                                current)</label>
-                            <div class="position-relative">
-                                <input type="password" id="editTraineePassword" class="form-control"
-                                    placeholder="Enter new password" style="padding-right: 40px;" minlength="6">
-                                <button class="btn btn-link position-absolute top-50 end-0 translate-middle-y"
-                                    type="button" id="toggleEditPassword"
-                                    style="text-decoration: none; padding: 0 12px; z-index: 10;">
-                                    <i class="bx bx-hide" id="editPasswordIcon"
-                                        style="font-size: 1.2rem; color: #697a8d;"></i>
-                                </button>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="editTraineeStatus" class="form-label">Status</label>
+                                <select id="editTraineeStatus" class="form-select">
+                                    <option value="pending">Pending</option>
+                                    <option value="enrolled">Enrolled</option>
+                                    <option value="active">Active</option>
+                                    <option value="completed">Completed</option>
+                                    <option value="inactive">Inactive</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="editTraineePassword" class="form-label">Password (leave blank to keep
+                                    current)</label>
+                                <div class="position-relative">
+                                    <input type="password" id="editTraineePassword" class="form-control"
+                                        placeholder="Enter new password" style="padding-right: 40px;" minlength="6">
+                                    <button class="btn btn-link position-absolute top-50 end-0 translate-middle-y"
+                                        type="button" id="toggleEditPassword"
+                                        style="text-decoration: none; padding: 0 12px; z-index: 10;">
+                                        <i class="bx bx-hide" id="editPasswordIcon"
+                                            style="font-size: 1.2rem; color: #697a8d;"></i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </form>
@@ -793,7 +824,7 @@
 
     <!-- View Trainee Modal -->
     <div class="modal fade" id="viewTraineeModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Trainee Details</h5>
@@ -808,20 +839,23 @@
                         <label class="form-label">Full Name</label>
                         <input type="text" class="form-control" id="viewTraineeName" value="Anna Cruz" disabled>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Email Address</label>
-                        <input type="email" class="form-control" id="viewTraineeEmail" value="anna.cruz@email.com"
-                            disabled>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Mobile Number</label>
-                        <input type="text" class="form-control" id="viewTraineePhone" value="+63 912 345 6789" disabled>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Email Address</label>
+                            <input type="email" class="form-control" id="viewTraineeEmail" value="anna.cruz@email.com"
+                                disabled>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Mobile Number</label>
+                            <input type="text" class="form-control" id="viewTraineePhone" value="+63 912 345 6789"
+                                disabled>
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Address</label>
                         <input type="text" class="form-control" id="viewTraineeAddress" value="" disabled>
                     </div>
-                    <div class="mb-3">is
+                    <div class="mb-3">
                         <label class="form-label">Status</label>
                         <input type="text" class="form-control" id="viewTraineeStatus" value="Enrolled" disabled>
                     </div>

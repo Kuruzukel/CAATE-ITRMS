@@ -243,6 +243,19 @@
 
 </div>
 
+### Backend Technologies
+
+<div align="center">
+
+| Technology                                                                                                  | Purpose                   | Version |
+| :---------------------------------------------------------------------------------------------------------- | :------------------------ | :-----: |
+| ![PHP](https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white)                | Server-side programming   |  7.4+   |
+| ![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white)    | NoSQL database            | Latest  |
+| ![Composer](https://img.shields.io/badge/Composer-885630?style=for-the-badge&logo=composer&logoColor=white) | PHP dependency management | Latest  |
+| ![REST API](https://img.shields.io/badge/REST_API-009688?style=for-the-badge&logo=fastapi&logoColor=white)  | RESTful API architecture  |    -    |
+
+</div>
+
 ### Build & Development Tools
 
 <div align="center">
@@ -286,9 +299,7 @@ CAATE-ITRMS/
 │   ├── 📂 config/
 │   │   └── gulpfile.js                # Gulp build configuration
 │   ├── 📂 docs/
-│   │   ├── MIGRATION_GUIDE.md         # Migration documentation
-│   │   ├── QUICK_START.md             # Quick start guide
-│   │   └── STRUCTURE.md               # Detailed structure docs
+│   │   └── MIGRATION_GUIDE.md         # Migration documentation
 │   ├── 📂 public/                     # Static files
 │   ├── 📂 src/
 │   │   ├── 📂 assets/
@@ -303,15 +314,12 @@ CAATE-ITRMS/
 │   ├── .gitignore
 │   ├── build-config.js                # Build configuration
 │   ├── gulpfile.js                    # Main Gulp file
-│   ├── INDEX.md                       # Index documentation
-│   ├── MIGRATION_SUMMARY.md           # Migration summary
 │   ├── package.json                   # Dependencies & scripts
 │   ├── README.md                      # Admin documentation
 │   └── webpack.config.js              # Webpack configuration
 │
 ├── 📂 auth/                           # Authentication System
 │   ├── 📂 docs/
-│   │   └── STRUCTURE.md               # Structure documentation
 │   ├── 📂 public/                     # Static files
 │   ├── 📂 src/
 │   │   ├── 📂 assets/
@@ -329,10 +337,41 @@ CAATE-ITRMS/
 │   ├── package.json                   # Dependencies & scripts
 │   └── README.md                      # Auth documentation
 │
+├── 📂 backend/                        # Backend API (PHP + MongoDB)
+│   ├── 📂 app/
+│   │   ├── 📂 config/                 # Configuration files
+│   │   │   └── database.php           # MongoDB connection
+│   │   ├── 📂 controllers/            # API controllers
+│   │   │   ├── AuthController.php     # Authentication logic
+│   │   │   ├── TraineeController.php  # Trainee management
+│   │   │   └── UserController.php     # User management
+│   │   ├── 📂 helpers/                # Helper functions
+│   │   ├── 📂 middleware/             # Middleware
+│   │   └── 📂 models/                 # Data models
+│   │       ├── Trainee.php            # Trainee model
+│   │       └── User.php               # User model
+│   ├── 📂 database/
+│   │   └── 📂 seeders/                # Database seeders
+│   ├── 📂 public/                     # Public entry point
+│   │   ├── .htaccess                  # Apache configuration
+│   │   ├── api-data.php               # API data viewer
+│   │   ├── index.php                  # Main entry point
+│   │   └── view-data.php              # Data viewer
+│   ├── 📂 routes/
+│   │   └── api.php                    # API routes
+│   ├── 📂 storage/
+│   │   └── 📂 logs/                   # Application logs
+│   ├── 📂 tests/                      # Unit tests
+│   ├── 📂 vendor/                     # Composer dependencies
+│   ├── .env.example                   # Environment template
+│   ├── .htaccess                      # Root Apache config
+│   ├── composer.json                  # PHP dependencies
+│   ├── composer.lock                  # Dependency lock file
+│   └── README.md                      # Backend documentation
+│
 ├── 📂 public/                         # Landing Page Website
 │   ├── 📂 dist/                       # Built files
 │   ├── 📂 docs/
-│   │   └── STRUCTURE.md               # Structure documentation
 │   ├── 📂 src/
 │   │   ├── 📂 assets/
 │   │   │   ├── 📂 css/                # 11 CSS files
@@ -407,6 +446,14 @@ Student dashboard for course management and profile administration.
 
 [📖 Full Documentation](trainee/README.md)
 
+### 5. Backend API
+
+RESTful API built with PHP and MongoDB for data management.
+
+**Technology:** PHP 7.4+ | **Database:** MongoDB | **Architecture:** REST API | **Features:** User Authentication, Trainee Management, CRUD Operations, Statistics API
+
+[📖 Full Documentation](backend/README.md)
+
 ---
 
 ## Getting Started
@@ -414,13 +461,22 @@ Student dashboard for course management and profile administration.
 ### Prerequisites
 
 ```bash
-# Required
+# Frontend Requirements
 - Node.js v14 or higher
 - npm v6 or higher (or yarn)
 - Git
+
+# Backend Requirements
+- PHP 7.4 or higher
+- MongoDB 4.0 or higher
+- Composer
+- Apache/Nginx web server
+- MongoDB PHP Extension
 ```
 
 ### Installation
+
+#### Frontend Applications (Admin, Auth, Public, Trainee)
 
 ```bash
 # 1. Clone the repository
@@ -440,7 +496,30 @@ npm run dev
 npm run build
 ```
 
+#### Backend API Setup
+
+```bash
+# 1. Navigate to backend directory
+cd backend
+
+# 2. Install PHP dependencies
+composer install
+
+# 3. Configure environment
+cp .env.example .env
+# Edit .env file with your MongoDB credentials
+
+# 4. Start MongoDB service
+# Windows: net start MongoDB
+# Linux/Mac: sudo systemctl start mongod
+
+# 5. Access the API
+# http://localhost/CAATE-ITRMS/backend/public/api/v1/
+```
+
 ### Quick Start Commands
+
+#### Frontend
 
 ```bash
 # Development
@@ -454,6 +533,19 @@ npm run build:prod   # Production build with optimization
 # Utilities
 npm run clean        # Clean build artifacts
 npm run lint         # Run linter (if configured)
+```
+
+#### Backend
+
+```bash
+# View API health
+GET /api/v1/health
+
+# View database data
+http://localhost/CAATE-ITRMS/backend/public/view-data.php
+
+# View JSON API data
+http://localhost/CAATE-ITRMS/backend/public/api-data.php
 ```
 
 ---
@@ -542,14 +634,16 @@ npm run watch
 
 ## Project Statistics
 
-| Metric                  | Count              |
-| ----------------------- | ------------------ |
-| **Total Pages**         | 46 HTML pages      |
-| **Applications**        | 4 independent apps |
-| **CSS Files**           | 45+ stylesheets    |
-| **JavaScript Files**    | 57+ scripts        |
-| **Shared Assets**       | 46 files           |
-| **Documentation Files** | 10 README/MD files |
+| Metric                  | Count                |
+| ----------------------- | -------------------- |
+| **Total Pages**         | 46 HTML pages        |
+| **Applications**        | 5 (4 frontend + API) |
+| **CSS Files**           | 45+ stylesheets      |
+| **JavaScript Files**    | 57+ scripts          |
+| **PHP Files**           | 10+ backend files    |
+| **Shared Assets**       | 46 files             |
+| **Documentation Files** | 6 README files       |
+| **Database**            | MongoDB (NoSQL)      |
 
 ---
 

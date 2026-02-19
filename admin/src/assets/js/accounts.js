@@ -72,38 +72,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
-
-    // Populate Edit Trainee Modal with data
-    const editTraineeModal = document.getElementById('editTraineeModal');
-    if (editTraineeModal) {
-        editTraineeModal.addEventListener('show.bs.modal', function (event) {
-            // Button that triggered the modal
-            const button = event.relatedTarget;
-
-            // Get the closest table row
-            const row = button.closest('tr');
-
-            if (row) {
-                // Extract data from the row
-                const id = row.querySelector('td:nth-child(1) strong').textContent;
-                const name = row.querySelector('td:nth-child(2) strong').textContent;
-                const email = row.querySelector('td:nth-child(3)').textContent;
-                const phone = row.querySelector('td:nth-child(4)').textContent;
-                const statusBadge = row.querySelector('td:nth-child(5) .badge');
-                const status = statusBadge ? statusBadge.textContent : '';
-
-                // Populate the modal fields
-                document.getElementById('editTraineeId').value = id;
-                document.getElementById('editTraineeName').value = name;
-                document.getElementById('editTraineeEmail').value = email;
-                document.getElementById('editTraineePhone').value = phone;
-                document.getElementById('editTraineeStatus').value = status;
-
-                // Set a default password or leave empty for security
-                document.getElementById('editTraineePassword').value = '';
-            }
-        });
-    }
 });
 
 
@@ -191,7 +159,13 @@ function renderTrainees(trainees) {
 function createTraineeRow(trainee, index) {
     const tr = document.createElement('tr');
 
-    const fullName = `${trainee.first_name} ${trainee.last_name}`;
+    // Build full name with middle name if available
+    let fullName = trainee.first_name;
+    if (trainee.middle_name) {
+        fullName += ' ' + trainee.middle_name;
+    }
+    fullName += ' ' + trainee.last_name;
+
     const initials = `${trainee.first_name.charAt(0)}${trainee.last_name.charAt(0)}`;
     const statusBadge = getStatusBadge(trainee.status);
     const avatarColor = getAvatarColor(index);
@@ -299,8 +273,15 @@ function viewTrainee(id) {
     const trainee = traineesData.find(t => t._id === id);
     if (!trainee) return;
 
+    // Build full name with middle name if available
+    let fullName = trainee.first_name;
+    if (trainee.middle_name) {
+        fullName += ' ' + trainee.middle_name;
+    }
+    fullName += ' ' + trainee.last_name;
+
     // Populate view modal
-    document.getElementById('viewTraineeName').value = `${trainee.first_name} ${trainee.last_name}`;
+    document.getElementById('viewTraineeName').value = fullName;
     document.getElementById('viewTraineeEmail').value = trainee.email;
     document.getElementById('viewTraineePhone').value = trainee.phone;
     document.getElementById('viewTraineeAddress').value = trainee.address || '';
@@ -316,12 +297,15 @@ function editTrainee(id) {
     const trainee = traineesData.find(t => t._id === id);
     if (!trainee) return;
 
-    // Populate edit modal
+    // Populate edit modal with separate name fields
     document.getElementById('editTraineeId').value = trainee._id;
-    document.getElementById('editTraineeName').value = `${trainee.first_name} ${trainee.last_name}`;
+    document.getElementById('editTraineeFirstName').value = trainee.first_name || '';
+    document.getElementById('editTraineeMiddleName').value = trainee.middle_name || '';
+    document.getElementById('editTraineeLastName').value = trainee.last_name || '';
     document.getElementById('editTraineeEmail').value = trainee.email;
     document.getElementById('editTraineePhone').value = trainee.phone;
     document.getElementById('editTraineeStatus').value = trainee.status || 'pending';
+    document.getElementById('editTraineePassword').value = ''; // Clear password field
 
     // Show modal
     const modal = new bootstrap.Modal(document.getElementById('editTraineeModal'));
@@ -372,41 +356,126 @@ async function confirmDeleteTrainee() {
 
 // Show success message
 function showSuccess(message) {
-    alert(message); // Replace with better notification system
+    showToast(message, 'success');
 }
 
 // Show error message
 function showError(message) {
-    alert(message); // Replace with better notification system
+    showToast(message, 'error');
+}
+
+// Show toast notification
+function showToast(message, type = 'success') {
+    const container = document.getElementById('toastContainer');
+    if (!container) return;
+
+    const toast = document.createElement('div');
+    toast.className = `toast-notification ${type}`;
+
+    const icon = type === 'success' ? 'bx-check-circle' :
+        type === 'error' ? 'bx-error-circle' :
+            type === 'warning' ? 'bx-error' : 'bx-info-circle';
+
+    const title = type === 'success' ? 'Success' :
+        type === 'error' ? 'Error' :
+            type === 'warning' ? 'Warning' : 'Info';
+
+    toast.innerHTML = `
+        <i class="bx ${icon} toast-icon"></i>
+        <div class="toast-content">
+            <div class="toast-title">${title}</div>
+            <div class="toast-message">${message}</div>
+        </div>
+        <button class="toast-close" onclick="closeToast(this)">
+            <i class="bx bx-x"></i>
+        </button>
+    `;
+
+    container.appendChild(toast);
+
+    // Auto remove after 4 seconds
+    setTimeout(() => {
+        closeToast(toast.querySelector('.toast-close'));
+    }, 4000);
+}
+
+// Close toast notification
+function closeToast(button) {
+    const toast = button.closest('.toast-notification');
+    if (toast) {
+        toast.classList.add('hiding');
+        setTimeout(() => {
+            toast.remove();
+        }, 300);
+    }
 }
 
 
 // Save edited trainee
 async function saveEditTrainee() {
     const id = document.getElementById('editTraineeId').value;
-    const fullName = document.getElementById('editTraineeName').value;
-    const email = document.getElementById('editTraineeEmail').value;
-    const phone = document.getElementById('editTraineePhone').value;
+    const firstName = document.getElementById('editTraineeFirstName').value.trim();
+    const middleName = document.getElementById('editTraineeMiddleName').value.trim();
+    const lastName = document.getElementById('editTraineeLastName').value.trim();
+    const email = document.getElementById('editTraineeEmail').value.trim();
+    const phone = document.getElementById('editTraineePhone').value.trim();
     const status = document.getElementById('editTraineeStatus').value;
-
-    // Split full name into first and last name
-    const nameParts = fullName.trim().split(' ');
-    const firstName = nameParts[0] || '';
-    const lastName = nameParts.slice(1).join(' ') || '';
+    const password = document.getElementById('editTraineePassword').value;
 
     // Validate required fields
-    if (!firstName || !email || !phone) {
+    if (!firstName || !lastName || !email || !phone) {
         showError('Please fill in all required fields');
+        return;
+    }
+
+    // Validate name fields (only letters and spaces)
+    const namePattern = /^[A-Za-z\s\-']+$/;
+    if (!namePattern.test(firstName)) {
+        showError('First name should only contain letters, spaces, hyphens, and apostrophes');
+        return;
+    }
+    if (middleName && !namePattern.test(middleName)) {
+        showError('Middle name should only contain letters, spaces, hyphens, and apostrophes');
+        return;
+    }
+    if (!namePattern.test(lastName)) {
+        showError('Last name should only contain letters, spaces, hyphens, and apostrophes');
+        return;
+    }
+
+    // Validate phone (only numbers)
+    const phonePattern = /^[0-9]+$/;
+    if (!phonePattern.test(phone)) {
+        showError('Mobile number should only contain numbers');
+        return;
+    }
+
+    // Validate email format
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) {
+        showError('Please enter a valid email address');
+        return;
+    }
+
+    // Validate password length if provided
+    if (password && password.length < 6) {
+        showError('Password must be at least 6 characters long');
         return;
     }
 
     const updateData = {
         first_name: firstName,
+        middle_name: middleName,
         last_name: lastName,
         email: email,
         phone: phone,
         status: status.toLowerCase()
     };
+
+    // Only include password if it was changed
+    if (password) {
+        updateData.password = password;
+    }
 
     try {
         const response = await fetch(`${API_BASE_URL}/trainees/${id}`, {
@@ -436,4 +505,133 @@ async function saveEditTrainee() {
         console.error('Error updating trainee:', error);
         showError('Error connecting to server');
     }
+}
+
+
+// Save new trainee
+async function saveNewTrainee() {
+    const id = document.getElementById('addTraineeId').value.trim();
+    const firstName = document.getElementById('addTraineeFirstName').value.trim();
+    const middleName = document.getElementById('addTraineeMiddleName').value.trim();
+    const lastName = document.getElementById('addTraineeLastName').value.trim();
+    const email = document.getElementById('addTraineeEmail').value.trim();
+    const phone = document.getElementById('addTraineePhone').value.trim();
+    const status = document.getElementById('addTraineeStatus').value;
+    const password = document.getElementById('addTraineePassword').value;
+
+    // Validate required fields
+    if (!id || !firstName || !lastName || !email || !phone || !password) {
+        showError('Please fill in all required fields');
+        return;
+    }
+
+    // Validate name fields (only letters and spaces)
+    const namePattern = /^[A-Za-z\s]+$/;
+    if (!namePattern.test(firstName)) {
+        showError('First name should only contain letters and spaces');
+        return;
+    }
+    if (middleName && !namePattern.test(middleName)) {
+        showError('Middle name should only contain letters and spaces');
+        return;
+    }
+    if (!namePattern.test(lastName)) {
+        showError('Last name should only contain letters and spaces');
+        return;
+    }
+
+    // Validate phone (only numbers)
+    const phonePattern = /^[0-9]+$/;
+    if (!phonePattern.test(phone)) {
+        showError('Mobile number should only contain numbers');
+        return;
+    }
+
+    // Validate email format
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) {
+        showError('Please enter a valid email address');
+        return;
+    }
+
+    // Validate password length
+    if (password.length < 6) {
+        showError('Password must be at least 6 characters long');
+        return;
+    }
+
+    const newTraineeData = {
+        trainee_id: id,
+        first_name: firstName,
+        middle_name: middleName,
+        last_name: lastName,
+        email: email,
+        phone: phone,
+        status: status.toLowerCase(),
+        password: password
+    };
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/trainees`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newTraineeData)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            showSuccess('Trainee added successfully');
+
+            // Close modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('addTraineeModal'));
+            modal.hide();
+
+            // Clear form
+            document.getElementById('addTraineeForm').reset();
+
+            // Reload trainees and statistics
+            loadTrainees();
+            loadStatistics();
+        } else {
+            showError(result.error || 'Failed to add trainee');
+        }
+    } catch (error) {
+        console.error('Error adding trainee:', error);
+        showError('Error connecting to server');
+    }
+}
+
+
+// Toast notification function
+function showToast(message, type = 'success') {
+    const toastContainer = document.getElementById('toastContainer');
+    if (!toastContainer) return;
+
+    const toast = document.createElement('div');
+    toast.className = `toast-notification ${type}`;
+
+    const icon = type === 'success' ? 'bx-check-circle' : 'bx-error-circle';
+    const title = type === 'success' ? 'Success' : 'Error';
+
+    toast.innerHTML = `
+        <i class="bx ${icon} toast-icon"></i>
+        <div class="toast-content">
+            <div class="toast-title">${title}</div>
+            <div class="toast-message">${message}</div>
+        </div>
+        <button class="toast-close" onclick="this.parentElement.remove()">
+            <i class="bx bx-x"></i>
+        </button>
+    `;
+
+    toastContainer.appendChild(toast);
+
+    // Auto remove after 4 seconds
+    setTimeout(() => {
+        toast.style.animation = 'slideOut 0.3s ease-out';
+        setTimeout(() => toast.remove(), 300);
+    }, 4000);
 }

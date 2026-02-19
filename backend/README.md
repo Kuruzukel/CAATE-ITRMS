@@ -107,13 +107,33 @@ extension=mongodb
 php database/seeders/InitializeCollections.php
 ```
 
-6. (Optional) Seed sample data:
+6. Seed comprehensive sample data:
 
 ```bash
-php database/seeders/SampleData.php
+php database/seeders/ComprehensiveSampleData.php
 ```
 
-7. Access the API at: `http://localhost/backend/public/`
+7. Access the backend:
+   - Main page: `http://localhost/backend/public/`
+   - View data: `http://localhost/backend/public/view-data.php`
+   - JSON API: `http://localhost/backend/public/api-data.php`
+
+## Sample Data
+
+The database includes:
+
+- 3 Users (Admin, Staff, Instructor)
+- 5 Courses (Nail Care, Skin Care, Aesthetic Services, Permanent Makeup, Advanced Skin Care)
+- 5 Active Trainees
+- 5 Enrollments
+- 5 Inventory Items
+- 3 Applications
+- 2 Graduates
+
+### Sample Login Credentials
+
+- **Email:** admin@caate.edu
+- **Password:** admin123
 
 ## API Endpoints
 

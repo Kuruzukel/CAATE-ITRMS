@@ -376,16 +376,11 @@ function showToast(message, type = 'success') {
         type === 'error' ? 'bx-error' :
             type === 'warning' ? 'bx-error' : 'bx-info-circle';
 
-    const title = type === 'success' ? 'Success' :
-        type === 'error' ? 'API Response' :
-            type === 'warning' ? 'Warning' : 'Info';
-
     toast.innerHTML = `
         <div class="toast-icon-wrapper">
             <i class="bx ${icon} toast-icon"></i>
         </div>
         <div class="toast-content">
-            <div class="toast-title">${title}</div>
             <div class="toast-message">${message}</div>
         </div>
         <button class="toast-close" onclick="closeToast(this)">
@@ -415,6 +410,13 @@ function closeToast(button) {
 
 // Save edited trainee
 async function saveEditTrainee() {
+    const submitBtn = document.querySelector('#editTraineeModal .btn-primary');
+    const originalBtnText = submitBtn.innerHTML;
+
+    // Disable button and show loading state
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Saving...';
+
     const id = document.getElementById('editTraineeId').value;
     const firstName = document.getElementById('editTraineeFirstName').value.trim();
     const middleName = document.getElementById('editTraineeMiddleName').value.trim();
@@ -427,6 +429,8 @@ async function saveEditTrainee() {
     // Validate required fields
     if (!firstName || !lastName || !email || !phone) {
         showError('Please fill in all required fields');
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnText;
         return;
     }
 
@@ -434,14 +438,20 @@ async function saveEditTrainee() {
     const namePattern = /^[A-Za-z\s\-']+$/;
     if (!namePattern.test(firstName)) {
         showError('First name should only contain letters, spaces, hyphens, and apostrophes');
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnText;
         return;
     }
     if (middleName && !namePattern.test(middleName)) {
         showError('Middle name should only contain letters, spaces, hyphens, and apostrophes');
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnText;
         return;
     }
     if (!namePattern.test(lastName)) {
         showError('Last name should only contain letters, spaces, hyphens, and apostrophes');
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnText;
         return;
     }
 
@@ -449,6 +459,8 @@ async function saveEditTrainee() {
     const phonePattern = /^[0-9]+$/;
     if (!phonePattern.test(phone)) {
         showError('Mobile number should only contain numbers');
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnText;
         return;
     }
 
@@ -456,12 +468,16 @@ async function saveEditTrainee() {
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailPattern.test(email)) {
         showError('Please enter a valid email address');
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnText;
         return;
     }
 
     // Validate password length if provided
     if (password && password.length < 6) {
         showError('Password must be at least 6 characters long');
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnText;
         return;
     }
 
@@ -500,18 +516,34 @@ async function saveEditTrainee() {
             // Reload trainees and statistics
             loadTrainees();
             loadStatistics();
+
+            // Reset button state
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnText;
         } else {
             showError(result.error || 'Failed to update trainee');
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnText;
         }
     } catch (error) {
         console.error('Error updating trainee:', error);
         showError('Error connecting to server');
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnText;
     }
 }
 
 
 // Save new trainee
 async function saveNewTrainee() {
+    // Get the button element
+    const addButton = document.querySelector('#addTraineeModal .btn-primary');
+    const originalText = addButton.innerHTML;
+
+    // Disable button and show loading state
+    addButton.disabled = true;
+    addButton.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Adding...';
+
     const id = document.getElementById('addTraineeId').value.trim();
     const firstName = document.getElementById('addTraineeFirstName').value.trim();
     const middleName = document.getElementById('addTraineeMiddleName').value.trim();
@@ -524,13 +556,17 @@ async function saveNewTrainee() {
     // Validate required fields
     if (!id || !firstName || !lastName || !email || !phone || !password) {
         showError('Please fill in all required fields');
+        addButton.disabled = false;
+        addButton.innerHTML = originalText;
         return;
     }
 
     // Validate ID (only numbers and special characters)
-    const idPattern = /^[0-9\-_@#$%&*]+$/;
+    const idPattern = /^[0-9\-_@#$%&*!]+$/;
     if (!idPattern.test(id)) {
         showError('ID should only contain numbers and special characters');
+        addButton.disabled = false;
+        addButton.innerHTML = originalText;
         return;
     }
 
@@ -538,14 +574,20 @@ async function saveNewTrainee() {
     const namePattern = /^[A-Za-z\s]+$/;
     if (!namePattern.test(firstName)) {
         showError('First name should only contain letters and spaces');
+        addButton.disabled = false;
+        addButton.innerHTML = originalText;
         return;
     }
     if (middleName && !namePattern.test(middleName)) {
         showError('Middle name should only contain letters and spaces');
+        addButton.disabled = false;
+        addButton.innerHTML = originalText;
         return;
     }
     if (!namePattern.test(lastName)) {
         showError('Last name should only contain letters and spaces');
+        addButton.disabled = false;
+        addButton.innerHTML = originalText;
         return;
     }
 
@@ -553,6 +595,8 @@ async function saveNewTrainee() {
     const phonePattern = /^[0-9]+$/;
     if (!phonePattern.test(phone)) {
         showError('Mobile number should only contain numbers');
+        addButton.disabled = false;
+        addButton.innerHTML = originalText;
         return;
     }
 
@@ -560,12 +604,16 @@ async function saveNewTrainee() {
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailPattern.test(email)) {
         showError('Please enter a valid email address');
+        addButton.disabled = false;
+        addButton.innerHTML = originalText;
         return;
     }
 
     // Validate password length
     if (password.length < 6) {
         showError('Password must be at least 6 characters long');
+        addButton.disabled = false;
+        addButton.innerHTML = originalText;
         return;
     }
 
@@ -604,12 +652,20 @@ async function saveNewTrainee() {
             // Reload trainees and statistics
             loadTrainees();
             loadStatistics();
+
+            // Reset button state
+            addButton.disabled = false;
+            addButton.innerHTML = originalText;
         } else {
             showError(result.error || 'Failed to add trainee');
+            addButton.disabled = false;
+            addButton.innerHTML = originalText;
         }
     } catch (error) {
         console.error('Error adding trainee:', error);
         showError('Error connecting to server');
+        addButton.disabled = false;
+        addButton.innerHTML = originalText;
     }
 }
 
@@ -623,14 +679,12 @@ function showToast(message, type = 'success') {
     toast.className = `toast-notification ${type}`;
 
     const icon = type === 'success' ? 'bx-check-circle' : 'bx-error';
-    const title = type === 'success' ? 'Success' : 'API Response';
 
     toast.innerHTML = `
         <div class="toast-icon-wrapper">
             <i class="bx ${icon} toast-icon"></i>
         </div>
         <div class="toast-content">
-            <div class="toast-title">${title}</div>
             <div class="toast-message">${message}</div>
         </div>
         <button class="toast-close" onclick="closeToast(this)">

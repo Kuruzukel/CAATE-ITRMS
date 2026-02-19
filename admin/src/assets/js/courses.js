@@ -71,69 +71,70 @@ document.addEventListener('DOMContentLoaded', function () {
                 resetEditImagePreview();
             }
         }
-
-        // Handle enrollment status change - show confirmation modal
-        if (e.target.closest('.status-option')) {
-            e.preventDefault();
-            const statusLink = e.target.closest('.status-option');
-            const newStatus = statusLink.dataset.status;
-            const dropdownBtn = statusLink.closest('.dropdown').querySelector('.enrollment-status-btn');
-            const courseId = dropdownBtn.dataset.id;
-
-            // Find course title from the card
-            const card = dropdownBtn.closest('.card');
-            const courseTitle = card.querySelector('.card-title').textContent;
-
-            // Set confirmation modal content
-            const confirmBadge = document.getElementById('confirmStatusBadge');
-            const confirmCourseName = document.getElementById('confirmCourseName');
-
-            confirmBadge.textContent = newStatus;
-            confirmBadge.className = 'badge fs-6 px-3 py-2';
-
-            if (newStatus === 'Open Enrollment') {
-                confirmBadge.classList.add('bg-success');
-            } else if (newStatus === 'Closed') {
-                confirmBadge.classList.add('bg-danger');
-            } else {
-                confirmBadge.classList.add('bg-secondary');
-            }
-
-            confirmCourseName.textContent = courseTitle;
-
-            // Store data for confirmation
-            const confirmBtn = document.getElementById('confirmStatusChangeBtn');
-            confirmBtn.dataset.courseId = courseId;
-            confirmBtn.dataset.newStatus = newStatus;
-            confirmBtn.dataset.buttonElement = dropdownBtn.id || `btn-${courseId}`;
-
-            // Assign unique ID to button if it doesn't have one
-            if (!dropdownBtn.id) {
-                dropdownBtn.id = `btn-${courseId}`;
-            }
-
-            // Show confirmation modal
-            const modal = new bootstrap.Modal(document.getElementById('enrollmentStatusModal'));
-            modal.show();
-        }
     });
+
 
     // Handle confirmation button click
     document.getElementById('confirmStatusChangeBtn').addEventListener('click', async function () {
-        const courseId = this.dataset.courseId;
-        const newStatus = this.dataset.newStatus;
-        const buttonElementId = this.dataset.buttonElement;
-        const buttonElement = document.getElementById(buttonElementId);
+        if (!pendingStatusChange) return;
 
-        // Close confirmation modal
-        const modal = bootstrap.Modal.getInstance(document.getElementById('enrollmentStatusModal'));
-        modal.hide();
+        // Get current enrollment status from the button
+        const currentStatus = pendingStatusChange.buttonElement.dataset.status;
+        const newStatus = pendingStatusChange.newStatus;
 
-        // Update enrollment status
-        if (buttonElement) {
-            await updateEnrollmentStatus(courseId, newStatus, buttonElement);
+        // Check if status is actually changing
+        if (currentStatus === newStatus) {
+            // Close modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('enrollmentStatusModal'));
+            if (modal) {
+                modal.hide();
+            }
+
+            // Clean up any leftover backdrops
+            setTimeout(() => {
+                const backdrops = document.querySelectorAll('.modal-backdrop');
+                backdrops.forEach(backdrop => backdrop.remove());
+                document.body.classList.remove('modal-open');
+                document.body.style.overflow = '';
+                document.body.style.paddingRight = '';
+            }, 300);
+
+            // Show info toast
+            showToast('Enrollment status is already set to "' + newStatus + '"', 'info');
+            pendingStatusChange = null;
+            return;
         }
+
+        // Move focus to body BEFORE hiding modal to prevent aria-hidden warning
+        document.body.focus();
+        this.blur();
+
+        // Close confirmation modal properly
+        const modal = bootstrap.Modal.getInstance(document.getElementById('enrollmentStatusModal'));
+        if (modal) {
+            modal.hide();
+        }
+
+        // Clean up any leftover backdrops
+        setTimeout(() => {
+            const backdrops = document.querySelectorAll('.modal-backdrop');
+            backdrops.forEach(backdrop => backdrop.remove());
+            document.body.classList.remove('modal-open');
+            document.body.style.overflow = '';
+            document.body.style.paddingRight = '';
+        }, 300);
+
+        // Update enrollment status (moved outside setTimeout)
+        await updateEnrollmentStatus(
+            pendingStatusChange.courseId,
+            pendingStatusChange.newStatus,
+            pendingStatusChange.buttonElement
+        );
+
+        // Clear pending change
+        pendingStatusChange = null;
     });
+
 
     // Save changes
     document.getElementById('saveCourseBtn').addEventListener('click', async function () {
@@ -147,6 +148,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (!badge || !title || !description || !hours) {
             showToast('Please fill in all required fields', 'error');
+            return;
+        }
+
+        // Check if anything has changed (convert to strings for comparison)
+        const hasTextChanges =
+            badge !== String(originalCourseData.badge) ||
+            title !== String(originalCourseData.title) ||
+            description !== String(originalCourseData.description) ||
+            hours !== String(originalCourseData.hours);
+
+        const hasImageChange = editImageFile !== null;
+
+        if (!hasTextChanges && !hasImageChange) {
+            showToast('No changes were made to the course', 'info');
             return;
         }
 
@@ -206,36 +221,6 @@ document.addEventListener('DOMContentLoaded', function () {
             const modal = new bootstrap.Modal(document.getElementById('enrollmentStatusModal'));
             modal.show();
         }
-    });
-
-    // Confirm status change
-    document.getElementById('confirmStatusChangeBtn').addEventListener('click', async function () {
-        if (!pendingStatusChange) return;
-
-        // Close confirmation modal properly
-        const modal = bootstrap.Modal.getInstance(document.getElementById('enrollmentStatusModal'));
-        if (modal) {
-            modal.hide();
-        }
-
-        // Clean up any leftover backdrops
-        setTimeout(() => {
-            const backdrops = document.querySelectorAll('.modal-backdrop');
-            backdrops.forEach(backdrop => backdrop.remove());
-            document.body.classList.remove('modal-open');
-            document.body.style.overflow = '';
-            document.body.style.paddingRight = '';
-        }, 300);
-
-        // Update enrollment status
-        await updateEnrollmentStatus(
-            pendingStatusChange.courseId,
-            pendingStatusChange.newStatus,
-            pendingStatusChange.buttonElement
-        );
-
-        // Clear pending change
-        pendingStatusChange = null;
     });
 
     // Handle cancel button click on enrollment status modal

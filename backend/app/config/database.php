@@ -1,5 +1,18 @@
 <?php
 
+// Load Composer autoloader if it exists
+$autoloadPaths = [
+    __DIR__ . '/../../../vendor/autoload.php',  // Project root
+    __DIR__ . '/../../vendor/autoload.php',      // Backend folder
+];
+
+foreach ($autoloadPaths as $autoloadPath) {
+    if (file_exists($autoloadPath)) {
+        require_once $autoloadPath;
+        break;
+    }
+}
+
 // MongoDB Configuration
 define('DB_HOST', getenv('DB_HOST') ?: '127.0.0.1');
 define('DB_PORT', getenv('DB_PORT') ?: 27017);

@@ -7,10 +7,14 @@ const API_BASE_URL = 'http://localhost/CAATE-ITRMS/backend/public/api/v1';
 let courses = [];
 let currentCourseId = null;
 let currentCourseCard = null;
+let editImageFile = null;
 
 document.addEventListener('DOMContentLoaded', function () {
     // Load courses from database
     loadCourses();
+
+    // Initialize image upload functionality for edit modal
+    initializeEditImageUpload();
 
     // When edit button is clicked, populate modal with course data
     document.addEventListener('click', function (e) {
@@ -23,7 +27,14 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('editCourseTitle').value = btn.dataset.title;
             document.getElementById('editCourseDescription').value = btn.dataset.description;
             document.getElementById('editCourseHours').value = btn.dataset.hours;
-            document.getElementById('editCourseImage').value = btn.dataset.image;
+
+            // Load existing image if available
+            const imageUrl = btn.dataset.image;
+            if (imageUrl && imageUrl !== '') {
+                loadExistingImage(imageUrl);
+            } else {
+                resetEditImagePreview();
+            }
         }
     });
 
@@ -35,42 +46,67 @@ document.addEventListener('DOMContentLoaded', function () {
             badge: document.getElementById('editCourseBadge').value,
             title: document.getElementById('editCourseTitle').value,
             description: document.getElementById('editCourseDescription').value,
-            hours: document.getElementById('editCourseHours').value,
-            image: document.getElementById('editCourseImage').value
+            hours: document.getElementById('editCourseHours').value
         };
 
-        try {
-            const response = await fetch(`${API_BASE_URL}/courses/${currentCourseId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(courseData)
-            });
-
-            const result = await response.json();
-
-            if (result.success) {
-                // Reload courses to reflect changes
-                await loadCourses();
-
-                // Close modal
-                const modal = bootstrap.Modal.getInstance(document.getElementById('editCourseModal'));
-                modal.hide();
-
-                // Show success toast notification
-                showToast('Course updated successfully!', 'success');
+        // If a new image file was uploaded, convert to base64
+        if (editImageFile) {
+            const reader = new FileReader();
+            reader.onload = async function (e) {
+                courseData.image = e.target.result;
+                await updateCourse(courseData);
+            };
+            reader.readAsDataURL(editImageFile);
+        } else {
+            // Keep existing image URL
+            const imagePreview = document.getElementById('editImagePreview');
+            if (imagePreview.src && imagePreview.style.display !== 'none') {
+                courseData.image = imagePreview.src;
             } else {
-                showToast(result.error || 'Failed to update course', 'error');
+                courseData.image = '';
             }
-        } catch (error) {
-            console.error('Error updating course:', error);
-            showToast('Error updating course. Please try again.', 'error');
+            await updateCourse(courseData);
         }
     });
 
     // Menu toggle is handled by main.js - no need to duplicate here
 });
+
+// Update course function
+async function updateCourse(courseData) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/courses/${currentCourseId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(courseData)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            // Reload courses to reflect changes
+            await loadCourses();
+
+            // Close modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('editCourseModal'));
+            modal.hide();
+
+            // Reset image state
+            editImageFile = null;
+            resetEditImagePreview();
+
+            // Show success toast notification
+            showToast('Course updated successfully!', 'success');
+        } else {
+            showToast(result.error || 'Failed to update course', 'error');
+        }
+    } catch (error) {
+        console.error('Error updating course:', error);
+        showToast('Error updating course. Please try again.', 'error');
+    }
+}
 
 // Load courses from database
 async function loadCourses() {
@@ -216,4 +252,124 @@ function closeToast(button) {
             toast.remove();
         }, 300);
     }
+}
+
+
+// Initialize image upload functionality for edit modal
+function initializeEditImageUpload() {
+    const uploadArea = document.getElementById('editUploadArea');
+    const imageInput = document.getElementById('editImageInput');
+    const imagePreview = document.getElementById('editImagePreview');
+    const noImageText = document.getElementById('editNoImageText');
+    const imageActionButtons = document.getElementById('editImageActionButtons');
+    const viewImageBtn = document.getElementById('editViewImageBtn');
+    const removeImageBtn = document.getElementById('editRemoveImageBtn');
+
+    // Click to upload
+    uploadArea.addEventListener('click', () => {
+        imageInput.click();
+    });
+
+    // File input change
+    imageInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            handleEditImageFile(file);
+        }
+    });
+
+    // Drag and drop
+    uploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadArea.classList.add('dragover');
+    });
+
+    uploadArea.addEventListener('dragleave', () => {
+        uploadArea.classList.remove('dragover');
+    });
+
+    uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove('dragover');
+        const file = e.dataTransfer.files[0];
+        if (file && file.type.startsWith('image/')) {
+            handleEditImageFile(file);
+        }
+    });
+
+    // View image button
+    viewImageBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const imgSrc = imagePreview.src;
+        if (imgSrc) {
+            window.open(imgSrc, '_blank');
+        }
+    });
+
+    // Remove image button
+    removeImageBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        resetEditImagePreview();
+        editImageFile = null;
+        imageInput.value = '';
+    });
+}
+
+// Handle image file for edit modal
+function handleEditImageFile(file) {
+    // Validate file size (5MB max)
+    if (file.size > 5 * 1024 * 1024) {
+        showToast('Image size must be less than 5MB', 'error');
+        return;
+    }
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+        showToast('Please select a valid image file', 'error');
+        return;
+    }
+
+    editImageFile = file;
+
+    // Preview image
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        const imagePreview = document.getElementById('editImagePreview');
+        const noImageText = document.getElementById('editNoImageText');
+        const imageActionButtons = document.getElementById('editImageActionButtons');
+
+        imagePreview.src = e.target.result;
+        imagePreview.style.display = 'block';
+        noImageText.style.display = 'none';
+        imageActionButtons.style.display = 'flex';
+    };
+    reader.readAsDataURL(file);
+}
+
+// Load existing image in edit modal
+function loadExistingImage(imageUrl) {
+    const imagePreview = document.getElementById('editImagePreview');
+    const noImageText = document.getElementById('editNoImageText');
+    const imageActionButtons = document.getElementById('editImageActionButtons');
+
+    if (imageUrl && imageUrl !== '') {
+        imagePreview.src = imageUrl;
+        imagePreview.style.display = 'block';
+        noImageText.style.display = 'none';
+        imageActionButtons.style.display = 'flex';
+    } else {
+        resetEditImagePreview();
+    }
+}
+
+// Reset image preview in edit modal
+function resetEditImagePreview() {
+    const imagePreview = document.getElementById('editImagePreview');
+    const noImageText = document.getElementById('editNoImageText');
+    const imageActionButtons = document.getElementById('editImageActionButtons');
+
+    imagePreview.src = '';
+    imagePreview.style.display = 'none';
+    noImageText.style.display = 'block';
+    imageActionButtons.style.display = 'none';
 }

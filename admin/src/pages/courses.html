@@ -328,7 +328,7 @@
 
     <!-- Edit Course Modal -->
     <div class="modal fade" id="editCourseModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Edit Course</h5>
@@ -337,36 +337,67 @@
                 <div class="modal-body">
                     <form id="editCourseForm">
                         <div class="row">
-                            <div class="col-12 mb-3">
-                                <label for="editCourseBadge" class="form-label">Course Code/Badge</label>
-                                <input type="text" class="form-control" id="editCourseBadge"
-                                    placeholder="e.g., NC II - SOCBCN220" required>
+                            <!-- Left Column - Form Fields -->
+                            <div class="col-md-7">
+                                <div class="mb-3">
+                                    <label for="editCourseBadge" class="form-label">Course Code/Badge</label>
+                                    <input type="text" class="form-control" id="editCourseBadge"
+                                        placeholder="e.g., NC II - SOCBCN220" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editCourseTitle" class="form-label">Course Title</label>
+                                    <input type="text" class="form-control" id="editCourseTitle"
+                                        placeholder="e.g., Beauty Care (Nail Care) Services NC II" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editCourseDescription" class="form-label">Course Description</label>
+                                    <textarea class="form-control" id="editCourseDescription" rows="4"
+                                        placeholder="Enter course description..." required></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editCourseHours" class="form-label">Duration</label>
+                                    <input type="text" class="form-control" id="editCourseHours"
+                                        placeholder="e.g., 307 Hours (39 Days)" required>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-12 mb-3">
-                                <label for="editCourseTitle" class="form-label">Course Title</label>
-                                <input type="text" class="form-control" id="editCourseTitle"
-                                    placeholder="e.g., Beauty Care (Nail Care) Services NC II" required>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-12 mb-3">
-                                <label for="editCourseDescription" class="form-label">Course Description</label>
-                                <textarea class="form-control" id="editCourseDescription" rows="4"
-                                    placeholder="Enter course description..." required></textarea>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="editCourseHours" class="form-label">Duration</label>
-                                <input type="text" class="form-control" id="editCourseHours"
-                                    placeholder="e.g., 307 Hours (39 Days)" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="editCourseImage" class="form-label">Image URL</label>
-                                <input type="url" class="form-control" id="editCourseImage"
-                                    placeholder="https://example.com/image.jpg">
+
+                            <!-- Right Column - Image Upload & Preview -->
+                            <div class="col-md-5">
+                                <div class="mb-3">
+                                    <label class="form-label">Upload Image</label>
+                                    <div class="upload-area" id="editUploadArea">
+                                        <i class="bx bx-cloud-upload" style="font-size: 2rem; color: #3b82f6;"></i>
+                                        <p class="mt-2 mb-0">Drag and drop your image here or click to select</p>
+                                        <small class="text-muted">Supported formats: JPG, PNG, GIF (Max 5MB)</small>
+                                        <input type="file" id="editImageInput" accept="image/*"
+                                            style="display: none;" />
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Image Preview</label>
+                                    <div id="editImagePreviewSection" class="image-preview-section">
+                                        <div class="image-preview-container">
+                                            <div id="editNoImageText" class="text-muted text-center">
+                                                <i class="bx bx-image-alt" style="font-size: 3rem; opacity: 0.3;"></i>
+                                                <p class="mt-2 mb-0">No image selected</p>
+                                                <small>Upload an image to see preview</small>
+                                            </div>
+                                            <img id="editImagePreview" class="image-preview" style="display: none;" />
+                                            <div class="image-action-buttons" style="display: none;"
+                                                id="editImageActionButtons">
+                                                <button type="button" class="btn btn-sm btn-primary image-view-btn"
+                                                    id="editViewImageBtn">
+                                                    <i class="bx bx-show"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-sm btn-danger image-remove-btn"
+                                                    id="editRemoveImageBtn">
+                                                    <i class="bx bx-trash"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </form>

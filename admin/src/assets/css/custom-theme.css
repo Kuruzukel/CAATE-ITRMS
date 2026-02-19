@@ -3153,3 +3153,36 @@ input[type="time"]::placeholder {
         min-height: 150px;
     }
 }
+
+
+/* Image Preview Modal Styles */
+#editImagePreviewModal .modal-content {
+    background-color: #1a2332 !important;
+    border: 1px solid #3d4f63 !important;
+}
+
+#editImagePreviewModal .modal-header {
+    background-color: #243447 !important;
+    border-bottom: 1px solid #3d4f63 !important;
+}
+
+#editImagePreviewModal .modal-title {
+    color: #b8c5d6 !important;
+}
+
+#editImagePreviewModal .modal-body {
+    background-color: #1a2332 !important;
+    padding: 2rem !important;
+}
+
+#editImagePreviewModal .modal-footer {
+    background-color: #243447 !important;
+    border-top: 1px solid #3d4f63 !important;
+}
+
+#editModalImagePreview {
+    max-height: 70vh !important;
+    object-fit: contain !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5) !important;
+}

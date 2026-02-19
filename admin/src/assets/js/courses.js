@@ -302,7 +302,31 @@ function initializeEditImageUpload() {
         e.stopPropagation();
         const imgSrc = imagePreview.src;
         if (imgSrc) {
-            window.open(imgSrc, '_blank');
+            // Set the modal image source
+            const modalImagePreview = document.getElementById('editModalImagePreview');
+            modalImagePreview.src = imgSrc;
+
+            // Show the modal
+            const imagePreviewModalElement = document.getElementById('editImagePreviewModal');
+            const imagePreviewModal = new bootstrap.Modal(imagePreviewModalElement);
+            imagePreviewModal.show();
+
+            // Handle modal close to restore edit modal backdrop
+            imagePreviewModalElement.addEventListener('hidden.bs.modal', function () {
+                // Small delay to ensure Bootstrap finishes its cleanup
+                setTimeout(() => {
+                    // Restore the backdrop for edit modal
+                    document.body.classList.add('modal-open');
+
+                    // Ensure edit modal backdrop exists
+                    const existingBackdrop = document.querySelector('.modal-backdrop');
+                    if (!existingBackdrop) {
+                        const backdrop = document.createElement('div');
+                        backdrop.className = 'modal-backdrop fade show';
+                        document.body.appendChild(backdrop);
+                    }
+                }, 50);
+            }, { once: true });
         }
     });
 

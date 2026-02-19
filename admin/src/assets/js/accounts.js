@@ -373,15 +373,17 @@ function showToast(message, type = 'success') {
     toast.className = `toast-notification ${type}`;
 
     const icon = type === 'success' ? 'bx-check-circle' :
-        type === 'error' ? 'bx-error-circle' :
+        type === 'error' ? 'bx-error' :
             type === 'warning' ? 'bx-error' : 'bx-info-circle';
 
     const title = type === 'success' ? 'Success' :
-        type === 'error' ? 'Error' :
+        type === 'error' ? 'API Response' :
             type === 'warning' ? 'Warning' : 'Info';
 
     toast.innerHTML = `
-        <i class="bx ${icon} toast-icon"></i>
+        <div class="toast-icon-wrapper">
+            <i class="bx ${icon} toast-icon"></i>
+        </div>
         <div class="toast-content">
             <div class="toast-title">${title}</div>
             <div class="toast-message">${message}</div>
@@ -393,10 +395,10 @@ function showToast(message, type = 'success') {
 
     container.appendChild(toast);
 
-    // Auto remove after 4 seconds
+    // Auto remove after 5 seconds
     setTimeout(() => {
         closeToast(toast.querySelector('.toast-close'));
-    }, 4000);
+    }, 5000);
 }
 
 // Close toast notification
@@ -613,25 +615,27 @@ function showToast(message, type = 'success') {
     const toast = document.createElement('div');
     toast.className = `toast-notification ${type}`;
 
-    const icon = type === 'success' ? 'bx-check-circle' : 'bx-error-circle';
-    const title = type === 'success' ? 'Success' : 'Error';
+    const icon = type === 'success' ? 'bx-check-circle' : 'bx-error';
+    const title = type === 'success' ? 'Success' : 'API Response';
 
     toast.innerHTML = `
-        <i class="bx ${icon} toast-icon"></i>
+        <div class="toast-icon-wrapper">
+            <i class="bx ${icon} toast-icon"></i>
+        </div>
         <div class="toast-content">
             <div class="toast-title">${title}</div>
             <div class="toast-message">${message}</div>
         </div>
-        <button class="toast-close" onclick="this.parentElement.remove()">
+        <button class="toast-close" onclick="closeToast(this)">
             <i class="bx bx-x"></i>
         </button>
     `;
 
     toastContainer.appendChild(toast);
 
-    // Auto remove after 4 seconds
+    // Auto remove after 5 seconds
     setTimeout(() => {
-        toast.style.animation = 'slideOut 0.3s ease-out';
+        toast.classList.add('hiding');
         setTimeout(() => toast.remove(), 300);
-    }, 4000);
+    }, 5000);
 }

@@ -1,6 +1,8 @@
 <div align="center">
 
-# 🎓 CAATE-ITRMS
+# CAATE-ITRMS
+
+<img src="admin/src/assets/images/CAATE_META_LOGO.png" alt="CAATE Logo" width="200"/>
 
 ### Creative Aesthetic Academy & Technical Education Inc.
 
@@ -698,7 +700,7 @@ For issues, questions, or suggestions:
 
 <br>
 
-### 🎓 CAATE-ITRMS
+### CAATE-ITRMS
 
 **Creative Aesthetic Academy & Technical Education Inc.**  
 _Integrated Training & Resource Management System_

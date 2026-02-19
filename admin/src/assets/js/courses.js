@@ -48,9 +48,52 @@ document.addEventListener('DOMContentLoaded', function () {
         const modal = bootstrap.Modal.getInstance(document.getElementById('editCourseModal'));
         modal.hide();
 
-        // Show success message (optional)
-        alert('Course updated successfully!');
+        // Show success toast notification
+        showToast('Course updated successfully!', 'success');
     });
 
     // Menu toggle is handled by main.js - no need to duplicate here
 });
+
+// Toast notification function
+function showToast(message, type = 'success') {
+    const container = document.getElementById('toastContainer');
+    if (!container) return;
+
+    const toast = document.createElement('div');
+    toast.className = `toast-notification ${type}`;
+
+    const icon = type === 'success' ? 'bx-check-circle' :
+        type === 'error' ? 'bx-error' :
+            type === 'warning' ? 'bx-error' : 'bx-info-circle';
+
+    toast.innerHTML = `
+        <div class="toast-icon-wrapper">
+            <i class="bx ${icon} toast-icon"></i>
+        </div>
+        <div class="toast-content">
+            <div class="toast-message">${message}</div>
+        </div>
+        <button class="toast-close" onclick="closeToast(this)">
+            <i class="bx bx-x"></i>
+        </button>
+    `;
+
+    container.appendChild(toast);
+
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+        closeToast(toast.querySelector('.toast-close'));
+    }, 5000);
+}
+
+// Close toast notification
+function closeToast(button) {
+    const toast = button.closest('.toast-notification');
+    if (toast) {
+        toast.classList.add('hiding');
+        setTimeout(() => {
+            toast.remove();
+        }, 300);
+    }
+}

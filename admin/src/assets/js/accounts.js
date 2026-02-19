@@ -195,19 +195,26 @@ function renderTrainees(trainees) {
 function createTraineeRow(trainee, index) {
     const tr = document.createElement('tr');
 
-    // Build full name with middle name if available
+    // Build full name with all name parts
     let fullName = trainee.first_name;
+    if (trainee.second_name) {
+        fullName += ' ' + trainee.second_name;
+    }
     if (trainee.middle_name) {
         fullName += ' ' + trainee.middle_name;
     }
     fullName += ' ' + trainee.last_name;
+    if (trainee.suffix) {
+        fullName += ' ' + trainee.suffix;
+    }
 
     const initials = `${trainee.first_name.charAt(0)}${trainee.last_name.charAt(0)}`;
     const statusBadge = getStatusBadge(trainee.status);
     const avatarColor = getAvatarColor(index);
+    const displayId = trainee.student_id || String(index).padStart(2, '0');
 
     tr.innerHTML = `
-        <td><strong>${String(index).padStart(2, '0')}</strong></td>
+        <td><strong>${displayId}</strong></td>
         <td>
             <div class="d-flex align-items-center">
                 <div class="avatar avatar-sm me-3">
@@ -310,7 +317,7 @@ function viewTrainee(id) {
     if (!trainee) return;
 
     // Populate view modal with separate name fields
-    document.getElementById('viewTraineeId').value = trainee.trainee_id || trainee._id || '';
+    document.getElementById('viewTraineeId').value = trainee.student_id || trainee._id || '';
     document.getElementById('viewTraineeFirstName').value = trainee.first_name || '';
     document.getElementById('viewTraineeSecondName').value = trainee.second_name || '';
     document.getElementById('viewTraineeMiddleName').value = trainee.middle_name || '';
@@ -601,7 +608,7 @@ async function saveNewTrainee() {
     const password = document.getElementById('addTraineePassword').value;
 
     // Validate required fields
-    if (!id || !firstName || !lastName || !email || !phone || !password) {
+    if (!id || !firstName || !lastName || !email || !phone) {
         showError('Please fill in all required fields');
         addButton.disabled = false;
         addButton.innerHTML = originalText;
@@ -662,8 +669,8 @@ async function saveNewTrainee() {
         return;
     }
 
-    // Validate password length
-    if (password.length < 6) {
+    // Validate password length if provided
+    if (password && password.length < 6) {
         showError('Password must be at least 6 characters long');
         addButton.disabled = false;
         addButton.innerHTML = originalText;
@@ -671,7 +678,7 @@ async function saveNewTrainee() {
     }
 
     const newTraineeData = {
-        trainee_id: id,
+        student_id: id,
         first_name: firstName,
         second_name: secondName,
         middle_name: middleName,
@@ -679,9 +686,13 @@ async function saveNewTrainee() {
         suffix: suffix,
         email: email,
         phone: phone,
-        status: status.toLowerCase(),
-        password: password
+        status: status.toLowerCase()
     };
+
+    // Only include password if provided
+    if (password) {
+        newTraineeData.password = password;
+    }
 
     try {
         const response = await fetch(`${API_BASE_URL}/trainees`, {

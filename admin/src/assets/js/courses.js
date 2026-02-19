@@ -113,18 +113,13 @@ async function loadCourses() {
     const loadingSpinner = document.getElementById('loadingSpinner');
     const coursesGrid = document.getElementById('coursesGrid');
 
-    console.log('Loading courses from:', `${API_BASE_URL}/courses`);
-
     try {
         const response = await fetch(`${API_BASE_URL}/courses`);
-        console.log('Response status:', response.status);
 
         const result = await response.json();
-        console.log('API Result:', result);
 
         if (result.success && result.data) {
             courses = result.data;
-            console.log('Courses loaded:', courses.length);
 
             renderCourses(courses);
 
@@ -311,21 +306,25 @@ function initializeEditImageUpload() {
             const imagePreviewModal = new bootstrap.Modal(imagePreviewModalElement);
             imagePreviewModal.show();
 
-            // Handle modal close to restore edit modal backdrop
-            imagePreviewModalElement.addEventListener('hidden.bs.modal', function () {
-                // Small delay to ensure Bootstrap finishes its cleanup
-                setTimeout(() => {
-                    // Restore the backdrop for edit modal
-                    document.body.classList.add('modal-open');
+            // Handle modal close to restore edit modal state
+            imagePreviewModalElement.addEventListener('hidden.bs.modal', function handleModalClose() {
+                // Ensure body has modal-open class
+                document.body.classList.add('modal-open');
 
-                    // Ensure edit modal backdrop exists
-                    const existingBackdrop = document.querySelector('.modal-backdrop');
-                    if (!existingBackdrop) {
+                // Check if backdrop exists, if not create one
+                setTimeout(() => {
+                    const backdrops = document.querySelectorAll('.modal-backdrop');
+                    if (backdrops.length === 0) {
                         const backdrop = document.createElement('div');
                         backdrop.className = 'modal-backdrop fade show';
                         document.body.appendChild(backdrop);
+                    } else if (backdrops.length > 1) {
+                        // Remove extra backdrops to prevent glitching
+                        for (let i = 1; i < backdrops.length; i++) {
+                            backdrops[i].remove();
+                        }
                     }
-                }, 50);
+                }, 100);
             }, { once: true });
         }
     });

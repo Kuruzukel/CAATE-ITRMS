@@ -788,7 +788,7 @@
                     <form id="editTraineeForm">
                         <div class="mb-3">
                             <label for="editTraineeId" class="form-label">ID</label>
-                            <input type="text" id="editTraineeId" class="form-control" placeholder="Enter ID" readonly>
+                            <input type="text" id="editTraineeId" class="form-control" placeholder="Enter ID">
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
@@ -930,24 +930,23 @@
                                 disabled>
                         </div>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Address</label>
-                        <input type="text" class="form-control" id="viewTraineeAddress" value="" disabled>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Status</label>
-                        <input type="text" class="form-control" id="viewTraineeStatus" value="Enrolled" disabled>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Password</label>
-                        <div class="position-relative">
-                            <input type="password" class="form-control" id="viewTraineePassword" value="password123"
-                                disabled style="padding-right: 40px;">
-                            <button class="btn btn-link position-absolute top-50 end-0 translate-middle-y" type="button"
-                                id="toggleViewPassword" style="text-decoration: none; padding: 0 12px; z-index: 10;">
-                                <i class="bx bx-hide" id="viewPasswordIcon"
-                                    style="font-size: 1.2rem; color: #697a8d;"></i>
-                            </button>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Status</label>
+                            <input type="text" class="form-control" id="viewTraineeStatus" value="Enrolled" disabled>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Password</label>
+                            <div class="position-relative">
+                                <input type="password" class="form-control" id="viewTraineePassword" value="password123"
+                                    disabled style="padding-right: 40px;">
+                                <button class="btn btn-link position-absolute top-50 end-0 translate-middle-y"
+                                    type="button" id="toggleViewPassword"
+                                    style="text-decoration: none; padding: 0 12px; z-index: 10;">
+                                    <i class="bx bx-hide" id="viewPasswordIcon"
+                                        style="font-size: 1.2rem; color: #697a8d;"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>

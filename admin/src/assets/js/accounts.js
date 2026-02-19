@@ -207,7 +207,7 @@ function createTraineeRow(trainee, index) {
     const avatarColor = getAvatarColor(index);
 
     tr.innerHTML = `
-        <td><strong>#${String(index).padStart(2, '0')}</strong></td>
+        <td><strong>${String(index).padStart(2, '0')}</strong></td>
         <td>
             <div class="d-flex align-items-center">
                 <div class="avatar avatar-sm me-3">
@@ -309,18 +309,15 @@ function viewTrainee(id) {
     const trainee = traineesData.find(t => t._id === id);
     if (!trainee) return;
 
-    // Build full name with middle name if available
-    let fullName = trainee.first_name;
-    if (trainee.middle_name) {
-        fullName += ' ' + trainee.middle_name;
-    }
-    fullName += ' ' + trainee.last_name;
-
-    // Populate view modal
-    document.getElementById('viewTraineeName').value = fullName;
+    // Populate view modal with separate name fields
+    document.getElementById('viewTraineeId').value = trainee.trainee_id || trainee._id || '';
+    document.getElementById('viewTraineeFirstName').value = trainee.first_name || '';
+    document.getElementById('viewTraineeSecondName').value = trainee.second_name || '';
+    document.getElementById('viewTraineeMiddleName').value = trainee.middle_name || '';
+    document.getElementById('viewTraineeLastName').value = trainee.last_name || '';
+    document.getElementById('viewTraineeSuffix').value = trainee.suffix || '';
     document.getElementById('viewTraineeEmail').value = trainee.email;
     document.getElementById('viewTraineePhone').value = trainee.phone;
-    document.getElementById('viewTraineeAddress').value = trainee.address || '';
     document.getElementById('viewTraineeStatus').value = trainee.status || 'pending';
 
     // Show modal

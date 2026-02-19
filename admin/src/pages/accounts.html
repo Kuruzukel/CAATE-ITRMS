@@ -594,22 +594,24 @@
                                                 <div class="row g-3">
                                                     <div class="col-md-8">
                                                         <label class="form-label" style="color: #b8c5d6;">Search</label>
-                                                        <input type="text" class="form-control"
+                                                        <input type="text" id="searchInput" class="form-control"
                                                             placeholder="Name, ID, Email"
                                                             style="background-color: #243447; border: 1px solid #3d4f63; color: #b8c5d6;">
                                                     </div>
                                                     <div class="col-md-3">
                                                         <label class="form-label" style="color: #b8c5d6;">Status</label>
-                                                        <select class="form-select"
+                                                        <select id="statusFilter" class="form-select"
                                                             style="background-color: #243447; border: 1px solid #3d4f63; color: #b8c5d6;">
                                                             <option value="">All Status</option>
-                                                            <option value="enrolled">Enrolled</option>
-                                                            <option value="completed">Completed</option>
                                                             <option value="pending">Pending</option>
+                                                            <option value="completed">Completed</option>
+                                                            <option value="enrolled">Enrolled</option>
+                                                            <option value="active">Active</option>
                                                         </select>
                                                     </div>
                                                     <div class="col-md-1 d-flex align-items-end">
-                                                        <button type="button" class="btn btn-outline-secondary w-100"
+                                                        <button type="button" id="resetFilters"
+                                                            class="btn btn-outline-secondary w-100"
                                                             style="border-color: #3d4f63; color: #b8c5d6;">
                                                             <i class="bx bx-reset"></i>
                                                         </button>

@@ -11,6 +11,9 @@ document.addEventListener('DOMContentLoaded', function () {
     loadTrainees();
     loadStatistics();
 
+    // Setup filter event listeners
+    setupFilters();
+
     // Menu toggle is handled by main.js - no need to duplicate here
 
     // Password Toggle for View Modal
@@ -316,6 +319,8 @@ function viewTrainee(id) {
     const trainee = traineesData.find(t => t._id === id);
     if (!trainee) return;
 
+    console.log('Viewing trainee:', trainee); // Debug log
+
     // Populate view modal with separate name fields
     document.getElementById('viewTraineeId').value = trainee.student_id || trainee._id || '';
     document.getElementById('viewTraineeFirstName').value = trainee.first_name || '';
@@ -323,9 +328,15 @@ function viewTrainee(id) {
     document.getElementById('viewTraineeMiddleName').value = trainee.middle_name || '';
     document.getElementById('viewTraineeLastName').value = trainee.last_name || '';
     document.getElementById('viewTraineeSuffix').value = trainee.suffix || '';
-    document.getElementById('viewTraineeEmail').value = trainee.email;
-    document.getElementById('viewTraineePhone').value = trainee.phone;
+    document.getElementById('viewTraineeEmail').value = trainee.email || '';
+    document.getElementById('viewTraineePhone').value = trainee.phone || '';
     document.getElementById('viewTraineeStatus').value = trainee.status || 'pending';
+
+    // Set password field (show placeholder if exists)
+    const passwordField = document.getElementById('viewTraineePassword');
+    if (passwordField) {
+        passwordField.value = trainee.password ? '••••••••' : '';
+    }
 
     // Show modal
     const modal = new bootstrap.Modal(document.getElementById('viewTraineeModal'));
@@ -338,7 +349,7 @@ function editTrainee(id) {
     if (!trainee) return;
 
     // Populate edit modal with separate name fields
-    document.getElementById('editTraineeId').value = trainee._id;
+    document.getElementById('editTraineeId').value = trainee.student_id || '';
     document.getElementById('editTraineeFirstName').value = trainee.first_name || '';
     document.getElementById('editTraineeSecondName').value = trainee.second_name || '';
     document.getElementById('editTraineeMiddleName').value = trainee.middle_name || '';
@@ -348,6 +359,9 @@ function editTrainee(id) {
     document.getElementById('editTraineePhone').value = trainee.phone;
     document.getElementById('editTraineeStatus').value = trainee.status || 'pending';
     document.getElementById('editTraineePassword').value = ''; // Clear password field
+
+    // Store the MongoDB _id in a hidden field or data attribute
+    document.getElementById('editTraineeForm').setAttribute('data-trainee-id', trainee._id);
 
     // Show modal
     const modal = new bootstrap.Modal(document.getElementById('editTraineeModal'));
@@ -459,7 +473,9 @@ async function saveEditTrainee() {
     submitBtn.disabled = true;
     submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Saving...';
 
-    const id = document.getElementById('editTraineeId').value;
+    // Get MongoDB _id from data attribute
+    const mongoId = document.getElementById('editTraineeForm').getAttribute('data-trainee-id');
+    const studentId = document.getElementById('editTraineeId').value.trim();
     const firstName = document.getElementById('editTraineeFirstName').value.trim();
     const secondName = document.getElementById('editTraineeSecondName').value.trim();
     const middleName = document.getElementById('editTraineeMiddleName').value.trim();
@@ -471,7 +487,7 @@ async function saveEditTrainee() {
     const password = document.getElementById('editTraineePassword').value;
 
     // Validate required fields
-    if (!firstName || !lastName || !email || !phone) {
+    if (!studentId || !firstName || !lastName || !email || !phone) {
         showError('Please fill in all required fields');
         submitBtn.disabled = false;
         submitBtn.innerHTML = originalBtnText;
@@ -532,6 +548,7 @@ async function saveEditTrainee() {
     }
 
     const updateData = {
+        student_id: studentId,
         first_name: firstName,
         second_name: secondName,
         middle_name: middleName,
@@ -548,7 +565,7 @@ async function saveEditTrainee() {
     }
 
     try {
-        const response = await fetch(`${API_BASE_URL}/trainees/${id}`, {
+        const response = await fetch(`${API_BASE_URL}/trainees/${mongoId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -782,4 +799,69 @@ function showToast(message, type = 'success') {
         toast.classList.add('hiding');
         setTimeout(() => toast.remove(), 300);
     }, 5000);
+}
+
+
+// Setup filter event listeners
+function setupFilters() {
+    const searchInput = document.getElementById('searchInput');
+    const statusFilter = document.getElementById('statusFilter');
+    const resetButton = document.getElementById('resetFilters');
+
+    if (searchInput) {
+        searchInput.addEventListener('input', applyFilters);
+    }
+
+    if (statusFilter) {
+        statusFilter.addEventListener('change', applyFilters);
+    }
+
+    if (resetButton) {
+        resetButton.addEventListener('click', resetFilters);
+    }
+}
+
+// Apply filters to trainee list
+function applyFilters() {
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+    const statusValue = document.getElementById('statusFilter').value.toLowerCase();
+
+    let filteredTrainees = traineesData;
+
+    // Apply search filter
+    if (searchTerm) {
+        filteredTrainees = filteredTrainees.filter(trainee => {
+            // Build full name
+            let fullName = trainee.first_name || '';
+            if (trainee.second_name) fullName += ' ' + trainee.second_name;
+            if (trainee.middle_name) fullName += ' ' + trainee.middle_name;
+            fullName += ' ' + (trainee.last_name || '');
+            if (trainee.suffix) fullName += ' ' + trainee.suffix;
+            fullName = fullName.toLowerCase();
+
+            const studentId = (trainee.student_id || '').toLowerCase();
+            const email = (trainee.email || '').toLowerCase();
+
+            return fullName.includes(searchTerm) ||
+                studentId.includes(searchTerm) ||
+                email.includes(searchTerm);
+        });
+    }
+
+    // Apply status filter
+    if (statusValue) {
+        filteredTrainees = filteredTrainees.filter(trainee => {
+            return (trainee.status || 'pending').toLowerCase() === statusValue;
+        });
+    }
+
+    // Render filtered results
+    renderTrainees(filteredTrainees);
+}
+
+// Reset all filters
+function resetFilters() {
+    document.getElementById('searchInput').value = '';
+    document.getElementById('statusFilter').value = '';
+    renderTrainees(traineesData);
 }

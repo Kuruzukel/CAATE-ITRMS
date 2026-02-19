@@ -3436,3 +3436,222 @@ input[type="time"]::placeholder {
         height: 10px;
     }
 }
+
+
+/* Enrollment Status Button Styling - Upper Right Corner */
+.enrollment-status-btn {
+    border: none !important;
+    background: transparent !important;
+    padding: 0.25rem 0.5rem !important;
+    box-shadow: none !important;
+}
+
+.enrollment-status-btn:hover,
+.enrollment-status-btn:focus {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.enrollment-status-btn .badge {
+    font-size: 0.75rem !important;
+    padding: 0.35rem 0.65rem !important;
+    font-weight: 600 !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+    transition: all var(--transition-fast) !important;
+}
+
+.enrollment-status-btn:hover .badge {
+    transform: scale(1.05) !important;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Badge Colors for Enrollment Status */
+.badge.bg-success {
+    background-color: #10b981 !important;
+    color: var(--white) !important;
+}
+
+.badge.bg-danger {
+    background-color: #ef4444 !important;
+    color: var(--white) !important;
+}
+
+.badge.bg-secondary {
+    background-color: #6b7280 !important;
+    color: var(--white) !important;
+}
+
+/* Dropdown Menu for Enrollment Status */
+.position-absolute .dropdown-menu {
+    min-width: 180px !important;
+}
+
+.position-absolute .dropdown-menu .dropdown-item {
+    display: flex !important;
+    align-items: center !important;
+    padding: 0.5rem 1rem !important;
+}
+
+.position-absolute .dropdown-menu .badge {
+    font-size: 0.75rem !important;
+    padding: 0.25rem 0.5rem !important;
+}
+
+
+/* Enrollment Status Dropdown - Upper Right Corner with Glassmorphism */
+.enrollment-status-btn {
+    position: relative;
+    z-index: 10;
+    border: none !important;
+    background: rgba(15, 41, 66, 0.85) !important;
+    backdrop-filter: blur(20px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+    box-shadow: 0 10px 40px rgba(22, 56, 86, 0.5),
+        0 4px 12px rgba(54, 145, 191, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15),
+        0 0 0 1px rgba(54, 145, 191, 0.1) !important;
+    border-radius: var(--border-radius-sm) !important;
+    transition: all var(--transition-normal) !important;
+}
+
+.enrollment-status-btn:hover {
+    transform: translateY(-2px) scale(1.02);
+    background: rgba(15, 41, 66, 0.95) !important;
+    box-shadow: 0 15px 50px rgba(22, 56, 86, 0.6),
+        0 6px 20px rgba(54, 145, 191, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2),
+        0 0 0 1px rgba(54, 145, 191, 0.2),
+        0 0 30px rgba(54, 145, 191, 0.2) !important;
+}
+
+.enrollment-status-btn:focus,
+.enrollment-status-btn:active {
+    background: rgba(15, 41, 66, 0.95) !important;
+    box-shadow: 0 10px 40px rgba(22, 56, 86, 0.5),
+        0 4px 12px rgba(54, 145, 191, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+}
+
+.enrollment-status-btn .badge {
+    font-size: 0.75rem;
+    padding: 0.35rem 0.65rem;
+    font-weight: 600;
+    border-radius: var(--border-radius-pill) !important;
+    transition: all var(--transition-fast) !important;
+}
+
+/* Dropdown positioning for upper right corner */
+.position-relative .dropdown {
+    position: relative;
+    z-index: 1000;
+}
+
+.position-relative .dropdown-menu {
+    position: absolute;
+    z-index: 1050;
+    background: linear-gradient(135deg, #0f2942 0%, #0a1f33 100%) !important;
+    border: 1px solid rgba(54, 145, 191, 0.4) !important;
+    border-radius: var(--border-radius-md) !important;
+    box-shadow: 0 10px 40px rgba(22, 56, 86, 0.6),
+        0 4px 12px rgba(54, 145, 191, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15),
+        0 0 0 1px rgba(54, 145, 191, 0.1) !important;
+    backdrop-filter: blur(20px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+    padding: 0.5rem !important;
+    margin-top: 0.5rem !important;
+    min-width: 180px !important;
+}
+
+.position-relative .dropdown-menu .dropdown-item {
+    color: var(--lighter-blue) !important;
+    transition: all var(--transition-fast);
+    border-radius: var(--border-radius-sm);
+    padding: 0.5rem 1rem;
+    margin: 0.25rem 0;
+    display: flex;
+    align-items: center;
+}
+
+.position-relative .dropdown-menu .dropdown-item:hover,
+.position-relative .dropdown-menu .dropdown-item:focus {
+    background: rgba(54, 145, 191, 0.3) !important;
+    backdrop-filter: blur(15px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(15px) saturate(180%) !important;
+    border: 1px solid rgba(54, 145, 191, 0.4) !important;
+    color: var(--white) !important;
+    box-shadow: 0 4px 16px rgba(54, 145, 191, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Status badge colors with system palette */
+.badge.bg-success {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+    color: var(--white) !important;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3) !important;
+}
+
+.badge.bg-danger {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+    color: var(--white) !important;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3) !important;
+}
+
+.badge.bg-secondary {
+    background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%) !important;
+    color: var(--white) !important;
+    box-shadow: 0 2px 8px rgba(107, 114, 128, 0.3) !important;
+}
+
+/* Ensure card image container allows overflow */
+.card .position-relative {
+    overflow: visible !important;
+}
+
+
+/* Enhanced Enrollment Status Button with System Color Palette */
+.enrollment-status-btn {
+    background: rgba(15, 41, 66, 0.85) !important;
+    backdrop-filter: blur(20px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+    box-shadow: 0 10px 40px rgba(22, 56, 86, 0.5),
+        0 4px 12px rgba(54, 145, 191, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15),
+        0 0 0 1px rgba(54, 145, 191, 0.1) !important;
+    border-radius: var(--border-radius-sm) !important;
+}
+
+.enrollment-status-btn:hover {
+    background: rgba(15, 41, 66, 0.95) !important;
+    transform: translateY(-2px) scale(1.02) !important;
+    box-shadow: 0 15px 50px rgba(22, 56, 86, 0.6),
+        0 6px 20px rgba(54, 145, 191, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2),
+        0 0 0 1px rgba(54, 145, 191, 0.2),
+        0 0 30px rgba(54, 145, 191, 0.2) !important;
+}
+
+/* Enhanced badge colors with gradients */
+.enrollment-status-btn .badge.bg-success {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+    border: 1px solid rgba(16, 185, 129, 0.3) !important;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3) !important;
+}
+
+.enrollment-status-btn .badge.bg-danger {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+    border: 1px solid rgba(239, 68, 68, 0.3) !important;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3) !important;
+}
+
+.enrollment-status-btn .badge.bg-secondary {
+    background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%) !important;
+    border: 1px solid rgba(107, 114, 128, 0.3) !important;
+    box-shadow: 0 2px 8px rgba(107, 114, 128, 0.3) !important;
+}
+
+/* Enhanced dropdown menu */
+.position-relative .dropdown-menu {
+    background: linear-gradient(135deg, #0f2942 0%, #0a1f33 100%) !important;
+}

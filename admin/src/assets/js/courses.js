@@ -228,12 +228,49 @@ function renderCourses(coursesData) {
             ? course.image
             : '../assets/images/CAATE_META_LOGO.png';
 
+        // Get enrollment status or default to 'Unpublished'
+        const enrollmentStatus = course.enrollment_status || 'Unpublished';
+
+        // Determine status badge color
+        let statusBadgeClass = 'bg-secondary';
+        if (enrollmentStatus === 'Open Enrollment') {
+            statusBadgeClass = 'bg-success';
+        } else if (enrollmentStatus === 'Closed') {
+            statusBadgeClass = 'bg-danger';
+        }
+
         col.innerHTML = `
             <div class="card h-100">
-                <img src="${imageUrl}"
-                    class="card-img-top" alt="${course.title}"
-                    style="height: 200px; object-fit: cover;"
-                    onerror="this.src='../assets/images/CAATE_META_LOGO.png'" />
+                <div class="position-relative">
+                    <img src="${imageUrl}"
+                        class="card-img-top" alt="${course.title}"
+                        style="height: 200px; object-fit: cover;"
+                        onerror="this.src='../assets/images/CAATE_META_LOGO.png'" />
+                    <div class="position-absolute top-0 end-0 p-2">
+                        <div class="dropdown">
+                            <button class="btn btn-sm dropdown-toggle enrollment-status-btn px-2 py-1" 
+                                type="button" 
+                                data-bs-toggle="dropdown" 
+                                aria-expanded="false"
+                                data-id="${courseId}"
+                                data-status="${enrollmentStatus}"
+                                style="border: none; background: transparent;">
+                                <span class="badge ${statusBadgeClass}">${enrollmentStatus}</span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item status-option" href="#" data-status="Open Enrollment">
+                                    <span class="badge bg-success me-2">Open Enrollment</span>
+                                </a></li>
+                                <li><a class="dropdown-item status-option" href="#" data-status="Closed">
+                                    <span class="badge bg-danger me-2">Closed</span>
+                                </a></li>
+                                <li><a class="dropdown-item status-option" href="#" data-status="Unpublished">
+                                    <span class="badge bg-secondary me-2">Unpublished</span>
+                                </a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
                 <div class="card-body d-flex flex-column">
                     <span class="badge ${badgeClass} mb-2 align-self-start">${badge}</span>
                     <h5 class="card-title">${course.title}</h5>

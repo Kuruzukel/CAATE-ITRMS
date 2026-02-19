@@ -2,10 +2,14 @@
 
 require_once __DIR__ . '/../app/controllers/AuthController.php';
 require_once __DIR__ . '/../app/controllers/UserController.php';
+require_once __DIR__ . '/../app/controllers/TraineeController.php';
 
 function handleRequest($uri, $method) {
     // Remove base path if exists
+    $uri = preg_replace('#^/CAATE-ITRMS/backend/public#', '', $uri);
+    $uri = preg_replace('#^/CAATE-ITRMS/backend#', '', $uri);
     $uri = preg_replace('#^/backend/public#', '', $uri);
+    $uri = preg_replace('#^/backend#', '', $uri);
     
     // API Routes
     $routes = [
@@ -17,6 +21,12 @@ function handleRequest($uri, $method) {
         'POST:/api/v1/users' => ['UserController', 'store'],
         'PUT:/api/v1/users/{id}' => ['UserController', 'update'],
         'DELETE:/api/v1/users/{id}' => ['UserController', 'destroy'],
+        'GET:/api/v1/trainees/statistics' => ['TraineeController', 'statistics'],
+        'GET:/api/v1/trainees' => ['TraineeController', 'index'],
+        'GET:/api/v1/trainees/{id}' => ['TraineeController', 'show'],
+        'POST:/api/v1/trainees' => ['TraineeController', 'store'],
+        'PUT:/api/v1/trainees/{id}' => ['TraineeController', 'update'],
+        'DELETE:/api/v1/trainees/{id}' => ['TraineeController', 'destroy'],
     ];
     
     // Match route

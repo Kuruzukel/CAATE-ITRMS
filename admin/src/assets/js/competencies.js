@@ -8,11 +8,26 @@ document.addEventListener('DOMContentLoaded', function () {
         btn.addEventListener('click', function () {
             currentCourseCard = this.closest('.card');
 
-            document.getElementById('editCourseBadge').value = this.dataset.badge;
-            document.getElementById('editCourseTitle').value = this.dataset.title;
-            document.getElementById('editCourseDescription').value = this.dataset.description;
-            document.getElementById('editCourseHours').value = this.dataset.hours;
-            document.getElementById('editCourseImage').value = this.dataset.image;
+            // Populate course info banner in modal body
+            const badgeBannerEl = document.getElementById('editCourseBadgeBody');
+            const titleBannerEl = document.getElementById('editCourseTitleBody');
+            const durationBannerEl = document.getElementById('editCourseDurationBody');
+
+            if (badgeBannerEl) badgeBannerEl.textContent = this.dataset.badge || '';
+            if (titleBannerEl) titleBannerEl.textContent = this.dataset.title || '';
+            if (durationBannerEl) {
+                const durationSpan = durationBannerEl.querySelector('span');
+                if (durationSpan) durationSpan.textContent = this.dataset.hours || '';
+            }
+
+            // Populate competency textareas if they exist
+            const basicComp = document.getElementById('editBasicCompetencies');
+            const commonComp = document.getElementById('editCommonCompetencies');
+            const coreComp = document.getElementById('editCoreCompetencies');
+
+            if (basicComp) basicComp.value = this.dataset.basicCompetencies || '';
+            if (commonComp) commonComp.value = this.dataset.commonCompetencies || '';
+            if (coreComp) coreComp.value = this.dataset.coreCompetencies || '';
         });
     });
 
@@ -20,37 +35,30 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('saveCourseBtn').addEventListener('click', function () {
         if (!currentCourseCard) return;
 
-        const badge = document.getElementById('editCourseBadge').value;
-        const title = document.getElementById('editCourseTitle').value;
-        const description = document.getElementById('editCourseDescription').value;
-        const hours = document.getElementById('editCourseHours').value;
-        const image = document.getElementById('editCourseImage').value;
+        // Get competency values
+        const basicComp = document.getElementById('editBasicCompetencies');
+        const commonComp = document.getElementById('editCommonCompetencies');
+        const coreComp = document.getElementById('editCoreCompetencies');
 
-        // Update the card
-        currentCourseCard.querySelector('.badge').textContent = badge;
-        currentCourseCard.querySelector('.card-title').textContent = title;
-        currentCourseCard.querySelector('.card-text').textContent = description;
-        currentCourseCard.querySelector('small').innerHTML = `<i class="fas fa-clock me-1"></i> ${hours}`;
-
-        if (image) {
-            currentCourseCard.querySelector('.card-img-top').src = image;
-        }
-
-        // Update button data attributes
+        // Update button data attributes with competencies
         const editBtn = currentCourseCard.querySelector('.edit-course-btn');
-        editBtn.dataset.badge = badge;
-        editBtn.dataset.title = title;
-        editBtn.dataset.description = description;
-        editBtn.dataset.hours = hours;
-        editBtn.dataset.image = image;
+        if (basicComp) editBtn.dataset.basicCompetencies = basicComp.value;
+        if (commonComp) editBtn.dataset.commonCompetencies = commonComp.value;
+        if (coreComp) editBtn.dataset.coreCompetencies = coreComp.value;
 
         // Close modal
         const modal = bootstrap.Modal.getInstance(document.getElementById('editCourseModal'));
         modal.hide();
 
-        // Show success message (optional)
-        alert('Course updated successfully!');
+        // Show success message
+        alert('Competencies updated successfully!');
     });
+
+    // Set current year in footer
+    const yearSpan = document.getElementById('currentYear');
+    if (yearSpan) {
+        yearSpan.textContent = new Date().getFullYear();
+    }
 
     // Menu toggle is handled by main.js - no need to duplicate here
 });

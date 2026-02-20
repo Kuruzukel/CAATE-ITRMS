@@ -809,11 +809,7 @@
                         <div
                             class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
                             <div class="mb-2 mb-md-0">
-                                ©
-                                <script>
-                                    document.write(new Date().getFullYear());
-                                </script>
-                                , Creative Aesthetic Academy & Technical Education Inc.
+                                © <span id="currentYear"></span>, Creative Aesthetic Academy & Technical Education Inc.
                             </div>
                         </div>
                     </footer>
@@ -833,13 +829,28 @@
 
     <!-- Edit Course Modal -->
     <div class="modal fade" id="editCourseModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Edit Competencies</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <!-- Course Info Banner -->
+                    <div class="course-info-banner mb-4">
+                        <div class="d-flex align-items-center justify-content-between gap-3">
+                            <span class="badge bg-primary fs-6" id="editCourseBadgeBody"></span>
+                            <div class="text-end">
+                                <h6 class="mb-1 text-white" id="editCourseTitleBody"></h6>
+                                <small class="text-white-50 d-flex align-items-center justify-content-end"
+                                    id="editCourseDurationBody">
+                                    <i class="fas fa-clock me-1"></i>
+                                    <span></span>
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+
                     <form id="editCourseForm">
 
                         <!-- Basic Competencies -->

@@ -63,7 +63,6 @@ try {
     $client = new MongoDB\Client("mongodb://127.0.0.1:27017");
     echo "✓ MongoDB client created successfully\n";
     
-    // Try to list databases
     $databases = $client->listDatabases();
     echo "✓ Successfully connected to MongoDB server\n";
     echo "  Available databases:\n";

@@ -42,12 +42,9 @@ async function loadCourses() {
         }
 
         const result = await response.json();
-        console.log('API Response:', result);
-        console.log('Courses data:', result.data);
 
         if (result.success && result.data && result.data.length > 0) {
             coursesData = result.data;
-            console.log('First course:', coursesData[0]);
             renderCourses(coursesData);
 
             // Hide loading, show courses
@@ -89,14 +86,12 @@ function renderCourses(courses) {
 
 // Create course card
 function createCourseCard(course) {
-    console.log('Creating card for course:', course);
     const col = document.createElement('div');
     col.className = 'col';
 
     // Determine badge color
     let badgeClass = 'bg-primary';
     const badgeText = course.badge || course.course_code || '';
-    console.log('Badge text:', badgeText);
 
     if (badgeText.includes('Level III')) {
         badgeClass = 'bg-info';
@@ -110,7 +105,6 @@ function createCourseCard(course) {
     const basicComp = course.basic_competencies || [];
     const commonComp = course.common_competencies || [];
     const coreComp = course.core_competencies || [];
-    console.log('Competencies:', { basic: basicComp.length, common: commonComp.length, core: coreComp.length });
 
     col.innerHTML = `
         <div class="card h-100">

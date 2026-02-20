@@ -69,6 +69,15 @@ class Course {
                 ['$set' => $data]
             );
             
+            // If competencies were updated, sync with competencies collection
+            if ($hasChanges && (
+                isset($data['basic_competencies']) || 
+                isset($data['common_competencies']) || 
+                isset($data['core_competencies'])
+            )) {
+                $this->syncCompetenciesToCollection($existing, $data);
+            }
+            
             // Return both success status and whether actual changes were made
             return [
                 'success' => true,
@@ -82,6 +91,85 @@ class Course {
                 'matched' => false,
                 'error' => $e->getMessage()
             ];
+        }
+    }
+    
+    private function syncCompetenciesToCollection($existing, $updatedData) {
+        try {
+            $db = getMongoConnection();
+            $competenciesCollection = $db->competencies;
+            
+            // Get course identifiers
+            $courseCode = $existing['course_code'] ?? '';
+            $courseTitle = $existing['course_title'] ?? $existing['title'] ?? '';
+            
+            if (empty($courseCode)) {
+                return; // Can't sync without course code
+            }
+            
+            // Delete existing competencies for this course
+            $competenciesCollection->deleteMany(['course_code' => $courseCode]);
+            
+            // Prepare competencies to insert
+            $competenciesToInsert = [];
+            $timestamp = new MongoDB\BSON\UTCDateTime();
+            
+            // Add basic competencies
+            if (isset($updatedData['basic_competencies']) && is_array($updatedData['basic_competencies'])) {
+                foreach ($updatedData['basic_competencies'] as $competency) {
+                    if (!empty(trim($competency))) {
+                        $competenciesToInsert[] = [
+                            'course_code' => $courseCode,
+                            'course_title' => $courseTitle,
+                            'competency_type' => 'Basic',
+                            'competency_name' => trim($competency),
+                            'created_at' => $timestamp,
+                            'updated_at' => $timestamp
+                        ];
+                    }
+                }
+            }
+            
+            // Add common competencies
+            if (isset($updatedData['common_competencies']) && is_array($updatedData['common_competencies'])) {
+                foreach ($updatedData['common_competencies'] as $competency) {
+                    if (!empty(trim($competency))) {
+                        $competenciesToInsert[] = [
+                            'course_code' => $courseCode,
+                            'course_title' => $courseTitle,
+                            'competency_type' => 'Common',
+                            'competency_name' => trim($competency),
+                            'created_at' => $timestamp,
+                            'updated_at' => $timestamp
+                        ];
+                    }
+                }
+            }
+            
+            // Add core competencies
+            if (isset($updatedData['core_competencies']) && is_array($updatedData['core_competencies'])) {
+                foreach ($updatedData['core_competencies'] as $competency) {
+                    if (!empty(trim($competency))) {
+                        $competenciesToInsert[] = [
+                            'course_code' => $courseCode,
+                            'course_title' => $courseTitle,
+                            'competency_type' => 'Core',
+                            'competency_name' => trim($competency),
+                            'created_at' => $timestamp,
+                            'updated_at' => $timestamp
+                        ];
+                    }
+                }
+            }
+            
+            // Insert new competencies if any exist
+            if (!empty($competenciesToInsert)) {
+                $competenciesCollection->insertMany($competenciesToInsert);
+            }
+            
+        } catch (Exception $e) {
+            // Log error but don't fail the main update
+            error_log("Failed to sync competencies: " . $e->getMessage());
         }
     }
     

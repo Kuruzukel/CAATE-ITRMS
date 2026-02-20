@@ -34,7 +34,7 @@ async function loadCourses() {
         if (emptyState) emptyState.classList.add('d-none');
         if (coursesGrid) coursesGrid.classList.add('d-none');
 
-        // Fetch competencies
+        // Fetch competencies (one document per course)
         const response = await fetch(`${API_BASE_URL}/api/v1/competencies`);
 
         if (!response.ok) {
@@ -218,10 +218,10 @@ async function saveCompetencies() {
     if (!currentCourseCard) return;
 
     const editBtn = currentCourseCard.querySelector('.edit-course-btn');
-    const courseId = editBtn?.dataset.courseId;
+    const competencyId = editBtn?.dataset.courseId; // This holds the competencies document _id
 
-    if (!courseId) {
-        alert('Course ID not found');
+    if (!competencyId) {
+        alert('Competency ID not found');
         return;
     }
 
@@ -237,7 +237,7 @@ async function saveCompetencies() {
     };
 
     try {
-        const response = await fetch(`${API_BASE_URL}/api/v1/courses/${courseId}`, {
+        const response = await fetch(`${API_BASE_URL}/api/v1/competencies/${competencyId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'

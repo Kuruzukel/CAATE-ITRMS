@@ -11,7 +11,61 @@ class CourseController {
         try {
             $courseModel = new Course();
             $courses = $courseModel->all();
-            
+
+            // Load competencies and group them by course_code so we can
+            // expose basic/common/core arrays without storing them on courses
+            $db = getMongoConnection();
+            $competenciesCollection = $db->competencies;
+
+            $grouped = [];
+            $cursor = $competenciesCollection->find();
+
+            foreach ($cursor as $competency) {
+                $courseCode = $competency['course_code'] ?? '';
+                if (!$courseCode) {
+                    continue;
+                }
+
+                $type = $competency['competency_type'] ?? '';
+                $name = $competency['competency_name'] ?? '';
+
+                if ($name === '') {
+                    continue;
+                }
+
+                if (!isset($grouped[$courseCode])) {
+                    $grouped[$courseCode] = [
+                        'Basic' => [],
+                        'Common' => [],
+                        'Core' => [],
+                    ];
+                }
+
+                if ($type === 'Basic') {
+                    $grouped[$courseCode]['Basic'][] = $name;
+                } elseif ($type === 'Common') {
+                    $grouped[$courseCode]['Common'][] = $name;
+                } elseif ($type === 'Core') {
+                    $grouped[$courseCode]['Core'][] = $name;
+                }
+            }
+
+            // Attach arrays to each course for API response only
+            foreach ($courses as &$course) {
+                $courseCode = $course['course_code'] ?? '';
+
+                if ($courseCode && isset($grouped[$courseCode])) {
+                    $course['basic_competencies'] = $grouped[$courseCode]['Basic'];
+                    $course['common_competencies'] = $grouped[$courseCode]['Common'];
+                    $course['core_competencies'] = $grouped[$courseCode]['Core'];
+                } else {
+                    $course['basic_competencies'] = [];
+                    $course['common_competencies'] = [];
+                    $course['core_competencies'] = [];
+                }
+            }
+            unset($course);
+
             echo json_encode(['success' => true, 'data' => $courses]);
         } catch (Exception $e) {
             http_response_code(500);
@@ -100,19 +154,11 @@ class CourseController {
                 return;
             }
             
-            // Update the course
+            // Update the course (course document no longer stores competency arrays;
+            // competencies are managed exclusively in the competencies collection)
             $result = $courseModel->update($id, $data);
 
             if ($result['success']) {
-                // If competencies were updated, sync to competencies collection
-                $hasCompetencies = isset($data['basic_competencies']) || 
-                                   isset($data['common_competencies']) || 
-                                   isset($data['core_competencies']);
-                
-                if ($hasCompetencies) {
-                    $this->syncCompetenciesToCollection($course, $data);
-                }
-                
                 if ($result['modified']) {
                     echo json_encode([
                         'success' => true, 

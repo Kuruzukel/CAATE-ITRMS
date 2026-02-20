@@ -63,10 +63,20 @@ class Course {
             
             // Always update the updated_at timestamp
             $data['updated_at'] = new MongoDB\BSON\UTCDateTime();
-            
+
+            // Do not persist competency arrays on the course document itself.
+            // They are stored in the separate competencies collection and only
+            // attached to API responses for convenience.
+            $updateData = $data;
+            unset(
+                $updateData['basic_competencies'],
+                $updateData['common_competencies'],
+                $updateData['core_competencies']
+            );
+
             $result = $this->collection->updateOne(
                 ['_id' => new MongoDB\BSON\ObjectId($id)],
-                ['$set' => $data]
+                ['$set' => $updateData]
             );
             
             // Check if course_code or title changed

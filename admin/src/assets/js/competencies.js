@@ -9,6 +9,7 @@ const API_BASE_URL = (typeof config !== 'undefined' && config.api)
 
 let coursesData = [];
 let currentCourseCard = null;
+let originalCompetencies = null;
 
 document.addEventListener('DOMContentLoaded', function () {
     loadCourses();
@@ -187,18 +188,29 @@ function initializeEditButtons() {
             const coreComp = document.getElementById('editCoreCompetencies');
 
             try {
+                let basicData = [];
+                let commonData = [];
+                let coreData = [];
+
                 if (basicComp) {
-                    const basicData = JSON.parse(this.dataset.basicCompetencies || '[]');
+                    basicData = JSON.parse(this.dataset.basicCompetencies || '[]');
                     basicComp.value = Array.isArray(basicData) ? basicData.join('\n') : '';
                 }
                 if (commonComp) {
-                    const commonData = JSON.parse(this.dataset.commonCompetencies || '[]');
+                    commonData = JSON.parse(this.dataset.commonCompetencies || '[]');
                     commonComp.value = Array.isArray(commonData) ? commonData.join('\n') : '';
                 }
                 if (coreComp) {
-                    const coreData = JSON.parse(this.dataset.coreCompetencies || '[]');
+                    coreData = JSON.parse(this.dataset.coreCompetencies || '[]');
                     coreComp.value = Array.isArray(coreData) ? coreData.join('\n') : '';
                 }
+
+                // Store original competencies for comparison
+                originalCompetencies = {
+                    basic_competencies: basicData,
+                    common_competencies: commonData,
+                    core_competencies: coreData
+                };
             } catch (e) {
                 console.error('Error parsing competencies:', e);
             }
@@ -221,7 +233,7 @@ async function saveCompetencies() {
     const competencyId = editBtn?.dataset.courseId; // This holds the competencies document _id
 
     if (!competencyId) {
-        alert('Competency ID not found');
+        showToast('Competency ID not found', 'error');
         return;
     }
 
@@ -236,6 +248,28 @@ async function saveCompetencies() {
         core_competencies: coreComp ? coreComp.value.split('\n').filter(line => line.trim()) : []
     };
 
+    // Check if all competencies are empty
+    const totalCompetencies = competencies.basic_competencies.length +
+        competencies.common_competencies.length +
+        competencies.core_competencies.length;
+
+    if (totalCompetencies === 0) {
+        showToast('Warning: All competency fields are empty', 'warning');
+        return;
+    }
+
+    // Check if anything changed
+    if (originalCompetencies) {
+        const basicChanged = JSON.stringify(competencies.basic_competencies) !== JSON.stringify(originalCompetencies.basic_competencies);
+        const commonChanged = JSON.stringify(competencies.common_competencies) !== JSON.stringify(originalCompetencies.common_competencies);
+        const coreChanged = JSON.stringify(competencies.core_competencies) !== JSON.stringify(originalCompetencies.core_competencies);
+
+        if (!basicChanged && !commonChanged && !coreChanged) {
+            showToast('No competency changes detected', 'info');
+            return;
+        }
+    }
+
     try {
         const response = await fetch(`${API_BASE_URL}/api/v1/competencies/${competencyId}`, {
             method: 'PUT',
@@ -248,7 +282,7 @@ async function saveCompetencies() {
         const result = await response.json();
 
         if (result.success) {
-            alert('Competencies updated successfully!');
+            showToast('Competencies updated successfully!', 'success');
 
             // Close modal
             const modal = bootstrap.Modal.getInstance(document.getElementById('editCourseModal'));
@@ -257,10 +291,51 @@ async function saveCompetencies() {
             // Reload courses
             loadCourses();
         } else {
-            alert('Failed to update competencies: ' + (result.error || 'Unknown error'));
+            showToast('Failed to update competencies: ' + (result.error || 'Unknown error'), 'error');
         }
     } catch (error) {
         console.error('Error saving competencies:', error);
-        alert('Failed to save competencies: ' + error.message);
+        showToast('Failed to save competencies: ' + error.message, 'error');
+    }
+}
+
+// Toast notification function
+function showToast(message, type = 'success') {
+    const container = document.getElementById('toastContainer');
+    if (!container) return;
+
+    const toast = document.createElement('div');
+    toast.className = `toast-notification ${type}`;
+
+    const icon = type === 'success' ? 'bx-check' :
+        type === 'error' ? 'bx-x' :
+            type === 'warning' ? 'bx-error-alt' : 'bxs-info-circle';
+
+    toast.innerHTML = `
+        <i class="bx ${icon} toast-icon"></i>
+        <div class="toast-content">
+            <div class="toast-message">${message}</div>
+        </div>
+        <button class="toast-close" onclick="closeToast(this)">
+            <i class="bx bx-x"></i>
+        </button>
+    `;
+
+    container.appendChild(toast);
+
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+        closeToast(toast.querySelector('.toast-close'));
+    }, 5000);
+}
+
+// Close toast notification
+function closeToast(button) {
+    const toast = button.closest('.toast-notification');
+    if (toast) {
+        toast.classList.add('hiding');
+        setTimeout(() => {
+            toast.remove();
+        }, 300);
     }
 }

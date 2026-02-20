@@ -45,6 +45,9 @@
 </head>
 
 <body>
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
     <!-- Layout wrapper -->
     <div class="layout-wrapper layout-content-navbar">
         <div class="layout-container">
@@ -345,6 +348,19 @@
     <div class="layout-overlay"></div>
     </div>
     <!-- / Layout wrapper -->
+
+    <!-- Toast Notification -->
+    <div class="bs-toast toast toast-placement-ex m-2 bg-success top-0 end-0" role="alert" aria-live="assertive"
+        aria-atomic="true" id="successToast">
+        <div class="toast-header">
+            <i class="bx bx-check-circle me-2"></i>
+            <div class="me-auto fw-semibold">Success</div>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body" id="toastMessage">
+            Competencies updated successfully!
+        </div>
+    </div>
 
     <!-- Edit Course Modal -->
     <div class="modal fade" id="editCourseModal" tabindex="-1" aria-hidden="true">

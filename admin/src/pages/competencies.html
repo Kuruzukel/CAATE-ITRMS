@@ -280,550 +280,69 @@
                     <!-- Content -->
                     <div class="container-xxl flex-grow-1 container-p-y">
 
+                        <!-- Loading Spinner -->
+                        <div id="loadingSpinner" class="loading-container">
+                            <div class="loading-content">
+                                <div class="loading-spinner-wrapper">
+                                    <div class="loading-spinner">
+                                        <div class="spinner-ring"></div>
+                                        <div class="spinner-ring"></div>
+                                        <div class="spinner-ring"></div>
+                                        <div class="spinner-ring"></div>
+                                    </div>
+                                </div>
+                                <div class="loading-text">
+                                    <h4 class="loading-title">Loading Courses</h4>
+                                    <p class="loading-subtitle">Please wait while we fetch course competencies...</p>
+                                </div>
+                                <div class="loading-dots">
+                                    <span class="dot"></span>
+                                    <span class="dot"></span>
+                                    <span class="dot"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Error State -->
+                        <div id="errorState" class="alert alert-danger d-none" role="alert">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <span id="errorMessage">Failed to load courses. Please try again later.</span>
+                        </div>
+
+                        <!-- Empty State -->
+                        <div id="emptyState" class="text-center py-5 d-none">
+                            <i class="fas fa-book-open fa-3x text-muted mb-3"></i>
+                            <h5>No Courses Available</h5>
+                            <p class="text-muted">There are currently no courses to display.</p>
+                        </div>
+
                         <!-- Courses Grid -->
-                        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-
-                            <!-- Course 1 -->
-                            <div class="col">
-                                <div class="card h-100">
-                                    <img src="https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&h=250&fit=crop"
-                                        class="card-img-top" alt="Nail Care Services NC II"
-                                        style="height: 200px; object-fit: cover;" />
-                                    <div class="card-body d-flex flex-column">
-                                        <span class="badge bg-primary mb-2 align-self-start">NC II - SOCBCN220</span>
-                                        <h5 class="card-title">Beauty Care (Nail Care) Services NC II</h5>
-                                        <div class="card-text flex-grow-1">
-                                            <div class="mb-2">
-                                                <strong class="text-primary">Basic Competencies:</strong>
-                                                <ul class="small mb-2" style="padding-left: 1.25rem;">
-                                                    <li>Participate in workplace communication</li>
-                                                    <li>Work in a team environment</li>
-                                                    <li>Practice career professionalism</li>
-                                                    <li>Practice occupational health and safety procedures</li>
-                                                </ul>
-                                            </div>
-                                            <div class="mb-2">
-                                                <strong class="text-primary">Common Competencies:</strong>
-                                                <ul class="small mb-2" style="padding-left: 1.25rem;">
-                                                    <li>Maintain an effective relationship with clients/customers</li>
-                                                    <li>Manage own performance</li>
-                                                    <li>Apply quality standards</li>
-                                                    <li>Maintain a safe, clean and efficient environment</li>
-                                                </ul>
-                                            </div>
-                                            <div>
-                                                <strong class="text-primary">Core Competencies:</strong>
-                                                <ul class="small" style="padding-left: 1.25rem;">
-                                                    <li>Perform manicure and pedicure</li>
-                                                    <li>Perform hand spa</li>
-                                                    <li>Perform foot spa</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex justify-content-between align-items-center mt-3">
-                                            <small><i class="fas fa-clock me-1"></i> 307 Hours (39 Days)</small>
-                                            <button class="btn btn-sm btn-outline-primary edit-course-btn"
-                                                data-bs-toggle="modal" data-bs-target="#editCourseModal"
-                                                data-badge="NC II - SOCBCN220"
-                                                data-title="Beauty Care (Nail Care) Services NC II"
-                                                data-description="Master professional nail care techniques including manicure, pedicure, nail art, and enhancement services."
-                                                data-hours="307 Hours (39 Days)"
-                                                data-image="https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&h=250&fit=crop">
-                                                <i class="bx bx-edit"></i> Edit
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Course 2 -->
-                            <div class="col">
-                                <div class="card h-100">
-                                    <img src="https://images.unsplash.com/photo-1552693673-1bf958298935?w=400&h=250&fit=crop"
-                                        class="card-img-top" alt="Skin Care Services NC II"
-                                        style="height: 200px; object-fit: cover;" />
-                                    <div class="card-body d-flex flex-column">
-                                        <span class="badge bg-primary mb-2 align-self-start">NC II - SOCBEC219</span>
-                                        <h5 class="card-title">Beauty Care (Skin Care) Services NC II</h5>
-                                        <div class="card-text flex-grow-1">
-                                            <div class="mb-2">
-                                                <strong class="text-primary">Basic Competencies:</strong>
-                                                <ul class="small mb-2" style="padding-left: 1.25rem;">
-                                                    <li>Participate in workplace communication</li>
-                                                    <li>Work in a team environment</li>
-                                                    <li>Solve/address general workplace problems</li>
-                                                    <li>Develop career and life decisions</li>
-                                                    <li>Contribute to workplace innovation</li>
-                                                    <li>Present relevant information</li>
-                                                    <li>Practice occupational safety and health policies and procedures
-                                                    </li>
-                                                    <li>Exercise efficient and effective sustainable practices in the
-                                                        workplace</li>
-                                                    <li>Practice entrepreneurial skills in the workplace</li>
-                                                </ul>
-                                            </div>
-                                            <div class="mb-2">
-                                                <strong class="text-primary">Common Competencies:</strong>
-                                                <ul class="small mb-2" style="padding-left: 1.25rem;">
-                                                    <li>Maintain an effective relationship with clients/customers</li>
-                                                    <li>Manage own performance</li>
-                                                    <li>Apply quality standards</li>
-                                                    <li>Maintain a safe, clean and efficient environment</li>
-                                                </ul>
-                                            </div>
-                                            <div>
-                                                <strong class="text-primary">Core Competencies:</strong>
-                                                <ul class="small" style="padding-left: 1.25rem;">
-                                                    <li>Perform facial cleansing</li>
-                                                    <li>Perform temporary hair removal activity</li>
-                                                    <li>Perform body scrub</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex justify-content-between align-items-center mt-3">
-                                            <small><i class="fas fa-clock me-1"></i> 421 Hours (53 Days)</small>
-                                            <button class="btn btn-sm btn-outline-primary edit-course-btn"
-                                                data-bs-toggle="modal" data-bs-target="#editCourseModal"
-                                                data-badge="NC II - SOCBEC219"
-                                                data-title="Beauty Care (Skin Care) Services NC II"
-                                                data-description="Develop expertise in professional skincare treatments, facial therapies, and comprehensive skin analysis techniques."
-                                                data-hours="421 Hours (53 Days)"
-                                                data-image="https://images.unsplash.com/photo-1552693673-1bf958298935?w=400&h=250&fit=crop">
-                                                <i class="bx bx-edit"></i> Edit
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Course 3 -->
-                            <div class="col">
-                                <div class="card h-100">
-                                    <img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=400&h=250&fit=crop"
-                                        class="card-img-top" alt="Aesthetic Services Level III"
-                                        style="height: 200px; object-fit: cover;" />
-                                    <div class="card-body d-flex flex-column">
-                                        <span class="badge bg-info mb-2 align-self-start">Level III</span>
-                                        <h5 class="card-title">Aesthetic Services Level III</h5>
-                                        <div class="card-text flex-grow-1">
-                                            <div class="mb-2">
-                                                <strong class="text-primary">Basic Competencies:</strong>
-                                                <ul class="small mb-2" style="padding-left: 1.25rem;">
-                                                    <li>Lead workplace communication</li>
-                                                    <li>Lead small teams</li>
-                                                    <li>Apply critical thinking and problem-solving techniques in the
-                                                        workplace</li>
-                                                    <li>Work in a diverse environment</li>
-                                                    <li>Propose methods of applying learning and innovation in the
-                                                        organization</li>
-                                                    <li>Use information systematically</li>
-                                                    <li>Evaluate occupational safety and health work practices</li>
-                                                    <li>Evaluate environmental work practices</li>
-                                                    <li>Facilitate entrepreneurial skills for MSMEs</li>
-                                                </ul>
-                                            </div>
-                                            <div class="mb-2">
-                                                <strong class="text-primary">Common Competencies:</strong>
-                                                <ul class="small mb-2" style="padding-left: 1.25rem;">
-                                                    <li>Maintain an effective relationship with clients/customers</li>
-                                                    <li>Manage own performance</li>
-                                                    <li>Apply quality standards</li>
-                                                    <li>Maintain a safe, clean and efficient work environment</li>
-                                                </ul>
-                                            </div>
-                                            <div>
-                                                <strong class="text-primary">Core Competencies:</strong>
-                                                <ul class="small" style="padding-left: 1.25rem;">
-                                                    <li>Perform advanced facial treatment</li>
-                                                    <li>Perform chemical skin peeling</li>
-                                                    <li>Perform light therapy</li>
-                                                    <li>Perform heat therapy</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex justify-content-between align-items-center mt-3">
-                                            <small><i class="fas fa-clock me-1"></i> 80 Hours (10 Days)</small>
-                                            <button class="btn btn-sm btn-outline-primary edit-course-btn"
-                                                data-bs-toggle="modal" data-bs-target="#editCourseModal"
-                                                data-badge="Level III" data-title="Aesthetic Services Level III"
-                                                data-description="Advance your career with comprehensive aesthetic services training and modern beauty technologies."
-                                                data-hours="80 Hours (10 Days)"
-                                                data-image="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=400&h=250&fit=crop">
-                                                <i class="bx bx-edit"></i> Edit
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Course 4 -->
-                            <div class="col">
-                                <div class="card h-100">
-                                    <img src="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?w=400&h=250&fit=crop"
-                                        class="card-img-top" alt="Advanced Skin Care Services"
-                                        style="height: 200px; object-fit: cover;" />
-                                    <div class="card-body d-flex flex-column">
-                                        <span class="badge bg-info mb-2 align-self-start">Level III</span>
-                                        <h5 class="card-title">Advanced Skin Care Services Level III</h5>
-                                        <div class="card-text flex-grow-1">
-                                            <div class="mb-2">
-                                                <strong class="text-primary">Basic Competencies:</strong>
-                                                <ul class="small mb-2" style="padding-left: 1.25rem;">
-                                                    <li>Lead workplace communication</li>
-                                                    <li>Lead small teams</li>
-                                                    <li>Apply critical thinking and problem-solving techniques in the
-                                                        workplace</li>
-                                                    <li>Work in a diverse environment</li>
-                                                    <li>Propose methods of applying learning and innovation in the
-                                                        organization</li>
-                                                    <li>Use information systematically</li>
-                                                    <li>Evaluate occupational safety and health work practices</li>
-                                                    <li>Evaluate environmental work practices</li>
-                                                    <li>Facilitate entrepreneurial skills for MSMEs</li>
-                                                </ul>
-                                            </div>
-                                            <div class="mb-2">
-                                                <strong class="text-primary">Common Competencies:</strong>
-                                                <ul class="small mb-2" style="padding-left: 1.25rem;">
-                                                    <li>Maintain an effective relationship with clients/customers</li>
-                                                    <li>Manage own performance</li>
-                                                    <li>Apply quality standards</li>
-                                                    <li>Maintain a safe, clean and efficient work environment</li>
-                                                </ul>
-                                            </div>
-                                            <div>
-                                                <strong class="text-primary">Core Competencies:</strong>
-                                                <ul class="small" style="padding-left: 1.25rem;">
-                                                    <li>Perform BB glow facial</li>
-                                                    <li>Perform collagen induction therapy</li>
-                                                    <li>Perform warts removal treatment</li>
-                                                    <li>Perform comedone extraction procedure</li>
-                                                    <li>Perform hair loss treatment therapy</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex justify-content-between align-items-center mt-3">
-                                            <small><i class="fas fa-clock me-1"></i> 100 Hours (13 Days)</small>
-                                            <button class="btn btn-sm btn-outline-primary edit-course-btn"
-                                                data-bs-toggle="modal" data-bs-target="#editCourseModal"
-                                                data-badge="Level III"
-                                                data-title="Advanced Skin Care Services Level III"
-                                                data-description="Master specialized techniques in anti-aging treatments, corrective skincare, and clinical-grade procedures."
-                                                data-hours="100 Hours (13 Days)"
-                                                data-image="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?w=400&h=250&fit=crop">
-                                                <i class="bx bx-edit"></i> Edit
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Course 5 -->
-                            <div class="col">
-                                <div class="card h-100">
-                                    <img src="https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=400&h=250&fit=crop"
-                                        class="card-img-top" alt="Permanent Make-Up Tattoo Services"
-                                        style="height: 200px; object-fit: cover;" />
-                                    <div class="card-body d-flex flex-column">
-                                        <span class="badge bg-info mb-2 align-self-start">Level III</span>
-                                        <h5 class="card-title">Permanent Make-Up Tattoo Services Level III</h5>
-                                        <div class="card-text flex-grow-1">
-                                            <div class="mb-2">
-                                                <strong class="text-primary">Basic Competencies:</strong>
-                                                <ul class="small mb-2" style="padding-left: 1.25rem;">
-                                                    <li>Lead workplace communication</li>
-                                                    <li>Lead small teams</li>
-                                                    <li>Apply critical thinking and problem-solving techniques in the
-                                                        workplace</li>
-                                                    <li>Work in a diverse environment</li>
-                                                    <li>Propose methods of applying learning and innovation in the
-                                                        organization</li>
-                                                    <li>Use information systematically</li>
-                                                    <li>Evaluate occupational safety and health work practices</li>
-                                                    <li>Evaluate environmental work practices</li>
-                                                    <li>Facilitate entrepreneurial skills for MSMEs</li>
-                                                </ul>
-                                            </div>
-                                            <div class="mb-2">
-                                                <strong class="text-primary">Common Competencies:</strong>
-                                                <ul class="small mb-2" style="padding-left: 1.25rem;">
-                                                    <li>Maintain an effective relationship with clients/customers</li>
-                                                    <li>Manage own performance</li>
-                                                    <li>Apply quality standards</li>
-                                                    <li>Maintain a safe, clean and efficient work environment</li>
-                                                </ul>
-                                            </div>
-                                            <div>
-                                                <strong class="text-primary">Core Competencies:</strong>
-                                                <ul class="small" style="padding-left: 1.25rem;">
-                                                    <li>Administer eyebrow pigmentation</li>
-                                                    <li>Administer eyeliner pigmentation</li>
-                                                    <li>Administer lip pigmentation</li>
-                                                    <li>Perform dermopigmentation removal procedure</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex justify-content-between align-items-center mt-3">
-                                            <small><i class="fas fa-clock me-1"></i> 100 Hours (13 Days)</small>
-                                            <button class="btn btn-sm btn-outline-primary edit-course-btn"
-                                                data-bs-toggle="modal" data-bs-target="#editCourseModal"
-                                                data-badge="Level III"
-                                                data-title="Permanent Make-Up Tattoo Services Level III"
-                                                data-description="Learn precision techniques for eyebrow microblading, eyeliner tattooing, and lip pigmentation services."
-                                                data-hours="100 Hours (13 Days)"
-                                                data-image="https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=400&h=250&fit=crop">
-                                                <i class="bx bx-edit"></i> Edit
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Course 6 -->
-                            <div class="col">
-                                <div class="card h-100">
-                                    <img src="https://northshoremedicalclinic.ca/wp-content/uploads/2022/05/PRP-for-Hair-Loss.jpg"
-                                        class="card-img-top" alt="Collagen Induction Therapy"
-                                        style="height: 200px; object-fit: cover;" />
-                                    <div class="card-body d-flex flex-column">
-                                        <span class="badge bg-warning mb-2 align-self-start">Specialized</span>
-                                        <h5 class="card-title">Perform Collagen Induction Therapy & Hair Loss Treatment
-                                        </h5>
-                                        <div class="card-text flex-grow-1">
-                                            <div>
-                                                <strong class="text-primary">Core Competencies:</strong>
-                                                <ul class="small" style="padding-left: 1.25rem;">
-                                                    <li>Perform collagen induction therapy</li>
-                                                    <li>Perform hair loss treatment therapy</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex justify-content-between align-items-center mt-3">
-                                            <small><i class="fas fa-clock me-1"></i> 8 Hours (1 Day)</small>
-                                            <button class="btn btn-sm btn-outline-primary edit-course-btn"
-                                                data-bs-toggle="modal" data-bs-target="#editCourseModal"
-                                                data-badge="Specialized"
-                                                data-title="Perform Collagen Induction Therapy & Hair Loss Treatment"
-                                                data-description="Master advanced microneedling techniques for skin rejuvenation and evidence-based hair loss treatments."
-                                                data-hours="8 Hours (1 Day)"
-                                                data-image="https://northshoremedicalclinic.ca/wp-content/uploads/2022/05/PRP-for-Hair-Loss.jpg">
-                                                <i class="bx bx-edit"></i> Edit
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Course 7 -->
-                            <div class="col">
-                                <div class="card h-100">
-                                    <img src="https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?w=400&h=250&fit=crop"
-                                        class="card-img-top" alt="Advanced Facial Treatment"
-                                        style="height: 200px; object-fit: cover;" />
-                                    <div class="card-body d-flex flex-column">
-                                        <span class="badge bg-warning mb-2 align-self-start">Specialized</span>
-                                        <h5 class="card-title">Perform Advanced Facial Treatment & Chemical Skin Peeling
-                                        </h5>
-                                        <div class="card-text flex-grow-1">
-                                            <div>
-                                                <strong class="text-primary">Core Competencies:</strong>
-                                                <ul class="small" style="padding-left: 1.25rem;">
-                                                    <li>Perform advance facial treatment</li>
-                                                    <li>Perform chemical skin peeling</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex justify-content-between align-items-center mt-3">
-                                            <small><i class="fas fa-clock me-1"></i> 16 Hours (2 Days)</small>
-                                            <button class="btn btn-sm btn-outline-primary edit-course-btn"
-                                                data-bs-toggle="modal" data-bs-target="#editCourseModal"
-                                                data-badge="Specialized"
-                                                data-title="Perform Advanced Facial Treatment & Chemical Skin Peeling"
-                                                data-description="Gain expertise in advanced facial protocols and controlled chemical exfoliation for skin transformation."
-                                                data-hours="16 Hours (2 Days)"
-                                                data-image="https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?w=400&h=250&fit=crop">
-                                                <i class="bx bx-edit"></i> Edit
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Course 8 -->
-                            <div class="col">
-                                <div class="card h-100">
-                                    <img src="https://omyguard.com/cdn/shop/articles/What_are_the_benefits_and_differences_of_blue_light_therapy_and_red_light_therapy.png?v=1721188964&width=1000"
-                                        class="card-img-top" alt="Light Therapy & Heat Therapy"
-                                        style="height: 200px; object-fit: cover;" />
-                                    <div class="card-body d-flex flex-column">
-                                        <span class="badge bg-warning mb-2 align-self-start">Specialized</span>
-                                        <h5 class="card-title">Perform Light Therapy & Heat Therapy</h5>
-                                        <div class="card-text flex-grow-1">
-                                            <div>
-                                                <strong class="text-primary">Core Competencies:</strong>
-                                                <ul class="small" style="padding-left: 1.25rem;">
-                                                    <li>Perform light therapy treatment</li>
-                                                    <li>Perform heat therapy treatment</li>
-                                                    <li>Apply LED therapy techniques</li>
-                                                    <li>Apply infrared treatment modalities</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex justify-content-between align-items-center mt-3">
-                                            <small><i class="fas fa-clock me-1"></i> 16 Hours (2 Days)</small>
-                                            <button class="btn btn-sm btn-outline-primary edit-course-btn"
-                                                data-bs-toggle="modal" data-bs-target="#editCourseModal"
-                                                data-badge="Specialized"
-                                                data-title="Perform Light Therapy & Heat Therapy"
-                                                data-description="Master LED therapy, infrared treatments, and thermal modalities for skin rejuvenation and healing."
-                                                data-hours="16 Hours (2 Days)"
-                                                data-image="https://omyguard.com/cdn/shop/articles/What_are_the_benefits_and_differences_of_blue_light_therapy_and_red_light_therapy.png?v=1721188964&width=1000">
-                                                <i class="bx bx-edit"></i> Edit
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Course 9 -->
-                            <div class="col">
-                                <div class="card h-100">
-                                    <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=400&h=250&fit=crop"
-                                        class="card-img-top" alt="Trainers Methodology"
-                                        style="height: 200px; object-fit: cover;" />
-                                    <div class="card-body d-flex flex-column">
-                                        <span class="badge bg-secondary mb-2 align-self-start">Level I</span>
-                                        <h5 class="card-title">Trainers Methodology Level I</h5>
-                                        <div class="card-text flex-grow-1">
-                                            <div class="mb-2">
-                                                <strong class="text-primary">Basic Competencies:</strong>
-                                                <ul class="small mb-2" style="padding-left: 1.25rem;">
-                                                    <li>Lead workplace communication</li>
-                                                    <li>Apply math and science principles in technical training</li>
-                                                    <li>Apply environmental principles and advocate conservation</li>
-                                                    <li>Utilize IT applications in technical training</li>
-                                                    <li>Lead small teams</li>
-                                                    <li>Apply work ethics, values and quality principles</li>
-                                                    <li>Work effectively in vocational education and training</li>
-                                                    <li>Foster and promote a learning culture</li>
-                                                    <li>Ensure healthy and safe learning environment</li>
-                                                    <li>Maintain and enhance professional practice</li>
-                                                    <li>Develop appreciation for cost-benefits of technical training
-                                                    </li>
-                                                    <li>Develop global understanding of labor markets</li>
-                                                </ul>
-                                            </div>
-                                            <div>
-                                                <strong class="text-primary">Core Competencies:</strong>
-                                                <ul class="small" style="padding-left: 1.25rem;">
-                                                    <li>Plan training sessions</li>
-                                                    <li>Facilitate learning sessions</li>
-                                                    <li>Supervise work-based learning</li>
-                                                    <li>Conduct competency assessment</li>
-                                                    <li>Maintain training facilities</li>
-                                                    <li>Utilize electronic media in facilitating training</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex justify-content-between align-items-center mt-3">
-                                            <small><i class="fas fa-clock me-1"></i> 264 Hours (33 Days)</small>
-                                            <button class="btn btn-sm btn-outline-primary edit-course-btn"
-                                                data-bs-toggle="modal" data-bs-target="#editCourseModal"
-                                                data-badge="Level I" data-title="Trainers Methodology Level I"
-                                                data-description="Develop essential training and facilitation skills to become a certified TESDA beauty educator."
-                                                data-hours="264 Hours (33 Days)"
-                                                data-image="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=400&h=250&fit=crop">
-                                                <i class="bx bx-edit"></i> Edit
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Course 10 -->
-                            <div class="col">
-                                <div class="card h-100">
-                                    <img src="https://tse3.mm.bing.net/th/id/OIP.f7lQ7Rt0CCBsxUWqGsYPwQHaE8?pid=Api&P=0&h=180"
-                                        class="card-img-top" alt="Eyelash and Eyebrow Services"
-                                        style="height: 200px; object-fit: cover;" />
-                                    <div class="card-body d-flex flex-column">
-                                        <span class="badge bg-info mb-2 align-self-start">Level III</span>
-                                        <h5 class="card-title">Eyelash and Eyebrow Services Level III</h5>
-                                        <div class="card-text flex-grow-1">
-                                            <div class="mb-2">
-                                                <strong class="text-primary">Basic Competencies:</strong>
-                                                <ul class="small mb-2" style="padding-left: 1.25rem;">
-                                                    <li>Lead workplace communication</li>
-                                                    <li>Lead small teams</li>
-                                                    <li>Apply critical thinking and problem-solving techniques in the
-                                                        workplace</li>
-                                                    <li>Work in a diverse environment</li>
-                                                    <li>Propose methods of applying learning and innovation in the
-                                                        organization</li>
-                                                    <li>Use information systematically</li>
-                                                    <li>Evaluate occupational safety and health work practices</li>
-                                                    <li>Evaluate environmental work practices</li>
-                                                    <li>Facilitate entrepreneurial skills for micro-small-medium
-                                                        enterprises (MSMEs)</li>
-                                                </ul>
-                                            </div>
-                                            <div class="mb-2">
-                                                <strong class="text-primary">Common Competencies:</strong>
-                                                <ul class="small mb-2" style="padding-left: 1.25rem;">
-                                                    <li>Maintain an effective relationship with clients/customers</li>
-                                                    <li>Manage own performance</li>
-                                                    <li>Apply quality standards</li>
-                                                    <li>Maintain a safe, clean and efficient work environment</li>
-                                                </ul>
-                                            </div>
-                                            <div>
-                                                <strong class="text-primary">Core Competencies:</strong>
-                                                <ul class="small" style="padding-left: 1.25rem;">
-                                                    <li>Perform eyelash extensions and removal</li>
-                                                    <li>Perform eyelash lift and tint</li>
-                                                    <li>Perform eyebrow lamination and tint</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex justify-content-between align-items-center mt-3">
-                                            <small><i class="fas fa-clock me-1"></i> 80 Hours (10 Days)</small>
-                                            <button class="btn btn-sm btn-outline-primary edit-course-btn"
-                                                data-bs-toggle="modal" data-bs-target="#editCourseModal"
-                                                data-badge="Level III"
-                                                data-title="Eyelash and Eyebrow Services Level III"
-                                                data-description="Perfect eyelash extensions, lash lifting, brow lamination, tinting, and professional shaping techniques."
-                                                data-hours="80 Hours (10 Days)"
-                                                data-image="https://tse3.mm.bing.net/th/id/OIP.f7lQ7Rt0CCBsxUWqGsYPwQHaE8?pid=Api&P=0&h=180">
-                                                <i class="bx bx-edit"></i> Edit
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        <div id="coursesGrid" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 d-none">
+                            <!-- Courses will be dynamically loaded here -->
                         </div>
                     </div>
-                    <!-- / Content -->
-
-                    <!-- Footer -->
-                    <footer class="content-footer footer bg-footer-theme">
-                        <div
-                            class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
-                            <div class="mb-2 mb-md-0">
-                                © <span id="currentYear"></span>, Creative Aesthetic Academy & Technical Education Inc.
-                            </div>
-                        </div>
-                    </footer>
-                    <!-- / Footer -->
-
-                    <div class="content-backdrop fade"></div>
                 </div>
-                <!-- Content wrapper -->
-            </div>
-            <!-- / Layout page -->
-        </div>
+                <!-- / Content -->
 
-        <!-- Overlay -->
-        <div class="layout-overlay"></div>
+                <!-- Footer -->
+                <footer class="content-footer footer bg-footer-theme">
+                    <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
+                        <div class="mb-2 mb-md-0">
+                            © <span id="currentYear"></span>, Creative Aesthetic Academy & Technical Education Inc.
+                        </div>
+                    </div>
+                </footer>
+                <!-- / Footer -->
+
+                <div class="content-backdrop fade"></div>
+            </div>
+            <!-- Content wrapper -->
+        </div>
+        <!-- / Layout page -->
+    </div>
+
+    <!-- Overlay -->
+    <div class="layout-overlay"></div>
     </div>
     <!-- / Layout wrapper -->
 
@@ -907,9 +426,6 @@
     <script src="../assets/js/admin-dashboard.js"></script>
 
     <!-- Competencies Page JS -->
-    <script src="../assets/js/competencies.js"></script>
-
-    <!-- Competencies JS -->
     <script src="../assets/js/competencies.js"></script>
 </body>
 

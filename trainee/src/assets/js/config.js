@@ -23,5 +23,11 @@ let config = {
     headingColor: '#566a7f',
     axisColor: '#a1acb8',
     borderColor: '#eceef1'
+  },
+  api: {
+    // API Base URL - adjust this based on your environment
+    baseUrl: window.location.hostname === 'localhost'
+      ? 'http://localhost/CAATE-ITRMS/backend/public'
+      : '/backend/public'
   }
 };

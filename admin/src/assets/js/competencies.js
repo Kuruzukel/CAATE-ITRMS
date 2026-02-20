@@ -34,8 +34,8 @@ async function loadCourses() {
         if (emptyState) emptyState.classList.add('d-none');
         if (coursesGrid) coursesGrid.classList.add('d-none');
 
-        // Fetch courses
-        const response = await fetch(`${API_BASE_URL}/api/v1/courses`);
+        // Fetch competencies
+        const response = await fetch(`${API_BASE_URL}/api/v1/competencies`);
 
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -59,14 +59,14 @@ async function loadCourses() {
             if (emptyState) emptyState.classList.remove('d-none');
         }
     } catch (error) {
-        console.error('Error loading courses:', error);
+        console.error('Error loading competencies:', error);
 
         // Show error
         if (loadingSpinner) loadingSpinner.classList.add('d-none');
         if (errorState) errorState.classList.remove('d-none');
         const errorMessage = document.getElementById('errorMessage');
         if (errorMessage) {
-            errorMessage.textContent = `Failed to load courses: ${error.message}`;
+            errorMessage.textContent = `Failed to load competencies: ${error.message}`;
         }
     }
 }
@@ -93,11 +93,11 @@ function createCourseCard(course) {
     let badgeClass = 'bg-primary';
     const badgeText = course.badge || course.course_code || '';
 
-    if (badgeText.includes('Level III')) {
+    if (badgeText.includes('Level III') || badgeText.includes('L3')) {
         badgeClass = 'bg-info';
-    } else if (badgeText.includes('Specialized')) {
+    } else if (badgeText.includes('Specialized') || badgeText.includes('SPEC')) {
         badgeClass = 'bg-warning';
-    } else if (badgeText.includes('Level I')) {
+    } else if (badgeText.includes('Level I') || badgeText.includes('L1')) {
         badgeClass = 'bg-secondary';
     }
 

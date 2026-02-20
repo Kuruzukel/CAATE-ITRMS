@@ -11,7 +11,7 @@ class Course {
     }
     
     public function all() {
-        $cursor = $this->collection->find();
+        $cursor = $this->collection->find([], ['sort' => ['order' => 1]]);
         return iterator_to_array($cursor);
     }
     
@@ -69,13 +69,27 @@ class Course {
                 ['$set' => $data]
             );
             
-            // If competencies were updated, sync with competencies collection
-            if ($hasChanges && (
-                isset($data['basic_competencies']) || 
-                isset($data['common_competencies']) || 
-                isset($data['core_competencies'])
-            )) {
-                $this->syncCompetenciesToCollection($existing, $data);
+            // Check if course_code or title changed
+            $oldCourseCode = $existing['course_code'] ?? '';
+            $newCourseCode = $data['course_code'] ?? $oldCourseCode;
+            $oldTitle = $existing['title'] ?? '';
+            $newTitle = $data['title'] ?? $oldTitle;
+            
+            $courseInfoChanged = ($oldCourseCode !== $newCourseCode) || ($oldTitle !== $newTitle);
+            
+            // Sync to competencies if course info changed or competencies were updated
+            if ($hasChanges && $oldCourseCode) {
+                if ($courseInfoChanged) {
+                    // Update course_code and title in competencies collection
+                    $this->updateCompetenciesCourseInfo($oldCourseCode, $newCourseCode, $newTitle);
+                }
+                
+                // If competencies arrays were updated, sync them
+                if (isset($data['basic_competencies']) || 
+                    isset($data['common_competencies']) || 
+                    isset($data['core_competencies'])) {
+                    $this->syncCompetenciesToCollection($existing, $data);
+                }
             }
             
             // Return both success status and whether actual changes were made
@@ -91,6 +105,25 @@ class Course {
                 'matched' => false,
                 'error' => $e->getMessage()
             ];
+        }
+    }
+    
+    private function updateCompetenciesCourseInfo($oldCourseCode, $newCourseCode, $newTitle) {
+        try {
+            $db = getMongoConnection();
+            $competenciesCollection = $db->competencies;
+            
+            // Update course_code and title in all matching competencies
+            $competenciesCollection->updateMany(
+                ['course_code' => $oldCourseCode],
+                ['$set' => [
+                    'course_code' => $newCourseCode,
+                    'title' => $newTitle,
+                    'updated_at' => new MongoDB\BSON\UTCDateTime()
+                ]]
+            );
+        } catch (Exception $e) {
+            error_log("Failed to update competencies course info: " . $e->getMessage());
         }
     }
     

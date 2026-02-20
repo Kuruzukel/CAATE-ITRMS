@@ -291,7 +291,7 @@ For issues or questions, refer to:
 ---
 
 **Developer:** KEL TO YAHHHH!  
-**Email:** [mikasaackerman.jme@gmail.com](mailto:mikasaackerman.jme@gmail.com)  
+**Email:** developer@example.com  
 **Last Updated**: February 2026  
 **Status**: Active Development  
 **Part of:** [CAATE-ITRMS Project](../README.md)

@@ -16,11 +16,6 @@ require_once __DIR__ . '/seed_competencies.php';
 
 echo "\n\n";
 
-echo "Step 3: Verifying Data...\n";
-echo "----------------------------------------\n";
-require_once __DIR__ . '/verify_competencies.php';
-
-echo "\n";
 echo "========================================\n";
 echo "✓ All seeding operations completed!\n";
 echo "========================================\n";

@@ -677,7 +677,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Contact & Support
 
 **Developer:** KEL TO YAHHHH!  
-**Email:** [mikasaackerman.jme@gmail.com](mailto:mikasaackerman.jme@gmail.com)  
 **GitHub:** [@Kuruzukel](https://github.com/Kuruzukel)
 
 **Institution:** Creative Aesthetic Academy & Technical Education Inc.  
@@ -688,7 +687,6 @@ For issues, questions, or suggestions:
 1. Check the [Documentation](#documentation) section
 2. Review application-specific README files
 3. Open an issue on GitHub
-4. Contact the developer via email
 
 ---
 

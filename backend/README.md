@@ -67,10 +67,10 @@ This will seed:
 
 **Default Admin Credentials:**
 
-- Email: admin@caate.edu
-- Password: admin123
+- Email: admin@example.com
+- Password: ChangeMe123!
 
-**⚠️ IMPORTANT:** Change the default admin password after first login!
+**⚠️ IMPORTANT:** Change the default admin password immediately after first login!
 
 ## Security Notes
 
@@ -238,8 +238,8 @@ The database includes:
 
 ### Sample Login Credentials
 
-- **Email:** admin@caate.edu
-- **Password:** admin123
+- **Email:** admin@example.com
+- **Password:** ChangeMe123!
 
 ## API Endpoints
 
@@ -261,8 +261,8 @@ The database includes:
 
 After running the sample data seeder:
 
-- **Email:** admin@caate.edu
-- **Password:** admin123
+- **Email:** admin@example.com
+- **Password:** ChangeMe123!
 
 ## Usage Example
 
@@ -279,7 +279,7 @@ curl -X POST http://localhost/backend/public/api/v1/auth/register \
 ```bash
 curl -X POST http://localhost/backend/public/api/v1/auth/login \
   -H "Content-Type: application/json" \
-  -d '{"email":"admin@caate.edu","password":"admin123"}'
+  -d '{"email":"admin@example.com","password":"ChangeMe123!"}'
 ```
 
 ## Adding New Features

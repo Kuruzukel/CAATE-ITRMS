@@ -265,7 +265,7 @@ For questions about specific images or to request new assets, refer to the main 
 ---
 
 **Developer:** KEL TO YAHHHH!  
-**Email:** [mikasaackerman.jme@gmail.com](mailto:mikasaackerman.jme@gmail.com)  
+**Email:** developer@example.com  
 **Last Updated**: February 2026  
 **Total Assets**: 46 files  
 **Status**: Active  

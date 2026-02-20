@@ -1,0 +1,96 @@
+# Environment variables and configuration files with sensitive data
+.env
+.env.local
+.env.*.local
+*.env
+!.env.example
+config.local.php
+config.production.php
+
+# Database configuration files (keep example files)
+database.config.php
+db.config.php
+# Note: backend/app/config/database.php uses environment variables, so it's safe to commit
+
+# API keys and credentials
+api-keys.json
+credentials.json
+secrets.json
+*.key
+*.pem
+*.p12
+*.pfx
+
+# Email configuration
+mail.config.php
+email.config.php
+smtp.config.php
+
+# Authentication and session files
+auth.config.php
+session.config.php
+jwt.secret
+oauth.config.php
+
+# Backup files that might contain sensitive data
+*.sql
+*.sql.gz
+*.dump
+backup/
+backups/
+
+# Log files (may contain sensitive information)
+*.log
+logs/
+storage/logs/
+
+# Vendor dependencies
+vendor/
+node_modules/
+package-lock.json
+yarn.lock
+
+# Composer lock file (optional - some projects commit this)
+# composer.lock
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.cache
+
+# User uploaded files (may contain personal data)
+uploads/
+storage/uploads/
+public/uploads/
+
+# Compiled and build files
+*.min.js
+*.min.css
+dist/
+build/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Desktop.ini
+
+# PHP specific
+composer.phar
+
+# Testing files with sensitive data
+phpunit.xml
+.phpunit.result.cache

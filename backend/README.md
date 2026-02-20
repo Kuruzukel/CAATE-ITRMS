@@ -1,4 +1,110 @@
-# CAATE-ITRMS Backend API
+# CAATE-ITRMS Backend
+
+## Setup
+
+### 1. Install Dependencies
+
+```bash
+composer install
+```
+
+### 2. Environment Configuration
+
+The application uses environment variables for sensitive configuration. These are loaded from the system environment or can be set in your web server configuration.
+
+**Required Environment Variables:**
+
+- `DB_HOST` - MongoDB host (default: 127.0.0.1)
+- `DB_PORT` - MongoDB port (default: 27017)
+- `DB_NAME` - Database name (default: CAATE-ITRMS)
+- `DB_USERNAME` - MongoDB username (optional)
+- `DB_PASSWORD` - MongoDB password (optional)
+
+**Setting Environment Variables:**
+
+**For Apache (.htaccess):**
+
+```apache
+SetEnv DB_HOST "127.0.0.1"
+SetEnv DB_PORT "27017"
+SetEnv DB_NAME "CAATE-ITRMS"
+SetEnv DB_USERNAME "your_username"
+SetEnv DB_PASSWORD "your_password"
+```
+
+**For PHP-FPM (.env file):**
+Create a `.env` file in the backend directory (this file is gitignored):
+
+```
+DB_HOST=127.0.0.1
+DB_PORT=27017
+DB_NAME=CAATE-ITRMS
+DB_USERNAME=your_username
+DB_PASSWORD=your_password
+```
+
+**For Windows (System Environment Variables):**
+
+```cmd
+setx DB_HOST "127.0.0.1"
+setx DB_PORT "27017"
+setx DB_NAME "CAATE-ITRMS"
+```
+
+### 3. Database Setup
+
+**Seed the database:**
+
+```bash
+php seed_all.php
+```
+
+This will seed:
+
+- Courses
+- Competencies
+- Sample users (admin, staff, instructor)
+
+**Default Admin Credentials:**
+
+- Email: admin@caate.edu
+- Password: admin123
+
+**⚠️ IMPORTANT:** Change the default admin password after first login!
+
+## Security Notes
+
+- Never commit `.env` files or files containing passwords/API keys
+- Always use environment variables for sensitive configuration
+- The `.gitignore` file is configured to exclude sensitive files
+- Change default passwords in production
+- Use strong passwords for database and admin accounts
+
+## API Endpoints
+
+Base URL: `http://localhost/CAATE-ITRMS/backend/public`
+
+### Courses
+
+- `GET /api/v1/courses` - Get all courses
+- `GET /api/v1/courses/{id}` - Get course by ID
+- `POST /api/v1/courses` - Create course
+- `PUT /api/v1/courses/{id}` - Update course (also syncs competencies collection)
+- `DELETE /api/v1/courses/{id}` - Delete course
+
+### Authentication
+
+- `POST /api/v1/auth/register` - Register new user
+- `POST /api/v1/auth/login` - Login user
+
+## Dual Collection Update
+
+When updating course competencies through the API, the system automatically:
+
+1. Updates the `courses` collection (competencies as arrays)
+2. Syncs to the `competencies` collection (individual documents)
+
+This ensures data consistency across both collections. API
 
 Laravel-inspired folder structure with PHP and MongoDB for CAATE Integrated Training & Resource Management System.
 

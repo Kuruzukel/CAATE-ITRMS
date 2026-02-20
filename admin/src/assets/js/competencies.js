@@ -42,9 +42,12 @@ async function loadCourses() {
         }
 
         const result = await response.json();
+        console.log('API Response:', result);
+        console.log('Courses data:', result.data);
 
         if (result.success && result.data && result.data.length > 0) {
             coursesData = result.data;
+            console.log('First course:', coursesData[0]);
             renderCourses(coursesData);
 
             // Hide loading, show courses
@@ -86,12 +89,14 @@ function renderCourses(courses) {
 
 // Create course card
 function createCourseCard(course) {
+    console.log('Creating card for course:', course);
     const col = document.createElement('div');
     col.className = 'col';
 
     // Determine badge color
     let badgeClass = 'bg-primary';
     const badgeText = course.badge || course.course_code || '';
+    console.log('Badge text:', badgeText);
 
     if (badgeText.includes('Level III')) {
         badgeClass = 'bg-info';
@@ -105,6 +110,7 @@ function createCourseCard(course) {
     const basicComp = course.basic_competencies || [];
     const commonComp = course.common_competencies || [];
     const coreComp = course.core_competencies || [];
+    console.log('Competencies:', { basic: basicComp.length, common: commonComp.length, core: coreComp.length });
 
     col.innerHTML = `
         <div class="card h-100">
@@ -142,14 +148,14 @@ function createCourseCard(course) {
                     ` : ''}
                 </div>
                 <div class="d-flex justify-content-between align-items-center mt-3">
-                    <small><i class="fas fa-clock me-1"></i> ${course.duration || course.hours || 'Duration TBA'}</small>
+                    <small><i class="fas fa-clock me-1"></i> ${course.hours || course.duration || 'Duration TBA'}</small>
                     <button class="btn btn-sm btn-outline-primary edit-course-btn"
                         data-bs-toggle="modal"
                         data-bs-target="#editCourseModal"
                         data-course-id="${course._id?.$oid || ''}"
                         data-badge="${badgeText}"
                         data-title="${course.title || ''}"
-                        data-hours="${course.duration || course.hours || ''}"
+                        data-hours="${course.hours || course.duration || ''}"
                         data-basic-competencies="${JSON.stringify(basicComp).replace(/"/g, '&quot;')}"
                         data-common-competencies="${JSON.stringify(commonComp).replace(/"/g, '&quot;')}"
                         data-core-competencies="${JSON.stringify(coreComp).replace(/"/g, '&quot;')}">

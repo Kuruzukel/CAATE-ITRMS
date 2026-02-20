@@ -105,7 +105,7 @@ function createCourseCard(course) {
                 <h5 class="card-title">${course.title || 'Untitled Course'}</h5>
                 <p class="card-text flex-grow-1">${course.description || 'No description available.'}</p>
                 <div class="d-flex justify-content-between align-items-center mt-3">
-                    <small><i class="fas fa-clock me-1"></i> ${course.duration || course.hours || 'Duration TBA'}</small>
+                    <small><i class="fas fa-clock me-1"></i> ${course.hours || course.duration || 'Duration TBA'}</small>
                     <button class="btn btn-sm btn-primary enroll-course-btn">
                         <i class="bx bx-user-plus"></i> Enroll
                     </button>

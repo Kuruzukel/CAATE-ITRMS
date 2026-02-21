@@ -14,9 +14,10 @@
     "$date": "2026-02-21T13:58:15.738Z"
   },
   "updated_at": {
-    "$date": "2026-02-21T14:09:21.677Z"
+    "$date": "2026-02-21T14:37:46.719Z"
   },
-  "trainee_id": "TRN-2026-001"
+  "trainee_id": "TRN-2026-001",
+  "password": "aaaaaaaa"
 },
 {
   "_id": {
@@ -34,9 +35,10 @@
     "$date": "2026-02-21T13:58:15.751Z"
   },
   "updated_at": {
-    "$date": "2026-02-21T13:58:15.751Z"
+    "$date": "2026-02-21T14:37:02.149Z"
   },
-  "trainee_id": "TRN-2026-002"
+  "trainee_id": "TRN-2026-002",
+  "password": "cMEfwi3u5Gf3"
 },
 {
   "_id": {
@@ -54,9 +56,10 @@
     "$date": "2026-02-21T13:58:15.754Z"
   },
   "updated_at": {
-    "$date": "2026-02-21T13:58:15.754Z"
+    "$date": "2026-02-21T14:55:59.930Z"
   },
-  "trainee_id": "TRN-2026-003"
+  "trainee_id": "TRN-2026-003",
+  "password": "password123"
 },
 {
   "_id": {
@@ -74,9 +77,10 @@
     "$date": "2026-02-21T13:58:15.756Z"
   },
   "updated_at": {
-    "$date": "2026-02-21T13:58:15.756Z"
+    "$date": "2026-02-21T14:55:59.944Z"
   },
-  "trainee_id": "TRN-2026-004"
+  "trainee_id": "TRN-2026-004",
+  "password": "password123"
 },
 {
   "_id": {
@@ -94,9 +98,10 @@
     "$date": "2026-02-21T13:58:15.758Z"
   },
   "updated_at": {
-    "$date": "2026-02-21T13:58:15.758Z"
+    "$date": "2026-02-21T14:55:59.945Z"
   },
-  "trainee_id": "TRN-2026-005"
+  "trainee_id": "TRN-2026-005",
+  "password": "password123"
 },
 {
   "_id": {
@@ -114,9 +119,10 @@
     "$date": "2026-02-21T13:58:15.779Z"
   },
   "updated_at": {
-    "$date": "2026-02-21T13:58:15.779Z"
+    "$date": "2026-02-21T14:55:59.947Z"
   },
-  "trainee_id": "TRN-2026-006"
+  "trainee_id": "TRN-2026-006",
+  "password": "password123"
 },
 {
   "_id": {
@@ -134,9 +140,10 @@
     "$date": "2026-02-21T13:58:15.791Z"
   },
   "updated_at": {
-    "$date": "2026-02-21T13:58:15.791Z"
+    "$date": "2026-02-21T14:55:59.948Z"
   },
-  "trainee_id": "TRN-2026-007"
+  "trainee_id": "TRN-2026-007",
+  "password": "password123"
 },
 {
   "_id": {
@@ -154,9 +161,10 @@
     "$date": "2026-02-21T13:58:15.794Z"
   },
   "updated_at": {
-    "$date": "2026-02-21T13:58:15.794Z"
+    "$date": "2026-02-21T14:55:59.949Z"
   },
-  "trainee_id": "TRN-2026-008"
+  "trainee_id": "TRN-2026-008",
+  "password": "password123"
 },
 {
   "_id": {
@@ -174,29 +182,10 @@
     "$date": "2026-02-21T13:58:15.805Z"
   },
   "updated_at": {
-    "$date": "2026-02-21T13:58:15.805Z"
+    "$date": "2026-02-21T14:55:59.951Z"
   },
-  "trainee_id": "TRN-2026-009"
-},
-{
-  "_id": {
-    "$oid": "6999b9f7834f0afada02b98b"
-  },
-  "first_name": "Luis",
-  "second_name": "",
-  "last_name": "Morales",
-  "middle_name": "",
-  "suffix": "",
-  "email": "luis.morales@example.com",
-  "phone": "09171075682",
-  "status": "pending",
-  "created_at": {
-    "$date": "2026-02-21T13:58:15.808Z"
-  },
-  "updated_at": {
-    "$date": "2026-02-21T13:58:15.808Z"
-  },
-  "trainee_id": "TRN-2026-010"
+  "trainee_id": "TRN-2026-009",
+  "password": "password123"
 },
 {
   "_id": {

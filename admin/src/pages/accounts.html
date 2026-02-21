@@ -524,7 +524,7 @@
                             <div class="col-md-6 mb-3">
                                 <label for="addTraineeEmail" class="form-label">Email Address</label>
                                 <input type="email" id="addTraineeEmail" class="form-control"
-                                    placeholder="Enter email address" required>
+                                    placeholder="Enter email address" required autocomplete="email">
                             </div>
                         </div>
                         <div class="row">
@@ -532,7 +532,7 @@
                                 <label for="addTraineePhone" class="form-label">Mobile Number</label>
                                 <input type="text" id="addTraineePhone" class="form-control"
                                     placeholder="Enter mobile number" required pattern="[0-9]+"
-                                    title="Only numbers allowed"
+                                    title="Only numbers allowed" autocomplete="tel"
                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                             </div>
                             <div class="col-md-6 mb-3">
@@ -640,7 +640,7 @@
                             <div class="col-md-6 mb-3">
                                 <label for="editTraineeEmail" class="form-label">Email Address</label>
                                 <input type="email" id="editTraineeEmail" class="form-control"
-                                    placeholder="Enter email address" required>
+                                    placeholder="Enter email address" required autocomplete="email">
                             </div>
                         </div>
                         <div class="row">
@@ -648,7 +648,8 @@
                                 <label for="editTraineePhone" class="form-label">Mobile Number</label>
                                 <input type="text" id="editTraineePhone" class="form-control"
                                     placeholder="Enter mobile number" pattern="[0-9]+" title="Only numbers allowed"
-                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
+                                    autocomplete="tel" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                    required>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="editTraineePassword" class="form-label">Password (leave blank to keep
@@ -686,68 +687,73 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Trainee ID</label>
-                            <input type="text" class="form-control" id="viewTraineeId" value="#01" disabled>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Status</label>
-                            <input type="text" class="form-control" id="viewTraineeStatus" value="Enrolled" disabled>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">First Name</label>
-                            <input type="text" class="form-control" id="viewTraineeFirstName" value="" disabled>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Second Name <span class="text-muted">(Optional)</span></label>
-                            <input type="text" class="form-control" id="viewTraineeSecondName" value="" disabled>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Middle Name <span class="text-muted">(If
-                                    Applicable)</span></label>
-                            <input type="text" class="form-control" id="viewTraineeMiddleName" value="" disabled>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Last Name <span class="text-muted">(If Applicable)</span></label>
-                            <input type="text" class="form-control" id="viewTraineeLastName" value="" disabled>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Suffix</label>
-                            <input type="text" class="form-control" id="viewTraineeSuffix" value="" disabled>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Email Address</label>
-                            <input type="email" class="form-control" id="viewTraineeEmail" value="anna.cruz@email.com"
-                                disabled>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Mobile Number</label>
-                            <input type="text" class="form-control" id="viewTraineePhone" value="+63 912 345 6789"
-                                disabled>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Password</label>
-                            <div class="position-relative">
-                                <input type="password" class="form-control" id="viewTraineePassword" value="password123"
-                                    readonly style="padding-right: 40px;">
-                                <button class="btn btn-link position-absolute top-50 end-0 translate-middle-y"
-                                    type="button" id="toggleViewPassword"
-                                    style="text-decoration: none; padding: 0 12px; z-index: 10;">
-                                    <i class="bx bx-hide" id="viewPasswordIcon"
-                                        style="font-size: 1.2rem; color: #697a8d;"></i>
-                                </button>
+                    <form id="viewTraineeForm" autocomplete="off">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Trainee ID</label>
+                                <input type="text" class="form-control" id="viewTraineeId" value="#01" disabled>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Status</label>
+                                <input type="text" class="form-control" id="viewTraineeStatus" value="Enrolled"
+                                    disabled>
                             </div>
                         </div>
-                    </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">First Name</label>
+                                <input type="text" class="form-control" id="viewTraineeFirstName" value="" disabled>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Second Name <span class="text-muted">(Optional)</span></label>
+                                <input type="text" class="form-control" id="viewTraineeSecondName" value="" disabled>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Middle Name <span class="text-muted">(If
+                                        Applicable)</span></label>
+                                <input type="text" class="form-control" id="viewTraineeMiddleName" value="" disabled>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Last Name <span class="text-muted">(If
+                                        Applicable)</span></label>
+                                <input type="text" class="form-control" id="viewTraineeLastName" value="" disabled>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Suffix</label>
+                                <input type="text" class="form-control" id="viewTraineeSuffix" value="" disabled>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Email Address</label>
+                                <input type="email" class="form-control" id="viewTraineeEmail"
+                                    value="anna.cruz@email.com" disabled autocomplete="email">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Mobile Number</label>
+                                <input type="text" class="form-control" id="viewTraineePhone" value="+63 912 345 6789"
+                                    disabled autocomplete="tel">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Password</label>
+                                <div class="position-relative">
+                                    <input type="password" class="form-control" id="viewTraineePassword"
+                                        value="password123" readonly autocomplete="current-password"
+                                        style="padding-right: 40px;">
+                                    <button class="btn btn-link position-absolute top-50 end-0 translate-middle-y"
+                                        type="button" id="toggleViewPassword"
+                                        style="text-decoration: none; padding: 0 12px; z-index: 10;">
+                                        <i class="bx bx-hide" id="viewPasswordIcon"
+                                            style="font-size: 1.2rem; color: #697a8d;"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>

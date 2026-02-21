@@ -985,14 +985,14 @@ input[type="date"]::-webkit-clear-button {
 .footer-links li {
     margin-bottom: 0;
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     word-break: break-word;
     line-height: 1.6;
 }
 
 .footer-links li i {
     flex-shrink: 0;
-    margin-top: 2px;
+    margin-top: 0;
 }
 
 .footer-links a {
@@ -1003,6 +1003,16 @@ input[type="date"]::-webkit-clear-button {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
+}
+
+.footer-links span {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1rem;
+}
+
+.footer-links span {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1rem;
 }
 
 .footer-links a:hover {

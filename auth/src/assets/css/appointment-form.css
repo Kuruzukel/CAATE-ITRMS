@@ -1486,6 +1486,21 @@ input[type="date"]::-webkit-clear-button {
 
 /* Responsive Footer */
 @media (max-width: 768px) {
+    .footer-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .footer-column {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .footer-links {
+        align-items: center;
+    }
+
     .footer-brand {
         align-items: center;
     }

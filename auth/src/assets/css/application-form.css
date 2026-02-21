@@ -1485,6 +1485,32 @@ header {
 
 /* Responsive */
 @media (max-width: 768px) {
+    .footer-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .footer-column {
+        align-items: center;
+    }
+
+    .footer-links {
+        align-items: center;
+    }
+
+    .footer-brand {
+        align-items: center;
+    }
+
+    .footer-logo-img {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .footer-social {
+        justify-content: center;
+    }
+
     .picture-signature-section {
         grid-template-columns: 1fr;
     }

@@ -2480,6 +2480,24 @@ h6 {
     text-align: center;
   }
 
+  .footer-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .footer-links {
+    align-items: center;
+  }
+
+  .footer-column {
+    align-items: center;
+  }
+
+  .footer-links {
+    align-items: center;
+  }
+
   .footer-brand {
     align-items: center;
   }

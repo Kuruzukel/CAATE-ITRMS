@@ -1,0 +1,190 @@
+[{
+  "_id": {
+    "$oid": "69986370220fdef72f0aa3a2"
+  },
+  "badge": "NC II - SOCBCN220",
+  "course_code": "NC II - SOCBCN220",
+  "title": "Beauty Care (Nail Care) Services NC II",
+  "description": "Master professional nail care techniques including manicure, pedicure, nail art, and enhancement services.",
+  "hours": "307 Hours (39 Days)",
+  "duration": "307 Hours (39 Days)",
+  "image": "https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&h=250&fit=crop",
+  "created_at": {
+    "$date": "2026-02-20T13:36:48.533Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-20T13:36:48.533Z"
+  },
+  "enrollment_status": "Unpublished"
+},
+{
+  "_id": {
+    "$oid": "69986370220fdef72f0aa3a3"
+  },
+  "badge": "NC II - SOCBEC219",
+  "course_code": "NC II - SOCBEC219",
+  "title": "Beauty Care (Skin Care) Services NC II",
+  "description": "Develop expertise in professional skincare treatments, facial therapies, and comprehensive skin analysis techniques.",
+  "hours": "421 Hours (53 Days)",
+  "duration": "421 Hours (53 Days)",
+  "image": "https://images.unsplash.com/photo-1552693673-1bf958298935?w=400&h=250&fit=crop",
+  "created_at": {
+    "$date": "2026-02-20T13:36:48.537Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-20T13:36:48.537Z"
+  },
+  "enrollment_status": "Unpublished"
+},
+{
+  "_id": {
+    "$oid": "69986370220fdef72f0aa3a4"
+  },
+  "badge": "Level III",
+  "course_code": "AESTHETIC-L3",
+  "title": "Aesthetic Services Level III",
+  "description": "Advance your career with comprehensive aesthetic services training and modern beauty technologies.",
+  "hours": "80 Hours (10 Days)",
+  "duration": "80 Hours (10 Days)",
+  "image": "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=400&h=250&fit=crop",
+  "created_at": {
+    "$date": "2026-02-20T13:36:48.538Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-20T13:36:48.538Z"
+  },
+  "enrollment_status": "Unpublished"
+},
+{
+  "_id": {
+    "$oid": "69986370220fdef72f0aa3a5"
+  },
+  "badge": "Level III",
+  "course_code": "SKINCARE-ADV-L3",
+  "title": "Advanced Skin Care Services Level III",
+  "description": "Master specialized techniques in anti-aging treatments, corrective skincare, and clinical-grade procedures.",
+  "hours": "100 Hours (13 Days)",
+  "duration": "100 Hours (13 Days)",
+  "image": "https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?w=400&h=250&fit=crop",
+  "created_at": {
+    "$date": "2026-02-20T13:36:48.539Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-20T13:36:48.539Z"
+  },
+  "enrollment_status": "Unpublished"
+},
+{
+  "_id": {
+    "$oid": "69986370220fdef72f0aa3a6"
+  },
+  "badge": "Level III",
+  "course_code": "MAKEUP-TATTOO-L3",
+  "title": "Permanent Make-Up Tattoo Services Level III",
+  "description": "Learn precision techniques for eyebrow microblading, eyeliner tattooing, and lip pigmentation services.",
+  "hours": "100 Hours (13 Days)",
+  "duration": "100 Hours (13 Days)",
+  "image": "https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=400&h=250&fit=crop",
+  "created_at": {
+    "$date": "2026-02-20T13:36:48.539Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-20T13:36:48.539Z"
+  },
+  "enrollment_status": "Unpublished"
+},
+{
+  "_id": {
+    "$oid": "69986370220fdef72f0aa3a7"
+  },
+  "badge": "Specialized",
+  "course_code": "COLLAGEN-SPEC",
+  "title": "Perform Collagen Induction Therapy & Hair Loss Treatment",
+  "description": "Master advanced microneedling techniques for skin rejuvenation and evidence-based hair loss treatments.",
+  "hours": "8 Hours (1 Day)",
+  "duration": "8 Hours (1 Day)",
+  "image": "https://northshoremedicalclinic.ca/wp-content/uploads/2022/05/PRP-for-Hair-Loss.jpg",
+  "created_at": {
+    "$date": "2026-02-20T13:36:48.540Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-20T13:36:48.540Z"
+  },
+  "enrollment_status": "Unpublished"
+},
+{
+  "_id": {
+    "$oid": "69986370220fdef72f0aa3a8"
+  },
+  "badge": "Specialized",
+  "course_code": "FACIAL-PEELING-SPEC",
+  "title": "Perform Advanced Facial Treatment & Chemical Skin Peeling",
+  "description": "Gain expertise in advanced facial protocols and controlled chemical exfoliation for skin transformation.",
+  "hours": "16 Hours (2 Days)",
+  "duration": "16 Hours (2 Days)",
+  "image": "https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?w=400&h=250&fit=crop",
+  "created_at": {
+    "$date": "2026-02-20T13:36:48.541Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-20T13:36:48.541Z"
+  },
+  "enrollment_status": "Unpublished"
+},
+{
+  "_id": {
+    "$oid": "69986370220fdef72f0aa3a9"
+  },
+  "badge": "Specialized",
+  "course_code": "LIGHT-HEAT-SPEC",
+  "title": "Perform Light Therapy & Heat Therapy",
+  "description": "Master LED therapy, infrared treatments, and thermal modalities for skin rejuvenation and healing.",
+  "hours": "16 Hours (2 Days)",
+  "duration": "16 Hours (2 Days)",
+  "image": "https://omyguard.com/cdn/shop/articles/What_are_the_benefits_and_differences_of_blue_light_therapy_and_red_light_therapy.png?v=1721188964&width=1000",
+  "created_at": {
+    "$date": "2026-02-20T13:36:48.542Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-20T13:36:48.542Z"
+  },
+  "enrollment_status": "Unpublished"
+},
+{
+  "_id": {
+    "$oid": "69986370220fdef72f0aa3aa"
+  },
+  "badge": "Level I",
+  "course_code": "TRAINERS-L1",
+  "title": "Trainers Methodology Level I",
+  "description": "Develop essential training and facilitation skills to become a certified TESDA beauty educator.",
+  "hours": "264 Hours (33 Days)",
+  "duration": "264 Hours (33 Days)",
+  "image": "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=400&h=250&fit=crop",
+  "created_at": {
+    "$date": "2026-02-20T13:36:48.544Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-20T13:36:48.544Z"
+  },
+  "enrollment_status": "Unpublished"
+},
+{
+  "_id": {
+    "$oid": "69986370220fdef72f0aa3ab"
+  },
+  "badge": "Level III",
+  "course_code": "EYELASH-BROW-L3",
+  "title": "Eyelash and Eyebrow Services Level III",
+  "description": "Perfect eyelash extensions, lash lifting, brow lamination, tinting, and professional shaping techniques.",
+  "hours": "80 Hours (10 Days)",
+  "duration": "80 Hours (10 Days)",
+  "image": "https://tse3.mm.bing.net/th/id/OIP.f7lQ7Rt0CCBsxUWqGsYPwQHaE8?pid=Api&P=0&h=180",
+  "created_at": {
+    "$date": "2026-02-20T13:36:48.545Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-20T13:36:48.545Z"
+  },
+  "enrollment_status": "Unpublished"
+}]

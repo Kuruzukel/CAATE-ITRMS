@@ -1,0 +1,221 @@
+[{
+  "_id": {
+    "$oid": "6999b9f7834f0afada02b982"
+  },
+  "first_name": "John",
+  "second_name": "Aeron",
+  "last_name": "Del Rosaruu",
+  "middle_name": "",
+  "suffix": "Sr.",
+  "email": "johnaeron69badingdong@example.com",
+  "phone": "09696969696",
+  "status": "enrolled",
+  "created_at": {
+    "$date": "2026-02-21T13:58:15.738Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-21T14:09:21.677Z"
+  },
+  "trainee_id": "TRN-2026-001"
+},
+{
+  "_id": {
+    "$oid": "6999b9f7834f0afada02b983"
+  },
+  "first_name": "Juan",
+  "second_name": "",
+  "last_name": "Reyes",
+  "middle_name": "",
+  "suffix": "",
+  "email": "juan.reyes@example.com",
+  "phone": "09175275815",
+  "status": "pending",
+  "created_at": {
+    "$date": "2026-02-21T13:58:15.751Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-21T13:58:15.751Z"
+  },
+  "trainee_id": "TRN-2026-002"
+},
+{
+  "_id": {
+    "$oid": "6999b9f7834f0afada02b984"
+  },
+  "first_name": "Sofia",
+  "second_name": "",
+  "last_name": "Cruz",
+  "middle_name": "",
+  "suffix": "",
+  "email": "sofia.cruz@example.com",
+  "phone": "09175839089",
+  "status": "pending",
+  "created_at": {
+    "$date": "2026-02-21T13:58:15.754Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-21T13:58:15.754Z"
+  },
+  "trainee_id": "TRN-2026-003"
+},
+{
+  "_id": {
+    "$oid": "6999b9f7834f0afada02b985"
+  },
+  "first_name": "Miguel",
+  "second_name": "",
+  "last_name": "Garcia",
+  "middle_name": "",
+  "suffix": "",
+  "email": "miguel.garcia@example.com",
+  "phone": "09178696779",
+  "status": "pending",
+  "created_at": {
+    "$date": "2026-02-21T13:58:15.756Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-21T13:58:15.756Z"
+  },
+  "trainee_id": "TRN-2026-004"
+},
+{
+  "_id": {
+    "$oid": "6999b9f7834f0afada02b986"
+  },
+  "first_name": "Isabella",
+  "second_name": "",
+  "last_name": "Mendoza",
+  "middle_name": "",
+  "suffix": "",
+  "email": "isabella.mendoza@example.com",
+  "phone": "09172521976",
+  "status": "pending",
+  "created_at": {
+    "$date": "2026-02-21T13:58:15.758Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-21T13:58:15.758Z"
+  },
+  "trainee_id": "TRN-2026-005"
+},
+{
+  "_id": {
+    "$oid": "6999b9f7834f0afada02b987"
+  },
+  "first_name": "Carlos",
+  "second_name": "",
+  "last_name": "Torres",
+  "middle_name": "",
+  "suffix": "",
+  "email": "carlos.torres@example.com",
+  "phone": "09179061514",
+  "status": "pending",
+  "created_at": {
+    "$date": "2026-02-21T13:58:15.779Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-21T13:58:15.779Z"
+  },
+  "trainee_id": "TRN-2026-006"
+},
+{
+  "_id": {
+    "$oid": "6999b9f7834f0afada02b988"
+  },
+  "first_name": "Gabriela",
+  "second_name": "",
+  "last_name": "Ramos",
+  "middle_name": "",
+  "suffix": "",
+  "email": "gabriela.ramos@example.com",
+  "phone": "09173714394",
+  "status": "pending",
+  "created_at": {
+    "$date": "2026-02-21T13:58:15.791Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-21T13:58:15.791Z"
+  },
+  "trainee_id": "TRN-2026-007"
+},
+{
+  "_id": {
+    "$oid": "6999b9f7834f0afada02b989"
+  },
+  "first_name": "Diego",
+  "second_name": "",
+  "last_name": "Flores",
+  "middle_name": "",
+  "suffix": "",
+  "email": "diego.flores@example.com",
+  "phone": "09175290836",
+  "status": "pending",
+  "created_at": {
+    "$date": "2026-02-21T13:58:15.794Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-21T13:58:15.794Z"
+  },
+  "trainee_id": "TRN-2026-008"
+},
+{
+  "_id": {
+    "$oid": "6999b9f7834f0afada02b98a"
+  },
+  "first_name": "Valentina",
+  "second_name": "",
+  "last_name": "Rivera",
+  "middle_name": "",
+  "suffix": "",
+  "email": "valentina.rivera@example.com",
+  "phone": "09176721414",
+  "status": "pending",
+  "created_at": {
+    "$date": "2026-02-21T13:58:15.805Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-21T13:58:15.805Z"
+  },
+  "trainee_id": "TRN-2026-009"
+},
+{
+  "_id": {
+    "$oid": "6999b9f7834f0afada02b98b"
+  },
+  "first_name": "Luis",
+  "second_name": "",
+  "last_name": "Morales",
+  "middle_name": "",
+  "suffix": "",
+  "email": "luis.morales@example.com",
+  "phone": "09171075682",
+  "status": "pending",
+  "created_at": {
+    "$date": "2026-02-21T13:58:15.808Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-21T13:58:15.808Z"
+  },
+  "trainee_id": "TRN-2026-010"
+},
+{
+  "_id": {
+    "$oid": "6999bf8331adba668008109e"
+  },
+  "trainee_id": "TRN-2026-011",
+  "first_name": "Louie",
+  "second_name": "jordanszxc",
+  "middle_name": "",
+  "last_name": "samieeee",
+  "suffix": "Jr.",
+  "email": "jordansgayming@gmail.com",
+  "phone": "09113232424246462462",
+  "status": "active",
+  "password": "wg9VcSN5an$h",
+  "created_at": {
+    "$date": "2026-02-21T14:21:55.328Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-21T14:21:55.328Z"
+  }
+}]

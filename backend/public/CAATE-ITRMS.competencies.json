@@ -1,0 +1,305 @@
+[{
+  "_id": {
+    "$oid": "6998652bf517b3825101c2f2"
+  },
+  "course_code": "NC II - SOCBCN220",
+  "title": "Beauty Care (Nail Care) Services NC II",
+  "basic_competencies": [
+    "Participate in workplace communication",
+    "Work in a team environment",
+    "Practice career professionalism",
+    "Practice occupational health and safety procedures",
+    "ror"
+  ],
+  "common_competencies": [
+    "Maintain an effective relationship with clients/customers",
+    "Manage own performance",
+    "Apply quality standards",
+    "Maintain a safe, clean and efficient environment"
+  ],
+  "core_competencies": [
+    "Perform manicure and pedicure",
+    "Perform hand spa",
+    "Perform foot spa"
+  ],
+  "created_at": {
+    "$date": "2026-02-20T13:44:11.141Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-20T13:44:11.141Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6998652bf517b3825101c2f3"
+  },
+  "course_code": "NC II - SOCBEC219",
+  "title": "Beauty Care (Skin Care) Services NC II",
+  "basic_competencies": [
+    "Participate in workplace communication",
+    "Work in a team environment",
+    "Solve/address general workplace problems",
+    "Develop career and life decisions",
+    "Contribute to workplace innovation",
+    "Present relevant information",
+    "Practice occupational safety and health policies and procedures",
+    "Exercise efficient and effective sustainable practices in the workplace",
+    "Practice entrepreneurial skills in the workplace"
+  ],
+  "common_competencies": [
+    "Maintain an effective relationship with clients/customers",
+    "Manage own performance",
+    "Apply quality standards",
+    "Maintain a safe, clean and efficient environment"
+  ],
+  "core_competencies": [
+    "Perform facial cleansing",
+    "Perform temporary hair removal activity",
+    "Perform body scrub"
+  ],
+  "created_at": {
+    "$date": "2026-02-20T13:44:11.141Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-20T13:44:11.141Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6998652bf517b3825101c2f4"
+  },
+  "course_code": "AESTHETIC-L3",
+  "title": "Aesthetic Services Level III",
+  "basic_competencies": [
+    "Lead workplace communication",
+    "Lead small teams",
+    "Apply critical thinking and problem-solving techniques in the workplace",
+    "Work in a diverse environment",
+    "Propose methods of applying learning and innovation in the organization",
+    "Use information systematically",
+    "Evaluate occupational safety and health work practices",
+    "Evaluate environmental work practices",
+    "Facilitate entrepreneurial skills for MSMEs"
+  ],
+  "common_competencies": [
+    "Maintain an effective relationship with clients/customers",
+    "Manage own performance",
+    "Apply quality standards",
+    "Maintain a safe, clean and efficient work environment"
+  ],
+  "core_competencies": [
+    "Perform advanced facial treatment",
+    "Perform chemical skin peeling",
+    "Perform light therapy",
+    "Perform heat therapy"
+  ],
+  "created_at": {
+    "$date": "2026-02-20T13:44:11.141Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-20T13:44:11.141Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6998652bf517b3825101c2f5"
+  },
+  "course_code": "SKINCARE-ADV-L3",
+  "title": "Advanced Skin Care Services Level III",
+  "basic_competencies": [
+    "Lead workplace communication",
+    "Lead small teams",
+    "Apply critical thinking and problem-solving techniques in the workplace",
+    "Work in a diverse environment",
+    "Propose methods of applying learning and innovation in the organization",
+    "Use information systematically",
+    "Evaluate occupational safety and health work practices",
+    "Evaluate environmental work practices",
+    "Facilitate entrepreneurial skills for MSMEs"
+  ],
+  "common_competencies": [
+    "Maintain an effective relationship with clients/customers",
+    "Manage own performance",
+    "Apply quality standards",
+    "Maintain a safe, clean and efficient work environment"
+  ],
+  "core_competencies": [
+    "Perform BB glow facial",
+    "Perform collagen induction therapy",
+    "Perform warts removal treatment",
+    "Perform comedone extraction procedure",
+    "Perform hair loss treatment therapy"
+  ],
+  "created_at": {
+    "$date": "2026-02-20T13:44:11.141Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-20T13:44:11.141Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6998652bf517b3825101c2f6"
+  },
+  "course_code": "MAKEUP-TATTOO-L3",
+  "title": "Permanent Make-Up Tattoo Services Level III",
+  "basic_competencies": [
+    "Lead workplace communication",
+    "Lead small teams",
+    "Apply critical thinking and problem-solving techniques in the workplace",
+    "Work in a diverse environment",
+    "Propose methods of applying learning and innovation in the organization",
+    "Use information systematically",
+    "Evaluate occupational safety and health work practices",
+    "Evaluate environmental work practices",
+    "Facilitate entrepreneurial skills for MSMEs"
+  ],
+  "common_competencies": [
+    "Maintain an effective relationship with clients/customers",
+    "Manage own performance",
+    "Apply quality standards",
+    "Maintain a safe, clean and efficient work environment"
+  ],
+  "core_competencies": [
+    "Administer eyebrow pigmentation",
+    "Administer eyeliner pigmentation",
+    "Administer lip pigmentation",
+    "Perform dermopigmentation removal procedure"
+  ],
+  "created_at": {
+    "$date": "2026-02-20T13:44:11.141Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-20T13:44:11.141Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6998652bf517b3825101c2f7"
+  },
+  "course_code": "COLLAGEN-SPEC",
+  "title": "Perform Collagen Induction Therapy & Hair Loss Treatment",
+  "basic_competencies": [],
+  "common_competencies": [],
+  "core_competencies": [
+    "Perform collagen induction therapy",
+    "Perform hair loss treatment therapy"
+  ],
+  "created_at": {
+    "$date": "2026-02-20T13:44:11.141Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-20T13:44:11.141Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6998652bf517b3825101c2f8"
+  },
+  "course_code": "FACIAL-PEELING-SPEC",
+  "title": "Perform Advanced Facial Treatment & Chemical Skin Peeling",
+  "basic_competencies": [],
+  "common_competencies": [],
+  "core_competencies": [
+    "Perform advance facial treatment",
+    "Perform chemical skin peeling"
+  ],
+  "created_at": {
+    "$date": "2026-02-20T13:44:11.141Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-20T13:44:11.141Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6998652bf517b3825101c2f9"
+  },
+  "course_code": "LIGHT-HEAT-SPEC",
+  "title": "Perform Light Therapy & Heat Therapy",
+  "basic_competencies": [],
+  "common_competencies": [],
+  "core_competencies": [
+    "Perform light therapy treatment",
+    "Perform heat therapy treatment",
+    "Apply LED therapy techniques",
+    "Apply infrared treatment modalities"
+  ],
+  "created_at": {
+    "$date": "2026-02-20T13:44:11.141Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-20T13:44:11.141Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6998652bf517b3825101c2fa"
+  },
+  "course_code": "TRAINERS-L1",
+  "title": "Trainers Methodology Level I",
+  "basic_competencies": [
+    "Lead workplace communication",
+    "Apply math and science principles in technical training",
+    "Apply environmental principles and advocate conservation",
+    "Utilize IT applications in technical training",
+    "Lead small teams",
+    "Apply work ethics, values and quality principles",
+    "Work effectively in vocational education and training",
+    "Foster and promote a learning culture",
+    "Ensure healthy and safe learning environment",
+    "Maintain and enhance professional practice",
+    "Develop appreciation for cost-benefits of technical training",
+    "Develop global understanding of labor markets"
+  ],
+  "common_competencies": [],
+  "core_competencies": [
+    "Plan training sessions",
+    "Facilitate learning sessions",
+    "Supervise work-based learning",
+    "Conduct competency assessment",
+    "Maintain training facilities",
+    "Utilize electronic media in facilitating training"
+  ],
+  "created_at": {
+    "$date": "2026-02-20T13:44:11.141Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-20T13:44:11.141Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6998652bf517b3825101c2fb"
+  },
+  "course_code": "EYELASH-BROW-L3",
+  "title": "Eyelash and Eyebrow Services Level III",
+  "basic_competencies": [
+    "Lead workplace communication",
+    "Lead small teams",
+    "Apply critical thinking and problem-solving techniques in the workplace",
+    "Work in a diverse environment",
+    "Propose methods of applying learning and innovation in the organization",
+    "Use information systematically",
+    "Evaluate occupational safety and health work practices",
+    "Evaluate environmental work practices",
+    "Facilitate entrepreneurial skills for micro-small-medium enterprises (MSMEs)"
+  ],
+  "common_competencies": [
+    "Maintain an effective relationship with clients/customers",
+    "Manage own performance",
+    "Apply quality standards",
+    "Maintain a safe, clean and efficient work environment"
+  ],
+  "core_competencies": [
+    "Perform eyelash extensions and removal",
+    "Perform eyelash lift and tint",
+    "Perform eyebrow lamination and tint"
+  ],
+  "created_at": {
+    "$date": "2026-02-20T13:44:11.141Z"
+  },
+  "updated_at": {
+    "$date": "2026-02-20T13:44:11.141Z"
+  }
+}]

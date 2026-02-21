@@ -540,7 +540,8 @@
                                         class="text-muted">(Optional)</span></label>
                                 <div class="position-relative">
                                     <input type="password" id="addTraineePassword" class="form-control"
-                                        placeholder="Enter password" style="padding-right: 75px;" minlength="6">
+                                        placeholder="Enter password" style="padding-right: 75px;" minlength="6"
+                                        autocomplete="new-password">
                                     <button class="btn btn-link position-absolute top-50 translate-middle-y"
                                         type="button" id="generateAddPassword"
                                         style="text-decoration: none; padding: 0 8px; z-index: 10; right: 35px;"
@@ -654,7 +655,8 @@
                                     current)</label>
                                 <div class="position-relative">
                                     <input type="password" id="editTraineePassword" class="form-control"
-                                        placeholder="Enter new password" style="padding-right: 40px;" minlength="6">
+                                        placeholder="Enter new password" style="padding-right: 75px;" minlength="6"
+                                        autocomplete="new-password">
                                     <button class="btn btn-link position-absolute top-50 end-0 translate-middle-y"
                                         type="button" id="toggleEditPassword"
                                         style="text-decoration: none; padding: 0 12px; z-index: 10;">
@@ -736,7 +738,7 @@
                             <label class="form-label">Password</label>
                             <div class="position-relative">
                                 <input type="password" class="form-control" id="viewTraineePassword" value="password123"
-                                    disabled style="padding-right: 40px;">
+                                    readonly style="padding-right: 40px;">
                                 <button class="btn btn-link position-absolute top-50 end-0 translate-middle-y"
                                     type="button" id="toggleViewPassword"
                                     style="text-decoration: none; padding: 0 12px; z-index: 10;">

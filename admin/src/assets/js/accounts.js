@@ -41,14 +41,18 @@ document.addEventListener('DOMContentLoaded', function () {
     const viewPasswordIcon = document.getElementById('viewPasswordIcon');
 
     if (toggleViewPassword && viewPasswordInput && viewPasswordIcon) {
-        toggleViewPassword.addEventListener('click', function () {
+        toggleViewPassword.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
             // Toggle password visibility
-            if (viewPasswordInput.type === 'password') {
-                viewPasswordInput.type = 'text';
+            const isPassword = viewPasswordInput.getAttribute('type') === 'password';
+            viewPasswordInput.setAttribute('type', isPassword ? 'text' : 'password');
+
+            if (isPassword) {
                 viewPasswordIcon.classList.remove('bx-hide');
                 viewPasswordIcon.classList.add('bx-show');
             } else {
-                viewPasswordInput.type = 'password';
                 viewPasswordIcon.classList.remove('bx-show');
                 viewPasswordIcon.classList.add('bx-hide');
             }
@@ -382,10 +386,17 @@ function viewTrainee(id) {
     document.getElementById('viewTraineePhone').value = trainee.phone || '';
     document.getElementById('viewTraineeStatus').value = trainee.status || 'pending';
 
-    // Set password field (show placeholder if exists)
+    // Set password field (show actual password from database)
     const passwordField = document.getElementById('viewTraineePassword');
     if (passwordField) {
-        passwordField.value = trainee.password ? '••••••••' : '';
+        passwordField.value = trainee.password || '';
+        // Reset to password type when modal opens
+        passwordField.setAttribute('type', 'password');
+        const viewPasswordIcon = document.getElementById('viewPasswordIcon');
+        if (viewPasswordIcon) {
+            viewPasswordIcon.classList.remove('bx-show');
+            viewPasswordIcon.classList.add('bx-hide');
+        }
     }
 
     // Show modal

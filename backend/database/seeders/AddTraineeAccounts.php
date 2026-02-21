@@ -44,6 +44,7 @@ try {
             'suffix' => '',
             'email' => $email,
             'phone' => $phone,
+            'password' => 'password123',
             'status' => 'pending',
             'created_at' => new MongoDB\BSON\UTCDateTime(),
             'updated_at' => new MongoDB\BSON\UTCDateTime(),

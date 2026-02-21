@@ -448,7 +448,7 @@ h6 {
   width: 160px;
   object-fit: contain;
   display: block;
-  margin-left: 0;
+  margin-left: auto;
   margin-right: auto;
   background: linear-gradient(145deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.6));
   backdrop-filter: blur(30px);
@@ -2226,11 +2226,16 @@ h6 {
 
   .footer-brand {
     align-items: center;
+    text-align: center;
+  }
+
+  .footer-brand p {
+    text-align: center;
   }
 
   .footer-logo-img {
-    margin-left: auto;
-    margin-right: auto;
+    margin-left: auto !important;
+    margin-right: auto !important;
   }
 }
 

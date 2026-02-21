@@ -713,7 +713,7 @@ textarea {
     width: auto;
     object-fit: contain;
     display: block;
-    margin-left: 0;
+    margin-left: auto;
     margin-right: auto;
 }
 
@@ -843,11 +843,16 @@ textarea {
 
     .footer-brand {
         align-items: center;
+        text-align: center;
+    }
+
+    .footer-brand p {
+        text-align: center;
     }
 
     .footer-logo-img {
-        margin-left: auto;
-        margin-right: auto;
+        margin-left: auto !important;
+        margin-right: auto !important;
     }
 }
 

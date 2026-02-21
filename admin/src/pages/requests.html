@@ -378,13 +378,19 @@
                                                         </select>
                                                     </div>
                                                     <div class="col-md-2">
-                                                        <label class="form-label">Service</label>
-                                                        <select class="form-select">
-                                                            <option value="">All Services</option>
-                                                            <option value="beauty-care">Beauty Care NC II</option>
-                                                            <option value="nail-care">Nail Care</option>
-                                                            <option value="permanent-makeup">Permanent Makeup</option>
-                                                            <option value="facial">Facial Treatment</option>
+                                                        <label class="form-label">Service Category</label>
+                                                        <select class="form-select" id="filterServiceCategory">
+                                                            <option value="">All Categories</option>
+                                                            <option value="skincare">Skin Care</option>
+                                                            <option value="haircare">Hair Care</option>
+                                                            <option value="nailcare">Nail Care</option>
+                                                            <option value="bodytreatment">Body Treatment</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <label class="form-label">Service Type</label>
+                                                        <select class="form-select" id="filterServiceType">
+                                                            <option value="">All Service Types</option>
                                                         </select>
                                                     </div>
                                                     <div class="col-md-2">
@@ -393,16 +399,6 @@
                                                             <option value="">All Types</option>
                                                             <option value="online">Online</option>
                                                             <option value="walk-in">Walk-In</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-md-2">
-                                                        <label class="form-label">Date Range</label>
-                                                        <select class="form-select">
-                                                            <option value="">All Dates</option>
-                                                            <option value="today">Today</option>
-                                                            <option value="week">This Week</option>
-                                                            <option value="month">This Month</option>
-                                                            <option value="overdue">Overdue (7+ days)</option>
                                                         </select>
                                                     </div>
                                                     <div class="col-md-1 d-flex align-items-end">
@@ -1594,10 +1590,6 @@
                                 <label class="form-label">Time</label>
                                 <input type="time" class="form-control" required />
                             </div>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Staff</label>
-                            <input type="text" class="form-control" placeholder="Enter staff name" required />
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Notes (Optional)</label>

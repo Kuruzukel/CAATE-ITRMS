@@ -6,6 +6,25 @@ const API_BASE_URL = 'http://localhost/CAATE-ITRMS/backend/public/api/v1';
 // State
 let traineesData = [];
 
+// Password generation characters
+const upper = 'ABCDEFGHIJKLMNPQRSTUVWXYZ';
+const lower = 'abcdefghijkmnopqrstuvwxyz';
+const digits = '123456789';
+const special = '!@#_$';
+
+// Generate random password function
+function generateRandomPassword(length = 12) {
+    const characters = upper + lower + digits + special;
+    let password = '';
+    const charactersLength = characters.length;
+
+    for (let i = 0; i < length; i++) {
+        password += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+
+    return password;
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     // Load trainees data
     loadTrainees();
@@ -53,6 +72,36 @@ document.addEventListener('DOMContentLoaded', function () {
                 addPasswordIcon.classList.remove('bx-show');
                 addPasswordIcon.classList.add('bx-hide');
             }
+        });
+    }
+
+    // Auto-generate password function
+    function generateRandomPassword(length = 12) {
+        const upper = 'ABCDEFGHIJKLMNPQRSTUVWXYZ';
+        const lower = 'abcdefghijkmnopqrstuvwxyz';
+        const digits = '123456789';
+        const special = '!@#_$';
+        const characters = upper + lower + digits + special;
+
+        let password = '';
+        const charactersLength = characters.length;
+
+        for (let i = 0; i < length; i++) {
+            password += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+
+        return password;
+    }
+
+    // Auto-generate password button for Add Modal
+    const generateAddPassword = document.getElementById('generateAddPassword');
+    if (generateAddPassword && addPasswordInput) {
+        generateAddPassword.addEventListener('click', function () {
+            const newPassword = generateRandomPassword(12);
+            addPasswordInput.value = newPassword;
+            addPasswordInput.type = 'text'; // Show the generated password
+            addPasswordIcon.classList.remove('bx-hide');
+            addPasswordIcon.classList.add('bx-show');
         });
     }
 

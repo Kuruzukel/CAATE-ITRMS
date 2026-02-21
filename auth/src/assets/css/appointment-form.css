@@ -1079,6 +1079,16 @@ input[type="date"]::-webkit-clear-button {
         margin-left: auto !important;
         margin-right: auto !important;
     }
+
+    .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+        justify-content: center;
+    }
+
+    .footer-bottom-links {
+        justify-content: center;
+    }
 }
 
 @media (min-width: 1086px) {

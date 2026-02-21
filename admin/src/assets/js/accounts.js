@@ -214,7 +214,7 @@ function createTraineeRow(trainee, index) {
     const initials = `${trainee.first_name.charAt(0)}${trainee.last_name.charAt(0)}`;
     const statusBadge = getStatusBadge(trainee.status);
     const avatarColor = getAvatarColor(index);
-    const displayId = trainee.student_id || String(index).padStart(2, '0');
+    const displayId = trainee.trainee_id || String(index).padStart(2, '0');
 
     tr.innerHTML = `
         <td><strong>${displayId}</strong></td>
@@ -318,7 +318,7 @@ function viewTrainee(id) {
     if (!trainee) return;
 
     // Populate view modal with separate name fields
-    document.getElementById('viewTraineeId').value = trainee.student_id || trainee._id || '';
+    document.getElementById('viewTraineeId').value = trainee.trainee_id || trainee._id || '';
     document.getElementById('viewTraineeFirstName').value = trainee.first_name || '';
     document.getElementById('viewTraineeSecondName').value = trainee.second_name || '';
     document.getElementById('viewTraineeMiddleName').value = trainee.middle_name || '';
@@ -346,7 +346,7 @@ function editTrainee(id) {
 
     // Store original trainee data for change detection
     window.originalTraineeData = {
-        student_id: trainee.student_id || '',
+        trainee_id: trainee.trainee_id || '',
         first_name: trainee.first_name || '',
         second_name: trainee.second_name || '',
         middle_name: trainee.middle_name || '',
@@ -358,7 +358,7 @@ function editTrainee(id) {
     };
 
     // Populate edit modal with separate name fields
-    document.getElementById('editTraineeId').value = trainee.student_id || '';
+    document.getElementById('editTraineeId').value = trainee.trainee_id || '';
     document.getElementById('editTraineeFirstName').value = trainee.first_name || '';
     document.getElementById('editTraineeSecondName').value = trainee.second_name || '';
     document.getElementById('editTraineeMiddleName').value = trainee.middle_name || '';
@@ -496,7 +496,7 @@ async function saveEditTrainee() {
     // Check if any changes were made
     if (window.originalTraineeData) {
         const hasChanges =
-            studentId !== window.originalTraineeData.student_id ||
+            studentId !== window.originalTraineeData.trainee_id ||
             firstName !== window.originalTraineeData.first_name ||
             secondName !== window.originalTraineeData.second_name ||
             middleName !== window.originalTraineeData.middle_name ||
@@ -578,7 +578,7 @@ async function saveEditTrainee() {
 
     // Check if any changes were made (compare with original data)
     const hasChanges =
-        window.originalTraineeData.student_id !== studentId ||
+        window.originalTraineeData.trainee_id !== studentId ||
         window.originalTraineeData.first_name !== firstName ||
         window.originalTraineeData.second_name !== secondName ||
         window.originalTraineeData.middle_name !== middleName ||
@@ -597,7 +597,7 @@ async function saveEditTrainee() {
     }
 
     const updateData = {
-        student_id: studentId,
+        trainee_id: studentId,
         first_name: firstName,
         second_name: secondName,
         middle_name: middleName,
@@ -744,7 +744,7 @@ async function saveNewTrainee() {
     }
 
     const newTraineeData = {
-        student_id: id,
+        trainee_id: id,
         first_name: firstName,
         second_name: secondName,
         middle_name: middleName,
@@ -888,7 +888,7 @@ function applyFilters() {
             if (trainee.suffix) fullName += ' ' + trainee.suffix;
             fullName = fullName.toLowerCase();
 
-            const studentId = (trainee.student_id || '').toLowerCase();
+            const studentId = (trainee.trainee_id || '').toLowerCase();
             const email = (trainee.email || '').toLowerCase();
 
             return fullName.includes(searchTerm) ||

@@ -125,7 +125,7 @@ try {
     $traineesCollection = $db->trainees;
     $trainees = [
         [
-            'student_id' => 'TRN-2024-001',
+            'trainee_id' => 'TRN-2024-001',
             'first_name' => 'Anna',
             'last_name' => 'Cruz',
             'email' => 'anna.cruz@example.com',
@@ -138,7 +138,7 @@ try {
             'updated_at' => new MongoDB\BSON\UTCDateTime()
         ],
         [
-            'student_id' => 'TRN-2024-002',
+            'trainee_id' => 'TRN-2024-002',
             'first_name' => 'Sofia',
             'last_name' => 'Garcia',
             'email' => 'sofia.garcia@example.com',
@@ -151,7 +151,7 @@ try {
             'updated_at' => new MongoDB\BSON\UTCDateTime()
         ],
         [
-            'student_id' => 'TRN-2024-003',
+            'trainee_id' => 'TRN-2024-003',
             'first_name' => 'Isabella',
             'last_name' => 'Mendoza',
             'email' => 'isabella.mendoza@example.com',
@@ -164,7 +164,7 @@ try {
             'updated_at' => new MongoDB\BSON\UTCDateTime()
         ],
         [
-            'student_id' => 'TRN-2024-004',
+            'trainee_id' => 'TRN-2024-004',
             'first_name' => 'Mia',
             'last_name' => 'Torres',
             'email' => 'mia.torres@example.com',
@@ -177,7 +177,7 @@ try {
             'updated_at' => new MongoDB\BSON\UTCDateTime()
         ],
         [
-            'student_id' => 'TRN-2024-005',
+            'trainee_id' => 'TRN-2024-005',
             'first_name' => 'Emma',
             'last_name' => 'Ramos',
             'email' => 'emma.ramos@example.com',
@@ -193,13 +193,13 @@ try {
     
     $traineeIds = [];
     foreach ($trainees as $trainee) {
-        $existing = $traineesCollection->findOne(['student_id' => $trainee['student_id']]);
+        $existing = $traineesCollection->findOne(['trainee_id' => $trainee['trainee_id']]);
         if (!$existing) {
             $result = $traineesCollection->insertOne($trainee);
-            $traineeIds[$trainee['student_id']] = $result->getInsertedId();
+            $traineeIds[$trainee['trainee_id']] = $result->getInsertedId();
             echo "  ✓ Created trainee: {$trainee['first_name']} {$trainee['last_name']}\n";
         } else {
-            $traineeIds[$trainee['student_id']] = $existing['_id'];
+            $traineeIds[$trainee['trainee_id']] = $existing['_id'];
         }
     }
     

@@ -24,7 +24,7 @@ try {
         'trainees' => [
             'indexes' => [
                 ['key' => ['email' => 1], 'unique' => true],
-                ['key' => ['student_id' => 1], 'unique' => true],
+                ['key' => ['trainee_id' => 1], 'unique' => true],
                 ['key' => ['status' => 1]]
             ]
         ],

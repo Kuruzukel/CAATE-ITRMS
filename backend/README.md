@@ -302,7 +302,7 @@ Update `routes/api.php`
 
 ```json
 {
-  "student_id": "TRN-2024-001",
+  "trainee_id": "TRN-2024-001",
   "first_name": "John",
   "last_name": "Doe",
   "email": "trainee@example.com",

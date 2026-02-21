@@ -270,7 +270,7 @@ $db = getMongoConnection();
                     $trainees = $db->trainees->find();
                     foreach ($trainees as $trainee) {
                         echo "<tr>";
-                        echo "<td><strong>{$trainee['student_id']}</strong></td>";
+                        echo "<td><strong>{$trainee['trainee_id']}</strong></td>";
                         echo "<td>{$trainee['first_name']} {$trainee['last_name']}</td>";
                         echo "<td>{$trainee['email']}</td>";
                         echo "<td>{$trainee['phone']}</td>";

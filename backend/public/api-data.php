@@ -49,7 +49,7 @@ try {
         $response['trainees'] = array_map(function($trainee) {
             return [
                 'id' => (string)$trainee['_id'],
-                'student_id' => $trainee['student_id'],
+                'trainee_id' => $trainee['trainee_id'],
                 'first_name' => $trainee['first_name'],
                 'last_name' => $trainee['last_name'],
                 'email' => $trainee['email'],

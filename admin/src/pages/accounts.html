@@ -463,10 +463,8 @@
                     <form id="addTraineeForm">
                         <div class="mb-3">
                             <label for="addTraineeId" class="form-label">Trainee ID</label>
-                            <input type="text" id="addTraineeId" class="form-control"
-                                placeholder="Enter ID (numbers and special characters only)" required
-                                pattern="[0-9\-_@#$%&*!]+" title="Only numbers and special characters allowed"
-                                oninput="this.value = this.value.replace(/[A-Za-z]/g, '')">
+                            <input type="text" id="addTraineeId" class="form-control" placeholder="Auto-generated"
+                                required readonly style="background-color: #f5f5f5; cursor: not-allowed;">
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">

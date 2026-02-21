@@ -92,6 +92,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 }, 100);
             }
         });
+
+        // Generate trainee ID when modal is shown
+        addTraineeModal.addEventListener('show.bs.modal', function () {
+            generateTraineeId();
+        });
     }
 
     // Reset button state when Edit Trainee modal is hidden
@@ -652,6 +657,54 @@ async function saveEditTrainee() {
 }
 
 
+
+
+// Generate trainee ID in format TRN-YYYY-XXX
+async function generateTraineeId() {
+    try {
+        // Get current year
+        const currentYear = new Date().getFullYear();
+
+        // Fetch existing trainees to find the highest number
+        const response = await fetch(`${API_BASE_URL}/trainees`);
+        const result = await response.json();
+
+        if (result.success) {
+            const trainees = result.data;
+
+            // Filter trainees with IDs matching the current year pattern
+            const yearPattern = new RegExp(`^TRN-${currentYear}-(\\d+)$`);
+            let maxNumber = 0;
+
+            trainees.forEach(trainee => {
+                if (trainee.trainee_id) {
+                    const match = trainee.trainee_id.match(yearPattern);
+                    if (match) {
+                        const num = parseInt(match[1], 10);
+                        if (num > maxNumber) {
+                            maxNumber = num;
+                        }
+                    }
+                }
+            });
+
+            // Generate next sequential number
+            const nextNumber = maxNumber + 1;
+            const paddedNumber = String(nextNumber).padStart(3, '0');
+
+            return `TRN-${currentYear}-${paddedNumber}`;
+        } else {
+            // If API fails, start with 001
+            return `TRN-${currentYear}-001`;
+        }
+    } catch (error) {
+        console.error('Error generating trainee ID:', error);
+        // Fallback to default
+        const currentYear = new Date().getFullYear();
+        return `TRN-${currentYear}-001`;
+    }
+}
+
 // Save new trainee
 async function saveNewTrainee() {
     // Get the button element
@@ -662,7 +715,13 @@ async function saveNewTrainee() {
     addButton.disabled = true;
     addButton.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Adding...';
 
-    const id = document.getElementById('addTraineeId').value.trim();
+    // Auto-generate trainee ID if not provided
+    let id = document.getElementById('addTraineeId').value.trim();
+    if (!id) {
+        id = await generateTraineeId();
+        document.getElementById('addTraineeId').value = id;
+    }
+
     const firstName = document.getElementById('addTraineeFirstName').value.trim();
     const secondName = document.getElementById('addTraineeSecondName').value.trim();
     const middleName = document.getElementById('addTraineeMiddleName').value.trim();
@@ -681,10 +740,10 @@ async function saveNewTrainee() {
         return;
     }
 
-    // Validate ID (only numbers and special characters)
-    const idPattern = /^[0-9\-_@#$%&*!]+$/;
+    // Validate trainee ID format (TRN-YYYY-XXX)
+    const idPattern = /^TRN-\d{4}-\d{3}$/;
     if (!idPattern.test(id)) {
-        showError('ID should only contain numbers and special characters');
+        showError('Invalid trainee ID format. Expected format: TRN-YYYY-XXX');
         addButton.disabled = false;
         addButton.innerHTML = originalText;
         return;

@@ -163,6 +163,31 @@ body::-webkit-scrollbar {
     margin-bottom: 1.5rem;
     text-transform: uppercase;
     letter-spacing: 1px;
+    animation: fadeInUp 0.6s ease-out;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.course-badge::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+.course-badge:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(54, 145, 191, 0.3);
+    border-color: rgba(54, 145, 191, 0.6);
+}
+
+.course-badge:hover::before {
+    left: 100%;
 }
 
 .course-hero-title {
@@ -171,6 +196,70 @@ body::-webkit-scrollbar {
     color: var(--text-dark);
     margin-bottom: 1.5rem;
     line-height: 1.2;
+    animation: fadeInUp 0.8s ease-out 0.2s both;
+    position: relative;
+}
+
+.course-hero-description {
+    font-size: 1.125rem;
+    color: var(--text-medium);
+    margin-bottom: 2rem;
+    line-height: 1.7;
+    animation: fadeInUp 1s ease-out 0.4s both;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.course-hero-meta {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin-bottom: 2.5rem;
+    flex-wrap: wrap;
+    animation: fadeInUp 1.2s ease-out 0.6s both;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--text-dark);
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 0.75rem 1.5rem;
+    background: rgba(54, 145, 191, 0.05);
+    border-radius: var(--border-radius-lg);
+    transition: all 0.3s ease;
+}
+
+.meta-item:hover {
+    background: rgba(54, 145, 191, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(54, 145, 191, 0.15);
+}
+
+.meta-item i {
+    color: var(--primary-blue);
+    font-size: 1.25rem;
+    transition: transform 0.3s ease;
+}
+
+.meta-item:hover i {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.course-hero-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    animation: fadeInUp 1.4s ease-out 0.8s both;
+}
+
+color: var(--text-dark);
+margin-bottom: 1.5rem;
+line-height: 1.2;
 }
 
 .course-hero-description {

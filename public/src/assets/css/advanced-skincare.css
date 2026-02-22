@@ -198,20 +198,6 @@ body::-webkit-scrollbar {
     position: relative;
 }
 
-.course-hero-title::after {
-    content: "";
-    position: absolute;
-    bottom: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80px;
-    height: 4px;
-    background: linear-gradient(90deg, var(--primary-blue), var(--primary-blue-dark));
-    border-radius: 2px;
-    opacity: 0;
-    animation: fadeInUp 1s ease-out 0.4s both;
-}
-
 .course-hero-description {
     font-size: 1.125rem;
     color: var(--text-medium);

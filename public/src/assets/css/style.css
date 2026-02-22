@@ -844,6 +844,9 @@ h6 {
   letter-spacing: 2px;
   margin-bottom: 1.2rem;
   line-height: 1.1;
+  opacity: 0;
+  animation: fadeInUp 0.8s ease forwards;
+  animation-delay: 0.4s;
 }
 
 .hero-title .highlight {
@@ -869,6 +872,9 @@ h6 {
   font-family: "Segoe UI", sans-serif;
   margin-left: auto;
   margin-right: auto;
+  opacity: 0;
+  animation: fadeInUp 0.8s ease forwards;
+  animation-delay: 0.8s;
 }
 
 .hero-buttons {
@@ -876,6 +882,9 @@ h6 {
   flex-wrap: wrap;
   gap: 1rem;
   justify-content: center;
+  opacity: 0;
+  animation: fadeInUp 0.8s ease forwards;
+  animation-delay: 1s;
 }
 
 .hero-logos {
@@ -892,6 +901,9 @@ h6 {
   perspective: 1500px;
   margin-left: auto;
   margin-right: auto;
+  opacity: 0;
+  animation: fadeInUp 0.8s ease forwards;
+  animation-delay: 0.2s;
 }
 
 .hero-logo {

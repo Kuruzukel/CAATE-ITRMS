@@ -1,0 +1,11 @@
+RewriteEngine On
+RewriteBase /
+
+# Enable directory browsing (optional, for debugging)
+Options +Indexes
+
+# Set default index file
+DirectoryIndex index.html index.php
+
+# Handle 404 errors
+ErrorDocument 404 /404.html

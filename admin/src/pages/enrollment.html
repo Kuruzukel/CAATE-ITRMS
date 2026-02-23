@@ -285,27 +285,27 @@
 
                         <!-- Enrollment Statistics Cards -->
                         <div class="row">
-                            <div class="col-lg-3 col-md-6 col-6 mb-4">
+                            <div class="col-lg col-md-6 col-6 mb-4">
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="card-title d-flex align-items-start justify-content-between">
                                             <div class="avatar flex-shrink-0">
-                                                <i class="bx bx-receipt" style="font-size: 2rem; color: #3b82f6;"></i>
+                                                <i class="bx bx-receipt" style="font-size: 2rem; color: #8b5cf6;"></i>
                                             </div>
                                         </div>
                                         <span class="fw-semibold d-block mb-1">Total Enrollments</span>
-                                        <h3 class="card-title mb-2">8,258</h3>
+                                        <h3 class="card-title mb-2">10,550</h3>
                                         <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i>
-                                            +15.3%</small>
+                                            +20.5%</small>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-3 col-md-6 col-6 mb-4">
+                            <div class="col-lg col-md-6 col-6 mb-4">
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="card-title d-flex align-items-start justify-content-between">
                                             <div class="avatar flex-shrink-0">
-                                                <i class="bx bx-award" style="font-size: 2rem; color: #10b981;"></i>
+                                                <i class="bx bx-award" style="font-size: 2rem; color: #3b82f6;"></i>
                                             </div>
                                         </div>
                                         <span class="fw-semibold d-block mb-1">Graduated</span>
@@ -315,34 +315,49 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-3 col-md-6 col-6 mb-4">
+                            <div class="col-lg col-md-6 col-6 mb-4">
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="card-title d-flex align-items-start justify-content-between">
                                             <div class="avatar flex-shrink-0">
-                                                <i class="bx bx-user-plus" style="font-size: 2rem; color: #f59e0b;"></i>
+                                                <i class="bx bx-check-circle"
+                                                    style="font-size: 2rem; color: #28a745;"></i>
                                             </div>
                                         </div>
-                                        <span class="fw-semibold d-block mb-1">New Scholar</span>
-                                        <h3 class="card-title mb-2">156</h3>
-                                        <small class="text-warning fw-semibold"><i class="bx bx-right-arrow-alt"></i>
-                                            This Month</small>
+                                        <span class="fw-semibold d-block mb-1">Enrolled</span>
+                                        <h3 class="card-title mb-2">8,258</h3>
+                                        <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i>
+                                            +15.3%</small>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-3 col-md-6 col-6 mb-4">
+                            <div class="col-lg col-md-6 col-6 mb-4">
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="card-title d-flex align-items-start justify-content-between">
                                             <div class="avatar flex-shrink-0">
-                                                <i class="bx bx-user-check"
-                                                    style="font-size: 2rem; color: #8b5cf6;"></i>
+                                                <i class="bx bx-time-five" style="font-size: 2rem; color: #ffc107;"></i>
                                             </div>
                                         </div>
-                                        <span class="fw-semibold d-block mb-1">Existing Scholar</span>
-                                        <h3 class="card-title mb-2">892</h3>
-                                        <small class="text-info fw-semibold"><i class="bx bx-right-arrow-alt"></i>
-                                            Active</small>
+                                        <span class="fw-semibold d-block mb-1">Pending</span>
+                                        <h3 class="card-title mb-2">156</h3>
+                                        <small class="text-warning fw-semibold"><i class="bx bx-right-arrow-alt"></i>
+                                            Awaiting</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg col-md-6 col-6 mb-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="card-title d-flex align-items-start justify-content-between">
+                                            <div class="avatar flex-shrink-0">
+                                                <i class="bx bx-x-circle" style="font-size: 2rem; color: #dc3545;"></i>
+                                            </div>
+                                        </div>
+                                        <span class="fw-semibold d-block mb-1">Cancelled</span>
+                                        <h3 class="card-title mb-2">891</h3>
+                                        <small class="text-danger fw-semibold"><i class="bx bx-down-arrow-alt"></i>
+                                            Not Proceeding</small>
                                     </div>
                                 </div>
                             </div>
@@ -378,7 +393,6 @@
                                                             <option value="">All Status</option>
                                                             <option value="enrolled">Enrolled</option>
                                                             <option value="pending">Pending</option>
-                                                            <option value="completed">Completed</option>
                                                         </select>
                                                     </div>
                                                     <div class="col-md-3">
@@ -472,12 +486,6 @@
                                                                                 class="bx bx-time-five me-2"
                                                                                 style="color: #ffc107 !important;"></i>Pending</a>
                                                                     </li>
-                                                                    <li><a class="dropdown-item"
-                                                                            style="color: #3b82f6 !important;"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-check-double me-2"
-                                                                                style="color: #3b82f6 !important;"></i>Completed</a>
-                                                                    </li>
                                                                     <li><a class="dropdown-item text-danger"
                                                                             href="javascript:void(0);"><i
                                                                                 class="bx bx-block me-2"></i>Cancelled</a>
@@ -549,12 +557,6 @@
                                                                             href="javascript:void(0);"><i
                                                                                 class="bx bx-time-five me-2"
                                                                                 style="color: #ffc107 !important;"></i>Pending</a>
-                                                                    </li>
-                                                                    <li><a class="dropdown-item"
-                                                                            style="color: #3b82f6 !important;"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-check-double me-2"
-                                                                                style="color: #3b82f6 !important;"></i>Completed</a>
                                                                     </li>
                                                                     <li><a class="dropdown-item text-danger"
                                                                             href="javascript:void(0);"><i
@@ -628,12 +630,6 @@
                                                                                 class="bx bx-time-five me-2"
                                                                                 style="color: #ffc107 !important;"></i>Pending</a>
                                                                     </li>
-                                                                    <li><a class="dropdown-item"
-                                                                            style="color: #3b82f6 !important;"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-check-double me-2"
-                                                                                style="color: #3b82f6 !important;"></i>Completed</a>
-                                                                    </li>
                                                                     <li><a class="dropdown-item text-danger"
                                                                             href="javascript:void(0);"><i
                                                                                 class="bx bx-block me-2"></i>Cancelled</a>
@@ -706,12 +702,6 @@
                                                                                 class="bx bx-time-five me-2"
                                                                                 style="color: #ffc107 !important;"></i>Pending</a>
                                                                     </li>
-                                                                    <li><a class="dropdown-item"
-                                                                            style="color: #3b82f6 !important;"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-check-double me-2"
-                                                                                style="color: #3b82f6 !important;"></i>Completed</a>
-                                                                    </li>
                                                                     <li><a class="dropdown-item text-danger"
                                                                             href="javascript:void(0);"><i
                                                                                 class="bx bx-block me-2"></i>Cancelled</a>
@@ -763,7 +753,7 @@
                                                         <td><strong>TRN-2025-998</strong></td>
                                                         <td>Beauty Care (Nail Care) NC II</td>
                                                         <td>Dec 05, 2025</td>
-                                                        <td><span class="badge bg-primary">Completed</span></td>
+                                                        <td><span class="badge bg-primary">Graduated</span></td>
                                                         <td>
                                                             <div class="btn-group" role="group">
                                                                 <button type="button"
@@ -783,12 +773,6 @@
                                                                             href="javascript:void(0);"><i
                                                                                 class="bx bx-time-five me-2"
                                                                                 style="color: #ffc107 !important;"></i>Pending</a>
-                                                                    </li>
-                                                                    <li><a class="dropdown-item"
-                                                                            style="color: #3b82f6 !important;"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-check-double me-2"
-                                                                                style="color: #3b82f6 !important;"></i>Completed</a>
                                                                     </li>
                                                                     <li><a class="dropdown-item text-danger"
                                                                             href="javascript:void(0);"><i
@@ -862,12 +846,6 @@
                                                                                 class="bx bx-time-five me-2"
                                                                                 style="color: #ffc107 !important;"></i>Pending</a>
                                                                     </li>
-                                                                    <li><a class="dropdown-item"
-                                                                            style="color: #3b82f6 !important;"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-check-double me-2"
-                                                                                style="color: #3b82f6 !important;"></i>Completed</a>
-                                                                    </li>
                                                                     <li><a class="dropdown-item text-danger"
                                                                             href="javascript:void(0);"><i
                                                                                 class="bx bx-block me-2"></i>Cancelled</a>
@@ -940,12 +918,6 @@
                                                                                 class="bx bx-time-five me-2"
                                                                                 style="color: #ffc107 !important;"></i>Pending</a>
                                                                     </li>
-                                                                    <li><a class="dropdown-item"
-                                                                            style="color: #3b82f6 !important;"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-check-double me-2"
-                                                                                style="color: #3b82f6 !important;"></i>Completed</a>
-                                                                    </li>
                                                                     <li><a class="dropdown-item text-danger"
                                                                             href="javascript:void(0);"><i
                                                                                 class="bx bx-block me-2"></i>Cancelled</a>
@@ -997,7 +969,7 @@
                                                         <td><strong>TRN-2026-007</strong></td>
                                                         <td>Collagen & Hairloss Treatment</td>
                                                         <td>Jan 28, 2026</td>
-                                                        <td><span class="badge bg-primary">Completed</span></td>
+                                                        <td><span class="badge bg-primary">Graduated</span></td>
                                                         <td>
                                                             <div class="btn-group" role="group">
                                                                 <button type="button"
@@ -1017,12 +989,6 @@
                                                                             href="javascript:void(0);"><i
                                                                                 class="bx bx-time-five me-2"
                                                                                 style="color: #ffc107 !important;"></i>Pending</a>
-                                                                    </li>
-                                                                    <li><a class="dropdown-item"
-                                                                            style="color: #3b82f6 !important;"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-check-double me-2"
-                                                                                style="color: #3b82f6 !important;"></i>Completed</a>
                                                                     </li>
                                                                     <li><a class="dropdown-item text-danger"
                                                                             href="javascript:void(0);"><i
@@ -1096,12 +1062,6 @@
                                                                                 class="bx bx-time-five me-2"
                                                                                 style="color: #ffc107 !important;"></i>Pending</a>
                                                                     </li>
-                                                                    <li><a class="dropdown-item"
-                                                                            style="color: #3b82f6 !important;"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-check-double me-2"
-                                                                                style="color: #3b82f6 !important;"></i>Completed</a>
-                                                                    </li>
                                                                     <li><a class="dropdown-item text-danger"
                                                                             href="javascript:void(0);"><i
                                                                                 class="bx bx-block me-2"></i>Cancelled</a>
@@ -1173,12 +1133,6 @@
                                                                             href="javascript:void(0);"><i
                                                                                 class="bx bx-time-five me-2"
                                                                                 style="color: #ffc107 !important;"></i>Pending</a>
-                                                                    </li>
-                                                                    <li><a class="dropdown-item"
-                                                                            style="color: #3b82f6 !important;"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-check-double me-2"
-                                                                                style="color: #3b82f6 !important;"></i>Completed</a>
                                                                     </li>
                                                                     <li><a class="dropdown-item text-danger"
                                                                             href="javascript:void(0);"><i
@@ -1252,12 +1206,6 @@
                                                                                 class="bx bx-time-five me-2"
                                                                                 style="color: #ffc107 !important;"></i>Pending</a>
                                                                     </li>
-                                                                    <li><a class="dropdown-item"
-                                                                            style="color: #3b82f6 !important;"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-check-double me-2"
-                                                                                style="color: #3b82f6 !important;"></i>Completed</a>
-                                                                    </li>
                                                                     <li><a class="dropdown-item text-danger"
                                                                             href="javascript:void(0);"><i
                                                                                 class="bx bx-block me-2"></i>Cancelled</a>
@@ -1329,12 +1277,6 @@
                                                                             href="javascript:void(0);"><i
                                                                                 class="bx bx-time-five me-2"
                                                                                 style="color: #ffc107 !important;"></i>Pending</a>
-                                                                    </li>
-                                                                    <li><a class="dropdown-item"
-                                                                            style="color: #3b82f6 !important;"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-check-double me-2"
-                                                                                style="color: #3b82f6 !important;"></i>Completed</a>
                                                                     </li>
                                                                     <li><a class="dropdown-item text-danger"
                                                                             href="javascript:void(0);"><i
@@ -1408,12 +1350,6 @@
                                                                                 class="bx bx-time-five me-2"
                                                                                 style="color: #ffc107 !important;"></i>Pending</a>
                                                                     </li>
-                                                                    <li><a class="dropdown-item"
-                                                                            style="color: #3b82f6 !important;"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-check-double me-2"
-                                                                                style="color: #3b82f6 !important;"></i>Completed</a>
-                                                                    </li>
                                                                     <li><a class="dropdown-item text-danger"
                                                                             href="javascript:void(0);"><i
                                                                                 class="bx bx-block me-2"></i>Cancelled</a>
@@ -1465,7 +1401,7 @@
                                                         <td><strong>TRN-2026-013</strong></td>
                                                         <td>Aesthetic Services Level III</td>
                                                         <td>Feb 03, 2026</td>
-                                                        <td><span class="badge bg-primary">Completed</span></td>
+                                                        <td><span class="badge bg-primary">Graduated</span></td>
                                                         <td>
                                                             <div class="btn-group" role="group">
                                                                 <button type="button"
@@ -1485,12 +1421,6 @@
                                                                             href="javascript:void(0);"><i
                                                                                 class="bx bx-time-five me-2"
                                                                                 style="color: #ffc107 !important;"></i>Pending</a>
-                                                                    </li>
-                                                                    <li><a class="dropdown-item"
-                                                                            style="color: #3b82f6 !important;"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-check-double me-2"
-                                                                                style="color: #3b82f6 !important;"></i>Completed</a>
                                                                     </li>
                                                                     <li><a class="dropdown-item text-danger"
                                                                             href="javascript:void(0);"><i
@@ -1563,12 +1493,6 @@
                                                                             href="javascript:void(0);"><i
                                                                                 class="bx bx-time-five me-2"
                                                                                 style="color: #ffc107 !important;"></i>Pending</a>
-                                                                    </li>
-                                                                    <li><a class="dropdown-item"
-                                                                            style="color: #3b82f6 !important;"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-check-double me-2"
-                                                                                style="color: #3b82f6 !important;"></i>Completed</a>
                                                                     </li>
                                                                     <li><a class="dropdown-item text-danger"
                                                                             href="javascript:void(0);"><i

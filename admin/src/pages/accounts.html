@@ -286,7 +286,6 @@
                     <!-- Content -->
                     <div class="container-xxl flex-grow-1 container-p-y">
                         <!-- Trainee Statistics Cards -->
-                        <!-- Trainee Statistics Cards -->
                         <div class="row">
                             <div class="col-lg-3 col-md-6 col-6 mb-4">
                                 <div class="card">
@@ -309,13 +308,13 @@
                                     <div class="card-body">
                                         <div class="card-title d-flex align-items-start justify-content-between">
                                             <div class="avatar flex-shrink-0">
-                                                <i class="bx bx-check-circle"
+                                                <i class="bx bx-book-bookmark"
                                                     style="font-size: 2rem; color: #3b82f6;"></i>
                                             </div>
                                         </div>
-                                        <span class="fw-semibold d-block mb-1">Enrolled Trainees</span>
-                                        <h3 class="card-title mb-2" id="enrolledTraineesCount">0</h3>
-                                        <small class="text-muted fw-semibold" id="enrolledTraineesChange">
+                                        <span class="fw-semibold d-block mb-1">Total Enrollments</span>
+                                        <h3 class="card-title mb-2" id="totalEnrollmentCount">0</h3>
+                                        <small class="text-muted fw-semibold" id="totalEnrollmentChange">
                                             <i class="bx bx-minus"></i> No change
                                         </small>
                                     </div>
@@ -326,12 +325,13 @@
                                     <div class="card-body">
                                         <div class="card-title d-flex align-items-start justify-content-between">
                                             <div class="avatar flex-shrink-0">
-                                                <i class="bx bx-award" style="font-size: 2rem; color: #8b5cf6;"></i>
+                                                <i class="bx bx-file-blank"
+                                                    style="font-size: 2rem; color: #8b5cf6;"></i>
                                             </div>
                                         </div>
-                                        <span class="fw-semibold d-block mb-1">Completed Trainees</span>
-                                        <h3 class="card-title mb-2" id="completedTraineesCount">0</h3>
-                                        <small class="text-muted fw-semibold" id="completedTraineesChange">
+                                        <span class="fw-semibold d-block mb-1">Total Applications</span>
+                                        <h3 class="card-title mb-2" id="totalApplicationCount">0</h3>
+                                        <small class="text-muted fw-semibold" id="totalApplicationChange">
                                             <i class="bx bx-minus"></i> No change
                                         </small>
                                     </div>
@@ -342,13 +342,14 @@
                                     <div class="card-body">
                                         <div class="card-title d-flex align-items-start justify-content-between">
                                             <div class="avatar flex-shrink-0">
-                                                <i class="bx bx-time-five" style="font-size: 2rem; color: #f59e0b;"></i>
+                                                <i class="bx bx-check-shield"
+                                                    style="font-size: 2rem; color: #f59e0b;"></i>
                                             </div>
                                         </div>
-                                        <span class="d-block mb-1">Pending</span>
-                                        <h3 class="card-title text-nowrap mb-2" id="pendingTraineesCount">0</h3>
+                                        <span class="d-block mb-1">Total Admissions</span>
+                                        <h3 class="card-title text-nowrap mb-2" id="totalAdmissionCount">0</h3>
                                         <small class="text-warning fw-semibold"><i class="bx bx-right-arrow-alt"></i>
-                                            Review</small>
+                                            Records</small>
                                     </div>
                                 </div>
                             </div>
@@ -371,28 +372,52 @@
                                             <div class="card card-body"
                                                 style="background-color: #1a2332; border: 1px solid #2d3e52;">
                                                 <div class="row g-3">
-                                                    <div class="col-md-8">
+                                                    <div class="col-md-6">
                                                         <label class="form-label" style="color: #b8c5d6;">Search</label>
                                                         <input type="text" id="searchInput" class="form-control"
                                                             placeholder="Name or Trainee ID"
                                                             style="background-color: #243447; border: 1px solid #3d4f63; color: #b8c5d6;">
                                                     </div>
-                                                    <div class="col-md-3">
-                                                        <label class="form-label" style="color: #b8c5d6;">Status</label>
-                                                        <select id="statusFilter" class="form-select"
+                                                    <div class="col-md-2">
+                                                        <label class="form-label"
+                                                            style="color: #b8c5d6;">Enrollments</label>
+                                                        <select id="enrollmentFilter" class="form-select"
                                                             style="background-color: #243447; border: 1px solid #3d4f63; color: #b8c5d6;">
-                                                            <option value="">All Status</option>
-                                                            <option value="pending">Pending</option>
-                                                            <option value="completed">Completed</option>
-                                                            <option value="enrolled">Enrolled</option>
-                                                            <option value="active">Active</option>
+                                                            <option value="">All Years</option>
+                                                            <option value="2025">2025</option>
+                                                            <option value="2026">2026</option>
+                                                            <option value="2027">2027</option>
                                                         </select>
                                                     </div>
-                                                    <div class="col-md-1 d-flex align-items-end">
+                                                    <div class="col-md-2">
+                                                        <label class="form-label"
+                                                            style="color: #b8c5d6;">Applications</label>
+                                                        <select id="applicationFilter" class="form-select"
+                                                            style="background-color: #243447; border: 1px solid #3d4f63; color: #b8c5d6;">
+                                                            <option value="">All Years</option>
+                                                            <option value="2025">2025</option>
+                                                            <option value="2026">2026</option>
+                                                            <option value="2027">2027</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <label class="form-label"
+                                                            style="color: #b8c5d6;">Admissions</label>
+                                                        <select id="admissionFilter" class="form-select"
+                                                            style="background-color: #243447; border: 1px solid #3d4f63; color: #b8c5d6;">
+                                                            <option value="">All Years</option>
+                                                            <option value="2025">2025</option>
+                                                            <option value="2026">2026</option>
+                                                            <option value="2027">2027</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="row g-3 mt-2">
+                                                    <div class="col-md-12 d-flex justify-content-end">
                                                         <button type="button" id="resetFilters"
-                                                            class="btn btn-outline-secondary w-100"
+                                                            class="btn btn-outline-secondary"
                                                             style="border-color: #3d4f63; color: #b8c5d6;">
-                                                            <i class="bx bx-reset"></i>
+                                                            <i class="bx bx-reset me-1"></i> Reset Filters
                                                         </button>
                                                     </div>
                                                 </div>
@@ -408,7 +433,6 @@
                                                         <th>Name</th>
                                                         <th>Email</th>
                                                         <th>Phone Number</th>
-                                                        <th>Status</th>
                                                         <th>Actions</th>
                                                     </tr>
                                                 </thead>
@@ -462,19 +486,10 @@
                 <div class="modal-body">
                     <form id="addTraineeForm">
                         <div class="row">
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-12 mb-3">
                                 <label for="addTraineeId" class="form-label">Trainee ID</label>
                                 <input type="text" id="addTraineeId" class="form-control" placeholder="Auto-generated"
                                     required readonly style="background-color: #f5f5f5; cursor: not-allowed;">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="addTraineeStatus" class="form-label">Status</label>
-                                <select id="addTraineeStatus" class="form-select">
-                                    <option value="pending">Pending</option>
-                                    <option value="enrolled">Enrolled</option>
-                                    <option value="active">Active</option>
-                                    <option value="completed">Completed</option>
-                                </select>
                             </div>
                         </div>
                         <div class="row">
@@ -579,18 +594,9 @@
                 <div class="modal-body">
                     <form id="editTraineeForm">
                         <div class="row">
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-12 mb-3">
                                 <label for="editTraineeId" class="form-label">Trainee ID</label>
                                 <input type="text" id="editTraineeId" class="form-control" placeholder="Enter ID">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="editTraineeStatus" class="form-label">Status</label>
-                                <select id="editTraineeStatus" class="form-select">
-                                    <option value="pending">Pending</option>
-                                    <option value="enrolled">Enrolled</option>
-                                    <option value="active">Active</option>
-                                    <option value="completed">Completed</option>
-                                </select>
                             </div>
                         </div>
                         <div class="row">
@@ -689,14 +695,9 @@
                 <div class="modal-body">
                     <form id="viewTraineeForm" autocomplete="off">
                         <div class="row">
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-12 mb-3">
                                 <label class="form-label">Trainee ID</label>
                                 <input type="text" class="form-control" id="viewTraineeId" value="#01" disabled>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Status</label>
-                                <input type="text" class="form-control" id="viewTraineeStatus" value="Enrolled"
-                                    disabled>
                             </div>
                         </div>
                         <div class="row">

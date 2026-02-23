@@ -1,30 +1,42 @@
 # Database Migrations
 
-This folder contains migration scripts for updating the database schema and data.
+This directory contains database migration scripts for the CAATE-ITRMS system.
 
 ## Available Migrations
 
-### migrate_student_id_to_trainee_id.php
+### RemoveTraineeStatusField.php
 
-Renames the `student_id` field to `trainee_id` in the trainees collection.
+Removes the `status` field from all trainee documents in the trainees collection.
+
+**What it does:**
+
+- Removes the `status` field from all existing trainee documents
+- Drops the `status` index from the trainees collection
+- Reports the number of documents modified
 
 **How to run:**
 
 ```bash
 cd backend/database/migrations
-php migrate_student_id_to_trainee_id.php
+php RemoveTraineeStatusField.php
 ```
 
-**What it does:**
+**Expected output:**
 
-- Finds all documents in the `trainees` collection with a `student_id` field
-- Renames `student_id` to `trainee_id` for all matching documents
-- Verifies the migration was successful
+```
+Starting migration: Remove status field from trainees collection...
 
-**Safe to run multiple times:** Yes, the script checks if documents need migration before proceeding.
+Found X trainee documents with status field
+✓ Removed status field from X documents
+✓ Dropped status index from trainees collection
 
-## Notes
+✅ Migration completed successfully!
+Total trainees in database: X
+```
+
+## Important Notes
 
 - Always backup your database before running migrations
-- Migrations are designed to be idempotent (safe to run multiple times)
-- Check the output to verify the migration completed successfully
+- Migrations are designed to be run once
+- Check the migration output to ensure it completed successfully
+- If a migration fails, check the error message and resolve any issues before re-running

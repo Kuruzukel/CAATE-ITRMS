@@ -133,7 +133,6 @@ try {
             'address' => '123 Main St, Manila',
             'date_of_birth' => new MongoDB\BSON\UTCDateTime(strtotime('2000-05-15') * 1000),
             'gender' => 'Female',
-            'status' => 'active',
             'created_at' => new MongoDB\BSON\UTCDateTime(),
             'updated_at' => new MongoDB\BSON\UTCDateTime()
         ],
@@ -146,7 +145,6 @@ try {
             'address' => '456 Rizal Ave, Quezon City',
             'date_of_birth' => new MongoDB\BSON\UTCDateTime(strtotime('1999-08-20') * 1000),
             'gender' => 'Female',
-            'status' => 'active',
             'created_at' => new MongoDB\BSON\UTCDateTime(),
             'updated_at' => new MongoDB\BSON\UTCDateTime()
         ],
@@ -159,7 +157,6 @@ try {
             'address' => '789 Bonifacio St, Makati',
             'date_of_birth' => new MongoDB\BSON\UTCDateTime(strtotime('2001-03-10') * 1000),
             'gender' => 'Female',
-            'status' => 'active',
             'created_at' => new MongoDB\BSON\UTCDateTime(),
             'updated_at' => new MongoDB\BSON\UTCDateTime()
         ],
@@ -172,7 +169,6 @@ try {
             'address' => '321 Luna St, Pasig',
             'date_of_birth' => new MongoDB\BSON\UTCDateTime(strtotime('2000-11-25') * 1000),
             'gender' => 'Female',
-            'status' => 'active',
             'created_at' => new MongoDB\BSON\UTCDateTime(),
             'updated_at' => new MongoDB\BSON\UTCDateTime()
         ],
@@ -185,7 +181,6 @@ try {
             'address' => '654 Del Pilar St, Mandaluyong',
             'date_of_birth' => new MongoDB\BSON\UTCDateTime(strtotime('1998-07-18') * 1000),
             'gender' => 'Female',
-            'status' => 'active',
             'created_at' => new MongoDB\BSON\UTCDateTime(),
             'updated_at' => new MongoDB\BSON\UTCDateTime()
         ]

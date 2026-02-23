@@ -68,18 +68,25 @@ class Trainee {
     }
     
     public function getStatistics() {
+        $db = getMongoConnection();
+        
+        // Get total trainees
         $total = $this->collection->countDocuments();
-        $active = $this->collection->countDocuments(['status' => 'active']);
-        $enrolled = $this->collection->countDocuments(['status' => 'enrolled']);
-        $completed = $this->collection->countDocuments(['status' => 'completed']);
-        $pending = $this->collection->countDocuments(['status' => 'pending']);
+        
+        // Get total enrollment records
+        $totalEnrollment = $db->enrollments->countDocuments();
+        
+        // Get total application records
+        $totalApplication = $db->applications->countDocuments();
+        
+        // Get total admission records
+        $totalAdmission = $db->admissions->countDocuments();
         
         return [
             'total' => $total,
-            'active' => $active,
-            'enrolled' => $enrolled,
-            'completed' => $completed,
-            'pending' => $pending
+            'totalEnrollment' => $totalEnrollment,
+            'totalApplication' => $totalApplication,
+            'totalAdmission' => $totalAdmission
         ];
     }
 }

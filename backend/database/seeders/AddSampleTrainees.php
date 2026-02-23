@@ -54,8 +54,6 @@ try {
         '741 Aurora Blvd, Quezon City'
     ];
     
-    $statuses = ['active', 'pending', 'enrolled'];
-    
     $createdTrainees = [];
     
     for ($i = 0; $i < 10; $i++) {
@@ -91,7 +89,6 @@ try {
             'address' => $addresses[$i],
             'date_of_birth' => new MongoDB\BSON\UTCDateTime($birthDate * 1000),
             'gender' => $genders[$i],
-            'status' => $statuses[array_rand($statuses)],
             'created_at' => new MongoDB\BSON\UTCDateTime(),
             'updated_at' => new MongoDB\BSON\UTCDateTime()
         ];
@@ -102,8 +99,7 @@ try {
             'trainee_id' => $traineeId,
             'name' => "{$firstName} {$lastName}",
             'email' => $email,
-            'password' => $password,
-            'status' => $trainee['status']
+            'password' => $password
         ];
         
         echo "  ✓ Created trainee: {$firstName} {$lastName} ({$traineeId})\n";
@@ -119,7 +115,6 @@ try {
         echo "Name:       {$trainee['name']}\n";
         echo "Email:      {$trainee['email']}\n";
         echo "Password:   {$trainee['password']}\n";
-        echo "Status:     {$trainee['status']}\n";
         echo str_repeat("-", 80) . "\n";
     }
     

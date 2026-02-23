@@ -270,7 +270,6 @@ function createTraineeRow(trainee, index) {
     }
 
     const initials = `${trainee.first_name.charAt(0)}${trainee.last_name.charAt(0)}`;
-    const statusBadge = getStatusBadge(trainee.status);
     const displayId = trainee.trainee_id || String(index).padStart(2, '0');
 
     tr.innerHTML = `
@@ -287,7 +286,6 @@ function createTraineeRow(trainee, index) {
         </td>
         <td>${trainee.email}</td>
         <td>${trainee.phone}</td>
-        <td><span class="badge ${statusBadge.class}">${statusBadge.text}</span></td>
         <td>
             <div class="dropdown">
                 <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
@@ -300,9 +298,6 @@ function createTraineeRow(trainee, index) {
                     <a class="dropdown-item" href="javascript:void(0);" onclick="editTrainee('${trainee._id}')">
                         <i class="bx bx-edit-alt me-1"></i> Edit Details
                     </a>
-                    <a class="dropdown-item" href="javascript:void(0);" onclick="changeTraineeStatus('${trainee._id}')">
-                        <i class="bx bx-refresh me-1"></i> Change Status
-                    </a>
                     <a class="dropdown-item text-danger" href="javascript:void(0);" onclick="deleteTrainee('${trainee._id}')">
                         <i class="bx bx-trash me-1"></i> Delete
                     </a>
@@ -313,24 +308,6 @@ function createTraineeRow(trainee, index) {
 
     return tr;
 }
-
-// Get status badge configuration
-function getStatusBadge(status) {
-    // Default to pending if no status
-    if (!status) status = 'pending';
-
-    const badges = {
-        'active': { class: 'bg-success', text: 'Active' },
-        'enrolled': { class: 'bg-success', text: 'Enrolled' },
-        'pending': { class: 'bg-warning', text: 'Pending' },
-        'completed': { class: 'bg-primary', text: 'Completed' },
-        'inactive': { class: 'bg-secondary', text: 'Inactive' }
-    };
-
-    return badges[status.toLowerCase()] || { class: 'bg-warning', text: 'Pending' };
-}
-
-
 
 // Get avatar color based on index
 function getAvatarColor(index) {
@@ -353,22 +330,22 @@ function updateStatistics(stats) {
         totalElement.textContent = stats.total.toLocaleString();
     }
 
-    // Update Enrolled Trainees
-    const enrolledElement = document.getElementById('enrolledTraineesCount');
-    if (enrolledElement) {
-        enrolledElement.textContent = stats.enrolled.toLocaleString();
+    // Update Total Enrollment
+    const enrollmentElement = document.getElementById('totalEnrollmentCount');
+    if (enrollmentElement) {
+        enrollmentElement.textContent = (stats.totalEnrollment || 0).toLocaleString();
     }
 
-    // Update Completed Trainees
-    const completedElement = document.getElementById('completedTraineesCount');
-    if (completedElement) {
-        completedElement.textContent = stats.completed.toLocaleString();
+    // Update Total Application
+    const applicationElement = document.getElementById('totalApplicationCount');
+    if (applicationElement) {
+        applicationElement.textContent = (stats.totalApplication || 0).toLocaleString();
     }
 
-    // Update Pending
-    const pendingElement = document.getElementById('pendingTraineesCount');
-    if (pendingElement) {
-        pendingElement.textContent = stats.pending.toLocaleString();
+    // Update Total Admission
+    const admissionElement = document.getElementById('totalAdmissionCount');
+    if (admissionElement) {
+        admissionElement.textContent = (stats.totalAdmission || 0).toLocaleString();
     }
 }
 
@@ -386,7 +363,6 @@ function viewTrainee(id) {
     document.getElementById('viewTraineeSuffix').value = trainee.suffix || '';
     document.getElementById('viewTraineeEmail').value = trainee.email || '';
     document.getElementById('viewTraineePhone').value = trainee.phone || '';
-    document.getElementById('viewTraineeStatus').value = trainee.status || 'pending';
 
     // Set password field (show actual password from database)
     const passwordField = document.getElementById('viewTraineePassword');
@@ -420,8 +396,7 @@ function editTrainee(id) {
         last_name: trainee.last_name || '',
         suffix: trainee.suffix || '',
         email: trainee.email || '',
-        phone: trainee.phone || '',
-        status: trainee.status || 'pending'
+        phone: trainee.phone || ''
     };
 
     // Populate edit modal with separate name fields
@@ -433,7 +408,6 @@ function editTrainee(id) {
     document.getElementById('editTraineeSuffix').value = trainee.suffix || '';
     document.getElementById('editTraineeEmail').value = trainee.email;
     document.getElementById('editTraineePhone').value = trainee.phone;
-    document.getElementById('editTraineeStatus').value = trainee.status || 'pending';
     document.getElementById('editTraineePassword').value = ''; // Clear password field
 
     // Store the MongoDB _id in a hidden field or data attribute
@@ -557,7 +531,6 @@ async function saveEditTrainee() {
     const suffix = document.getElementById('editTraineeSuffix').value.trim();
     const email = document.getElementById('editTraineeEmail').value.trim();
     const phone = document.getElementById('editTraineePhone').value.trim();
-    const status = document.getElementById('editTraineeStatus').value;
     const password = document.getElementById('editTraineePassword').value;
 
     // Check if any changes were made
@@ -571,7 +544,6 @@ async function saveEditTrainee() {
             suffix !== window.originalTraineeData.suffix ||
             email !== window.originalTraineeData.email ||
             phone !== window.originalTraineeData.phone ||
-            status !== window.originalTraineeData.status ||
             password !== ''; // Password field has value means it was changed
 
         if (!hasChanges) {
@@ -653,7 +625,6 @@ async function saveEditTrainee() {
         window.originalTraineeData.suffix !== suffix ||
         window.originalTraineeData.email !== email ||
         window.originalTraineeData.phone !== phone ||
-        window.originalTraineeData.status !== status.toLowerCase() ||
         password !== ''; // Password change counts as a change
 
     if (!hasChanges) {
@@ -671,8 +642,7 @@ async function saveEditTrainee() {
         last_name: lastName,
         suffix: suffix,
         email: email,
-        phone: phone,
-        status: status.toLowerCase()
+        phone: phone
     };
 
     // Only include password if it was changed
@@ -791,7 +761,6 @@ async function saveNewTrainee() {
     const suffix = document.getElementById('addTraineeSuffix').value.trim();
     const email = document.getElementById('addTraineeEmail').value.trim();
     const phone = document.getElementById('addTraineePhone').value.trim();
-    const status = document.getElementById('addTraineeStatus').value;
     const password = document.getElementById('addTraineePassword').value;
 
     // Validate required fields
@@ -872,8 +841,7 @@ async function saveNewTrainee() {
         last_name: lastName,
         suffix: suffix,
         email: email,
-        phone: phone,
-        status: status.toLowerCase()
+        phone: phone
     };
 
     // Only include password if provided
@@ -975,15 +943,25 @@ function showToast(message, type = 'success') {
 // Setup filter event listeners
 function setupFilters() {
     const searchInput = document.getElementById('searchInput');
-    const statusFilter = document.getElementById('statusFilter');
+    const enrollmentFilter = document.getElementById('enrollmentFilter');
+    const applicationFilter = document.getElementById('applicationFilter');
+    const admissionFilter = document.getElementById('admissionFilter');
     const resetButton = document.getElementById('resetFilters');
 
     if (searchInput) {
         searchInput.addEventListener('input', applyFilters);
     }
 
-    if (statusFilter) {
-        statusFilter.addEventListener('change', applyFilters);
+    if (enrollmentFilter) {
+        enrollmentFilter.addEventListener('change', applyFilters);
+    }
+
+    if (applicationFilter) {
+        applicationFilter.addEventListener('change', applyFilters);
+    }
+
+    if (admissionFilter) {
+        admissionFilter.addEventListener('change', applyFilters);
     }
 
     if (resetButton) {
@@ -994,7 +972,9 @@ function setupFilters() {
 // Apply filters to trainee list
 function applyFilters() {
     const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
-    const statusValue = document.getElementById('statusFilter').value.toLowerCase();
+    const enrollmentYear = document.getElementById('enrollmentFilter')?.value || '';
+    const applicationYear = document.getElementById('applicationFilter')?.value || '';
+    const admissionYear = document.getElementById('admissionFilter')?.value || '';
 
     let filteredTrainees = traineesData;
 
@@ -1018,10 +998,30 @@ function applyFilters() {
         });
     }
 
-    // Apply status filter
-    if (statusValue) {
+    // Apply enrollment year filter
+    if (enrollmentYear) {
         filteredTrainees = filteredTrainees.filter(trainee => {
-            return (trainee.status || 'pending').toLowerCase() === statusValue;
+            return trainee.enrollments && trainee.enrollments.some(e =>
+                e.year === enrollmentYear || (e.date && new Date(e.date).getFullYear().toString() === enrollmentYear)
+            );
+        });
+    }
+
+    // Apply application year filter
+    if (applicationYear) {
+        filteredTrainees = filteredTrainees.filter(trainee => {
+            return trainee.applications && trainee.applications.some(a =>
+                a.year === applicationYear || (a.date && new Date(a.date).getFullYear().toString() === applicationYear)
+            );
+        });
+    }
+
+    // Apply admission year filter
+    if (admissionYear) {
+        filteredTrainees = filteredTrainees.filter(trainee => {
+            return trainee.admissions && trainee.admissions.some(a =>
+                a.year === admissionYear || (a.date && new Date(a.date).getFullYear().toString() === admissionYear)
+            );
         });
     }
 
@@ -1032,6 +1032,13 @@ function applyFilters() {
 // Reset all filters
 function resetFilters() {
     document.getElementById('searchInput').value = '';
-    document.getElementById('statusFilter').value = '';
+    const enrollmentFilter = document.getElementById('enrollmentFilter');
+    const applicationFilter = document.getElementById('applicationFilter');
+    const admissionFilter = document.getElementById('admissionFilter');
+
+    if (enrollmentFilter) enrollmentFilter.value = '';
+    if (applicationFilter) applicationFilter.value = '';
+    if (admissionFilter) admissionFilter.value = '';
+
     renderTrainees(traineesData);
 }

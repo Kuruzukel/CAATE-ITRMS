@@ -54,8 +54,7 @@ try {
                 'last_name' => $trainee['last_name'],
                 'email' => $trainee['email'],
                 'phone' => $trainee['phone'],
-                'address' => $trainee['address'],
-                'status' => $trainee['status']
+                'address' => $trainee['address']
             ];
         }, $trainees);
     }

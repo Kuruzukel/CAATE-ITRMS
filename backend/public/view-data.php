@@ -262,7 +262,6 @@ $db = getMongoConnection();
                         <th>Name</th>
                         <th>Email</th>
                         <th>Phone</th>
-                        <th>Status</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -274,7 +273,6 @@ $db = getMongoConnection();
                         echo "<td>{$trainee['first_name']} {$trainee['last_name']}</td>";
                         echo "<td>{$trainee['email']}</td>";
                         echo "<td>{$trainee['phone']}</td>";
-                        echo "<td><span class='badge badge-active'>{$trainee['status']}</span></td>";
                         echo "</tr>";
                     }
                     ?>

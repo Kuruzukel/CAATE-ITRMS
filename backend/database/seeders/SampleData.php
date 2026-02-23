@@ -84,7 +84,6 @@ try {
             'email' => 'trainee@example.com',
             'phone' => '09123456789',
             'address' => 'Sample Address, City',
-            'status' => 'active',
             'created_at' => new MongoDB\BSON\UTCDateTime(),
             'updated_at' => new MongoDB\BSON\UTCDateTime()
         ]);

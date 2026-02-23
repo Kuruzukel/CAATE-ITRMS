@@ -45,7 +45,6 @@ try {
             'email' => $email,
             'phone' => $phone,
             'password' => 'password123',
-            'status' => 'pending',
             'created_at' => new MongoDB\BSON\UTCDateTime(),
             'updated_at' => new MongoDB\BSON\UTCDateTime(),
             'trainee_id' => $traineeId
@@ -62,7 +61,7 @@ try {
     echo str_repeat("=", 80) . "\n";
     echo "Structure: Same as John Aeron Del Rosaruu (TRN-2026-001)\n";
     echo "Field Order: first_name, second_name, last_name, middle_name, suffix,\n";
-    echo "             email, phone, status, created_at, updated_at, trainee_id\n";
+    echo "             email, phone, created_at, updated_at, trainee_id\n";
     echo "No address field included\n";
     echo str_repeat("=", 80) . "\n";
     

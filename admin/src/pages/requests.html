@@ -385,6 +385,7 @@
                                                             <option value="haircare">Hair Care</option>
                                                             <option value="nailcare">Nail Care</option>
                                                             <option value="bodytreatment">Body Treatment</option>
+                                                            <option value="aesthetic">Aesthetic Services</option>
                                                         </select>
                                                     </div>
                                                     <div class="col-md-2">
@@ -439,11 +440,29 @@
                                                         </td>
                                                         <td>
                                                             <div class="btn-group" role="group">
-                                                                <button type="button" class="btn btn-sm btn-primary"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#assignModal">
-                                                                    <i class="bx bx-calendar-plus"></i> Assign
+                                                                <button type="button"
+                                                                    class="btn btn-sm btn-primary dropdown-toggle"
+                                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                                    <i class="bx bx-refresh"></i> Change Status
                                                                 </button>
+                                                                <ul class="dropdown-menu">
+                                                                    <li><a class="dropdown-item"
+                                                                            style="color: #28a745 !important;"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-check-circle me-2"
+                                                                                style="color: #28a745 !important;"></i>Approve</a>
+                                                                    </li>
+                                                                    <li><a class="dropdown-item"
+                                                                            style="color: #ffc107 !important;"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-time-five me-2"
+                                                                                style="color: #ffc107 !important;"></i>Pending</a>
+                                                                    </li>
+                                                                    <li><a class="dropdown-item text-danger"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-block me-2"></i>Cancelled</a>
+                                                                    </li>
+                                                                </ul>
                                                                 <button type="button"
                                                                     class="btn btn-sm btn-primary dropdown-toggle dropdown-toggle-split"
                                                                     data-bs-toggle="dropdown" aria-expanded="false">
@@ -474,21 +493,6 @@
                                                                             data-bs-target="#addNoteModal"><i
                                                                                 class="bx bx-note me-2"></i>Add
                                                                             Note</a></li>
-                                                                    <li>
-                                                                        <hr class="dropdown-divider">
-                                                                    </li>
-                                                                    <li><a class="dropdown-item text-success"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-check-circle me-2"></i>Approve</a>
-                                                                    </li>
-                                                                    <li><a class="dropdown-item text-danger"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-x-circle me-2"></i>Decline</a>
-                                                                    </li>
-                                                                    <li><a class="dropdown-item text-warning"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-time-five me-2"></i>Pending</a>
-                                                                    </li>
                                                                     <li>
                                                                         <hr class="dropdown-divider">
                                                                     </li>
@@ -514,15 +518,33 @@
                                                             <small class="text-muted">2:00 PM - 3:30 PM</small>
                                                         </td>
                                                         <td>
-                                                            <span class="badge bg-success">Confirmed</span>
+                                                            <span class="badge bg-success">Approved</span>
                                                         </td>
                                                         <td>
                                                             <div class="btn-group" role="group">
-                                                                <button type="button" class="btn btn-sm btn-primary"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#assignModal">
-                                                                    <i class="bx bx-calendar-plus"></i> Assign
+                                                                <button type="button"
+                                                                    class="btn btn-sm btn-primary dropdown-toggle"
+                                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                                    <i class="bx bx-refresh"></i> Change Status
                                                                 </button>
+                                                                <ul class="dropdown-menu">
+                                                                    <li><a class="dropdown-item"
+                                                                            style="color: #28a745 !important;"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-check-circle me-2"
+                                                                                style="color: #28a745 !important;"></i>Approve</a>
+                                                                    </li>
+                                                                    <li><a class="dropdown-item"
+                                                                            style="color: #ffc107 !important;"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-time-five me-2"
+                                                                                style="color: #ffc107 !important;"></i>Pending</a>
+                                                                    </li>
+                                                                    <li><a class="dropdown-item text-danger"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-block me-2"></i>Cancelled</a>
+                                                                    </li>
+                                                                </ul>
                                                                 <button type="button"
                                                                     class="btn btn-sm btn-primary dropdown-toggle dropdown-toggle-split"
                                                                     data-bs-toggle="dropdown" aria-expanded="false">
@@ -553,21 +575,6 @@
                                                                             data-bs-target="#addNoteModal"><i
                                                                                 class="bx bx-note me-2"></i>Add
                                                                             Note</a></li>
-                                                                    <li>
-                                                                        <hr class="dropdown-divider">
-                                                                    </li>
-                                                                    <li><a class="dropdown-item text-success"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-check-circle me-2"></i>Approve</a>
-                                                                    </li>
-                                                                    <li><a class="dropdown-item text-danger"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-x-circle me-2"></i>Decline</a>
-                                                                    </li>
-                                                                    <li><a class="dropdown-item text-warning"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-time-five me-2"></i>Pending</a>
-                                                                    </li>
                                                                     <li>
                                                                         <hr class="dropdown-divider">
                                                                     </li>
@@ -596,11 +603,29 @@
                                                         </td>
                                                         <td>
                                                             <div class="btn-group" role="group">
-                                                                <button type="button" class="btn btn-sm btn-primary"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#assignModal">
-                                                                    <i class="bx bx-calendar-plus"></i> Assign
+                                                                <button type="button"
+                                                                    class="btn btn-sm btn-primary dropdown-toggle"
+                                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                                    <i class="bx bx-refresh"></i> Change Status
                                                                 </button>
+                                                                <ul class="dropdown-menu">
+                                                                    <li><a class="dropdown-item"
+                                                                            style="color: #28a745 !important;"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-check-circle me-2"
+                                                                                style="color: #28a745 !important;"></i>Approve</a>
+                                                                    </li>
+                                                                    <li><a class="dropdown-item"
+                                                                            style="color: #ffc107 !important;"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-time-five me-2"
+                                                                                style="color: #ffc107 !important;"></i>Pending</a>
+                                                                    </li>
+                                                                    <li><a class="dropdown-item text-danger"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-block me-2"></i>Cancelled</a>
+                                                                    </li>
+                                                                </ul>
                                                                 <button type="button"
                                                                     class="btn btn-sm btn-primary dropdown-toggle dropdown-toggle-split"
                                                                     data-bs-toggle="dropdown" aria-expanded="false">
@@ -631,21 +656,6 @@
                                                                             data-bs-target="#addNoteModal"><i
                                                                                 class="bx bx-note me-2"></i>Add
                                                                             Note</a></li>
-                                                                    <li>
-                                                                        <hr class="dropdown-divider">
-                                                                    </li>
-                                                                    <li><a class="dropdown-item text-success"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-check-circle me-2"></i>Approve</a>
-                                                                    </li>
-                                                                    <li><a class="dropdown-item text-danger"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-x-circle me-2"></i>Decline</a>
-                                                                    </li>
-                                                                    <li><a class="dropdown-item text-warning"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-time-five me-2"></i>Pending</a>
-                                                                    </li>
                                                                     <li>
                                                                         <hr class="dropdown-divider">
                                                                     </li>
@@ -671,15 +681,33 @@
                                                             <small class="text-muted">10:00 AM - 12:00 PM</small>
                                                         </td>
                                                         <td>
-                                                            <span class="badge bg-success">Confirmed</span>
+                                                            <span class="badge bg-success">Approved</span>
                                                         </td>
                                                         <td>
                                                             <div class="btn-group" role="group">
-                                                                <button type="button" class="btn btn-sm btn-primary"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#assignModal">
-                                                                    <i class="bx bx-calendar-plus"></i> Assign
+                                                                <button type="button"
+                                                                    class="btn btn-sm btn-primary dropdown-toggle"
+                                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                                    <i class="bx bx-refresh"></i> Change Status
                                                                 </button>
+                                                                <ul class="dropdown-menu">
+                                                                    <li><a class="dropdown-item"
+                                                                            style="color: #28a745 !important;"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-check-circle me-2"
+                                                                                style="color: #28a745 !important;"></i>Approve</a>
+                                                                    </li>
+                                                                    <li><a class="dropdown-item"
+                                                                            style="color: #ffc107 !important;"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-time-five me-2"
+                                                                                style="color: #ffc107 !important;"></i>Pending</a>
+                                                                    </li>
+                                                                    <li><a class="dropdown-item text-danger"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-block me-2"></i>Cancelled</a>
+                                                                    </li>
+                                                                </ul>
                                                                 <button type="button"
                                                                     class="btn btn-sm btn-primary dropdown-toggle dropdown-toggle-split"
                                                                     data-bs-toggle="dropdown" aria-expanded="false">
@@ -710,21 +738,6 @@
                                                                             data-bs-target="#addNoteModal"><i
                                                                                 class="bx bx-note me-2"></i>Add
                                                                             Note</a></li>
-                                                                    <li>
-                                                                        <hr class="dropdown-divider">
-                                                                    </li>
-                                                                    <li><a class="dropdown-item text-success"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-check-circle me-2"></i>Approve</a>
-                                                                    </li>
-                                                                    <li><a class="dropdown-item text-danger"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-x-circle me-2"></i>Decline</a>
-                                                                    </li>
-                                                                    <li><a class="dropdown-item text-warning"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-time-five me-2"></i>Pending</a>
-                                                                    </li>
                                                                     <li>
                                                                         <hr class="dropdown-divider">
                                                                     </li>
@@ -754,11 +767,29 @@
                                                         </td>
                                                         <td>
                                                             <div class="btn-group" role="group">
-                                                                <button type="button" class="btn btn-sm btn-primary"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#assignModal">
-                                                                    <i class="bx bx-calendar-plus"></i> Assign
+                                                                <button type="button"
+                                                                    class="btn btn-sm btn-primary dropdown-toggle"
+                                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                                    <i class="bx bx-refresh"></i> Change Status
                                                                 </button>
+                                                                <ul class="dropdown-menu">
+                                                                    <li><a class="dropdown-item"
+                                                                            style="color: #28a745 !important;"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-check-circle me-2"
+                                                                                style="color: #28a745 !important;"></i>Approve</a>
+                                                                    </li>
+                                                                    <li><a class="dropdown-item"
+                                                                            style="color: #ffc107 !important;"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-time-five me-2"
+                                                                                style="color: #ffc107 !important;"></i>Pending</a>
+                                                                    </li>
+                                                                    <li><a class="dropdown-item text-danger"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-block me-2"></i>Cancelled</a>
+                                                                    </li>
+                                                                </ul>
                                                                 <button type="button"
                                                                     class="btn btn-sm btn-primary dropdown-toggle dropdown-toggle-split"
                                                                     data-bs-toggle="dropdown" aria-expanded="false">
@@ -789,21 +820,6 @@
                                                                             data-bs-target="#addNoteModal"><i
                                                                                 class="bx bx-note me-2"></i>Add
                                                                             Note</a></li>
-                                                                    <li>
-                                                                        <hr class="dropdown-divider">
-                                                                    </li>
-                                                                    <li><a class="dropdown-item text-success"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-check-circle me-2"></i>Approve</a>
-                                                                    </li>
-                                                                    <li><a class="dropdown-item text-danger"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-x-circle me-2"></i>Decline</a>
-                                                                    </li>
-                                                                    <li><a class="dropdown-item text-warning"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-time-five me-2"></i>Pending</a>
-                                                                    </li>
                                                                     <li>
                                                                         <hr class="dropdown-divider">
                                                                     </li>
@@ -832,11 +848,29 @@
                                                         </td>
                                                         <td>
                                                             <div class="btn-group" role="group">
-                                                                <button type="button" class="btn btn-sm btn-primary"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#assignModal">
-                                                                    <i class="bx bx-calendar-plus"></i> Assign
+                                                                <button type="button"
+                                                                    class="btn btn-sm btn-primary dropdown-toggle"
+                                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                                    <i class="bx bx-refresh"></i> Change Status
                                                                 </button>
+                                                                <ul class="dropdown-menu">
+                                                                    <li><a class="dropdown-item"
+                                                                            style="color: #28a745 !important;"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-check-circle me-2"
+                                                                                style="color: #28a745 !important;"></i>Approve</a>
+                                                                    </li>
+                                                                    <li><a class="dropdown-item"
+                                                                            style="color: #ffc107 !important;"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-time-five me-2"
+                                                                                style="color: #ffc107 !important;"></i>Pending</a>
+                                                                    </li>
+                                                                    <li><a class="dropdown-item text-danger"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-block me-2"></i>Cancelled</a>
+                                                                    </li>
+                                                                </ul>
                                                                 <button type="button"
                                                                     class="btn btn-sm btn-primary dropdown-toggle dropdown-toggle-split"
                                                                     data-bs-toggle="dropdown" aria-expanded="false">
@@ -867,21 +901,6 @@
                                                                             data-bs-target="#addNoteModal"><i
                                                                                 class="bx bx-note me-2"></i>Add
                                                                             Note</a></li>
-                                                                    <li>
-                                                                        <hr class="dropdown-divider">
-                                                                    </li>
-                                                                    <li><a class="dropdown-item text-success"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-check-circle me-2"></i>Approve</a>
-                                                                    </li>
-                                                                    <li><a class="dropdown-item text-danger"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-x-circle me-2"></i>Decline</a>
-                                                                    </li>
-                                                                    <li><a class="dropdown-item text-warning"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-time-five me-2"></i>Pending</a>
-                                                                    </li>
                                                                     <li>
                                                                         <hr class="dropdown-divider">
                                                                     </li>
@@ -907,15 +926,33 @@
                                                             <small class="text-muted">11:00 AM - 1:00 PM</small>
                                                         </td>
                                                         <td>
-                                                            <span class="badge bg-success">Confirmed</span>
+                                                            <span class="badge bg-success">Approved</span>
                                                         </td>
                                                         <td>
                                                             <div class="btn-group" role="group">
-                                                                <button type="button" class="btn btn-sm btn-primary"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#assignModal">
-                                                                    <i class="bx bx-calendar-plus"></i> Assign
+                                                                <button type="button"
+                                                                    class="btn btn-sm btn-primary dropdown-toggle"
+                                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                                    <i class="bx bx-refresh"></i> Change Status
                                                                 </button>
+                                                                <ul class="dropdown-menu">
+                                                                    <li><a class="dropdown-item"
+                                                                            style="color: #28a745 !important;"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-check-circle me-2"
+                                                                                style="color: #28a745 !important;"></i>Approve</a>
+                                                                    </li>
+                                                                    <li><a class="dropdown-item"
+                                                                            style="color: #ffc107 !important;"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-time-five me-2"
+                                                                                style="color: #ffc107 !important;"></i>Pending</a>
+                                                                    </li>
+                                                                    <li><a class="dropdown-item text-danger"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-block me-2"></i>Cancelled</a>
+                                                                    </li>
+                                                                </ul>
                                                                 <button type="button"
                                                                     class="btn btn-sm btn-primary dropdown-toggle dropdown-toggle-split"
                                                                     data-bs-toggle="dropdown" aria-expanded="false">
@@ -946,21 +983,6 @@
                                                                             data-bs-target="#addNoteModal"><i
                                                                                 class="bx bx-note me-2"></i>Add
                                                                             Note</a></li>
-                                                                    <li>
-                                                                        <hr class="dropdown-divider">
-                                                                    </li>
-                                                                    <li><a class="dropdown-item text-success"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-check-circle me-2"></i>Approve</a>
-                                                                    </li>
-                                                                    <li><a class="dropdown-item text-danger"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-x-circle me-2"></i>Decline</a>
-                                                                    </li>
-                                                                    <li><a class="dropdown-item text-warning"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-time-five me-2"></i>Pending</a>
-                                                                    </li>
                                                                     <li>
                                                                         <hr class="dropdown-divider">
                                                                     </li>
@@ -989,11 +1011,29 @@
                                                         </td>
                                                         <td>
                                                             <div class="btn-group" role="group">
-                                                                <button type="button" class="btn btn-sm btn-primary"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#assignModal">
-                                                                    <i class="bx bx-calendar-plus"></i> Assign
+                                                                <button type="button"
+                                                                    class="btn btn-sm btn-primary dropdown-toggle"
+                                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                                    <i class="bx bx-refresh"></i> Change Status
                                                                 </button>
+                                                                <ul class="dropdown-menu">
+                                                                    <li><a class="dropdown-item"
+                                                                            style="color: #28a745 !important;"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-check-circle me-2"
+                                                                                style="color: #28a745 !important;"></i>Approve</a>
+                                                                    </li>
+                                                                    <li><a class="dropdown-item"
+                                                                            style="color: #ffc107 !important;"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-time-five me-2"
+                                                                                style="color: #ffc107 !important;"></i>Pending</a>
+                                                                    </li>
+                                                                    <li><a class="dropdown-item text-danger"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-block me-2"></i>Cancelled</a>
+                                                                    </li>
+                                                                </ul>
                                                                 <button type="button"
                                                                     class="btn btn-sm btn-primary dropdown-toggle dropdown-toggle-split"
                                                                     data-bs-toggle="dropdown" aria-expanded="false">
@@ -1024,21 +1064,6 @@
                                                                             data-bs-target="#addNoteModal"><i
                                                                                 class="bx bx-note me-2"></i>Add
                                                                             Note</a></li>
-                                                                    <li>
-                                                                        <hr class="dropdown-divider">
-                                                                    </li>
-                                                                    <li><a class="dropdown-item text-success"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-check-circle me-2"></i>Approve</a>
-                                                                    </li>
-                                                                    <li><a class="dropdown-item text-danger"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-x-circle me-2"></i>Decline</a>
-                                                                    </li>
-                                                                    <li><a class="dropdown-item text-warning"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-time-five me-2"></i>Pending</a>
-                                                                    </li>
                                                                     <li>
                                                                         <hr class="dropdown-divider">
                                                                     </li>
@@ -1064,15 +1089,33 @@
                                                             <small class="text-muted">4:00 PM - 5:00 PM</small>
                                                         </td>
                                                         <td>
-                                                            <span class="badge bg-success">Confirmed</span>
+                                                            <span class="badge bg-success">Approved</span>
                                                         </td>
                                                         <td>
                                                             <div class="btn-group" role="group">
-                                                                <button type="button" class="btn btn-sm btn-primary"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#assignModal">
-                                                                    <i class="bx bx-calendar-plus"></i> Assign
+                                                                <button type="button"
+                                                                    class="btn btn-sm btn-primary dropdown-toggle"
+                                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                                    <i class="bx bx-refresh"></i> Change Status
                                                                 </button>
+                                                                <ul class="dropdown-menu">
+                                                                    <li><a class="dropdown-item"
+                                                                            style="color: #28a745 !important;"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-check-circle me-2"
+                                                                                style="color: #28a745 !important;"></i>Approve</a>
+                                                                    </li>
+                                                                    <li><a class="dropdown-item"
+                                                                            style="color: #ffc107 !important;"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-time-five me-2"
+                                                                                style="color: #ffc107 !important;"></i>Pending</a>
+                                                                    </li>
+                                                                    <li><a class="dropdown-item text-danger"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-block me-2"></i>Cancelled</a>
+                                                                    </li>
+                                                                </ul>
                                                                 <button type="button"
                                                                     class="btn btn-sm btn-primary dropdown-toggle dropdown-toggle-split"
                                                                     data-bs-toggle="dropdown" aria-expanded="false">
@@ -1103,21 +1146,6 @@
                                                                             data-bs-target="#addNoteModal"><i
                                                                                 class="bx bx-note me-2"></i>Add
                                                                             Note</a></li>
-                                                                    <li>
-                                                                        <hr class="dropdown-divider">
-                                                                    </li>
-                                                                    <li><a class="dropdown-item text-success"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-check-circle me-2"></i>Approve</a>
-                                                                    </li>
-                                                                    <li><a class="dropdown-item text-danger"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-x-circle me-2"></i>Decline</a>
-                                                                    </li>
-                                                                    <li><a class="dropdown-item text-warning"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-time-five me-2"></i>Pending</a>
-                                                                    </li>
                                                                     <li>
                                                                         <hr class="dropdown-divider">
                                                                     </li>
@@ -1147,11 +1175,29 @@
                                                         </td>
                                                         <td>
                                                             <div class="btn-group" role="group">
-                                                                <button type="button" class="btn btn-sm btn-primary"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#assignModal">
-                                                                    <i class="bx bx-calendar-plus"></i> Assign
+                                                                <button type="button"
+                                                                    class="btn btn-sm btn-primary dropdown-toggle"
+                                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                                    <i class="bx bx-refresh"></i> Change Status
                                                                 </button>
+                                                                <ul class="dropdown-menu">
+                                                                    <li><a class="dropdown-item"
+                                                                            style="color: #28a745 !important;"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-check-circle me-2"
+                                                                                style="color: #28a745 !important;"></i>Approve</a>
+                                                                    </li>
+                                                                    <li><a class="dropdown-item"
+                                                                            style="color: #ffc107 !important;"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-time-five me-2"
+                                                                                style="color: #ffc107 !important;"></i>Pending</a>
+                                                                    </li>
+                                                                    <li><a class="dropdown-item text-danger"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-block me-2"></i>Cancelled</a>
+                                                                    </li>
+                                                                </ul>
                                                                 <button type="button"
                                                                     class="btn btn-sm btn-primary dropdown-toggle dropdown-toggle-split"
                                                                     data-bs-toggle="dropdown" aria-expanded="false">
@@ -1182,21 +1228,6 @@
                                                                             data-bs-target="#addNoteModal"><i
                                                                                 class="bx bx-note me-2"></i>Add
                                                                             Note</a></li>
-                                                                    <li>
-                                                                        <hr class="dropdown-divider">
-                                                                    </li>
-                                                                    <li><a class="dropdown-item text-success"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-check-circle me-2"></i>Approve</a>
-                                                                    </li>
-                                                                    <li><a class="dropdown-item text-danger"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-x-circle me-2"></i>Decline</a>
-                                                                    </li>
-                                                                    <li><a class="dropdown-item text-warning"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-time-five me-2"></i>Pending</a>
-                                                                    </li>
                                                                     <li>
                                                                         <hr class="dropdown-divider">
                                                                     </li>
@@ -1225,11 +1256,29 @@
                                                         </td>
                                                         <td>
                                                             <div class="btn-group" role="group">
-                                                                <button type="button" class="btn btn-sm btn-primary"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#assignModal">
-                                                                    <i class="bx bx-calendar-plus"></i> Assign
+                                                                <button type="button"
+                                                                    class="btn btn-sm btn-primary dropdown-toggle"
+                                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                                    <i class="bx bx-refresh"></i> Change Status
                                                                 </button>
+                                                                <ul class="dropdown-menu">
+                                                                    <li><a class="dropdown-item"
+                                                                            style="color: #28a745 !important;"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-check-circle me-2"
+                                                                                style="color: #28a745 !important;"></i>Approve</a>
+                                                                    </li>
+                                                                    <li><a class="dropdown-item"
+                                                                            style="color: #ffc107 !important;"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-time-five me-2"
+                                                                                style="color: #ffc107 !important;"></i>Pending</a>
+                                                                    </li>
+                                                                    <li><a class="dropdown-item text-danger"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-block me-2"></i>Cancelled</a>
+                                                                    </li>
+                                                                </ul>
                                                                 <button type="button"
                                                                     class="btn btn-sm btn-primary dropdown-toggle dropdown-toggle-split"
                                                                     data-bs-toggle="dropdown" aria-expanded="false">
@@ -1260,21 +1309,6 @@
                                                                             data-bs-target="#addNoteModal"><i
                                                                                 class="bx bx-note me-2"></i>Add
                                                                             Note</a></li>
-                                                                    <li>
-                                                                        <hr class="dropdown-divider">
-                                                                    </li>
-                                                                    <li><a class="dropdown-item text-success"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-check-circle me-2"></i>Approve</a>
-                                                                    </li>
-                                                                    <li><a class="dropdown-item text-danger"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-x-circle me-2"></i>Decline</a>
-                                                                    </li>
-                                                                    <li><a class="dropdown-item text-warning"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-time-five me-2"></i>Pending</a>
-                                                                    </li>
                                                                     <li>
                                                                         <hr class="dropdown-divider">
                                                                     </li>
@@ -1300,15 +1334,33 @@
                                                             <small class="text-muted">11:00 AM - 12:30 PM</small>
                                                         </td>
                                                         <td>
-                                                            <span class="badge bg-success">Confirmed</span>
+                                                            <span class="badge bg-success">Approved</span>
                                                         </td>
                                                         <td>
                                                             <div class="btn-group" role="group">
-                                                                <button type="button" class="btn btn-sm btn-primary"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#assignModal">
-                                                                    <i class="bx bx-calendar-plus"></i> Assign
+                                                                <button type="button"
+                                                                    class="btn btn-sm btn-primary dropdown-toggle"
+                                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                                    <i class="bx bx-refresh"></i> Change Status
                                                                 </button>
+                                                                <ul class="dropdown-menu">
+                                                                    <li><a class="dropdown-item"
+                                                                            style="color: #28a745 !important;"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-check-circle me-2"
+                                                                                style="color: #28a745 !important;"></i>Approve</a>
+                                                                    </li>
+                                                                    <li><a class="dropdown-item"
+                                                                            style="color: #ffc107 !important;"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-time-five me-2"
+                                                                                style="color: #ffc107 !important;"></i>Pending</a>
+                                                                    </li>
+                                                                    <li><a class="dropdown-item text-danger"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-block me-2"></i>Cancelled</a>
+                                                                    </li>
+                                                                </ul>
                                                                 <button type="button"
                                                                     class="btn btn-sm btn-primary dropdown-toggle dropdown-toggle-split"
                                                                     data-bs-toggle="dropdown" aria-expanded="false">
@@ -1339,21 +1391,6 @@
                                                                             data-bs-target="#addNoteModal"><i
                                                                                 class="bx bx-note me-2"></i>Add
                                                                             Note</a></li>
-                                                                    <li>
-                                                                        <hr class="dropdown-divider">
-                                                                    </li>
-                                                                    <li><a class="dropdown-item text-success"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-check-circle me-2"></i>Approve</a>
-                                                                    </li>
-                                                                    <li><a class="dropdown-item text-danger"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-x-circle me-2"></i>Decline</a>
-                                                                    </li>
-                                                                    <li><a class="dropdown-item text-warning"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-time-five me-2"></i>Pending</a>
-                                                                    </li>
                                                                     <li>
                                                                         <hr class="dropdown-divider">
                                                                     </li>
@@ -1379,15 +1416,33 @@
                                                             <small class="text-muted">9:00 AM - 10:30 AM</small>
                                                         </td>
                                                         <td>
-                                                            <span class="badge bg-success">Confirmed</span>
+                                                            <span class="badge bg-success">Approved</span>
                                                         </td>
                                                         <td>
                                                             <div class="btn-group" role="group">
-                                                                <button type="button" class="btn btn-sm btn-primary"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#assignModal">
-                                                                    <i class="bx bx-calendar-plus"></i> Assign
+                                                                <button type="button"
+                                                                    class="btn btn-sm btn-primary dropdown-toggle"
+                                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                                    <i class="bx bx-refresh"></i> Change Status
                                                                 </button>
+                                                                <ul class="dropdown-menu">
+                                                                    <li><a class="dropdown-item"
+                                                                            style="color: #28a745 !important;"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-check-circle me-2"
+                                                                                style="color: #28a745 !important;"></i>Approve</a>
+                                                                    </li>
+                                                                    <li><a class="dropdown-item"
+                                                                            style="color: #ffc107 !important;"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-time-five me-2"
+                                                                                style="color: #ffc107 !important;"></i>Pending</a>
+                                                                    </li>
+                                                                    <li><a class="dropdown-item text-danger"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-block me-2"></i>Cancelled</a>
+                                                                    </li>
+                                                                </ul>
                                                                 <button type="button"
                                                                     class="btn btn-sm btn-primary dropdown-toggle dropdown-toggle-split"
                                                                     data-bs-toggle="dropdown" aria-expanded="false">
@@ -1418,21 +1473,6 @@
                                                                             data-bs-target="#addNoteModal"><i
                                                                                 class="bx bx-note me-2"></i>Add
                                                                             Note</a></li>
-                                                                    <li>
-                                                                        <hr class="dropdown-divider">
-                                                                    </li>
-                                                                    <li><a class="dropdown-item text-success"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-check-circle me-2"></i>Approve</a>
-                                                                    </li>
-                                                                    <li><a class="dropdown-item text-danger"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-x-circle me-2"></i>Decline</a>
-                                                                    </li>
-                                                                    <li><a class="dropdown-item text-warning"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-time-five me-2"></i>Pending</a>
-                                                                    </li>
                                                                     <li>
                                                                         <hr class="dropdown-divider">
                                                                     </li>
@@ -1461,11 +1501,29 @@
                                                         </td>
                                                         <td>
                                                             <div class="btn-group" role="group">
-                                                                <button type="button" class="btn btn-sm btn-primary"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#assignModal">
-                                                                    <i class="bx bx-calendar-plus"></i> Assign
+                                                                <button type="button"
+                                                                    class="btn btn-sm btn-primary dropdown-toggle"
+                                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                                    <i class="bx bx-refresh"></i> Change Status
                                                                 </button>
+                                                                <ul class="dropdown-menu">
+                                                                    <li><a class="dropdown-item"
+                                                                            style="color: #28a745 !important;"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-check-circle me-2"
+                                                                                style="color: #28a745 !important;"></i>Approve</a>
+                                                                    </li>
+                                                                    <li><a class="dropdown-item"
+                                                                            style="color: #ffc107 !important;"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-time-five me-2"
+                                                                                style="color: #ffc107 !important;"></i>Pending</a>
+                                                                    </li>
+                                                                    <li><a class="dropdown-item text-danger"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-block me-2"></i>Cancelled</a>
+                                                                    </li>
+                                                                </ul>
                                                                 <button type="button"
                                                                     class="btn btn-sm btn-primary dropdown-toggle dropdown-toggle-split"
                                                                     data-bs-toggle="dropdown" aria-expanded="false">
@@ -1496,21 +1554,6 @@
                                                                             data-bs-target="#addNoteModal"><i
                                                                                 class="bx bx-note me-2"></i>Add
                                                                             Note</a></li>
-                                                                    <li>
-                                                                        <hr class="dropdown-divider">
-                                                                    </li>
-                                                                    <li><a class="dropdown-item text-success"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-check-circle me-2"></i>Approve</a>
-                                                                    </li>
-                                                                    <li><a class="dropdown-item text-danger"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-x-circle me-2"></i>Decline</a>
-                                                                    </li>
-                                                                    <li><a class="dropdown-item text-warning"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-time-five me-2"></i>Pending</a>
-                                                                    </li>
                                                                     <li>
                                                                         <hr class="dropdown-divider">
                                                                     </li>
@@ -1536,15 +1579,33 @@
                                                             <small class="text-muted">4:00 PM - 5:00 PM</small>
                                                         </td>
                                                         <td>
-                                                            <span class="badge bg-success">Confirmed</span>
+                                                            <span class="badge bg-success">Approved</span>
                                                         </td>
                                                         <td>
                                                             <div class="btn-group" role="group">
-                                                                <button type="button" class="btn btn-sm btn-primary"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#assignModal">
-                                                                    <i class="bx bx-calendar-plus"></i> Assign
+                                                                <button type="button"
+                                                                    class="btn btn-sm btn-primary dropdown-toggle"
+                                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                                    <i class="bx bx-refresh"></i> Change Status
                                                                 </button>
+                                                                <ul class="dropdown-menu">
+                                                                    <li><a class="dropdown-item"
+                                                                            style="color: #28a745 !important;"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-check-circle me-2"
+                                                                                style="color: #28a745 !important;"></i>Approve</a>
+                                                                    </li>
+                                                                    <li><a class="dropdown-item"
+                                                                            style="color: #ffc107 !important;"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-time-five me-2"
+                                                                                style="color: #ffc107 !important;"></i>Pending</a>
+                                                                    </li>
+                                                                    <li><a class="dropdown-item text-danger"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-block me-2"></i>Cancelled</a>
+                                                                    </li>
+                                                                </ul>
                                                                 <button type="button"
                                                                     class="btn btn-sm btn-primary dropdown-toggle dropdown-toggle-split"
                                                                     data-bs-toggle="dropdown" aria-expanded="false">
@@ -1575,21 +1636,6 @@
                                                                             data-bs-target="#addNoteModal"><i
                                                                                 class="bx bx-note me-2"></i>Add
                                                                             Note</a></li>
-                                                                    <li>
-                                                                        <hr class="dropdown-divider">
-                                                                    </li>
-                                                                    <li><a class="dropdown-item text-success"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-check-circle me-2"></i>Approve</a>
-                                                                    </li>
-                                                                    <li><a class="dropdown-item text-danger"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-x-circle me-2"></i>Decline</a>
-                                                                    </li>
-                                                                    <li><a class="dropdown-item text-warning"
-                                                                            href="javascript:void(0);"><i
-                                                                                class="bx bx-time-five me-2"></i>Pending</a>
-                                                                    </li>
                                                                     <li>
                                                                         <hr class="dropdown-divider">
                                                                     </li>
@@ -2387,7 +2433,7 @@ Thank you!</textarea>
 
 
     <!-- Requests JS -->
-    <script src="../assets/js/requests.js"></script>
+    <script src="../assets/js/requests.js?v=4"></script>
 </body>
 
 </html>

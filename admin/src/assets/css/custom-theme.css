@@ -3782,3 +3782,32 @@ input[type="time"]::placeholder {
         gap: 0.75rem !important;
     }
 }
+
+/* Force select dropdowns to open downward */
+select.form-select {
+    appearance: auto;
+    -webkit-appearance: menulist;
+    -moz-appearance: menulist;
+}
+
+/* Ensure dropdown opens below the select element */
+#filterServiceType {
+    position: relative;
+}
+
+
+/* Force dropdown menus to always open downwards */
+.form-select {
+    position: relative !important;
+}
+
+select.form-select option {
+    direction: ltr !important;
+}
+
+/* Ensure select dropdowns open downwards */
+select.form-select {
+    appearance: auto !important;
+    -webkit-appearance: menulist !important;
+    -moz-appearance: menulist !important;
+}

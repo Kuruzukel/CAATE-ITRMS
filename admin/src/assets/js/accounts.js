@@ -300,6 +300,9 @@ function createTraineeRow(trainee, index) {
                     <a class="dropdown-item" href="javascript:void(0);" onclick="editTrainee('${trainee._id}')">
                         <i class="bx bx-edit-alt me-1"></i> Edit Details
                     </a>
+                    <a class="dropdown-item" href="javascript:void(0);" onclick="changeTraineeStatus('${trainee._id}')">
+                        <i class="bx bx-refresh me-1"></i> Change Status
+                    </a>
                     <a class="dropdown-item text-danger" href="javascript:void(0);" onclick="deleteTrainee('${trainee._id}')">
                         <i class="bx bx-trash me-1"></i> Delete
                     </a>

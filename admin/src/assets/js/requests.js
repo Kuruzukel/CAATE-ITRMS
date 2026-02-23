@@ -93,3 +93,62 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Menu toggle is handled by main.js
 });
+
+
+// Delete confirmation functionality
+const deleteConfirmInput = document.getElementById('deleteConfirmInput');
+const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+
+if (deleteConfirmInput && confirmDeleteBtn) {
+    deleteConfirmInput.addEventListener('input', function () {
+        if (this.value === 'DELETE') {
+            confirmDeleteBtn.disabled = false;
+        } else {
+            confirmDeleteBtn.disabled = true;
+        }
+    });
+
+    // Reset input when modal is closed
+    const deleteModal = document.getElementById('deleteModal');
+    if (deleteModal) {
+        deleteModal.addEventListener('hidden.bs.modal', function () {
+            deleteConfirmInput.value = '';
+            confirmDeleteBtn.disabled = true;
+        });
+    }
+
+    // Handle delete confirmation
+    confirmDeleteBtn.addEventListener('click', function () {
+        // Add your delete logic here
+        alert('Record deleted successfully!');
+        // Close modal
+        const modal = bootstrap.Modal.getInstance(deleteModal);
+        modal.hide();
+    });
+}
+
+
+// Delete confirmation functionality
+document.addEventListener('DOMContentLoaded', function () {
+    const deleteConfirmInput = document.getElementById('deleteConfirmInput');
+    const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+
+    if (deleteConfirmInput && confirmDeleteBtn) {
+        deleteConfirmInput.addEventListener('input', function () {
+            if (this.value === 'DELETE') {
+                confirmDeleteBtn.disabled = false;
+            } else {
+                confirmDeleteBtn.disabled = true;
+            }
+        });
+
+        // Reset input when modal is closed
+        const deleteModal = document.getElementById('deleteModal');
+        if (deleteModal) {
+            deleteModal.addEventListener('hidden.bs.modal', function () {
+                deleteConfirmInput.value = '';
+                confirmDeleteBtn.disabled = true;
+            });
+        }
+    }
+});

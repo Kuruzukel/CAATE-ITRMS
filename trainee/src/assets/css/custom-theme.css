@@ -465,13 +465,18 @@
 
 .avatar:hover,
 .avatar:focus {
-    border-color: var(--primary-blue-dark);
-    box-shadow: 0 0 0 0.2rem rgba(54, 145, 191, 0.25);
-    transform: scale(1.05);
+    background: linear-gradient(135deg, rgba(54, 145, 191, 0.3) 0%, rgba(50, 85, 150, 0.3) 100%) !important;
+    backdrop-filter: blur(15px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(15px) saturate(180%) !important;
+    border: 1px solid rgba(54, 145, 191, 0.6) !important;
+    box-shadow: 0 6px 20px rgba(22, 56, 86, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
+    transform: scale(1.08);
+    color: var(--white) !important;
 }
 
 .avatar:active {
-    transform: scale(0.98);
+    transform: scale(0.95);
+    background: linear-gradient(135deg, rgba(54, 145, 191, 0.4) 0%, rgba(50, 85, 150, 0.4) 100%) !important;
 }
 
 .avatar img {

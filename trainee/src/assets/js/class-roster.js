@@ -217,7 +217,7 @@ function viewStudents(courseId, courseName, cardElement) {
         const avatarColor = avatarColors[index % avatarColors.length];
 
         studentItem.innerHTML = `
-            <div class="student-avatar" style="background: ${avatarColor};">${student.initials}</div>
+            <div class="student-avatar" style="background: linear-gradient(135deg, rgba(54, 145, 191, 0.1) 0%, rgba(50, 85, 150, 0.1) 100%); backdrop-filter: blur(10px) saturate(180%); -webkit-backdrop-filter: blur(10px) saturate(180%); border: 1px solid rgba(54, 145, 191, 0.4); box-shadow: 0 4px 12px rgba(22, 56, 86, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3); color: white;">${student.initials}</div>
             <div class="flex-grow-1">
                 <h6 class="mb-0">${student.name}</h6>
                 <small class="text-muted">Student ID: STU-${String(student.id).padStart(4, '0')}</small>

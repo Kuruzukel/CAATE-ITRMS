@@ -1,4 +1,4 @@
-/* Accounts Page Script */
+/* Accounts Page Script - Updated Avatar Styling */
 
 // API Configuration
 const API_BASE_URL = 'http://localhost/CAATE-ITRMS/backend/public/api/v1';
@@ -271,15 +271,14 @@ function createTraineeRow(trainee, index) {
 
     const initials = `${trainee.first_name.charAt(0)}${trainee.last_name.charAt(0)}`;
     const statusBadge = getStatusBadge(trainee.status);
-    const avatarColor = getAvatarColor(index);
     const displayId = trainee.trainee_id || String(index).padStart(2, '0');
 
     tr.innerHTML = `
         <td><strong>${displayId}</strong></td>
         <td>
             <div class="d-flex align-items-center">
-                <div class="avatar avatar-sm me-3">
-                    <span class="avatar-initial rounded-circle ${avatarColor}">${initials}</span>
+                <div class="avatar avatar-sm me-3" style="background: linear-gradient(135deg, rgba(54, 145, 191, 0.1) 0%, rgba(50, 85, 150, 0.1) 100%); backdrop-filter: blur(10px) saturate(180%); -webkit-backdrop-filter: blur(10px) saturate(180%); border: 1px solid rgba(54, 145, 191, 0.4); box-shadow: 0 4px 12px rgba(22, 56, 86, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3); color: white; display: flex; align-items: center; justify-content: center; border-radius: 50%; width: 38px; height: 38px; font-weight: 600;">
+                    ${initials}
                 </div>
                 <div>
                     <strong>${fullName}</strong>

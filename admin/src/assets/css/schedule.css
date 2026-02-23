@@ -408,7 +408,7 @@
 }
 
 /* Enhanced Glassmorphism Statistics Cards */
-.card {
+.card.calendar-card {
     border-radius: var(--border-radius-md) !important;
     box-shadow: 0 10px 40px rgba(22, 56, 86, 0.5), 0 4px 12px rgba(54, 145, 191, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 0 0 1px rgba(54, 145, 191, 0.1) !important;
     border: 1px solid rgba(54, 145, 191, 0.4) !important;
@@ -422,7 +422,7 @@
     position: relative;
 }
 
-.card-body {
+.card.calendar-card .card-body {
     border-radius: var(--border-radius-md) !important;
     box-shadow: 0 10px 40px rgba(22, 56, 86, 0.5), 0 4px 12px rgba(54, 145, 191, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 0 0 1px rgba(54, 145, 191, 0.1) !important;
     border: 1px solid rgba(54, 145, 191, 0.4) !important;
@@ -432,7 +432,6 @@
     -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
     color: var(--white) !important;
     background-clip: padding-box;
-    padding: 1.8rem !important;
     position: relative;
     z-index: 2;
 }
@@ -441,13 +440,7 @@
 
 
 
-/* Statistics cards hover effects */
-.row.mb-4 .card:hover {
-    transform: translateY(-8px) !important;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15) !important;
-    border-color: rgba(54, 145, 191, 0.3) !important;
-    background: rgba(255, 255, 255, 0.15) !important;
-}
+/* Statistics cards hover effects - removed to match requests.html */
 
 /* Glassmorphism Search Input */
 #scheduleSearch {

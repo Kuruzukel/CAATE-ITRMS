@@ -223,6 +223,26 @@ async function loadStatistics() {
     }
 }
 
+// Helper function to clear all row highlights
+function clearAllHighlights() {
+    const tbody = document.querySelector('.table tbody');
+    if (tbody) {
+        const rows = tbody.querySelectorAll('tr');
+        rows.forEach(row => {
+            row.style.boxShadow = '';
+            row.style.border = '';
+            row.style.borderLeft = '';
+            row.style.borderRadius = '';
+            row.style.background = '';
+            row.style.transition = '';
+            row.style.transform = '';
+            row.style.outline = '';
+            row.style.outlineOffset = '';
+            row.style.zIndex = '';
+        });
+    }
+}
+
 // Render trainees table
 function renderTrainees(trainees) {
     const tbody = document.querySelector('.table tbody');
@@ -949,7 +969,14 @@ function setupFilters() {
     const resetButton = document.getElementById('resetFilters');
 
     if (searchInput) {
-        searchInput.addEventListener('input', applyFilters);
+        searchInput.addEventListener('input', function () {
+            // Auto-reset when search input is cleared
+            if (searchInput.value.trim() === '') {
+                resetFilters();
+            } else {
+                applyFilters();
+            }
+        });
     }
 
     if (enrollmentFilter) {
@@ -976,9 +1003,29 @@ function applyFilters() {
     const applicationYear = document.getElementById('applicationFilter')?.value || '';
     const admissionYear = document.getElementById('admissionFilter')?.value || '';
 
+    // If search is cleared and no year filters, clear highlights and show all
+    if (!searchTerm && !enrollmentYear && !applicationYear && !admissionYear) {
+        clearAllHighlights();
+        renderTrainees(traineesData);
+        return;
+    }
+
+    // If only search term is provided (no year filters), highlight instead of filter
+    if (searchTerm && !enrollmentYear && !applicationYear && !admissionYear) {
+        // Show all trainees but highlight matches
+        renderTrainees(traineesData);
+        // Wait for render to complete, then highlight
+        setTimeout(() => {
+            clearAllHighlights();
+            highlightSearchResults(searchTerm);
+        }, 50);
+        return;
+    }
+
+    // Otherwise, apply normal filtering for year filters
     let filteredTrainees = traineesData;
 
-    // Apply search filter
+    // Apply search filter only when year filters are active
     if (searchTerm) {
         filteredTrainees = filteredTrainees.filter(trainee => {
             // Build full name
@@ -1029,6 +1076,56 @@ function applyFilters() {
     renderTrainees(filteredTrainees);
 }
 
+// Highlight search results without hiding other rows
+function highlightSearchResults(searchTerm) {
+    const tbody = document.querySelector('.table tbody');
+    if (!tbody) return;
+
+    const rows = tbody.querySelectorAll('tr');
+    let firstMatch = null;
+
+    rows.forEach(row => {
+        // Remove any existing highlight
+        row.style.boxShadow = '';
+        row.style.border = '';
+        row.style.borderLeft = '';
+        row.style.borderRadius = '';
+        row.style.background = '';
+        row.style.transition = '';
+        row.style.transform = '';
+        row.style.outline = '';
+        row.style.outlineOffset = '';
+        row.style.zIndex = '';
+
+        // Get row text content
+        const rowText = row.textContent.toLowerCase();
+
+        // Check if row matches search term
+        if (rowText.includes(searchTerm)) {
+            // Apply card hover design with proper spacing
+            row.style.position = 'relative';
+            row.style.boxShadow = '0 8px 24px rgba(22, 56, 86, 0.5), 0 4px 12px rgba(54, 145, 191, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15)';
+            row.style.transform = 'translateY(-2px) scale(1.01)';
+            row.style.outline = '2px solid rgba(54, 145, 191, 0.6)';
+            row.style.outlineOffset = '2px';
+            row.style.borderRadius = '10px';
+            row.style.background = 'linear-gradient(135deg, rgba(54, 145, 191, 0.08) 0%, rgba(50, 85, 150, 0.08) 100%)';
+            row.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+            row.style.zIndex = '10';
+
+            // Store first match for scrolling
+            if (!firstMatch) {
+                firstMatch = row;
+            }
+        }
+    });
+
+    // Scroll to first match
+    if (firstMatch) {
+        firstMatch.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+}
+
 // Reset all filters
 function resetFilters() {
     document.getElementById('searchInput').value = '';
@@ -1039,6 +1136,9 @@ function resetFilters() {
     if (enrollmentFilter) enrollmentFilter.value = '';
     if (applicationFilter) applicationFilter.value = '';
     if (admissionFilter) admissionFilter.value = '';
+
+    // Clear all highlights using helper function
+    clearAllHighlights();
 
     renderTrainees(traineesData);
 }

@@ -411,15 +411,9 @@
                                                     <div class="col-md-3">
                                                         <label class="form-label" style="color: #b8c5d6;">Enrollment
                                                             Date</label>
-                                                        <select class="form-select"
-                                                            style="background-color: #243447; border: 1px solid #3d4f63; color: #b8c5d6;">
-                                                            <option value="">All Dates</option>
-                                                            <option value="today">Today</option>
-                                                            <option value="week">This Week</option>
-                                                            <option value="month">This Month</option>
-                                                            <option value="3months">Last 3 Months</option>
-                                                            <option value="year">This Year</option>
-                                                        </select>
+                                                        <input type="date" class="form-control"
+                                                            id="enrollmentDateFilter"
+                                                            style="background-color: #243447; border: 1px solid #3d4f63; color: #b8c5d6; color-scheme: dark;">
                                                     </div>
                                                     <div class="col-md-1 d-flex align-items-end">
                                                         <button type="button" class="btn btn-outline-secondary w-100"
@@ -471,13 +465,19 @@
                                                                             style="color: #28a745 !important;"
                                                                             href="javascript:void(0);"><i
                                                                                 class="bx bx-check-circle me-2"
-                                                                                style="color: #28a745 !important;"></i>Approve</a>
+                                                                                style="color: #28a745 !important;"></i>Enrolled</a>
                                                                     </li>
                                                                     <li><a class="dropdown-item"
                                                                             style="color: #ffc107 !important;"
                                                                             href="javascript:void(0);"><i
                                                                                 class="bx bx-time-five me-2"
                                                                                 style="color: #ffc107 !important;"></i>Pending</a>
+                                                                    </li>
+                                                                    <li><a class="dropdown-item"
+                                                                            style="color: #3b82f6 !important;"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-check-double me-2"
+                                                                                style="color: #3b82f6 !important;"></i>Completed</a>
                                                                     </li>
                                                                     <li><a class="dropdown-item text-danger"
                                                                             href="javascript:void(0);"><i
@@ -543,13 +543,19 @@
                                                                             style="color: #28a745 !important;"
                                                                             href="javascript:void(0);"><i
                                                                                 class="bx bx-check-circle me-2"
-                                                                                style="color: #28a745 !important;"></i>Approve</a>
+                                                                                style="color: #28a745 !important;"></i>Enrolled</a>
                                                                     </li>
                                                                     <li><a class="dropdown-item"
                                                                             style="color: #ffc107 !important;"
                                                                             href="javascript:void(0);"><i
                                                                                 class="bx bx-time-five me-2"
                                                                                 style="color: #ffc107 !important;"></i>Pending</a>
+                                                                    </li>
+                                                                    <li><a class="dropdown-item"
+                                                                            style="color: #3b82f6 !important;"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-check-double me-2"
+                                                                                style="color: #3b82f6 !important;"></i>Completed</a>
                                                                     </li>
                                                                     <li><a class="dropdown-item text-danger"
                                                                             href="javascript:void(0);"><i
@@ -615,13 +621,19 @@
                                                                             style="color: #28a745 !important;"
                                                                             href="javascript:void(0);"><i
                                                                                 class="bx bx-check-circle me-2"
-                                                                                style="color: #28a745 !important;"></i>Approve</a>
+                                                                                style="color: #28a745 !important;"></i>Enrolled</a>
                                                                     </li>
                                                                     <li><a class="dropdown-item"
                                                                             style="color: #ffc107 !important;"
                                                                             href="javascript:void(0);"><i
                                                                                 class="bx bx-time-five me-2"
                                                                                 style="color: #ffc107 !important;"></i>Pending</a>
+                                                                    </li>
+                                                                    <li><a class="dropdown-item"
+                                                                            style="color: #3b82f6 !important;"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-check-double me-2"
+                                                                                style="color: #3b82f6 !important;"></i>Completed</a>
                                                                     </li>
                                                                     <li><a class="dropdown-item text-danger"
                                                                             href="javascript:void(0);"><i
@@ -687,13 +699,19 @@
                                                                             style="color: #28a745 !important;"
                                                                             href="javascript:void(0);"><i
                                                                                 class="bx bx-check-circle me-2"
-                                                                                style="color: #28a745 !important;"></i>Approve</a>
+                                                                                style="color: #28a745 !important;"></i>Enrolled</a>
                                                                     </li>
                                                                     <li><a class="dropdown-item"
                                                                             style="color: #ffc107 !important;"
                                                                             href="javascript:void(0);"><i
                                                                                 class="bx bx-time-five me-2"
                                                                                 style="color: #ffc107 !important;"></i>Pending</a>
+                                                                    </li>
+                                                                    <li><a class="dropdown-item"
+                                                                            style="color: #3b82f6 !important;"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-check-double me-2"
+                                                                                style="color: #3b82f6 !important;"></i>Completed</a>
                                                                     </li>
                                                                     <li><a class="dropdown-item text-danger"
                                                                             href="javascript:void(0);"><i
@@ -759,13 +777,19 @@
                                                                             style="color: #28a745 !important;"
                                                                             href="javascript:void(0);"><i
                                                                                 class="bx bx-check-circle me-2"
-                                                                                style="color: #28a745 !important;"></i>Approve</a>
+                                                                                style="color: #28a745 !important;"></i>Enrolled</a>
                                                                     </li>
                                                                     <li><a class="dropdown-item"
                                                                             style="color: #ffc107 !important;"
                                                                             href="javascript:void(0);"><i
                                                                                 class="bx bx-time-five me-2"
                                                                                 style="color: #ffc107 !important;"></i>Pending</a>
+                                                                    </li>
+                                                                    <li><a class="dropdown-item"
+                                                                            style="color: #3b82f6 !important;"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-check-double me-2"
+                                                                                style="color: #3b82f6 !important;"></i>Completed</a>
                                                                     </li>
                                                                     <li><a class="dropdown-item text-danger"
                                                                             href="javascript:void(0);"><i
@@ -831,13 +855,19 @@
                                                                             style="color: #28a745 !important;"
                                                                             href="javascript:void(0);"><i
                                                                                 class="bx bx-check-circle me-2"
-                                                                                style="color: #28a745 !important;"></i>Approve</a>
+                                                                                style="color: #28a745 !important;"></i>Enrolled</a>
                                                                     </li>
                                                                     <li><a class="dropdown-item"
                                                                             style="color: #ffc107 !important;"
                                                                             href="javascript:void(0);"><i
                                                                                 class="bx bx-time-five me-2"
                                                                                 style="color: #ffc107 !important;"></i>Pending</a>
+                                                                    </li>
+                                                                    <li><a class="dropdown-item"
+                                                                            style="color: #3b82f6 !important;"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-check-double me-2"
+                                                                                style="color: #3b82f6 !important;"></i>Completed</a>
                                                                     </li>
                                                                     <li><a class="dropdown-item text-danger"
                                                                             href="javascript:void(0);"><i
@@ -903,13 +933,19 @@
                                                                             style="color: #28a745 !important;"
                                                                             href="javascript:void(0);"><i
                                                                                 class="bx bx-check-circle me-2"
-                                                                                style="color: #28a745 !important;"></i>Approve</a>
+                                                                                style="color: #28a745 !important;"></i>Enrolled</a>
                                                                     </li>
                                                                     <li><a class="dropdown-item"
                                                                             style="color: #ffc107 !important;"
                                                                             href="javascript:void(0);"><i
                                                                                 class="bx bx-time-five me-2"
                                                                                 style="color: #ffc107 !important;"></i>Pending</a>
+                                                                    </li>
+                                                                    <li><a class="dropdown-item"
+                                                                            style="color: #3b82f6 !important;"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-check-double me-2"
+                                                                                style="color: #3b82f6 !important;"></i>Completed</a>
                                                                     </li>
                                                                     <li><a class="dropdown-item text-danger"
                                                                             href="javascript:void(0);"><i
@@ -975,13 +1011,19 @@
                                                                             style="color: #28a745 !important;"
                                                                             href="javascript:void(0);"><i
                                                                                 class="bx bx-check-circle me-2"
-                                                                                style="color: #28a745 !important;"></i>Approve</a>
+                                                                                style="color: #28a745 !important;"></i>Enrolled</a>
                                                                     </li>
                                                                     <li><a class="dropdown-item"
                                                                             style="color: #ffc107 !important;"
                                                                             href="javascript:void(0);"><i
                                                                                 class="bx bx-time-five me-2"
                                                                                 style="color: #ffc107 !important;"></i>Pending</a>
+                                                                    </li>
+                                                                    <li><a class="dropdown-item"
+                                                                            style="color: #3b82f6 !important;"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-check-double me-2"
+                                                                                style="color: #3b82f6 !important;"></i>Completed</a>
                                                                     </li>
                                                                     <li><a class="dropdown-item text-danger"
                                                                             href="javascript:void(0);"><i
@@ -1047,13 +1089,19 @@
                                                                             style="color: #28a745 !important;"
                                                                             href="javascript:void(0);"><i
                                                                                 class="bx bx-check-circle me-2"
-                                                                                style="color: #28a745 !important;"></i>Approve</a>
+                                                                                style="color: #28a745 !important;"></i>Enrolled</a>
                                                                     </li>
                                                                     <li><a class="dropdown-item"
                                                                             style="color: #ffc107 !important;"
                                                                             href="javascript:void(0);"><i
                                                                                 class="bx bx-time-five me-2"
                                                                                 style="color: #ffc107 !important;"></i>Pending</a>
+                                                                    </li>
+                                                                    <li><a class="dropdown-item"
+                                                                            style="color: #3b82f6 !important;"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-check-double me-2"
+                                                                                style="color: #3b82f6 !important;"></i>Completed</a>
                                                                     </li>
                                                                     <li><a class="dropdown-item text-danger"
                                                                             href="javascript:void(0);"><i
@@ -1119,13 +1167,19 @@
                                                                             style="color: #28a745 !important;"
                                                                             href="javascript:void(0);"><i
                                                                                 class="bx bx-check-circle me-2"
-                                                                                style="color: #28a745 !important;"></i>Approve</a>
+                                                                                style="color: #28a745 !important;"></i>Enrolled</a>
                                                                     </li>
                                                                     <li><a class="dropdown-item"
                                                                             style="color: #ffc107 !important;"
                                                                             href="javascript:void(0);"><i
                                                                                 class="bx bx-time-five me-2"
                                                                                 style="color: #ffc107 !important;"></i>Pending</a>
+                                                                    </li>
+                                                                    <li><a class="dropdown-item"
+                                                                            style="color: #3b82f6 !important;"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-check-double me-2"
+                                                                                style="color: #3b82f6 !important;"></i>Completed</a>
                                                                     </li>
                                                                     <li><a class="dropdown-item text-danger"
                                                                             href="javascript:void(0);"><i
@@ -1191,13 +1245,19 @@
                                                                             style="color: #28a745 !important;"
                                                                             href="javascript:void(0);"><i
                                                                                 class="bx bx-check-circle me-2"
-                                                                                style="color: #28a745 !important;"></i>Approve</a>
+                                                                                style="color: #28a745 !important;"></i>Enrolled</a>
                                                                     </li>
                                                                     <li><a class="dropdown-item"
                                                                             style="color: #ffc107 !important;"
                                                                             href="javascript:void(0);"><i
                                                                                 class="bx bx-time-five me-2"
                                                                                 style="color: #ffc107 !important;"></i>Pending</a>
+                                                                    </li>
+                                                                    <li><a class="dropdown-item"
+                                                                            style="color: #3b82f6 !important;"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-check-double me-2"
+                                                                                style="color: #3b82f6 !important;"></i>Completed</a>
                                                                     </li>
                                                                     <li><a class="dropdown-item text-danger"
                                                                             href="javascript:void(0);"><i
@@ -1263,13 +1323,19 @@
                                                                             style="color: #28a745 !important;"
                                                                             href="javascript:void(0);"><i
                                                                                 class="bx bx-check-circle me-2"
-                                                                                style="color: #28a745 !important;"></i>Approve</a>
+                                                                                style="color: #28a745 !important;"></i>Enrolled</a>
                                                                     </li>
                                                                     <li><a class="dropdown-item"
                                                                             style="color: #ffc107 !important;"
                                                                             href="javascript:void(0);"><i
                                                                                 class="bx bx-time-five me-2"
                                                                                 style="color: #ffc107 !important;"></i>Pending</a>
+                                                                    </li>
+                                                                    <li><a class="dropdown-item"
+                                                                            style="color: #3b82f6 !important;"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-check-double me-2"
+                                                                                style="color: #3b82f6 !important;"></i>Completed</a>
                                                                     </li>
                                                                     <li><a class="dropdown-item text-danger"
                                                                             href="javascript:void(0);"><i
@@ -1335,13 +1401,19 @@
                                                                             style="color: #28a745 !important;"
                                                                             href="javascript:void(0);"><i
                                                                                 class="bx bx-check-circle me-2"
-                                                                                style="color: #28a745 !important;"></i>Approve</a>
+                                                                                style="color: #28a745 !important;"></i>Enrolled</a>
                                                                     </li>
                                                                     <li><a class="dropdown-item"
                                                                             style="color: #ffc107 !important;"
                                                                             href="javascript:void(0);"><i
                                                                                 class="bx bx-time-five me-2"
                                                                                 style="color: #ffc107 !important;"></i>Pending</a>
+                                                                    </li>
+                                                                    <li><a class="dropdown-item"
+                                                                            style="color: #3b82f6 !important;"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-check-double me-2"
+                                                                                style="color: #3b82f6 !important;"></i>Completed</a>
                                                                     </li>
                                                                     <li><a class="dropdown-item text-danger"
                                                                             href="javascript:void(0);"><i
@@ -1407,13 +1479,19 @@
                                                                             style="color: #28a745 !important;"
                                                                             href="javascript:void(0);"><i
                                                                                 class="bx bx-check-circle me-2"
-                                                                                style="color: #28a745 !important;"></i>Approve</a>
+                                                                                style="color: #28a745 !important;"></i>Enrolled</a>
                                                                     </li>
                                                                     <li><a class="dropdown-item"
                                                                             style="color: #ffc107 !important;"
                                                                             href="javascript:void(0);"><i
                                                                                 class="bx bx-time-five me-2"
                                                                                 style="color: #ffc107 !important;"></i>Pending</a>
+                                                                    </li>
+                                                                    <li><a class="dropdown-item"
+                                                                            style="color: #3b82f6 !important;"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-check-double me-2"
+                                                                                style="color: #3b82f6 !important;"></i>Completed</a>
                                                                     </li>
                                                                     <li><a class="dropdown-item text-danger"
                                                                             href="javascript:void(0);"><i
@@ -1479,13 +1557,19 @@
                                                                             style="color: #28a745 !important;"
                                                                             href="javascript:void(0);"><i
                                                                                 class="bx bx-check-circle me-2"
-                                                                                style="color: #28a745 !important;"></i>Approve</a>
+                                                                                style="color: #28a745 !important;"></i>Enrolled</a>
                                                                     </li>
                                                                     <li><a class="dropdown-item"
                                                                             style="color: #ffc107 !important;"
                                                                             href="javascript:void(0);"><i
                                                                                 class="bx bx-time-five me-2"
                                                                                 style="color: #ffc107 !important;"></i>Pending</a>
+                                                                    </li>
+                                                                    <li><a class="dropdown-item"
+                                                                            style="color: #3b82f6 !important;"
+                                                                            href="javascript:void(0);"><i
+                                                                                class="bx bx-check-double me-2"
+                                                                                style="color: #3b82f6 !important;"></i>Completed</a>
                                                                     </li>
                                                                     <li><a class="dropdown-item text-danger"
                                                                             href="javascript:void(0);"><i

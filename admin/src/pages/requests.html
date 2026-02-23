@@ -44,6 +44,15 @@
 
     <!-- Helpers -->
     <script src="../assets/vendor/js/helpers.js"></script>
+
+    <!-- Custom Styles for Date Picker -->
+    <style>
+        /* Make date picker icon white */
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+            cursor: pointer;
+        }
+    </style>
     <script src="../assets/js/config.js"></script>
 </head>
 
@@ -370,15 +379,6 @@
                                                             placeholder="Name or Email">
                                                     </div>
                                                     <div class="col-md-2">
-                                                        <label class="form-label">Status</label>
-                                                        <select class="form-select">
-                                                            <option value="">All Status</option>
-                                                            <option value="pending">Pending</option>
-                                                            <option value="confirmed">Confirmed</option>
-                                                            <option value="cancelled">Cancelled</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-md-2">
                                                         <label class="form-label">Service Category</label>
                                                         <select class="form-select" id="filterServiceCategory">
                                                             <option value="">All Categories</option>
@@ -396,12 +396,18 @@
                                                         </select>
                                                     </div>
                                                     <div class="col-md-2">
-                                                        <label class="form-label">Registration Type</label>
+                                                        <label class="form-label">Status</label>
                                                         <select class="form-select">
-                                                            <option value="">All Types</option>
-                                                            <option value="online">Online</option>
-                                                            <option value="walk-in">Walk-In</option>
+                                                            <option value="">All Status</option>
+                                                            <option value="pending">Pending</option>
+                                                            <option value="confirmed">Confirmed</option>
+                                                            <option value="cancelled">Cancelled</option>
                                                         </select>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <label class="form-label">Date</label>
+                                                        <input type="date" class="form-control" id="requestDateFilter"
+                                                            style="color-scheme: dark;">
                                                     </div>
                                                     <div class="col-md-1 d-flex align-items-end">
                                                         <button type="button" class="btn btn-outline-secondary w-100">

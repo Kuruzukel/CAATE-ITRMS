@@ -140,3 +140,30 @@ function removeImagePreview(type) {
     // Reset input
     inputField.value = '';
 }
+
+// Delete Confirmation Handler
+const deleteConfirmInput = document.getElementById('deleteConfirmInput');
+const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+
+if (deleteConfirmInput && confirmDeleteBtn) {
+    deleteConfirmInput.addEventListener('input', function () {
+        const inputValue = this.value.trim().toLowerCase();
+        if (inputValue === 'delete') {
+            confirmDeleteBtn.disabled = false;
+            confirmDeleteBtn.classList.remove('disabled');
+        } else {
+            confirmDeleteBtn.disabled = true;
+            confirmDeleteBtn.classList.add('disabled');
+        }
+    });
+
+    // Reset input when modal is closed
+    const deleteModal = document.getElementById('deleteModal');
+    if (deleteModal) {
+        deleteModal.addEventListener('hidden.bs.modal', function () {
+            deleteConfirmInput.value = '';
+            confirmDeleteBtn.disabled = true;
+            confirmDeleteBtn.classList.add('disabled');
+        });
+    }
+}

@@ -1497,35 +1497,65 @@
                 <div class="modal-body">
                     <div class="row mb-3">
                         <div class="col-md-6">
-                            <h6 class="text-white">Trainee Information</h6>
-                            <p class="mb-1"><strong>Name:</strong> <span id="viewAttendanceName">Anna Cruz</span></p>
-                            <p class="mb-1"><strong>Trainee ID:</strong> <span id="viewAttendanceID">TRN-001</span></p>
-                            <p class="mb-1"><strong>Course:</strong> <span id="viewAttendanceCourse">Beauty Care (Skin
-                                    Care) NC II</span></p>
-                            <p class="mb-1"><strong>Date:</strong> <span id="viewAttendanceDate">Feb 03, 2026</span></p>
+                            <label class="form-label">Trainee Name</label>
+                            <input type="text" class="form-control" id="viewAttendanceName" value="Anna Cruz" readonly>
                         </div>
                         <div class="col-md-6">
-                            <h6 class="text-white">Attendance Status</h6>
-                            <p class="mb-1"><strong>Status:</strong> <span id="viewAttendanceStatus"
-                                    class="badge bg-success">Present</span></p>
-                            <p class="mb-1"><strong>Time In:</strong> <span id="viewTimeIn">08:00 AM</span></p>
-                            <p class="mb-1"><strong>Time Out:</strong> <span id="viewTimeOut">05:00 PM</span></p>
+                            <label class="form-label">Trainee ID</label>
+                            <input type="text" class="form-control" id="viewAttendanceID" value="TRN-001" readonly>
                         </div>
                     </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Course</label>
+                            <input type="text" class="form-control" id="viewAttendanceCourse"
+                                value="Beauty Care (Skin Care) NC II" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Date</label>
+                            <input type="text" class="form-control" id="viewAttendanceDate" value="Feb 03, 2026"
+                                readonly>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Status</label>
+                            <div>
+                                <span id="viewAttendanceStatus" class="badge bg-success">Present</span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Time In</label>
+                            <input type="text" class="form-control" id="viewTimeIn" value="08:00 AM" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Time Out</label>
+                            <input type="text" class="form-control" id="viewTimeOut" value="05:00 PM" readonly>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <label class="form-label">Notes</label>
+                            <textarea class="form-control" id="viewAttendanceNotes" rows="3" readonly
+                                placeholder="No notes available"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Images Section -->
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <h6 class="text-white">Time In Image</h6>
+                            <h6 class="text-white mb-3">TIME IN IMAGE</h6>
                             <div class="border rounded p-3 text-center"
-                                style="background-color: #1a2332; min-height: 200px;">
+                                style="background-color: #1a2332; min-height: 200px; display: flex; align-items: center; justify-content: center;">
                                 <img id="viewTimeInImage" src="" alt="Time In Image" class="img-fluid"
                                     style="max-height: 180px; display: none;">
                                 <p id="viewTimeInNoImage" class="text-muted mb-0">No image uploaded</p>
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <h6 class="text-white">Time Out Image</h6>
+                            <h6 class="text-white mb-3">TIME OUT IMAGE</h6>
                             <div class="border rounded p-3 text-center"
-                                style="background-color: #1a2332; min-height: 200px;">
+                                style="background-color: #1a2332; min-height: 200px; display: flex; align-items: center; justify-content: center;">
                                 <img id="viewTimeOutImage" src="" alt="Time Out Image" class="img-fluid"
                                     style="max-height: 180px; display: none;">
                                 <p id="viewTimeOutNoImage" class="text-muted mb-0">No image uploaded</p>
@@ -1582,6 +1612,13 @@
                         <div class="col-md-6">
                             <label class="form-label">Time Out</label>
                             <input type="time" class="form-control" id="editTimeOut" value="17:00">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <label class="form-label">Notes (Optional)</label>
+                            <textarea class="form-control" id="editAttendanceNotes" rows="3"
+                                placeholder="Add any additional notes or remarks about this attendance record..."></textarea>
                         </div>
                     </div>
 

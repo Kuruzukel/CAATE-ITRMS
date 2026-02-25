@@ -296,8 +296,8 @@
                                             </div>
                                         </div>
                                         <span class="fw-semibold d-block mb-1">Total Items</span>
-                                        <h3 class="card-title mb-2">1,248</h3>
-                                        <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i> +45
+                                        <h3 class="card-title mb-2">0</h3>
+                                        <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i> +0
                                             this month</small>
                                     </div>
                                 </div>
@@ -312,7 +312,7 @@
                                             </div>
                                         </div>
                                         <span class="fw-semibold d-block mb-1">In Stock</span>
-                                        <h3 class="card-title mb-2">1,089</h3>
+                                        <h3 class="card-title mb-2">0</h3>
                                         <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i>
                                             Available</small>
                                     </div>
@@ -328,7 +328,7 @@
                                             </div>
                                         </div>
                                         <span class="fw-semibold d-block mb-1">Low Stock</span>
-                                        <h3 class="card-title mb-2">24</h3>
+                                        <h3 class="card-title mb-2">0</h3>
                                         <small class="text-warning fw-semibold"><i class="bx bx-right-arrow-alt"></i>
                                             Needs Reorder</small>
                                     </div>
@@ -343,7 +343,7 @@
                                             </div>
                                         </div>
                                         <span class="fw-semibold d-block mb-1">Out of Stock</span>
-                                        <h3 class="card-title mb-2">12</h3>
+                                        <h3 class="card-title mb-2">0</h3>
                                         <small class="text-danger fw-semibold"><i class="bx bx-down-arrow-alt"></i>
                                             Critical</small>
                                     </div>
@@ -358,7 +358,7 @@
                                     <div class="card-header d-flex justify-content-between align-items-center">
                                         <h5 class="mb-0" id="inventoryListTitle">List of Equipments</h5>
                                         <button type="button" class="btn btn-primary btn-sm" id="addInventoryBtn">
-                                            <i class="bx bx-plus"></i> <span id="addInventoryText">Add Equipment</span>
+                                            <i class="bx bx-plus"></i> <span id="addInventoryText">Add Item</span>
                                         </button>
                                     </div>
                                     <div class="card-body">
@@ -379,10 +379,10 @@
                                                         <select class="form-select" id="programsFilter"
                                                             style="background-color: #243447; border: 1px solid #3d4f63; color: #b8c5d6;">
                                                             <option value="">All Programs</option>
-                                                            <option value="Beauty Care (Skin Care) NC II">Beauty Care
-                                                                (Skin Care) NC II</option>
                                                             <option value="Beauty Care (Nail Care) NC II">Beauty Care
                                                                 (Nail Care) NC II</option>
+                                                            <option value="Beauty Care (Skin Care) NC II">Beauty Care
+                                                                (Skin Care) NC II</option>
                                                             <option value="Trainers Methodology Level I">Trainers
                                                                 Methodology Level I</option>
                                                             <option value="Eyelash & Eyebrow Services Level III">Eyelash
@@ -518,6 +518,92 @@
     <!-- Dynamic Search Placeholder -->
     <script src="../assets/js/audit-inventory-filter.js"></script>
 
+    <!-- Add Inventory Modal -->
+    <div class="modal fade" id="addInventoryModal" tabindex="-1" aria-labelledby="addInventoryModalLabel"
+        aria-modal="true" role="dialog">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addInventoryModalLabel">Add New Item</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addInventoryForm">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="addProgram" class="form-label">Program</label>
+                                <select class="form-select" id="addProgram" required>
+                                    <option value="">Select Program</option>
+                                    <option value="Beauty Care (Nail Care) NC II">Beauty Care (Nail Care) NC II</option>
+                                    <option value="Beauty Care (Skin Care) NC II">Beauty Care (Skin Care) NC II</option>
+                                    <option value="Trainers Methodology Level I">Trainers Methodology Level I</option>
+                                    <option value="Eyelash & Eyebrow Services Level III">Eyelash & Eyebrow Services
+                                        Level III</option>
+                                    <option value="Aesthetic Services Level II">Aesthetic Services Level II</option>
+                                    <option value="Aesthetic Services Level III">Aesthetic Services Level III</option>
+                                    <option value="Advanced Skin Care Level IV">Advanced Skin Care Level IV</option>
+                                    <option value="Permanent Makeup Tattoo Level III">Permanent Makeup Tattoo Level III
+                                    </option>
+                                    <option value="Collagen & Hairloss Treatment">Collagen & Hairloss Treatment</option>
+                                    <option value="Facial Peeling & Chemical Peeling">Facial Peeling & Chemical Peeling
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="addInventoryType" class="form-label">Inventory Type</label>
+                                <select class="form-select" id="addInventoryType" required>
+                                    <option value="">Select Type</option>
+                                    <option value="equipment">Equipment</option>
+                                    <option value="tools">Tools</option>
+                                    <option value="consumables">Consumables</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="addItemName" class="form-label">Item Name</label>
+                                <input type="text" class="form-control" id="addItemName"
+                                    placeholder="e.g., Manicure Table" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="addSpecification" class="form-label">Specification</label>
+                                <input type="text" class="form-control" id="addSpecification"
+                                    placeholder="e.g., Standard size, wooden" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label for="addQuantityRequired" class="form-label">Quantity Required</label>
+                                <input type="text" class="form-control" id="addQuantityRequired" placeholder="00 Units"
+                                    required>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="addQuantityOnSite" class="form-label">Quantity On Site</label>
+                                <input type="text" class="form-control" id="addQuantityOnSite" placeholder="00 Units"
+                                    required>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="addDifference" class="form-label">Difference</label>
+                                <input type="text" class="form-control" id="addDifference" placeholder="00/00">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label for="addRemarks" class="form-label">Inspector's Remarks (Optional)</label>
+                                <textarea class="form-control" id="addRemarks" rows="2"
+                                    placeholder="Enter any additional notes or observations"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="saveInventoryBtn">Add Equipment</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Edit Equipment Modal -->
     <div class="modal fade" id="editEquipmentModal" tabindex="-1" aria-labelledby="editEquipmentModalLabel"
         aria-modal="true" role="dialog">
@@ -563,11 +649,8 @@
                                 </select>
                             </div>
                             <div class="col-md-6">
-                                <label for="editRemarks" class="form-label">Inspector's Remarks</label>
-                                <select class="form-select" id="editRemarks" required>
-                                    <option value="Compliant">Compliant</option>
-                                    <option value="Non-Compliant">Non-Compliant</option>
-                                </select>
+                                <label for="editRemarks" class="form-label">Inspector's Remarks (Optional)</label>
+                                <textarea class="form-control" id="editRemarks" rows="2"></textarea>
                             </div>
                         </div>
                     </form>
@@ -620,8 +703,8 @@
                             <input type="text" class="form-control" id="viewStockStatus" readonly>
                         </div>
                         <div class="col-md-6">
-                            <label for="viewRemarks" class="form-label">Inspector's Remarks</label>
-                            <input type="text" class="form-control" id="viewRemarks" readonly>
+                            <label for="viewRemarks" class="form-label">Inspector's Remarks (Optional)</label>
+                            <textarea class="form-control" id="viewRemarks" rows="2" readonly></textarea>
                         </div>
                     </div>
                 </div>

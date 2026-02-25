@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function () {
     loadInventoryData();
 
     // Handle modal shown events to prevent aria-hidden warnings
-    const modals = ['editEquipmentModal', 'viewEquipmentModal', 'deleteEquipmentModal'];
+    const modals = ['addInventoryModal', 'editEquipmentModal', 'viewEquipmentModal', 'deleteEquipmentModal'];
     modals.forEach(modalId => {
         const modalEl = document.getElementById(modalId);
         if (modalEl) {
@@ -30,6 +30,26 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
     });
+
+    // Handle Add Inventory Button Click
+    const addInventoryBtn = document.getElementById('addInventoryBtn');
+    if (addInventoryBtn) {
+        addInventoryBtn.addEventListener('click', function () {
+            // Reset form
+            document.getElementById('addInventoryForm').reset();
+            // Open modal
+            const modal = new bootstrap.Modal(document.getElementById('addInventoryModal'));
+            modal.show();
+        });
+    }
+
+    // Handle Save Inventory Button Click
+    const saveInventoryBtn = document.getElementById('saveInventoryBtn');
+    if (saveInventoryBtn) {
+        saveInventoryBtn.addEventListener('click', function () {
+            saveNewInventoryItem();
+        });
+    }
 
     // Handle Inventory Type Filter Change
     const inventoryTypeFilter = document.getElementById('inventoryTypeFilter');
@@ -43,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function () {
             switch (selectedType) {
                 case 'equipment':
                     inventoryListTitle.textContent = 'List of Equipments';
-                    addInventoryText.textContent = 'Add Equipment';
+                    addInventoryText.textContent = 'Add Item';
                     break;
                 case 'tools':
                     inventoryListTitle.textContent = 'List of Tools';
@@ -55,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     break;
                 default:
                     inventoryListTitle.textContent = 'List of Equipments';
-                    addInventoryText.textContent = 'Add Equipment';
+                    addInventoryText.textContent = 'Add Item';
                     break;
             }
 
@@ -99,7 +119,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Reset title
             if (inventoryListTitle) inventoryListTitle.textContent = 'List of Equipments';
-            if (addInventoryText) addInventoryText.textContent = 'Add Equipment';
+            if (addInventoryText) addInventoryText.textContent = 'Add Item';
 
             // Clear highlights and reload data
             clearAllHighlights();
@@ -598,3 +618,76 @@ function highlightSearchResults(searchTerm) {
         firstMatch.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 }
+
+
+// Save new inventory item
+async function saveNewInventoryItem() {
+    const form = document.getElementById('addInventoryForm');
+
+    // Validate form
+    if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+    }
+
+    // Get form values
+    const program = document.getElementById('addProgram').value;
+    const inventoryType = document.getElementById('addInventoryType').value;
+    const itemName = document.getElementById('addItemName').value;
+    const specification = document.getElementById('addSpecification').value;
+    const quantityRequired = parseInt(document.getElementById('addQuantityRequired').value);
+    const quantityOnSite = parseInt(document.getElementById('addQuantityOnSite').value);
+    const remarks = document.getElementById('addRemarks').value;
+
+    // Prepare data
+    const data = {
+        program: program,
+        inventory_type: inventoryType,
+        item_name: itemName,
+        specification: specification,
+        quantity_required: quantityRequired,
+        quantity_on_site: quantityOnSite,
+        inspector_remarks: remarks
+    };
+
+    try {
+        // Disable button and show loading
+        const saveBtn = document.getElementById('saveInventoryBtn');
+        saveBtn.disabled = true;
+        saveBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Saving...';
+
+        const response = await fetch(`${API_BASE_URL}/api.php?endpoint=inventory&collection=audit_inventory`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            // Close modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('addInventoryModal'));
+            modal.hide();
+
+            // Show success message
+            alert('Inventory item added successfully!');
+
+            // Reload data
+            await loadInventoryData();
+        } else {
+            alert('Error: ' + (result.error || 'Failed to add inventory item'));
+        }
+    } catch (error) {
+        console.error('Error adding inventory item:', error);
+        alert('Error adding inventory item. Please try again.');
+    } finally {
+        // Re-enable button
+        const saveBtn = document.getElementById('saveInventoryBtn');
+        saveBtn.disabled = false;
+        saveBtn.innerHTML = 'Add Item';
+    }
+}
+
+

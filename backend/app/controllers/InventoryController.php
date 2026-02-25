@@ -283,4 +283,34 @@ class InventoryController {
             ]);
         }
     }
+    
+    // Get unique filter values (programs and stock statuses)
+    public function getFilterOptions() {
+        try {
+            // Get unique programs
+            $programs = $this->collection->distinct('program');
+            
+            // Get unique stock statuses
+            $stockStatuses = $this->collection->distinct('stock_status');
+            
+            // Sort the arrays
+            sort($programs);
+            sort($stockStatuses);
+            
+            http_response_code(200);
+            echo json_encode([
+                'success' => true,
+                'data' => [
+                    'programs' => array_values(array_filter($programs)), // Remove null/empty values
+                    'stock_statuses' => array_values(array_filter($stockStatuses))
+                ]
+            ]);
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
 }

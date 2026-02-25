@@ -376,27 +376,10 @@
                                                     <div class="col-md-2">
                                                         <label class="form-label"
                                                             style="color: #b8c5d6;">Programs</label>
-                                                        <select class="form-select"
+                                                        <select class="form-select" id="programsFilter"
                                                             style="background-color: #243447; border: 1px solid #3d4f63; color: #b8c5d6;">
                                                             <option value="">All Programs</option>
-                                                            <option value="nail-care">Nail Care Services NC II</option>
-                                                            <option value="skin-care">Skin Care Services NC II</option>
-                                                            <option value="aesthetic-3">Aesthetic Services Level III
-                                                            </option>
-                                                            <option value="advanced-skin">Advanced Skin Care Level III
-                                                            </option>
-                                                            <option value="permanent-makeup">Permanent Make-Up Tattoo
-                                                                Level III</option>
-                                                            <option value="collagen-hairloss">Collagen Induction & Hair
-                                                                Loss Treatment</option>
-                                                            <option value="facial-peeling">Advanced Facial & Chemical
-                                                                Skin Peeling</option>
-                                                            <option value="light-heat-therapy">Light Therapy & Heat
-                                                                Therapy</option>
-                                                            <option value="trainers">Trainers Methodology Level I
-                                                            </option>
-                                                            <option value="eyelash">Eyelash & Eyebrow Services Level III
-                                                            </option>
+                                                            <!-- Options will be populated dynamically -->
                                                         </select>
                                                     </div>
                                                     <div class="col-md-3">
@@ -413,16 +396,15 @@
                                                     <div class="col-md-3">
                                                         <label class="form-label" style="color: #b8c5d6;">Stock
                                                             Status</label>
-                                                        <select class="form-select"
+                                                        <select class="form-select" id="stockStatusFilter"
                                                             style="background-color: #243447; border: 1px solid #3d4f63; color: #b8c5d6;">
                                                             <option value="">All Status</option>
-                                                            <option value="in-stock">In Stock</option>
-                                                            <option value="low-stock">Low Stock</option>
-                                                            <option value="out-of-stock">Out of Stock</option>
+                                                            <!-- Options will be populated dynamically -->
                                                         </select>
                                                     </div>
                                                     <div class="col-md-1 d-flex align-items-end">
-                                                        <button type="button" class="btn btn-outline-secondary w-100"
+                                                        <button type="button" id="resetFiltersBtn"
+                                                            class="btn btn-outline-secondary w-100"
                                                             style="border-color: #3d4f63; color: #b8c5d6;">
                                                             <i class="bx bx-reset"></i>
                                                         </button>

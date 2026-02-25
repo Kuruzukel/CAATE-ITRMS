@@ -11,6 +11,9 @@ const API_BASE_URL = window.location.origin.includes('localhost')
 
 // Prevent aria-hidden focus warnings by managing modal focus properly
 document.addEventListener('DOMContentLoaded', function () {
+    // Load filter options first
+    loadFilterOptions();
+
     // Load inventory data
     loadInventoryData();
 
@@ -56,7 +59,23 @@ document.addEventListener('DOMContentLoaded', function () {
                     break;
             }
 
-            loadInventoryData();
+            applyFilters();
+        });
+    }
+
+    // Handle Programs Filter Change
+    const programsFilter = document.getElementById('programsFilter');
+    if (programsFilter) {
+        programsFilter.addEventListener('change', function () {
+            applyFilters();
+        });
+    }
+
+    // Handle Stock Status Filter Change
+    const stockStatusFilter = document.getElementById('stockStatusFilter');
+    if (stockStatusFilter) {
+        stockStatusFilter.addEventListener('change', function () {
+            applyFilters();
         });
     }
 
@@ -64,24 +83,77 @@ document.addEventListener('DOMContentLoaded', function () {
     const searchInput = document.getElementById('filterSearchInput');
     if (searchInput) {
         searchInput.addEventListener('input', function () {
-            const searchTerm = searchInput.value.toLowerCase().trim();
+            applyFilters();
+        });
+    }
 
-            // If search is cleared, clear highlights and show all
-            if (!searchTerm) {
-                clearAllHighlights();
-                renderInventoryTable(inventoryData);
-            } else {
-                // Show all items but highlight matches
-                renderInventoryTable(inventoryData);
-                // Wait for render to complete, then highlight
-                setTimeout(() => {
-                    clearAllHighlights();
-                    highlightSearchResults(searchTerm);
-                }, 50);
-            }
+    // Handle Reset Button
+    const resetButton = document.getElementById('resetFiltersBtn');
+    if (resetButton) {
+        resetButton.addEventListener('click', function () {
+            // Reset all filters
+            if (inventoryTypeFilter) inventoryTypeFilter.value = '';
+            if (programsFilter) programsFilter.value = '';
+            if (stockStatusFilter) stockStatusFilter.value = '';
+            if (searchInput) searchInput.value = '';
+
+            // Reset title
+            if (inventoryListTitle) inventoryListTitle.textContent = 'List of Equipments';
+            if (addInventoryText) addInventoryText.textContent = 'Add Equipment';
+
+            // Clear highlights and reload data
+            clearAllHighlights();
+            loadInventoryData();
         });
     }
 });
+
+// Apply all filters together
+function applyFilters() {
+    const inventoryTypeFilter = document.getElementById('inventoryTypeFilter');
+    const programsFilter = document.getElementById('programsFilter');
+    const stockStatusFilter = document.getElementById('stockStatusFilter');
+    const searchInput = document.getElementById('filterSearchInput');
+
+    // Get filter values
+    const selectedType = inventoryTypeFilter ? inventoryTypeFilter.value : '';
+    const selectedProgram = programsFilter ? programsFilter.value : '';
+    const selectedStatus = stockStatusFilter ? stockStatusFilter.value : '';
+    const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
+
+    // Filter the data
+    let filteredData = inventoryData.filter(item => {
+        // Filter by inventory type
+        if (selectedType && item.inventory_type !== selectedType) {
+            return false;
+        }
+
+        // Filter by program
+        if (selectedProgram && item.program !== selectedProgram) {
+            return false;
+        }
+
+        // Filter by stock status
+        if (selectedStatus && item.stock_status !== selectedStatus) {
+            return false;
+        }
+
+        return true;
+    });
+
+    // Render filtered data
+    renderInventoryTable(filteredData);
+
+    // Apply search highlighting if search term exists
+    if (searchTerm) {
+        setTimeout(() => {
+            clearAllHighlights();
+            highlightSearchResults(searchTerm);
+        }, 50);
+    } else {
+        clearAllHighlights();
+    }
+}
 
 // Debounce function for search
 function debounce(func, wait) {
@@ -96,31 +168,56 @@ function debounce(func, wait) {
     };
 }
 
+// Load filter options from API
+async function loadFilterOptions() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/v1/inventory/filter-options?collection=caate-inventory`);
+        const result = await response.json();
+
+        if (result.success) {
+            const { programs, stock_statuses } = result.data;
+
+            // Populate Programs filter
+            const programsFilter = document.getElementById('programsFilter');
+            if (programsFilter) {
+                programs.forEach(program => {
+                    const option = document.createElement('option');
+                    option.value = program;
+                    option.textContent = program;
+                    programsFilter.appendChild(option);
+                });
+            }
+
+            // Populate Stock Status filter
+            const stockStatusFilter = document.getElementById('stockStatusFilter');
+            if (stockStatusFilter) {
+                stock_statuses.forEach(status => {
+                    const option = document.createElement('option');
+                    option.value = status;
+                    option.textContent = status;
+                    stockStatusFilter.appendChild(option);
+                });
+            }
+        }
+    } catch (error) {
+        console.error('Error loading filter options:', error);
+    }
+}
+
 // Load inventory data from API
 async function loadInventoryData() {
     // Show loader before fetching data
     showTableLoader();
 
     try {
-        const inventoryTypeFilter = document.getElementById('inventoryTypeFilter');
-        const searchInput = document.getElementById('filterSearchInput');
-
-        let url = `${API_BASE_URL}/api/v1/inventory?collection=caate-inventory&`;
-
-        if (inventoryTypeFilter && inventoryTypeFilter.value) {
-            url += `inventory_type=${encodeURIComponent(inventoryTypeFilter.value)}&`;
-        }
-
-        if (searchInput && searchInput.value) {
-            url += `search=${encodeURIComponent(searchInput.value)}&`;
-        }
+        let url = `${API_BASE_URL}/api/v1/inventory?collection=caate-inventory`;
 
         const response = await fetch(url);
         const result = await response.json();
 
         if (result.success) {
             inventoryData = result.data;
-            renderInventoryTable(inventoryData);
+            applyFilters();
             updateStatistics();
         } else {
             console.error('Failed to load inventory:', result.error);

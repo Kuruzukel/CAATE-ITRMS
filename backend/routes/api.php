@@ -43,6 +43,7 @@ function handleRequest($uri, $method) {
         'PUT:/api/v1/competencies/{id}' => ['CompetencyController', 'update'],
         'DELETE:/api/v1/competencies/{id}' => ['CompetencyController', 'destroy'],
         'GET:/api/v1/inventory/statistics' => ['InventoryController', 'statistics'],
+        'GET:/api/v1/inventory/filter-options' => ['InventoryController', 'getFilterOptions'],
         'GET:/api/v1/inventory' => ['InventoryController', 'index'],
         'GET:/api/v1/inventory/{id}' => ['InventoryController', 'show'],
         'POST:/api/v1/inventory' => ['InventoryController', 'store'],

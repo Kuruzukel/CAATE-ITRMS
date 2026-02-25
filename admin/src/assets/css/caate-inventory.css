@@ -208,3 +208,9 @@
 .d-inline-block.ms-2 {
     margin-left: 0.5rem !important;
 }
+
+
+/* Fix .mb-4 margin to match Bootstrap default */
+.mb-4 {
+    margin-bottom: 1.5rem !important;
+}

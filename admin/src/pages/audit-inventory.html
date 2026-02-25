@@ -369,7 +369,7 @@
                                                 <div class="row g-3">
                                                     <div class="col-md-3">
                                                         <label class="form-label" style="color: #b8c5d6;">Search</label>
-                                                        <input type="text" class="form-control"
+                                                        <input type="text" id="filterSearchInput" class="form-control"
                                                             placeholder="Equipment Name"
                                                             style="background-color: #243447; border: 1px solid #3d4f63; color: #b8c5d6;">
                                                     </div>
@@ -379,26 +379,24 @@
                                                         <select class="form-select"
                                                             style="background-color: #243447; border: 1px solid #3d4f63; color: #b8c5d6;">
                                                             <option value="">All Programs</option>
-                                                            <option value="beauty-skin">Beauty Care (Skin Care) NC II
+                                                            <option value="nail-care">Nail Care Services NC II</option>
+                                                            <option value="skin-care">Skin Care Services NC II</option>
+                                                            <option value="aesthetic-3">Aesthetic Services Level III
                                                             </option>
-                                                            <option value="beauty-nail">Beauty Care (Nail Care) NC II
+                                                            <option value="advanced-skin">Advanced Skin Care Level III
                                                             </option>
+                                                            <option value="permanent-makeup">Permanent Make-Up Tattoo
+                                                                Level III</option>
+                                                            <option value="collagen-hairloss">Collagen Induction & Hair
+                                                                Loss Treatment</option>
+                                                            <option value="facial-peeling">Advanced Facial & Chemical
+                                                                Skin Peeling</option>
+                                                            <option value="light-heat-therapy">Light Therapy & Heat
+                                                                Therapy</option>
                                                             <option value="trainers">Trainers Methodology Level I
                                                             </option>
                                                             <option value="eyelash">Eyelash & Eyebrow Services Level III
                                                             </option>
-                                                            <option value="aesthetic-2">Aesthetic Services Level II
-                                                            </option>
-                                                            <option value="aesthetic-3">Aesthetic Services Level III
-                                                            </option>
-                                                            <option value="advanced-skin">Advanced Skin Care Level IV
-                                                            </option>
-                                                            <option value="permanent-makeup">Permanent Makeup Tattoo
-                                                                Level III</option>
-                                                            <option value="collagen-hairloss">Collagen & Hairloss
-                                                                Treatment</option>
-                                                            <option value="facial-peeling">Facial Peeling & Chemical
-                                                                Peeling</option>
                                                         </select>
                                                     </div>
                                                     <div class="col-md-3">
@@ -437,7 +435,7 @@
                                             <table class="table table-hover">
                                                 <thead>
                                                     <tr>
-                                                        <th>Name of Equipment</th>
+                                                        <th id="equipmentNameHeader">Name of Equipment</th>
                                                         <th>Specification</th>
                                                         <th>Quantity Required</th>
                                                         <th>Quantity On Site</th>
@@ -1609,6 +1607,9 @@
 
     <!-- Audit Inventory JS -->
     <script src="../assets/js/audit-inventory.js"></script>
+
+    <!-- Dynamic Search Placeholder -->
+    <script src="../assets/js/audit-inventory-filter.js"></script>
 </body>
 
 </html>

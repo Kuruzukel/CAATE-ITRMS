@@ -84,6 +84,9 @@ function debounce(func, wait) {
 
 // Load inventory data from API
 async function loadInventoryData() {
+    // Show loader before fetching data
+    showTableLoader();
+
     try {
         const inventoryTypeFilter = document.getElementById('inventoryTypeFilter');
         const searchInput = document.getElementById('filterSearchInput');
@@ -115,11 +118,34 @@ async function loadInventoryData() {
     }
 }
 
+// Show loader in table
+function showTableLoader() {
+    const tbody = document.querySelector('.table tbody');
+    if (!tbody) return;
+
+    tbody.innerHTML = `
+        <tr>
+            <td colspan="8" class="text-center" style="padding: 60px 20px;">
+                <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-3 text-muted">Loading inventory data...</p>
+            </td>
+        </tr>
+    `;
+}
+
 // Render inventory table
 // Render inventory table
 function renderInventoryTable(data) {
     const tbody = document.querySelector('.table tbody');
     if (!tbody) return;
+
+    // Hide loader
+    const loader = document.getElementById('tableLoader');
+    if (loader) {
+        loader.remove();
+    }
 
     if (data.length === 0) {
         tbody.innerHTML = '<tr><td colspan="8" class="text-center">No inventory items found</td></tr>';

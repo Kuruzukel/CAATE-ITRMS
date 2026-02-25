@@ -172,8 +172,28 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
+// Show loader in table
+function showTableLoader() {
+    const tbody = document.querySelector('.table tbody');
+    if (!tbody) return;
+
+    tbody.innerHTML = `
+        <tr>
+            <td colspan="5" class="text-center" style="padding: 60px 20px;">
+                <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-3 text-muted">Loading trainees data...</p>
+            </td>
+        </tr>
+    `;
+}
+
 // Load trainees from API
 async function loadTrainees() {
+    // Show loader before fetching data
+    showTableLoader();
+
     try {
         const response = await fetch(`${API_BASE_URL}/trainees`);
         const result = await response.json();
@@ -247,6 +267,12 @@ function clearAllHighlights() {
 function renderTrainees(trainees) {
     const tbody = document.querySelector('.table tbody');
     if (!tbody) return;
+
+    // Hide loader
+    const loader = document.getElementById('tableLoader');
+    if (loader) {
+        loader.remove();
+    }
 
     tbody.innerHTML = '';
 

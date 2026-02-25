@@ -23,5 +23,8 @@ let config = {
     headingColor: '#566a7f',
     axisColor: '#a1acb8',
     borderColor: '#eceef1'
+  },
+  api: {
+    baseURL: '/CAATE-ITRMS/backend/public/index.php'
   }
 };

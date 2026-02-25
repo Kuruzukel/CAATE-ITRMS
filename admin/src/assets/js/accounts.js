@@ -1131,7 +1131,6 @@ function highlightSearchResults(searchTerm) {
             // Apply card hover design with proper spacing
             row.style.position = 'relative';
             row.style.boxShadow = '0 8px 24px rgba(22, 56, 86, 0.5), 0 4px 12px rgba(54, 145, 191, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15)';
-            row.style.transform = 'translateY(-2px) scale(1.01)';
             row.style.outline = '2px solid rgba(54, 145, 191, 0.6)';
             row.style.outlineOffset = '2px';
             row.style.borderRadius = '10px';

@@ -1,58 +1,58 @@
 program,inventory_type,item_name,specification,quantity_required,quantity_on_site,difference,stock_status,inspector_remarks,created_at,updated_at
-Nail Care Services NC II,equipment,Nail service table,2 x 3 x 2,10,10,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,equipment,Chair for client,Locally made,10,10,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,equipment,Supply tray,Locally made,10,10,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,equipment,Foot rest,Locally made,10,10,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,equipment,Stool (for manicurist),Locally made,10,10,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,equipment,Paraffin wax machine,10 x 15 x 9.5 inches (7.4 pounds),2,2,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,equipment,Foot spa machine,17 x 13 x 10 inches (5.3 pounds),5,5,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,equipment,Ultraviolet lamp or Ultraviolet sterilizer,Ultraviolet lamp or Ultraviolet sterilizer,1,1,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,equipment,White Board,4 x 8 ft.,1,1,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,equipment,Projector,Epson,1,1,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,equipment,Working Table (teacher/trainer),46'W x 30'D x 29'H,1,1,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,equipment,Laptop,Acer,1,1,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,equipment,Textbook,Textbook,5,5,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,tools,Cuticle pusher,Locally made,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,tools,Cuticle nipper,Locally made,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,tools,Nail brush,Locally made,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,tools,Emery board,Locally made,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,tools,Tweezers,Locally made,10,10,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,tools,Cuticle scissors,Locally made,10,10,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,tools,Toe nail clipper,Locally made,10,10,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,tools,Nail buffer,Locally made,2,2,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,tools,Nail file,Locally made,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,tools,Orange wood,Locally made,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,consumables,Polish (12 ml),Locally made,60,60,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,consumables,Base coat (15 ml),Locally made,40,40,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,consumables,Top coat (12 ml),Locally made,40,40,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,consumables,Cuticle softener (50 ml),Locally made,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,consumables,Cuticle oil (50 ml),Locally made,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,consumables,Quick dry (15 ml),Locally made,40,40,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,consumables,Hand and foot soap liquid (100 ml),Locally made,10,10,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,consumables,Hand and foot scrub (500 ml),Locally made,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,consumables,Hand and foot mask (500 ml),Seaweeds / organic,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,consumables,Paraffin wax (500 g),Locally made,10,10,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,consumables,Finger bowl,Locally made,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,consumables,Container (16 oz.),Clear glass,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,consumables,Container (16 oz.) Cotton,Cotton / clear glass,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,consumables,Towel Small,Small (20 × 28),80,80,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,consumables,Disposable slippers,Locally made,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,consumables,Nail separator,Locally made,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,consumables,Face mask,Disposable,20,30,10,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,consumables,Apron,10″ × 24″,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,consumables,Massage oil,Liniment / aromatherapy 10 ml,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,consumables,Cling wrap,30 cm × 16meter,10,10,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,consumables,Alcohol,500 ml,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,consumables,Gloves,Disposable,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,consumables,Mitten,With two sections,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,consumables,Towel Small (duplicate),Small (20 × 28),20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,consumables,Towel Big,Big (40 x 70),20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,consumables,Sanitizer,30 ml,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,consumables,Antiseptic solution,250 ml,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,consumables,Cotton balls,10 g,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,consumables,Foot and hand lotion,500 ml,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,consumables,Alcohol 70%,70% (250 ml),20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,consumables,Tissue paper,Roll (10 meters),20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,consumables,Foot file,Locally made,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,consumables,Callus remover,Locally made,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Nail Care Services NC II,consumables,Foot scrub,Locally made,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,equipment,Nail service table,2 x 3 x 2,10,10,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,equipment,Chair for client,Locally made,10,10,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,equipment,Supply tray,Locally made,10,10,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,equipment,Foot rest,Locally made,10,10,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,equipment,Stool (for manicurist),Locally made,10,10,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,equipment,Paraffin wax machine,10 x 15 x 9.5 inches (7.4 pounds),2,2,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,equipment,Foot spa machine,17 x 13 x 10 inches (5.3 pounds),5,5,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,equipment,Ultraviolet lamp or Ultraviolet sterilizer,Ultraviolet lamp or Ultraviolet sterilizer,1,1,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,equipment,White Board,4 x 8 ft.,1,1,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,equipment,Projector,Epson,1,1,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,equipment,Working Table (teacher/trainer),46'W x 30'D x 29'H,1,1,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,equipment,Laptop,Acer,1,1,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,equipment,Textbook,Textbook,5,5,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,tools,Cuticle pusher,Locally made,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,tools,Cuticle nipper,Locally made,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,tools,Nail brush,Locally made,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,tools,Emery board,Locally made,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,tools,Tweezers,Locally made,10,10,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,tools,Cuticle scissors,Locally made,10,10,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,tools,Toe nail clipper,Locally made,10,10,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,tools,Nail buffer,Locally made,2,2,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,tools,Nail file,Locally made,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,tools,Orange wood,Locally made,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,consumables,Polish (12 ml),Locally made,60,60,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,consumables,Base coat (15 ml),Locally made,40,40,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,consumables,Top coat (12 ml),Locally made,40,40,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,consumables,Cuticle softener (50 ml),Locally made,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,consumables,Cuticle oil (50 ml),Locally made,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,consumables,Quick dry (15 ml),Locally made,40,40,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,consumables,Hand and foot soap liquid (100 ml),Locally made,10,10,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,consumables,Hand and foot scrub (500 ml),Locally made,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,consumables,Hand and foot mask (500 ml),Seaweeds / organic,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,consumables,Paraffin wax (500 g),Locally made,10,10,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,consumables,Finger bowl,Locally made,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,consumables,Container (16 oz.),Clear glass,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,consumables,Container (16 oz.) Cotton,Cotton / clear glass,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,consumables,Towel Small,Small (20 × 28),80,80,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,consumables,Disposable slippers,Locally made,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,consumables,Nail separator,Locally made,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,consumables,Face mask,Disposable,20,30,10,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,consumables,Apron,10″ × 24″,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,consumables,Massage oil,Liniment / aromatherapy 10 ml,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,consumables,Cling wrap,30 cm × 16meter,10,10,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,consumables,Alcohol,500 ml,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,consumables,Gloves,Disposable,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,consumables,Mitten,With two sections,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,consumables,Towel Small (duplicate),Small (20 × 28),20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,consumables,Towel Big,Big (40 x 70),20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,consumables,Sanitizer,30 ml,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,consumables,Antiseptic solution,250 ml,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,consumables,Cotton balls,10 g,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,consumables,Foot and hand lotion,500 ml,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,consumables,Alcohol 70%,70% (250 ml),20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,consumables,Tissue paper,Roll (10 meters),20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,consumables,Foot file,Locally made,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,consumables,Callus remover,Locally made,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Nail Care) NC II,consumables,Foot scrub,Locally made,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z

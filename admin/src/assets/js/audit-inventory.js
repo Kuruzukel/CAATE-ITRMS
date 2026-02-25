@@ -213,85 +213,19 @@ function highlightSearchResults(searchTerm) {
     }
 }
 
-// Load filter options from API
-async function loadFilterOptions() {
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/v1/inventory/filter-options?collection=audit-inventory`);
-        const result = await response.json();
-
-        if (result.success) {
-            const { programs, stock_statuses } = result.data;
-
-            // Populate Programs filter
-            const programsFilter = document.getElementById('programsFilter');
-            if (programsFilter) {
-                programs.forEach(program => {
-                    const option = document.createElement('option');
-                    option.value = program;
-                    option.textContent = program;
-                    programsFilter.appendChild(option);
-                });
-            }
-
-            // Populate Stock Status filter
-            const stockStatusFilter = document.getElementById('stockStatusFilter');
-            if (stockStatusFilter) {
-                stock_statuses.forEach(status => {
-                    const option = document.createElement('option');
-                    option.value = status;
-                    option.textContent = status;
-                    stockStatusFilter.appendChild(option);
-                });
-            }
-        }
-    } catch (error) {
-        console.error('Error loading filter options:', error);
-    }
-}
-
-// Load filter options from API
-async function loadFilterOptions() {
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/v1/inventory/filter-options?collection=audit-inventory`);
-        const result = await response.json();
-
-        if (result.success) {
-            const { programs, stock_statuses } = result.data;
-
-            // Populate Programs filter
-            const programsFilter = document.getElementById('programsFilter');
-            if (programsFilter && programs) {
-                // Keep the "All Programs" option
-                programsFilter.innerHTML = '<option value="">All Programs</option>';
-                programs.forEach(program => {
-                    if (program) { // Only add non-empty values
-                        const option = document.createElement('option');
-                        option.value = program;
-                        option.textContent = program;
-                        programsFilter.appendChild(option);
-                    }
-                });
-            }
-
-            // Populate Stock Status filter
-            const stockStatusFilter = document.getElementById('stockStatusFilter');
-            if (stockStatusFilter && stock_statuses) {
-                // Keep the "All Status" option
-                stockStatusFilter.innerHTML = '<option value="">All Status</option>';
-                stock_statuses.forEach(status => {
-                    if (status) { // Only add non-empty values
-                        const option = document.createElement('option');
-                        option.value = status;
-                        option.textContent = status;
-                        stockStatusFilter.appendChild(option);
-                    }
-                });
-            }
-        }
-    } catch (error) {
-        console.error('Error loading filter options:', error);
-    }
-}
+// Load filter options from API - DISABLED: Using static HTML options instead
+// async function loadFilterOptions() {
+//     try {
+//         const response = await fetch(`${API_BASE_URL}/api/v1/inventory/filter-options?collection=audit-inventory`);
+//         const result = await response.json();
+//         if (result.success) {
+//             const { programs, stock_statuses } = result.data;
+//             // Populate filters dynamically
+//         }
+//     } catch (error) {
+//         console.error('Error loading filter options:', error);
+//     }
+// }
 
 // Load inventory data from API
 async function loadInventoryData() {

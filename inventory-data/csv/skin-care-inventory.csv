@@ -1,80 +1,80 @@
 program,inventory_type,item_name,specification,quantity_required,quantity_on_site,difference,stock_status,inspector_remarks,created_at,updated_at
-Skin Care Services NC II,equipment,Facial machine which includes (iontophorosis Sonophoresis Highfrequency Rotary brush Vacuum Spray Galvanic skin tightening),Facial machine which includes (iontophorosis Sonophoresis Highfrequency Rotary brush Vacuum Spray Galvanic skin tightening),2,2,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,equipment,Facial bed,76.5" L x 2.5 w,5,5,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,equipment,U.V Steamer,1.5" x 9" x 9",1,1,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,equipment,LED Magnifying lamp w/ steamer floor standing,Lens 1 cm in diameter,5,5,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,equipment,Stool,16" x 23",5,5,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,equipment,Facial bed (Temporary Hair Removal),76.5" L x 2.5 w,5,5,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,equipment,LED Magnifying lamp w/ steamer floor standing (Temporary Hair Removal),Lens 1 cm in diameter,5,5,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,equipment,Stool (Temporary Hair Removal),16" x 23",5,5,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,equipment,LED magnifying lamp w/ streamer floor standing,Lens 1 cm in diameter,5,5,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,equipment,Facial bed (Body Scrubbing),76.5" L x 2.5 w,5,5,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,tools,Handheld mirror,6" tall,5,5,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,tools,Trolley,45x33x3cm,5,5,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,tools,Stainless basin,Stainless basin,5,5,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,tools,Waste basket,plastic,5,5,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,tools,TWEEZERS,TWEEZERS,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,tools,Shavers,Shavers,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,tools,Handheld mirror (Temporary Hair Removal),Handheld mirror,5,5,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,tools,Stainless basin (Temporary Hair Removal),Stainless basin,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,tools,Waste basket (Temporary Hair Removal),Plastic,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,tools,Spatula,Plastic,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,tools,Trolley (Temporary Hair Removal),45x33x3cm,5,5,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,tools,Basin stainless,stainless,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,tools,Trolley (Body Scrubbing),45x33x3cm,5,5,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,tools,Waste basket (Body Scrubbing),plastic,0,0,0,Out of Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,tools,Alcohol 70% Isoprophyl,250 ml,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,tools,Apron or Smock gown,Apron or Smock gown,20,25,5,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,tools,Bed sheet,Bed sheet,20,100,80,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,tools,Clipboard without cover,Clipboard without cover,20,45,25,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,tools,Headband (cloth),Headband (cloth),20,100,80,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,tools,Ballpen,Ballpen,20,24,4,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,tools,Timer (mobilephone watch or other gadgets),Timer (mobilephone watch or other gadgets),5,5,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,tools,Waste bin c/o training,Waste bin c/o training,5,5,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,consumables,Bib (as bib),Adult size white,20,100,80,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,consumables,Tissue 2 ply,100 pulls,8,8,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,consumables,Facial mask,Locally made,20,100,80,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,consumables,Cotton ball (pack of 20 pieces),Locally made,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,consumables,Headband,Locally made,20,100,80,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,consumables,Eye pads,Locally made,20,100,80,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,consumables,Make up remover,Locally made,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,consumables,Face sponges,3inch diameter,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,consumables,Gauze (pack of 2),4x4 inches,125,125,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,consumables,Distilled water,Locally made 5 liters jars,5,5,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,consumables,Gloves disposable,Vinyl Boxes (1box 50 pairs),1,1,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,consumables,Cleansing cream/ Facial Cleanser,20 bottles,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,consumables,Facial Cleanser,Facial Cleanser,4,4,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,consumables,Facial lotion,Facial lotion,4,4,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,consumables,Skin toner,Skin toner,4,4,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,consumables,Make-up remover,50 ml,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,consumables,Serum,30 ml,20,30,10,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,consumables,Moisturizer,50 grams,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,consumables,Sunblock/ Sunscreen,50 grams,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,consumables,Talcum powder,50 ml,4,4,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,consumables,Facial lotion (duplicate),50 ml,4,4,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,consumables,Thread,Cotton sewing,4,4,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,consumables,Shaving cream,100 grams,4,4,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,consumables,Cold wax,250 grams,4,4,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,consumables,Skin toner (duplicate),50 ml,4,4,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,consumables,Face towel (as bib),Adult size white,20,100,80,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,consumables,Tissue (duplicate),2 ply 100 pulls,4,8,4,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,consumables,Facial mask (duplicate),Disposable,20,100,80,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,consumables,Cotton ball (duplicate),Pack of 20 pcs,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,consumables,Headband (duplicate),Headband,20,100,80,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,consumables,Eye pads (duplicate),6 x 8 cm,20,100,80,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,consumables,Gauze (pack of 2) (duplicate),4 x 4 inches,125,125,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,consumables,Gloves disposable (1box 50 pairs),vinyl,5,5,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,consumables,Moisturizer (duplicate),50 grams,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,consumables,Bath towel,40 x 70,40,40,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,consumables,Body wrap,Free size,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,consumables,Body sponges,Body sponges,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,consumables,Scrubbing gloves,Scrubbing gloves,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,consumables,Plastic sheets,Plastic sheets,100,100,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,consumables,Headband cloth,Headband cloth,100,100,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,consumables,Scrubber (e.g. loofah or mitten),Scrubber (e.g. loofah or mitten),20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,consumables,Liquid soap,Liquid soap,4,4,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,consumables,Moisturizer (Body Scrubbing),Moisturizer,4,4,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,consumables,Scrubbing product ingredients,Scrubbing product ingredients,4,4,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,consumables,Facial Cleanser (Temporary Hair Removal),Facial Cleanser,4,4,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,consumables,Facial lotion (Temporary Hair Removal),50 ml,4,4,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
-Skin Care Services NC II,consumables,Skin toner (Temporary Hair Removal),50 ml,4,4,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,equipment,Facial machine which includes (iontophorosis Sonophoresis Highfrequency Rotary brush Vacuum Spray Galvanic skin tightening),Facial machine which includes (iontophorosis Sonophoresis Highfrequency Rotary brush Vacuum Spray Galvanic skin tightening),2,2,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,equipment,Facial bed,76.5" L x 2.5 w,5,5,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,equipment,U.V Steamer,1.5" x 9" x 9",1,1,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,equipment,LED Magnifying lamp w/ steamer floor standing,Lens 1 cm in diameter,5,5,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,equipment,Stool,16" x 23",5,5,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,equipment,Facial bed (Temporary Hair Removal),76.5" L x 2.5 w,5,5,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,equipment,LED Magnifying lamp w/ steamer floor standing (Temporary Hair Removal),Lens 1 cm in diameter,5,5,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,equipment,Stool (Temporary Hair Removal),16" x 23",5,5,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,equipment,LED magnifying lamp w/ streamer floor standing,Lens 1 cm in diameter,5,5,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,equipment,Facial bed (Body Scrubbing),76.5" L x 2.5 w,5,5,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,tools,Handheld mirror,6" tall,5,5,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,tools,Trolley,45x33x3cm,5,5,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,tools,Stainless basin,Stainless basin,5,5,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,tools,Waste basket,plastic,5,5,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,tools,TWEEZERS,TWEEZERS,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,tools,Shavers,Shavers,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,tools,Handheld mirror (Temporary Hair Removal),Handheld mirror,5,5,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,tools,Stainless basin (Temporary Hair Removal),Stainless basin,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,tools,Waste basket (Temporary Hair Removal),Plastic,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,tools,Spatula,Plastic,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,tools,Trolley (Temporary Hair Removal),45x33x3cm,5,5,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,tools,Basin stainless,stainless,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,tools,Trolley (Body Scrubbing),45x33x3cm,5,5,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,tools,Waste basket (Body Scrubbing),plastic,0,0,0,Out of Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,tools,Alcohol 70% Isoprophyl,250 ml,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,tools,Apron or Smock gown,Apron or Smock gown,20,25,5,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,tools,Bed sheet,Bed sheet,20,100,80,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,tools,Clipboard without cover,Clipboard without cover,20,45,25,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,tools,Headband (cloth),Headband (cloth),20,100,80,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,tools,Ballpen,Ballpen,20,24,4,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,tools,Timer (mobilephone watch or other gadgets),Timer (mobilephone watch or other gadgets),5,5,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,tools,Waste bin c/o training,Waste bin c/o training,5,5,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,consumables,Bib (as bib),Adult size white,20,100,80,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,consumables,Tissue 2 ply,100 pulls,8,8,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,consumables,Facial mask,Locally made,20,100,80,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,consumables,Cotton ball (pack of 20 pieces),Locally made,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,consumables,Headband,Locally made,20,100,80,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,consumables,Eye pads,Locally made,20,100,80,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,consumables,Make up remover,Locally made,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,consumables,Face sponges,3inch diameter,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,consumables,Gauze (pack of 2),4x4 inches,125,125,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,consumables,Distilled water,Locally made 5 liters jars,5,5,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,consumables,Gloves disposable,Vinyl Boxes (1box 50 pairs),1,1,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,consumables,Cleansing cream/ Facial Cleanser,20 bottles,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,consumables,Facial Cleanser,Facial Cleanser,4,4,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,consumables,Facial lotion,Facial lotion,4,4,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,consumables,Skin toner,Skin toner,4,4,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,consumables,Make-up remover,50 ml,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,consumables,Serum,30 ml,20,30,10,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,consumables,Moisturizer,50 grams,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,consumables,Sunblock/ Sunscreen,50 grams,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,consumables,Talcum powder,50 ml,4,4,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,consumables,Facial lotion (duplicate),50 ml,4,4,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,consumables,Thread,Cotton sewing,4,4,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,consumables,Shaving cream,100 grams,4,4,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,consumables,Cold wax,250 grams,4,4,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,consumables,Skin toner (duplicate),50 ml,4,4,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,consumables,Face towel (as bib),Adult size white,20,100,80,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,consumables,Tissue (duplicate),2 ply 100 pulls,4,8,4,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,consumables,Facial mask (duplicate),Disposable,20,100,80,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,consumables,Cotton ball (duplicate),Pack of 20 pcs,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,consumables,Headband (duplicate),Headband,20,100,80,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,consumables,Eye pads (duplicate),6 x 8 cm,20,100,80,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,consumables,Gauze (pack of 2) (duplicate),4 x 4 inches,125,125,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,consumables,Gloves disposable (1box 50 pairs),vinyl,5,5,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,consumables,Moisturizer (duplicate),50 grams,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,consumables,Bath towel,40 x 70,40,40,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,consumables,Body wrap,Free size,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,consumables,Body sponges,Body sponges,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,consumables,Scrubbing gloves,Scrubbing gloves,20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,consumables,Plastic sheets,Plastic sheets,100,100,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,consumables,Headband cloth,Headband cloth,100,100,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,consumables,Scrubber (e.g. loofah or mitten),Scrubber (e.g. loofah or mitten),20,20,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,consumables,Liquid soap,Liquid soap,4,4,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,consumables,Moisturizer (Body Scrubbing),Moisturizer,4,4,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,consumables,Scrubbing product ingredients,Scrubbing product ingredients,4,4,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,consumables,Facial Cleanser (Temporary Hair Removal),Facial Cleanser,4,4,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,consumables,Facial lotion (Temporary Hair Removal),50 ml,4,4,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z
+Beauty Care (Skin Care) NC II,consumables,Skin toner (Temporary Hair Removal),50 ml,4,4,0,In Stock,,2026-02-25T00:00:00.000Z,2026-02-25T00:00:00.000Z

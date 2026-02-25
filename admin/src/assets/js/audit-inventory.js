@@ -116,6 +116,7 @@ async function loadInventoryData() {
 }
 
 // Render inventory table
+// Render inventory table
 function renderInventoryTable(data) {
     const tbody = document.querySelector('.table tbody');
     if (!tbody) return;
@@ -142,21 +143,31 @@ function renderInventoryTable(data) {
                 <td><span class="badge ${remarksBadgeClass}">${item.inspector_remarks || 'N/A'}</span></td>
                 <td>
                     <div class="btn-group" role="group">
-                        <button type="button" class="btn btn-sm btn-primary" onclick="viewDetails(this)">
-                            <i class="bx bx-show"></i>
+                        <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bx bx-refresh"></i> Change Status
                         </button>
-                        <button type="button" class="btn btn-sm btn-info" onclick="editEquipment(this)">
-                            <i class="bx bx-edit"></i>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" style="color: #10b981 !important;" href="javascript:void(0);"><i class="bx bx-check-circle me-2" style="color: #10b981 !important;"></i>In Stock</a></li>
+                            <li><a class="dropdown-item" style="color: #f59e0b !important;" href="javascript:void(0);"><i class="bx bx-error-circle me-2" style="color: #f59e0b !important;"></i>Low Stock</a></li>
+                            <li><a class="dropdown-item" style="color: #ef4444 !important;" href="javascript:void(0);"><i class="bx bx-x-circle me-2" style="color: #ef4444 !important;"></i>Out of Stock</a></li>
+                        </ul>
+                    </div>
+                    <div class="dropdown d-inline-block ms-2">
+                        <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                            <i class="bx bx-dots-vertical-rounded"></i>
                         </button>
-                        <button type="button" class="btn btn-sm btn-danger" onclick="deleteEquipment(this)">
-                            <i class="bx bx-trash"></i>
-                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="javascript:void(0);" onclick="editEquipment(this)"><i class="bx bx-edit-alt me-1"></i> Edit Details</a>
+                            <a class="dropdown-item" href="javascript:void(0);" onclick="viewDetails(this)"><i class="bx bx-show me-1"></i> View Details</a>
+                            <a class="dropdown-item text-danger" href="javascript:void(0);" onclick="deleteEquipment(this)"><i class="bx bx-trash me-1"></i> Delete</a>
+                        </div>
                     </div>
                 </td>
             </tr>
         `;
     }).join('');
 }
+
 
 // Update statistics
 async function updateStatistics() {
@@ -315,6 +326,35 @@ async function confirmDeleteEquipment() {
         }
     } catch (error) {
         console.error('Error deleting item:', error);
+        showError('Error connecting to server');
+    }
+}
+
+// Change Status Function
+async function changeStatus(element, newStatus) {
+    const row = element.closest('tr');
+    const itemId = row.getAttribute('data-id');
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/v1/inventory/${itemId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                stock_status: newStatus
+            })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            loadInventoryData();
+        } else {
+            showError('Failed to update status: ' + result.error);
+        }
+    } catch (error) {
+        console.error('Error updating status:', error);
         showError('Error connecting to server');
     }
 }

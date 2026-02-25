@@ -50,3 +50,161 @@
     border-radius: 12px;
     border: 1px solid rgba(54, 145, 191, 0.15);
 }
+
+
+/* Dropdown Button Styles */
+.btn-group .dropdown-toggle {
+    transition: all 0.3s ease;
+}
+
+.btn-group .dropdown-toggle:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Three Dots Menu Button */
+.btn.hide-arrow {
+    font-size: 1.5rem;
+    color: #b8c5d6;
+    transition: all 0.3s ease;
+}
+
+.btn.hide-arrow:hover {
+    color: #3b82f6;
+    transform: scale(1.1);
+}
+
+/* Dropdown Menu Styles */
+.dropdown-menu {
+    background-color: #1a2332;
+    border: 1px solid #2d3e52;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    padding: 0.5rem 0;
+}
+
+.dropdown-item {
+    color: #b8c5d6 !important;
+    padding: 0.5rem 1rem;
+    transition: all 0.2s ease;
+}
+
+.dropdown-item:hover {
+    background-color: #243447;
+    color: #ffffff !important;
+}
+
+.dropdown-item i {
+    transition: transform 0.2s ease;
+}
+
+.dropdown-item:hover i {
+    transform: translateX(3px);
+}
+
+.dropdown-item.text-danger {
+    color: #ef4444 !important;
+}
+
+.dropdown-item.text-danger:hover {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: #ff6b6b !important;
+}
+
+/* Change Status Dropdown Items */
+.dropdown-menu li a[style*="#10b981"]:hover {
+    background-color: rgba(16, 185, 129, 0.1);
+}
+
+.dropdown-menu li a[style*="#f59e0b"]:hover {
+    background-color: rgba(245, 158, 11, 0.1);
+}
+
+.dropdown-menu li a[style*="#ef4444"]:hover {
+    background-color: rgba(239, 68, 68, 0.1);
+}
+
+
+/* Dropdown Button Styles */
+.btn-group .dropdown-toggle {
+    transition: all 0.3s ease;
+}
+
+.btn-group .dropdown-toggle:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Three Dots Dropdown */
+.dropdown .hide-arrow {
+    font-size: 1.5rem;
+    color: #b8c5d6;
+    transition: all 0.3s ease;
+}
+
+.dropdown .hide-arrow:hover {
+    color: #3b82f6;
+    transform: scale(1.1);
+}
+
+.dropdown .hide-arrow::after {
+    display: none !important;
+}
+
+/* Dropdown Menu Styles */
+.dropdown-menu {
+    background-color: #1a2332;
+    border: 1px solid #2d3e52;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    padding: 0.5rem 0;
+    min-width: 180px;
+}
+
+.dropdown-item {
+    color: #b8c5d6 !important;
+    padding: 0.5rem 1rem;
+    transition: all 0.2s ease;
+}
+
+.dropdown-item:hover {
+    background-color: #243447;
+    color: #ffffff !important;
+}
+
+.dropdown-item i {
+    font-size: 1.1rem;
+    vertical-align: middle;
+}
+
+.dropdown-item.text-danger {
+    color: #ef4444 !important;
+}
+
+.dropdown-item.text-danger:hover {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: #ff6b6b !important;
+}
+
+/* Change Status Dropdown Items */
+.dropdown-menu li a[style*="#10b981"]:hover {
+    background-color: rgba(16, 185, 129, 0.1);
+}
+
+.dropdown-menu li a[style*="#f59e0b"]:hover {
+    background-color: rgba(245, 158, 11, 0.1);
+}
+
+.dropdown-menu li a[style*="#ef4444"]:hover {
+    background-color: rgba(239, 68, 68, 0.1);
+}
+
+/* Button Group Spacing */
+.btn-group {
+    display: inline-flex;
+    gap: 0;
+}
+
+.d-inline-block.ms-2 {
+    margin-left: 0.5rem !important;
+}

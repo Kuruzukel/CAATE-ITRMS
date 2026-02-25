@@ -20,43 +20,62 @@ define('DB_NAME', getenv('DB_NAME') ?: 'CAATE-ITRMS');
 define('DB_USERNAME', getenv('DB_USERNAME') ?: '');
 define('DB_PASSWORD', getenv('DB_PASSWORD') ?: '');
 
-// MongoDB Connection
-function getMongoConnection() {
-    try {
-        $connectionString = "mongodb://";
-        
-        if (DB_USERNAME && DB_PASSWORD) {
-            $connectionString .= DB_USERNAME . ":" . DB_PASSWORD . "@";
+// Database Class
+class Database {
+    private $client;
+    private $database;
+    
+    public function __construct() {
+        try {
+            $connectionString = "mongodb://";
+            
+            if (DB_USERNAME && DB_PASSWORD) {
+                $connectionString .= DB_USERNAME . ":" . DB_PASSWORD . "@";
+            }
+            
+            $connectionString .= DB_HOST . ":" . DB_PORT;
+            
+            $this->client = new MongoDB\Client($connectionString);
+            
+            // Test the connection
+            $this->client->listDatabases();
+            
+            $this->database = $this->client->selectDatabase(DB_NAME);
+        } catch (MongoDB\Driver\Exception\ConnectionTimeoutException $e) {
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'error' => 'MongoDB connection timeout. Is MongoDB running on ' . DB_HOST . ':' . DB_PORT . '?'
+            ]);
+            exit();
+        } catch (MongoDB\Driver\Exception\Exception $e) {
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'error' => 'MongoDB error: ' . $e->getMessage()
+            ]);
+            exit();
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'error' => 'Database connection failed: ' . $e->getMessage()
+            ]);
+            exit();
         }
-        
-        $connectionString .= DB_HOST . ":" . DB_PORT;
-        
-        $client = new MongoDB\Client($connectionString);
-        
-        // Test the connection
-        $client->listDatabases();
-        
-        return $client->selectDatabase(DB_NAME);
-    } catch (MongoDB\Driver\Exception\ConnectionTimeoutException $e) {
-        http_response_code(500);
-        echo json_encode([
-            'success' => false,
-            'error' => 'MongoDB connection timeout. Is MongoDB running on ' . DB_HOST . ':' . DB_PORT . '?'
-        ]);
-        exit();
-    } catch (MongoDB\Driver\Exception\Exception $e) {
-        http_response_code(500);
-        echo json_encode([
-            'success' => false,
-            'error' => 'MongoDB error: ' . $e->getMessage()
-        ]);
-        exit();
-    } catch (Exception $e) {
-        http_response_code(500);
-        echo json_encode([
-            'success' => false,
-            'error' => 'Database connection failed: ' . $e->getMessage()
-        ]);
-        exit();
     }
+    
+    public function getDatabase() {
+        return $this->database;
+    }
+    
+    public function getClient() {
+        return $this->client;
+    }
+}
+
+// MongoDB Connection Function (for backward compatibility)
+function getMongoConnection() {
+    $database = new Database();
+    return $database->getDatabase();
 }

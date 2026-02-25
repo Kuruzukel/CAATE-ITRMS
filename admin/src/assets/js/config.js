@@ -25,6 +25,6 @@ let config = {
     borderColor: '#eceef1'
   },
   api: {
-    baseURL: '/CAATE-ITRMS/backend/public/index.php'
+    baseURL: '/CAATE-ITRMS/backend/public'
   }
 };

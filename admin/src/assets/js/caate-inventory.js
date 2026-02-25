@@ -5,7 +5,9 @@ let currentRow = null;
 let inventoryData = [];
 
 // API Configuration
-const API_BASE_URL = config?.api?.baseURL || '/CAATE-ITRMS/backend/public/index.php';
+const API_BASE_URL = window.location.origin.includes('localhost')
+    ? 'http://localhost/CAATE-ITRMS/backend/public'
+    : '/CAATE-ITRMS/backend/public';
 
 // Prevent aria-hidden focus warnings by managing modal focus properly
 document.addEventListener('DOMContentLoaded', function () {

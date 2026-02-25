@@ -12,7 +12,7 @@ let inventoryData = [];
 // Prevent aria-hidden focus warnings by managing modal focus properly
 document.addEventListener('DOMContentLoaded', function () {
     // Load filter options first
-    loadFilterOptions();
+    // loadFilterOptions(); // Commented out - using static HTML options instead
 
     // Load inventory data
     loadInventoryData();
@@ -336,7 +336,6 @@ function showTableLoader() {
 }
 
 // Render inventory table
-// Render inventory table
 function renderInventoryTable(data) {
     const tbody = document.querySelector('.table tbody');
     if (!tbody) return;
@@ -348,7 +347,18 @@ function renderInventoryTable(data) {
     }
 
     if (data.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="8" class="text-center">No inventory items found</td></tr>';
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="8" class="text-center" style="padding: 60px 20px;">
+                    <div style="color: #697a8d;">
+                        <i class="bx bx-package" style="font-size: 4rem; opacity: 0.3; display: block; margin-bottom: 15px;"></i>
+                        <h5 style="margin-bottom: 10px; color: #697a8d;">No inventory items found</h5>
+                        <p style="margin: 0; font-size: 0.9rem; opacity: 0.7;">The inventory database collection is empty or no items match your filters.</p>
+                        <p style="margin: 5px 0 0 0; font-size: 0.9rem; opacity: 0.7;">Try adjusting your filters or click "Add Equipment" to create your first item.</p>
+                    </div>
+                </td>
+            </tr>
+        `;
         return;
     }
 

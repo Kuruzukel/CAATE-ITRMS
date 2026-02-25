@@ -137,22 +137,22 @@ function viewDetails(element) {
     const cells = row.cells;
 
     // Populate modal fields
-    document.getElementById('viewEquipmentName').textContent = cells[0].textContent.trim();
-    document.getElementById('viewSpecification').textContent = cells[1].textContent.trim();
-    document.getElementById('viewQuantityRequired').textContent = cells[2].textContent.trim();
-    document.getElementById('viewQuantityOnSite').textContent = cells[3].textContent.trim();
-    document.getElementById('viewDifference').textContent = cells[4].textContent.trim();
+    document.getElementById('viewEquipmentName').value = cells[0].textContent.trim();
+    document.getElementById('viewSpecification').value = cells[1].textContent.trim();
+    document.getElementById('viewQuantityRequired').value = cells[2].textContent.trim();
+    document.getElementById('viewQuantityOnSite').value = cells[3].textContent.trim();
+    document.getElementById('viewDifference').value = cells[4].textContent.trim();
 
-    // Get stock status with badge styling
+    // Get stock status text
     const stockBadge = cells[5].querySelector('.badge');
     if (stockBadge) {
-        document.getElementById('viewStockStatus').innerHTML = stockBadge.outerHTML;
+        document.getElementById('viewStockStatus').value = stockBadge.textContent.trim();
     }
 
-    // Get remarks with badge styling
+    // Get remarks text
     const remarksBadge = cells[6].querySelector('.badge');
     if (remarksBadge) {
-        document.getElementById('viewRemarks').innerHTML = remarksBadge.outerHTML;
+        document.getElementById('viewRemarks').value = remarksBadge.textContent.trim();
     }
 
     // Show modal

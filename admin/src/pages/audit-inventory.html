@@ -356,9 +356,9 @@
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-header d-flex justify-content-between align-items-center">
-                                        <h5 class="mb-0">Equipment List</h5>
-                                        <button type="button" class="btn btn-primary btn-sm">
-                                            <i class="bx bx-plus"></i> Add Equipment
+                                        <h5 class="mb-0" id="inventoryListTitle">List of Equipments</h5>
+                                        <button type="button" class="btn btn-primary btn-sm" id="addInventoryBtn">
+                                            <i class="bx bx-plus"></i> <span id="addInventoryText">Add Equipment</span>
                                         </button>
                                     </div>
                                     <div class="card-body">
@@ -402,15 +402,14 @@
                                                         </select>
                                                     </div>
                                                     <div class="col-md-3">
-                                                        <label class="form-label" style="color: #b8c5d6;">Quantity
-                                                            Range</label>
-                                                        <select class="form-select"
+                                                        <label class="form-label" style="color: #b8c5d6;">Inventory
+                                                            Type</label>
+                                                        <select class="form-select" id="inventoryTypeFilter"
                                                             style="background-color: #243447; border: 1px solid #3d4f63; color: #b8c5d6;">
-                                                            <option value="">All Quantities</option>
-                                                            <option value="1-2">1-2 Units</option>
-                                                            <option value="3-5">3-5 Units</option>
-                                                            <option value="6-10">6-10 Units</option>
-                                                            <option value="10+">10+ Units</option>
+                                                            <option value="">All Types</option>
+                                                            <option value="equipment">Equipments</option>
+                                                            <option value="tools">Tools</option>
+                                                            <option value="consumables">Consumables/Materials</option>
                                                         </select>
                                                     </div>
                                                     <div class="col-md-3">

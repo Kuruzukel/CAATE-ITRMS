@@ -7,6 +7,9 @@
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
+    <!-- Reduce browser extension interference -->
+    <meta name="referrer" content="no-referrer" />
+
     <title>CAATE | Audit Inventory</title>
 
     <meta name="description" content="" />
@@ -531,7 +534,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="addInventoryForm">
+                    <form id="addInventoryForm" autocomplete="off">
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label for="addProgram" class="form-label">Program</label>
@@ -615,7 +618,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="editEquipmentForm">
+                    <form id="editEquipmentForm" autocomplete="off">
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label for="editEquipmentName" class="form-label">Equipment Name</label>

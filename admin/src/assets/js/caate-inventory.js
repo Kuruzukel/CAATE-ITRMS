@@ -360,7 +360,53 @@ async function updateStatistics() {
 
 // Show error message
 function showError(message) {
-    alert(message);
+    showToast(message, 'error');
+}
+
+// Show success message
+function showSuccess(message) {
+    showToast(message, 'success');
+}
+
+// Show toast notification
+function showToast(message, type = 'success') {
+    const container = document.getElementById('toastContainer');
+    if (!container) return;
+
+    const toast = document.createElement('div');
+    toast.className = `toast-notification ${type}`;
+
+    const icon = type === 'success' ? 'bx-check' :
+        type === 'error' ? 'bx-x' :
+            type === 'warning' ? 'bx-error-circle' : 'bxs-info-circle';
+
+    toast.innerHTML = `
+        <i class="bx ${icon} toast-icon"></i>
+        <div class="toast-content">
+            <div class="toast-message">${message}</div>
+        </div>
+        <button class="toast-close" onclick="closeToast(this)">
+            <i class="bx bx-x"></i>
+        </button>
+    `;
+
+    container.appendChild(toast);
+
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+        closeToast(toast.querySelector('.toast-close'));
+    }, 5000);
+}
+
+// Close toast notification
+function closeToast(button) {
+    const toast = button.closest('.toast-notification');
+    if (toast) {
+        toast.classList.add('hiding');
+        setTimeout(() => {
+            toast.remove();
+        }, 300);
+    }
 }
 
 // Edit Equipment Function
@@ -601,20 +647,30 @@ function highlightSearchResults(searchTerm) {
 async function saveNewInventoryItem() {
     const form = document.getElementById('addInventoryForm');
 
-    // Validate form
-    if (!form.checkValidity()) {
-        form.reportValidity();
-        return;
-    }
-
     // Get form values
     const program = document.getElementById('addProgram').value;
     const inventoryType = document.getElementById('addInventoryType').value;
     const itemName = document.getElementById('addItemName').value;
     const specification = document.getElementById('addSpecification').value;
-    const quantityRequired = parseInt(document.getElementById('addQuantityRequired').value);
-    const quantityOnSite = parseInt(document.getElementById('addQuantityOnSite').value);
+    const quantityRequired = document.getElementById('addQuantityRequired').value;
+    const quantityOnSite = document.getElementById('addQuantityOnSite').value;
     const remarks = document.getElementById('addRemarks').value;
+
+    // Validate required fields manually and show toast
+    if (!program || !inventoryType || !itemName || !specification || !quantityRequired || !quantityOnSite) {
+        showToast('Please fill in all required fields before adding the item', 'warning');
+
+        // Also trigger browser validation to highlight empty fields
+        form.reportValidity();
+        return;
+    }
+
+    // Validate form
+    if (!form.checkValidity()) {
+        showToast('Please fill in all required fields correctly', 'warning');
+        form.reportValidity();
+        return;
+    }
 
     // Prepare data
     const data = {
@@ -622,8 +678,8 @@ async function saveNewInventoryItem() {
         inventory_type: inventoryType,
         item_name: itemName,
         specification: specification,
-        quantity_required: quantityRequired,
-        quantity_on_site: quantityOnSite,
+        quantity_required: parseInt(quantityRequired),
+        quantity_on_site: parseInt(quantityOnSite),
         inspector_remarks: remarks
     };
 
@@ -633,7 +689,7 @@ async function saveNewInventoryItem() {
         saveBtn.disabled = true;
         saveBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Saving...';
 
-        const response = await fetch(`${API_BASE_URL}/api.php?endpoint=inventory&collection=caate_inventory`, {
+        const response = await fetch(`${API_BASE_URL}/api/v1/inventory?collection=caate-inventory`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -649,16 +705,16 @@ async function saveNewInventoryItem() {
             modal.hide();
 
             // Show success message
-            alert('Inventory item added successfully!');
+            showToast('Inventory item added successfully!', 'success');
 
             // Reload data
             await loadInventoryData();
         } else {
-            alert('Error: ' + (result.error || 'Failed to add inventory item'));
+            showToast('Error: ' + (result.error || 'Failed to add inventory item'), 'error');
         }
     } catch (error) {
         console.error('Error adding inventory item:', error);
-        alert('Error adding inventory item. Please try again.');
+        showToast('Error adding inventory item. Please try again.', 'error');
     } finally {
         // Re-enable button
         const saveBtn = document.getElementById('saveInventoryBtn');

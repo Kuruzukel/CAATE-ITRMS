@@ -10,7 +10,9 @@ class InventoryController {
         
         // Determine collection based on query parameter
         $collectionName = $_GET['collection'] ?? 'inventory';
-        $this->collection = $this->db->$collectionName;
+        
+        // Use selectCollection for collection names with hyphens
+        $this->collection = $this->db->selectCollection($collectionName);
     }
     
     // Get all inventory items with optional filters
@@ -230,7 +232,7 @@ class InventoryController {
         try {
             // Re-initialize collection in case it wasn't set properly in constructor
             $collectionName = $_GET['collection'] ?? 'inventory';
-            $collection = $this->db->$collectionName;
+            $collection = $this->db->selectCollection($collectionName);
             
             $result = $collection->deleteOne(['_id' => new MongoDB\BSON\ObjectId($id)]);
             

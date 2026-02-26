@@ -440,7 +440,9 @@ function editEquipment(element) {
     document.getElementById('editStockStatus').value = stockBadge ? stockBadge.textContent.trim() : '';
 
     const remarksBadge = cells[6].querySelector('.badge');
-    document.getElementById('editRemarks').value = remarksBadge ? remarksBadge.textContent.trim() : '';
+    const remarksText = remarksBadge ? remarksBadge.textContent.trim() : '';
+    // Convert 'N/A' back to empty string
+    document.getElementById('editRemarks').value = remarksText === 'N/A' ? '' : remarksText;
 
     const modal = new bootstrap.Modal(document.getElementById('editEquipmentModal'));
     modal.show();

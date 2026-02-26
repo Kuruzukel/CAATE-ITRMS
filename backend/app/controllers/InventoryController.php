@@ -183,39 +183,49 @@ class InventoryController {
             
             $updateData = [];
             
+            // Helper function to normalize values for comparison
+            $normalize = function($value) {
+                if ($value === null || $value === '') {
+                    return '';
+                }
+                return trim((string)$value);
+            };
+            
             // Only add fields that have actually changed
-            if (isset($data['program']) && $data['program'] !== $existingItem['program']) {
+            if (isset($data['program']) && $normalize($data['program']) !== $normalize($existingItem['program'] ?? '')) {
                 $updateData['program'] = $data['program'];
             }
-            if (isset($data['inventory_type']) && $data['inventory_type'] !== $existingItem['inventory_type']) {
+            if (isset($data['inventory_type']) && $normalize($data['inventory_type']) !== $normalize($existingItem['inventory_type'] ?? '')) {
                 $updateData['inventory_type'] = $data['inventory_type'];
             }
-            if (isset($data['item_name']) && $data['item_name'] !== $existingItem['item_name']) {
+            if (isset($data['item_name']) && $normalize($data['item_name']) !== $normalize($existingItem['item_name'] ?? '')) {
                 $updateData['item_name'] = $data['item_name'];
             }
-            if (isset($data['specification']) && $data['specification'] !== $existingItem['specification']) {
+            if (isset($data['specification']) && $normalize($data['specification']) !== $normalize($existingItem['specification'] ?? '')) {
                 $updateData['specification'] = $data['specification'];
             }
-            if (isset($data['quantity_required']) && (int)$data['quantity_required'] !== $existingItem['quantity_required']) {
+            if (isset($data['quantity_required']) && (int)$data['quantity_required'] !== (int)($existingItem['quantity_required'] ?? 0)) {
                 $updateData['quantity_required'] = (int) $data['quantity_required'];
             }
-            if (isset($data['quantity_on_site']) && (int)$data['quantity_on_site'] !== $existingItem['quantity_on_site']) {
+            if (isset($data['quantity_on_site']) && (int)$data['quantity_on_site'] !== (int)($existingItem['quantity_on_site'] ?? 0)) {
                 $updateData['quantity_on_site'] = (int) $data['quantity_on_site'];
             }
-            if (isset($data['inspector_remarks']) && $data['inspector_remarks'] !== ($existingItem['inspector_remarks'] ?? '')) {
+            if (isset($data['inspector_remarks']) && $normalize($data['inspector_remarks']) !== $normalize($existingItem['inspector_remarks'] ?? '')) {
                 $updateData['inspector_remarks'] = $data['inspector_remarks'];
             }
-            if (isset($data['stock_status']) && $data['stock_status'] !== $existingItem['stock_status']) {
+            if (isset($data['stock_status']) && $normalize($data['stock_status']) !== $normalize($existingItem['stock_status'] ?? '')) {
                 $updateData['stock_status'] = $data['stock_status'];
             }
             
             // Recalculate difference and stock status if quantities changed
             if (isset($updateData['quantity_required']) || isset($updateData['quantity_on_site'])) {
-                $qtyRequired = $updateData['quantity_required'] ?? $existingItem['quantity_required'];
-                $qtyOnSite = $updateData['quantity_on_site'] ?? $existingItem['quantity_on_site'];
+                $qtyRequired = $updateData['quantity_required'] ?? (int)($existingItem['quantity_required'] ?? 0);
+                $qtyOnSite = $updateData['quantity_on_site'] ?? (int)($existingItem['quantity_on_site'] ?? 0);
                 
                 $newDifference = $qtyOnSite - $qtyRequired;
-                if ($newDifference !== $existingItem['difference']) {
+                $existingDifference = (int)($existingItem['difference'] ?? 0);
+                
+                if ($newDifference !== $existingDifference) {
                     $updateData['difference'] = $newDifference;
                 }
                 
@@ -226,7 +236,8 @@ class InventoryController {
                     $newStockStatus = 'Low Stock';
                 }
                 
-                if ($newStockStatus !== $existingItem['stock_status']) {
+                $existingStockStatus = $normalize($existingItem['stock_status'] ?? '');
+                if ($normalize($newStockStatus) !== $existingStockStatus) {
                     $updateData['stock_status'] = $newStockStatus;
                 }
             }

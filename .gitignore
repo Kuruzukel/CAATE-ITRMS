@@ -7,6 +7,13 @@
 config.local.php
 config.production.php
 
+# Root index.html (development/testing file)
+/index.html
+
+# Inventory data folder (local data/testing)
+/inventory-data/
+inventory-data/
+
 # Database configuration files (keep example files)
 database.config.php
 db.config.php

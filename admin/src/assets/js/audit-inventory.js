@@ -408,10 +408,10 @@ function showToast(message, type = 'success') {
 
     container.appendChild(toast);
 
-    // Auto remove after 5 seconds
+    // Auto remove after 2.5 seconds (faster)
     setTimeout(() => {
         closeToast(toast.querySelector('.toast-close'));
-    }, 5000);
+    }, 2500);
 }
 
 // Close toast notification
@@ -421,7 +421,7 @@ function closeToast(button) {
         toast.classList.add('hiding');
         setTimeout(() => {
             toast.remove();
-        }, 300);
+        }, 200);
     }
 }
 

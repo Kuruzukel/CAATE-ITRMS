@@ -339,7 +339,7 @@ function renderInventoryTable(data) {
 // Update statistics
 async function updateStatistics() {
     try {
-        const response = await fetch(`${API_BASE_URL}/api/v1/inventory/statistics`);
+        const response = await fetch(`${API_BASE_URL}/api/v1/inventory/statistics?collection=caate-inventory`);
         const result = await response.json();
 
         if (result.success) {

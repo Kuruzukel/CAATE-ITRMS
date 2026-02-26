@@ -185,7 +185,7 @@ class InventoryController {
             
             // Helper function to normalize values for comparison
             $normalize = function($value) {
-                if ($value === null || $value === '') {
+                if ($value === null || $value === '' || $value === 'N/A') {
                     return '';
                 }
                 return trim((string)$value);

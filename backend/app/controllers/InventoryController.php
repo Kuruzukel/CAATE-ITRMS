@@ -204,11 +204,11 @@ class InventoryController {
                 ['$set' => $updateData]
             );
             
-            if ($result->getModifiedCount() === 0) {
+            if ($result->getMatchedCount() === 0) {
                 http_response_code(404);
                 echo json_encode([
                     'success' => false,
-                    'error' => 'Item not found or no changes made'
+                    'error' => 'Item not found'
                 ]);
                 return;
             }
@@ -216,7 +216,8 @@ class InventoryController {
             http_response_code(200);
             echo json_encode([
                 'success' => true,
-                'message' => 'Item updated successfully'
+                'message' => 'Item updated successfully',
+                'modified' => $result->getModifiedCount() > 0
             ]);
         } catch (Exception $e) {
             http_response_code(500);

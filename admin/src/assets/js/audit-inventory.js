@@ -263,11 +263,9 @@ async function loadInventoryData() {
             applyFilters();
             updateStatistics();
         } else {
-            console.error('Failed to load inventory:', result.error);
             showToast('Failed to load inventory data', 'error');
         }
     } catch (error) {
-        console.error('Error loading inventory:', error);
         showToast('Error connecting to server', 'error');
     }
 }
@@ -377,7 +375,7 @@ async function updateStatistics() {
             }
         }
     } catch (error) {
-        console.error('Error loading statistics:', error);
+        // Silently fail - statistics are not critical
     }
 }
 
@@ -468,7 +466,7 @@ async function saveEquipmentChanges() {
     const qtyOnSite = parseInt(document.getElementById('editQuantityOnSite').value);
 
     try {
-        const response = await fetch(`${API_BASE_URL}/api/v1/inventory/${itemId}`, {
+        const response = await fetch(`${API_BASE_URL}/api/v1/inventory/${itemId}?collection=audit-inventory`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -494,7 +492,6 @@ async function saveEquipmentChanges() {
             showToast('Failed to update item: ' + result.error, 'error');
         }
     } catch (error) {
-        console.error('Error updating item:', error);
         showToast('Error connecting to server', 'error');
     }
 }
@@ -558,7 +555,6 @@ async function confirmDeleteEquipment() {
             showToast('Failed to delete item: ' + result.error, 'error');
         }
     } catch (error) {
-        console.error('Error deleting item:', error);
         showToast('Error connecting to server', 'error');
     }
 }
@@ -569,7 +565,7 @@ async function changeStatus(element, newStatus) {
     const itemId = row.getAttribute('data-id');
 
     try {
-        const response = await fetch(`${API_BASE_URL}/api/v1/inventory/${itemId}`, {
+        const response = await fetch(`${API_BASE_URL}/api/v1/inventory/${itemId}?collection=audit-inventory`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -588,7 +584,6 @@ async function changeStatus(element, newStatus) {
             showToast('Failed to update status: ' + result.error, 'error');
         }
     } catch (error) {
-        console.error('Error updating status:', error);
         showToast('Error connecting to server', 'error');
     }
 }
@@ -732,7 +727,6 @@ async function saveNewInventoryItem() {
             showToast('Error: ' + (result.error || 'Failed to add inventory item'), 'error');
         }
     } catch (error) {
-        console.error('Error adding inventory item:', error);
         showToast('Error adding inventory item. Please try again.', 'error');
     } finally {
         // Re-enable button

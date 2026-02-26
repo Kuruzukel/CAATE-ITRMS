@@ -220,7 +220,7 @@ async function loadFilterOptions() {
             }
         }
     } catch (error) {
-        console.error('Error loading filter options:', error);
+        // Silently fail - filter options are not critical
     }
 }
 
@@ -240,11 +240,9 @@ async function loadInventoryData() {
             applyFilters();
             updateStatistics();
         } else {
-            console.error('Failed to load inventory:', result.error);
             showError('Failed to load inventory data');
         }
     } catch (error) {
-        console.error('Error loading inventory:', error);
         showError('Error connecting to server');
     }
 }
@@ -354,7 +352,7 @@ async function updateStatistics() {
             }
         }
     } catch (error) {
-        console.error('Error loading statistics:', error);
+        // Silently fail - statistics are not critical
     }
 }
 
@@ -450,7 +448,7 @@ async function saveEquipmentChanges() {
     const qtyOnSite = parseInt(document.getElementById('editQuantityOnSite').value);
 
     try {
-        const response = await fetch(`${API_BASE_URL}/api/v1/inventory/${itemId}`, {
+        const response = await fetch(`${API_BASE_URL}/api/v1/inventory/${itemId}?collection=caate-inventory`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -475,7 +473,6 @@ async function saveEquipmentChanges() {
             showError('Failed to update item: ' + result.error);
         }
     } catch (error) {
-        console.error('Error updating item:', error);
         showError('Error connecting to server');
     }
 }
@@ -538,7 +535,6 @@ async function confirmDeleteEquipment() {
             showError('Failed to delete item: ' + result.error);
         }
     } catch (error) {
-        console.error('Error deleting item:', error);
         showError('Error connecting to server');
     }
 }
@@ -549,7 +545,7 @@ async function changeStatus(element, newStatus) {
     const itemId = row.getAttribute('data-id');
 
     try {
-        const response = await fetch(`${API_BASE_URL}/api/v1/inventory/${itemId}`, {
+        const response = await fetch(`${API_BASE_URL}/api/v1/inventory/${itemId}?collection=caate-inventory`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -567,7 +563,6 @@ async function changeStatus(element, newStatus) {
             showError('Failed to update status: ' + result.error);
         }
     } catch (error) {
-        console.error('Error updating status:', error);
         showError('Error connecting to server');
     }
 }
@@ -711,7 +706,6 @@ async function saveNewInventoryItem() {
             showToast('Error: ' + (result.error || 'Failed to add inventory item'), 'error');
         }
     } catch (error) {
-        console.error('Error adding inventory item:', error);
         showToast('Error adding inventory item. Please try again.', 'error');
     } finally {
         // Re-enable button

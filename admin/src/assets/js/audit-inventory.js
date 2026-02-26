@@ -335,9 +335,9 @@ function renderInventoryTable(data) {
                             <i class="bx bx-refresh"></i> Change Status
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" style="color: #10b981 !important;" href="javascript:void(0);"><i class="bx bx-check-circle me-2" style="color: #10b981 !important;"></i>In Stock</a></li>
-                            <li><a class="dropdown-item" style="color: #f59e0b !important;" href="javascript:void(0);"><i class="bx bx-error-circle me-2" style="color: #f59e0b !important;"></i>Low Stock</a></li>
-                            <li><a class="dropdown-item" style="color: #ef4444 !important;" href="javascript:void(0);"><i class="bx bx-x-circle me-2" style="color: #ef4444 !important;"></i>Out of Stock</a></li>
+                            <li><a class="dropdown-item" style="color: #10b981 !important;" href="javascript:void(0);" onclick="changeStatus(this, 'In Stock')"><i class="bx bx-check-circle me-2" style="color: #10b981 !important;"></i>In Stock</a></li>
+                            <li><a class="dropdown-item" style="color: #f59e0b !important;" href="javascript:void(0);" onclick="changeStatus(this, 'Low Stock')"><i class="bx bx-error-circle me-2" style="color: #f59e0b !important;"></i>Low Stock</a></li>
+                            <li><a class="dropdown-item" style="color: #ef4444 !important;" href="javascript:void(0);" onclick="changeStatus(this, 'Out of Stock')"><i class="bx bx-x-circle me-2" style="color: #ef4444 !important;"></i>Out of Stock</a></li>
                         </ul>
                     </div>
                     <div class="dropdown d-inline-block ms-2">
@@ -587,7 +587,12 @@ async function changeStatus(element, newStatus) {
         const result = await response.json();
 
         if (result.success) {
-            showToast('Status updated successfully!', 'success');
+            // Show appropriate message based on whether changes were made
+            if (result.modified === false) {
+                showToast('Status is already set to ' + newStatus, 'info');
+            } else {
+                showToast('Status updated to ' + newStatus + ' successfully!', 'success');
+            }
             loadInventoryData();
         } else {
             showToast('Failed to update status: ' + result.error, 'error');

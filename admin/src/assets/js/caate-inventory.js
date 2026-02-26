@@ -448,6 +448,9 @@ async function saveEquipmentChanges() {
     const itemId = currentRow.getAttribute('data-id');
     const qtyRequired = parseInt(document.getElementById('editQuantityRequired').value);
     const qtyOnSite = parseInt(document.getElementById('editQuantityOnSite').value);
+    const itemName = document.getElementById('editEquipmentName').value;
+    const specification = document.getElementById('editSpecification').value;
+    const inspectorRemarks = document.getElementById('editRemarks').value;
 
     try {
         const response = await fetch(`${API_BASE_URL}/api/v1/inventory/${itemId}?collection=caate-inventory`, {
@@ -456,11 +459,11 @@ async function saveEquipmentChanges() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                item_name: document.getElementById('editEquipmentName').value,
-                specification: document.getElementById('editSpecification').value,
+                item_name: itemName,
+                specification: specification,
                 quantity_required: qtyRequired,
                 quantity_on_site: qtyOnSite,
-                inspector_remarks: document.getElementById('editRemarks').value
+                inspector_remarks: inspectorRemarks
             })
         });
 
@@ -475,9 +478,55 @@ async function saveEquipmentChanges() {
                 showToast('No changes were made to the item', 'info');
             } else {
                 showToast('Inventory item updated successfully!', 'success');
+
+                // Update the row immediately without reloading all data
+                const cells = currentRow.cells;
+
+                // Update item name (column 0)
+                cells[0].innerHTML = `<strong>${itemName}</strong>`;
+
+                // Update specification (column 1)
+                cells[1].textContent = specification;
+
+                // Update quantity required (column 2)
+                cells[2].textContent = `${qtyRequired} Units`;
+
+                // Update quantity on site (column 3)
+                cells[3].textContent = `${qtyOnSite} Units`;
+
+                // Calculate and update difference (column 4)
+                const difference = qtyRequired - qtyOnSite;
+                cells[4].textContent = `${qtyOnSite}/${difference}`;
+
+                // Update stock status badge (column 5)
+                let stockStatus = 'In Stock';
+                let badgeClass = 'bg-success';
+                if (qtyOnSite == 0) {
+                    stockStatus = 'Out of Stock';
+                    badgeClass = 'bg-danger';
+                } else if (qtyOnSite < qtyRequired) {
+                    stockStatus = 'Low Stock';
+                    badgeClass = 'bg-warning';
+                }
+
+                const statusBadge = cells[5].querySelector('.badge');
+                if (statusBadge) {
+                    statusBadge.className = `badge ${badgeClass}`;
+                    statusBadge.textContent = stockStatus;
+                }
+
+                // Update inspector remarks (column 6)
+                const remarksBadge = cells[6].querySelector('.badge');
+                if (remarksBadge) {
+                    const remarksClass = inspectorRemarks === 'Compliant' ? 'bg-success' : 'bg-danger';
+                    remarksBadge.className = `badge ${remarksClass}`;
+                    remarksBadge.textContent = inspectorRemarks || 'N/A';
+                }
+
+                // Update statistics in background
+                updateStatistics();
             }
 
-            loadInventoryData();
             currentRow = null;
         } else {
             showToast('Failed to update item: ' + result.error, 'error');
@@ -573,8 +622,31 @@ async function changeStatus(element, newStatus) {
                 showToast('Status is already set to ' + newStatus, 'info');
             } else {
                 showToast('Status updated to ' + newStatus + ' successfully!', 'success');
+
+                // Update the row immediately without reloading all data
+                const statusCell = row.cells[5]; // Stock status is in column 5
+                const statusBadge = statusCell.querySelector('.badge');
+
+                if (statusBadge) {
+                    // Remove old badge classes
+                    statusBadge.classList.remove('bg-success', 'bg-warning', 'bg-danger');
+
+                    // Add new badge class based on status
+                    if (newStatus === 'In Stock') {
+                        statusBadge.classList.add('bg-success');
+                    } else if (newStatus === 'Low Stock') {
+                        statusBadge.classList.add('bg-warning');
+                    } else if (newStatus === 'Out of Stock') {
+                        statusBadge.classList.add('bg-danger');
+                    }
+
+                    // Update badge text
+                    statusBadge.textContent = newStatus;
+                }
+
+                // Update statistics in background without blocking UI
+                updateStatistics();
             }
-            loadInventoryData();
         } else {
             showToast('Failed to update status: ' + result.error, 'error');
         }

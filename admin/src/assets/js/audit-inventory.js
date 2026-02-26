@@ -647,20 +647,25 @@ async function changeStatus(element, newStatus) {
     const oldStatus = statusBadge ? statusBadge.textContent.trim() : '';
     const oldBadgeClass = statusBadge ? statusBadge.className : '';
 
-    // Update UI immediately for instant feedback
-    if (statusBadge) {
-        statusBadge.classList.remove('bg-success', 'bg-warning', 'bg-danger');
+    // Show success toast immediately for instant feedback
+    showToast('Status updated to ' + newStatus + ' successfully!', 'success');
 
-        if (newStatus === 'In Stock') {
-            statusBadge.classList.add('bg-success');
-        } else if (newStatus === 'Low Stock') {
-            statusBadge.classList.add('bg-warning');
-        } else if (newStatus === 'Out of Stock') {
-            statusBadge.classList.add('bg-danger');
+    // Update UI immediately using requestAnimationFrame to avoid forced reflow
+    requestAnimationFrame(() => {
+        if (statusBadge) {
+            statusBadge.classList.remove('bg-success', 'bg-warning', 'bg-danger');
+
+            if (newStatus === 'In Stock') {
+                statusBadge.classList.add('bg-success');
+            } else if (newStatus === 'Low Stock') {
+                statusBadge.classList.add('bg-warning');
+            } else if (newStatus === 'Out of Stock') {
+                statusBadge.classList.add('bg-danger');
+            }
+
+            statusBadge.textContent = newStatus;
         }
-
-        statusBadge.textContent = newStatus;
-    }
+    });
 
     try {
         const response = await fetch(`${API_BASE_URL}/api/v1/inventory/${itemId}?collection=audit-inventory`, {
@@ -678,29 +683,35 @@ async function changeStatus(element, newStatus) {
         if (result.success) {
             if (result.modified === false) {
                 // Rollback to old status if nothing changed
-                if (statusBadge) {
-                    statusBadge.className = oldBadgeClass;
-                    statusBadge.textContent = oldStatus;
-                }
+                requestAnimationFrame(() => {
+                    if (statusBadge) {
+                        statusBadge.className = oldBadgeClass;
+                        statusBadge.textContent = oldStatus;
+                    }
+                });
                 showToast('Status is already set to ' + newStatus, 'info');
             } else {
-                showToast('Status updated to ' + newStatus + ' successfully!', 'success');
+                // Update statistics in background
                 updateStatistics();
             }
         } else {
             // Rollback on error
-            if (statusBadge) {
-                statusBadge.className = oldBadgeClass;
-                statusBadge.textContent = oldStatus;
-            }
+            requestAnimationFrame(() => {
+                if (statusBadge) {
+                    statusBadge.className = oldBadgeClass;
+                    statusBadge.textContent = oldStatus;
+                }
+            });
             showToast('Failed to update status: ' + result.error, 'error');
         }
     } catch (error) {
         // Rollback on error
-        if (statusBadge) {
-            statusBadge.className = oldBadgeClass;
-            statusBadge.textContent = oldStatus;
-        }
+        requestAnimationFrame(() => {
+            if (statusBadge) {
+                statusBadge.className = oldBadgeClass;
+                statusBadge.textContent = oldStatus;
+            }
+        });
         showToast('Error connecting to server', 'error');
     }
 }

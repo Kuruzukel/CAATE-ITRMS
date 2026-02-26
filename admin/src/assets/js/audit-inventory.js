@@ -681,15 +681,13 @@ async function saveNewInventoryItem() {
     if (!program || !inventoryType || !itemName || !specification || !quantityRequired || !quantityOnSite) {
         showToast('Please fill in all required fields before adding the item', 'warning');
 
-        // Also trigger browser validation to highlight empty fields
-        form.reportValidity();
+        // Don't trigger browser validation tooltip
         return;
     }
 
     // Validate form
     if (!form.checkValidity()) {
         showToast('Please fill in all required fields correctly', 'warning');
-        form.reportValidity();
         return;
     }
 

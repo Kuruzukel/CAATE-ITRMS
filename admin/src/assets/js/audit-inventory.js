@@ -595,8 +595,18 @@ async function confirmDeleteEquipment() {
     if (!currentRow) return;
 
     const itemId = currentRow.getAttribute('data-id');
+    const rowToDelete = currentRow;
 
     try {
+        // Close modal immediately
+        const modal = bootstrap.Modal.getInstance(document.getElementById('deleteEquipmentModal'));
+        modal.hide();
+
+        // Remove row immediately with fade animation
+        rowToDelete.style.transition = 'opacity 0.3s ease-out';
+        rowToDelete.style.opacity = '0';
+
+        // Delete from server
         const response = await fetch(`${API_BASE_URL}/api/v1/inventory/${itemId}?collection=audit-inventory`, {
             method: 'DELETE'
         });
@@ -604,15 +614,24 @@ async function confirmDeleteEquipment() {
         const result = await response.json();
 
         if (result.success) {
-            const modal = bootstrap.Modal.getInstance(document.getElementById('deleteEquipmentModal'));
-            modal.hide();
+            // Remove row from DOM after fade
+            setTimeout(() => {
+                rowToDelete.remove();
+            }, 300);
+
             showToast('Inventory item deleted successfully!', 'success');
-            loadInventoryData();
+
+            // Update statistics in background
+            updateStatistics();
             currentRow = null;
         } else {
+            // Restore row if delete failed
+            rowToDelete.style.opacity = '1';
             showToast('Failed to delete item: ' + result.error, 'error');
         }
     } catch (error) {
+        // Restore row if error occurred
+        rowToDelete.style.opacity = '1';
         showToast('Error connecting to server', 'error');
     }
 }
@@ -621,6 +640,27 @@ async function confirmDeleteEquipment() {
 async function changeStatus(element, newStatus) {
     const row = element.closest('tr');
     const itemId = row.getAttribute('data-id');
+    const statusCell = row.cells[5];
+    const statusBadge = statusCell.querySelector('.badge');
+
+    // Store old status for rollback if needed
+    const oldStatus = statusBadge ? statusBadge.textContent.trim() : '';
+    const oldBadgeClass = statusBadge ? statusBadge.className : '';
+
+    // Update UI immediately for instant feedback
+    if (statusBadge) {
+        statusBadge.classList.remove('bg-success', 'bg-warning', 'bg-danger');
+
+        if (newStatus === 'In Stock') {
+            statusBadge.classList.add('bg-success');
+        } else if (newStatus === 'Low Stock') {
+            statusBadge.classList.add('bg-warning');
+        } else if (newStatus === 'Out of Stock') {
+            statusBadge.classList.add('bg-danger');
+        }
+
+        statusBadge.textContent = newStatus;
+    }
 
     try {
         const response = await fetch(`${API_BASE_URL}/api/v1/inventory/${itemId}?collection=audit-inventory`, {
@@ -636,40 +676,31 @@ async function changeStatus(element, newStatus) {
         const result = await response.json();
 
         if (result.success) {
-            // Show appropriate message based on whether changes were made
             if (result.modified === false) {
+                // Rollback to old status if nothing changed
+                if (statusBadge) {
+                    statusBadge.className = oldBadgeClass;
+                    statusBadge.textContent = oldStatus;
+                }
                 showToast('Status is already set to ' + newStatus, 'info');
             } else {
                 showToast('Status updated to ' + newStatus + ' successfully!', 'success');
-
-                // Update the row immediately without reloading all data
-                const statusCell = row.cells[5]; // Stock status is in column 5
-                const statusBadge = statusCell.querySelector('.badge');
-
-                if (statusBadge) {
-                    // Remove old badge classes
-                    statusBadge.classList.remove('bg-success', 'bg-warning', 'bg-danger');
-
-                    // Add new badge class based on status
-                    if (newStatus === 'In Stock') {
-                        statusBadge.classList.add('bg-success');
-                    } else if (newStatus === 'Low Stock') {
-                        statusBadge.classList.add('bg-warning');
-                    } else if (newStatus === 'Out of Stock') {
-                        statusBadge.classList.add('bg-danger');
-                    }
-
-                    // Update badge text
-                    statusBadge.textContent = newStatus;
-                }
-
-                // Update statistics in background without blocking UI
                 updateStatistics();
             }
         } else {
+            // Rollback on error
+            if (statusBadge) {
+                statusBadge.className = oldBadgeClass;
+                statusBadge.textContent = oldStatus;
+            }
             showToast('Failed to update status: ' + result.error, 'error');
         }
     } catch (error) {
+        // Rollback on error
+        if (statusBadge) {
+            statusBadge.className = oldBadgeClass;
+            statusBadge.textContent = oldStatus;
+        }
         showToast('Error connecting to server', 'error');
     }
 }

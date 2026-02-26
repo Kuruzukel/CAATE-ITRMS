@@ -485,7 +485,14 @@ async function saveEquipmentChanges() {
         if (result.success) {
             const modal = bootstrap.Modal.getInstance(document.getElementById('editEquipmentModal'));
             modal.hide();
-            showToast('Inventory item updated successfully!', 'success');
+
+            // Show appropriate message based on whether changes were made
+            if (result.modified === false) {
+                showToast('No changes were made to the item', 'info');
+            } else {
+                showToast('Inventory item updated successfully!', 'success');
+            }
+
             loadInventoryData();
             currentRow = null;
         } else {

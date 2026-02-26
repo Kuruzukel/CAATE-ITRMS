@@ -169,42 +169,10 @@ class InventoryController {
         try {
             $data = json_decode(file_get_contents('php://input'), true);
             
-            $updateData = [];
+            // Get existing item first
+            $existingItem = $this->collection->findOne(['_id' => new MongoDB\BSON\ObjectId($id)]);
             
-            if (isset($data['program'])) $updateData['program'] = $data['program'];
-            if (isset($data['inventory_type'])) $updateData['inventory_type'] = $data['inventory_type'];
-            if (isset($data['item_name'])) $updateData['item_name'] = $data['item_name'];
-            if (isset($data['specification'])) $updateData['specification'] = $data['specification'];
-            if (isset($data['quantity_required'])) $updateData['quantity_required'] = (int) $data['quantity_required'];
-            if (isset($data['quantity_on_site'])) $updateData['quantity_on_site'] = (int) $data['quantity_on_site'];
-            if (isset($data['inspector_remarks'])) $updateData['inspector_remarks'] = $data['inspector_remarks'];
-            
-            // Recalculate difference and stock status if quantities changed
-            if (isset($updateData['quantity_required']) || isset($updateData['quantity_on_site'])) {
-                $item = $this->collection->findOne(['_id' => new MongoDB\BSON\ObjectId($id)]);
-                
-                $qtyRequired = $updateData['quantity_required'] ?? $item['quantity_required'];
-                $qtyOnSite = $updateData['quantity_on_site'] ?? $item['quantity_on_site'];
-                
-                $updateData['difference'] = $qtyOnSite - $qtyRequired;
-                
-                if ($qtyOnSite == 0) {
-                    $updateData['stock_status'] = 'Out of Stock';
-                } elseif ($qtyOnSite < $qtyRequired) {
-                    $updateData['stock_status'] = 'Low Stock';
-                } else {
-                    $updateData['stock_status'] = 'In Stock';
-                }
-            }
-            
-            $updateData['updated_at'] = new MongoDB\BSON\UTCDateTime();
-            
-            $result = $this->collection->updateOne(
-                ['_id' => new MongoDB\BSON\ObjectId($id)],
-                ['$set' => $updateData]
-            );
-            
-            if ($result->getMatchedCount() === 0) {
+            if (!$existingItem) {
                 http_response_code(404);
                 echo json_encode([
                     'success' => false,
@@ -213,11 +181,80 @@ class InventoryController {
                 return;
             }
             
+            $updateData = [];
+            
+            // Only add fields that have actually changed
+            if (isset($data['program']) && $data['program'] !== $existingItem['program']) {
+                $updateData['program'] = $data['program'];
+            }
+            if (isset($data['inventory_type']) && $data['inventory_type'] !== $existingItem['inventory_type']) {
+                $updateData['inventory_type'] = $data['inventory_type'];
+            }
+            if (isset($data['item_name']) && $data['item_name'] !== $existingItem['item_name']) {
+                $updateData['item_name'] = $data['item_name'];
+            }
+            if (isset($data['specification']) && $data['specification'] !== $existingItem['specification']) {
+                $updateData['specification'] = $data['specification'];
+            }
+            if (isset($data['quantity_required']) && (int)$data['quantity_required'] !== $existingItem['quantity_required']) {
+                $updateData['quantity_required'] = (int) $data['quantity_required'];
+            }
+            if (isset($data['quantity_on_site']) && (int)$data['quantity_on_site'] !== $existingItem['quantity_on_site']) {
+                $updateData['quantity_on_site'] = (int) $data['quantity_on_site'];
+            }
+            if (isset($data['inspector_remarks']) && $data['inspector_remarks'] !== ($existingItem['inspector_remarks'] ?? '')) {
+                $updateData['inspector_remarks'] = $data['inspector_remarks'];
+            }
+            if (isset($data['stock_status']) && $data['stock_status'] !== $existingItem['stock_status']) {
+                $updateData['stock_status'] = $data['stock_status'];
+            }
+            
+            // Recalculate difference and stock status if quantities changed
+            if (isset($updateData['quantity_required']) || isset($updateData['quantity_on_site'])) {
+                $qtyRequired = $updateData['quantity_required'] ?? $existingItem['quantity_required'];
+                $qtyOnSite = $updateData['quantity_on_site'] ?? $existingItem['quantity_on_site'];
+                
+                $newDifference = $qtyOnSite - $qtyRequired;
+                if ($newDifference !== $existingItem['difference']) {
+                    $updateData['difference'] = $newDifference;
+                }
+                
+                $newStockStatus = 'In Stock';
+                if ($qtyOnSite == 0) {
+                    $newStockStatus = 'Out of Stock';
+                } elseif ($qtyOnSite < $qtyRequired) {
+                    $newStockStatus = 'Low Stock';
+                }
+                
+                if ($newStockStatus !== $existingItem['stock_status']) {
+                    $updateData['stock_status'] = $newStockStatus;
+                }
+            }
+            
+            // If no changes, return success but with modified = false
+            if (empty($updateData)) {
+                http_response_code(200);
+                echo json_encode([
+                    'success' => true,
+                    'message' => 'No changes made',
+                    'modified' => false
+                ]);
+                return;
+            }
+            
+            // Add updated_at only when there are actual changes
+            $updateData['updated_at'] = new MongoDB\BSON\UTCDateTime();
+            
+            $result = $this->collection->updateOne(
+                ['_id' => new MongoDB\BSON\ObjectId($id)],
+                ['$set' => $updateData]
+            );
+            
             http_response_code(200);
             echo json_encode([
                 'success' => true,
                 'message' => 'Item updated successfully',
-                'modified' => $result->getModifiedCount() > 0
+                'modified' => true
             ]);
         } catch (Exception $e) {
             http_response_code(500);

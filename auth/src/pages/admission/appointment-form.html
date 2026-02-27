@@ -22,11 +22,8 @@
     <!-- Boxicons -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
     <!-- External CSS -->
-    <link rel="stylesheet" href="../../assets/css/appointment-form.css?v=13">
+    <link rel="stylesheet" href="../../assets/css/appointment-form.css?v=24">
 </head>
 
 <body>
@@ -323,76 +320,78 @@
     </footer>
 
     <!-- Confirmation Modal -->
-    <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="confirmationModalLabel">
+    <div class="custom-modal" id="confirmationModal">
+        <div class="custom-modal-backdrop"></div>
+        <div class="custom-modal-dialog">
+            <div class="custom-modal-content">
+                <div class="custom-modal-header">
+                    <h5 class="custom-modal-title">
                         <i class="fas fa-check-circle"></i>
                         Confirm Your Appointment
                     </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="custom-modal-close" aria-label="Close">
+                        <i class="fas fa-times"></i>
+                    </button>
                 </div>
-                <div class="modal-body">
-                    <div class="row mb-3">
-                        <div class="col-12">
-                            <label class="form-label">FULL NAME</label>
-                            <input type="text" class="form-control" id="confirmFullName" readonly>
+                <div class="custom-modal-body">
+                    <div class="modal-field-group">
+                        <div class="modal-field full-width">
+                            <label class="modal-label">FULL NAME</label>
+                            <input type="text" class="modal-input" id="confirmFullName" readonly>
                         </div>
                     </div>
 
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label class="form-label">EMAIL</label>
-                            <input type="text" class="form-control" id="confirmEmail" readonly>
+                    <div class="modal-field-group">
+                        <div class="modal-field">
+                            <label class="modal-label">EMAIL</label>
+                            <input type="text" class="modal-input" id="confirmEmail" readonly>
                         </div>
-                        <div class="col-md-6">
-                            <label class="form-label">PHONE</label>
-                            <input type="text" class="form-control" id="confirmPhone" readonly>
-                        </div>
-                    </div>
-
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label class="form-label">SERVICE CATEGORY</label>
-                            <input type="text" class="form-control" id="confirmCategory" readonly>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">SERVICE TYPE</label>
-                            <input type="text" class="form-control" id="confirmServiceType" readonly>
+                        <div class="modal-field">
+                            <label class="modal-label">PHONE</label>
+                            <input type="text" class="modal-input" id="confirmPhone" readonly>
                         </div>
                     </div>
 
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label class="form-label">PREFERRED DATE</label>
-                            <input type="text" class="form-control" id="confirmDate" readonly>
+                    <div class="modal-field-group">
+                        <div class="modal-field">
+                            <label class="modal-label">SERVICE CATEGORY</label>
+                            <input type="text" class="modal-input" id="confirmCategory" readonly>
                         </div>
-                        <div class="col-md-6">
-                            <label class="form-label">PREFERRED TIME</label>
-                            <input type="text" class="form-control" id="confirmTime" readonly>
+                        <div class="modal-field">
+                            <label class="modal-label">SERVICE TYPE</label>
+                            <input type="text" class="modal-input" id="confirmServiceType" readonly>
                         </div>
                     </div>
 
-                    <div class="row mb-3" id="notesSection" style="display: none;">
-                        <div class="col-12">
-                            <label class="form-label">SPECIAL NOTES</label>
-                            <textarea class="form-control" id="confirmNotes" rows="3" readonly></textarea>
+                    <div class="modal-field-group">
+                        <div class="modal-field">
+                            <label class="modal-label">PREFERRED DATE</label>
+                            <input type="text" class="modal-input" id="confirmDate" readonly>
+                        </div>
+                        <div class="modal-field">
+                            <label class="modal-label">PREFERRED TIME</label>
+                            <input type="text" class="modal-input" id="confirmTime" readonly>
+                        </div>
+                    </div>
+
+                    <div class="modal-field-group" id="notesSection" style="display: none;">
+                        <div class="modal-field full-width">
+                            <label class="modal-label">SPECIAL NOTES</label>
+                            <textarea class="modal-input" id="confirmNotes" rows="3" readonly></textarea>
                         </div>
                     </div>
 
                     <!-- Verification Notice -->
-                    <div class="alert alert-info verification-notice" role="alert">
+                    <div class="modal-alert">
                         <i class="fas fa-info-circle"></i>
-                        <div class="verification-text">
+                        <div class="modal-alert-content">
                             <strong>Please verify your information</strong>
                             <p>Review all details carefully. A confirmation email will be sent once submitted.</p>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <div class="custom-modal-footer">
+                    <button type="button" class="btn btn-secondary modal-cancel-btn">Cancel</button>
                     <button type="button" class="btn btn-primary" id="confirmSubmitBtn">Submit Appointment</button>
                 </div>
             </div>
@@ -401,9 +400,6 @@
 
     <!-- Toast Container -->
     <div id="toastContainer" class="toast-container"></div>
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- JavaScript -->
     <script src="../../assets/js/apppoinrment-form.js"></script>

@@ -202,8 +202,7 @@ appointmentForm.addEventListener('submit', function (e) {
     populateConfirmationModal(appointmentData);
 
     // Show confirmation modal
-    const confirmModal = new bootstrap.Modal(document.getElementById('confirmationModal'));
-    confirmModal.show();
+    openModal('confirmationModal');
 });
 
 // Helper function to highlight error fields
@@ -311,8 +310,7 @@ document.getElementById('confirmSubmitBtn').addEventListener('click', async func
 
         if (result.success) {
             // Close confirmation modal
-            const confirmModal = bootstrap.Modal.getInstance(document.getElementById('confirmationModal'));
-            confirmModal.hide();
+            closeModal('confirmationModal');
 
             // Show success toast
             showToast('Appointment submitted! Check your email for approval status.', 'success');
@@ -345,12 +343,7 @@ function showToast(message, type = 'success') {
     const toast = document.createElement('div');
     toast.className = `toast-notification ${type}`;
 
-    const icon = type === 'success' ? 'bx-check' :
-        type === 'error' ? 'bx-x' :
-            type === 'warning' ? 'bx-error-circle' : 'bxs-info-circle';
-
     toast.innerHTML = `
-        <i class="bx ${icon} toast-icon"></i>
         <div class="toast-content">
             <div class="toast-message">${message}</div>
         </div>
@@ -472,3 +465,67 @@ nameFields.forEach(fieldId => {
         });
     }
 });
+
+// ========================================
+// CUSTOM MODAL FUNCTIONS (Bootstrap Replacement)
+// ========================================
+
+function openModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (!modal) return;
+
+    // Add show class to trigger animations
+    modal.classList.add('show');
+
+    // Prevent body scroll
+    document.body.classList.add('modal-open');
+
+    // Setup close handlers
+    setupModalCloseHandlers(modal);
+}
+
+function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (!modal) return;
+
+    // Remove show class to trigger exit animations
+    modal.classList.remove('show');
+
+    // Allow body scroll
+    document.body.classList.remove('modal-open');
+}
+
+function setupModalCloseHandlers(modal) {
+    // Close button handler
+    const closeBtn = modal.querySelector('.custom-modal-close');
+    if (closeBtn) {
+        closeBtn.onclick = function () {
+            closeModal(modal.id);
+        };
+    }
+
+    // Cancel button handler
+    const cancelBtn = modal.querySelector('.modal-cancel-btn');
+    if (cancelBtn) {
+        cancelBtn.onclick = function () {
+            closeModal(modal.id);
+        };
+    }
+
+    // Backdrop click handler
+    const backdrop = modal.querySelector('.custom-modal-backdrop');
+    if (backdrop) {
+        backdrop.onclick = function () {
+            closeModal(modal.id);
+        };
+    }
+
+    // Escape key handler
+    const escapeHandler = function (e) {
+        if (e.key === 'Escape' && modal.classList.contains('show')) {
+            closeModal(modal.id);
+            document.removeEventListener('keydown', escapeHandler);
+        }
+    };
+    document.addEventListener('keydown', escapeHandler);
+}

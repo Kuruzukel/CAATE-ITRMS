@@ -315,7 +315,7 @@ document.getElementById('confirmSubmitBtn').addEventListener('click', async func
             confirmModal.hide();
 
             // Show success toast
-            showToast('Appointment booked successfully! We will contact you shortly to confirm.', 'success');
+            showToast('Appointment submitted! Check your email for approval status.', 'success');
 
             // Reset form
             appointmentForm.reset();

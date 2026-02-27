@@ -6,8 +6,8 @@ class Appointment {
     private $collection;
     
     public function __construct() {
-        $database = Database::getInstance();
-        $this->collection = $database->getCollection('appointments');
+        $db = getMongoConnection();
+        $this->collection = $db->appointments;
     }
     
     public function all() {

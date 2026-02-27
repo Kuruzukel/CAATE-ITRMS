@@ -100,18 +100,49 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // Load appointments from database
 async function loadAppointments() {
+    // Show loader before fetching data
+    showTableLoader();
+
+    // Add a timeout fallback
+    const timeoutId = setTimeout(() => {
+        displayAppointments([]);
+    }, 10000); // 10 second timeout
+
     try {
-        const response = await fetch('/CAATE-ITRMS/backend/public/api/v1/appointments');
+        const apiUrl = '/CAATE-ITRMS/backend/public/api/v1/appointments';
+
+        const response = await fetch(apiUrl);
+        clearTimeout(timeoutId); // Clear timeout if request completes
+
         const result = await response.json();
 
         if (result.success && result.data) {
             displayAppointments(result.data);
         } else {
-            console.error('Failed to load appointments:', result.error);
+            displayAppointments([]);
         }
     } catch (error) {
+        clearTimeout(timeoutId); // Clear timeout on error
         console.error('Error loading appointments:', error);
+        displayAppointments([]);
     }
+}
+
+// Show loader in table
+function showTableLoader() {
+    const tbody = document.querySelector('.table-border-bottom-0');
+    if (!tbody) return;
+
+    tbody.innerHTML = `
+        <tr id="tableLoader">
+            <td colspan="7" class="text-center" style="padding: 60px 20px;">
+                <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-3 text-muted">Loading appointments data...</p>
+            </td>
+        </tr>
+    `;
 }
 
 // Load statistics
@@ -144,11 +175,28 @@ function displayAppointments(appointments) {
     const tbody = document.querySelector('.table-border-bottom-0');
     if (!tbody) return;
 
+    // Hide loader
+    const loader = document.getElementById('tableLoader');
+    if (loader) {
+        loader.remove();
+    }
+
     // Clear existing rows
     tbody.innerHTML = '';
 
-    if (appointments.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" class="text-center">No appointments found</td></tr>';
+    if (!appointments || appointments.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="7" class="text-center" style="padding: 60px 20px;">
+                    <div style="color: #697a8d;">
+                        <i class="bx bx-calendar-x" style="font-size: 4rem; opacity: 0.3; display: block; margin-bottom: 15px;"></i>
+                        <h5 style="margin-bottom: 10px; color: #697a8d;">No appointments found</h5>
+                        <p style="margin: 0; font-size: 0.9rem; opacity: 0.7;">The appointments database collection is empty or no items match your filters.</p>
+                        <p style="margin: 5px 0 0 0; font-size: 0.9rem; opacity: 0.7;">Try adjusting your filters or wait for new appointment requests.</p>
+                    </div>
+                </td>
+            </tr>
+        `;
         return;
     }
 
@@ -351,13 +399,11 @@ async function deleteAppointment(id) {
 
 // View details (placeholder)
 function viewDetails(id) {
-    console.log('View details for appointment:', id);
     // Implement view details modal
 }
 
 // Edit details (placeholder)
 function editDetails(id) {
-    console.log('Edit details for appointment:', id);
     // Implement edit details modal
 }
 

@@ -1005,7 +1005,7 @@ input[type="date"]::-webkit-clear-button {
 
 .footer-brand p {
     color: rgba(255, 255, 255, 0.7);
-    font-size: 1rem;
+    font-size: 0.9375rem;
     line-height: 1.7;
     margin-bottom: 0;
 }
@@ -1038,7 +1038,7 @@ input[type="date"]::-webkit-clear-button {
 }
 
 .footer-column h4 {
-    font-size: 1.25rem;
+    font-size: 1.125rem;
     font-weight: 600;
     color: var(--white);
     margin-bottom: 1.5rem;
@@ -1079,7 +1079,7 @@ input[type="date"]::-webkit-clear-button {
 .footer-links a {
     color: rgba(255, 255, 255, 0.7);
     text-decoration: none;
-    font-size: 1rem;
+    font-size: 0.9375rem;
     transition: all 0.2s ease;
     display: inline;
     white-space: nowrap;
@@ -1087,7 +1087,7 @@ input[type="date"]::-webkit-clear-button {
 
 .footer-links span {
     color: rgba(255, 255, 255, 0.7);
-    font-size: 1rem;
+    font-size: 0.9375rem;
     display: inline;
     white-space: nowrap;
 }
@@ -1201,12 +1201,6 @@ input[type="date"]::-webkit-clear-button {
 @media (max-width: 1024px) {
     .footer-content {
         grid-template-columns: 1fr 1fr;
-        gap: 2rem;
-    }
-
-    .footer-brand {
-        grid-column: 1 / -1;
-        max-width: 100%;
     }
 }
 
@@ -2799,7 +2793,6 @@ body.modal-open {
 #confirmationModal .verification-notice {
     background: linear-gradient(135deg, rgba(54, 145, 191, 0.08) 0%, rgba(50, 85, 150, 0.06) 100%);
     border: 1px solid rgba(54, 145, 191, 0.25);
-    border-left: 4px solid var(--primary-blue);
     border-radius: 8px;
     padding: 1rem;
     margin-top: 1.25rem;
@@ -2849,6 +2842,8 @@ body.modal-open {
 
     #confirmationModal .verification-notice i {
         font-size: 1.35rem;
+        width: 30px;
+        height: 30px;
     }
 
     #confirmationModal .verification-text strong {
@@ -2868,6 +2863,10 @@ body.modal-open {
 
     #confirmationModal .verification-notice i {
         font-size: 1.25rem;
+        width: 28px;
+        font-size: 1.25rem;
+        width: 28px;
+        height: 28px;
     }
 
     #confirmationModal .verification-text strong {
@@ -2887,6 +2886,8 @@ body.modal-open {
 
     #confirmationModal .verification-notice i {
         font-size: 1.15rem;
+        width: 26px;
+        height: 26px;
     }
 
     #confirmationModal .verification-text strong {
@@ -2907,6 +2908,8 @@ body.modal-open {
 
     #confirmationModal .verification-notice i {
         font-size: 1.1rem;
+        width: 24px;
+        height: 24px;
     }
 
     #confirmationModal .verification-text strong {
@@ -2923,7 +2926,7 @@ body.modal-open {
 /* Verification Notice Styling */
 .verification-notice {
     background: linear-gradient(135deg, rgba(54, 145, 191, 0.1) 0%, rgba(50, 85, 150, 0.08) 100%);
-    border-left: 4px solid #3691bf;
+    border: 1px solid rgba(54, 145, 191, 0.25);
     border-radius: 8px;
     padding: 1rem 1.25rem;
     margin-top: 1.5rem;

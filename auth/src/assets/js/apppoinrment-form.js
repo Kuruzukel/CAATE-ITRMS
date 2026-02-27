@@ -441,3 +441,34 @@ emailInput.addEventListener('blur', function () {
         this.style.borderColor = 'var(--success)';
     }
 });
+
+// Letter-only validation for name fields
+const nameFields = ['firstName', 'secondName', 'middleName', 'lastName', 'suffix'];
+
+nameFields.forEach(fieldId => {
+    const field = document.getElementById(fieldId);
+    if (field) {
+        field.addEventListener('input', function (e) {
+            // For suffix, allow letters, dots, commas, and spaces
+            if (fieldId === 'suffix') {
+                this.value = this.value.replace(/[^A-Za-z.,\s]/g, '');
+            } else {
+                // For other name fields, allow only letters and spaces
+                this.value = this.value.replace(/[^A-Za-z\s]/g, '');
+            }
+        });
+
+        // Prevent paste of non-letter characters
+        field.addEventListener('paste', function (e) {
+            e.preventDefault();
+            const pastedText = (e.clipboardData || window.clipboardData).getData('text');
+            if (fieldId === 'suffix') {
+                const cleanedText = pastedText.replace(/[^A-Za-z.,\s]/g, '');
+                document.execCommand('insertText', false, cleanedText);
+            } else {
+                const cleanedText = pastedText.replace(/[^A-Za-z\s]/g, '');
+                document.execCommand('insertText', false, cleanedText);
+            }
+        });
+    }
+});

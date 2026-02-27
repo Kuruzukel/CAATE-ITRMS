@@ -2982,6 +2982,7 @@ body.modal-open {
     pointer-events: auto;
     background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(30px) saturate(180%);
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
     border: 1px solid rgba(54, 145, 191, 0.2);
     border-radius: 16px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
@@ -2994,9 +2995,12 @@ body.modal-open {
     align-items: center;
     justify-content: space-between;
     padding: 1.5rem;
-    backdrop-filter: blur(20px);
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
     border-bottom: 1px solid rgba(54, 145, 191, 0.2);
     border-radius: 16px 16px 0 0;
+    box-shadow: 0 2px 8px rgba(22, 56, 86, 0.08);
 }
 
 .custom-modal-title {
@@ -3070,6 +3074,7 @@ body.modal-open {
     padding: 1.5rem;
     background: rgba(255, 255, 255, 0.6);
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
 /* Modal Field Groups */
@@ -3182,13 +3187,14 @@ body.modal-open {
 .custom-modal-footer .btn {
     padding: 0.75rem 1.75rem !important;
     font-size: 0.95rem !important;
-    border-radius: 8px !important;
+    border-radius: 50px !important;
     transition: all 0.2s ease !important;
 }
 
 .modal-cancel-btn {
     background: rgba(108, 117, 125, 0.9) !important;
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border: 1px solid rgba(108, 117, 125, 0.3) !important;
     color: white !important;
 }
@@ -3334,8 +3340,12 @@ body.modal-open {
     align-items: center;
     justify-content: space-between;
     padding: 1.5rem 2rem;
-    border-bottom: none;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    border-bottom: 1px solid rgba(54, 145, 191, 0.2);
     border-radius: 16px 16px 0 0;
+    box-shadow: 0 2px 8px rgba(22, 56, 86, 0.08);
 }
 
 .custom-modal-title {
@@ -3396,6 +3406,7 @@ body.modal-open {
     padding: 1.5rem;
     background: rgba(255, 255, 255, 0.6);
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
 /* Modal Field Groups */
@@ -3506,7 +3517,7 @@ body.modal-open {
     padding: 0.875rem 2.5rem !important;
     font-size: 1rem !important;
     font-weight: 600;
-    border-radius: 12px;
+    border-radius: 50px;
     transition: all 0.2s ease;
     border: none;
 }
@@ -3515,7 +3526,7 @@ body.modal-open {
     background: #6B7280 !important;
     color: #ffffff !important;
     padding: 0.875rem 2.5rem !important;
-    border-radius: 12px !important;
+    border-radius: 50px !important;
     font-weight: 600 !important;
 }
 
@@ -3529,7 +3540,7 @@ body.modal-open {
     background: #10B981 !important;
     color: #ffffff !important;
     padding: 0.875rem 2.5rem !important;
-    border-radius: 12px !important;
+    border-radius: 50px !important;
     font-weight: 600 !important;
 }
 
@@ -3769,7 +3780,7 @@ body.modal-open {
     border: none !important;
     color: #fff !important;
     padding: 0.75rem 2rem !important;
-    border-radius: 12px !important;
+    border-radius: 50px !important;
     font-weight: 600 !important;
 }
 
@@ -3783,7 +3794,7 @@ body.modal-open {
     border: none !important;
     color: white !important;
     padding: 0.75rem 2rem !important;
-    border-radius: 12px !important;
+    border-radius: 50px !important;
     font-weight: 600 !important;
 }
 

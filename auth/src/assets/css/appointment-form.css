@@ -1124,6 +1124,9 @@ input[type="date"]::-webkit-clear-button {
 
     .footer-brand p {
         text-align: center;
+        max-width: 100%;
+        margin-left: auto;
+        margin-right: auto;
     }
 
     .footer-logo-img {

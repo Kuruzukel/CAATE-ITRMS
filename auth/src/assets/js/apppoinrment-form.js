@@ -228,11 +228,11 @@ function populateConfirmationModal(data) {
         data.lastName,
         data.suffix
     ].filter(Boolean).join(' ');
-    document.getElementById('confirmFullName').textContent = fullName;
+    document.getElementById('confirmFullName').value = fullName;
 
     // Contact info
-    document.getElementById('confirmEmail').textContent = data.email;
-    document.getElementById('confirmPhone').textContent = data.contactNumber;
+    document.getElementById('confirmEmail').value = data.email;
+    document.getElementById('confirmPhone').value = data.contactNumber;
 
     // Service details
     const categoryMap = {
@@ -242,12 +242,12 @@ function populateConfirmationModal(data) {
         'bodytreatment': 'Body Treatment',
         'aesthetic': 'Aesthetic Services'
     };
-    document.getElementById('confirmCategory').textContent = categoryMap[data.serviceCategory] || data.serviceCategory;
+    document.getElementById('confirmCategory').value = categoryMap[data.serviceCategory] || data.serviceCategory;
 
     const serviceTypeText = data.serviceType.split('-').map(word =>
         word.charAt(0).toUpperCase() + word.slice(1)
     ).join(' ');
-    document.getElementById('confirmServiceType').textContent = serviceTypeText;
+    document.getElementById('confirmServiceType').value = serviceTypeText;
 
     // Appointment schedule
     const dateObj = new Date(data.preferredDate);
@@ -257,7 +257,7 @@ function populateConfirmationModal(data) {
         month: 'long',
         day: 'numeric'
     });
-    document.getElementById('confirmDate').textContent = formattedDate;
+    document.getElementById('confirmDate').value = formattedDate;
 
     // Format time
     const [hours, minutes] = data.preferredTime.split(':');
@@ -265,12 +265,12 @@ function populateConfirmationModal(data) {
     const ampm = hour >= 12 ? 'PM' : 'AM';
     const hour12 = hour % 12 || 12;
     const formattedTime = `${hour12}:${minutes} ${ampm}`;
-    document.getElementById('confirmTime').textContent = formattedTime;
+    document.getElementById('confirmTime').value = formattedTime;
 
     // Special notes
     if (data.specialNotes && data.specialNotes.trim()) {
         document.getElementById('notesSection').style.display = 'block';
-        document.getElementById('confirmNotes').textContent = data.specialNotes;
+        document.getElementById('confirmNotes').value = data.specialNotes;
     } else {
         document.getElementById('notesSection').style.display = 'none';
     }

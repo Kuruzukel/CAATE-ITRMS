@@ -19,8 +19,11 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
+    <!-- Boxicons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
     <!-- External CSS -->
-    <link rel="stylesheet" href="../../assets/css/appointment-form.css?v=3">
+    <link rel="stylesheet" href="../../assets/css/appointment-form.css?v=11">
 </head>
 
 <body>
@@ -68,7 +71,7 @@
 
             <!-- Appointment Form -->
             <div class="appointment-form-container">
-                <form id="appointmentForm" class="appointment-form">
+                <form id="appointmentForm" class="appointment-form" novalidate>
                     <!-- Personal Information Section -->
                     <div class="form-section">
                         <h3 class="section-title">
@@ -310,6 +313,86 @@
             </div>
         </div>
     </footer>
+
+    <!-- Confirmation Modal -->
+    <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmationModalLabel">
+                        <i class="fas fa-check-circle"></i>
+                        Confirm Your Appointment
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="modal-intro">Please review your appointment details before confirming:</p>
+
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <label class="form-label fw-bold">Full Name</label>
+                            <input type="text" class="form-control" id="confirmFullName" readonly>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Email</label>
+                            <input type="text" class="form-control" id="confirmEmail" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Phone</label>
+                            <input type="text" class="form-control" id="confirmPhone" readonly>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Service Category</label>
+                            <input type="text" class="form-control" id="confirmCategory" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Service Type</label>
+                            <input type="text" class="form-control" id="confirmServiceType" readonly>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Preferred Date</label>
+                            <input type="text" class="form-control" id="confirmDate" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Preferred Time</label>
+                            <input type="text" class="form-control" id="confirmTime" readonly>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3" id="notesSection" style="display: none;">
+                        <div class="col-12">
+                            <label class="form-label fw-bold">Special Notes</label>
+                            <textarea class="form-control" id="confirmNotes" rows="3" readonly></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                    <button type="button" class="btn btn-primary" id="confirmSubmitBtn">
+                        <i class="fas fa-check"></i> Confirm & Submit
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- JavaScript -->
     <script src="../../assets/js/apppoinrment-form.js"></script>

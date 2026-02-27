@@ -108,8 +108,182 @@ serviceCategorySelect.addEventListener('change', function () {
 });
 
 // Form Submission Handler
-appointmentForm.addEventListener('submit', async function (e) {
+appointmentForm.addEventListener('submit', function (e) {
     e.preventDefault();
+    e.stopPropagation();
+
+    // Validate First Name
+    const firstNameInput = document.getElementById('firstName');
+    if (!firstNameInput.value.trim()) {
+        showToast('First Name is required. Please enter your first name.', 'error');
+        highlightError(firstNameInput);
+        return;
+    }
+
+    // Validate Phone Number
+    const phoneInput = document.getElementById('contactNumber');
+    const phoneValue = phoneInput.value.replace(/\D/g, '');
+    if (!phoneInput.value.trim()) {
+        showToast('Phone Number is required. Please enter your contact number.', 'error');
+        highlightError(phoneInput);
+        return;
+    }
+    if (phoneValue.length !== 11) {
+        showToast('Phone number must be exactly 11 digits (e.g., 09XX XXX XXXX)', 'error');
+        highlightError(phoneInput);
+        return;
+    }
+
+    // Validate Email
+    const emailInput = document.getElementById('email');
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailInput.value.trim()) {
+        showToast('Email Address is required. Please enter your email.', 'error');
+        highlightError(emailInput);
+        return;
+    }
+    if (!emailPattern.test(emailInput.value)) {
+        showToast('Please enter a valid email address (e.g., name@example.com)', 'error');
+        highlightError(emailInput);
+        return;
+    }
+
+    // Validate Service Category
+    const serviceCategoryInput = document.getElementById('serviceCategory');
+    if (!serviceCategoryInput.value) {
+        showToast('Service Category is required. Please select a service category.', 'error');
+        highlightError(serviceCategoryInput);
+        return;
+    }
+
+    // Validate Service Type
+    const serviceTypeInput = document.getElementById('serviceType');
+    if (!serviceTypeInput.value) {
+        showToast('Service Type is required. Please select a service type.', 'error');
+        highlightError(serviceTypeInput);
+        return;
+    }
+
+    // Validate Preferred Date
+    const dateInput = document.getElementById('preferredDate');
+    if (!dateInput.value) {
+        showToast('Preferred Date is required. Please select your appointment date.', 'error');
+        highlightError(dateInput);
+        return;
+    }
+
+    const selectedDate = new Date(dateInput.value);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (selectedDate < today) {
+        showToast('Please select a future date for your appointment.', 'error');
+        highlightError(dateInput);
+        return;
+    }
+
+    // Validate Preferred Time
+    const timeInput = document.getElementById('preferredTime');
+    if (!timeInput.value) {
+        showToast('Preferred Time is required. Please select your appointment time.', 'error');
+        highlightError(timeInput);
+        return;
+    }
+
+    // Get form data
+    const formData = new FormData(appointmentForm);
+    const appointmentData = {};
+
+    formData.forEach((value, key) => {
+        appointmentData[key] = value;
+    });
+
+    // Populate confirmation modal
+    populateConfirmationModal(appointmentData);
+
+    // Show confirmation modal
+    const confirmModal = new bootstrap.Modal(document.getElementById('confirmationModal'));
+    confirmModal.show();
+});
+
+// Helper function to highlight error fields
+function highlightError(element) {
+    element.focus();
+    element.style.borderColor = '#f56565';
+    element.classList.add('shake-error');
+
+    setTimeout(() => {
+        element.classList.remove('shake-error');
+        element.style.borderColor = '';
+    }, 600);
+}
+
+// Populate confirmation modal with form data
+function populateConfirmationModal(data) {
+    // Full name
+    const fullName = [
+        data.firstName,
+        data.secondName,
+        data.middleName,
+        data.lastName,
+        data.suffix
+    ].filter(Boolean).join(' ');
+    document.getElementById('confirmFullName').textContent = fullName;
+
+    // Contact info
+    document.getElementById('confirmEmail').textContent = data.email;
+    document.getElementById('confirmPhone').textContent = data.contactNumber;
+
+    // Service details
+    const categoryMap = {
+        'skincare': 'Skin Care',
+        'haircare': 'Hair Care',
+        'nailcare': 'Nail Care',
+        'bodytreatment': 'Body Treatment',
+        'aesthetic': 'Aesthetic Services'
+    };
+    document.getElementById('confirmCategory').textContent = categoryMap[data.serviceCategory] || data.serviceCategory;
+
+    const serviceTypeText = data.serviceType.split('-').map(word =>
+        word.charAt(0).toUpperCase() + word.slice(1)
+    ).join(' ');
+    document.getElementById('confirmServiceType').textContent = serviceTypeText;
+
+    // Appointment schedule
+    const dateObj = new Date(data.preferredDate);
+    const formattedDate = dateObj.toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+    document.getElementById('confirmDate').textContent = formattedDate;
+
+    // Format time
+    const [hours, minutes] = data.preferredTime.split(':');
+    const hour = parseInt(hours);
+    const ampm = hour >= 12 ? 'PM' : 'AM';
+    const hour12 = hour % 12 || 12;
+    const formattedTime = `${hour12}:${minutes} ${ampm}`;
+    document.getElementById('confirmTime').textContent = formattedTime;
+
+    // Special notes
+    if (data.specialNotes && data.specialNotes.trim()) {
+        document.getElementById('notesSection').style.display = 'block';
+        document.getElementById('confirmNotes').textContent = data.specialNotes;
+    } else {
+        document.getElementById('notesSection').style.display = 'none';
+    }
+}
+
+// Handle confirmation submit
+document.getElementById('confirmSubmitBtn').addEventListener('click', async function () {
+    const btn = this;
+    const originalText = btn.innerHTML;
+
+    // Disable button and show loading
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
 
     // Get form data
     const formData = new FormData(appointmentForm);
@@ -136,24 +310,73 @@ appointmentForm.addEventListener('submit', async function (e) {
         const result = await response.json();
 
         if (result.success) {
-            // Show success message
-            alert('Appointment booked successfully! Your appointment status is Pending. We will contact you shortly to confirm.');
+            // Close confirmation modal
+            const confirmModal = bootstrap.Modal.getInstance(document.getElementById('confirmationModal'));
+            confirmModal.hide();
+
+            // Show success toast
+            showToast('Appointment booked successfully! We will contact you shortly to confirm.', 'success');
 
             // Reset form
             appointmentForm.reset();
             serviceTypeSelect.disabled = true;
             serviceTypeSelect.innerHTML = '<option value="">Select a service type</option>';
 
-            // Optionally redirect to confirmation page
-            // window.location.href = 'appointment-confirmation.html';
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         } else {
-            alert('Error booking appointment: ' + (result.error || 'Unknown error'));
+            showToast('Error booking appointment: ' + (result.error || 'Unknown error'), 'error');
         }
     } catch (error) {
         console.error('Error:', error);
-        alert('Failed to book appointment. Please try again later.');
+        showToast('Failed to book appointment. Please try again later.', 'error');
+    } finally {
+        // Re-enable button
+        btn.disabled = false;
+        btn.innerHTML = originalText;
     }
 });
+
+// Toast notification function
+function showToast(message, type = 'success') {
+    const container = document.getElementById('toastContainer');
+    if (!container) return;
+
+    const toast = document.createElement('div');
+    toast.className = `toast-notification ${type}`;
+
+    const icon = type === 'success' ? 'bx-check' :
+        type === 'error' ? 'bx-x' :
+            type === 'warning' ? 'bx-error-circle' : 'bxs-info-circle';
+
+    toast.innerHTML = `
+        <i class="bx ${icon} toast-icon"></i>
+        <div class="toast-content">
+            <div class="toast-message">${message}</div>
+        </div>
+        <button class="toast-close" onclick="closeToast(this)">
+            <i class="bx bx-x"></i>
+        </button>
+    `;
+
+    container.appendChild(toast);
+
+    // Auto remove after 2.5 seconds
+    setTimeout(() => {
+        closeToast(toast.querySelector('.toast-close'));
+    }, 2500);
+}
+
+// Close toast notification
+function closeToast(button) {
+    const toast = button.closest('.toast-notification');
+    if (toast) {
+        toast.classList.add('hiding');
+        setTimeout(() => {
+            toast.remove();
+        }, 200);
+    }
+}
 
 // Phone number formatting
 const contactNumberInput = document.getElementById('contactNumber');

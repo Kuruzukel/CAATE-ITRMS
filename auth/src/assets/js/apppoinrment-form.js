@@ -5,13 +5,19 @@ const serviceTypes = {
         { value: 'skin-analysis', text: 'Skin Analysis' },
         { value: 'acne-treatment', text: 'Acne Treatment' },
         { value: 'anti-aging', text: 'Anti-Aging Treatment' },
-        { value: 'brightening', text: 'Skin Brightening' }
+        { value: 'brightening', text: 'Skin Brightening' },
+        { value: 'skin-care-treatment', text: 'Skin Care Treatment' },
+        { value: 'advanced-skin-care', text: 'Advanced Skin Care' },
+        { value: 'collagen-treatment', text: 'Collagen Treatment' },
+        { value: 'facial-peeling', text: 'Facial Peeling' }
     ],
     haircare: [
         { value: 'hair-loss-therapy', text: 'Hair Loss Therapy' },
         { value: 'scalp-treatment', text: 'Scalp Treatment' },
         { value: 'hair-spa', text: 'Hair Spa' },
-        { value: 'keratin-treatment', text: 'Keratin Treatment' }
+        { value: 'keratin-treatment', text: 'Keratin Treatment' },
+        { value: 'hair-spa-treatment', text: 'Hair Spa Treatment' },
+        { value: 'hairloss-treatment', text: 'Hairloss Treatment' }
     ],
     nailcare: [
         { value: 'gel-manicure', text: 'Gel Manicure' },
@@ -19,13 +25,21 @@ const serviceTypes = {
         { value: 'pedicure', text: 'Pedicure' },
         { value: 'nail-art', text: 'Nail Art' },
         { value: 'hand-spa', text: 'Hand Spa' },
-        { value: 'foot-spa', text: 'Foot Spa' }
+        { value: 'foot-spa', text: 'Foot Spa' },
+        { value: 'nail-care-service', text: 'Nail Care Service' }
     ],
     bodytreatment: [
         { value: 'body-scrub', text: 'Body Scrub' },
         { value: 'waxing', text: 'Waxing' },
         { value: 'body-massage', text: 'Body Massage' },
         { value: 'slimming-treatment', text: 'Slimming Treatment' }
+    ],
+    aesthetic: [
+        { value: 'permanent-makeup', text: 'Permanent Makeup' },
+        { value: 'eyelash-extension', text: 'Eyelash Extension' },
+        { value: 'eyebrow-threading', text: 'Eyebrow Threading' },
+        { value: 'eyebrow-microblading', text: 'Eyebrow Microblading' },
+        { value: 'aesthetic-consultation', text: 'Aesthetic Consultation' }
     ]
 };
 
@@ -94,7 +108,7 @@ serviceCategorySelect.addEventListener('change', function () {
 });
 
 // Form Submission Handler
-appointmentForm.addEventListener('submit', function (e) {
+appointmentForm.addEventListener('submit', async function (e) {
     e.preventDefault();
 
     // Get form data
@@ -109,19 +123,36 @@ appointmentForm.addEventListener('submit', function (e) {
     appointmentData.status = 'Pending';
     appointmentData.submittedAt = new Date().toISOString();
 
-    // Log the data (in production, this would be sent to a server)
-    console.log('Appointment Data:', appointmentData);
+    try {
+        // Send data to backend API
+        const response = await fetch('/CAATE-ITRMS/backend/public/api/v1/appointments', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(appointmentData)
+        });
 
-    // Show success message
-    alert('Appointment booked successfully! Your appointment status is Pending. We will contact you shortly to confirm.');
+        const result = await response.json();
 
-    // Reset form
-    appointmentForm.reset();
-    serviceTypeSelect.disabled = true;
-    serviceTypeSelect.innerHTML = '<option value="">Select a service type</option>';
+        if (result.success) {
+            // Show success message
+            alert('Appointment booked successfully! Your appointment status is Pending. We will contact you shortly to confirm.');
 
-    // Optionally redirect to confirmation page
-    // window.location.href = 'appointment-confirmation.html';
+            // Reset form
+            appointmentForm.reset();
+            serviceTypeSelect.disabled = true;
+            serviceTypeSelect.innerHTML = '<option value="">Select a service type</option>';
+
+            // Optionally redirect to confirmation page
+            // window.location.href = 'appointment-confirmation.html';
+        } else {
+            alert('Error booking appointment: ' + (result.error || 'Unknown error'));
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Failed to book appointment. Please try again later.');
+    }
 });
 
 // Phone number formatting

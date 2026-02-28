@@ -1,4 +1,33 @@
 /* Requests Page Script */
+
+// Service Category and Type Mapping (Global scope)
+const serviceCategories = {
+    'skincare': [
+        { value: 'facial-treatment', text: 'Facial Treatment' },
+        { value: 'skin-care-treatment', text: 'Skin Care Treatment' },
+        { value: 'advanced-skin-care', text: 'Advanced Skin Care' },
+        { value: 'collagen-treatment', text: 'Collagen Treatment' },
+        { value: 'facial-peeling', text: 'Facial Peeling' }
+    ],
+    'haircare': [
+        { value: 'hair-spa-treatment', text: 'Hair Spa Treatment' },
+        { value: 'hairloss-treatment', text: 'Hairloss Treatment' }
+    ],
+    'nailcare': [
+        { value: 'nail-care-service', text: 'Nail Care Service' }
+    ],
+    'bodytreatment': [
+        { value: 'body-massage', text: 'Body Massage' }
+    ],
+    'aesthetic': [
+        { value: 'permanent-makeup', text: 'Permanent Makeup' },
+        { value: 'eyelash-extension', text: 'Eyelash Extension' },
+        { value: 'eyebrow-threading', text: 'Eyebrow Threading' },
+        { value: 'eyebrow-microblading', text: 'Eyebrow Microblading' },
+        { value: 'aesthetic-consultation', text: 'Aesthetic Consultation' }
+    ]
+};
+
 document.addEventListener('DOMContentLoaded', function () {
     // Fix passive event listeners for better performance
     if (typeof EventTarget !== 'undefined') {
@@ -29,33 +58,6 @@ document.addEventListener('DOMContentLoaded', function () {
     loadStatistics();
 
     // Service Category and Type Filtering
-    const serviceCategories = {
-        'skincare': [
-            { value: 'facial-treatment', text: 'Facial Treatment' },
-            { value: 'skin-care-treatment', text: 'Skin Care Treatment' },
-            { value: 'advanced-skin-care', text: 'Advanced Skin Care' },
-            { value: 'collagen-treatment', text: 'Collagen Treatment' },
-            { value: 'facial-peeling', text: 'Facial Peeling' }
-        ],
-        'haircare': [
-            { value: 'hair-spa-treatment', text: 'Hair Spa Treatment' },
-            { value: 'hairloss-treatment', text: 'Hairloss Treatment' }
-        ],
-        'nailcare': [
-            { value: 'nail-care-service', text: 'Nail Care Service' }
-        ],
-        'bodytreatment': [
-            { value: 'body-massage', text: 'Body Massage' }
-        ],
-        'aesthetic': [
-            { value: 'permanent-makeup', text: 'Permanent Makeup' },
-            { value: 'eyelash-extension', text: 'Eyelash Extension' },
-            { value: 'eyebrow-threading', text: 'Eyebrow Threading' },
-            { value: 'eyebrow-microblading', text: 'Eyebrow Microblading' },
-            { value: 'aesthetic-consultation', text: 'Aesthetic Consultation' }
-        ]
-    };
-
     const filterServiceCategory = document.getElementById('filterServiceCategory');
     const filterServiceType = document.getElementById('filterServiceType');
 

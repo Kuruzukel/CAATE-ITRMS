@@ -682,18 +682,17 @@ async function saveAppointmentChanges() {
         specialNotes: document.getElementById('editSpecialNotes').value.trim()
     };
 
-    // Validate required fields
-    if (!updatedData.firstName || !updatedData.lastName || !updatedData.email ||
-        !updatedData.contactNumber || !updatedData.serviceCategory || !updatedData.serviceType ||
-        !updatedData.preferredDate || !updatedData.preferredTime) {
-        showToast('Please fill in all required fields', 'warning');
-        return;
-    }
-
-    // Check if any changes were made
+    // Check if any changes were made FIRST
     let hasChanges = false;
     for (const key in updatedData) {
-        if (updatedData[key] !== (originalAppointmentData[key] || '')) {
+        const originalValue = originalAppointmentData[key] || '';
+        const updatedValue = updatedData[key] || '';
+
+        // Normalize values for comparison (trim and convert to string)
+        const normalizedOriginal = String(originalValue).trim();
+        const normalizedUpdated = String(updatedValue).trim();
+
+        if (normalizedOriginal !== normalizedUpdated) {
             hasChanges = true;
             break;
         }
@@ -701,6 +700,14 @@ async function saveAppointmentChanges() {
 
     if (!hasChanges) {
         showToast('No changes detected', 'info');
+        return;
+    }
+
+    // Validate required fields (only if changes were detected)
+    if (!updatedData.firstName || !updatedData.lastName || !updatedData.email ||
+        !updatedData.contactNumber || !updatedData.serviceCategory || !updatedData.serviceType ||
+        !updatedData.preferredDate || !updatedData.preferredTime) {
+        showToast('Please fill in all required fields', 'warning');
         return;
     }
 
@@ -735,5 +742,53 @@ async function saveAppointmentChanges() {
     } catch (error) {
         console.error('Error updating appointment:', error);
         showToast('Failed to update appointment. Please try again.', 'error');
+    }
+}
+
+// Toast notification function
+function showToast(message, type = 'success') {
+    const container = document.getElementById('toastContainer');
+    if (!container) {
+        console.warn('Toast container not found');
+        return;
+    }
+
+    const toast = document.createElement('div');
+    toast.className = `toast-notification ${type}`;
+
+    // Icon based on type
+    const icons = {
+        success: 'bx-check-circle',
+        error: 'bx-error-circle',
+        warning: 'bx-error',
+        info: 'bx-info-circle'
+    };
+
+    toast.innerHTML = `
+        <div class="toast-content">
+            <i class="bx ${icons[type] || icons.info} toast-icon"></i>
+            <div class="toast-message">${message}</div>
+        </div>
+        <button class="toast-close" onclick="closeToast(this)">
+            <i class="bx bx-x"></i>
+        </button>
+    `;
+
+    container.appendChild(toast);
+
+    // Auto remove after 3 seconds
+    setTimeout(() => {
+        closeToast(toast.querySelector('.toast-close'));
+    }, 3000);
+}
+
+// Close toast notification
+function closeToast(button) {
+    const toast = button.closest('.toast-notification');
+    if (toast) {
+        toast.classList.add('hiding');
+        setTimeout(() => {
+            toast.remove();
+        }, 300);
     }
 }

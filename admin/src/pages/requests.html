@@ -1391,8 +1391,7 @@ Thank you!</textarea>
     </div>
 
     <!-- View Appointment Details Modal -->
-    <div class="modal fade" id="viewAppointmentModal" tabindex="-1" aria-labelledby="viewAppointmentModalLabel"
-        aria-modal="true" role="dialog">
+    <div class="modal fade" id="viewAppointmentModal" tabindex="-1" aria-labelledby="viewAppointmentModalLabel">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -1498,8 +1497,7 @@ Thank you!</textarea>
     </div>
 
     <!-- Edit Appointment Details Modal -->
-    <div class="modal fade" id="editAppointmentModal" tabindex="-1" aria-labelledby="editAppointmentModalLabel"
-        aria-modal="true" role="dialog">
+    <div class="modal fade" id="editAppointmentModal" tabindex="-1" aria-labelledby="editAppointmentModalLabel">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -1623,8 +1621,7 @@ Thank you!</textarea>
     </div>
 
     <!-- Delete Appointment Confirmation Modal -->
-    <div class="modal fade" id="deleteAppointmentModal" tabindex="-1" aria-labelledby="deleteAppointmentModalLabel"
-        aria-modal="true" role="dialog">
+    <div class="modal fade" id="deleteAppointmentModal" tabindex="-1" aria-labelledby="deleteAppointmentModalLabel">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-danger">
@@ -1651,8 +1648,123 @@ Thank you!</textarea>
     <!-- Toast Notification Container -->
     <div id="toastContainer" style="position: fixed; top: 20px; right: 20px; z-index: 9999;"></div>
 
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" style="position: fixed; top: 20px; right: 20px; z-index: 9999;"></div>
+
+    <!-- Toast Notification Styles -->
+    <style>
+        .toast-notification {
+            min-width: 300px;
+            max-width: 400px;
+            padding: 16px 20px;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            animation: slideIn 0.3s ease-out;
+            backdrop-filter: blur(10px);
+            border-left: 4px solid;
+        }
+
+        .toast-notification.success {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.95) 0%, rgba(5, 150, 105, 0.95) 100%);
+            border-left-color: #059669;
+            color: white;
+        }
+
+        .toast-notification.error {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.95) 0%, rgba(220, 38, 38, 0.95) 100%);
+            border-left-color: #dc2626;
+            color: white;
+        }
+
+        .toast-notification.warning {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.95) 0%, rgba(217, 119, 6, 0.95) 100%);
+            border-left-color: #d97706;
+            color: white;
+        }
+
+        .toast-notification.info {
+            background: linear-gradient(135deg, rgba(54, 145, 191, 0.95) 0%, rgba(50, 85, 150, 0.95) 100%);
+            border-left-color: #325596;
+            color: white;
+        }
+
+        .toast-content {
+            display: flex;
+            align-items: center;
+            flex: 1;
+            gap: 12px;
+        }
+
+        .toast-icon {
+            font-size: 24px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .toast-message {
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 1.4;
+            flex: 1;
+        }
+
+        .toast-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 0;
+            margin-left: 12px;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .toast-close:hover {
+            opacity: 1;
+        }
+
+        .toast-notification.hiding {
+            animation: slideOut 0.3s ease-in forwards;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+
+            to {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+        }
+    </style>
+
     <!-- Requests JS -->
-    <script src="../assets/js/requests.js?v=6"></script>
+    <script src="../assets/js/requests.js?v=7"></script>
 </body>
 
 </html>

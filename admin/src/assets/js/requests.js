@@ -379,35 +379,81 @@ async function updateStatus(id, status) {
 }
 
 // Delete appointment
+let currentDeletingAppointmentId = null;
+
 async function deleteAppointment(id) {
     // Validate that id is a string
     if (typeof id !== 'string' || !id) {
         console.error('Invalid appointment ID:', id);
-        alert('Invalid appointment ID');
+        showToast('Invalid appointment ID', 'error');
         return;
     }
 
-    if (!confirm('Are you sure you want to delete this appointment?')) {
+    // Store the ID for later use
+    currentDeletingAppointmentId = id;
+
+    // Fetch appointment details to show name in modal
+    try {
+        const response = await fetch(`/CAATE-ITRMS/backend/public/api/v1/appointments/${id}`);
+        const result = await response.json();
+
+        if (result.success && result.data) {
+            const appointment = result.data;
+            const fullName = [
+                appointment.firstName,
+                appointment.secondName,
+                appointment.middleName,
+                appointment.lastName,
+                appointment.suffix
+            ].filter(Boolean).join(' ');
+
+            document.getElementById('deleteAppointmentName').textContent = fullName;
+
+            // Show delete confirmation modal
+            const modal = new bootstrap.Modal(document.getElementById('deleteAppointmentModal'));
+            modal.show();
+        } else {
+            showToast('Failed to load appointment details', 'error');
+        }
+    } catch (error) {
+        console.error('Error loading appointment details:', error);
+        showToast('Failed to load appointment details', 'error');
+    }
+}
+
+// Confirm delete appointment
+async function confirmDeleteAppointment() {
+    if (!currentDeletingAppointmentId) {
+        showToast('No appointment selected for deletion', 'error');
         return;
     }
 
     try {
-        const response = await fetch(`/CAATE-ITRMS/backend/public/api/v1/appointments/${id}`, {
+        const response = await fetch(`/CAATE-ITRMS/backend/public/api/v1/appointments/${currentDeletingAppointmentId}`, {
             method: 'DELETE'
         });
 
         const result = await response.json();
 
         if (result.success) {
+            showToast('Appointment deleted successfully', 'success');
+
+            // Close modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('deleteAppointmentModal'));
+            modal.hide();
+
+            // Reset ID
+            currentDeletingAppointmentId = null;
+
             // Reload appointments
             loadAppointments();
             loadStatistics();
         } else {
-            alert('Failed to delete appointment: ' + (result.error || 'Unknown error'));
+            showToast('Failed to delete appointment: ' + (result.error || 'Unknown error'), 'error');
         }
     } catch (error) {
         console.error('Error deleting appointment:', error);
-        alert('Failed to delete appointment. Please try again.');
+        showToast('Failed to delete appointment. Please try again.', 'error');
     }
 }
 
@@ -463,16 +509,118 @@ async function editDetails(id) {
 
 // Display appointment details in modal (helper function)
 function displayAppointmentDetails(appointment) {
-    // TODO: Implement modal display logic
-    console.log('Appointment details:', appointment);
-    alert('View details modal not yet implemented. Check console for data.');
+    // Populate view modal fields
+    document.getElementById('viewFirstName').value = appointment.firstName || '';
+    document.getElementById('viewSecondName').value = appointment.secondName || '';
+    document.getElementById('viewMiddleName').value = appointment.middleName || '';
+    document.getElementById('viewLastName').value = appointment.lastName || '';
+    document.getElementById('viewSuffix').value = appointment.suffix || '';
+    document.getElementById('viewEmail').value = appointment.email || '';
+    document.getElementById('viewContactNumber').value = appointment.contactNumber || '';
+
+    // Format service category and type
+    const categoryMap = {
+        'skincare': 'Skin Care',
+        'haircare': 'Hair Care',
+        'nailcare': 'Nail Care',
+        'bodytreatment': 'Body Treatment',
+        'aesthetic': 'Aesthetic Services'
+    };
+    document.getElementById('viewServiceCategory').value = categoryMap[appointment.serviceCategory] || appointment.serviceCategory || '';
+    document.getElementById('viewServiceType').value = formatServiceType(appointment.serviceType) || '';
+
+    // Format date
+    if (appointment.preferredDate) {
+        const dateObj = new Date(appointment.preferredDate);
+        document.getElementById('viewPreferredDate').value = dateObj.toLocaleDateString('en-US', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+    } else {
+        document.getElementById('viewPreferredDate').value = 'Not set';
+    }
+
+    // Format time
+    if (appointment.preferredTime) {
+        const [hours, minutes] = appointment.preferredTime.split(':');
+        const hour = parseInt(hours);
+        const ampm = hour >= 12 ? 'PM' : 'AM';
+        const hour12 = hour % 12 || 12;
+        document.getElementById('viewPreferredTime').value = `${hour12}:${minutes} ${ampm}`;
+    } else {
+        document.getElementById('viewPreferredTime').value = 'Not set';
+    }
+
+    document.getElementById('viewStatus').value = appointment.status || 'Pending';
+    document.getElementById('viewSpecialNotes').value = appointment.specialNotes || 'No special notes';
+
+    // Show modal
+    const modal = new bootstrap.Modal(document.getElementById('viewAppointmentModal'));
+    modal.show();
 }
 
 // Display edit form in modal (helper function)
+let currentEditingAppointmentId = null;
+let originalAppointmentData = null;
+
 function displayEditForm(appointment) {
-    // TODO: Implement edit form modal logic
-    console.log('Edit appointment:', appointment);
-    alert('Edit form modal not yet implemented. Check console for data.');
+    currentEditingAppointmentId = appointment._id;
+
+    // Store original data for comparison
+    originalAppointmentData = JSON.parse(JSON.stringify(appointment));
+
+    // Populate edit modal fields
+    document.getElementById('editFirstName').value = appointment.firstName || '';
+    document.getElementById('editSecondName').value = appointment.secondName || '';
+    document.getElementById('editMiddleName').value = appointment.middleName || '';
+    document.getElementById('editLastName').value = appointment.lastName || '';
+    document.getElementById('editSuffix').value = appointment.suffix || '';
+    document.getElementById('editEmail').value = appointment.email || '';
+    document.getElementById('editContactNumber').value = appointment.contactNumber || '';
+    document.getElementById('editServiceCategory').value = appointment.serviceCategory || '';
+
+    // Populate service types based on category
+    const editServiceCategory = document.getElementById('editServiceCategory');
+    const editServiceType = document.getElementById('editServiceType');
+
+    if (appointment.serviceCategory && serviceCategories[appointment.serviceCategory]) {
+        editServiceType.innerHTML = '<option value="">Select service type</option>';
+        serviceCategories[appointment.serviceCategory].forEach(service => {
+            const option = document.createElement('option');
+            option.value = service.value;
+            option.textContent = service.text;
+            if (service.value === appointment.serviceType) {
+                option.selected = true;
+            }
+            editServiceType.appendChild(option);
+        });
+    }
+
+    document.getElementById('editPreferredDate').value = appointment.preferredDate || '';
+    document.getElementById('editPreferredTime').value = appointment.preferredTime || '';
+    document.getElementById('editStatus').value = appointment.status || 'Pending';
+    document.getElementById('editSpecialNotes').value = appointment.specialNotes || '';
+
+    // Setup service category change handler for edit modal
+    editServiceCategory.addEventListener('change', function () {
+        const selectedCategory = this.value;
+        editServiceType.innerHTML = '<option value="">Select service type</option>';
+
+        if (selectedCategory && serviceCategories[selectedCategory]) {
+            serviceCategories[selectedCategory].forEach(service => {
+                const option = document.createElement('option');
+                option.value = service.value;
+                option.textContent = service.text;
+                editServiceType.appendChild(option);
+            });
+        }
+    });
+
+    // Show modal
+    const modal = new bootstrap.Modal(document.getElementById('editAppointmentModal'));
+    modal.show();
 }
 
 
@@ -506,4 +654,84 @@ if (deleteConfirmInput && confirmDeleteBtn) {
         const modal = bootstrap.Modal.getInstance(deleteModal);
         modal.hide();
     });
+}
+
+// Save appointment changes
+async function saveAppointmentChanges() {
+    if (!currentEditingAppointmentId) {
+        showToast('No appointment selected for editing', 'error');
+        return;
+    }
+
+    // Get form data
+    const updatedData = {
+        firstName: document.getElementById('editFirstName').value.trim(),
+        secondName: document.getElementById('editSecondName').value.trim(),
+        middleName: document.getElementById('editMiddleName').value.trim(),
+        lastName: document.getElementById('editLastName').value.trim(),
+        suffix: document.getElementById('editSuffix').value.trim(),
+        email: document.getElementById('editEmail').value.trim(),
+        contactNumber: document.getElementById('editContactNumber').value.trim(),
+        serviceCategory: document.getElementById('editServiceCategory').value,
+        serviceType: document.getElementById('editServiceType').value,
+        preferredDate: document.getElementById('editPreferredDate').value,
+        preferredTime: document.getElementById('editPreferredTime').value,
+        status: document.getElementById('editStatus').value,
+        specialNotes: document.getElementById('editSpecialNotes').value.trim()
+    };
+
+    // Validate required fields
+    if (!updatedData.firstName || !updatedData.lastName || !updatedData.email ||
+        !updatedData.contactNumber || !updatedData.serviceCategory || !updatedData.serviceType ||
+        !updatedData.preferredDate || !updatedData.preferredTime) {
+        showToast('Please fill in all required fields', 'warning');
+        return;
+    }
+
+    // Check if any changes were made
+    let hasChanges = false;
+    for (const key in updatedData) {
+        if (updatedData[key] !== (originalAppointmentData[key] || '')) {
+            hasChanges = true;
+            break;
+        }
+    }
+
+    if (!hasChanges) {
+        showToast('No changes detected', 'info');
+        return;
+    }
+
+    try {
+        const response = await fetch(`/CAATE-ITRMS/backend/public/api/v1/appointments/${currentEditingAppointmentId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updatedData)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            showToast('Appointment updated successfully!', 'success');
+
+            // Close modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('editAppointmentModal'));
+            modal.hide();
+
+            // Reset variables
+            currentEditingAppointmentId = null;
+            originalAppointmentData = null;
+
+            // Reload appointments
+            loadAppointments();
+            loadStatistics();
+        } else {
+            showToast('Failed to update appointment: ' + (result.error || 'Unknown error'), 'error');
+        }
+    } catch (error) {
+        console.error('Error updating appointment:', error);
+        showToast('Failed to update appointment. Please try again.', 'error');
+    }
 }

@@ -1390,9 +1390,269 @@ Thank you!</textarea>
         </div>
     </div>
 
+    <!-- View Appointment Details Modal -->
+    <div class="modal fade" id="viewAppointmentModal" tabindex="-1" aria-labelledby="viewAppointmentModalLabel"
+        aria-modal="true" role="dialog">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="viewAppointmentModalLabel">Appointment Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Personal Information -->
+                    <h6 class="mb-3" style="color: #3691bf; font-weight: 600;">
+                        <i class="bx bx-user me-2"></i>Personal Information
+                    </h6>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="viewFirstName" class="form-label">First Name</label>
+                            <input type="text" class="form-control" id="viewFirstName" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="viewSecondName" class="form-label">Second Name</label>
+                            <input type="text" class="form-control" id="viewSecondName" readonly>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="viewMiddleName" class="form-label">Middle Name</label>
+                            <input type="text" class="form-control" id="viewMiddleName" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="viewLastName" class="form-label">Last Name</label>
+                            <input type="text" class="form-control" id="viewLastName" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="viewSuffix" class="form-label">Suffix</label>
+                            <input type="text" class="form-control" id="viewSuffix" readonly>
+                        </div>
+                    </div>
+
+                    <!-- Contact Information -->
+                    <h6 class="mb-3 mt-4" style="color: #3691bf; font-weight: 600;">
+                        <i class="bx bx-phone me-2"></i>Contact Information
+                    </h6>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="viewEmail" class="form-label">Email Address</label>
+                            <input type="text" class="form-control" id="viewEmail" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="viewContactNumber" class="form-label">Contact Number</label>
+                            <input type="text" class="form-control" id="viewContactNumber" readonly>
+                        </div>
+                    </div>
+
+                    <!-- Service Details -->
+                    <h6 class="mb-3 mt-4" style="color: #3691bf; font-weight: 600;">
+                        <i class="bx bx-briefcase me-2"></i>Service Details
+                    </h6>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="viewServiceCategory" class="form-label">Service Category</label>
+                            <input type="text" class="form-control" id="viewServiceCategory" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="viewServiceType" class="form-label">Service Type</label>
+                            <input type="text" class="form-control" id="viewServiceType" readonly>
+                        </div>
+                    </div>
+
+                    <!-- Appointment Schedule -->
+                    <h6 class="mb-3 mt-4" style="color: #3691bf; font-weight: 600;">
+                        <i class="bx bx-calendar me-2"></i>Appointment Schedule
+                    </h6>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="viewPreferredDate" class="form-label">Preferred Date</label>
+                            <input type="text" class="form-control" id="viewPreferredDate" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="viewPreferredTime" class="form-label">Preferred Time</label>
+                            <input type="text" class="form-control" id="viewPreferredTime" readonly>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <label for="viewStatus" class="form-label">Status</label>
+                            <input type="text" class="form-control" id="viewStatus" readonly>
+                        </div>
+                    </div>
+
+                    <!-- Special Notes -->
+                    <h6 class="mb-3 mt-4" style="color: #3691bf; font-weight: 600;">
+                        <i class="bx bx-note me-2"></i>Special Notes
+                    </h6>
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <textarea class="form-control" id="viewSpecialNotes" rows="3" readonly></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Appointment Details Modal -->
+    <div class="modal fade" id="editAppointmentModal" tabindex="-1" aria-labelledby="editAppointmentModalLabel"
+        aria-modal="true" role="dialog">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editAppointmentModalLabel">Edit Appointment Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editAppointmentForm" autocomplete="off">
+                        <!-- Personal Information -->
+                        <h6 class="mb-3" style="color: #3691bf; font-weight: 600;">
+                            <i class="bx bx-user me-2"></i>Personal Information
+                        </h6>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="editFirstName" class="form-label">First Name</label>
+                                <input type="text" class="form-control" id="editFirstName" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="editSecondName" class="form-label">Second Name</label>
+                                <input type="text" class="form-control" id="editSecondName">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label for="editMiddleName" class="form-label">Middle Name</label>
+                                <input type="text" class="form-control" id="editMiddleName">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="editLastName" class="form-label">Last Name</label>
+                                <input type="text" class="form-control" id="editLastName" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="editSuffix" class="form-label">Suffix</label>
+                                <input type="text" class="form-control" id="editSuffix">
+                            </div>
+                        </div>
+
+                        <!-- Contact Information -->
+                        <h6 class="mb-3 mt-4" style="color: #3691bf; font-weight: 600;">
+                            <i class="bx bx-phone me-2"></i>Contact Information
+                        </h6>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="editEmail" class="form-label">Email Address</label>
+                                <input type="email" class="form-control" id="editEmail" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="editContactNumber" class="form-label">Contact Number</label>
+                                <input type="text" class="form-control" id="editContactNumber" required>
+                            </div>
+                        </div>
+
+                        <!-- Service Details -->
+                        <h6 class="mb-3 mt-4" style="color: #3691bf; font-weight: 600;">
+                            <i class="bx bx-briefcase me-2"></i>Service Details
+                        </h6>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="editServiceCategory" class="form-label">Service Category</label>
+                                <select class="form-select" id="editServiceCategory" required>
+                                    <option value="">Select category</option>
+                                    <option value="skincare">Skin Care</option>
+                                    <option value="haircare">Hair Care</option>
+                                    <option value="nailcare">Nail Care</option>
+                                    <option value="bodytreatment">Body Treatment</option>
+                                    <option value="aesthetic">Aesthetic Services</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="editServiceType" class="form-label">Service Type</label>
+                                <select class="form-select" id="editServiceType" required>
+                                    <option value="">Select service type</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Appointment Schedule -->
+                        <h6 class="mb-3 mt-4" style="color: #3691bf; font-weight: 600;">
+                            <i class="bx bx-calendar me-2"></i>Appointment Schedule
+                        </h6>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="editPreferredDate" class="form-label">Preferred Date</label>
+                                <input type="date" class="form-control" id="editPreferredDate" required
+                                    style="color-scheme: dark;">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="editPreferredTime" class="form-label">Preferred Time</label>
+                                <input type="time" class="form-control" id="editPreferredTime" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label for="editStatus" class="form-label">Status</label>
+                                <select class="form-select" id="editStatus" required>
+                                    <option value="Pending">Pending</option>
+                                    <option value="Approved">Approved</option>
+                                    <option value="Cancelled">Cancelled</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Special Notes -->
+                        <h6 class="mb-3 mt-4" style="color: #3691bf; font-weight: 600;">
+                            <i class="bx bx-note me-2"></i>Special Notes
+                        </h6>
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <textarea class="form-control" id="editSpecialNotes" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="saveAppointmentChanges()">Save
+                        Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Appointment Confirmation Modal -->
+    <div class="modal fade" id="deleteAppointmentModal" tabindex="-1" aria-labelledby="deleteAppointmentModalLabel"
+        aria-modal="true" role="dialog">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-danger">
+                    <h5 class="modal-title text-white" id="deleteAppointmentModalLabel">Confirm Delete</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-3">
+                        <i class="bx bx-error-circle text-danger" style="font-size: 4rem;"></i>
+                    </div>
+                    <h6 class="text-center mb-3">Are you sure you want to delete this appointment?</h6>
+                    <p class="text-center mb-2"><strong id="deleteAppointmentName"></strong></p>
+                    <p class="text-center text-muted">This action cannot be undone.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" onclick="confirmDeleteAppointment()">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" style="position: fixed; top: 20px; right: 20px; z-index: 9999;"></div>
 
     <!-- Requests JS -->
-    <script src="../assets/js/requests.js?v=4"></script>
+    <script src="../assets/js/requests.js?v=6"></script>
 </body>
 
 </html>

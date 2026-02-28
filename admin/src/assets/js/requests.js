@@ -138,6 +138,36 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // Add New Appointment Modal - Service Category and Type Dynamic Population
+    const addServiceCategory = document.getElementById('addAppointmentServiceCategory');
+    const addServiceType = document.getElementById('addAppointmentServiceType');
+
+    if (addServiceCategory && addServiceType) {
+        // Listen for category changes in add modal
+        addServiceCategory.addEventListener('change', function () {
+            const selectedCategory = this.value;
+
+            // Clear current service type options
+            addServiceType.innerHTML = '<option value="">Select a service type</option>';
+
+            if (selectedCategory && serviceCategories[selectedCategory]) {
+                // Add service types for selected category
+                serviceCategories[selectedCategory].forEach(service => {
+                    const option = document.createElement('option');
+                    option.value = service.value;
+                    option.textContent = service.text;
+                    addServiceType.appendChild(option);
+                });
+            }
+        });
+    }
+
+    // Save New Appointment Button
+    const saveNewAppointmentBtn = document.getElementById('saveNewAppointmentBtn');
+    if (saveNewAppointmentBtn) {
+        saveNewAppointmentBtn.addEventListener('click', handleSaveNewAppointment);
+    }
+
     // Menu toggle is handled by main.js
 });
 
@@ -1009,4 +1039,157 @@ function updateRowWithNewData(row, data) {
     const appointmentData = JSON.parse(row.getAttribute('data-appointment'));
     Object.assign(appointmentData, data);
     row.setAttribute('data-appointment', JSON.stringify(appointmentData));
+}
+
+
+// Handle Save New Appointment
+async function handleSaveNewAppointment() {
+    const btn = document.getElementById('saveNewAppointmentBtn');
+    const originalText = btn.innerHTML;
+
+    // Get form values
+    const firstName = document.getElementById('addAppointmentFirstName').value.trim();
+    const secondName = document.getElementById('addAppointmentSecondName').value.trim();
+    const middleName = document.getElementById('addAppointmentMiddleName').value.trim();
+    const lastName = document.getElementById('addAppointmentLastName').value.trim();
+    const suffix = document.getElementById('addAppointmentSuffix').value.trim();
+    const contactNumber = document.getElementById('addAppointmentPhone').value.trim();
+    const email = document.getElementById('addAppointmentEmail').value.trim();
+    const serviceCategory = document.getElementById('addAppointmentServiceCategory').value;
+    const serviceType = document.getElementById('addAppointmentServiceType').value;
+    const preferredDate = document.getElementById('addAppointmentDate').value;
+    const preferredTime = document.getElementById('addAppointmentTime').value;
+    const status = document.getElementById('addAppointmentStatus').value;
+    const registrationType = document.getElementById('addAppointmentRegistrationType').value;
+    const specialNotes = document.getElementById('addAppointmentSpecialNotes').value.trim();
+    const adminNotes = document.getElementById('addAppointmentNotes').value.trim();
+
+    // Validate required fields
+    if (!firstName) {
+        showToast('First Name is required', 'error');
+        document.getElementById('addAppointmentFirstName').focus();
+        return;
+    }
+
+    if (!contactNumber) {
+        showToast('Phone Number is required', 'error');
+        document.getElementById('addAppointmentPhone').focus();
+        return;
+    }
+
+    if (!email) {
+        showToast('Email Address is required', 'error');
+        document.getElementById('addAppointmentEmail').focus();
+        return;
+    }
+
+    // Validate email format
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) {
+        showToast('Please enter a valid email address', 'error');
+        document.getElementById('addAppointmentEmail').focus();
+        return;
+    }
+
+    if (!serviceCategory) {
+        showToast('Service Category is required', 'error');
+        document.getElementById('addAppointmentServiceCategory').focus();
+        return;
+    }
+
+    if (!serviceType) {
+        showToast('Service Type is required', 'error');
+        document.getElementById('addAppointmentServiceType').focus();
+        return;
+    }
+
+    if (!preferredDate) {
+        showToast('Preferred Date is required', 'error');
+        document.getElementById('addAppointmentDate').focus();
+        return;
+    }
+
+    if (!preferredTime) {
+        showToast('Preferred Time is required', 'error');
+        document.getElementById('addAppointmentTime').focus();
+        return;
+    }
+
+    // Prepare appointment data
+    const appointmentData = {
+        firstName,
+        secondName,
+        middleName,
+        lastName,
+        suffix,
+        contactNumber,
+        email,
+        serviceCategory,
+        serviceType,
+        preferredDate,
+        preferredTime,
+        status,
+        registrationType,
+        specialNotes,
+        adminNotes
+    };
+
+    // Disable button and show loading
+    btn.disabled = true;
+    btn.innerHTML = '<i class="bx bx-loader-alt bx-spin me-2"></i>Saving...';
+
+    try {
+        const response = await fetch('/CAATE-ITRMS/backend/public/api/v1/appointments', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(appointmentData)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            showToast('Appointment created successfully!', 'success');
+
+            // Close modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('calendarModal'));
+            modal.hide();
+
+            // Reset form
+            resetAddAppointmentForm();
+
+            // Reload appointments and statistics
+            loadAppointments();
+            loadStatistics();
+        } else {
+            showToast('Failed to create appointment: ' + (result.error || 'Unknown error'), 'error');
+        }
+    } catch (error) {
+        console.error('Error creating appointment:', error);
+        showToast('Failed to create appointment. Please try again.', 'error');
+    } finally {
+        // Re-enable button
+        btn.disabled = false;
+        btn.innerHTML = originalText;
+    }
+}
+
+// Reset Add Appointment Form
+function resetAddAppointmentForm() {
+    document.getElementById('addAppointmentFirstName').value = '';
+    document.getElementById('addAppointmentSecondName').value = '';
+    document.getElementById('addAppointmentMiddleName').value = '';
+    document.getElementById('addAppointmentLastName').value = '';
+    document.getElementById('addAppointmentSuffix').value = '';
+    document.getElementById('addAppointmentPhone').value = '';
+    document.getElementById('addAppointmentEmail').value = '';
+    document.getElementById('addAppointmentServiceCategory').value = '';
+    document.getElementById('addAppointmentServiceType').innerHTML = '<option value="">Select a service type</option>';
+    document.getElementById('addAppointmentDate').value = '';
+    document.getElementById('addAppointmentTime').value = '';
+    document.getElementById('addAppointmentStatus').value = 'Pending';
+    document.getElementById('addAppointmentRegistrationType').value = '';
+    document.getElementById('addAppointmentSpecialNotes').value = '';
+    document.getElementById('addAppointmentNotes').value = '';
 }

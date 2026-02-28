@@ -610,6 +610,7 @@ function displayAppointmentDetails(appointment) {
 
     document.getElementById('viewStatus').value = appointment.status || 'Pending';
     document.getElementById('viewSpecialNotes').value = appointment.specialNotes || 'No special notes';
+    document.getElementById('viewAdminNotes').value = appointment.adminNotes || 'No admin notes';
 
     // Show modal
     const modal = new bootstrap.Modal(document.getElementById('viewAppointmentModal'));

@@ -1648,9 +1648,6 @@ Thank you!</textarea>
     <!-- Toast Notification Container -->
     <div id="toastContainer" style="position: fixed; top: 20px; right: 20px; z-index: 9999;"></div>
 
-    <!-- Toast Notification Container -->
-    <div id="toastContainer" style="position: fixed; top: 20px; right: 20px; z-index: 9999;"></div>
-
     <!-- Toast Notification Styles -->
     <style>
         .toast-notification {
@@ -1696,22 +1693,24 @@ Thank you!</textarea>
             display: flex;
             align-items: center;
             flex: 1;
-            gap: 12px;
         }
 
         .toast-icon {
-            font-size: 24px;
-            flex-shrink: 0;
+            font-size: 22px;
+            margin-right: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0;
+            line-height: 1;
         }
 
         .toast-message {
             font-size: 14px;
             font-weight: 500;
-            line-height: 1.4;
-            flex: 1;
+            line-height: 1.5;
+            display: flex;
+            align-items: center;
         }
 
         .toast-close {
@@ -1724,10 +1723,11 @@ Thank you!</textarea>
             margin-left: 12px;
             opacity: 0.8;
             transition: opacity 0.2s;
-            flex-shrink: 0;
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0;
+            line-height: 1;
         }
 
         .toast-close:hover {

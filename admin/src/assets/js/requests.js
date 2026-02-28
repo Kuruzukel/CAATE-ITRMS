@@ -628,7 +628,9 @@ function displayEditForm(appointment, row) {
     document.getElementById('editPreferredDate').value = appointment.preferredDate || '';
     document.getElementById('editPreferredTime').value = appointment.preferredTime || '';
     document.getElementById('editStatus').value = appointment.status || 'Pending';
+    document.getElementById('editRegistrationType').value = appointment.registrationType || '';
     document.getElementById('editSpecialNotes').value = appointment.specialNotes || '';
+    document.getElementById('editAdminNotes').value = appointment.adminNotes || '';
 
     // Setup service category change handler for edit modal
     editServiceCategory.addEventListener('change', function () {
@@ -706,7 +708,9 @@ async function saveAppointmentChanges() {
         preferredDate: document.getElementById('editPreferredDate').value,
         preferredTime: document.getElementById('editPreferredTime').value,
         status: document.getElementById('editStatus').value,
-        specialNotes: document.getElementById('editSpecialNotes').value.trim()
+        registrationType: document.getElementById('editRegistrationType').value,
+        specialNotes: document.getElementById('editSpecialNotes').value.trim(),
+        adminNotes: document.getElementById('editAdminNotes').value.trim()
     };
 
     // Check if any changes were made FIRST

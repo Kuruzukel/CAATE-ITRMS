@@ -3,6 +3,7 @@
 // Service Category and Type Mapping (Global scope)
 const serviceCategories = {
     'skincare': [
+        { value: 'acne-treatment', text: 'Acne Treatment' },
         { value: 'facial-treatment', text: 'Facial Treatment' },
         { value: 'skin-care-treatment', text: 'Skin Care Treatment' },
         { value: 'advanced-skin-care', text: 'Advanced Skin Care' },
@@ -625,6 +626,12 @@ function displayEditForm(appointment, row) {
     // Store original data for comparison
     originalAppointmentData = JSON.parse(JSON.stringify(appointment));
 
+    console.log('=== EDIT FORM DEBUG ===');
+    console.log('Full appointment data:', appointment);
+    console.log('Service Category:', appointment.serviceCategory);
+    console.log('Service Type:', appointment.serviceType);
+    console.log('Available categories:', Object.keys(serviceCategories));
+
     // Populate edit modal fields
     document.getElementById('editFirstName').value = appointment.firstName || '';
     document.getElementById('editSecondName').value = appointment.secondName || '';
@@ -639,21 +646,40 @@ function displayEditForm(appointment, row) {
     const editServiceType = document.getElementById('editServiceType');
     editServiceCategory.value = appointment.serviceCategory || '';
 
-    // Populate service types based on category
+    // Clear and populate service types based on category
     editServiceType.innerHTML = '<option value="">Select a service type</option>';
 
     if (appointment.serviceCategory && serviceCategories[appointment.serviceCategory]) {
-        serviceCategories[appointment.serviceCategory].forEach(service => {
+        console.log('Found category in serviceCategories, populating options...');
+        const services = serviceCategories[appointment.serviceCategory];
+        console.log('Services for this category:', services);
+
+        services.forEach(service => {
             const option = document.createElement('option');
             option.value = service.value;
             option.textContent = service.text;
             editServiceType.appendChild(option);
+            console.log('Added option:', service.value, '-', service.text);
         });
 
-        // Set the service type value AFTER populating options
+        // Set the service type value AFTER populating all options
         if (appointment.serviceType) {
             editServiceType.value = appointment.serviceType;
+            console.log('Set service type to:', appointment.serviceType);
+            console.log('Dropdown value after setting:', editServiceType.value);
+
+            // If value didn't set, log all available options
+            if (!editServiceType.value) {
+                console.warn('Service type value did not set! Available options:');
+                Array.from(editServiceType.options).forEach(opt => {
+                    console.log('  -', opt.value, ':', opt.text);
+                });
+            }
+        } else {
+            console.warn('No service type in appointment data');
         }
+    } else {
+        console.error('Service category not found or empty:', appointment.serviceCategory);
     }
 
     document.getElementById('editPreferredDate').value = appointment.preferredDate || '';
@@ -662,25 +688,6 @@ function displayEditForm(appointment, row) {
     document.getElementById('editRegistrationType').value = appointment.registrationType || '';
     document.getElementById('editSpecialNotes').value = appointment.specialNotes || '';
     document.getElementById('editAdminNotes').value = appointment.adminNotes || '';
-
-    // Remove old event listener and add new one (prevent duplicates)
-    const newEditServiceCategory = editServiceCategory.cloneNode(true);
-    editServiceCategory.parentNode.replaceChild(newEditServiceCategory, editServiceCategory);
-
-    // Setup service category change handler for edit modal
-    newEditServiceCategory.addEventListener('change', function () {
-        const selectedCategory = this.value;
-        editServiceType.innerHTML = '<option value="">Select a service type</option>';
-
-        if (selectedCategory && serviceCategories[selectedCategory]) {
-            serviceCategories[selectedCategory].forEach(service => {
-                const option = document.createElement('option');
-                option.value = service.value;
-                option.textContent = service.text;
-                editServiceType.appendChild(option);
-            });
-        }
-    });
 
     // Show modal
     const modal = new bootstrap.Modal(document.getElementById('editAppointmentModal'));

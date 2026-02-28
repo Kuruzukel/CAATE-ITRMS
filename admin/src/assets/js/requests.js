@@ -3,22 +3,38 @@
 // Service Category and Type Mapping (Global scope)
 const serviceCategories = {
     'skincare': [
-        { value: 'acne-treatment', text: 'Acne Treatment' },
         { value: 'facial-treatment', text: 'Facial Treatment' },
+        { value: 'skin-analysis', text: 'Skin Analysis' },
+        { value: 'acne-treatment', text: 'Acne Treatment' },
+        { value: 'anti-aging', text: 'Anti-Aging Treatment' },
+        { value: 'brightening', text: 'Skin Brightening' },
         { value: 'skin-care-treatment', text: 'Skin Care Treatment' },
         { value: 'advanced-skin-care', text: 'Advanced Skin Care' },
         { value: 'collagen-treatment', text: 'Collagen Treatment' },
         { value: 'facial-peeling', text: 'Facial Peeling' }
     ],
     'haircare': [
+        { value: 'hair-loss-therapy', text: 'Hair Loss Therapy' },
+        { value: 'scalp-treatment', text: 'Scalp Treatment' },
+        { value: 'hair-spa', text: 'Hair Spa' },
+        { value: 'keratin-treatment', text: 'Keratin Treatment' },
         { value: 'hair-spa-treatment', text: 'Hair Spa Treatment' },
         { value: 'hairloss-treatment', text: 'Hairloss Treatment' }
     ],
     'nailcare': [
+        { value: 'gel-manicure', text: 'Gel Manicure' },
+        { value: 'nail-extension', text: 'Nail Extension' },
+        { value: 'pedicure', text: 'Pedicure' },
+        { value: 'nail-art', text: 'Nail Art' },
+        { value: 'hand-spa', text: 'Hand Spa' },
+        { value: 'foot-spa', text: 'Foot Spa' },
         { value: 'nail-care-service', text: 'Nail Care Service' }
     ],
     'bodytreatment': [
-        { value: 'body-massage', text: 'Body Massage' }
+        { value: 'body-scrub', text: 'Body Scrub' },
+        { value: 'waxing', text: 'Waxing' },
+        { value: 'body-massage', text: 'Body Massage' },
+        { value: 'slimming-treatment', text: 'Slimming Treatment' }
     ],
     'aesthetic': [
         { value: 'permanent-makeup', text: 'Permanent Makeup' },
@@ -93,6 +109,30 @@ document.addEventListener('DOMContentLoaded', function () {
                     option.value = service.value;
                     option.textContent = service.text;
                     filterServiceType.appendChild(option);
+                });
+            }
+        });
+    }
+
+    // Edit Service Category and Type Dynamic Population
+    const editServiceCategory = document.getElementById('editServiceCategory');
+    const editServiceType = document.getElementById('editServiceType');
+
+    if (editServiceCategory && editServiceType) {
+        // Listen for category changes in edit modal
+        editServiceCategory.addEventListener('change', function () {
+            const selectedCategory = this.value;
+
+            // Clear current service type options
+            editServiceType.innerHTML = '<option value="">Select a service type</option>';
+
+            if (selectedCategory && serviceCategories[selectedCategory]) {
+                // Add service types for selected category
+                serviceCategories[selectedCategory].forEach(service => {
+                    const option = document.createElement('option');
+                    option.value = service.value;
+                    option.textContent = service.text;
+                    editServiceType.appendChild(option);
                 });
             }
         });
@@ -639,6 +679,12 @@ function displayEditForm(appointment, row) {
     // Set service category first
     const editServiceCategory = document.getElementById('editServiceCategory');
     const editServiceType = document.getElementById('editServiceType');
+
+    // Debug logging
+    console.log('Appointment data:', appointment);
+    console.log('Service Category:', appointment.serviceCategory);
+    console.log('Service Type:', appointment.serviceType);
+
     editServiceCategory.value = appointment.serviceCategory || '';
 
     // Clear and populate service types based on category
@@ -657,7 +703,23 @@ function displayEditForm(appointment, row) {
         // Set the service type value AFTER populating all options
         if (appointment.serviceType) {
             editServiceType.value = appointment.serviceType;
+            console.log('Set service type to:', appointment.serviceType);
+            console.log('Dropdown value after setting:', editServiceType.value);
+
+            // If value didn't set, the service type might not exist in our list
+            if (!editServiceType.value || editServiceType.value === '') {
+                console.warn('Service type not found in dropdown options:', appointment.serviceType);
+                // Add the missing option dynamically
+                const option = document.createElement('option');
+                option.value = appointment.serviceType;
+                option.textContent = formatServiceType(appointment.serviceType);
+                option.selected = true;
+                editServiceType.appendChild(option);
+                console.log('Added missing service type option');
+            }
         }
+    } else {
+        console.warn('Service category not found in serviceCategories:', appointment.serviceCategory);
     }
 
     document.getElementById('editPreferredDate').value = appointment.preferredDate || '';

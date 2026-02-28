@@ -365,6 +365,29 @@ async function updateStatus(element, status) {
         return;
     }
 
+    // OPTIMISTIC UPDATE: Update UI immediately before API call
+    const statusCell = row.querySelector('.status-cell');
+    const originalStatusHTML = statusCell ? statusCell.innerHTML : '';
+
+    if (statusCell) {
+        statusCell.innerHTML = getStatusBadge(status);
+    }
+
+    // Update the stored appointment data immediately
+    const appointmentData = JSON.parse(row.getAttribute('data-appointment'));
+    const originalStatus = appointmentData.status;
+    appointmentData.status = status;
+    row.setAttribute('data-appointment', JSON.stringify(appointmentData));
+
+    // Show success toast immediately
+    const statusMessages = {
+        'Approved': 'Appointment approved successfully!',
+        'Pending': 'Appointment status changed to pending',
+        'Cancelled': 'Appointment cancelled successfully',
+        'Completed': 'Appointment marked as completed'
+    };
+    showToast(statusMessages[status] || 'Status updated successfully', 'success');
+
     try {
         const response = await fetch(`/CAATE-ITRMS/backend/public/api/v1/appointments/${id}`, {
             method: 'PUT',
@@ -377,31 +400,26 @@ async function updateStatus(element, status) {
         const result = await response.json();
 
         if (result.success) {
-            // Show success toast with appropriate message
-            const statusMessages = {
-                'Approved': 'Appointment approved successfully!',
-                'Pending': 'Appointment status changed to pending',
-                'Cancelled': 'Appointment cancelled successfully'
-            };
-            showToast(statusMessages[status] || 'Status updated successfully', 'success');
-
-            // Update only the status cell in the current row
-            const statusCell = row.querySelector('.status-cell');
-            if (statusCell) {
-                statusCell.innerHTML = getStatusBadge(status);
-            }
-
-            // Update the stored appointment data
-            const appointmentData = JSON.parse(row.getAttribute('data-appointment'));
-            appointmentData.status = status;
-            row.setAttribute('data-appointment', JSON.stringify(appointmentData));
-
-            // Update statistics
+            // Update statistics in background
             loadStatistics();
         } else {
+            // ROLLBACK: Revert UI changes if API call failed
+            if (statusCell) {
+                statusCell.innerHTML = originalStatusHTML;
+            }
+            appointmentData.status = originalStatus;
+            row.setAttribute('data-appointment', JSON.stringify(appointmentData));
+
             showToast('Failed to update status: ' + (result.error || 'Unknown error'), 'error');
         }
     } catch (error) {
+        // ROLLBACK: Revert UI changes if API call failed
+        if (statusCell) {
+            statusCell.innerHTML = originalStatusHTML;
+        }
+        appointmentData.status = originalStatus;
+        row.setAttribute('data-appointment', JSON.stringify(appointmentData));
+
         console.error('Error updating status:', error);
         showToast('Failed to update status. Please try again.', 'error');
     }
@@ -615,23 +633,27 @@ function displayEditForm(appointment, row) {
     document.getElementById('editSuffix').value = appointment.suffix || '';
     document.getElementById('editEmail').value = appointment.email || '';
     document.getElementById('editContactNumber').value = appointment.contactNumber || '';
-    document.getElementById('editServiceCategory').value = appointment.serviceCategory || '';
 
-    // Populate service types based on category
+    // Set service category first
     const editServiceCategory = document.getElementById('editServiceCategory');
     const editServiceType = document.getElementById('editServiceType');
+    editServiceCategory.value = appointment.serviceCategory || '';
+
+    // Populate service types based on category
+    editServiceType.innerHTML = '<option value="">Select a service type</option>';
 
     if (appointment.serviceCategory && serviceCategories[appointment.serviceCategory]) {
-        editServiceType.innerHTML = '<option value="">Select service type</option>';
         serviceCategories[appointment.serviceCategory].forEach(service => {
             const option = document.createElement('option');
             option.value = service.value;
             option.textContent = service.text;
-            if (service.value === appointment.serviceType) {
-                option.selected = true;
-            }
             editServiceType.appendChild(option);
         });
+
+        // Set the service type value AFTER populating options
+        if (appointment.serviceType) {
+            editServiceType.value = appointment.serviceType;
+        }
     }
 
     document.getElementById('editPreferredDate').value = appointment.preferredDate || '';
@@ -641,10 +663,14 @@ function displayEditForm(appointment, row) {
     document.getElementById('editSpecialNotes').value = appointment.specialNotes || '';
     document.getElementById('editAdminNotes').value = appointment.adminNotes || '';
 
+    // Remove old event listener and add new one (prevent duplicates)
+    const newEditServiceCategory = editServiceCategory.cloneNode(true);
+    editServiceCategory.parentNode.replaceChild(newEditServiceCategory, editServiceCategory);
+
     // Setup service category change handler for edit modal
-    editServiceCategory.addEventListener('change', function () {
+    newEditServiceCategory.addEventListener('change', function () {
         const selectedCategory = this.value;
-        editServiceType.innerHTML = '<option value="">Select service type</option>';
+        editServiceType.innerHTML = '<option value="">Select a service type</option>';
 
         if (selectedCategory && serviceCategories[selectedCategory]) {
             serviceCategories[selectedCategory].forEach(service => {
@@ -660,6 +686,7 @@ function displayEditForm(appointment, row) {
     const modal = new bootstrap.Modal(document.getElementById('editAppointmentModal'));
     modal.show();
 }
+
 
 
 // Delete confirmation functionality
@@ -722,6 +749,8 @@ async function saveAppointmentChanges() {
         adminNotes: document.getElementById('editAdminNotes').value.trim()
     };
 
+    console.log('Form data collected:', updatedData);
+
     // Check if any changes were made FIRST
     let hasChanges = false;
     for (const key in updatedData) {
@@ -743,11 +772,22 @@ async function saveAppointmentChanges() {
         return;
     }
 
-    // Validate required fields (only if changes were detected)
-    if (!updatedData.firstName || !updatedData.lastName || !updatedData.email ||
-        !updatedData.contactNumber || !updatedData.serviceCategory || !updatedData.serviceType ||
-        !updatedData.preferredDate || !updatedData.preferredTime) {
-        showToast('Please fill in all required fields', 'warning');
+    // Validate ONLY truly required fields (marked with red asterisk *)
+    // Required: First Name, Phone Number, Email, Service Category, Service Type, Preferred Date, Preferred Time
+    // Optional/If Applicable: Second Name, Middle Name, Last Name, Suffix, Registration Type, Special Notes, Admin Notes
+
+    const missingFields = [];
+    if (!updatedData.firstName) missingFields.push('First Name');
+    if (!updatedData.email) missingFields.push('Email');
+    if (!updatedData.contactNumber) missingFields.push('Phone Number');
+    if (!updatedData.serviceCategory) missingFields.push('Service Category');
+    if (!updatedData.serviceType) missingFields.push('Service Type');
+    if (!updatedData.preferredDate) missingFields.push('Preferred Date');
+    if (!updatedData.preferredTime) missingFields.push('Preferred Time');
+
+    if (missingFields.length > 0) {
+        console.log('Missing required fields:', missingFields);
+        showToast('Please fill in all required fields: ' + missingFields.join(', '), 'warning');
         return;
     }
 

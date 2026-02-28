@@ -1193,3 +1193,48 @@ function resetAddAppointmentForm() {
     document.getElementById('addAppointmentSpecialNotes').value = '';
     document.getElementById('addAppointmentNotes').value = '';
 }
+
+
+// Phone number formatting for Add New Appointment modal
+const addAppointmentPhone = document.getElementById('addAppointmentPhone');
+if (addAppointmentPhone) {
+    addAppointmentPhone.addEventListener('input', function (e) {
+        let value = e.target.value.replace(/\D/g, '');
+
+        // Limit to 11 digits for Philippine numbers
+        if (value.length > 11) {
+            value = value.slice(0, 11);
+        }
+
+        // Format: 09XX XXX XXXX
+        if (value.length > 4 && value.length <= 7) {
+            value = value.slice(0, 4) + ' ' + value.slice(4);
+        } else if (value.length > 7) {
+            value = value.slice(0, 4) + ' ' + value.slice(4, 7) + ' ' + value.slice(7);
+        }
+
+        e.target.value = value;
+    });
+}
+
+// Phone number formatting for Edit Appointment modal
+const editContactNumber = document.getElementById('editContactNumber');
+if (editContactNumber) {
+    editContactNumber.addEventListener('input', function (e) {
+        let value = e.target.value.replace(/\D/g, '');
+
+        // Limit to 11 digits for Philippine numbers
+        if (value.length > 11) {
+            value = value.slice(0, 11);
+        }
+
+        // Format: 09XX XXX XXXX
+        if (value.length > 4 && value.length <= 7) {
+            value = value.slice(0, 4) + ' ' + value.slice(4);
+        } else if (value.length > 7) {
+            value = value.slice(0, 4) + ' ' + value.slice(4, 7) + ' ' + value.slice(7);
+        }
+
+        e.target.value = value;
+    });
+}

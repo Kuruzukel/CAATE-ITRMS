@@ -680,11 +680,6 @@ function displayEditForm(appointment, row) {
     const editServiceCategory = document.getElementById('editServiceCategory');
     const editServiceType = document.getElementById('editServiceType');
 
-    // Debug logging
-    console.log('Appointment data:', appointment);
-    console.log('Service Category:', appointment.serviceCategory);
-    console.log('Service Type:', appointment.serviceType);
-
     editServiceCategory.value = appointment.serviceCategory || '';
 
     // Clear and populate service types based on category
@@ -703,23 +698,17 @@ function displayEditForm(appointment, row) {
         // Set the service type value AFTER populating all options
         if (appointment.serviceType) {
             editServiceType.value = appointment.serviceType;
-            console.log('Set service type to:', appointment.serviceType);
-            console.log('Dropdown value after setting:', editServiceType.value);
 
             // If value didn't set, the service type might not exist in our list
             if (!editServiceType.value || editServiceType.value === '') {
-                console.warn('Service type not found in dropdown options:', appointment.serviceType);
                 // Add the missing option dynamically
                 const option = document.createElement('option');
                 option.value = appointment.serviceType;
                 option.textContent = formatServiceType(appointment.serviceType);
                 option.selected = true;
                 editServiceType.appendChild(option);
-                console.log('Added missing service type option');
             }
         }
-    } else {
-        console.warn('Service category not found in serviceCategories:', appointment.serviceCategory);
     }
 
     document.getElementById('editPreferredDate').value = appointment.preferredDate || '';

@@ -212,6 +212,10 @@ function displayAppointments(appointments) {
 function createAppointmentRow(appointment) {
     const tr = document.createElement('tr');
 
+    // Store appointment data in the row for quick access
+    tr.setAttribute('data-appointment', JSON.stringify(appointment));
+    tr.setAttribute('data-id', appointment._id);
+
     // Get initials for avatar
     const firstName = appointment.firstName || '';
     const lastName = appointment.lastName || '';
@@ -253,7 +257,7 @@ function createAppointmentRow(appointment) {
             <small class="text-muted">${serviceType}</small>
         </td>
         <td>${dateTime}</td>
-        <td>${statusBadge}</td>
+        <td class="status-cell">${statusBadge}</td>
         <td>
             <div class="btn-group" role="group">
                 <button type="button" class="btn btn-sm btn-primary dropdown-toggle"
@@ -262,17 +266,17 @@ function createAppointmentRow(appointment) {
                 </button>
                 <ul class="dropdown-menu">
                     <li><a class="dropdown-item" style="color: #28a745 !important;"
-                            href="javascript:void(0);" onclick="updateStatus('${appointment._id}', 'Approved')"><i
+                            href="javascript:void(0);" onclick="updateStatus(this, 'Approved')"><i
                                 class="bx bx-check-circle me-2"
                                 style="color: #28a745 !important;"></i>Approve</a>
                     </li>
                     <li><a class="dropdown-item" style="color: #ffc107 !important;"
-                            href="javascript:void(0);" onclick="updateStatus('${appointment._id}', 'Pending')"><i
+                            href="javascript:void(0);" onclick="updateStatus(this, 'Pending')"><i
                                 class="bx bx-time-five me-2"
                                 style="color: #ffc107 !important;"></i>Pending</a>
                     </li>
                     <li><a class="dropdown-item text-danger"
-                            href="javascript:void(0);" onclick="updateStatus('${appointment._id}', 'Cancelled')"><i
+                            href="javascript:void(0);" onclick="updateStatus(this, 'Cancelled')"><i
                                 class="bx bx-block me-2"></i>Cancelled</a>
                     </li>
                 </ul>
@@ -283,16 +287,16 @@ function createAppointmentRow(appointment) {
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end">
                     <li><a class="dropdown-item" href="javascript:void(0);"
-                            onclick="viewDetails('${appointment._id}')"><i
+                            onclick="viewDetails(this)"><i
                                 class="bx bx-show me-2"></i>View Details</a></li>
                     <li><a class="dropdown-item" href="javascript:void(0);"
-                            onclick="editDetails('${appointment._id}')"><i
+                            onclick="editDetails(this)"><i
                                 class="bx bx-edit me-2"></i>Edit Details</a></li>
                     <li>
                         <hr class="dropdown-divider">
                     </li>
                     <li><a class="dropdown-item text-danger" href="javascript:void(0);"
-                            onclick="deleteAppointment('${appointment._id}')"><i
+                            onclick="deleteAppointment(this)"><i
                                 class="bx bx-trash me-2"></i>Delete Record</a>
                     </li>
                 </ul>
@@ -348,11 +352,16 @@ function getStatusBadge(status) {
 }
 
 // Update appointment status
-async function updateStatus(id, status) {
-    // Validate that id is a string
-    if (typeof id !== 'string' || !id) {
-        console.error('Invalid appointment ID:', id);
-        alert('Invalid appointment ID');
+async function updateStatus(element, status) {
+    const row = element.closest('tr');
+    if (!row) {
+        showToast('Could not find appointment row', 'error');
+        return;
+    }
+
+    const id = row.getAttribute('data-id');
+    if (!id) {
+        showToast('Invalid appointment ID', 'error');
         return;
     }
 
@@ -368,15 +377,33 @@ async function updateStatus(id, status) {
         const result = await response.json();
 
         if (result.success) {
-            // Reload appointments
-            loadAppointments();
+            // Show success toast with appropriate message
+            const statusMessages = {
+                'Approved': 'Appointment approved successfully!',
+                'Pending': 'Appointment status changed to pending',
+                'Cancelled': 'Appointment cancelled successfully'
+            };
+            showToast(statusMessages[status] || 'Status updated successfully', 'success');
+
+            // Update only the status cell in the current row
+            const statusCell = row.querySelector('.status-cell');
+            if (statusCell) {
+                statusCell.innerHTML = getStatusBadge(status);
+            }
+
+            // Update the stored appointment data
+            const appointmentData = JSON.parse(row.getAttribute('data-appointment'));
+            appointmentData.status = status;
+            row.setAttribute('data-appointment', JSON.stringify(appointmentData));
+
+            // Update statistics
             loadStatistics();
         } else {
-            alert('Failed to update status: ' + (result.error || 'Unknown error'));
+            showToast('Failed to update status: ' + (result.error || 'Unknown error'), 'error');
         }
     } catch (error) {
         console.error('Error updating status:', error);
-        alert('Failed to update status. Please try again.');
+        showToast('Failed to update status. Please try again.', 'error');
     }
 }
 
@@ -460,52 +487,50 @@ async function confirmDeleteAppointment() {
 }
 
 // View details
-async function viewDetails(id) {
-    // Validate that id is a string
-    if (typeof id !== 'string' || !id) {
-        console.error('Invalid appointment ID:', id);
-        alert('Invalid appointment ID');
+async function viewDetails(element) {
+    const row = element.closest('tr');
+    if (!row) {
+        showToast('Could not find appointment row', 'error');
+        return;
+    }
+
+    const appointmentDataStr = row.getAttribute('data-appointment');
+    if (!appointmentDataStr) {
+        showToast('Appointment data not found', 'error');
+        console.error('Row missing data-appointment attribute:', row);
         return;
     }
 
     try {
-        const response = await fetch(`/CAATE-ITRMS/backend/public/api/v1/appointments/${id}`);
-        const result = await response.json();
-
-        if (result.success && result.data) {
-            // Display appointment details in a modal
-            displayAppointmentDetails(result.data);
-        } else {
-            alert('Failed to load appointment details: ' + (result.error || 'Unknown error'));
-        }
+        const appointment = JSON.parse(appointmentDataStr);
+        displayAppointmentDetails(appointment);
     } catch (error) {
-        console.error('Error loading appointment details:', error);
-        alert('Failed to load appointment details. Please try again.');
+        showToast('Error loading appointment data', 'error');
+        console.error('Error parsing appointment data:', error);
     }
 }
 
 // Edit details
-async function editDetails(id) {
-    // Validate that id is a string
-    if (typeof id !== 'string' || !id) {
-        console.error('Invalid appointment ID:', id);
-        alert('Invalid appointment ID');
+async function editDetails(element) {
+    const row = element.closest('tr');
+    if (!row) {
+        showToast('Could not find appointment row', 'error');
+        return;
+    }
+
+    const appointmentDataStr = row.getAttribute('data-appointment');
+    if (!appointmentDataStr) {
+        showToast('Appointment data not found', 'error');
+        console.error('Row missing data-appointment attribute:', row);
         return;
     }
 
     try {
-        const response = await fetch(`/CAATE-ITRMS/backend/public/api/v1/appointments/${id}`);
-        const result = await response.json();
-
-        if (result.success && result.data) {
-            // Display edit form in a modal
-            displayEditForm(result.data);
-        } else {
-            alert('Failed to load appointment details: ' + (result.error || 'Unknown error'));
-        }
+        const appointment = JSON.parse(appointmentDataStr);
+        displayEditForm(appointment, row);
     } catch (error) {
-        console.error('Error loading appointment details:', error);
-        alert('Failed to load appointment details. Please try again.');
+        showToast('Error loading appointment data', 'error');
+        console.error('Error parsing appointment data:', error);
     }
 }
 
@@ -564,11 +589,11 @@ function displayAppointmentDetails(appointment) {
 }
 
 // Display edit form in modal (helper function)
-let currentEditingAppointmentId = null;
+let currentEditingAppointmentRow = null;
 let originalAppointmentData = null;
 
-function displayEditForm(appointment) {
-    currentEditingAppointmentId = appointment._id;
+function displayEditForm(appointment, row) {
+    currentEditingAppointmentRow = row;
 
     // Store original data for comparison
     originalAppointmentData = JSON.parse(JSON.stringify(appointment));
@@ -660,10 +685,12 @@ if (deleteConfirmInput && confirmDeleteBtn) {
 
 // Save appointment changes
 async function saveAppointmentChanges() {
-    if (!currentEditingAppointmentId) {
+    if (!currentEditingAppointmentRow) {
         showToast('No appointment selected for editing', 'error');
         return;
     }
+
+    const id = currentEditingAppointmentRow.getAttribute('data-id');
 
     // Get form data
     const updatedData = {
@@ -712,7 +739,7 @@ async function saveAppointmentChanges() {
     }
 
     try {
-        const response = await fetch(`/CAATE-ITRMS/backend/public/api/v1/appointments/${currentEditingAppointmentId}`, {
+        const response = await fetch(`/CAATE-ITRMS/backend/public/api/v1/appointments/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -729,12 +756,14 @@ async function saveAppointmentChanges() {
             const modal = bootstrap.Modal.getInstance(document.getElementById('editAppointmentModal'));
             modal.hide();
 
+            // Update only the specific row instead of reloading all data
+            updateRowWithNewData(currentEditingAppointmentRow, updatedData);
+
             // Reset variables
-            currentEditingAppointmentId = null;
+            currentEditingAppointmentRow = null;
             originalAppointmentData = null;
 
-            // Reload appointments
-            loadAppointments();
+            // Update statistics
             loadStatistics();
         } else {
             showToast('Failed to update appointment: ' + (result.error || 'Unknown error'), 'error');
@@ -748,25 +777,18 @@ async function saveAppointmentChanges() {
 // Toast notification function
 function showToast(message, type = 'success') {
     const container = document.getElementById('toastContainer');
-    if (!container) {
-        console.warn('Toast container not found');
-        return;
-    }
+    if (!container) return;
 
     const toast = document.createElement('div');
     toast.className = `toast-notification ${type}`;
 
-    // Icon based on type
-    const icons = {
-        success: 'bx-check-circle',
-        error: 'bx-error-circle',
-        warning: 'bx-error',
-        info: 'bx-info-circle'
-    };
+    const icon = type === 'success' ? 'bx-check' :
+        type === 'error' ? 'bx-x' :
+            type === 'warning' ? 'bx-error-circle' : 'bxs-info-circle';
 
     toast.innerHTML = `
+        <i class="bx ${icon} toast-icon"></i>
         <div class="toast-content">
-            <i class="bx ${icons[type] || icons.info} toast-icon"></i>
             <div class="toast-message">${message}</div>
         </div>
         <button class="toast-close" onclick="closeToast(this)">
@@ -776,10 +798,10 @@ function showToast(message, type = 'success') {
 
     container.appendChild(toast);
 
-    // Auto remove after 3 seconds
+    // Auto remove after 2.5 seconds
     setTimeout(() => {
         closeToast(toast.querySelector('.toast-close'));
-    }, 3000);
+    }, 2500);
 }
 
 // Close toast notification
@@ -789,6 +811,115 @@ function closeToast(button) {
         toast.classList.add('hiding');
         setTimeout(() => {
             toast.remove();
-        }, 300);
+        }, 200);
     }
+}
+
+// Update a specific appointment row without reloading the entire table
+function updateAppointmentRow(appointmentId, updatedData) {
+    // Find the row with this appointment ID
+    const rows = document.querySelectorAll('.table-border-bottom-0 tr');
+
+    for (const row of rows) {
+        // Check if this row contains the appointment ID in any onclick attribute
+        const buttons = row.querySelectorAll('[onclick*="' + appointmentId + '"]');
+
+        if (buttons.length > 0) {
+            const cells = row.cells;
+
+            // If status was updated, update the status badge (column 5)
+            if (updatedData.status) {
+                cells[5].innerHTML = getStatusBadge(updatedData.status);
+            }
+
+            // If full data was provided, update all cells
+            if (updatedData.firstName) {
+                // Update name (column 0)
+                const firstName = updatedData.firstName || '';
+                const lastName = updatedData.lastName || '';
+                const initials = (firstName.charAt(0) + lastName.charAt(0)).toUpperCase() || 'NA';
+
+                const fullName = [
+                    updatedData.firstName,
+                    updatedData.secondName,
+                    updatedData.middleName,
+                    updatedData.lastName,
+                    updatedData.suffix
+                ].filter(Boolean).join(' ');
+
+                cells[0].innerHTML = `
+                    <div class="d-flex align-items-center">
+                        <div class="avatar avatar-sm me-3"
+                            style="background: linear-gradient(135deg, rgba(54, 145, 191, 0.1) 0%, rgba(50, 85, 150, 0.1) 100%); backdrop-filter: blur(10px) saturate(180%); -webkit-backdrop-filter: blur(10px) saturate(180%); border: 1px solid rgba(54, 145, 191, 0.4); box-shadow: 0 4px 12px rgba(22, 56, 86, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3); color: white; display: flex; align-items: center; justify-content: center; border-radius: 50%; width: 38px; height: 38px; font-weight: 600;">
+                            ${initials}
+                        </div>
+                        <strong>${fullName}</strong>
+                    </div>
+                `;
+
+                // Update email (column 1)
+                cells[1].textContent = updatedData.email || 'N/A';
+
+                // Update contact number (column 2)
+                cells[2].textContent = updatedData.contactNumber || 'N/A';
+
+                // Update service (column 3)
+                const serviceCategory = formatServiceCategory(updatedData.serviceCategory);
+                const serviceType = formatServiceType(updatedData.serviceType);
+                cells[3].innerHTML = `
+                    <strong>${serviceCategory}</strong><br>
+                    <small class="text-muted">${serviceType}</small>
+                `;
+
+                // Update date & time (column 4)
+                const dateTime = formatDateTime(updatedData.preferredDate, updatedData.preferredTime);
+                cells[4].innerHTML = dateTime;
+
+                // Update status (column 5)
+                cells[5].innerHTML = getStatusBadge(updatedData.status);
+            }
+
+            break;
+        }
+    }
+}
+
+// Update row with new data
+function updateRowWithNewData(row, data) {
+    const cells = row.cells;
+
+    // Update name cell (column 0)
+    const fullName = [data.firstName, data.secondName, data.middleName, data.lastName, data.suffix].filter(Boolean).join(' ');
+    const initials = ((data.firstName || '').charAt(0) + (data.lastName || '').charAt(0)).toUpperCase() || 'NA';
+    cells[0].innerHTML = `
+        <div class="d-flex align-items-center">
+            <div class="avatar avatar-sm me-3"
+                style="background: linear-gradient(135deg, rgba(54, 145, 191, 0.1) 0%, rgba(50, 85, 150, 0.1) 100%); backdrop-filter: blur(10px) saturate(180%); -webkit-backdrop-filter: blur(10px) saturate(180%); border: 1px solid rgba(54, 145, 191, 0.4); box-shadow: 0 4px 12px rgba(22, 56, 86, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3); color: white; display: flex; align-items: center; justify-content: center; border-radius: 50%; width: 38px; height: 38px; font-weight: 600;">
+                ${initials}
+            </div>
+            <strong>${fullName}</strong>
+        </div>
+    `;
+
+    // Update email (column 1)
+    cells[1].textContent = data.email || 'N/A';
+
+    // Update contact number (column 2)
+    cells[2].textContent = data.contactNumber || 'N/A';
+
+    // Update service (column 3)
+    const serviceCategory = formatServiceCategory(data.serviceCategory);
+    const serviceType = formatServiceType(data.serviceType);
+    cells[3].innerHTML = `<strong>${serviceCategory}</strong><br><small class="text-muted">${serviceType}</small>`;
+
+    // Update date & time (column 4)
+    cells[4].innerHTML = formatDateTime(data.preferredDate, data.preferredTime);
+
+    // Update status (column 5)
+    cells[5].innerHTML = getStatusBadge(data.status);
+
+    // Update stored data
+    const appointmentData = JSON.parse(row.getAttribute('data-appointment'));
+    Object.assign(appointmentData, data);
+    row.setAttribute('data-appointment', JSON.stringify(appointmentData));
 }

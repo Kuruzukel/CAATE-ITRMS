@@ -408,57 +408,66 @@ async function updateStatus(element, status) {
 }
 
 // Delete appointment
-let currentDeletingAppointmentId = null;
+let currentDeletingAppointmentRow = null;
 
-async function deleteAppointment(id) {
-    // Validate that id is a string
-    if (typeof id !== 'string' || !id) {
-        console.error('Invalid appointment ID:', id);
-        showToast('Invalid appointment ID', 'error');
+function deleteAppointment(element) {
+    // Get the row from the element
+    const row = element.closest('tr');
+    if (!row) {
+        console.error('Could not find row for delete');
+        showToast('Invalid appointment', 'error');
         return;
     }
 
-    // Store the ID for later use
-    currentDeletingAppointmentId = id;
+    // Get appointment data from row
+    const appointmentData = row.getAttribute('data-appointment');
+    if (!appointmentData) {
+        console.error('No appointment data found in row');
+        showToast('Invalid appointment data', 'error');
+        return;
+    }
 
-    // Fetch appointment details to show name in modal
     try {
-        const response = await fetch(`/CAATE-ITRMS/backend/public/api/v1/appointments/${id}`);
-        const result = await response.json();
+        const appointment = JSON.parse(appointmentData);
 
-        if (result.success && result.data) {
-            const appointment = result.data;
-            const fullName = [
-                appointment.firstName,
-                appointment.secondName,
-                appointment.middleName,
-                appointment.lastName,
-                appointment.suffix
-            ].filter(Boolean).join(' ');
+        // Store the row for later use
+        currentDeletingAppointmentRow = row;
 
-            document.getElementById('deleteAppointmentName').textContent = fullName;
+        // Build full name for display
+        const fullName = [
+            appointment.firstName,
+            appointment.secondName,
+            appointment.middleName,
+            appointment.lastName,
+            appointment.suffix
+        ].filter(Boolean).join(' ');
 
-            // Show delete confirmation modal
-            const modal = new bootstrap.Modal(document.getElementById('deleteAppointmentModal'));
-            modal.show();
-        } else {
-            showToast('Failed to load appointment details', 'error');
-        }
+        document.getElementById('deleteAppointmentName').textContent = fullName;
+
+        // Show delete confirmation modal
+        const modal = new bootstrap.Modal(document.getElementById('deleteAppointmentModal'));
+        modal.show();
     } catch (error) {
-        console.error('Error loading appointment details:', error);
+        console.error('Error parsing appointment data:', error);
         showToast('Failed to load appointment details', 'error');
     }
 }
 
 // Confirm delete appointment
 async function confirmDeleteAppointment() {
-    if (!currentDeletingAppointmentId) {
+    if (!currentDeletingAppointmentRow) {
         showToast('No appointment selected for deletion', 'error');
         return;
     }
 
+    const id = currentDeletingAppointmentRow.getAttribute('data-id');
+    if (!id) {
+        showToast('Invalid appointment ID', 'error');
+        return;
+    }
+
     try {
-        const response = await fetch(`/CAATE-ITRMS/backend/public/api/v1/appointments/${currentDeletingAppointmentId}`, {
+        const response = await fetch(`/CAATE-ITRMS/backend/public/api/v1/appointments/${id}`, {
             method: 'DELETE'
         });
 
@@ -467,15 +476,15 @@ async function confirmDeleteAppointment() {
         if (result.success) {
             showToast('Appointment deleted successfully', 'success');
 
+            // Remove the row from the table (no full reload)
+            currentDeletingAppointmentRow.remove();
+            currentDeletingAppointmentRow = null;
+
             // Close modal
             const modal = bootstrap.Modal.getInstance(document.getElementById('deleteAppointmentModal'));
             modal.hide();
 
-            // Reset ID
-            currentDeletingAppointmentId = null;
-
-            // Reload appointments
-            loadAppointments();
+            // Reload statistics only
             loadStatistics();
         } else {
             showToast('Failed to delete appointment: ' + (result.error || 'Unknown error'), 'error');

@@ -1,5 +1,8 @@
 /* Requests Page Script */
 
+// Global appointments data storage
+let appointmentsData = [];
+
 // Service Category and Type Mapping (Global scope)
 const serviceCategories = {
     'skincare': [
@@ -111,6 +114,55 @@ document.addEventListener('DOMContentLoaded', function () {
                     filterServiceType.appendChild(option);
                 });
             }
+
+            // Apply filters after category change
+            applyFilters();
+        });
+
+        // Listen for service type changes
+        filterServiceType.addEventListener('change', applyFilters);
+    }
+
+    // Handle Search Input
+    const filterSearchInput = document.getElementById('filterSearchInput');
+    if (filterSearchInput) {
+        filterSearchInput.addEventListener('input', applyFilters);
+    }
+
+    // Handle Status Filter
+    const filterStatus = document.getElementById('filterStatus');
+    if (filterStatus) {
+        filterStatus.addEventListener('change', applyFilters);
+    }
+
+    // Handle Date Filter
+    const filterDate = document.getElementById('filterDate');
+    if (filterDate) {
+        filterDate.addEventListener('change', applyFilters);
+    }
+
+    // Handle Reset Button
+    const resetFiltersBtn = document.getElementById('resetFiltersBtn');
+    if (resetFiltersBtn) {
+        resetFiltersBtn.addEventListener('click', function () {
+            // Reset all filters
+            if (filterSearchInput) filterSearchInput.value = '';
+            if (filterServiceCategory) filterServiceCategory.value = '';
+            if (filterServiceType) {
+                filterServiceType.innerHTML = '<option value="">All Service Types</option>';
+                // Repopulate with all service types
+                Object.values(serviceCategories).flat().forEach(service => {
+                    const option = document.createElement('option');
+                    option.value = service.value;
+                    option.textContent = service.text;
+                    filterServiceType.appendChild(option);
+                });
+            }
+            if (filterStatus) filterStatus.value = '';
+            if (filterDate) filterDate.value = '';
+
+            // Reapply filters (which will show all data)
+            applyFilters();
         });
     }
 
@@ -178,6 +230,7 @@ async function loadAppointments() {
 
     // Add a timeout fallback
     const timeoutId = setTimeout(() => {
+        appointmentsData = [];
         displayAppointments([]);
     }, 10000); // 10 second timeout
 
@@ -190,13 +243,16 @@ async function loadAppointments() {
         const result = await response.json();
 
         if (result.success && result.data) {
+            appointmentsData = result.data; // Store data globally
             displayAppointments(result.data);
         } else {
+            appointmentsData = [];
             displayAppointments([]);
         }
     } catch (error) {
         clearTimeout(timeoutId); // Clear timeout on error
         console.error('Error loading appointments:', error);
+        appointmentsData = [];
         displayAppointments([]);
     }
 }
@@ -1237,4 +1293,118 @@ if (editContactNumber) {
 
         e.target.value = value;
     });
+}
+
+
+// Apply all filters together
+function applyFilters() {
+    const filterSearchInput = document.getElementById('filterSearchInput');
+    const filterServiceCategory = document.getElementById('filterServiceCategory');
+    const filterServiceType = document.getElementById('filterServiceType');
+    const filterStatus = document.getElementById('filterStatus');
+    const filterDate = document.getElementById('filterDate');
+
+    // Get filter values
+    const searchTerm = filterSearchInput ? filterSearchInput.value.toLowerCase().trim() : '';
+    const selectedCategory = filterServiceCategory ? filterServiceCategory.value : '';
+    const selectedServiceType = filterServiceType ? filterServiceType.value : '';
+    const selectedStatus = filterStatus ? filterStatus.value : '';
+    const selectedDate = filterDate ? filterDate.value : '';
+
+    // Filter the data
+    let filteredData = appointmentsData.filter(appointment => {
+        // Filter by service category
+        if (selectedCategory && appointment.serviceCategory !== selectedCategory) {
+            return false;
+        }
+
+        // Filter by service type
+        if (selectedServiceType && appointment.serviceType !== selectedServiceType) {
+            return false;
+        }
+
+        // Filter by status
+        if (selectedStatus && appointment.status !== selectedStatus) {
+            return false;
+        }
+
+        // Filter by date
+        if (selectedDate && appointment.preferredDate !== selectedDate) {
+            return false;
+        }
+
+        return true;
+    });
+
+    // Render filtered data
+    displayAppointments(filteredData);
+
+    // Apply search highlighting if search term exists
+    if (searchTerm) {
+        setTimeout(() => {
+            clearAllHighlights();
+            highlightSearchResults(searchTerm);
+        }, 50);
+    } else {
+        clearAllHighlights();
+    }
+}
+
+// Helper function to clear all row highlights
+function clearAllHighlights() {
+    const tbody = document.querySelector('.table-border-bottom-0');
+    if (tbody) {
+        const rows = tbody.querySelectorAll('tr');
+        rows.forEach(row => {
+            row.style.boxShadow = '';
+            row.style.border = '';
+            row.style.borderLeft = '';
+            row.style.borderRadius = '';
+            row.style.background = '';
+            row.style.transition = '';
+            row.style.transform = '';
+            row.style.outline = '';
+            row.style.outlineOffset = '';
+            row.style.zIndex = '';
+            row.style.position = '';
+        });
+    }
+}
+
+// Highlight search results without hiding other rows
+function highlightSearchResults(searchTerm) {
+    const tbody = document.querySelector('.table-border-bottom-0');
+    if (!tbody) return;
+
+    const rows = tbody.querySelectorAll('tr');
+    let firstMatch = null;
+
+    rows.forEach(row => {
+        // Get row text content
+        const rowText = row.textContent.toLowerCase();
+
+        // Check if row matches search term
+        if (rowText.includes(searchTerm)) {
+            // Apply card hover design with proper spacing
+            row.style.position = 'relative';
+            row.style.boxShadow = '0 8px 24px rgba(22, 56, 86, 0.5), 0 4px 12px rgba(54, 145, 191, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15)';
+            row.style.outline = '2px solid rgba(54, 145, 191, 0.6)';
+            row.style.outlineOffset = '2px';
+            row.style.borderRadius = '10px';
+            row.style.background = 'linear-gradient(135deg, rgba(54, 145, 191, 0.08) 0%, rgba(50, 85, 150, 0.08) 100%)';
+            row.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+            row.style.transform = 'scale(1.01)';
+            row.style.zIndex = '10';
+
+            // Store first match for scrolling
+            if (!firstMatch) {
+                firstMatch = row;
+            }
+        }
+    });
+
+    // Scroll to first match if exists
+    if (firstMatch) {
+        firstMatch.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
 }

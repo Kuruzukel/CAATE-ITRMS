@@ -626,12 +626,6 @@ function displayEditForm(appointment, row) {
     // Store original data for comparison
     originalAppointmentData = JSON.parse(JSON.stringify(appointment));
 
-    console.log('=== EDIT FORM DEBUG ===');
-    console.log('Full appointment data:', appointment);
-    console.log('Service Category:', appointment.serviceCategory);
-    console.log('Service Type:', appointment.serviceType);
-    console.log('Available categories:', Object.keys(serviceCategories));
-
     // Populate edit modal fields
     document.getElementById('editFirstName').value = appointment.firstName || '';
     document.getElementById('editSecondName').value = appointment.secondName || '';
@@ -650,36 +644,19 @@ function displayEditForm(appointment, row) {
     editServiceType.innerHTML = '<option value="">Select a service type</option>';
 
     if (appointment.serviceCategory && serviceCategories[appointment.serviceCategory]) {
-        console.log('Found category in serviceCategories, populating options...');
         const services = serviceCategories[appointment.serviceCategory];
-        console.log('Services for this category:', services);
 
         services.forEach(service => {
             const option = document.createElement('option');
             option.value = service.value;
             option.textContent = service.text;
             editServiceType.appendChild(option);
-            console.log('Added option:', service.value, '-', service.text);
         });
 
         // Set the service type value AFTER populating all options
         if (appointment.serviceType) {
             editServiceType.value = appointment.serviceType;
-            console.log('Set service type to:', appointment.serviceType);
-            console.log('Dropdown value after setting:', editServiceType.value);
-
-            // If value didn't set, log all available options
-            if (!editServiceType.value) {
-                console.warn('Service type value did not set! Available options:');
-                Array.from(editServiceType.options).forEach(opt => {
-                    console.log('  -', opt.value, ':', opt.text);
-                });
-            }
-        } else {
-            console.warn('No service type in appointment data');
         }
-    } else {
-        console.error('Service category not found or empty:', appointment.serviceCategory);
     }
 
     document.getElementById('editPreferredDate').value = appointment.preferredDate || '';
@@ -755,8 +732,6 @@ async function saveAppointmentChanges() {
         specialNotes: document.getElementById('editSpecialNotes').value.trim(),
         adminNotes: document.getElementById('editAdminNotes').value.trim()
     };
-
-    console.log('Form data collected:', updatedData);
 
     // Check if any changes were made FIRST
     let hasChanges = false;

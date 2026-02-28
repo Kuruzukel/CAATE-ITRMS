@@ -347,6 +347,13 @@ function getStatusBadge(status) {
 
 // Update appointment status
 async function updateStatus(id, status) {
+    // Validate that id is a string
+    if (typeof id !== 'string' || !id) {
+        console.error('Invalid appointment ID:', id);
+        alert('Invalid appointment ID');
+        return;
+    }
+
     try {
         const response = await fetch(`/CAATE-ITRMS/backend/public/api/v1/appointments/${id}`, {
             method: 'PUT',
@@ -373,6 +380,13 @@ async function updateStatus(id, status) {
 
 // Delete appointment
 async function deleteAppointment(id) {
+    // Validate that id is a string
+    if (typeof id !== 'string' || !id) {
+        console.error('Invalid appointment ID:', id);
+        alert('Invalid appointment ID');
+        return;
+    }
+
     if (!confirm('Are you sure you want to delete this appointment?')) {
         return;
     }
@@ -397,14 +411,68 @@ async function deleteAppointment(id) {
     }
 }
 
-// View details (placeholder)
-function viewDetails(id) {
-    // Implement view details modal
+// View details
+async function viewDetails(id) {
+    // Validate that id is a string
+    if (typeof id !== 'string' || !id) {
+        console.error('Invalid appointment ID:', id);
+        alert('Invalid appointment ID');
+        return;
+    }
+
+    try {
+        const response = await fetch(`/CAATE-ITRMS/backend/public/api/v1/appointments/${id}`);
+        const result = await response.json();
+
+        if (result.success && result.data) {
+            // Display appointment details in a modal
+            displayAppointmentDetails(result.data);
+        } else {
+            alert('Failed to load appointment details: ' + (result.error || 'Unknown error'));
+        }
+    } catch (error) {
+        console.error('Error loading appointment details:', error);
+        alert('Failed to load appointment details. Please try again.');
+    }
 }
 
-// Edit details (placeholder)
-function editDetails(id) {
-    // Implement edit details modal
+// Edit details
+async function editDetails(id) {
+    // Validate that id is a string
+    if (typeof id !== 'string' || !id) {
+        console.error('Invalid appointment ID:', id);
+        alert('Invalid appointment ID');
+        return;
+    }
+
+    try {
+        const response = await fetch(`/CAATE-ITRMS/backend/public/api/v1/appointments/${id}`);
+        const result = await response.json();
+
+        if (result.success && result.data) {
+            // Display edit form in a modal
+            displayEditForm(result.data);
+        } else {
+            alert('Failed to load appointment details: ' + (result.error || 'Unknown error'));
+        }
+    } catch (error) {
+        console.error('Error loading appointment details:', error);
+        alert('Failed to load appointment details. Please try again.');
+    }
+}
+
+// Display appointment details in modal (helper function)
+function displayAppointmentDetails(appointment) {
+    // TODO: Implement modal display logic
+    console.log('Appointment details:', appointment);
+    alert('View details modal not yet implemented. Check console for data.');
+}
+
+// Display edit form in modal (helper function)
+function displayEditForm(appointment) {
+    // TODO: Implement edit form modal logic
+    console.log('Edit appointment:', appointment);
+    alert('Edit form modal not yet implemented. Check console for data.');
 }
 
 

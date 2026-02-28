@@ -12,13 +12,27 @@ class Appointment {
     
     public function all() {
         $cursor = $this->collection->find([], ['sort' => ['createdAt' => -1]]);
-        return iterator_to_array($cursor);
+        $appointments = iterator_to_array($cursor);
+        
+        // Convert ObjectId to string for JSON serialization
+        return array_map(function($appointment) {
+            if (isset($appointment['_id'])) {
+                $appointment['_id'] = (string) $appointment['_id'];
+            }
+            return $appointment;
+        }, $appointments);
     }
     
     public function findById($id) {
         try {
             $objectId = new MongoDB\BSON\ObjectId($id);
-            return $this->collection->findOne(['_id' => $objectId]);
+            $appointment = $this->collection->findOne(['_id' => $objectId]);
+            
+            if ($appointment && isset($appointment['_id'])) {
+                $appointment['_id'] = (string) $appointment['_id'];
+            }
+            
+            return $appointment;
         } catch (Exception $e) {
             return null;
         }

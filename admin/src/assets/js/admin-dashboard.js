@@ -5,10 +5,51 @@ const API_BASE_URL = window.location.origin.includes('localhost')
     ? 'http://localhost/CAATE-ITRMS/backend/public'
     : '/CAATE-ITRMS/backend/public';
 
+// Global variable to store selected year
+let selectedYear = 2026;
+
+// Function to update all year labels on the dashboard
+function updateYearLabels(year) {
+    // Update chart title
+    const chartTitle = document.querySelector('.col-md-8 h5.card-header');
+    if (chartTitle) {
+        chartTitle.textContent = `Monthly Trainee Enrollment ${year}`;
+    }
+
+    // Update enrollment activity trend badge
+    const activityBadge = document.querySelector('.badge.bg-label-warning');
+    if (activityBadge) {
+        activityBadge.textContent = `Year ${year}`;
+    }
+
+    // Update year statistics labels (current year and previous year)
+    const yearLabels = document.querySelectorAll('.d-flex.px-xxl-4 small');
+    if (yearLabels.length >= 2) {
+        yearLabels[0].textContent = year;
+        yearLabels[1].textContent = year - 1;
+    }
+
+    // Update chart series names if chart exists
+    if (window.totalRevenueChartInstance) {
+        window.totalRevenueChartInstance.updateOptions({
+            series: [
+                {
+                    name: year.toString(),
+                    data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                },
+                {
+                    name: (year - 1).toString(),
+                    data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                }
+            ]
+        });
+    }
+}
+
 // Function to fetch dashboard statistics
-async function fetchDashboardStatistics() {
+async function fetchDashboardStatistics(year = selectedYear) {
     try {
-        const response = await fetch(`${API_BASE_URL}/api/v1/trainees/statistics`);
+        const response = await fetch(`${API_BASE_URL}/api/v1/trainees/statistics?year=${year}`);
 
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -76,24 +117,23 @@ function updateDashboardUI(data) {
         }
     }
 
-    // Update this month's enrollments card
-    const monthEnrollmentsCards = document.querySelectorAll('.col-lg-6.col-md-12.col-6.mb-4 .card');
-    if (monthEnrollmentsCards.length > 1) {
-        const monthCard = monthEnrollmentsCards[1];
-        const monthCountElement = monthCard.querySelector('h3.card-title');
-        const monthPercentageElement = monthCard.querySelector('small.fw-semibold');
+    // Update this month's enrollments card (Approved Enrollments)
+    const approvedCard = document.querySelector('.bx-check-circle');
+    if (approvedCard) {
+        const approvedCountElement = approvedCard.closest('.card-body').querySelector('h3.card-title');
+        const approvedPercentageElement = approvedCard.closest('.card-body').querySelector('small.fw-semibold');
 
-        if (monthCountElement) {
-            monthCountElement.textContent = data.monthEnrollments.toLocaleString();
+        if (approvedCountElement) {
+            approvedCountElement.textContent = data.approvedEnrollments.toLocaleString();
         }
 
-        if (monthPercentageElement && data.monthPercentageIncrease !== undefined) {
+        if (approvedPercentageElement && data.monthPercentageIncrease !== undefined) {
             const isPositive = data.monthPercentageIncrease >= 0;
             const icon = isPositive ? 'bx-up-arrow-alt' : 'bx-down-arrow-alt';
             const colorClass = isPositive ? 'text-success' : 'text-danger';
 
-            monthPercentageElement.className = `fw-semibold ${colorClass}`;
-            monthPercentageElement.innerHTML = `<i class="bx ${icon}"></i> ${isPositive ? '+' : ''}${data.monthPercentageIncrease}%`;
+            approvedPercentageElement.className = `fw-semibold ${colorClass}`;
+            approvedPercentageElement.innerHTML = `<i class="bx ${icon}"></i> ${isPositive ? '+' : ''}${data.monthPercentageIncrease}%`;
         }
     }
 
@@ -106,12 +146,12 @@ function updateDashboardUI(data) {
         }
     }
 
-    // Update approved enrollments card
-    const approvedCard = document.querySelector('.bx-check-circle');
-    if (approvedCard) {
-        const approvedCountElement = approvedCard.closest('.card-body').querySelector('h3.card-title');
-        if (approvedCountElement) {
-            approvedCountElement.textContent = data.approvedEnrollments.toLocaleString();
+    // Update cancelled enrollments card
+    const cancelledCard = document.querySelector('.bx-x-circle');
+    if (cancelledCard) {
+        const cancelledCountElement = cancelledCard.closest('.card-body').querySelector('h3.card-title');
+        if (cancelledCountElement) {
+            cancelledCountElement.textContent = data.cancelledEnrollments || 0;
         }
     }
 
@@ -119,15 +159,43 @@ function updateDashboardUI(data) {
     const activityTrendCard = document.querySelector('.badge.bg-label-warning');
     if (activityTrendCard) {
         const activityCountElement = activityTrendCard.closest('.card-body').querySelector('h3.mb-0');
+        const activityPercentageElement = activityTrendCard.closest('.card-body').querySelector('small.text-success');
+
         if (activityCountElement) {
             activityCountElement.textContent = data.monthEnrollments.toLocaleString();
         }
+
+        if (activityPercentageElement && data.monthPercentageIncrease !== undefined) {
+            const isPositive = data.monthPercentageIncrease >= 0;
+            const icon = isPositive ? 'bx-chevron-up' : 'bx-chevron-down';
+            const colorClass = isPositive ? 'text-success' : 'text-danger';
+
+            activityPercentageElement.className = `text-nowrap fw-semibold ${colorClass}`;
+            activityPercentageElement.innerHTML = `<i class="bx ${icon}"></i> ${Math.abs(data.monthPercentageIncrease)}%`;
+        }
+    }
+
+    // Update growth chart percentage
+    const growthTextElement = document.querySelector('.text-center.fw-semibold.pt-3.mb-2');
+    if (growthTextElement && data.yearGrowthPercentage !== undefined) {
+        growthTextElement.textContent = `${data.yearGrowthPercentage}% Enrollment Growth`;
+    }
+
+    // Update growth chart if it exists
+    if (window.growthChartInstance && data.yearGrowthPercentage !== undefined) {
+        window.growthChartInstance.updateSeries([data.yearGrowthPercentage]);
+    }
+
+    // Update year statistics counts
+    const yearCountElements = document.querySelectorAll('.d-flex.px-xxl-4 h6.mb-0');
+    if (yearCountElements.length >= 2) {
+        yearCountElements[0].textContent = data.currentYearEnrollments || 0;
+        yearCountElements[1].textContent = data.previousYearEnrollments || 0;
     }
 }
 
-// Function to ensure Present status badges have green background with white text
+// Function to style Present status badges
 function stylePresentBadges() {
-    // Find all badges containing "Present" text
     const badges = document.querySelectorAll('.badge');
 
     badges.forEach(badge => {
@@ -161,42 +229,29 @@ function ensureSuccessBadgeStyling() {
     });
 }
 
-// Function to ensure all dashboard text is white
-function makeTextWhite() {
-    // Target all text elements in cards
-    const textElements = document.querySelectorAll(`
-        .card-body h1, .card-body h2, .card-body h3, .card-body h4, .card-body h5, .card-body h6,
-        .card-body span, .card-body small, .card-body p, .card-body div,
-        .card-title, .card-text, .card-header h5, .card-header small,
-        .fw-semibold, .d-block, .text-nowrap, .me-2 h6, .me-2 small,
-        .user-progress small, .text-muted, .text-dark
-    `);
+// Initialize year filter functionality
+function initYearFilter() {
+    const yearDropdownItems = document.querySelectorAll('#growthReportId + .dropdown-menu .dropdown-item');
 
-    textElements.forEach(element => {
-        // Don't change badge colors or button colors
-        if (!element.classList.contains('badge') &&
-            !element.classList.contains('btn') &&
-            !element.closest('.dropdown-menu')) {
-            element.style.color = '#ffffff';
-        }
-    });
+    yearDropdownItems.forEach(item => {
+        item.addEventListener('click', function (e) {
+            e.preventDefault();
+            const year = parseInt(this.textContent.trim());
 
-    // Specifically target course names and statistics
-    const courseElements = document.querySelectorAll('li .me-2 h6, li .me-2 small');
-    courseElements.forEach(element => {
-        element.style.color = '#ffffff';
-    });
-
-    // Target all numbers and statistics
-    const statsElements = document.querySelectorAll('.card-body h2, .card-body h3, .card-title');
-    statsElements.forEach(element => {
-        element.style.color = '#ffffff';
-        element.style.fontWeight = 'bold';
+            if (!isNaN(year)) {
+                selectedYear = year;
+                updateYearLabels(year);
+                fetchDashboardStatistics(year);
+            }
+        });
     });
 }
 
 // Initialize styling when DOM is loaded
 document.addEventListener('DOMContentLoaded', function () {
+    // Initialize year filter
+    initYearFilter();
+
     // Fetch and display real dashboard statistics
     fetchDashboardStatistics();
 
@@ -221,50 +276,8 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // Refresh statistics every 30 seconds
-    setInterval(fetchDashboardStatistics, 30000);
+    setInterval(() => fetchDashboardStatistics(selectedYear), 30000);
 });
-
-
-// Function to update the welcome statistics chart with real data
-function updateWelcomeChart(enrolledPercentage, pendingPercentage, todayPercentage) {
-    // Check if ApexCharts is available and chart exists
-    if (typeof ApexCharts === 'undefined') {
-        return;
-    }
-
-    const chartElement = document.querySelector('#welcomeStatisticsChart');
-    if (!chartElement) {
-        return;
-    }
-
-    // Try to update existing chart or create new one
-    try {
-        // Get the chart instance if it exists
-        const chartInstance = ApexCharts.getChartByID('welcomeStatisticsChart');
-
-        if (chartInstance) {
-            // Update existing chart
-            chartInstance.updateOptions({
-                series: [enrolledPercentage, pendingPercentage, 100 - enrolledPercentage - pendingPercentage],
-                plotOptions: {
-                    pie: {
-                        donut: {
-                            labels: {
-                                total: {
-                                    formatter: function (w) {
-                                        return todayPercentage + '%';
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-        }
-    } catch (error) {
-        // Silently fail
-    }
-}
 
 
 // Function to update the welcome chart with real data

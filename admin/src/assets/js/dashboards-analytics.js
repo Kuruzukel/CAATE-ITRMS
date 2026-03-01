@@ -314,6 +314,9 @@
 
     const totalRevenueChart = new ApexCharts(totalRevenueChartEl, totalRevenueChartOptions);
     totalRevenueChart.render();
+
+    // Store chart instance globally
+    window.totalRevenueChartInstance = totalRevenueChart;
   }
 
   // Growth Chart - Radial Bar Chart
@@ -322,7 +325,7 @@
     if (!growthChartEl) return;
 
     const growthChartOptions = {
-      series: [78],
+      series: [0],
       labels: ['Growth'],
       chart: {
         height: 240,
@@ -401,6 +404,9 @@
 
     const growthChart = new ApexCharts(growthChartEl, growthChartOptions);
     growthChart.render();
+
+    // Store chart instance globally
+    window.growthChartInstance = growthChart;
   }
 
   // Profit Report Line Chart

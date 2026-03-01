@@ -17,16 +17,21 @@ function updateYearLabels(year) {
     }
 
     // Update enrollment activity trend badge
-    const activityBadge = document.querySelector('.badge.bg-label-warning');
+    const activityBadge = document.getElementById('activityTrendYearBadge');
     if (activityBadge) {
         activityBadge.textContent = `Year ${year}`;
     }
 
     // Update year statistics labels (current year and previous year)
-    const yearLabels = document.querySelectorAll('.d-flex.px-xxl-4 small');
-    if (yearLabels.length >= 2) {
-        yearLabels[0].textContent = year;
-        yearLabels[1].textContent = year - 1;
+    const currentYearLabel = document.getElementById('currentYearLabel');
+    const previousYearLabel = document.getElementById('previousYearLabel');
+
+    if (currentYearLabel) {
+        currentYearLabel.textContent = year;
+    }
+
+    if (previousYearLabel) {
+        previousYearLabel.textContent = year - 1;
     }
 
     // Update chart series names if chart exists
@@ -156,23 +161,20 @@ function updateDashboardUI(data) {
     }
 
     // Update enrollment activity trend card
-    const activityTrendCard = document.querySelector('.badge.bg-label-warning');
-    if (activityTrendCard) {
-        const activityCountElement = activityTrendCard.closest('.card-body').querySelector('h3.mb-0');
-        const activityPercentageElement = activityTrendCard.closest('.card-body').querySelector('small.text-success');
+    const activityTrendCount = document.getElementById('activityTrendCount');
+    const activityTrendPercentage = document.getElementById('activityTrendPercentage');
 
-        if (activityCountElement) {
-            activityCountElement.textContent = data.monthEnrollments.toLocaleString();
-        }
+    if (activityTrendCount) {
+        activityTrendCount.textContent = data.monthEnrollments || 0;
+    }
 
-        if (activityPercentageElement && data.monthPercentageIncrease !== undefined) {
-            const isPositive = data.monthPercentageIncrease >= 0;
-            const icon = isPositive ? 'bx-chevron-up' : 'bx-chevron-down';
-            const colorClass = isPositive ? 'text-success' : 'text-danger';
+    if (activityTrendPercentage && data.monthPercentageIncrease !== undefined) {
+        const isPositive = data.monthPercentageIncrease >= 0;
+        const icon = isPositive ? 'bx-chevron-up' : 'bx-chevron-down';
+        const colorClass = isPositive ? 'text-success' : 'text-danger';
 
-            activityPercentageElement.className = `text-nowrap fw-semibold ${colorClass}`;
-            activityPercentageElement.innerHTML = `<i class="bx ${icon}"></i> ${Math.abs(data.monthPercentageIncrease)}%`;
-        }
+        activityTrendPercentage.className = `text-nowrap fw-semibold ${colorClass}`;
+        activityTrendPercentage.innerHTML = `<i class="bx ${icon}"></i> ${Math.abs(data.monthPercentageIncrease)}%`;
     }
 
     // Update growth chart percentage
@@ -187,10 +189,15 @@ function updateDashboardUI(data) {
     }
 
     // Update year statistics counts
-    const yearCountElements = document.querySelectorAll('.d-flex.px-xxl-4 h6.mb-0');
-    if (yearCountElements.length >= 2) {
-        yearCountElements[0].textContent = data.currentYearEnrollments || 0;
-        yearCountElements[1].textContent = data.previousYearEnrollments || 0;
+    const currentYearCount = document.getElementById('currentYearCount');
+    const previousYearCount = document.getElementById('previousYearCount');
+
+    if (currentYearCount) {
+        currentYearCount.textContent = data.currentYearEnrollments || 0;
+    }
+
+    if (previousYearCount) {
+        previousYearCount.textContent = data.previousYearEnrollments || 0;
     }
 }
 

@@ -447,20 +447,20 @@
                         <div class="d-flex px-xxl-4 px-lg-2 p-4 gap-xxl-3 gap-lg-1 gap-3 justify-content-between">
                           <div class="d-flex">
                             <div class="me-2">
-                              <span class="badge bg-label-primary p-2"><i class="bx bx-user text-primary"></i></span>
+                              <span class="badge bg-label-primary p-2"><i class="bx bx-calendar-check text-primary"></i></span>
                             </div>
                             <div class="d-flex flex-column">
-                              <small>2026</small>
-                              <h6 class="mb-0">0</h6>
+                              <small id="currentYearLabel">2026</small>
+                              <h6 class="mb-0" id="currentYearCount">0</h6>
                             </div>
                           </div>
                           <div class="d-flex">
                             <div class="me-2">
-                              <span class="badge bg-label-info p-2"><i class="bx bx-wallet text-info"></i></span>
+                              <span class="badge bg-label-info p-2"><i class="bx bx-calendar-event text-info"></i></span>
                             </div>
                             <div class="d-flex flex-column">
-                              <small>2025</small>
-                              <h6 class="mb-0">0</h6>
+                              <small id="previousYearLabel">2025</small>
+                              <h6 class="mb-0" id="previousYearCount">0</h6>
                             </div>
                           </div>
                         </div>
@@ -540,13 +540,13 @@
                             <div class="d-flex flex-sm-column flex-row align-items-start justify-content-between">
                               <div class="card-title">
                                 <h5 class="text-nowrap mb-2">Enrollment Activity Trend</h5>
-                                <span class="badge bg-label-warning rounded-pill">Year 2026</span>
+                                <span class="badge bg-label-warning rounded-pill" id="activityTrendYearBadge">Year 2026</span>
                               </div>
                               <div class="mt-sm-auto">
-                                <small class="text-success text-nowrap fw-semibold"
+                                <small class="text-success text-nowrap fw-semibold" id="activityTrendPercentage"
                                   ><i class="bx bx-chevron-up"></i> 0%</small
                                 >
-                                <h3 class="mb-0">0</h3>
+                                <h3 class="mb-0" id="activityTrendCount">0</h3>
                               </div>
                             </div>
                             <div id="profileReportChart"></div>

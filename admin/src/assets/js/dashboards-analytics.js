@@ -94,7 +94,7 @@
         colors: [cardColor]
       },
       legend: {
-        show: true,
+        show: false,
         horizontalAlign: 'left',
         position: 'top',
         markers: {

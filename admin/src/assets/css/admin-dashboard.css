@@ -428,3 +428,81 @@ span.badge.bg-success {
         white-space: nowrap !important;
     }
 }
+
+
+/* Add horizontal scrollbar to Monthly Trainee Enrollment chart */
+#totalRevenueChart {
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    width: 100% !important;
+}
+
+/* Style the scrollbar for the chart */
+#totalRevenueChart::-webkit-scrollbar {
+    height: 8px !important;
+}
+
+#totalRevenueChart::-webkit-scrollbar-track {
+    background: rgba(54, 145, 191, 0.1) !important;
+    border-radius: 4px !important;
+}
+
+#totalRevenueChart::-webkit-scrollbar-thumb {
+    background: rgba(54, 145, 191, 0.5) !important;
+    border-radius: 4px !important;
+}
+
+#totalRevenueChart::-webkit-scrollbar-thumb:hover {
+    background: rgba(54, 145, 191, 0.7) !important;
+}
+
+/* Ensure chart container has proper width */
+.col-md-8 #totalRevenueChart {
+    min-width: 100% !important;
+}
+
+/* Make the chart responsive but scrollable */
+@media (max-width: 991px) {
+    #totalRevenueChart {
+        overflow-x: auto !important;
+    }
+}
+
+
+/* Add horizontal scrollbar to Monthly Trainee Enrollment chart */
+#totalRevenueChart {
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    width: 100% !important;
+}
+
+/* Style the scrollbar for the chart */
+#totalRevenueChart::-webkit-scrollbar {
+    height: 8px !important;
+}
+
+#totalRevenueChart::-webkit-scrollbar-track {
+    background: rgba(54, 145, 191, 0.1) !important;
+    border-radius: 4px !important;
+}
+
+#totalRevenueChart::-webkit-scrollbar-thumb {
+    background: rgba(54, 145, 191, 0.5) !important;
+    border-radius: 4px !important;
+}
+
+#totalRevenueChart::-webkit-scrollbar-thumb:hover {
+    background: rgba(54, 145, 191, 0.7) !important;
+}
+
+/* Ensure chart container has proper width */
+.col-md-8 #totalRevenueChart {
+    min-width: 100% !important;
+}
+
+/* Make the chart responsive but scrollable */
+@media (max-width: 991px) {
+    #totalRevenueChart {
+        overflow-x: auto !important;
+    }
+}

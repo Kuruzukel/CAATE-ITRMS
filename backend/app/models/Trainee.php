@@ -82,11 +82,81 @@ class Trainee {
         // Get total admission records
         $totalAdmission = $db->admissions->countDocuments();
         
+        // Get today's enrollments
+        $todayStart = new MongoDB\BSON\UTCDateTime(strtotime('today') * 1000);
+        $todayEnd = new MongoDB\BSON\UTCDateTime(strtotime('tomorrow') * 1000);
+        $todayEnrollments = $db->enrollments->countDocuments([
+            'created_at' => [
+                '$gte' => $todayStart,
+                '$lt' => $todayEnd
+            ]
+        ]);
+        
+        // Get this month's enrollments
+        $monthStart = new MongoDB\BSON\UTCDateTime(strtotime('first day of this month') * 1000);
+        $monthEnd = new MongoDB\BSON\UTCDateTime(strtotime('first day of next month') * 1000);
+        $monthEnrollments = $db->enrollments->countDocuments([
+            'created_at' => [
+                '$gte' => $monthStart,
+                '$lt' => $monthEnd
+            ]
+        ]);
+        
+        // Get pending enrollments (assuming status field exists)
+        $pendingEnrollments = $db->enrollments->countDocuments([
+            'status' => ['$in' => ['pending', 'Pending']]
+        ]);
+        
+        // Get approved enrollments
+        $approvedEnrollments = $db->enrollments->countDocuments([
+            'status' => ['$in' => ['approved', 'Approved', 'enrolled', 'Enrolled']]
+        ]);
+        
+        // Calculate percentage increase for today (comparing to yesterday)
+        $yesterdayStart = new MongoDB\BSON\UTCDateTime(strtotime('yesterday') * 1000);
+        $yesterdayEnd = new MongoDB\BSON\UTCDateTime(strtotime('today') * 1000);
+        $yesterdayEnrollments = $db->enrollments->countDocuments([
+            'created_at' => [
+                '$gte' => $yesterdayStart,
+                '$lt' => $yesterdayEnd
+            ]
+        ]);
+        
+        $todayPercentageIncrease = 0;
+        if ($yesterdayEnrollments > 0) {
+            $todayPercentageIncrease = (($todayEnrollments - $yesterdayEnrollments) / $yesterdayEnrollments) * 100;
+        } elseif ($todayEnrollments > 0) {
+            $todayPercentageIncrease = 100;
+        }
+        
+        // Calculate percentage increase for this month (comparing to last month)
+        $lastMonthStart = new MongoDB\BSON\UTCDateTime(strtotime('first day of last month') * 1000);
+        $lastMonthEnd = new MongoDB\BSON\UTCDateTime(strtotime('first day of this month') * 1000);
+        $lastMonthEnrollments = $db->enrollments->countDocuments([
+            'created_at' => [
+                '$gte' => $lastMonthStart,
+                '$lt' => $lastMonthEnd
+            ]
+        ]);
+        
+        $monthPercentageIncrease = 0;
+        if ($lastMonthEnrollments > 0) {
+            $monthPercentageIncrease = (($monthEnrollments - $lastMonthEnrollments) / $lastMonthEnrollments) * 100;
+        } elseif ($monthEnrollments > 0) {
+            $monthPercentageIncrease = 100;
+        }
+        
         return [
             'total' => $total,
             'totalEnrollment' => $totalEnrollment,
             'totalApplication' => $totalApplication,
-            'totalAdmission' => $totalAdmission
+            'totalAdmission' => $totalAdmission,
+            'todayEnrollments' => $todayEnrollments,
+            'monthEnrollments' => $monthEnrollments,
+            'pendingEnrollments' => $pendingEnrollments,
+            'approvedEnrollments' => $approvedEnrollments,
+            'todayPercentageIncrease' => round($todayPercentageIncrease, 1),
+            'monthPercentageIncrease' => round($monthPercentageIncrease, 1)
         ];
     }
 }

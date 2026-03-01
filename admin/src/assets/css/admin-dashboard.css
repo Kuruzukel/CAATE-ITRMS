@@ -241,3 +241,190 @@ span.badge.bg-success {
         margin-bottom: 1.5rem !important;
     }
 }
+
+
+/* Dashboard Card Dropdown Menu Styling - Match accounts.html style */
+.card .dropdown-menu {
+    background-color: #1a2942 !important;
+    background: linear-gradient(135deg, #1a2942 0%, #0f1f33 100%) !important;
+    backdrop-filter: blur(20px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+    border: 1px solid rgba(54, 145, 191, 0.4) !important;
+    border-radius: 8px !important;
+    box-shadow: 0 10px 40px rgba(22, 56, 86, 0.6),
+        0 4px 12px rgba(54, 145, 191, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15),
+        0 0 0 1px rgba(54, 145, 191, 0.2) !important;
+    padding: 0.5rem !important;
+    min-width: 200px !important;
+}
+
+/* Dropdown items styling */
+.card .dropdown-menu .dropdown-item {
+    color: rgba(255, 255, 255, 0.9) !important;
+    padding: 0.65rem 1rem !important;
+    border-radius: 6px !important;
+    transition: all 0.2s ease !important;
+    margin: 0.15rem 0 !important;
+    font-weight: 500 !important;
+    background-color: transparent !important;
+}
+
+/* Dropdown item hover effect */
+.card .dropdown-menu .dropdown-item:hover,
+.card .dropdown-menu .dropdown-item:focus {
+    background: rgba(54, 145, 191, 0.25) !important;
+    backdrop-filter: blur(15px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(15px) saturate(180%) !important;
+    border: 1px solid rgba(54, 145, 191, 0.5) !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 16px rgba(54, 145, 191, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+    transform: translateX(4px) !important;
+}
+
+/* Dropdown item active state */
+.card .dropdown-menu .dropdown-item:active {
+    background: rgba(54, 145, 191, 0.4) !important;
+    color: #ffffff !important;
+}
+
+/* Dropdown item icons */
+.card .dropdown-menu .dropdown-item i {
+    color: rgba(54, 145, 191, 0.9) !important;
+    transition: color 0.2s ease !important;
+}
+
+.card .dropdown-menu .dropdown-item:hover i,
+.card .dropdown-menu .dropdown-item:focus i {
+    color: #ffffff !important;
+}
+
+/* Delete/Danger item styling - Red text by default, red border on hover */
+.card .dropdown-menu .dropdown-item.text-danger {
+    color: #ef4444 !important;
+}
+
+.card .dropdown-menu .dropdown-item.text-danger:hover,
+.card .dropdown-menu .dropdown-item.text-danger:focus {
+    background: rgba(239, 68, 68, 0.15) !important;
+    border: 1px solid #ef4444 !important;
+    color: #ef4444 !important;
+}
+
+/* Delete item icon styling */
+.card .dropdown-menu .dropdown-item.text-danger i {
+    color: #ef4444 !important;
+}
+
+.card .dropdown-menu .dropdown-item.text-danger:hover i,
+.card .dropdown-menu .dropdown-item.text-danger:focus i {
+    color: #ef4444 !important;
+}
+
+/* Dropdown divider styling */
+.card .dropdown-menu .dropdown-divider {
+    border-top: 1px solid rgba(54, 145, 191, 0.3) !important;
+    margin: 0.5rem 0 !important;
+    box-shadow: 0 1px 2px rgba(54, 145, 191, 0.2) !important;
+}
+
+
+/* Responsive dropdown adjustments for smaller cards */
+@media (max-width: 1399px) {
+    .card .dropdown-menu {
+        min-width: 180px !important;
+        padding: 0.4rem !important;
+    }
+
+    .card .dropdown-menu .dropdown-item {
+        padding: 0.55rem 0.85rem !important;
+        font-size: 0.875rem !important;
+    }
+}
+
+@media (max-width: 1199px) {
+    .card .dropdown-menu {
+        min-width: 160px !important;
+        padding: 0.35rem !important;
+    }
+
+    .card .dropdown-menu .dropdown-item {
+        padding: 0.5rem 0.75rem !important;
+        font-size: 0.8125rem !important;
+    }
+}
+
+@media (max-width: 991px) {
+    .card .dropdown-menu {
+        min-width: 150px !important;
+        padding: 0.3rem !important;
+    }
+
+    .card .dropdown-menu .dropdown-item {
+        padding: 0.45rem 0.65rem !important;
+        font-size: 0.8125rem !important;
+    }
+}
+
+@media (max-width: 767px) {
+    .card .dropdown-menu {
+        min-width: 140px !important;
+        padding: 0.25rem !important;
+    }
+
+    .card .dropdown-menu .dropdown-item {
+        padding: 0.4rem 0.6rem !important;
+        font-size: 0.75rem !important;
+    }
+}
+
+@media (max-width: 575px) {
+    .card .dropdown-menu {
+        min-width: 130px !important;
+        padding: 0.25rem !important;
+    }
+
+    .card .dropdown-menu .dropdown-item {
+        padding: 0.35rem 0.5rem !important;
+        font-size: 0.75rem !important;
+    }
+
+    .card .dropdown-menu .dropdown-item:hover,
+    .card .dropdown-menu .dropdown-item:focus {
+        transform: translateX(2px) !important;
+    }
+}
+
+/* Adjust dropdown positioning for small cards */
+.col-6 .card .dropdown-menu,
+.col-lg-6 .card .dropdown-menu,
+.col-md-6 .card .dropdown-menu {
+    min-width: 150px !important;
+}
+
+/* Ensure dropdown doesn't overflow card boundaries on small screens */
+@media (max-width: 575px) {
+    .card .dropdown {
+        position: static !important;
+    }
+
+    .card .dropdown-menu {
+        position: absolute !important;
+        right: 0.5rem !important;
+        left: auto !important;
+    }
+}
+
+/* Compact dropdown for very small cards (col-6 on mobile) */
+@media (max-width: 767px) {
+    .col-6 .card .dropdown-menu {
+        min-width: 120px !important;
+        font-size: 0.7rem !important;
+    }
+
+    .col-6 .card .dropdown-menu .dropdown-item {
+        padding: 0.3rem 0.5rem !important;
+        white-space: nowrap !important;
+    }
+}

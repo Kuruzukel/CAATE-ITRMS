@@ -214,3 +214,30 @@ span.badge.bg-success {
 .table tbody tr[style*="outline"] {
     margin: 12px 0;
 }
+
+
+/* Remove padding/margin at bottom of welcome card on larger screens */
+@media (min-width: 992px) {
+    .col-lg-8.mb-4.order-0 .card {
+        margin-bottom: 0 !important;
+        padding-bottom: 0 !important;
+    }
+
+    .col-lg-8.mb-4.order-0 .card .row {
+        margin-bottom: 0 !important;
+    }
+
+    .col-lg-8.mb-4.order-0 .card .card-body {
+        padding-bottom: 1.5rem !important;
+    }
+
+    .col-lg-8.mb-4.order-0 .card::after,
+    .col-lg-8.mb-4.order-0 .card::before {
+        display: none !important;
+    }
+
+    /* Remove bottom spacing from the column itself */
+    .col-lg-8.mb-4.order-0 {
+        margin-bottom: 1.5rem !important;
+    }
+}

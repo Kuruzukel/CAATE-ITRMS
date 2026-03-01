@@ -552,6 +552,12 @@
     const chartWelcomeStatistics = document.querySelector('#welcomeStatisticsChart');
     if (!chartWelcomeStatistics) return;
 
+    // Check if we have real data stored
+    const hasRealData = window.welcomeChartData;
+    const enrolledValue = hasRealData ? window.welcomeChartData.enrolled : 72;
+    const pendingValue = hasRealData ? window.welcomeChartData.pending : 18;
+    const completedValue = hasRealData ? window.welcomeChartData.completed : 10;
+
     const welcomeChartConfig = {
       chart: {
         height: 165,
@@ -563,7 +569,7 @@
         }
       },
       labels: ['Enrolled', 'Pending', 'Completed'],
-      series: [72, 18, 10],
+      series: [enrolledValue, pendingValue, completedValue],
       colors: [config.colors.success, config.colors.warning, config.colors.primary],
       stroke: {
         width: 5,
@@ -610,7 +616,7 @@
                 color: axisColor,
                 label: 'Today',
                 formatter: function (w) {
-                  return '72%';
+                  return enrolledValue + '%';
                 }
               }
             }
@@ -621,6 +627,9 @@
 
     const welcomeChart = new ApexCharts(chartWelcomeStatistics, welcomeChartConfig);
     welcomeChart.render();
+
+    // Store the chart instance globally so it can be updated
+    window.welcomeChartInstance = welcomeChart;
   }
 
   // Income Chart - Area chart

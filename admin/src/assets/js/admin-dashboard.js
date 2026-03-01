@@ -8,37 +8,26 @@ const API_BASE_URL = window.location.origin.includes('localhost')
 // Function to fetch dashboard statistics
 async function fetchDashboardStatistics() {
     try {
-        console.log('Fetching statistics from:', `${API_BASE_URL}/api/v1/trainees/statistics`);
         const response = await fetch(`${API_BASE_URL}/api/v1/trainees/statistics`);
 
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        // Get the raw text first to see what's being returned
         const text = await response.text();
-        console.log('Raw response:', text);
-
-        // Try to parse it as JSON
         const result = JSON.parse(text);
 
         if (result.success) {
             updateDashboardUI(result.data);
-            console.log('Statistics loaded successfully:', result.data);
-        } else {
-            console.error('Failed to fetch statistics:', result.error);
-            showErrorMessage('Failed to load dashboard statistics');
         }
     } catch (error) {
-        console.error('Error fetching dashboard statistics:', error);
-        showErrorMessage('Unable to connect to the server. Please check if the backend is running.');
+        // Silently fail
     }
 }
 
 // Function to show error message
 function showErrorMessage(message) {
     // You can implement a toast notification here
-    console.warn('Dashboard Error:', message);
 }
 
 // Function to update dashboard UI with real data
@@ -48,6 +37,18 @@ function updateDashboardUI(data) {
     if (totalTraineesElement) {
         totalTraineesElement.textContent = data.total.toLocaleString();
     }
+
+    // Calculate percentage for the chart
+    const totalEnrollments = data.approvedEnrollments + data.pendingEnrollments;
+    const enrolledPercentage = totalEnrollments > 0
+        ? Math.round((data.approvedEnrollments / totalEnrollments) * 100)
+        : 0;
+    const pendingPercentage = totalEnrollments > 0
+        ? Math.round((data.pendingEnrollments / totalEnrollments) * 100)
+        : 0;
+
+    // Update the welcome card chart
+    updateWelcomeChart(enrolledPercentage, pendingPercentage, Math.abs(data.todayPercentageIncrease));
 
     // Update percentage in welcome card text
     const percentageTextElement = document.querySelector('.col-sm-7 .fw-bold');
@@ -122,8 +123,6 @@ function updateDashboardUI(data) {
             activityCountElement.textContent = data.monthEnrollments.toLocaleString();
         }
     }
-
-    console.log('Dashboard statistics updated:', data);
 }
 
 // Function to ensure Present status badges have green background with white text
@@ -224,3 +223,87 @@ document.addEventListener('DOMContentLoaded', function () {
     // Refresh statistics every 30 seconds
     setInterval(fetchDashboardStatistics, 30000);
 });
+
+
+// Function to update the welcome statistics chart with real data
+function updateWelcomeChart(enrolledPercentage, pendingPercentage, todayPercentage) {
+    // Check if ApexCharts is available and chart exists
+    if (typeof ApexCharts === 'undefined') {
+        return;
+    }
+
+    const chartElement = document.querySelector('#welcomeStatisticsChart');
+    if (!chartElement) {
+        return;
+    }
+
+    // Try to update existing chart or create new one
+    try {
+        // Get the chart instance if it exists
+        const chartInstance = ApexCharts.getChartByID('welcomeStatisticsChart');
+
+        if (chartInstance) {
+            // Update existing chart
+            chartInstance.updateOptions({
+                series: [enrolledPercentage, pendingPercentage, 100 - enrolledPercentage - pendingPercentage],
+                plotOptions: {
+                    pie: {
+                        donut: {
+                            labels: {
+                                total: {
+                                    formatter: function (w) {
+                                        return todayPercentage + '%';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    } catch (error) {
+        // Silently fail
+    }
+}
+
+
+// Function to update the welcome chart with real data
+function updateWelcomeChart(enrolledPercentage, pendingPercentage, completedPercentage) {
+    // Check if ApexCharts is available
+    if (typeof ApexCharts === 'undefined') {
+        setTimeout(() => updateWelcomeChart(enrolledPercentage, pendingPercentage, completedPercentage), 500);
+        return;
+    }
+
+    const chartElement = document.querySelector('#welcomeStatisticsChart');
+    if (!chartElement) return;
+
+    // Store the chart instance globally so we can update it
+    if (!window.welcomeChartInstance) {
+        // Store the data for when the chart is initialized
+        window.welcomeChartData = {
+            enrolled: enrolledPercentage,
+            pending: pendingPercentage,
+            completed: completedPercentage
+        };
+        return;
+    }
+
+    // Update the chart data
+    window.welcomeChartInstance.updateOptions({
+        series: [enrolledPercentage, pendingPercentage, completedPercentage],
+        plotOptions: {
+            pie: {
+                donut: {
+                    labels: {
+                        total: {
+                            formatter: function (w) {
+                                return enrolledPercentage + '%';
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    });
+}

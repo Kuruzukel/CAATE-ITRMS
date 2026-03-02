@@ -327,3 +327,345 @@ function updateWelcomeChart(enrolledPercentage, pendingPercentage, completedPerc
         }
     });
 }
+
+
+// Function to fetch course enrollment statistics
+async function fetchCourseEnrollmentStatistics() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/v1/courses/enrollment-statistics`);
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+
+        if (result.success) {
+            updateCourseEnrollmentUI(result.data);
+        }
+    } catch (error) {
+        console.error('Error fetching course enrollment statistics:', error);
+    }
+}
+
+// Function to update Course Enrollment Statistics UI
+function updateCourseEnrollmentUI(data) {
+    // Update total enrollments count
+    const totalEnrollmentsElement = document.getElementById('totalEnrollmentsCount');
+    if (totalEnrollmentsElement && data.totalEnrollments !== undefined) {
+        totalEnrollmentsElement.textContent = data.totalEnrollments.toLocaleString();
+    }
+
+    // Update top enrolled courses list
+    const coursesList = document.getElementById('topEnrolledCoursesList');
+    if (coursesList && data.topCourses && data.topCourses.length > 0) {
+        coursesList.innerHTML = '';
+
+        data.topCourses.forEach((course, index) => {
+            const isLast = index === data.topCourses.length - 1;
+            const li = document.createElement('li');
+            li.className = isLast ? 'd-flex' : 'd-flex mb-4 pb-1';
+
+            li.innerHTML = `
+                <div class="avatar flex-shrink-0 me-3">
+                    <img src="${course.image || 'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&h=250&fit=crop'}" 
+                         alt="${course.name}" 
+                         class="rounded" 
+                         style="width: 38px; height: 38px; object-fit: cover;" />
+                </div>
+                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                    <div class="me-2">
+                        <h6 class="mb-0">${course.name}</h6>
+                        <small class="text-muted">${course.hours} hours</small>
+                    </div>
+                    <div class="user-progress">
+                        <small class="fw-semibold">${course.enrollmentCount}</small>
+                    </div>
+                </div>
+            `;
+
+            coursesList.appendChild(li);
+        });
+    }
+}
+
+// Function to fetch recent enrollment activity
+async function fetchRecentEnrollmentActivity() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/v1/enrollments/recent-activity`);
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+
+        if (result.success) {
+            updateRecentEnrollmentActivityUI(result.data);
+        }
+    } catch (error) {
+        console.error('Error fetching recent enrollment activity:', error);
+    }
+}
+
+// Function to update Recent Enrollment Activity UI
+function updateRecentEnrollmentActivityUI(activities) {
+    const activityList = document.getElementById('recentEnrollmentActivityList');
+    if (!activityList || !activities || activities.length === 0) return;
+
+    activityList.innerHTML = '';
+
+    activities.forEach((activity, index) => {
+        const isLast = index === activities.length - 1;
+        const li = document.createElement('li');
+        li.className = isLast ? 'd-flex' : 'd-flex mb-4 pb-1';
+
+        // Determine badge class and text based on status
+        let badgeClass = 'bg-label-primary';
+        let badgeText = activity.status;
+
+        switch (activity.status.toLowerCase()) {
+            case 'enrolled':
+                badgeClass = 'bg-success';
+                badgeText = 'Enrolled';
+                break;
+            case 'pending':
+                badgeClass = 'bg-warning';
+                badgeText = 'Pending';
+                break;
+            case 'cancelled':
+            case 'withdrawn':
+                badgeClass = 'bg-danger';
+                badgeText = 'Cancelled';
+                break;
+            case 'completed':
+                badgeClass = 'bg-info';
+                badgeText = 'Completed';
+                break;
+        }
+
+        // Determine avatar (use image if available, otherwise use initials)
+        let avatarHTML = '';
+        if (activity.avatar) {
+            avatarHTML = `<img src="${activity.avatar}" alt="${activity.name}" class="rounded-circle" />`;
+        } else {
+            const initials = activity.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+            avatarHTML = `<span class="avatar-initial rounded-circle bg-label-primary"><i class="bx bx-user"></i></span>`;
+        }
+
+        li.innerHTML = `
+            <div class="avatar flex-shrink-0 me-3">
+                ${avatarHTML}
+            </div>
+            <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                <div class="me-2">
+                    <h6 class="mb-0">${activity.name}</h6>
+                    <small class="text-muted d-block">${activity.courseName}</small>
+                </div>
+                <div class="user-progress">
+                    <span class="badge ${badgeClass}">${badgeText}</span>
+                </div>
+            </div>
+        `;
+
+        activityList.appendChild(li);
+    });
+}
+
+// Initialize dashboard data fetching
+function initializeDashboardData() {
+    // Fetch course enrollment statistics
+    fetchCourseEnrollmentStatistics();
+
+    // Fetch recent enrollment activity
+    fetchRecentEnrollmentActivity();
+
+    // Refresh data every 30 seconds
+    setInterval(() => {
+        fetchCourseEnrollmentStatistics();
+        fetchRecentEnrollmentActivity();
+    }, 30000);
+}
+
+// Update DOMContentLoaded event listener to include new functions
+document.addEventListener('DOMContentLoaded', function () {
+    // Initialize year filter
+    initYearFilter();
+
+    // Fetch and display real dashboard statistics
+    fetchDashboardStatistics();
+
+    // Initialize dashboard data (courses and recent activity)
+    initializeDashboardData();
+
+    stylePresentBadges();
+    stylePresentTodayElements();
+    ensureSuccessBadgeStyling();
+
+    // Re-apply styling after any dynamic content updates
+    const observer = new MutationObserver(function (mutations) {
+        mutations.forEach(function (mutation) {
+            if (mutation.type === 'childList') {
+                stylePresentBadges();
+                ensureSuccessBadgeStyling();
+            }
+        });
+    });
+
+    // Start observing
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true
+    });
+
+    // Refresh statistics every 30 seconds
+    setInterval(() => fetchDashboardStatistics(selectedYear), 30000);
+});
+
+
+// Function to fetch course enrollment statistics
+async function fetchCourseEnrollmentStatistics() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/v1/courses/enrollment-statistics`);
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+
+        if (result.success && result.data) {
+            updateCourseEnrollmentUI(result.data);
+        }
+    } catch (error) {
+        console.error('Error fetching course enrollment statistics:', error);
+    }
+}
+
+// Function to update course enrollment UI
+function updateCourseEnrollmentUI(data) {
+    // Update total enrollments count
+    const totalEnrollmentsElement = document.getElementById('totalEnrollmentsCount');
+    if (totalEnrollmentsElement && data.totalEnrollments !== undefined) {
+        totalEnrollmentsElement.textContent = data.totalEnrollments.toLocaleString();
+    }
+
+    // Update top enrolled courses
+    if (data.topCourses && Array.isArray(data.topCourses)) {
+        data.topCourses.forEach((course, index) => {
+            const countElement = document.getElementById(`course${index + 1}Count`);
+            if (countElement) {
+                countElement.textContent = course.enrollmentCount || 0;
+            }
+        });
+    }
+}
+
+// Function to fetch recent enrollment activity
+async function fetchRecentEnrollmentActivity() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/v1/enrollments/recent?limit=6`);
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+
+        if (result.success && result.data) {
+            updateRecentEnrollmentUI(result.data);
+        }
+    } catch (error) {
+        console.error('Error fetching recent enrollment activity:', error);
+    }
+}
+
+// Function to update recent enrollment activity UI
+function updateRecentEnrollmentUI(enrollments) {
+    const listElement = document.getElementById('recentEnrollmentActivityList');
+    if (!listElement) return;
+
+    if (!enrollments || enrollments.length === 0) {
+        listElement.innerHTML = `
+            <li class="d-flex justify-content-center align-items-center py-5">
+                <p class="text-muted">No recent enrollment activity</p>
+            </li>
+        `;
+        return;
+    }
+
+    listElement.innerHTML = enrollments.map((enrollment, index) => {
+        const statusConfig = getStatusConfig(enrollment.status);
+        const isLast = index === enrollments.length - 1;
+
+        return `
+            <li class="d-flex ${isLast ? '' : 'mb-4 pb-1'}">
+                <div class="avatar flex-shrink-0 me-3">
+                    <span class="avatar-initial rounded-circle bg-label-${statusConfig.color}">
+                        <i class="bx bx-user"></i>
+                    </span>
+                </div>
+                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                    <div class="me-2">
+                        <h6 class="mb-0">${enrollment.traineeName || 'Unknown'}</h6>
+                        <small class="text-muted d-block">${enrollment.courseName || 'N/A'}</small>
+                    </div>
+                    <div class="user-progress">
+                        <span class="badge bg-${statusConfig.color}">${statusConfig.label}</span>
+                    </div>
+                </div>
+            </li>
+        `;
+    }).join('');
+}
+
+// Function to get status configuration
+function getStatusConfig(status) {
+    const statusMap = {
+        'enrolled': { color: 'success', label: 'Enrolled' },
+        'pending': { color: 'warning', label: 'Pending' },
+        'cancelled': { color: 'danger', label: 'Cancelled' },
+        'withdrawn': { color: 'danger', label: 'Cancelled' },
+        'completed': { color: 'primary', label: 'Completed' }
+    };
+
+    return statusMap[status?.toLowerCase()] || { color: 'secondary', label: status || 'Unknown' };
+}
+
+// Update the DOMContentLoaded event listener to include new fetch functions
+document.addEventListener('DOMContentLoaded', function () {
+    // Initialize year filter
+    initYearFilter();
+
+    // Fetch and display real dashboard statistics
+    fetchDashboardStatistics();
+    fetchCourseEnrollmentStatistics();
+    fetchRecentEnrollmentActivity();
+
+    stylePresentBadges();
+    stylePresentTodayElements();
+    ensureSuccessBadgeStyling();
+
+    // Re-apply styling after any dynamic content updates
+    const observer = new MutationObserver(function (mutations) {
+        mutations.forEach(function (mutation) {
+            if (mutation.type === 'childList') {
+                stylePresentBadges();
+                ensureSuccessBadgeStyling();
+            }
+        });
+    });
+
+    // Start observing
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true
+    });
+
+    // Refresh statistics every 30 seconds
+    setInterval(() => {
+        fetchDashboardStatistics(selectedYear);
+        fetchCourseEnrollmentStatistics();
+        fetchRecentEnrollmentActivity();
+    }, 30000);
+});

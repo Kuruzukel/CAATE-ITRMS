@@ -34,6 +34,7 @@ function handleRequest($uri, $method) {
         'PUT:/api/v1/trainees/{id}' => ['TraineeController', 'update'],
         'DELETE:/api/v1/trainees/{id}' => ['TraineeController', 'destroy'],
         'GET:/api/v1/courses' => ['CourseController', 'index'],
+        'GET:/api/v1/courses/enrollment-statistics' => ['CourseController', 'getEnrollmentStatistics'],
         'GET:/api/v1/courses/{id}' => ['CourseController', 'show'],
         'POST:/api/v1/courses' => ['CourseController', 'store'],
         'PUT:/api/v1/courses/{id}' => ['CourseController', 'update'],

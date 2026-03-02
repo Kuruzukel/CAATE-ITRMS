@@ -479,22 +479,17 @@ function updateRecentEnrollmentActivityUI(activities) {
 // Function to fetch course enrollment statistics
 async function fetchCourseEnrollmentStatistics() {
     try {
-        // TODO: Backend endpoint not implemented yet
-        // const response = await fetch(`${API_BASE_URL}/api/v1/courses/enrollment-statistics`);
+        const response = await fetch(`${API_BASE_URL}/api/v1/courses/enrollment-statistics`);
 
-        // Temporary: Use mock data or skip until endpoint is ready
-        console.warn('Course enrollment statistics endpoint not yet implemented');
-        return;
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
 
-        // if (!response.ok) {
-        //     throw new Error(`HTTP error! status: ${response.status}`);
-        // }
+        const result = await response.json();
 
-        // const result = await response.json();
-
-        // if (result.success && result.data) {
-        //     updateCourseEnrollmentUI(result.data);
-        // }
+        if (result.success && result.data) {
+            updateCourseEnrollmentUI(result.data);
+        }
     } catch (error) {
         console.error('Error fetching course enrollment statistics:', error);
     }
@@ -508,14 +503,35 @@ function updateCourseEnrollmentUI(data) {
         totalEnrollmentsElement.textContent = data.totalEnrollments.toLocaleString();
     }
 
-    // Update top enrolled courses
+    // Update top enrolled courses list
     if (data.topCourses && Array.isArray(data.topCourses)) {
-        data.topCourses.forEach((course, index) => {
-            const countElement = document.getElementById(`course${index + 1}Count`);
-            if (countElement) {
-                countElement.textContent = course.enrollmentCount || 0;
-            }
-        });
+        const listElement = document.getElementById('topEnrolledCoursesList');
+        if (listElement && data.topCourses.length > 0) {
+            listElement.innerHTML = data.topCourses.map((course, index) => {
+                const isLast = index === data.topCourses.length - 1;
+                const imageUrl = course.image || 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400&h=250&fit=crop';
+
+                return `
+                    <li class="d-flex ${isLast ? '' : 'mb-4 pb-1'}">
+                        <div class="avatar flex-shrink-0 me-3">
+                            <img src="${imageUrl}" alt="${course.name}" class="rounded" style="width: 38px; height: 38px; object-fit: cover;" />
+                        </div>
+                        <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                            <div class="me-2">
+                                <h6 class="mb-0">${course.name}</h6>
+                                <small class="text-muted">${course.hours} hours</small>
+                            </div>
+                            <div class="user-progress">
+                                <small class="fw-semibold">${course.enrollmentCount}</small>
+                            </div>
+                        </div>
+                    </li>
+                `;
+            }).join('');
+        }
+
+        // Update the donut chart with real data
+        updateCourseDonutChart(data.topCourses);
     }
 }
 

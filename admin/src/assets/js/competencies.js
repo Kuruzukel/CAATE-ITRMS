@@ -1,11 +1,10 @@
 /* Competencies Page Functionality */
 
 // API Configuration
-const API_BASE_URL = (typeof config !== 'undefined' && config.api)
-    ? config.api.baseUrl
-    : (window.location.hostname === 'localhost'
-        ? 'http://localhost/CAATE-ITRMS/backend/public'
-        : '/backend/public');
+window.API_BASE_URL = window.API_BASE_URL || (window.location.hostname === 'localhost'
+    ? 'http://localhost/CAATE-ITRMS/backend/public'
+    : '/backend/public');
+var API_BASE_URL = window.API_BASE_URL;
 
 let coursesData = [];
 let currentCourseCard = null;

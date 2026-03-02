@@ -1,7 +1,7 @@
 /* Admin Dashboard specific JavaScript */
 
-// API Base URL
-const API_BASE_URL = window.location.origin.includes('localhost')
+// API Base URL - Always use the base path for dashboard
+var API_BASE_URL_DASHBOARD = window.location.origin.includes('localhost')
     ? 'http://localhost/CAATE-ITRMS/backend/public'
     : '/CAATE-ITRMS/backend/public';
 
@@ -54,7 +54,7 @@ function updateYearLabels(year) {
 // Function to fetch dashboard statistics
 async function fetchDashboardStatistics(year = selectedYear) {
     try {
-        const response = await fetch(`${API_BASE_URL}/api/v1/trainees/statistics?year=${year}`);
+        const response = await fetch(`${API_BASE_URL_DASHBOARD}/api/v1/trainees/statistics?year=${year}`);
 
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -332,7 +332,7 @@ function updateWelcomeChart(enrolledPercentage, pendingPercentage, completedPerc
 // Function to fetch course enrollment statistics
 async function fetchCourseEnrollmentStatistics() {
     try {
-        const response = await fetch(`${API_BASE_URL}/api/v1/courses/enrollment-statistics`);
+        const response = await fetch(`${API_BASE_URL_DASHBOARD}/api/v1/courses/enrollment-statistics`);
 
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -392,7 +392,7 @@ function updateCourseEnrollmentUI(data) {
 // Function to fetch recent enrollment activity
 async function fetchRecentEnrollmentActivity() {
     try {
-        const response = await fetch(`${API_BASE_URL}/api/v1/enrollments/recent-activity`);
+        const response = await fetch(`${API_BASE_URL_DASHBOARD}/api/v1/enrollments/recent-activity`);
 
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -479,7 +479,7 @@ function updateRecentEnrollmentActivityUI(activities) {
 // Function to fetch course enrollment statistics
 async function fetchCourseEnrollmentStatistics() {
     try {
-        const response = await fetch(`${API_BASE_URL}/api/v1/courses/enrollment-statistics`);
+        const response = await fetch(`${API_BASE_URL_DASHBOARD}/api/v1/courses/enrollment-statistics`);
 
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);

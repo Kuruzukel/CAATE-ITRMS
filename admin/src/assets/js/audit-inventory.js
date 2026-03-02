@@ -1,9 +1,11 @@
 /* Audit Inventory Page Script */
 
 // API Configuration
-const API_BASE_URL = window.location.origin.includes('localhost')
-    ? 'http://localhost/CAATE-ITRMS/backend/public'
-    : '/CAATE-ITRMS/backend/public';
+if (typeof API_BASE_URL === 'undefined') {
+    var API_BASE_URL = window.location.origin.includes('localhost')
+        ? 'http://localhost/CAATE-ITRMS/backend/public'
+        : '/CAATE-ITRMS/backend/public';
+}
 
 // Store current row for modal operations
 let currentRow = null;

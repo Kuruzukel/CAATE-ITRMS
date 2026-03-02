@@ -5,9 +5,11 @@ let currentRow = null;
 let inventoryData = [];
 
 // API Configuration
-const API_BASE_URL = window.location.origin.includes('localhost')
-    ? 'http://localhost/CAATE-ITRMS/backend/public'
-    : '/CAATE-ITRMS/backend/public';
+if (typeof API_BASE_URL === 'undefined') {
+    var API_BASE_URL = window.location.origin.includes('localhost')
+        ? 'http://localhost/CAATE-ITRMS/backend/public'
+        : '/CAATE-ITRMS/backend/public';
+}
 
 // Prevent aria-hidden focus warnings by managing modal focus properly
 document.addEventListener('DOMContentLoaded', function () {

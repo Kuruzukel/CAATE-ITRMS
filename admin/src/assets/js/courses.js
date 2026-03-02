@@ -1,7 +1,7 @@
 /* Courses Page Functionality */
 
-// API Configuration
-const API_BASE_URL = 'http://localhost/CAATE-ITRMS/backend/public/api/v1';
+// API Configuration - Always use the full API path for this page
+var API_BASE_URL = 'http://localhost/CAATE-ITRMS/backend/public/api/v1';
 
 // State
 let courses = [];

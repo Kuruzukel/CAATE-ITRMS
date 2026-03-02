@@ -537,26 +537,8 @@ function updateCourseEnrollmentUI(data) {
 
 // Function to fetch recent enrollment activity
 async function fetchRecentEnrollmentActivity() {
-    try {
-        // TODO: Backend endpoint not implemented yet
-        // const response = await fetch(`${API_BASE_URL}/api/v1/enrollments/recent?limit=6`);
-
-        // Temporary: Use mock data or skip until endpoint is ready
-        console.warn('Recent enrollment activity endpoint not yet implemented');
-        return;
-
-        // if (!response.ok) {
-        //     throw new Error(`HTTP error! status: ${response.status}`);
-        // }
-
-        // const result = await response.json();
-
-        // if (result.success && result.data) {
-        //     updateRecentEnrollmentUI(result.data);
-        // }
-    } catch (error) {
-        console.error('Error fetching recent enrollment activity:', error);
-    }
+    // Endpoint not yet implemented - silently skip
+    return;
 }
 
 // Function to update recent enrollment activity UI

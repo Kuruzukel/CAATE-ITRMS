@@ -8,6 +8,7 @@ require_once __DIR__ . '/../app/controllers/CourseController.php';
 require_once __DIR__ . '/../app/controllers/CompetencyController.php';
 require_once __DIR__ . '/../app/controllers/InventoryController.php';
 require_once __DIR__ . '/../app/controllers/AppointmentController.php';
+require_once __DIR__ . '/../app/controllers/EnrollmentController.php';
 
 function handleRequest($uri, $method) {
     // Remove base path if exists
@@ -39,6 +40,7 @@ function handleRequest($uri, $method) {
         'POST:/api/v1/courses' => ['CourseController', 'store'],
         'PUT:/api/v1/courses/{id}' => ['CourseController', 'update'],
         'DELETE:/api/v1/courses/{id}' => ['CourseController', 'destroy'],
+        'GET:/api/v1/enrollments/recent' => ['EnrollmentController', 'getRecentEnrollments'],
         'GET:/api/v1/competencies' => ['CompetencyController', 'index'],
         'GET:/api/v1/competencies/{id}' => ['CompetencyController', 'show'],
         'POST:/api/v1/competencies' => ['CompetencyController', 'store'],

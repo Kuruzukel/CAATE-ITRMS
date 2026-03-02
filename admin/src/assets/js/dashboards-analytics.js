@@ -25,11 +25,11 @@
       initWeeklyExpensesChart
     ];
 
-    // Stagger chart initialization to keep each frame under 50ms
+    // Stagger chart initialization with longer delays to prevent performance violations
     charts.forEach((chartInit, index) => {
       setTimeout(() => {
         requestAnimationFrame(chartInit);
-      }, index * 50);
+      }, index * 150); // Increased from 50ms to 150ms
     });
   }
 
@@ -466,80 +466,11 @@
     profileReportChart.render();
   }
 
-  // Order Statistics Chart
+  // Order Statistics Chart - Now handled dynamically by admin-dashboard.js
   function initOrderStatisticsChart() {
-    const chartOrderStatistics = document.querySelector('#orderStatisticsChart');
-    if (!chartOrderStatistics) return;
-
-    const orderChartConfig = {
-      chart: {
-        height: 165,
-        width: 130,
-        type: 'donut',
-        animations: {
-          enabled: true,
-          speed: 400
-        }
-      },
-      labels: ['Electronic', 'Sports', 'Decor', 'Fashion'],
-      series: [85, 15, 50, 50],
-      colors: [config.colors.primary, config.colors.secondary, config.colors.info, config.colors.success],
-      stroke: {
-        width: 5,
-        colors: cardColor
-      },
-      dataLabels: {
-        enabled: false,
-        formatter: function (val, opt) {
-          return parseInt(val) + '%';
-        }
-      },
-      legend: {
-        show: false
-      },
-      grid: {
-        padding: {
-          top: 0,
-          bottom: 0,
-          right: 15
-        }
-      },
-      plotOptions: {
-        pie: {
-          donut: {
-            size: '75%',
-            labels: {
-              show: true,
-              value: {
-                fontSize: '1.5rem',
-                fontFamily: 'Public Sans',
-                color: headingColor,
-                offsetY: -15,
-                formatter: function (val) {
-                  return parseInt(val) + '%';
-                }
-              },
-              name: {
-                offsetY: 20,
-                fontFamily: 'Public Sans'
-              },
-              total: {
-                show: true,
-                fontSize: '0.8125rem',
-                color: axisColor,
-                label: 'Weekly',
-                formatter: function (w) {
-                  return '38%';
-                }
-              }
-            }
-          }
-        }
-      }
-    };
-
-    const statisticsChart = new ApexCharts(chartOrderStatistics, orderChartConfig);
-    statisticsChart.render();
+    // Chart is now populated with real data from the enrollment statistics API
+    // See admin-dashboard.js -> updateCourseDonutChart()
+    return;
   }
 
   // Welcome Statistics Chart

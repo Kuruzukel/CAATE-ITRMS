@@ -13,19 +13,24 @@
   borderColor = config.colors.borderColor;
 
   // Defer chart initialization to improve initial page load
-  // Defer chart initialization to improve initial page load
   function initializeCharts() {
-    // Use requestIdleCallback for better performance, fallback to setTimeout
-    const scheduleInit = window.requestIdleCallback || ((cb) => setTimeout(cb, 1));
+    // Use requestAnimationFrame for smoother rendering
+    requestAnimationFrame(() => {
+      // Initialize charts in batches to prevent blocking
+      initTotalRevenueChart();
+      initGrowthChart();
 
-    // Batch chart rendering with delays to prevent blocking
-    scheduleInit(() => initTotalRevenueChart());
-    scheduleInit(() => initGrowthChart());
-    scheduleInit(() => initProfileReportChart());
-    scheduleInit(() => initOrderStatisticsChart());
-    scheduleInit(() => initWelcomeStatisticsChart());
-    scheduleInit(() => initIncomeChart());
-    scheduleInit(() => initWeeklyExpensesChart());
+      requestAnimationFrame(() => {
+        initProfileReportChart();
+        initOrderStatisticsChart();
+
+        requestAnimationFrame(() => {
+          initWelcomeStatisticsChart();
+          initIncomeChart();
+          initWeeklyExpensesChart();
+        });
+      });
+    });
   }
 
   // Total Revenue Report Chart - Bar Chart

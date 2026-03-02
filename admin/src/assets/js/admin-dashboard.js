@@ -473,70 +473,28 @@ function updateRecentEnrollmentActivityUI(activities) {
 }
 
 // Initialize dashboard data fetching
-function initializeDashboardData() {
-    // Fetch course enrollment statistics
-    fetchCourseEnrollmentStatistics();
-
-    // Fetch recent enrollment activity
-    fetchRecentEnrollmentActivity();
-
-    // Refresh data every 30 seconds
-    setInterval(() => {
-        fetchCourseEnrollmentStatistics();
-        fetchRecentEnrollmentActivity();
-    }, 30000);
-}
-
-// Update DOMContentLoaded event listener to include new functions
-document.addEventListener('DOMContentLoaded', function () {
-    // Initialize year filter
-    initYearFilter();
-
-    // Fetch and display real dashboard statistics
-    fetchDashboardStatistics();
-
-    // Initialize dashboard data (courses and recent activity)
-    initializeDashboardData();
-
-    stylePresentBadges();
-    stylePresentTodayElements();
-    ensureSuccessBadgeStyling();
-
-    // Re-apply styling after any dynamic content updates
-    const observer = new MutationObserver(function (mutations) {
-        mutations.forEach(function (mutation) {
-            if (mutation.type === 'childList') {
-                stylePresentBadges();
-                ensureSuccessBadgeStyling();
-            }
-        });
-    });
-
-    // Start observing
-    observer.observe(document.body, {
-        childList: true,
-        subtree: true
-    });
-
-    // Refresh statistics every 30 seconds
-    setInterval(() => fetchDashboardStatistics(selectedYear), 30000);
-});
+// Removed duplicate function - consolidated below
 
 
 // Function to fetch course enrollment statistics
 async function fetchCourseEnrollmentStatistics() {
     try {
-        const response = await fetch(`${API_BASE_URL}/api/v1/courses/enrollment-statistics`);
+        // TODO: Backend endpoint not implemented yet
+        // const response = await fetch(`${API_BASE_URL}/api/v1/courses/enrollment-statistics`);
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
+        // Temporary: Use mock data or skip until endpoint is ready
+        console.warn('Course enrollment statistics endpoint not yet implemented');
+        return;
 
-        const result = await response.json();
+        // if (!response.ok) {
+        //     throw new Error(`HTTP error! status: ${response.status}`);
+        // }
 
-        if (result.success && result.data) {
-            updateCourseEnrollmentUI(result.data);
-        }
+        // const result = await response.json();
+
+        // if (result.success && result.data) {
+        //     updateCourseEnrollmentUI(result.data);
+        // }
     } catch (error) {
         console.error('Error fetching course enrollment statistics:', error);
     }
@@ -564,17 +522,22 @@ function updateCourseEnrollmentUI(data) {
 // Function to fetch recent enrollment activity
 async function fetchRecentEnrollmentActivity() {
     try {
-        const response = await fetch(`${API_BASE_URL}/api/v1/enrollments/recent?limit=6`);
+        // TODO: Backend endpoint not implemented yet
+        // const response = await fetch(`${API_BASE_URL}/api/v1/enrollments/recent?limit=6`);
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
+        // Temporary: Use mock data or skip until endpoint is ready
+        console.warn('Recent enrollment activity endpoint not yet implemented');
+        return;
 
-        const result = await response.json();
+        // if (!response.ok) {
+        //     throw new Error(`HTTP error! status: ${response.status}`);
+        // }
 
-        if (result.success && result.data) {
-            updateRecentEnrollmentUI(result.data);
-        }
+        // const result = await response.json();
+
+        // if (result.success && result.data) {
+        //     updateRecentEnrollmentUI(result.data);
+        // }
     } catch (error) {
         console.error('Error fetching recent enrollment activity:', error);
     }
@@ -632,7 +595,7 @@ function getStatusConfig(status) {
     return statusMap[status?.toLowerCase()] || { color: 'secondary', label: status || 'Unknown' };
 }
 
-// Update the DOMContentLoaded event listener to include new fetch functions
+// Single DOMContentLoaded event listener
 document.addEventListener('DOMContentLoaded', function () {
     // Initialize year filter
     initYearFilter();

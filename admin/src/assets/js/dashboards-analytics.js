@@ -13,35 +13,19 @@
   borderColor = config.colors.borderColor;
 
   // Defer chart initialization to improve initial page load
+  // Defer chart initialization to improve initial page load
   function initializeCharts() {
-    // Use requestAnimationFrame to batch chart rendering
-    requestAnimationFrame(() => {
-      initTotalRevenueChart();
-    });
+    // Use requestIdleCallback for better performance, fallback to setTimeout
+    const scheduleInit = window.requestIdleCallback || ((cb) => setTimeout(cb, 1));
 
-    requestAnimationFrame(() => {
-      initGrowthChart();
-    });
-
-    requestAnimationFrame(() => {
-      initProfileReportChart();
-    });
-
-    requestAnimationFrame(() => {
-      initOrderStatisticsChart();
-    });
-
-    requestAnimationFrame(() => {
-      initWelcomeStatisticsChart();
-    });
-
-    requestAnimationFrame(() => {
-      initIncomeChart();
-    });
-
-    requestAnimationFrame(() => {
-      initWeeklyExpensesChart();
-    });
+    // Batch chart rendering with delays to prevent blocking
+    scheduleInit(() => initTotalRevenueChart());
+    scheduleInit(() => initGrowthChart());
+    scheduleInit(() => initProfileReportChart());
+    scheduleInit(() => initOrderStatisticsChart());
+    scheduleInit(() => initWelcomeStatisticsChart());
+    scheduleInit(() => initIncomeChart());
+    scheduleInit(() => initWeeklyExpensesChart());
   }
 
   // Total Revenue Report Chart - Bar Chart

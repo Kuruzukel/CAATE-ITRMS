@@ -653,6 +653,24 @@ function updateCourseDonutChart(courses) {
     const chartElement = document.querySelector('#orderStatisticsChart');
     if (!chartElement) return;
 
+    // Check if all enrollment counts are 0
+    const totalEnrollments = courses.reduce((sum, course) => sum + (course.enrollmentCount || 0), 0);
+
+    if (totalEnrollments === 0) {
+        // Hide the chart and show a message
+        chartElement.innerHTML = `
+            <div style="display: flex; align-items: center; justify-content: center; height: 165px; width: 130px;">
+                <p style="text-align: center; color: #8592a3; font-size: 12px; margin: 0;">No enrollments yet</p>
+            </div>
+        `;
+        // Destroy existing chart instance if it exists
+        if (window.orderStatisticsChartInstance) {
+            window.orderStatisticsChartInstance.destroy();
+            window.orderStatisticsChartInstance = null;
+        }
+        return;
+    }
+
     // Prepare data for the chart
     const labels = courses.map(course => course.name);
     const series = courses.map(course => course.enrollmentCount);
@@ -726,3 +744,4 @@ function updateCourseDonutChart(courses) {
         window.orderStatisticsChartInstance.render();
     }
 }
+

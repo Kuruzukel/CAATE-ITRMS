@@ -14,22 +14,22 @@
 
   // Defer chart initialization to improve initial page load
   function initializeCharts() {
-    // Use requestAnimationFrame for smoother rendering
-    requestAnimationFrame(() => {
-      // Initialize charts in batches to prevent blocking
-      initTotalRevenueChart();
-      initGrowthChart();
+    // Initialize charts one at a time with delays to prevent blocking
+    const charts = [
+      initTotalRevenueChart,
+      initGrowthChart,
+      initProfileReportChart,
+      initOrderStatisticsChart,
+      initWelcomeStatisticsChart,
+      initIncomeChart,
+      initWeeklyExpensesChart
+    ];
 
-      requestAnimationFrame(() => {
-        initProfileReportChart();
-        initOrderStatisticsChart();
-
-        requestAnimationFrame(() => {
-          initWelcomeStatisticsChart();
-          initIncomeChart();
-          initWeeklyExpensesChart();
-        });
-      });
+    // Stagger chart initialization to keep each frame under 50ms
+    charts.forEach((chartInit, index) => {
+      setTimeout(() => {
+        requestAnimationFrame(chartInit);
+      }, index * 50);
     });
   }
 

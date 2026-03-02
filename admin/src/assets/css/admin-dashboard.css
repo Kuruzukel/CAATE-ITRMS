@@ -506,3 +506,137 @@ span.badge.bg-success {
         overflow-x: auto !important;
     }
 }
+
+
+/* ApexCharts tooltip styling - Match dropdown color palette */
+.apexcharts-tooltip {
+    background: linear-gradient(135deg, #1a2942 0%, #0f1f33 100%) !important;
+    backdrop-filter: blur(20px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+    border: 1px solid rgba(54, 145, 191, 0.4) !important;
+    box-shadow: 0 10px 40px rgba(22, 56, 86, 0.6),
+        0 4px 12px rgba(54, 145, 191, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+    color: rgba(255, 255, 255, 0.95) !important;
+}
+
+.apexcharts-tooltip-title {
+    background: rgba(54, 145, 191, 0.2) !important;
+    border-bottom: 1px solid rgba(54, 145, 191, 0.3) !important;
+    color: rgba(255, 255, 255, 0.95) !important;
+}
+
+.apexcharts-tooltip-text,
+.apexcharts-tooltip-text-y-label,
+.apexcharts-tooltip-text-y-value {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.apexcharts-tooltip-series-group {
+    background: transparent !important;
+}
+
+/* ApexCharts xaxis tooltip */
+.apexcharts-xaxistooltip {
+    background: linear-gradient(135deg, #1a2942 0%, #0f1f33 100%) !important;
+    border: 1px solid rgba(54, 145, 191, 0.4) !important;
+    color: rgba(255, 255, 255, 0.95) !important;
+    box-shadow: 0 4px 12px rgba(54, 145, 191, 0.4) !important;
+}
+
+.apexcharts-xaxistooltip:before,
+.apexcharts-xaxistooltip:after {
+    border-bottom-color: rgba(54, 145, 191, 0.4) !important;
+}
+
+.apexcharts-xaxistooltip-text {
+    color: rgba(255, 255, 255, 0.95) !important;
+}
+
+/* ApexCharts legend */
+.apexcharts-legend-text {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Chart grid lines - make them more subtle */
+.apexcharts-gridline {
+    stroke: rgba(54, 145, 191, 0.2) !important;
+}
+
+/* Chart axis labels */
+.apexcharts-xaxis-label,
+.apexcharts-yaxis-label {
+    fill: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* Monthly Enrollment Activity - Chart specific styling */
+#incomeChart .apexcharts-tooltip,
+#expensesOfWeek .apexcharts-tooltip {
+    background: linear-gradient(135deg, #1a2942 0%, #0f1f33 100%) !important;
+    border: 1px solid rgba(54, 145, 191, 0.4) !important;
+}
+
+
+/* ApexCharts tooltip styling for Monthly Enrollment Activity - Match dropdown palette */
+.col-md-6.col-lg-4.order-1 .apexcharts-tooltip {
+    background: linear-gradient(135deg, #1a2942 0%, #0f1f33 100%) !important;
+    backdrop-filter: blur(20px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+    border: 1px solid rgba(54, 145, 191, 0.4) !important;
+    box-shadow: 0 10px 40px rgba(22, 56, 86, 0.6),
+        0 4px 12px rgba(54, 145, 191, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+    color: rgba(255, 255, 255, 0.95) !important;
+}
+
+.col-md-6.col-lg-4.order-1 .apexcharts-tooltip-title {
+    background: rgba(54, 145, 191, 0.2) !important;
+    border-bottom: 1px solid rgba(54, 145, 191, 0.3) !important;
+    color: rgba(255, 255, 255, 0.95) !important;
+}
+
+.col-md-6.col-lg-4.order-1 .apexcharts-tooltip-text,
+.col-md-6.col-lg-4.order-1 .apexcharts-tooltip-text-y-label,
+.col-md-6.col-lg-4.order-1 .apexcharts-tooltip-text-y-value {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.col-md-6.col-lg-4.order-1 .apexcharts-tooltip-marker {
+    background-color: rgba(54, 145, 191, 0.8) !important;
+}
+
+/* ApexCharts xaxis tooltip (month labels) */
+.col-md-6.col-lg-4.order-1 .apexcharts-xaxistooltip {
+    background: linear-gradient(135deg, #1a2942 0%, #0f1f33 100%) !important;
+    backdrop-filter: blur(20px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+    border: 1px solid rgba(54, 145, 191, 0.4) !important;
+    box-shadow: 0 4px 12px rgba(54, 145, 191, 0.4) !important;
+    color: rgba(255, 255, 255, 0.95) !important;
+}
+
+.col-md-6.col-lg-4.order-1 .apexcharts-xaxistooltip-text {
+    color: rgba(255, 255, 255, 0.95) !important;
+}
+
+.col-md-6.col-lg-4.order-1 .apexcharts-xaxistooltip:before,
+.col-md-6.col-lg-4.order-1 .apexcharts-xaxistooltip:after {
+    border-bottom-color: rgba(54, 145, 191, 0.4) !important;
+}
+
+/* Chart grid lines */
+.col-md-6.col-lg-4.order-1 .apexcharts-gridline {
+    stroke: rgba(54, 145, 191, 0.2) !important;
+}
+
+/* Chart axis labels */
+.col-md-6.col-lg-4.order-1 .apexcharts-xaxis-label,
+.col-md-6.col-lg-4.order-1 .apexcharts-yaxis-label {
+    fill: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* Active data point marker */
+.col-md-6.col-lg-4.order-1 .apexcharts-marker {
+    stroke: rgba(54, 145, 191, 0.9) !important;
+    fill: #ffffff !important;
+}

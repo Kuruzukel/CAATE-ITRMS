@@ -506,32 +506,40 @@ function updateCourseEnrollmentUI(data) {
     // Update top enrolled courses list
     if (data.topCourses && Array.isArray(data.topCourses)) {
         const listElement = document.getElementById('topEnrolledCoursesList');
-        if (listElement && data.topCourses.length > 0) {
-            listElement.innerHTML = data.topCourses.map((course, index) => {
-                const isLast = index === data.topCourses.length - 1;
-                const imageUrl = course.image || 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400&h=250&fit=crop';
+        if (listElement) {
+            if (data.topCourses.length > 0) {
+                listElement.innerHTML = data.topCourses.map((course, index) => {
+                    const isLast = index === data.topCourses.length - 1;
+                    const imageUrl = course.image || 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400&h=250&fit=crop';
 
-                return `
-                    <li class="d-flex ${isLast ? '' : 'mb-4 pb-1'}">
-                        <div class="avatar flex-shrink-0 me-3">
-                            <img src="${imageUrl}" alt="${course.name}" class="rounded" style="width: 38px; height: 38px; object-fit: cover;" />
-                        </div>
-                        <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                                <h6 class="mb-0">${course.name}</h6>
-                                <small class="text-muted">${course.hours} hours</small>
+                    return `
+                        <li class="d-flex ${isLast ? '' : 'mb-4 pb-1'}">
+                            <div class="avatar flex-shrink-0 me-3">
+                                <img src="${imageUrl}" alt="${course.name}" class="rounded" style="width: 38px; height: 38px; object-fit: cover;" />
                             </div>
-                            <div class="user-progress">
-                                <small class="fw-semibold">${course.enrollmentCount}</small>
+                            <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                                <div class="me-2">
+                                    <h6 class="mb-0">${course.name}</h6>
+                                    <small class="text-muted">${course.hours} hours</small>
+                                </div>
+                                <div class="user-progress">
+                                    <small class="fw-semibold">${course.enrollmentCount}</small>
+                                </div>
                             </div>
-                        </div>
+                        </li>
+                    `;
+                }).join('');
+
+                // Update the donut chart with real data
+                updateCourseDonutChart(data.topCourses);
+            } else {
+                listElement.innerHTML = `
+                    <li class="d-flex justify-content-center align-items-center py-5">
+                        <p class="text-muted">No courses available</p>
                     </li>
                 `;
-            }).join('');
+            }
         }
-
-        // Update the donut chart with real data
-        updateCourseDonutChart(data.topCourses);
     }
 }
 

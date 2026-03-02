@@ -301,7 +301,8 @@ class CourseController {
             $courses = $coursesCollection->find()->toArray();
             
             // Count enrollments per course
-            $topCourses = [];
+            $allCourses = [];
+            $totalEnrollmentsCount = 0;
             
             foreach ($courses as $course) {
                 $courseId = (string)$course['_id'];
@@ -310,42 +311,56 @@ class CourseController {
                 $courseImage = $course['image'] ?? '';
                 $courseDescription = $course['description'] ?? '';
                 
-                // Count enrolled trainees for this course
+                // Count enrolled trainees for this course (accept multiple status values)
+                // Try both string comparison and case-insensitive
                 $enrollmentCount = $enrollmentsCollection->countDocuments([
                     'course_id' => $courseId,
-                    'status' => 'enrolled'
+                    'status' => ['$in' => ['enrolled', 'active', 'approved', 'ongoing', 'Enrolled', 'Active', 'Approved', 'Ongoing']]
                 ]);
                 
-                if ($enrollmentCount > 0) {
-                    $topCourses[] = [
-                        'id' => $courseId,
-                        'name' => $courseName,
-                        'hours' => $courseHours,
-                        'enrollmentCount' => $enrollmentCount,
-                        'image' => $courseImage,
-                        'description' => $courseDescription
-                    ];
-                }
+                // Also try without status filter to see if course_id matches
+                $totalForCourse = $enrollmentsCollection->countDocuments([
+                    'course_id' => $courseId
+                ]);
+                
+                $totalEnrollmentsCount += $enrollmentCount;
+                
+                $allCourses[] = [
+                    'id' => $courseId,
+                    'name' => $courseName,
+                    'hours' => $courseHours,
+                    'enrollmentCount' => $enrollmentCount,
+                    'totalForCourse' => $totalForCourse, // Debug: total enrollments regardless of status
+                    'image' => $courseImage,
+                    'description' => $courseDescription
+                ];
             }
             
             // Sort by enrollment count descending
-            usort($topCourses, function($a, $b) {
+            usort($allCourses, function($a, $b) {
                 return $b['enrollmentCount'] - $a['enrollmentCount'];
             });
             
             // Get top 5 courses
-            $topCourses = array_slice($topCourses, 0, 5);
+            $topCourses = array_slice($allCourses, 0, 5);
             
-            // Calculate total enrollments
+            // Calculate total enrollments (accept multiple status values)
             $totalEnrollments = $enrollmentsCollection->countDocuments([
-                'status' => 'enrolled'
+                'status' => ['$in' => ['enrolled', 'active', 'approved', 'ongoing', 'Enrolled', 'Active', 'Approved', 'Ongoing']]
             ]);
+            
+            // Debug: Get total count of all enrollments
+            $allEnrollmentsCount = $enrollmentsCollection->countDocuments([]);
             
             echo json_encode([
                 'success' => true,
                 'data' => [
                     'totalEnrollments' => $totalEnrollments,
-                    'topCourses' => $topCourses
+                    'topCourses' => $topCourses,
+                    'debug' => [
+                        'allEnrollmentsInDb' => $allEnrollmentsCount,
+                        'totalCounted' => $totalEnrollmentsCount
+                    ]
                 ]
             ]);
         } catch (Exception $e) {

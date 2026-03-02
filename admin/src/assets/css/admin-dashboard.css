@@ -640,3 +640,60 @@ span.badge.bg-success {
     stroke: rgba(54, 145, 191, 0.9) !important;
     fill: #ffffff !important;
 }
+
+
+/* Course Tooltip Styling */
+.course-tooltip {
+    background: linear-gradient(135deg, #1a2942 0%, #0f1f33 100%) !important;
+    backdrop-filter: blur(20px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+    border: 1px solid rgba(54, 145, 191, 0.4) !important;
+    border-radius: 8px !important;
+    box-shadow: 0 10px 40px rgba(22, 56, 86, 0.6),
+        0 4px 12px rgba(54, 145, 191, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+    padding: 1rem !important;
+    min-width: 250px !important;
+    max-width: 350px !important;
+    animation: fadeIn 0.2s ease-in-out;
+}
+
+.course-tooltip .tooltip-header h6 {
+    color: rgba(255, 255, 255, 0.95) !important;
+    font-weight: 600 !important;
+    margin-bottom: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+    border-bottom: 1px solid rgba(54, 145, 191, 0.3) !important;
+}
+
+.course-tooltip .tooltip-body p {
+    color: rgba(255, 255, 255, 0.85) !important;
+    font-size: 0.875rem !important;
+    line-height: 1.5 !important;
+}
+
+.course-tooltip .tooltip-body strong {
+    color: rgba(54, 145, 191, 0.95) !important;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Course item hover effect */
+.course-item {
+    position: relative;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.course-item:hover {
+    transform: translateX(4px);
+}

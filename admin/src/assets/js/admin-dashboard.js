@@ -669,3 +669,91 @@ document.addEventListener('DOMContentLoaded', function () {
         fetchRecentEnrollmentActivity();
     }, 30000);
 });
+
+
+// Function to update the course donut chart
+function updateCourseDonutChart(courses) {
+    if (!courses || courses.length === 0) return;
+
+    // Wait for ApexCharts to be available
+    if (typeof ApexCharts === 'undefined') {
+        setTimeout(() => updateCourseDonutChart(courses), 500);
+        return;
+    }
+
+    const chartElement = document.querySelector('#orderStatisticsChart');
+    if (!chartElement) return;
+
+    // Prepare data for the chart
+    const labels = courses.map(course => course.name);
+    const series = courses.map(course => course.enrollmentCount);
+    const colors = ['#696cff', '#03c3ec', '#8592a3', '#71dd37', '#ffab00'];
+
+    // Check if chart instance exists
+    if (window.orderStatisticsChartInstance) {
+        // Update existing chart
+        window.orderStatisticsChartInstance.updateOptions({
+            labels: labels,
+            series: series,
+            colors: colors.slice(0, courses.length)
+        });
+    } else {
+        // Create new chart
+        const chartConfig = {
+            chart: {
+                height: 165,
+                width: 130,
+                type: 'donut'
+            },
+            labels: labels,
+            series: series,
+            colors: colors.slice(0, courses.length),
+            stroke: {
+                width: 5,
+                colors: ['#1a2942']
+            },
+            dataLabels: {
+                enabled: false,
+                formatter: function (val, opt) {
+                    return parseInt(val) + '%';
+                }
+            },
+            legend: {
+                show: false
+            },
+            grid: {
+                padding: {
+                    top: 0,
+                    bottom: 0,
+                    right: 15
+                }
+            },
+            plotOptions: {
+                pie: {
+                    donut: {
+                        size: '75%',
+                        labels: {
+                            show: false
+                        }
+                    }
+                }
+            },
+            tooltip: {
+                theme: 'dark',
+                style: {
+                    fontSize: '12px',
+                    fontFamily: 'Public Sans'
+                },
+                y: {
+                    formatter: function (val, opts) {
+                        const courseName = opts.w.globals.labels[opts.seriesIndex];
+                        return courseName + ': ' + val + ' trainees';
+                    }
+                }
+            }
+        };
+
+        window.orderStatisticsChartInstance = new ApexCharts(chartElement, chartConfig);
+        window.orderStatisticsChartInstance.render();
+    }
+}

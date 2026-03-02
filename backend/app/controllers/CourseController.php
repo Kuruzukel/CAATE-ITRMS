@@ -287,4 +287,73 @@ class CourseController {
             ]);
         }
     }
+    
+    public function getEnrollmentStatistics() {
+        header('Content-Type: application/json');
+        header('Access-Control-Allow-Origin: *');
+        
+        try {
+            $db = getMongoConnection();
+            $enrollmentsCollection = $db->enrollments;
+            $coursesCollection = $db->courses;
+            
+            // Get all courses
+            $courses = $coursesCollection->find()->toArray();
+            
+            // Count enrollments per course
+            $topCourses = [];
+            
+            foreach ($courses as $course) {
+                $courseId = (string)$course['_id'];
+                $courseName = $course['title'] ?? 'Unknown Course';
+                $courseHours = $course['hours'] ?? 0;
+                $courseImage = $course['image'] ?? '';
+                $courseDescription = $course['description'] ?? '';
+                
+                // Count enrolled trainees for this course
+                $enrollmentCount = $enrollmentsCollection->countDocuments([
+                    'course_id' => $courseId,
+                    'status' => 'enrolled'
+                ]);
+                
+                if ($enrollmentCount > 0) {
+                    $topCourses[] = [
+                        'id' => $courseId,
+                        'name' => $courseName,
+                        'hours' => $courseHours,
+                        'enrollmentCount' => $enrollmentCount,
+                        'image' => $courseImage,
+                        'description' => $courseDescription
+                    ];
+                }
+            }
+            
+            // Sort by enrollment count descending
+            usort($topCourses, function($a, $b) {
+                return $b['enrollmentCount'] - $a['enrollmentCount'];
+            });
+            
+            // Get top 5 courses
+            $topCourses = array_slice($topCourses, 0, 5);
+            
+            // Calculate total enrollments
+            $totalEnrollments = $enrollmentsCollection->countDocuments([
+                'status' => 'enrolled'
+            ]);
+            
+            echo json_encode([
+                'success' => true,
+                'data' => [
+                    'totalEnrollments' => $totalEnrollments,
+                    'topCourses' => $topCourses
+                ]
+            ]);
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
 }

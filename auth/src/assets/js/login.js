@@ -24,46 +24,41 @@ window.togglePassword = function () {
     }
 };
 
-// Show loading state
-function showLoading(button) {
-    button.disabled = true;
-    button.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Signing in...';
-}
+// Toast notification function
+function showToast(message, type = 'success') {
+    const container = document.getElementById('toastContainer');
+    if (!container) return;
 
-// Reset button state
-function resetButton(button) {
-    button.disabled = false;
-    button.innerHTML = 'Sign in';
-}
+    const toast = document.createElement('div');
+    toast.className = `toast-notification ${type}`;
 
-// Show error message
-function showError(message) {
-    const form = document.getElementById('formAuthentication');
-
-    // Remove existing alerts
-    const existingAlert = form.querySelector('.alert');
-    if (existingAlert) {
-        existingAlert.remove();
-    }
-
-    // Create new alert
-    const alert = document.createElement('div');
-    alert.className = 'alert alert-danger alert-dismissible fade show';
-    alert.role = 'alert';
-    alert.innerHTML = `
-        <strong>Error!</strong> ${message}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    toast.innerHTML = `
+        <div class="toast-content">
+            <div class="toast-message">${message}</div>
+        </div>
+        <button class="toast-close" onclick="closeToast(this)">
+            <i class="bx bx-x"></i>
+        </button>
     `;
 
-    form.insertBefore(alert, form.firstChild);
+    container.appendChild(toast);
 
-    // Auto dismiss after 5 seconds
+    // Auto remove after 2.5 seconds
     setTimeout(() => {
-        if (alert.parentNode) {
-            alert.remove();
-        }
-    }, 5000);
+        closeToast(toast.querySelector('.toast-close'));
+    }, 2500);
 }
+
+// Close toast notification - MUST be global for onclick to work
+window.closeToast = function (button) {
+    const toast = button.closest('.toast-notification');
+    if (toast) {
+        toast.classList.add('hiding');
+        setTimeout(() => {
+            toast.remove();
+        }, 200);
+    }
+};
 
 // Form validation and submission
 document.addEventListener('DOMContentLoaded', function () {
@@ -81,19 +76,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Validation
             if (!identifier) {
-                showError('Please enter your email or username');
+                showToast('Please enter your email or username', 'error');
                 emailInput.focus();
                 return;
             }
 
             if (!password) {
-                showError('Please enter your password');
+                showToast('Please enter your password', 'error');
                 passwordInput.focus();
                 return;
             }
 
-            // Show loading state
-            showLoading(submitButton);
+            // Disable button to prevent double submission
+            submitButton.disabled = true;
 
             try {
                 const response = await fetch(`${API_BASE_URL}/api/v1/auth/login`, {
@@ -115,25 +110,30 @@ document.addEventListener('DOMContentLoaded', function () {
                     localStorage.setItem('userRole', result.role);
                     localStorage.setItem('userData', JSON.stringify(result.user));
 
-                    // Redirect based on role using absolute paths from root
-                    const baseUrl = window.location.origin + '/CAATE-ITRMS';
+                    // Show success toast
+                    showToast('Login successful! Redirecting to dashboard...', 'success');
 
-                    if (result.role === 'admin') {
-                        window.location.href = baseUrl + '/admin/src/pages/dashboard.html';
-                    } else if (result.role === 'trainee') {
-                        window.location.href = baseUrl + '/trainee/src/pages/dashboard.html';
-                    } else {
-                        showError('Unknown user role');
-                        resetButton(submitButton);
-                    }
+                    // Redirect based on role after a short delay
+                    setTimeout(() => {
+                        const baseUrl = window.location.origin + '/CAATE-ITRMS';
+
+                        if (result.role === 'admin') {
+                            window.location.href = baseUrl + '/admin/src/pages/dashboard.html';
+                        } else if (result.role === 'trainee') {
+                            window.location.href = baseUrl + '/trainee/src/pages/dashboard.html';
+                        } else {
+                            showToast('Unknown user role', 'error');
+                            submitButton.disabled = false;
+                        }
+                    }, 1000); // 1 second delay to show the success message
                 } else {
-                    showError(result.error || 'Login failed. Please try again.');
-                    resetButton(submitButton);
+                    showToast(result.error || 'Login failed. Please try again.', 'error');
+                    submitButton.disabled = false;
                 }
             } catch (error) {
                 console.error('Login error:', error);
-                showError('Connection error. Please check if the server is running.');
-                resetButton(submitButton);
+                showToast('Connection error. Please check if the server is running.', 'error');
+                submitButton.disabled = false;
             }
         });
     }

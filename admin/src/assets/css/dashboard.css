@@ -87,6 +87,19 @@
     display: none !important;
 }
 
+/* White text styling for user dropdown - matches trainee dashboard */
+.navbar-dropdown.dropdown-user .text-white {
+    color: #ffffff !important;
+}
+
+.navbar-dropdown.dropdown-user .fw-semibold.text-white {
+    color: #ffffff !important;
+}
+
+.navbar-dropdown.dropdown-user small.text-white {
+    color: #ffffff !important;
+}
+
 /* Responsive adjustments for user dropdown */
 @media (max-width: 767px) {
     .navbar-dropdown.dropdown-user .dropdown-menu {
@@ -98,4 +111,3 @@
         font-size: 0.875rem;
     }
 }
-

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Password Toggle</title>
+    <link rel="stylesheet" href="src/assets/css/boxicons.css" />
+    <style>
+        body {
+            padding: 50px;
+            font-family: Arial, sans-serif;
+        }
+
+        .test-container {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px 40px 10px 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .toggle-icon {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        .status {
+            margin-top: 10px;
+            padding: 10px;
+            background: #f0f0f0;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="test-container">
+        <h2>Password Toggle Test</h2>
+
+        <div class="form-group">
+            <label>Login Page Toggle (no parameters):</label>
+            <div class="password-wrapper">
+                <input type="password" id="password" placeholder="Enter password">
+                <span class="toggle-icon" onclick="togglePassword()">
+                    <i class="bx bx-hide" id="toggleIcon"></i>
+                </span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Register Page Toggle (with parameters):</label>
+            <div class="password-wrapper">
+                <input type="password" id="password2" placeholder="Enter password">
+                <span class="toggle-icon" onclick="togglePasswordWithParams('password2', 'toggleIcon2')">
+                    <i class="bx bx-hide" id="toggleIcon2"></i>
+                </span>
+            </div>
+        </div>
+
+        <div class="status">
+            <strong>Status:</strong>
+            <div id="status">Click the eye icons to test</div>
+        </div>
+    </div>
+
+    <script>
+        // Login version - no parameters
+        window.togglePassword = function () {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.getElementById('toggleIcon');
+            const status = document.getElementById('status');
+
+            if (!passwordInput || !toggleIcon) {
+                status.textContent = 'ERROR: Elements not found!';
+                status.style.color = 'red';
+                return;
+            }
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.className = 'bx bx-show';
+                status.textContent = '✓ Login toggle: Password is now VISIBLE';
+                status.style.color = 'green';
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.className = 'bx bx-hide';
+                status.textContent = '✓ Login toggle: Password is now HIDDEN';
+                status.style.color = 'blue';
+            }
+        };
+
+        // Register version - with parameters
+        window.togglePasswordWithParams = function (inputId, iconId) {
+            const passwordInput = document.getElementById(inputId);
+            const toggleIcon = document.getElementById(iconId);
+            const status = document.getElementById('status');
+
+            if (!passwordInput || !toggleIcon) {
+                status.textContent = 'ERROR: Elements not found!';
+                status.style.color = 'red';
+                return;
+            }
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.className = 'bx bx-show';
+                status.textContent = '✓ Register toggle: Password is now VISIBLE';
+                status.style.color = 'green';
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.className = 'bx bx-hide';
+                status.textContent = '✓ Register toggle: Password is now HIDDEN';
+                status.style.color = 'blue';
+            }
+        };
+    </script>
+</body>
+
+</html>

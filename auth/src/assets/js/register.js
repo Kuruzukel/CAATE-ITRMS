@@ -9,16 +9,22 @@ window.togglePassword = function (inputId, iconId) {
     const toggleIcon = document.getElementById(iconId);
 
     if (!passwordInput || !toggleIcon) {
-        console.log('Password input or toggle icon not found');
+        console.error('Password input or toggle icon not found:', inputId, iconId);
         return;
     }
 
+    console.log('Toggle clicked for:', inputId, '- Current type:', passwordInput.type);
+
     if (passwordInput.type === 'password') {
         passwordInput.type = 'text';
-        toggleIcon.className = 'bx bx-show';
+        toggleIcon.classList.remove('bx-hide');
+        toggleIcon.classList.add('bx-show');
+        console.log('Password now visible');
     } else {
         passwordInput.type = 'password';
-        toggleIcon.className = 'bx bx-hide';
+        toggleIcon.classList.remove('bx-show');
+        toggleIcon.classList.add('bx-hide');
+        console.log('Password now hidden');
     }
 };
 

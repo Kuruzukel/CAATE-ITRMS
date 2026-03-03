@@ -16,9 +16,9 @@
     padding: 16px 20px;
     border-radius: 16px;
     border: 1px solid rgba(54, 145, 191, 0.4);
-    background: linear-gradient(135deg, rgba(26, 41, 66, 0.95) 0%, rgba(15, 31, 51, 0.95) 100%);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
     box-shadow: 0 10px 40px rgba(22, 56, 86, 0.6),
         0 4px 12px rgba(54, 145, 191, 0.4),
         inset 0 1px 0 rgba(255, 255, 255, 0.15),

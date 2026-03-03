@@ -87,8 +87,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
 
-            // Disable button to prevent double submission
-            submitButton.disabled = true;
+            // Don't disable button - keep it in default state
 
             try {
                 const response = await fetch(`${API_BASE_URL}/api/v1/auth/login`, {
@@ -123,17 +122,14 @@ document.addEventListener('DOMContentLoaded', function () {
                             window.location.href = baseUrl + '/trainee/src/pages/dashboard.html';
                         } else {
                             showToast('Unknown user role', 'error');
-                            submitButton.disabled = false;
                         }
                     }, 1000); // 1 second delay to show the success message
                 } else {
                     showToast(result.error || 'Login failed. Please try again.', 'error');
-                    submitButton.disabled = false;
                 }
             } catch (error) {
                 console.error('Login error:', error);
                 showToast('Connection error. Please check if the server is running.', 'error');
-                submitButton.disabled = false;
             }
         });
     }

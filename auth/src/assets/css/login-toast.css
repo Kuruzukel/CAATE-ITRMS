@@ -1,0 +1,55 @@
+/* Toast positioning for mobile screens */
+@media (max-width: 768px) {
+    .toast-container {
+        top: 20px !important;
+        left: 50% !important;
+        right: auto !important;
+        transform: translateX(-50%) !important;
+        width: calc(100% - 2rem) !important;
+        max-width: 400px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+    }
+
+    .toast-notification {
+        width: 100% !important;
+        min-width: auto !important;
+        max-width: 100% !important;
+    }
+}
+
+/* Ensure toast animations work with centered position on mobile */
+@media (max-width: 768px) {
+    @keyframes slideIn {
+        from {
+            transform: translateY(-100px);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    @keyframes slideOut {
+        from {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        to {
+            transform: translateY(-100px);
+            opacity: 0;
+        }
+    }
+
+    .toast-notification {
+        animation: slideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+
+    .toast-notification.hiding {
+        animation: slideOut 0.3s cubic-bezier(0.4, 0, 1, 1) forwards !important;
+    }
+}

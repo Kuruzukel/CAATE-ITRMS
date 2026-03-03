@@ -286,6 +286,7 @@ p {
 
 .form-check-label {
     color: var(--white) !important;
+    font-weight: normal !important;
 }
 
 /* Primary Button - Glassmorphism Effect */
@@ -383,6 +384,16 @@ small:hover {
 .bx-hide,
 .bx-show {
     color: rgba(255, 255, 255, 0.7) !important;
+    transition: color 0.2s ease, transform 0.2s ease;
+    cursor: pointer;
+}
+
+#togglePassword:hover .bx-hide,
+#togglePassword:hover .bx-show,
+.bx-hide:hover,
+.bx-show:hover {
+    color: var(--primary-blue) !important;
+    transform: scale(1.1);
 }
 
 /* Responsive Design */

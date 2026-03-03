@@ -113,7 +113,11 @@
                     <div class="position-relative">
                       <input type="password" id="password" class="form-control" name="password"
                         placeholder="Enter your password" aria-describedby="password" autocomplete="new-password"
-                        required />
+                        style="padding-right: 45px;" required />
+                      <button class="btn btn-link position-absolute top-50 end-0 translate-middle-y" type="button"
+                        id="togglePassword" style="text-decoration: none; padding: 0 12px; z-index: 10;">
+                        <i class="bx bx-hide" id="togglePasswordIcon" style="font-size: 1.2rem; color: #697a8d;"></i>
+                      </button>
                     </div>
                     <small class="form-text text-muted d-block mt-2">
                       Password must be at least 8 characters long and include an uppercase letter, a lowercase letter, a
@@ -127,7 +131,12 @@
                     <div class="position-relative">
                       <input type="password" id="confirmPassword" class="form-control" name="confirmPassword"
                         placeholder="Confirm your password" aria-describedby="confirmPassword"
-                        autocomplete="new-password" required />
+                        autocomplete="new-password" style="padding-right: 45px;" required />
+                      <button class="btn btn-link position-absolute top-50 end-0 translate-middle-y" type="button"
+                        id="toggleConfirmPassword" style="text-decoration: none; padding: 0 12px; z-index: 10;">
+                        <i class="bx bx-hide" id="toggleConfirmPasswordIcon"
+                          style="font-size: 1.2rem; color: #697a8d;"></i>
+                      </button>
                     </div>
                   </div>
                 </div>

@@ -25,12 +25,16 @@ document.addEventListener('DOMContentLoaded', function () {
     const togglePasswordIcon = document.getElementById('togglePasswordIcon');
 
     if (togglePasswordBtn && passwordInput && togglePasswordIcon) {
-        togglePasswordBtn.addEventListener('click', function () {
-            const type = passwordInput.type === 'password' ? 'text' : 'password';
-            passwordInput.type = type;
+        togglePasswordBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            const currentType = passwordInput.getAttribute('type');
+            const newType = currentType === 'password' ? 'text' : 'password';
+
+            passwordInput.setAttribute('type', newType);
 
             // Toggle icon
-            if (type === 'text') {
+            if (newType === 'text') {
                 togglePasswordIcon.classList.remove('bx-hide');
                 togglePasswordIcon.classList.add('bx-show');
             } else {
@@ -46,12 +50,16 @@ document.addEventListener('DOMContentLoaded', function () {
     const toggleConfirmPasswordIcon = document.getElementById('toggleConfirmPasswordIcon');
 
     if (toggleConfirmPasswordBtn && confirmPasswordInput && toggleConfirmPasswordIcon) {
-        toggleConfirmPasswordBtn.addEventListener('click', function () {
-            const type = confirmPasswordInput.type === 'password' ? 'text' : 'password';
-            confirmPasswordInput.type = type;
+        toggleConfirmPasswordBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            const currentType = confirmPasswordInput.getAttribute('type');
+            const newType = currentType === 'password' ? 'text' : 'password';
+
+            confirmPasswordInput.setAttribute('type', newType);
 
             // Toggle icon
-            if (type === 'text') {
+            if (newType === 'text') {
                 toggleConfirmPasswordIcon.classList.remove('bx-hide');
                 toggleConfirmPasswordIcon.classList.add('bx-show');
             } else {

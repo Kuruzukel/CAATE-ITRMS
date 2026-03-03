@@ -149,13 +149,25 @@ class Trainee {
             $totalTrainees = $this->collection->countDocuments();
             
             // Get enrollment, application, and admission counts from their respective collections
+            // Only count records with valid status (submitted by trainees)
             $enrollmentCollection = $db->enrollments;
             $applicationCollection = $db->applications;
             $admissionCollection = $db->admissions;
             
-            $totalEnrollment = $enrollmentCollection->countDocuments();
-            $totalApplication = $applicationCollection->countDocuments();
-            $totalAdmission = $admissionCollection->countDocuments();
+            // Count only enrollments with valid status (e.g., 'pending', 'approved', 'enrolled')
+            $totalEnrollment = $enrollmentCollection->countDocuments([
+                'status' => ['$in' => ['pending', 'approved', 'enrolled', 'active', 'completed']]
+            ]);
+            
+            // Count only applications with valid status (e.g., 'pending', 'approved', 'rejected')
+            $totalApplication = $applicationCollection->countDocuments([
+                'status' => ['$in' => ['pending', 'approved', 'rejected', 'submitted']]
+            ]);
+            
+            // Count only admissions with valid status
+            $totalAdmission = $admissionCollection->countDocuments([
+                'status' => ['$in' => ['pending', 'approved', 'rejected', 'admitted']]
+            ]);
             
             // Active trainees (you may need to adjust the criteria)
             $activeTrainees = $this->collection->countDocuments(['status' => 'active']);

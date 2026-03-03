@@ -8,45 +8,93 @@ require_once __DIR__ . '/../helpers/JwtHelper.php';
 class AuthController {
     
     public function register() {
-        $data = json_decode(file_get_contents('php://input'), true);
-        
-        if (!isset($data['name']) || !isset($data['email']) || !isset($data['password'])) {
-            http_response_code(400);
-            echo json_encode(['error' => 'Name, email and password are required']);
-            return;
+            $data = json_decode(file_get_contents('php://input'), true);
+
+            if (!isset($data['name']) || !isset($data['email']) || !isset($data['password'])) {
+                http_response_code(400);
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'Name, email and password are required'
+                ]);
+                return;
+            }
+
+            $traineeModel = new Trainee();
+
+            // Check if trainee exists by email
+            $existingTrainee = $traineeModel->findByEmail($data['email']);
+            if ($existingTrainee) {
+                http_response_code(200);
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'Email already exists'
+                ]);
+                return;
+            }
+
+            // Split name into first and last name
+            $nameParts = explode(' ', trim($data['name']), 2);
+            $firstName = $nameParts[0];
+            $lastName = isset($nameParts[1]) ? $nameParts[1] : '';
+
+            // Generate trainee ID
+            $currentYear = date('Y');
+            $traineeId = $this->generateTraineeId($traineeModel, $currentYear);
+
+            // Create trainee account
+            $traineeData = [
+                'trainee_id' => $traineeId,
+                'first_name' => $firstName,
+                'last_name' => $lastName,
+                'email' => $data['email'],
+                'phone' => $data['phone'] ?? '',
+                'password' => password_hash($data['password'], PASSWORD_BCRYPT),
+                'created_at' => new MongoDB\BSON\UTCDateTime(),
+                'updated_at' => new MongoDB\BSON\UTCDateTime()
+            ];
+
+            $newTraineeId = $traineeModel->create($traineeData);
+            $trainee = $traineeModel->findById($newTraineeId);
+
+            $token = JwtHelper::generateToken([
+                'user_id' => (string)$trainee['_id'],
+                'role' => 'trainee'
+            ]);
+
+            http_response_code(201);
+            echo json_encode([
+                'success' => true,
+                'message' => 'Registration successful',
+                'token' => $token,
+                'role' => 'trainee',
+                'user' => [
+                    'id' => (string)$trainee['_id'],
+                    'name' => $firstName . ' ' . $lastName,
+                    'email' => $trainee['email']
+                ]
+            ]);
         }
-        
-        $userModel = new User();
-        
-        // Check if user exists
-        if ($userModel->findByEmail($data['email'])) {
-            http_response_code(409);
-            echo json_encode(['error' => 'Email already exists']);
-            return;
+
+        // Helper function to generate trainee ID
+        private function generateTraineeId($traineeModel, $year) {
+            // Get all trainees with IDs for the current year
+            $allTrainees = $traineeModel->all();
+            $pattern = "/^TRN-{$year}-(\\d+)$/";
+            $maxNumber = 0;
+
+            foreach ($allTrainees as $trainee) {
+                if (isset($trainee['trainee_id']) && preg_match($pattern, $trainee['trainee_id'], $matches)) {
+                    $number = intval($matches[1]);
+                    if ($number > $maxNumber) {
+                        $maxNumber = $number;
+                    }
+                }
+            }
+
+            $nextNumber = $maxNumber + 1;
+            return sprintf('TRN-%s-%03d', $year, $nextNumber);
         }
-        
-        // Create user
-        $userId = $userModel->create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => password_hash($data['password'], PASSWORD_BCRYPT),
-            'created_at' => new MongoDB\BSON\UTCDateTime()
-        ]);
-        
-        $user = $userModel->findById($userId);
-        $token = JwtHelper::generateToken(['user_id' => (string)$user['_id']]);
-        
-        http_response_code(201);
-        echo json_encode([
-            'message' => 'User registered successfully',
-            'token' => $token,
-            'user' => [
-                'id' => (string)$user['_id'],
-                'name' => $user['name'],
-                'email' => $user['email']
-            ]
-        ]);
-    }
+
     
     public function login() {
         $data = json_decode(file_get_contents('php://input'), true);

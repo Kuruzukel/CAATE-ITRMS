@@ -41,8 +41,7 @@ function redirectToLogin() {
     localStorage.removeItem('authToken');
     localStorage.removeItem('userRole');
     localStorage.removeItem('userData');
-    const baseUrl = window.location.origin + '/CAATE-ITRMS';
-    window.location.href = baseUrl + '/auth/src/pages/login.html';
+    window.location.href = window.location.origin + '/CAATE-ITRMS/auth/src/pages/login.html';
 }
 
 // Get current user data
@@ -73,8 +72,7 @@ async function logout() {
     localStorage.removeItem('userData');
 
     // Redirect to login using absolute path
-    const baseUrl = window.location.origin + '/CAATE-ITRMS';
-    window.location.href = baseUrl + '/auth/src/pages/login.html';
+    window.location.href = window.location.origin + '/CAATE-ITRMS/auth/src/pages/login.html';
 }
 
 // Initialize authentication check on page load

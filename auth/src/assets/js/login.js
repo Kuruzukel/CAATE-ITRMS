@@ -8,34 +8,6 @@ const API_BASE_URL = window.location.hostname === 'localhost' || window.location
     ? 'http://localhost/CAATE-ITRMS/backend/public'
     : '/backend/public';
 
-// Toggle password visibility - MUST be global for onclick to work
-window.togglePassword = function () {
-    const passwordInput = document.getElementById('password');
-    const toggleIcon = document.getElementById('toggleIcon');
-
-    if (!passwordInput || !toggleIcon) {
-        console.error('Password input or toggle icon not found');
-        return;
-    }
-
-    const currentType = passwordInput.getAttribute('type');
-    console.log('Current type:', currentType);
-
-    if (currentType === 'password') {
-        // Show password
-        passwordInput.setAttribute('type', 'text');
-        toggleIcon.classList.remove('bx-hide');
-        toggleIcon.classList.add('bx-show');
-        console.log('Password is now VISIBLE');
-    } else {
-        // Hide password
-        passwordInput.setAttribute('type', 'password');
-        toggleIcon.classList.remove('bx-show');
-        toggleIcon.classList.add('bx-hide');
-        console.log('Password is now HIDDEN');
-    }
-};
-
 // Toast notification function
 function showToast(message, type = 'success') {
     const container = document.getElementById('toastContainer');

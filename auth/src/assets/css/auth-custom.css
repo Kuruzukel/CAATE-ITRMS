@@ -225,6 +225,7 @@ p {
 .form-label {
     color: var(--white) !important;
     font-weight: 500 !important;
+    font-family: "Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif !important;
 }
 
 /* Form Controls */
@@ -356,6 +357,7 @@ a {
     color: var(--primary-blue) !important;
     transition: color var(--transition-fast);
     text-decoration: none;
+    font-family: "Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif !important;
 }
 
 a:hover {
@@ -370,6 +372,7 @@ a:hover {
 /* Small Text */
 small {
     color: rgba(255, 255, 255, 0.7) !important;
+    font-family: "Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif !important;
 }
 
 small:hover {

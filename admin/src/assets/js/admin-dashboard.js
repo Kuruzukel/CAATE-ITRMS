@@ -184,8 +184,9 @@ function updateDashboardUI(data) {
     }
 
     // Update growth chart if it exists
-    if (window.growthChartInstance && data.yearGrowthPercentage !== undefined) {
-        window.growthChartInstance.updateSeries([data.yearGrowthPercentage]);
+    if (window.growthChartInstance && data.yearGrowthPercentage !== undefined && data.yearGrowthPercentage !== null) {
+        const growthValue = isNaN(data.yearGrowthPercentage) ? 0 : Math.max(0, Math.min(100, data.yearGrowthPercentage));
+        window.growthChartInstance.updateSeries([growthValue]);
     }
 
     // Update year statistics counts
@@ -298,27 +299,32 @@ function updateWelcomeChart(enrolledPercentage, pendingPercentage, completedPerc
     const chartElement = document.querySelector('#welcomeStatisticsChart');
     if (!chartElement) return;
 
+    // Ensure all values are valid numbers, default to 0 if not
+    const enrolled = isNaN(enrolledPercentage) || enrolledPercentage === null || enrolledPercentage === undefined ? 0 : enrolledPercentage;
+    const pending = isNaN(pendingPercentage) || pendingPercentage === null || pendingPercentage === undefined ? 0 : pendingPercentage;
+    const completed = isNaN(completedPercentage) || completedPercentage === null || completedPercentage === undefined ? 0 : completedPercentage;
+
     // Store the chart instance globally so we can update it
     if (!window.welcomeChartInstance) {
         // Store the data for when the chart is initialized
         window.welcomeChartData = {
-            enrolled: enrolledPercentage,
-            pending: pendingPercentage,
-            completed: completedPercentage
+            enrolled: enrolled,
+            pending: pending,
+            completed: completed
         };
         return;
     }
 
     // Update the chart data
     window.welcomeChartInstance.updateOptions({
-        series: [enrolledPercentage, pendingPercentage, completedPercentage],
+        series: [enrolled, pending, completed],
         plotOptions: {
             pie: {
                 donut: {
                     labels: {
                         total: {
                             formatter: function (w) {
-                                return enrolledPercentage + '%';
+                                return enrolled + '%';
                             }
                         }
                     }

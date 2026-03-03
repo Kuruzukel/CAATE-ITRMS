@@ -748,12 +748,32 @@ window.saveEditTrainee = async function saveEditTrainee() {
         if (result.success) {
             showSuccess('Trainee updated successfully');
 
+            // Update the trainee in local data
+            const traineeIndex = traineesData.findIndex(t => String(t._id) === mongoId);
+            if (traineeIndex !== -1) {
+                // Update the trainee object with new data
+                traineesData[traineeIndex] = {
+                    ...traineesData[traineeIndex],
+                    ...updateData,
+                    _id: mongoId
+                };
+
+                // Update only the specific row in the table
+                const tbody = document.querySelector('.table tbody');
+                if (tbody) {
+                    const rows = tbody.querySelectorAll('tr');
+                    if (rows[traineeIndex]) {
+                        const updatedRow = createTraineeRow(traineesData[traineeIndex], traineeIndex + 1);
+                        rows[traineeIndex].replaceWith(updatedRow);
+                    }
+                }
+            }
+
             // Close modal
             const modal = bootstrap.Modal.getInstance(document.getElementById('editTraineeModal'));
             modal.hide();
 
-            // Reload trainees and statistics
-            loadTrainees();
+            // Reload statistics only
             loadStatistics();
 
             // Reset button state

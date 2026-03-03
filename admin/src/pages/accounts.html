@@ -723,9 +723,13 @@
                 <div class="modal-body">
                     <form id="viewTraineeForm" autocomplete="off">
                         <div class="row">
-                            <div class="col-md-12 mb-3">
+                            <div class="col-md-6 mb-3">
                                 <label class="form-label">Trainee ID</label>
                                 <input type="text" class="form-control" id="viewTraineeId" value="#01" disabled>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Username <span class="text-muted">(Optional)</span></label>
+                                <input type="text" class="form-control" id="viewTraineeUsername" value="" disabled>
                             </div>
                         </div>
                         <div class="row">
@@ -763,16 +767,10 @@
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">Username <span class="text-muted">(Optional)</span></label>
-                                <input type="text" class="form-control" id="viewTraineeUsername" value="" disabled>
-                            </div>
-                            <div class="col-md-6 mb-3">
                                 <label class="form-label">Phone Number</label>
                                 <input type="text" class="form-control" id="viewTraineePhone" value="+63 912 345 6789"
                                     disabled autocomplete="tel">
                             </div>
-                        </div>
-                        <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Password</label>
                                 <div class="position-relative">

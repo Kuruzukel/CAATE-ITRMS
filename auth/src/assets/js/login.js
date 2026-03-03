@@ -8,8 +8,8 @@ const API_BASE_URL = window.location.hostname === 'localhost' || window.location
     ? 'http://localhost/CAATE-ITRMS/backend/public'
     : '/backend/public';
 
-// Toggle password visibility
-function togglePassword() {
+// Toggle password visibility - MUST be global for onclick to work
+window.togglePassword = function () {
     const passwordInput = document.getElementById('password');
     const toggleIcon = document.getElementById('toggleIcon');
 
@@ -22,7 +22,7 @@ function togglePassword() {
         toggleIcon.classList.remove('bx-show');
         toggleIcon.classList.add('bx-hide');
     }
-}
+};
 
 // Show loading state
 function showLoading(button) {

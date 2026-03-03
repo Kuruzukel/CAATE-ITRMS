@@ -3,8 +3,8 @@
  * Handles registration form functionality, password visibility toggle, and validation
  */
 
-// Toggle password visibility for multiple password fields
-function togglePassword(inputId, iconId) {
+// Toggle password visibility for multiple password fields - MUST be global for onclick to work
+window.togglePassword = function (inputId, iconId) {
     const passwordInput = document.getElementById(inputId);
     const toggleIcon = document.getElementById(iconId);
 
@@ -17,7 +17,7 @@ function togglePassword(inputId, iconId) {
         toggleIcon.classList.remove('bx-show');
         toggleIcon.classList.add('bx-hide');
     }
-}
+};
 
 // Password validation function
 function validatePassword(password) {

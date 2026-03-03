@@ -72,7 +72,7 @@ async function logout() {
     localStorage.removeItem('userRole');
     localStorage.removeItem('userData');
 
-    // Redirect to login
+    // Redirect to login using absolute path
     const baseUrl = window.location.origin + '/CAATE-ITRMS';
     window.location.href = baseUrl + '/auth/src/pages/login.html';
 }

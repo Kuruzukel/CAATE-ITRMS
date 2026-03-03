@@ -124,42 +124,71 @@ class AuthController {
         
         if ($trainee) {
             error_log("Trainee found: " . json_encode([
-                'name' => $trainee['name'] ?? $trainee['fullName'] ?? 'N/A',
+                'first_name' => $trainee['first_name'] ?? 'N/A',
+                'last_name' => $trainee['last_name'] ?? 'N/A',
                 'email' => $trainee['email'] ?? 'N/A',
-                'has_password' => isset($trainee['password'])
+                'has_password' => isset($trainee['password']),
+                'password_value' => isset($trainee['password']) ? substr($trainee['password'], 0, 20) . '...' : 'N/A'
             ]));
             
-            if (isset($trainee['password']) && password_verify($password, $trainee['password'])) {
-                // Trainee login successful (hashed password)
-                session_start();
-                $_SESSION['user_id'] = (string)$trainee['_id'];
-                $_SESSION['user_role'] = 'trainee';
-                $_SESSION['user_name'] = $trainee['name'] ?? $trainee['fullName'] ?? '';
-                $_SESSION['user_email'] = $trainee['email'];
+            if (isset($trainee['password'])) {
+                // Check if password matches (support both plain text and hashed)
+                $passwordMatches = false;
                 
-                $token = JwtHelper::generateToken([
-                    'user_id' => (string)$trainee['_id'],
-                    'role' => 'trainee'
-                ]);
+                // First try hashed password verification
+                if (password_verify($password, $trainee['password'])) {
+                    $passwordMatches = true;
+                    error_log("Trainee password verified (hashed)");
+                } 
+                // Fallback to plain text comparison
+                elseif ($trainee['password'] === $password) {
+                    $passwordMatches = true;
+                    error_log("Trainee password verified (plain text)");
+                }
                 
-                error_log("Trainee login successful");
-                
-                echo json_encode([
-                    'success' => true,
-                    'message' => 'Login successful',
-                    'token' => $token,
-                    'role' => 'trainee',
-                    'user' => [
-                        'id' => (string)$trainee['_id'],
-                        'name' => $trainee['name'] ?? $trainee['fullName'] ?? '',
-                        'email' => $trainee['email'],
-                        'username' => $trainee['username'] ?? '',
+                if ($passwordMatches) {
+                    // Trainee login successful
+                    session_start();
+                    $_SESSION['user_id'] = (string)$trainee['_id'];
+                    $_SESSION['user_role'] = 'trainee';
+                    
+                    // Build full name from available fields
+                    $fullName = trim(
+                        ($trainee['first_name'] ?? '') . ' ' . 
+                        ($trainee['middle_name'] ?? '') . ' ' . 
+                        ($trainee['last_name'] ?? '')
+                    );
+                    if (empty($fullName)) {
+                        $fullName = $trainee['name'] ?? $trainee['fullName'] ?? '';
+                    }
+                    
+                    $_SESSION['user_name'] = $fullName;
+                    $_SESSION['user_email'] = $trainee['email'];
+                    
+                    $token = JwtHelper::generateToken([
+                        'user_id' => (string)$trainee['_id'],
                         'role' => 'trainee'
-                    ]
-                ]);
-                return;
-            } else {
-                error_log("Trainee password verification failed");
+                    ]);
+                    
+                    error_log("Trainee login successful");
+                    
+                    echo json_encode([
+                        'success' => true,
+                        'message' => 'Login successful',
+                        'token' => $token,
+                        'role' => 'trainee',
+                        'user' => [
+                            'id' => (string)$trainee['_id'],
+                            'name' => $fullName,
+                            'email' => $trainee['email'],
+                            'username' => $trainee['username'] ?? '',
+                            'role' => 'trainee'
+                        ]
+                    ]);
+                    return;
+                } else {
+                    error_log("Trainee password verification failed");
+                }
             }
         } else {
             error_log("No trainee found with identifier: " . $identifier);

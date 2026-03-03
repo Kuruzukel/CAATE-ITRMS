@@ -1,189 +1,154 @@
 <!DOCTYPE html>
+<html lang="en" class="light-style customizer-hide" dir="ltr" data-theme="theme-default" data-assets-path="../assets/"
+  data-template="vertical-menu-template-free">
 
-<!-- =========================================================
-* Sneat - Bootstrap 5 HTML Admin Template - Pro | v1.0.0
-==============================================================
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
-* Product Page: https://themeselection.com/products/sneat-bootstrap-html-admin-template/
-* Created by: ThemeSelection
-* License: You must have a valid license purchased in order to legally use the theme for your project.
-* Copyright ThemeSelection (https://themeselection.com)
+  <title>CAATE | Login</title>
 
-=========================================================
- -->
-<!-- beautify ignore:start -->
-<html
-  lang="en"
-  class="light-style customizer-hide"
-  dir="ltr"
-  data-theme="theme-default"
-  data-assets-path="../assets/"
-  data-template="vertical-menu-template-free"
->
-  <head>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
-    />
+  <meta name="description" content="" />
 
-    <title>CAATE | Login</title>
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="../assets/images/favicon.ico?v=1" />
+  <link rel="shortcut icon" type="image/x-icon" href="../assets/images/favicon.ico?v=1" />
 
-    <meta name="description" content="" />
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+    rel="stylesheet" />
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="../assets/images/favicon.ico?v=1" />
-    <link rel="shortcut icon" type="image/x-icon" href="../assets/images/favicon.ico?v=1" />
+  <!-- Icons. Uncomment required icon fonts -->
+  <link rel="stylesheet" href="../assets/css/boxicons.css" />
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
-      rel="stylesheet"
-    />
+  <!-- Core CSS -->
+  <link rel="stylesheet" href="../assets/css/core.css" class="template-customizer-core-css" />
+  <link rel="stylesheet" href="../assets/css/theme-default.css" class="template-customizer-theme-css" />
+  <link rel="stylesheet" href="../assets/css/demo.css" />
 
-    <!-- Icons. Uncomment required icon fonts -->
-    <link rel="stylesheet" href="../assets/css/boxicons.css" />
+  <!-- Vendors CSS -->
+  <link rel="stylesheet" href="../assets/css/perfect-scrollbar.css" />
 
-    <!-- Core CSS -->
-    <link rel="stylesheet" href="../assets/css/core.css" class="template-customizer-core-css" />
-    <link rel="stylesheet" href="../assets/css/theme-default.css" class="template-customizer-theme-css" />
-    <link rel="stylesheet" href="../assets/css/demo.css" />
+  <!-- Page CSS -->
+  <!-- Page -->
+  <link rel="stylesheet" href="../assets/css/page-auth.css" />
 
-    <!-- Vendors CSS -->
-    <link rel="stylesheet" href="../assets/css/perfect-scrollbar.css" />
+  <!-- Custom Auth Styles - CAATE Theme -->
+  <link rel="stylesheet" href="../assets/css/auth-custom.css" />
 
-    <!-- Page CSS -->
-    <!-- Page -->
-    <link rel="stylesheet" href="../assets/css/page-auth.css" />
-    
-    <!-- Custom Auth Styles - CAATE Theme -->
-    <link rel="stylesheet" href="../assets/css/auth-custom.css" />
-    
-    <!-- Helpers -->
-    <script src="../assets/js/helpers.js"></script>
+  <!-- Helpers -->
+  <script src="../assets/js/helpers.js"></script>
 
-    <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
-    <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
-    <script src="../assets/js/config.js"></script>
-  </head>
+  <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
+  <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
+  <script src="../assets/js/config.js"></script>
+</head>
 
-  <body>
-    <!-- Dark Overlay -->
-    <div class="dark-overlay"></div>
-    
-    <!-- Animated Orbs Background -->
-    <div class="orbs-container">
-      <div class="orb orb-1"></div>
-      <div class="orb orb-2"></div>
-      <div class="orb orb-3"></div>
-      <div class="orb orb-4"></div>
-      <div class="orb orb-5"></div>
-    </div>
+<body>
+  <!-- Dark Overlay -->
+  <div class="dark-overlay"></div>
 
-    <!-- Content -->
+  <!-- Animated Orbs Background -->
+  <div class="orbs-container">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="orb orb-4"></div>
+    <div class="orb orb-5"></div>
+  </div>
 
-    <div class="container-xxl">
-      <div class="authentication-wrapper authentication-basic container-p-y">
-        <div class="authentication-inner">
-          <!-- Register -->
-          <div class="card">
-            <div class="card-body">
-              <!-- Hero Logos -->
-              <div class="hero-logos">
-                <img src="../assets/images/ROUNDCAATELOGO.png" alt="CAATE Logo" class="hero-logo caate-logo" />
-              </div>
-              <!-- /Hero Logos -->
-              <h4 class="mb-2">Welcome to CAATE!</h4>
-              <p class="mb-4">Access your learning portal and continue your journey</p>
+  <!-- Content -->
 
-              <form id="formAuthentication" class="mb-3">
-                <div class="mb-3">
-                  <label for="email" class="form-label">Email or Username</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="email"
-                    name="email-username"
-                    placeholder="Enter your email or username"
-                    autocomplete="username"
-                    autofocus
-                    required
-                  />
-                </div>
-                <div class="mb-3 form-password-toggle">
-                  <div class="d-flex justify-content-between">
-                    <label class="form-label" for="password">Password</label>
-                    <a href="forgot-password.html">
-                      <small>Forgot Password?</small>
-                    </a>
-                  </div>
-                  <div class="position-relative">
-                    <input
-                      type="password"
-                      id="password"
-                      class="form-control password-input-with-icon"
-                      name="password"
-                      placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                      aria-describedby="password"
-                      autocomplete="current-password"
-                      required
-                    />
-                    <span class="password-toggle-icon cursor-pointer" onclick="togglePassword()">
-                      <i class="bx bx-hide" id="toggleIcon"></i>
-                    </span>
-                  </div>
-                </div>
-                <div class="mb-3">
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="remember-me" />
-                    <label class="form-check-label" for="remember-me"> Remember Me </label>
-                  </div>
-                </div>
-                <div class="mb-3">
-                  <button class="btn btn-primary d-grid w-100" type="submit">Sign in</button>
-                </div>
-              </form>
-
-              <p class="text-center mt-3">
-                <span>New on our platform? </span>
-                <a href="register.html" class="highlight-link">
-                  <strong>Create an account</strong>
-                </a>
-              </p>
-
-              <p class="text-center mt-2">
-                <a href="../../../public/src/pages/index.html" class="back-home-link">
-                  <i class="bx bx-arrow-back"></i>
-                  Back to Home Page
-                </a>
-              </p>
+  <div class="container-xxl">
+    <div class="authentication-wrapper authentication-basic container-p-y">
+      <div class="authentication-inner">
+        <!-- Register -->
+        <div class="card">
+          <div class="card-body">
+            <!-- Hero Logos -->
+            <div class="hero-logos">
+              <img src="../assets/images/ROUNDCAATELOGO.png" alt="CAATE Logo" class="hero-logo caate-logo" />
             </div>
+            <!-- /Hero Logos -->
+            <h4 class="mb-2">Welcome to CAATE!</h4>
+            <p class="mb-4">Access your learning portal and continue your journey</p>
+
+            <form id="formAuthentication" class="mb-3">
+              <div class="mb-3">
+                <label for="email" class="form-label">Email or Username</label>
+                <input type="text" class="form-control" id="email" name="email-username"
+                  placeholder="Enter your email or username" autocomplete="username" autofocus required />
+              </div>
+              <div class="mb-3 form-password-toggle">
+                <div class="d-flex justify-content-between">
+                  <label class="form-label" for="password">Password</label>
+                  <a href="forgot-password.html">
+                    <small>Forgot Password?</small>
+                  </a>
+                </div>
+                <div class="position-relative">
+                  <input type="password" id="password" class="form-control password-input-with-icon" name="password"
+                    placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+                    aria-describedby="password" autocomplete="current-password" required />
+                  <span class="password-toggle-icon cursor-pointer" onclick="togglePassword()">
+                    <i class="bx bx-hide" id="toggleIcon"></i>
+                  </span>
+                </div>
+              </div>
+              <div class="mb-3">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="remember-me" />
+                  <label class="form-check-label" for="remember-me"> Remember Me </label>
+                </div>
+              </div>
+              <div class="mb-3">
+                <button class="btn btn-primary d-grid w-100" type="submit">Sign in</button>
+              </div>
+            </form>
+
+            <p class="text-center mt-3">
+              <span>New on our platform? </span>
+              <a href="register.html" class="highlight-link">
+                <strong>Create an account</strong>
+              </a>
+            </p>
+
+            <p class="text-center mt-2">
+              <a href="../../../public/src/pages/index.html" class="back-home-link">
+                <i class="bx bx-arrow-back"></i>
+                Back to Home Page
+              </a>
+            </p>
           </div>
-          <!-- /Register -->
         </div>
+        <!-- /Register -->
       </div>
     </div>
+  </div>
 
-    <!-- / Content -->
+  <!-- / Content -->
 
-    <!-- Core JS -->
-    <!-- build:js assets/vendor/js/core.js -->
-    <script src="../assets/js/jquery.js"></script>
-    <script src="../assets/js/popper.js"></script>
-    <script src="../assets/js/bootstrap.js"></script>
-    <script src="../assets/js/perfect-scrollbar.js"></script>
+  <!-- Core JS -->
+  <!-- build:js assets/vendor/js/core.js -->
+  <script src="../assets/js/jquery.js"></script>
+  <script src="../assets/js/popper.js"></script>
+  <script src="../assets/js/bootstrap.js"></script>
+  <script src="../assets/js/perfect-scrollbar.js"></script>
 
-    <script src="../assets/js/menu.js"></script>
-    <!-- endbuild -->
+  <script src="../assets/js/menu.js"></script>
+  <!-- endbuild -->
 
-    <!-- Vendors JS -->
+  <!-- Vendors JS -->
 
-    <!-- Main JS -->
-    <script src="../assets/js/main.js"></script>
+  <!-- Main JS -->
+  <script src="../assets/js/main.js"></script>
 
-    <!-- Page JS -->
-    <script src="../assets/js/login.js"></script>
-  </body>
+  <!-- Page JS -->
+  <script src="../assets/js/login.js"></script>
+</body>
+
 </html>

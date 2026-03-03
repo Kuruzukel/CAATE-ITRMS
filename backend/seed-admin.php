@@ -25,7 +25,7 @@ try {
         'name' => 'Kel Miyata',
         'email' => 'kelmiyata@caate.edu',
         'username' => 'kelmiyata',
-        'password' => password_hash('admin123', PASSWORD_BCRYPT), // Change this password!
+        'password' => 'admin123', // Plain text password for admins
         'role' => 'admin',
         'created_at' => new MongoDB\BSON\UTCDateTime(),
         'updated_at' => new MongoDB\BSON\UTCDateTime()

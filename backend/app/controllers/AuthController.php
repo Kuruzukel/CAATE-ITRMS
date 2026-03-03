@@ -67,8 +67,8 @@ class AuthController {
         $adminModel = new Admin();
         $admin = $adminModel->findByEmailOrUsername($identifier);
         
-        if ($admin && isset($admin['password']) && password_verify($password, $admin['password'])) {
-            // Admin login successful
+        if ($admin && isset($admin['password']) && $admin['password'] === $password) {
+            // Admin login successful (plain text password comparison)
             session_start();
             $_SESSION['user_id'] = (string)$admin['_id'];
             $_SESSION['user_role'] = 'admin';
@@ -101,7 +101,7 @@ class AuthController {
         $trainee = $traineeModel->findByEmailOrUsername($identifier);
         
         if ($trainee && isset($trainee['password']) && password_verify($password, $trainee['password'])) {
-            // Trainee login successful
+            // Trainee login successful (hashed password)
             session_start();
             $_SESSION['user_id'] = (string)$trainee['_id'];
             $_SESSION['user_role'] = 'trainee';

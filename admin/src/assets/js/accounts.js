@@ -398,9 +398,6 @@ function updateStatistics(stats) {
 
 // View trainee details
 window.viewTrainee = function viewTrainee(id) {
-    console.log('viewTrainee called with id:', id);
-    console.log('traineesData:', traineesData);
-
     // Convert id to string if it's an object
     const traineeId = String(id);
 
@@ -442,9 +439,6 @@ window.viewTrainee = function viewTrainee(id) {
 
 // Edit trainee
 window.editTrainee = function editTrainee(id) {
-    console.log('editTrainee called with id:', id);
-    console.log('traineesData:', traineesData);
-
     // Convert id to string if it's an object
     const traineeId = String(id);
 
@@ -490,9 +484,6 @@ window.editTrainee = function editTrainee(id) {
 
 // Delete trainee
 window.deleteTrainee = async function deleteTrainee(id) {
-    console.log('deleteTrainee called with id:', id);
-    console.log('traineesData:', traineesData);
-
     // Convert id to string if it's an object
     const traineeId = String(id);
 

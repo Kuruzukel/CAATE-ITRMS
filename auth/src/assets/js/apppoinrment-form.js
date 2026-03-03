@@ -347,16 +347,14 @@ function showToast(message, type = 'success') {
         <div class="toast-content">
             <div class="toast-message">${message}</div>
         </div>
-        <button class="toast-close" onclick="closeToast(this)">
-            <i class="bx bx-x"></i>
-        </button>
     `;
 
     container.appendChild(toast);
 
     // Auto remove after 2.5 seconds
     setTimeout(() => {
-        closeToast(toast.querySelector('.toast-close'));
+        toast.classList.add('hiding');
+        setTimeout(() => toast.remove(), 300);
     }, 2500);
 }
 

@@ -20,19 +20,19 @@ function showToast(message, type = 'success') {
         <div class="toast-content">
             <div class="toast-message">${message}</div>
         </div>
-        <button class="toast-close" onclick="closeToast(this)">
-            <i class="bx bx-x"></i>
-        </button>
     `;
 
     container.appendChild(toast);
 
     // Auto remove after 3 seconds
     setTimeout(() => {
-        const closeBtn = toast.querySelector('.toast-close');
-        if (closeBtn) closeToast(closeBtn);
+        toast.classList.add('hiding');
+        setTimeout(() => {
+            toast.remove();
+        }, 200);
     }, 3000);
 }
+
 
 // Close toast notification - MUST be global for onclick to work
 window.closeToast = function (button) {

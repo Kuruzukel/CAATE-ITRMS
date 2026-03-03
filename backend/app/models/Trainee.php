@@ -109,9 +109,19 @@ class Trainee {
     public function getStatistics() {
         try {
             $year = isset($_GET['year']) ? (int)$_GET['year'] : date('Y');
+            $db = getMongoConnection();
             
             // Total trainees
             $totalTrainees = $this->collection->countDocuments();
+            
+            // Get enrollment, application, and admission counts from their respective collections
+            $enrollmentCollection = $db->enrollments;
+            $applicationCollection = $db->applications;
+            $admissionCollection = $db->admissions;
+            
+            $totalEnrollment = $enrollmentCollection->countDocuments();
+            $totalApplication = $applicationCollection->countDocuments();
+            $totalAdmission = $admissionCollection->countDocuments();
             
             // Active trainees (you may need to adjust the criteria)
             $activeTrainees = $this->collection->countDocuments(['status' => 'active']);
@@ -136,7 +146,10 @@ class Trainee {
             }
             
             return [
-                'total_trainees' => $totalTrainees,
+                'total' => $totalTrainees,
+                'totalEnrollment' => $totalEnrollment,
+                'totalApplication' => $totalApplication,
+                'totalAdmission' => $totalAdmission,
                 'active_trainees' => $activeTrainees,
                 'graduates' => $graduates,
                 'monthly_enrollments' => $monthlyEnrollments,
@@ -145,7 +158,10 @@ class Trainee {
         } catch (Exception $e) {
             error_log("Error getting statistics: " . $e->getMessage());
             return [
-                'total_trainees' => 0,
+                'total' => 0,
+                'totalEnrollment' => 0,
+                'totalApplication' => 0,
+                'totalAdmission' => 0,
                 'active_trainees' => 0,
                 'graduates' => 0,
                 'monthly_enrollments' => array_fill(0, 12, 0),

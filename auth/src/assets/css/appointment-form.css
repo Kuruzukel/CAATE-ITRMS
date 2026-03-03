@@ -1963,8 +1963,7 @@ body.modal-open {
 }
 
 
-/* Toast Notification Styles */
-/* Toast Notification Styles */
+/* Toast Notification Styles - Glassmorphism Design */
 .toast-container {
     position: fixed;
     top: 100px;
@@ -1976,49 +1975,48 @@ body.modal-open {
 }
 
 .toast-notification {
-    min-width: 280px;
-    max-width: 360px;
-    min-height: 70px;
-    padding: 16px 18px;
-    border-radius: 12px;
-    border-style: solid;
-    border-width: 2px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    min-width: 320px;
+    max-width: 400px;
+    min-height: 80px;
+    padding: 20px 24px;
+    border-radius: 16px;
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    box-shadow: 0 10px 40px rgba(22, 56, 86, 0.6),
+        0 4px 12px rgba(54, 145, 191, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15),
+        0 0 0 1px rgba(54, 145, 191, 0.2);
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 16px;
     animation: slideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     position: relative;
+    border: 1px solid rgba(54, 145, 191, 0.4);
 }
 
 .toast-notification.success {
-    background: #f2faf5;
-    border-color: #2fc584;
-    color: #2fc584;
+    background: linear-gradient(135deg, rgba(47, 197, 132, 0.25) 0%, rgba(25, 128, 83, 0.25) 100%);
+    border-color: rgba(47, 197, 132, 0.5);
 }
 
 .toast-notification.error {
-    background: #fff5f3;
-    border-color: #de3e25;
-    color: #de3e25;
+    background: linear-gradient(135deg, rgba(222, 62, 37, 0.25) 0%, rgba(196, 41, 36, 0.25) 100%);
+    border-color: rgba(222, 62, 37, 0.5);
 }
 
 .toast-notification.info {
-    background: #f0f7ff;
-    border-color: #0066cc;
-    color: #0066cc;
+    background: linear-gradient(135deg, rgba(54, 145, 191, 0.25) 0%, rgba(50, 85, 150, 0.25) 100%);
+    border-color: rgba(54, 145, 191, 0.5);
 }
 
 .toast-notification.warning {
-    background: #fff8e6;
-    border-color: #cc8800;
-    color: #cc8800;
+    background: linear-gradient(135deg, rgba(204, 136, 0, 0.25) 0%, rgba(153, 102, 0, 0.25) 100%);
+    border-color: rgba(204, 136, 0, 0.5);
 }
 
 .toast-icon {
     display: none !important;
 }
-
 
 .toast-content {
     flex: 1;
@@ -2030,73 +2028,81 @@ body.modal-open {
     margin-bottom: 6px;
     font-size: 16px;
     letter-spacing: 0.3px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .toast-notification.success .toast-title {
-    color: #2fc584;
+    color: rgba(255, 255, 255, 0.95);
 }
 
 .toast-notification.error .toast-title {
-    color: #de3e25;
+    color: rgba(255, 255, 255, 0.95);
 }
 
 .toast-notification.info .toast-title {
-    color: #0066cc;
+    color: rgba(255, 255, 255, 0.95);
 }
 
 .toast-notification.warning .toast-title {
-    color: #cc8800;
+    color: rgba(255, 255, 255, 0.95);
 }
 
 .toast-message {
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 500;
     line-height: 1.5;
 }
 
 .toast-notification.success .toast-message {
-    color: #198053;
+    color: rgba(255, 255, 255, 0.9);
 }
 
 .toast-notification.error .toast-message {
-    color: #c42924;
+    color: rgba(255, 255, 255, 0.9);
 }
 
 .toast-notification.info .toast-message {
-    color: #004d99;
+    color: rgba(255, 255, 255, 0.9);
 }
 
 .toast-notification.warning .toast-message {
-    color: #996600;
+    color: rgba(255, 255, 255, 0.9);
 }
 
 .toast-close {
-    background: none;
-    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     cursor: pointer;
-    font-size: 24px;
+    font-size: 20px;
     padding: 0;
     width: 32px;
     height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 6px;
+    border-radius: 8px;
     transition: all 0.2s ease;
     flex-shrink: 0;
     margin-top: -4px;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.toast-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: scale(1.05);
 }
 
 .toast-notification.success .toast-close {
-    color: #2fc584;
+    color: rgba(255, 255, 255, 0.95);
 }
 
 .toast-notification.error .toast-close {
-    color: #de3e25;
+    color: rgba(255, 255, 255, 0.95);
 }
 
 .toast-notification.info .toast-close {
-    color: #0066cc;
+    color: rgba(255, 255, 255, 0.95);
 }
 
 .toast-notification.warning .toast-close {

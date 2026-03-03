@@ -102,7 +102,12 @@ document.addEventListener('DOMContentLoaded', function () {
                         showToast('Unknown user role', 'error');
                     }
                 } else {
-                    showToast(result.error || 'Invalid credentials', 'error');
+                    // Handle 401 Unauthorized - user doesn't exist or wrong credentials
+                    if (response.status === 401) {
+                        showToast('User does not exist or invalid credentials', 'error');
+                    } else {
+                        showToast(result.error || 'Invalid credentials', 'error');
+                    }
                 }
             } catch (error) {
                 console.error('Login error:', error);

@@ -1977,9 +1977,11 @@ body.modal-open {
 .toast-notification {
     min-width: 320px;
     max-width: 400px;
-    min-height: 80px;
-    padding: 20px 24px;
+    min-height: 70px;
+    padding: 16px 20px;
     border-radius: 16px;
+    border: 1px solid rgba(54, 145, 191, 0.4);
+    background: linear-gradient(135deg, rgba(26, 41, 66, 0.95) 0%, rgba(15, 31, 51, 0.95) 100%);
     backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
     box-shadow: 0 10px 40px rgba(22, 56, 86, 0.6),
@@ -1989,29 +1991,75 @@ body.modal-open {
     display: flex;
     align-items: center;
     gap: 16px;
-    animation: slideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    animation: slideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     position: relative;
-    border: 1px solid rgba(54, 145, 191, 0.4);
+    overflow: hidden;
 }
 
+/* Glassmorphism glow effect on hover */
+.toast-notification::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(54, 145, 191, 0.1) 0%, rgba(50, 85, 150, 0.1) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.toast-notification:hover::before {
+    opacity: 1;
+}
+
+/* Success Toast */
 .toast-notification.success {
-    background: linear-gradient(135deg, rgba(47, 197, 132, 0.25) 0%, rgba(25, 128, 83, 0.25) 100%);
-    border-color: rgba(47, 197, 132, 0.5);
+    border-color: rgba(16, 185, 129, 0.5);
+    box-shadow: 0 10px 40px rgba(16, 185, 129, 0.3),
+        0 4px 12px rgba(16, 185, 129, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
+.toast-notification.success::after {
+    display: none;
+}
+
+/* Error Toast */
 .toast-notification.error {
-    background: linear-gradient(135deg, rgba(222, 62, 37, 0.25) 0%, rgba(196, 41, 36, 0.25) 100%);
-    border-color: rgba(222, 62, 37, 0.5);
+    border-color: rgba(239, 68, 68, 0.5);
+    box-shadow: 0 10px 40px rgba(239, 68, 68, 0.3),
+        0 4px 12px rgba(239, 68, 68, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
+.toast-notification.error::after {
+    display: none;
+}
+
+/* Info Toast */
 .toast-notification.info {
-    background: linear-gradient(135deg, rgba(54, 145, 191, 0.25) 0%, rgba(50, 85, 150, 0.25) 100%);
     border-color: rgba(54, 145, 191, 0.5);
+    box-shadow: 0 10px 40px rgba(54, 145, 191, 0.3),
+        0 4px 12px rgba(54, 145, 191, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
+.toast-notification.info::after {
+    display: none;
+}
+
+/* Warning Toast */
 .toast-notification.warning {
-    background: linear-gradient(135deg, rgba(204, 136, 0, 0.25) 0%, rgba(153, 102, 0, 0.25) 100%);
-    border-color: rgba(204, 136, 0, 0.5);
+    border-color: rgba(245, 158, 11, 0.5);
+    box-shadow: 0 10px 40px rgba(245, 158, 11, 0.3),
+        0 4px 12px rgba(245, 158, 11, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.toast-notification.warning::after {
+    display: none;
 }
 
 .toast-icon {
@@ -2021,56 +2069,28 @@ body.modal-open {
 .toast-content {
     flex: 1;
     padding-top: 0;
+    position: relative;
+    z-index: 1;
 }
 
 .toast-title {
     font-weight: 600;
-    margin-bottom: 6px;
-    font-size: 16px;
+    margin-bottom: 4px;
+    font-size: 15px;
     letter-spacing: 0.3px;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-}
-
-.toast-notification.success .toast-title {
-    color: rgba(255, 255, 255, 0.95);
-}
-
-.toast-notification.error .toast-title {
-    color: rgba(255, 255, 255, 0.95);
-}
-
-.toast-notification.info .toast-title {
-    color: rgba(255, 255, 255, 0.95);
-}
-
-.toast-notification.warning .toast-title {
     color: rgba(255, 255, 255, 0.95);
 }
 
 .toast-message {
-    font-size: 14px;
-    font-weight: 500;
+    font-size: 13px;
+    font-weight: 400;
     line-height: 1.5;
-}
-
-.toast-notification.success .toast-message {
-    color: rgba(255, 255, 255, 0.9);
-}
-
-.toast-notification.error .toast-message {
-    color: rgba(255, 255, 255, 0.9);
-}
-
-.toast-notification.info .toast-message {
-    color: rgba(255, 255, 255, 0.9);
-}
-
-.toast-notification.warning .toast-message {
-    color: rgba(255, 255, 255, 0.9);
+    color: rgba(255, 255, 255, 0.75);
 }
 
 .toast-close {
     background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
     cursor: pointer;
     font-size: 20px;
@@ -2081,38 +2101,23 @@ body.modal-open {
     align-items: center;
     justify-content: center;
     border-radius: 8px;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
     flex-shrink: 0;
-    margin-top: -4px;
-    color: rgba(255, 255, 255, 0.9);
+    color: rgba(255, 255, 255, 0.7);
+    position: relative;
+    z-index: 1;
 }
 
 .toast-close:hover {
     background: rgba(255, 255, 255, 0.2);
     border-color: rgba(255, 255, 255, 0.3);
+    color: rgba(255, 255, 255, 0.95);
     transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-.toast-notification.success .toast-close {
-    color: rgba(255, 255, 255, 0.95);
-}
-
-.toast-notification.error .toast-close {
-    color: rgba(255, 255, 255, 0.95);
-}
-
-.toast-notification.info .toast-close {
-    color: rgba(255, 255, 255, 0.95);
-}
-
-.toast-notification.warning .toast-close {
-    color: rgba(255, 255, 255, 0.95);
-}
-
-.toast-close:hover {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.3);
-    transform: scale(1.05);
+.toast-close:active {
+    transform: scale(0.95);
 }
 
 @keyframes slideIn {
@@ -3830,120 +3835,7 @@ body.modal-open {
     }
 }
 
-/* Toast Notification Styles (Boxicons Replacement) */
-.toast-notification {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 1rem 1.25rem;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    margin-bottom: 0.75rem;
-    animation: slideIn 0.3s ease;
-    min-width: 300px;
-    max-width: 500px;
-}
-
-.toast-notification.hiding {
-    animation: slideOut 0.2s ease;
-}
-
-.toast-icon {
-    display: none;
-}
-
-.toast-notification.success {
-    border-left: 4px solid #48bb78;
-}
-
-.toast-notification.error {
-    border-left: 4px solid #f56565;
-}
-
-.toast-notification.warning {
-    border-left: 4px solid #ed8936;
-}
-
-.toast-notification.info {
-    border-left: 4px solid #4299e1;
-}
-
-.toast-content {
-    flex: 1;
-}
-
-.toast-message {
-    color: var(--text-dark);
-    font-size: 0.95rem;
-    line-height: 1.4;
-}
-
-.toast-close {
-    background: transparent;
-    border: none;
-    padding: 0.25rem;
-    cursor: pointer;
-    color: var(--text-medium);
-    font-size: 1.25rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 4px;
-    transition: all 0.2s ease;
-}
-
-.toast-close:hover {
-    background: rgba(0, 0, 0, 0.05);
-    color: var(--text-dark);
-}
-
-.toast-container {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 10500;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-}
-
-@keyframes slideIn {
-    from {
-        transform: translateX(400px);
-        opacity: 0;
-    }
-
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
-}
-
-@keyframes slideOut {
-    from {
-        transform: translateX(0);
-        opacity: 1;
-    }
-
-    to {
-        transform: translateX(400px);
-        opacity: 0;
-    }
-}
-
-@media (max-width: 576px) {
-    .toast-container {
-        right: 10px;
-        left: 10px;
-        align-items: stretch;
-    }
-
-    .toast-notification {
-        min-width: auto;
-        max-width: none;
-    }
-}
+/* Duplicate toast styles removed - using glassmorphism design from lines 1967-2150 */
 
 /* ========================================
    MODAL DESIGN UPDATES (Screenshot Match)
@@ -4022,226 +3914,8 @@ body.modal-open {
 }
 
 /* ========================================
-   OLD TOAST NOTIFICATION STYLES (Restored)
+   GLASSMORPHISM TOAST STYLES ACTIVE
    ======================================== */
-
-/* Override new toast styles with old design */
-.toast-notification {
-    min-width: 280px !important;
-    max-width: 360px !important;
-    display: flex !important;
-    align-items: center !important;
-    gap: 0.75rem !important;
-    padding: 1rem 1.25rem !important;
-    background: white !important;
-    border: 2px solid !important;
-    border-radius: 8px !important;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
-    margin-bottom: 0.75rem !important;
-    animation: slideIn 0.3s ease !important;
-}
-
-.toast-notification.success {
-    background: #f2faf5 !important;
-    border-color: #2fc584 !important;
-}
-
-.toast-notification.error {
-    background: #fff5f3 !important;
-    border-color: #de3e25 !important;
-}
-
-.toast-notification.info {
-    background: #f0f7ff !important;
-    border-color: #0066cc !important;
-}
-
-.toast-notification.warning {
-    background: #fff8e6 !important;
-    border-color: #cc8800 !important;
-}
-
-.toast-icon {
-    width: 35px !important;
-    height: 35px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    font-size: 18px !important;
-    font-weight: normal !important;
-    flex-shrink: 0 !important;
-    background-color: transparent !important;
-    border: 2px solid !important;
-    border-radius: 50% !important;
-}
-
-.toast-icon::before {
-    font-size: 18px !important;
-    line-height: 1 !important;
-    font-weight: normal !important;
-}
-
-.toast-notification.success .toast-icon {
-    border-color: #2fc584 !important;
-    color: #2fc584 !important;
-}
-
-.toast-notification.error .toast-icon {
-    border-color: #de3e25 !important;
-    color: #de3e25 !important;
-}
-
-.toast-notification.info .toast-icon {
-    border-color: #0066cc !important;
-    color: #0066cc !important;
-}
-
-.toast-notification.warning .toast-icon {
-    border-color: #ff9800 !important;
-    color: #ff9800 !important;
-}
-
-/* Toast Message Colors */
-.toast-notification.success .toast-message {
-    color: #198053 !important;
-}
-
-.toast-notification.error .toast-message {
-    color: #c42924 !important;
-}
-
-.toast-notification.info .toast-message {
-    color: #004d99 !important;
-}
-
-.toast-notification.warning .toast-message {
-    color: #996600 !important;
-}
-
-/* Toast Close Button Colors */
-.toast-notification.success .toast-close {
-    color: #2fc584 !important;
-}
-
-.toast-notification.error .toast-close {
-    color: #de3e25 !important;
-}
-
-.toast-notification.info .toast-close {
-    color: #0066cc !important;
-}
-
-.toast-notification.warning .toast-close {
-    color: #ff9800 !important;
-}
-
-.toast-close {
-    background: transparent !important;
-    border: none !important;
-    padding: 0.25rem !important;
-    cursor: pointer !important;
-    font-size: 1.25rem !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    border-radius: 4px !important;
-    transition: all 0.2s ease !important;
-}
-
-.toast-close:hover {
-    background: rgba(0, 0, 0, 0.05) !important;
-}
-
-.toast-content {
-    flex: 1 !important;
-}
-
-.toast-message {
-    font-size: 0.95rem !important;
-    line-height: 1.4 !important;
-    font-weight: 500 !important;
-}
-
-/* Responsive */
-@media (max-width: 576px) {
-    .toast-notification {
-        min-width: auto !important;
-        max-width: 100% !important;
-    }
-}
-
-/* ========================================
-   OLD TOAST NOTIFICATION STYLES (Boxicons)
-   ======================================== */
-
-/* Override new toast styles with old design */
-.toast-notification {
-    min-width: 280px !important;
-    max-width: 360px !important;
-    background: white !important;
-    border: 2px solid !important;
-    border-radius: 8px !important;
-    padding: 1rem 1.25rem !important;
-    display: flex !important;
-    align-items: center !important;
-    gap: 1rem !important;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
-    animation: slideIn 0.3s ease !important;
-    margin-bottom: 0.75rem !important;
-}
-
-.toast-notification.success {
-    background: #f2faf5 !important;
-    border-color: #2fc584 !important;
-}
-
-.toast-notification.error {
-    background: #fff5f3 !important;
-    border-color: #de3e25 !important;
-}
-
-.toast-notification.info {
-    background: #f0f7ff !important;
-    border-color: #0066cc !important;
-}
-
-.toast-notification.warning {
-    background: #fff8e6 !important;
-    border-color: #cc8800 !important;
-}
-
-.toast-icon {
-    width: 40px !important;
-    height: 40px !important;
-    border-radius: 50% !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    flex-shrink: 0 !important;
-    font-size: 40px !important;
-    background-color: transparent !important;
-}
-
-.toast-icon::before {
-    font-size: 40px !important;
-    line-height: 1 !important;
-}
-
-.toast-notification.success .toast-icon {
-    color: #2fc584 !important;
-}
-
-.toast-notification.error .toast-icon {
-    color: #de3e25 !important;
-}
-
-.toast-notification.info .toast-icon {
-    color: #0066cc !important;
-}
-
-.toast-notification.warning .toast-icon {
-    color: #ff9800 !important;
-}
 
 /* Toast Content */
 .toast-content {
@@ -4254,56 +3928,7 @@ body.modal-open {
     margin: 0 !important;
 }
 
-.toast-notification.success .toast-message {
-    color: #198053 !important;
-}
-
-.toast-notification.error .toast-message {
-    color: #c42924 !important;
-}
-
-.toast-notification.info .toast-message {
-    color: #004d99 !important;
-}
-
-.toast-notification.warning .toast-message {
-    color: #996600 !important;
-}
-
-/* Toast Close Button */
-.toast-close {
-    background: transparent !important;
-    border: none !important;
-    padding: 0.25rem !important;
-    cursor: pointer !important;
-    font-size: 1.25rem !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    border-radius: 4px !important;
-    transition: all 0.2s ease !important;
-    flex-shrink: 0 !important;
-}
-
-.toast-notification.success .toast-close {
-    color: #2fc584 !important;
-}
-
-.toast-notification.error .toast-close {
-    color: #de3e25 !important;
-}
-
-.toast-notification.info .toast-close {
-    color: #0066cc !important;
-}
-
-.toast-notification.warning .toast-close {
-    color: #ff9800 !important;
-}
-
-.toast-close:hover {
-    background: rgba(0, 0, 0, 0.05) !important;
-}
+/* Toast message and close button color overrides removed - using glassmorphism design colors */
 
 /* Toast Container */
 .toast-container {

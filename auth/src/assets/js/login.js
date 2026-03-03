@@ -115,11 +115,13 @@ document.addEventListener('DOMContentLoaded', function () {
                     localStorage.setItem('userRole', result.role);
                     localStorage.setItem('userData', JSON.stringify(result.user));
 
-                    // Redirect based on role
+                    // Redirect based on role using absolute paths from root
+                    const baseUrl = window.location.origin + '/CAATE-ITRMS';
+
                     if (result.role === 'admin') {
-                        window.location.href = '../../admin/src/pages/dashboard.html';
+                        window.location.href = baseUrl + '/admin/src/pages/dashboard.html';
                     } else if (result.role === 'trainee') {
-                        window.location.href = '../../trainee/src/pages/dashboard.html';
+                        window.location.href = baseUrl + '/trainee/src/pages/dashboard.html';
                     } else {
                         showError('Unknown user role');
                         resetButton(submitButton);

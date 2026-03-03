@@ -21,10 +21,12 @@ async function checkAuthentication(requiredRole = null) {
     // If a specific role is required, check it
     if (requiredRole && userRole !== requiredRole) {
         // Redirect to appropriate dashboard
+        const baseUrl = window.location.origin + '/CAATE-ITRMS';
+
         if (userRole === 'admin') {
-            window.location.href = '../../admin/src/pages/dashboard.html';
+            window.location.href = baseUrl + '/admin/src/pages/dashboard.html';
         } else if (userRole === 'trainee') {
-            window.location.href = '../../trainee/src/pages/dashboard.html';
+            window.location.href = baseUrl + '/trainee/src/pages/dashboard.html';
         } else {
             redirectToLogin();
         }
@@ -39,7 +41,8 @@ function redirectToLogin() {
     localStorage.removeItem('authToken');
     localStorage.removeItem('userRole');
     localStorage.removeItem('userData');
-    window.location.href = '../../auth/src/pages/login.html';
+    const baseUrl = window.location.origin + '/CAATE-ITRMS';
+    window.location.href = baseUrl + '/auth/src/pages/login.html';
 }
 
 // Get current user data
@@ -70,7 +73,8 @@ async function logout() {
     localStorage.removeItem('userData');
 
     // Redirect to login
-    window.location.href = '../../auth/src/pages/login.html';
+    const baseUrl = window.location.origin + '/CAATE-ITRMS';
+    window.location.href = baseUrl + '/auth/src/pages/login.html';
 }
 
 // Initialize authentication check on page load

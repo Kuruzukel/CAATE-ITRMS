@@ -81,11 +81,11 @@
             <h4 class="mb-2">Welcome to CAATE!</h4>
             <p class="mb-4">Access your learning portal and continue your journey</p>
 
-            <form id="formAuthentication" class="mb-3">
+            <form id="formAuthentication" class="mb-3" novalidate>
               <div class="mb-3">
                 <label for="email" class="form-label">Email or Username</label>
                 <input type="text" class="form-control" id="email" name="email-username"
-                  placeholder="Enter your email or username" autocomplete="username" autofocus required />
+                  placeholder="Enter your email or username" autocomplete="username" autofocus />
               </div>
               <div class="mb-3 form-password-toggle">
                 <div class="d-flex justify-content-between">
@@ -97,7 +97,7 @@
                 <div class="position-relative">
                   <input type="password" id="password" class="form-control password-input-with-icon" name="password"
                     placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                    aria-describedby="password" autocomplete="current-password" required />
+                    aria-describedby="password" autocomplete="current-password" />
                   <span class="password-toggle-icon cursor-pointer" onclick="togglePassword()">
                     <i class="bx bx-hide" id="toggleIcon"></i>
                   </span>

@@ -63,73 +63,110 @@ class AuthController {
         $identifier = $data['identifier'];
         $password = $data['password'];
         
+        // Debug logging
+        error_log("Login attempt for identifier: " . $identifier);
+        
         // Try to find user in admins collection first
         $adminModel = new Admin();
         $admin = $adminModel->findByEmailOrUsername($identifier);
         
-        if ($admin && isset($admin['password']) && $admin['password'] === $password) {
-            // Admin login successful (plain text password comparison)
-            session_start();
-            $_SESSION['user_id'] = (string)$admin['_id'];
-            $_SESSION['user_role'] = 'admin';
-            $_SESSION['user_name'] = $admin['name'];
-            $_SESSION['user_email'] = $admin['email'];
+        if ($admin) {
+            error_log("Admin found: " . json_encode([
+                'name' => $admin['name'] ?? 'N/A',
+                'email' => $admin['email'] ?? 'N/A',
+                'username' => $admin['username'] ?? 'N/A',
+                'has_password' => isset($admin['password'])
+            ]));
             
-            $token = JwtHelper::generateToken([
-                'user_id' => (string)$admin['_id'],
-                'role' => 'admin'
-            ]);
-            
-            echo json_encode([
-                'success' => true,
-                'message' => 'Login successful',
-                'token' => $token,
-                'role' => 'admin',
-                'user' => [
-                    'id' => (string)$admin['_id'],
-                    'name' => $admin['name'],
-                    'email' => $admin['email'],
-                    'username' => $admin['username'] ?? '',
-                    'role' => 'admin'
-                ]
-            ]);
-            return;
+            if (isset($admin['password'])) {
+                error_log("Password comparison - Input: '$password', Stored: '{$admin['password']}'");
+                
+                if ($admin['password'] === $password) {
+                    // Admin login successful (plain text password comparison)
+                    session_start();
+                    $_SESSION['user_id'] = (string)$admin['_id'];
+                    $_SESSION['user_role'] = 'admin';
+                    $_SESSION['user_name'] = $admin['name'];
+                    $_SESSION['user_email'] = $admin['email'];
+                    
+                    $token = JwtHelper::generateToken([
+                        'user_id' => (string)$admin['_id'],
+                        'role' => 'admin'
+                    ]);
+                    
+                    error_log("Admin login successful");
+                    
+                    echo json_encode([
+                        'success' => true,
+                        'message' => 'Login successful',
+                        'token' => $token,
+                        'role' => 'admin',
+                        'user' => [
+                            'id' => (string)$admin['_id'],
+                            'name' => $admin['name'],
+                            'email' => $admin['email'],
+                            'username' => $admin['username'] ?? '',
+                            'role' => 'admin'
+                        ]
+                    ]);
+                    return;
+                } else {
+                    error_log("Admin password mismatch");
+                }
+            }
+        } else {
+            error_log("No admin found with identifier: " . $identifier);
         }
         
         // Try to find user in trainees collection
         $traineeModel = new Trainee();
         $trainee = $traineeModel->findByEmailOrUsername($identifier);
         
-        if ($trainee && isset($trainee['password']) && password_verify($password, $trainee['password'])) {
-            // Trainee login successful (hashed password)
-            session_start();
-            $_SESSION['user_id'] = (string)$trainee['_id'];
-            $_SESSION['user_role'] = 'trainee';
-            $_SESSION['user_name'] = $trainee['name'] ?? $trainee['fullName'] ?? '';
-            $_SESSION['user_email'] = $trainee['email'];
+        if ($trainee) {
+            error_log("Trainee found: " . json_encode([
+                'name' => $trainee['name'] ?? $trainee['fullName'] ?? 'N/A',
+                'email' => $trainee['email'] ?? 'N/A',
+                'has_password' => isset($trainee['password'])
+            ]));
             
-            $token = JwtHelper::generateToken([
-                'user_id' => (string)$trainee['_id'],
-                'role' => 'trainee'
-            ]);
-            
-            echo json_encode([
-                'success' => true,
-                'message' => 'Login successful',
-                'token' => $token,
-                'role' => 'trainee',
-                'user' => [
-                    'id' => (string)$trainee['_id'],
-                    'name' => $trainee['name'] ?? $trainee['fullName'] ?? '',
-                    'email' => $trainee['email'],
-                    'username' => $trainee['username'] ?? '',
+            if (isset($trainee['password']) && password_verify($password, $trainee['password'])) {
+                // Trainee login successful (hashed password)
+                session_start();
+                $_SESSION['user_id'] = (string)$trainee['_id'];
+                $_SESSION['user_role'] = 'trainee';
+                $_SESSION['user_name'] = $trainee['name'] ?? $trainee['fullName'] ?? '';
+                $_SESSION['user_email'] = $trainee['email'];
+                
+                $token = JwtHelper::generateToken([
+                    'user_id' => (string)$trainee['_id'],
                     'role' => 'trainee'
-                ]
-            ]);
-            return;
+                ]);
+                
+                error_log("Trainee login successful");
+                
+                echo json_encode([
+                    'success' => true,
+                    'message' => 'Login successful',
+                    'token' => $token,
+                    'role' => 'trainee',
+                    'user' => [
+                        'id' => (string)$trainee['_id'],
+                        'name' => $trainee['name'] ?? $trainee['fullName'] ?? '',
+                        'email' => $trainee['email'],
+                        'username' => $trainee['username'] ?? '',
+                        'role' => 'trainee'
+                    ]
+                ]);
+                return;
+            } else {
+                error_log("Trainee password verification failed");
+            }
+        } else {
+            error_log("No trainee found with identifier: " . $identifier);
         }
         
         // Invalid credentials
+        error_log("Login failed - invalid credentials");
         http_response_code(401);
         echo json_encode([
             'success' => false,

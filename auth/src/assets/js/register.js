@@ -8,14 +8,17 @@ window.togglePassword = function (inputId, iconId) {
     const passwordInput = document.getElementById(inputId);
     const toggleIcon = document.getElementById(iconId);
 
+    if (!passwordInput || !toggleIcon) {
+        console.log('Password input or toggle icon not found');
+        return;
+    }
+
     if (passwordInput.type === 'password') {
         passwordInput.type = 'text';
-        toggleIcon.classList.remove('bx-hide');
-        toggleIcon.classList.add('bx-show');
+        toggleIcon.className = 'bx bx-show';
     } else {
         passwordInput.type = 'password';
-        toggleIcon.classList.remove('bx-show');
-        toggleIcon.classList.add('bx-hide');
+        toggleIcon.className = 'bx bx-hide';
     }
 };
 

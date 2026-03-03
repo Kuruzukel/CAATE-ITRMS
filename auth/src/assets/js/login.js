@@ -13,14 +13,17 @@ window.togglePassword = function () {
     const passwordInput = document.getElementById('password');
     const toggleIcon = document.getElementById('toggleIcon');
 
+    if (!passwordInput || !toggleIcon) {
+        console.log('Password input or toggle icon not found');
+        return;
+    }
+
     if (passwordInput.type === 'password') {
         passwordInput.type = 'text';
-        toggleIcon.classList.remove('bx-hide');
-        toggleIcon.classList.add('bx-show');
+        toggleIcon.className = 'bx bx-show';
     } else {
         passwordInput.type = 'password';
-        toggleIcon.classList.remove('bx-show');
-        toggleIcon.classList.add('bx-hide');
+        toggleIcon.className = 'bx bx-hide';
     }
 };
 
@@ -43,10 +46,11 @@ function showToast(message, type = 'success') {
 
     container.appendChild(toast);
 
-    // Auto remove after 2.5 seconds
+    // Auto remove after 3 seconds
     setTimeout(() => {
-        closeToast(toast.querySelector('.toast-close'));
-    }, 2500);
+        const closeBtn = toast.querySelector('.toast-close');
+        if (closeBtn) closeToast(closeBtn);
+    }, 3000);
 }
 
 // Close toast notification - MUST be global for onclick to work
@@ -72,7 +76,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const identifier = emailInput.value.trim();
             const password = passwordInput.value;
-            const submitButton = loginForm.querySelector('button[type="submit"]');
 
             // Validation
             if (!identifier) {
@@ -86,8 +89,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 passwordInput.focus();
                 return;
             }
-
-            // Don't disable button - keep it in default state
 
             try {
                 const response = await fetch(`${API_BASE_URL}/api/v1/auth/login`, {
@@ -109,23 +110,18 @@ document.addEventListener('DOMContentLoaded', function () {
                     localStorage.setItem('userRole', result.role);
                     localStorage.setItem('userData', JSON.stringify(result.user));
 
-                    // Show success toast
-                    showToast('Login successful! Redirecting to dashboard...', 'success');
+                    // Redirect immediately - no toast needed
+                    const baseUrl = window.location.origin + '/CAATE-ITRMS';
 
-                    // Redirect based on role after a short delay
-                    setTimeout(() => {
-                        const baseUrl = window.location.origin + '/CAATE-ITRMS';
-
-                        if (result.role === 'admin') {
-                            window.location.href = baseUrl + '/admin/src/pages/dashboard.html';
-                        } else if (result.role === 'trainee') {
-                            window.location.href = baseUrl + '/trainee/src/pages/dashboard.html';
-                        } else {
-                            showToast('Unknown user role', 'error');
-                        }
-                    }, 1000); // 1 second delay to show the success message
+                    if (result.role === 'admin') {
+                        window.location.href = baseUrl + '/admin/src/pages/dashboard.html';
+                    } else if (result.role === 'trainee') {
+                        window.location.href = baseUrl + '/trainee/src/pages/dashboard.html';
+                    } else {
+                        showToast('Unknown user role', 'error');
+                    }
                 } else {
-                    showToast(result.error || 'Login failed. Please try again.', 'error');
+                    showToast(result.error || 'Invalid credentials', 'error');
                 }
             } catch (error) {
                 console.error('Login error:', error);

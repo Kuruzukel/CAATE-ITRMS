@@ -23,6 +23,7 @@ function handleRequest($uri, $method) {
         'POST:/api/v1/auth/register' => ['AuthController', 'register'],
         'POST:/api/v1/auth/login' => ['AuthController', 'login'],
         'POST:/api/v1/auth/logout' => ['AuthController', 'logout'],
+        'GET:/api/v1/auth/session' => ['AuthController', 'checkSession'],
         'GET:/api/v1/users' => ['UserController', 'index'],
         'GET:/api/v1/users/{id}' => ['UserController', 'show'],
         'POST:/api/v1/users' => ['UserController', 'store'],

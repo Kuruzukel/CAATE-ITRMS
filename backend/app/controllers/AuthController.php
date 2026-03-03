@@ -1,6 +1,8 @@
 <?php
 
 require_once __DIR__ . '/../models/User.php';
+require_once __DIR__ . '/../models/Admin.php';
+require_once __DIR__ . '/../models/Trainee.php';
 require_once __DIR__ . '/../helpers/JwtHelper.php';
 
 class AuthController {
@@ -49,35 +51,120 @@ class AuthController {
     public function login() {
         $data = json_decode(file_get_contents('php://input'), true);
         
-        if (!isset($data['email']) || !isset($data['password'])) {
+        if (!isset($data['identifier']) || !isset($data['password'])) {
             http_response_code(400);
-            echo json_encode(['error' => 'Email and password are required']);
+            echo json_encode([
+                'success' => false,
+                'error' => 'Email/Username and password are required'
+            ]);
             return;
         }
         
-        $userModel = new User();
-        $user = $userModel->findByEmail($data['email']);
+        $identifier = $data['identifier'];
+        $password = $data['password'];
         
-        if (!$user || !password_verify($data['password'], $user['password'])) {
-            http_response_code(401);
-            echo json_encode(['error' => 'Invalid credentials']);
+        // Try to find user in admins collection first
+        $adminModel = new Admin();
+        $admin = $adminModel->findByEmailOrUsername($identifier);
+        
+        if ($admin && isset($admin['password']) && password_verify($password, $admin['password'])) {
+            // Admin login successful
+            session_start();
+            $_SESSION['user_id'] = (string)$admin['_id'];
+            $_SESSION['user_role'] = 'admin';
+            $_SESSION['user_name'] = $admin['name'];
+            $_SESSION['user_email'] = $admin['email'];
+            
+            $token = JwtHelper::generateToken([
+                'user_id' => (string)$admin['_id'],
+                'role' => 'admin'
+            ]);
+            
+            echo json_encode([
+                'success' => true,
+                'message' => 'Login successful',
+                'token' => $token,
+                'role' => 'admin',
+                'user' => [
+                    'id' => (string)$admin['_id'],
+                    'name' => $admin['name'],
+                    'email' => $admin['email'],
+                    'username' => $admin['username'] ?? '',
+                    'role' => 'admin'
+                ]
+            ]);
             return;
         }
         
-        $token = JwtHelper::generateToken(['user_id' => (string)$user['_id']]);
+        // Try to find user in trainees collection
+        $traineeModel = new Trainee();
+        $trainee = $traineeModel->findByEmailOrUsername($identifier);
         
+        if ($trainee && isset($trainee['password']) && password_verify($password, $trainee['password'])) {
+            // Trainee login successful
+            session_start();
+            $_SESSION['user_id'] = (string)$trainee['_id'];
+            $_SESSION['user_role'] = 'trainee';
+            $_SESSION['user_name'] = $trainee['name'] ?? $trainee['fullName'] ?? '';
+            $_SESSION['user_email'] = $trainee['email'];
+            
+            $token = JwtHelper::generateToken([
+                'user_id' => (string)$trainee['_id'],
+                'role' => 'trainee'
+            ]);
+            
+            echo json_encode([
+                'success' => true,
+                'message' => 'Login successful',
+                'token' => $token,
+                'role' => 'trainee',
+                'user' => [
+                    'id' => (string)$trainee['_id'],
+                    'name' => $trainee['name'] ?? $trainee['fullName'] ?? '',
+                    'email' => $trainee['email'],
+                    'username' => $trainee['username'] ?? '',
+                    'role' => 'trainee'
+                ]
+            ]);
+            return;
+        }
+        
+        // Invalid credentials
+        http_response_code(401);
         echo json_encode([
-            'message' => 'Login successful',
-            'token' => $token,
-            'user' => [
-                'id' => (string)$user['_id'],
-                'name' => $user['name'],
-                'email' => $user['email']
-            ]
+            'success' => false,
+            'error' => 'Invalid credentials'
         ]);
     }
     
     public function logout() {
-        echo json_encode(['message' => 'Logout successful']);
+        session_start();
+        session_destroy();
+        echo json_encode([
+            'success' => true,
+            'message' => 'Logout successful'
+        ]);
+    }
+    
+    public function checkSession() {
+        session_start();
+        
+        if (isset($_SESSION['user_id']) && isset($_SESSION['user_role'])) {
+            echo json_encode([
+                'success' => true,
+                'authenticated' => true,
+                'user' => [
+                    'id' => $_SESSION['user_id'],
+                    'name' => $_SESSION['user_name'] ?? '',
+                    'email' => $_SESSION['user_email'] ?? '',
+                    'role' => $_SESSION['user_role']
+                ]
+            ]);
+        } else {
+            echo json_encode([
+                'success' => true,
+                'authenticated' => false
+            ]);
+        }
     }
 }

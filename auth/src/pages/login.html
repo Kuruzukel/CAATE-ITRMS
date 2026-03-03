@@ -98,7 +98,7 @@
               <h4 class="mb-2">Welcome to CAATE!</h4>
               <p class="mb-4">Access your learning portal and continue your journey</p>
 
-              <form id="formAuthentication" class="mb-3" action="../../admin-panel/src/pages/dashboard.html" method="POST">
+              <form id="formAuthentication" class="mb-3">
                 <div class="mb-3">
                   <label for="email" class="form-label">Email or Username</label>
                   <input
@@ -109,6 +109,7 @@
                     placeholder="Enter your email or username"
                     autocomplete="username"
                     autofocus
+                    required
                   />
                 </div>
                 <div class="mb-3 form-password-toggle">
@@ -127,6 +128,7 @@
                       placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
                       aria-describedby="password"
                       autocomplete="current-password"
+                      required
                     />
                     <span class="password-toggle-icon cursor-pointer" onclick="togglePassword()">
                       <i class="bx bx-hide" id="toggleIcon"></i>

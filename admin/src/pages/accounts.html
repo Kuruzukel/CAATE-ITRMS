@@ -495,10 +495,18 @@
                 <div class="modal-body">
                     <form id="addTraineeForm">
                         <div class="row">
-                            <div class="col-md-12 mb-3">
+                            <div class="col-md-6 mb-3">
                                 <label for="addTraineeId" class="form-label">Trainee ID</label>
                                 <input type="text" id="addTraineeId" class="form-control" placeholder="Auto-generated"
                                     required readonly style="background-color: #f5f5f5; cursor: not-allowed;">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="addTraineeUsername" class="form-label">Username <span
+                                        class="text-muted">(Optional)</span></label>
+                                <input type="text" id="addTraineeUsername" class="form-control"
+                                    placeholder="Enter username" pattern="[A-Za-z0-9_-]+"
+                                    title="Only letters, numbers, underscores, and hyphens allowed"
+                                    oninput="this.value = this.value.replace(/[^A-Za-z0-9_-]/g, '')">
                             </div>
                         </div>
                         <div class="row">
@@ -559,6 +567,8 @@
                                     title="Only numbers allowed" autocomplete="tel"
                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                             </div>
+                        </div>
+                        <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="addTraineePassword" class="form-label">Password <span
                                         class="text-muted">(Optional)</span></label>

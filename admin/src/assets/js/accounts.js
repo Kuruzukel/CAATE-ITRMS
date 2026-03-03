@@ -396,9 +396,16 @@ function updateStatistics(stats) {
 }
 
 // View trainee details
-function viewTrainee(id) {
+window.viewTrainee = function viewTrainee(id) {
+    console.log('viewTrainee called with id:', id);
+    console.log('traineesData:', traineesData);
+
     const trainee = traineesData.find(t => t._id === id);
-    if (!trainee) return;
+    if (!trainee) {
+        console.error('Trainee not found with id:', id);
+        alert('Trainee not found. Please refresh the page and try again.');
+        return;
+    }
 
     // Populate view modal with separate name fields
     document.getElementById('viewTraineeId').value = trainee.trainee_id || trainee._id || '';
@@ -429,9 +436,16 @@ function viewTrainee(id) {
 }
 
 // Edit trainee
-function editTrainee(id) {
+window.editTrainee = function editTrainee(id) {
+    console.log('editTrainee called with id:', id);
+    console.log('traineesData:', traineesData);
+
     const trainee = traineesData.find(t => t._id === id);
-    if (!trainee) return;
+    if (!trainee) {
+        console.error('Trainee not found with id:', id);
+        alert('Trainee not found. Please refresh the page and try again.');
+        return;
+    }
 
     // Store original trainee data for change detection
     window.originalTraineeData = {
@@ -465,9 +479,16 @@ function editTrainee(id) {
 }
 
 // Delete trainee
-async function deleteTrainee(id) {
+window.deleteTrainee = async function deleteTrainee(id) {
+    console.log('deleteTrainee called with id:', id);
+    console.log('traineesData:', traineesData);
+
     const trainee = traineesData.find(t => t._id === id);
-    if (!trainee) return;
+    if (!trainee) {
+        console.error('Trainee not found with id:', id);
+        alert('Trainee not found. Please refresh the page and try again.');
+        return;
+    }
 
     // Populate delete modal with trainee info
     document.getElementById('deleteTraineeName').textContent = `${trainee.first_name} ${trainee.last_name}`;
@@ -479,7 +500,7 @@ async function deleteTrainee(id) {
 }
 
 // Confirm delete trainee
-async function confirmDeleteTrainee() {
+window.confirmDeleteTrainee = async function confirmDeleteTrainee() {
     const id = document.getElementById('deleteTraineeId').value;
 
     try {
@@ -559,7 +580,7 @@ function closeToast(button) {
 
 
 // Save edited trainee
-async function saveEditTrainee() {
+window.saveEditTrainee = async function saveEditTrainee() {
     const submitBtn = document.querySelector('#editTraineeModal .btn-primary');
     const originalBtnText = submitBtn.innerHTML;
 
@@ -784,7 +805,7 @@ async function generateTraineeId() {
 }
 
 // Save new trainee
-async function saveNewTrainee() {
+window.saveNewTrainee = async function saveNewTrainee() {
     // Get the button element
     const addButton = document.querySelector('#addTraineeModal .btn-primary');
     const originalText = addButton.innerHTML;
@@ -800,6 +821,7 @@ async function saveNewTrainee() {
         document.getElementById('addTraineeId').value = id;
     }
 
+    const username = document.getElementById('addTraineeUsername').value.trim();
     const firstName = document.getElementById('addTraineeFirstName').value.trim();
     const secondName = document.getElementById('addTraineeSecondName').value.trim();
     const middleName = document.getElementById('addTraineeMiddleName').value.trim();
@@ -889,6 +911,11 @@ async function saveNewTrainee() {
         email: email,
         phone: phone
     };
+
+    // Only include username if provided
+    if (username) {
+        newTraineeData.username = username;
+    }
 
     // Only include password if provided
     if (password) {

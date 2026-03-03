@@ -92,10 +92,8 @@ class Trainee {
     
     public function create($data) {
         try {
-            // Hash password if provided
-            if (isset($data['password'])) {
-                $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
-            }
+            // Don't hash password - store as plain text
+            // Password is already in plain text from the form
             
             // Add timestamps
             $data['created_at'] = new MongoDB\BSON\UTCDateTime();
@@ -114,9 +112,8 @@ class Trainee {
             // Remove password from update if empty
             if (isset($data['password']) && empty($data['password'])) {
                 unset($data['password']);
-            } elseif (isset($data['password'])) {
-                $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
             }
+            // Don't hash password - store as plain text
             
             // Update timestamp
             $data['updated_at'] = new MongoDB\BSON\UTCDateTime();

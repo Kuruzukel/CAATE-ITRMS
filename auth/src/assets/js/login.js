@@ -18,19 +18,53 @@ window.togglePassword = function () {
         return;
     }
 
-    console.log('Toggle clicked - Current type:', passwordInput.type);
+    // Get current value and type
+    const currentValue = passwordInput.value;
+    const isCurrentlyPassword = passwordInput.type === 'password';
 
-    if (passwordInput.type === 'password') {
-        passwordInput.type = 'text';
+    console.log('BEFORE Toggle - Type:', passwordInput.type, 'Value:', currentValue);
+
+    // Create a new input element with opposite type
+    const newInput = document.createElement('input');
+    newInput.type = isCurrentlyPassword ? 'text' : 'password';
+    newInput.id = 'password';
+    newInput.name = 'password';
+    // Use different class when visible
+    newInput.className = isCurrentlyPassword ? 'form-control password-visible' : 'form-control password-input-with-icon';
+    newInput.placeholder = 'Enter your password';
+    newInput.setAttribute('aria-describedby', 'password');
+    newInput.setAttribute('autocomplete', 'current-password');
+    newInput.value = currentValue;
+
+    // Add inline styles to force visibility
+    if (isCurrentlyPassword) {
+        newInput.style.webkitTextSecurity = 'none';
+        newInput.style.MozTextSecurity = 'none';
+        newInput.style.textSecurity = 'none';
+        newInput.style.fontFamily = "'Public Sans', sans-serif";
+        newInput.style.paddingRight = '45px';
+    }
+
+    // Replace the old input with the new one
+    passwordInput.parentNode.replaceChild(newInput, passwordInput);
+
+    // Update icon
+    if (isCurrentlyPassword) {
+        // Was password, now showing as text
         toggleIcon.classList.remove('bx-hide');
         toggleIcon.classList.add('bx-show');
-        console.log('Password now visible');
+        console.log('AFTER Toggle - Password now VISIBLE as TEXT. Type:', newInput.type, 'Value:', newInput.value);
     } else {
-        passwordInput.type = 'password';
+        // Was text, now hiding as password
         toggleIcon.classList.remove('bx-show');
         toggleIcon.classList.add('bx-hide');
-        console.log('Password now hidden');
+        console.log('AFTER Toggle - Password now HIDDEN. Type:', newInput.type);
     }
+
+    // Focus the new input
+    newInput.focus();
+    // Move cursor to end
+    newInput.setSelectionRange(newInput.value.length, newInput.value.length);
 };
 
 // Toast notification function
@@ -74,12 +108,12 @@ window.closeToast = function (button) {
 document.addEventListener('DOMContentLoaded', function () {
     const loginForm = document.getElementById('formAuthentication');
     const emailInput = document.getElementById('email');
-    const passwordInput = document.getElementById('password');
 
     if (loginForm) {
         loginForm.addEventListener('submit', async function (e) {
             e.preventDefault();
 
+            const passwordInput = document.getElementById('password');
             const identifier = emailInput.value.trim();
             const password = passwordInput.value;
 

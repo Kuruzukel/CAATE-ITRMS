@@ -44,6 +44,9 @@
   <link rel="stylesheet" href="../assets/css/appointment-form.css" />
   <link rel="stylesheet" href="../assets/css/login-toast.css" />
 
+  <!-- Password Toggle Fix -->
+  <link rel="stylesheet" href="../assets/css/password-fix.css" />
+
   <!-- Helpers -->
   <script src="../assets/js/helpers.js"></script>
 
@@ -96,8 +99,7 @@
                 </div>
                 <div class="position-relative">
                   <input type="password" id="password" class="form-control password-input-with-icon" name="password"
-                    placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                    aria-describedby="password" autocomplete="current-password" />
+                    placeholder="Enter your password" aria-describedby="password" autocomplete="current-password" />
                   <span class="password-toggle-icon cursor-pointer" onclick="togglePassword()">
                     <i class="bx bx-hide" id="toggleIcon"></i>
                   </span>
@@ -155,7 +157,7 @@
   <script src="../assets/js/main.js"></script>
 
   <!-- Page JS -->
-  <script src="../assets/js/login.js"></script>
+  <script src="../assets/js/login.js?v=3"></script>
 </body>
 
 </html>

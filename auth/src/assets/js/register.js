@@ -13,19 +13,42 @@ window.togglePassword = function (inputId, iconId) {
         return;
     }
 
-    console.log('Toggle clicked for:', inputId, '- Current type:', passwordInput.type);
+    // Get current value and type
+    const currentValue = passwordInput.value;
+    const currentType = passwordInput.type;
 
-    if (passwordInput.type === 'password') {
-        passwordInput.type = 'text';
+    console.log('Toggle clicked for:', inputId, '- Current type:', currentType);
+
+    // Create a new input element with opposite type
+    const newInput = document.createElement('input');
+    newInput.type = currentType === 'password' ? 'text' : 'password';
+    newInput.id = inputId;
+    newInput.name = inputId;
+    newInput.className = 'form-control password-input-with-icon';
+    newInput.placeholder = inputId === 'password' ? 'Enter your password' : 'Confirm your password';
+    newInput.setAttribute('aria-describedby', inputId);
+    newInput.setAttribute('autocomplete', 'new-password');
+    newInput.setAttribute('required', 'required');
+    newInput.value = currentValue;
+
+    // Replace the old input with the new one
+    passwordInput.parentNode.replaceChild(newInput, passwordInput);
+
+    // Update icon
+    if (newInput.type === 'text') {
         toggleIcon.classList.remove('bx-hide');
         toggleIcon.classList.add('bx-show');
-        console.log('Password now visible');
+        console.log('Password now VISIBLE:', newInput.value);
     } else {
-        passwordInput.type = 'password';
         toggleIcon.classList.remove('bx-show');
         toggleIcon.classList.add('bx-hide');
-        console.log('Password now hidden');
+        console.log('Password now HIDDEN');
     }
+
+    // Focus the new input
+    newInput.focus();
+    // Move cursor to end
+    newInput.setSelectionRange(newInput.value.length, newInput.value.length);
 };
 
 // Password validation function

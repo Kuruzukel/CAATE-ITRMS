@@ -355,6 +355,7 @@ function createTraineeRow(trainee, index) {
     return tr;
 }
 
+
 // Get avatar color based on index
 function getAvatarColor(index) {
     const colors = [
@@ -400,10 +401,13 @@ window.viewTrainee = function viewTrainee(id) {
     console.log('viewTrainee called with id:', id);
     console.log('traineesData:', traineesData);
 
-    const trainee = traineesData.find(t => t._id === id);
+    // Convert id to string if it's an object
+    const traineeId = String(id);
+
+    const trainee = traineesData.find(t => String(t._id) === traineeId || String(t.id) === traineeId);
     if (!trainee) {
-        console.error('Trainee not found with id:', id);
-        alert('Trainee not found. Please refresh the page and try again.');
+        console.error('Trainee not found with id:', traineeId);
+        showError('Trainee not found. Please refresh the page and try again.');
         return;
     }
 
@@ -415,6 +419,7 @@ window.viewTrainee = function viewTrainee(id) {
     document.getElementById('viewTraineeLastName').value = trainee.last_name || '';
     document.getElementById('viewTraineeSuffix').value = trainee.suffix || '';
     document.getElementById('viewTraineeEmail').value = trainee.email || '';
+    document.getElementById('viewTraineeUsername').value = trainee.username || '';
     document.getElementById('viewTraineePhone').value = trainee.phone || '';
 
     // Set password field (show actual password from database)
@@ -440,10 +445,13 @@ window.editTrainee = function editTrainee(id) {
     console.log('editTrainee called with id:', id);
     console.log('traineesData:', traineesData);
 
-    const trainee = traineesData.find(t => t._id === id);
+    // Convert id to string if it's an object
+    const traineeId = String(id);
+
+    const trainee = traineesData.find(t => String(t._id) === traineeId || String(t.id) === traineeId);
     if (!trainee) {
-        console.error('Trainee not found with id:', id);
-        alert('Trainee not found. Please refresh the page and try again.');
+        console.error('Trainee not found with id:', traineeId);
+        showError('Trainee not found. Please refresh the page and try again.');
         return;
     }
 
@@ -456,6 +464,7 @@ window.editTrainee = function editTrainee(id) {
         last_name: trainee.last_name || '',
         suffix: trainee.suffix || '',
         email: trainee.email || '',
+        username: trainee.username || '',
         phone: trainee.phone || ''
     };
 
@@ -467,6 +476,7 @@ window.editTrainee = function editTrainee(id) {
     document.getElementById('editTraineeLastName').value = trainee.last_name || '';
     document.getElementById('editTraineeSuffix').value = trainee.suffix || '';
     document.getElementById('editTraineeEmail').value = trainee.email;
+    document.getElementById('editTraineeUsername').value = trainee.username || '';
     document.getElementById('editTraineePhone').value = trainee.phone;
     document.getElementById('editTraineePassword').value = ''; // Clear password field
 
@@ -483,16 +493,19 @@ window.deleteTrainee = async function deleteTrainee(id) {
     console.log('deleteTrainee called with id:', id);
     console.log('traineesData:', traineesData);
 
-    const trainee = traineesData.find(t => t._id === id);
+    // Convert id to string if it's an object
+    const traineeId = String(id);
+
+    const trainee = traineesData.find(t => String(t._id) === traineeId || String(t.id) === traineeId);
     if (!trainee) {
-        console.error('Trainee not found with id:', id);
-        alert('Trainee not found. Please refresh the page and try again.');
+        console.error('Trainee not found with id:', traineeId);
+        showError('Trainee not found. Please refresh the page and try again.');
         return;
     }
 
     // Populate delete modal with trainee info
     document.getElementById('deleteTraineeName').textContent = `${trainee.first_name} ${trainee.last_name}`;
-    document.getElementById('deleteTraineeId').value = id;
+    document.getElementById('deleteTraineeId').value = traineeId;
 
     // Show the Bootstrap modal
     const modal = new bootstrap.Modal(document.getElementById('deleteTraineeModal'));
@@ -597,6 +610,7 @@ window.saveEditTrainee = async function saveEditTrainee() {
     const lastName = document.getElementById('editTraineeLastName').value.trim();
     const suffix = document.getElementById('editTraineeSuffix').value.trim();
     const email = document.getElementById('editTraineeEmail').value.trim();
+    const username = document.getElementById('editTraineeUsername').value.trim();
     const phone = document.getElementById('editTraineePhone').value.trim();
     const password = document.getElementById('editTraineePassword').value;
 
@@ -610,6 +624,7 @@ window.saveEditTrainee = async function saveEditTrainee() {
             lastName !== window.originalTraineeData.last_name ||
             suffix !== window.originalTraineeData.suffix ||
             email !== window.originalTraineeData.email ||
+            username !== window.originalTraineeData.username ||
             phone !== window.originalTraineeData.phone ||
             password !== ''; // Password field has value means it was changed
 
@@ -691,6 +706,7 @@ window.saveEditTrainee = async function saveEditTrainee() {
         window.originalTraineeData.last_name !== lastName ||
         window.originalTraineeData.suffix !== suffix ||
         window.originalTraineeData.email !== email ||
+        window.originalTraineeData.username !== username ||
         window.originalTraineeData.phone !== phone ||
         password !== ''; // Password change counts as a change
 
@@ -709,6 +725,7 @@ window.saveEditTrainee = async function saveEditTrainee() {
         last_name: lastName,
         suffix: suffix,
         email: email,
+        username: username,
         phone: phone
     };
 

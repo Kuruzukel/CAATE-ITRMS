@@ -655,20 +655,28 @@
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="editTraineeSuffix" class="form-label">Suffix <span
-                                        class="text-muted">(Optional)</span></label>
-                                <input type="text" id="editTraineeSuffix" class="form-control"
-                                    placeholder="e.g., Jr., Sr., III" pattern="[A-Za-z\s.,]*"
-                                    title="Only letters, spaces, periods, and commas allowed"
-                                    oninput="this.value = this.value.replace(/[^A-Za-z\s.,]/g, '')">
-                            </div>
-                            <div class="col-md-6 mb-3">
                                 <label for="editTraineeEmail" class="form-label">Email Address</label>
                                 <input type="email" id="editTraineeEmail" class="form-control"
                                     placeholder="Enter email address" required autocomplete="email">
                             </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="editTraineeUsername" class="form-label">Username <span
+                                        class="text-muted">(Optional)</span></label>
+                                <input type="text" id="editTraineeUsername" class="form-control"
+                                    placeholder="Enter username" pattern="[A-Za-z0-9_-]+"
+                                    title="Only letters, numbers, underscores, and hyphens allowed"
+                                    oninput="this.value = this.value.replace(/[^A-Za-z0-9_-]/g, '')">
+                            </div>
                         </div>
                         <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="editTraineeUsername" class="form-label">Username <span
+                                        class="text-muted">(Optional)</span></label>
+                                <input type="text" id="editTraineeUsername" class="form-control"
+                                    placeholder="Enter username" pattern="[A-Za-z0-9_-]+"
+                                    title="Only letters, numbers, underscores, and hyphens allowed"
+                                    oninput="this.value = this.value.replace(/[^A-Za-z0-9_-]/g, '')">
+                            </div>
                             <div class="col-md-6 mb-3">
                                 <label for="editTraineePhone" class="form-label">Phone Number</label>
                                 <input type="text" id="editTraineePhone" class="form-control"
@@ -676,6 +684,8 @@
                                     autocomplete="tel" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                                     required>
                             </div>
+                        </div>
+                        <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="editTraineePassword" class="form-label">Password (leave blank to keep
                                     current)</label>
@@ -743,7 +753,7 @@
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">Suffix</label>
+                                <label class="form-label">Suffix <span class="text-muted">(Optional)</span></label>
                                 <input type="text" class="form-control" id="viewTraineeSuffix" value="" disabled>
                             </div>
                             <div class="col-md-6 mb-3">
@@ -754,32 +764,37 @@
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
+                                <label class="form-label">Username <span class="text-muted">(Optional)</span></label>
+                                <input type="text" class="form-control" id="viewTraineeUsername" value="" disabled>
+                            </div>
+                            <div class="col-md-6 mb-3">
                                 <label class="form-label">Phone Number</label>
                                 <input type="text" class="form-control" id="viewTraineePhone" value="+63 912 345 6789"
                                     disabled autocomplete="tel">
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Password</label>
-                                <div class="position-relative">
-                                    <input type="password" class="form-control" id="viewTraineePassword"
-                                        value="password123" readonly autocomplete="current-password"
-                                        style="padding-right: 40px;">
-                                    <button class="btn btn-link position-absolute top-50 end-0 translate-middle-y"
-                                        type="button" id="toggleViewPassword"
-                                        style="text-decoration: none; padding: 0 12px; z-index: 10;">
-                                        <i class="bx bx-hide" id="viewPasswordIcon"
-                                            style="font-size: 1.2rem; color: #697a8d;"></i>
-                                    </button>
-                                </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Password</label>
+                            <div class="position-relative">
+                                <input type="password" class="form-control" id="viewTraineePassword" value="password123"
+                                    readonly autocomplete="current-password" style="padding-right: 40px;">
+                                <button class="btn btn-link position-absolute top-50 end-0 translate-middle-y"
+                                    type="button" id="toggleViewPassword"
+                                    style="text-decoration: none; padding: 0 12px; z-index: 10;">
+                                    <i class="bx bx-hide" id="viewPasswordIcon"
+                                        style="font-size: 1.2rem; color: #697a8d;"></i>
+                                </button>
                             </div>
                         </div>
-                    </form>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
+                </form>
             </div>
         </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+    </div>
+    </div>
     </div>
 
     <!-- Delete Trainee Modal -->

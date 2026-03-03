@@ -12,12 +12,28 @@ class Trainee {
     
     public function findByEmail($email) {
         $document = $this->collection->findOne(['email' => $email]);
-        return $document ? (array)$document : null;
+        if ($document) {
+            $trainee = (array)$document;
+            // Convert MongoDB ObjectId to string
+            if (isset($trainee['_id'])) {
+                $trainee['_id'] = (string)$trainee['_id'];
+            }
+            return $trainee;
+        }
+        return null;
     }
     
     public function findByUsername($username) {
         $document = $this->collection->findOne(['username' => $username]);
-        return $document ? (array)$document : null;
+        if ($document) {
+            $trainee = (array)$document;
+            // Convert MongoDB ObjectId to string
+            if (isset($trainee['_id'])) {
+                $trainee['_id'] = (string)$trainee['_id'];
+            }
+            return $trainee;
+        }
+        return null;
     }
     
     public function findByEmailOrUsername($identifier) {
@@ -27,13 +43,29 @@ class Trainee {
                 ['username' => $identifier]
             ]
         ]);
-        return $document ? (array)$document : null;
+        if ($document) {
+            $trainee = (array)$document;
+            // Convert MongoDB ObjectId to string
+            if (isset($trainee['_id'])) {
+                $trainee['_id'] = (string)$trainee['_id'];
+            }
+            return $trainee;
+        }
+        return null;
     }
     
     public function findById($id) {
         try {
             $document = $this->collection->findOne(['_id' => new MongoDB\BSON\ObjectId($id)]);
-            return $document ? (array)$document : null;
+            if ($document) {
+                $trainee = (array)$document;
+                // Convert MongoDB ObjectId to string
+                if (isset($trainee['_id'])) {
+                    $trainee['_id'] = (string)$trainee['_id'];
+                }
+                return $trainee;
+            }
+            return null;
         } catch (Exception $e) {
             return null;
         }
@@ -44,7 +76,12 @@ class Trainee {
             $cursor = $this->collection->find();
             $trainees = [];
             foreach ($cursor as $document) {
-                $trainees[] = (array)$document;
+                $trainee = (array)$document;
+                // Convert MongoDB ObjectId to string
+                if (isset($trainee['_id'])) {
+                    $trainee['_id'] = (string)$trainee['_id'];
+                }
+                $trainees[] = $trainee;
             }
             return $trainees;
         } catch (Exception $e) {

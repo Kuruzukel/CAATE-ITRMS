@@ -194,9 +194,9 @@ class AuthController {
             error_log("No trainee found with identifier: " . $identifier);
         }
         
-        // Invalid credentials
+        // Invalid credentials - return 200 with error flag to avoid console errors
         error_log("Login failed - invalid credentials");
-        http_response_code(401);
+        http_response_code(200);
         echo json_encode([
             'success' => false,
             'error' => 'Invalid credentials'

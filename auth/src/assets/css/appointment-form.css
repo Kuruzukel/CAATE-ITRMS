@@ -2106,34 +2106,35 @@ body.modal-open {
 }
 
 .toast-notification.warning .toast-close {
-    color: #ff9800;
+    color: rgba(255, 255, 255, 0.95);
 }
 
 .toast-close:hover {
-    background-color: rgba(0, 0, 0, 0.05);
-    transform: scale(1.1);
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: scale(1.05);
 }
 
 @keyframes slideIn {
     from {
-        transform: translateX(450px);
+        transform: translateX(450px) scale(0.9);
         opacity: 0;
     }
 
     to {
-        transform: translateX(0);
+        transform: translateX(0) scale(1);
         opacity: 1;
     }
 }
 
 @keyframes slideOut {
     from {
-        transform: translateX(0);
+        transform: translateX(0) scale(1);
         opacity: 1;
     }
 
     to {
-        transform: translateX(450px);
+        transform: translateX(450px) scale(0.9);
         opacity: 0;
     }
 }
@@ -2170,17 +2171,230 @@ body.modal-open {
     animation: shake 0.6s;
 }
 
-/* Mobile responsive for toast */
-@media (max-width: 480px) {
+/* Responsive Media Queries for Toast Notifications */
+
+/* Large Desktop (1920px and above) */
+@media (min-width: 1920px) {
+    .toast-notification {
+        min-width: 380px;
+        max-width: 450px;
+        padding: 22px 26px;
+    }
+
+    .toast-title {
+        font-size: 17px;
+    }
+
+    .toast-message {
+        font-size: 15px;
+    }
+}
+
+/* Desktop (1200px - 1919px) */
+@media (min-width: 1200px) and (max-width: 1919px) {
+    .toast-notification {
+        min-width: 320px;
+        max-width: 400px;
+    }
+}
+
+/* Tablet Landscape (992px - 1199px) */
+@media (min-width: 992px) and (max-width: 1199px) {
     .toast-container {
-        right: 10px;
-        left: 10px;
+        right: 16px;
+        top: 90px;
+    }
+
+    .toast-notification {
+        min-width: 300px;
+        max-width: 380px;
+        padding: 18px 22px;
+    }
+
+    .toast-title {
+        font-size: 15px;
+    }
+
+    .toast-message {
+        font-size: 13px;
+    }
+
+    .toast-close {
+        width: 30px;
+        height: 30px;
+        font-size: 18px;
+    }
+}
+
+/* Tablet Portrait (768px - 991px) */
+@media (min-width: 768px) and (max-width: 991px) {
+    .toast-container {
+        right: 16px;
+        top: 85px;
+    }
+
+    .toast-notification {
+        min-width: 280px;
+        max-width: 360px;
+        padding: 16px 20px;
+        min-height: 70px;
+    }
+
+    .toast-title {
+        font-size: 14px;
+    }
+
+    .toast-message {
+        font-size: 13px;
+    }
+
+    .toast-close {
+        width: 28px;
+        height: 28px;
+        font-size: 18px;
+    }
+}
+
+/* Mobile Landscape (576px - 767px) */
+@media (min-width: 576px) and (max-width: 767px) {
+    .toast-container {
+        right: 12px;
+        left: 12px;
         top: 80px;
     }
 
     .toast-notification {
         min-width: auto;
         max-width: 100%;
+        padding: 14px 18px;
+        min-height: 65px;
+        border-radius: 14px;
+    }
+
+    .toast-title {
+        font-size: 14px;
+        margin-bottom: 4px;
+    }
+
+    .toast-message {
+        font-size: 12px;
+    }
+
+    .toast-close {
+        width: 28px;
+        height: 28px;
+        font-size: 16px;
+        border-radius: 6px;
+    }
+}
+
+/* Mobile Portrait (480px - 575px) */
+@media (min-width: 480px) and (max-width: 575px) {
+    .toast-container {
+        right: 10px;
+        left: 10px;
+        top: 75px;
+    }
+
+    .toast-notification {
+        min-width: auto;
+        max-width: 100%;
+        padding: 14px 16px;
+        min-height: 60px;
+        border-radius: 12px;
+        gap: 12px;
+    }
+
+    .toast-title {
+        font-size: 13px;
+        margin-bottom: 3px;
+    }
+
+    .toast-message {
+        font-size: 12px;
+        line-height: 1.4;
+    }
+
+    .toast-close {
+        width: 26px;
+        height: 26px;
+        font-size: 16px;
+        border-radius: 6px;
+    }
+}
+
+/* Small Mobile (below 480px) */
+@media (max-width: 479px) {
+    .toast-container {
+        right: 8px;
+        left: 8px;
+        top: 70px;
+        gap: 10px;
+    }
+
+    .toast-notification {
+        min-width: auto;
+        max-width: 100%;
+        padding: 12px 14px;
+        min-height: 55px;
+        border-radius: 12px;
+        gap: 10px;
+        box-shadow: 0 8px 32px rgba(22, 56, 86, 0.5),
+            0 4px 10px rgba(54, 145, 191, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    }
+
+    .toast-title {
+        font-size: 13px;
+        margin-bottom: 2px;
+        letter-spacing: 0.2px;
+    }
+
+    .toast-message {
+        font-size: 11px;
+        line-height: 1.4;
+    }
+
+    .toast-close {
+        width: 24px;
+        height: 24px;
+        font-size: 14px;
+        border-radius: 6px;
+        padding: 0;
+    }
+
+    .toast-close:hover {
+        transform: scale(1.03);
+    }
+}
+
+/* Extra Small Mobile (below 360px) */
+@media (max-width: 359px) {
+    .toast-container {
+        right: 6px;
+        left: 6px;
+        top: 65px;
+    }
+
+    .toast-notification {
+        padding: 10px 12px;
+        min-height: 50px;
+        border-radius: 10px;
+        gap: 8px;
+    }
+
+    .toast-title {
+        font-size: 12px;
+    }
+
+    .toast-message {
+        font-size: 11px;
+    }
+
+    .toast-close {
+        width: 22px;
+        height: 22px;
+        font-size: 14px;
     }
 }
 

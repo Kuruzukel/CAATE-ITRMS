@@ -58,7 +58,13 @@ document.addEventListener('DOMContentLoaded', function () {
             const identifier = emailInput.value.trim();
             const password = passwordInput.value;
 
-            // Validation
+            // Validation - check each field independently
+            if (!identifier && !password) {
+                showToast('Please enter your email/username and password', 'error');
+                emailInput.focus();
+                return;
+            }
+
             if (!identifier) {
                 showToast('Please enter your email or username', 'error');
                 emailInput.focus();
@@ -102,15 +108,10 @@ document.addEventListener('DOMContentLoaded', function () {
                         showToast('Unknown user role', 'error');
                     }
                 } else {
-                    // Handle 401 Unauthorized - user doesn't exist or wrong credentials
-                    if (response.status === 401) {
-                        showToast('User does not exist or invalid credentials', 'error');
-                    } else {
-                        showToast(result.error || 'Invalid credentials', 'error');
-                    }
+                    // Handle authentication failure - user doesn't exist or wrong credentials
+                    showToast('User does not exist or invalid credentials', 'error');
                 }
             } catch (error) {
-                console.error('Login error:', error);
                 showToast('Connection error. Please check if the server is running.', 'error');
             }
         });

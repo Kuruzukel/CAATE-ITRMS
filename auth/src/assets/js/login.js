@@ -3,10 +3,8 @@
  * Handles login form functionality and password visibility toggle
  */
 
-// API Base URL
-const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-    ? 'http://localhost/CAATE-ITRMS/backend/public'
-    : '/backend/public';
+// API Base URL - works for both localhost and network access
+const API_BASE_URL = window.location.origin + '/CAATE-ITRMS/backend/public';
 
 // Toast notification function
 function showToast(message, type = 'success') {

@@ -1,7 +1,7 @@
 /* Accounts Page Script - Updated Avatar Styling */
 
-// API Configuration
-const API_BASE_URL = 'http://localhost/CAATE-ITRMS/backend/public/api/v1';
+// API Configuration - Works for both localhost and network access
+const API_BASE_URL = window.location.origin + '/CAATE-ITRMS/backend/public/api/v1';
 
 // State
 let traineesData = [];

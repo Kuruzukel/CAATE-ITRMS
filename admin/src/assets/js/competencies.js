@@ -1,9 +1,7 @@
 /* Competencies Page Functionality */
 
-// API Configuration
-window.API_BASE_URL = window.API_BASE_URL || (window.location.hostname === 'localhost'
-    ? 'http://localhost/CAATE-ITRMS/backend/public'
-    : '/backend/public');
+// API Configuration - Works for both localhost and network access
+window.API_BASE_URL = window.location.origin + '/CAATE-ITRMS/backend/public';
 var API_BASE_URL = window.API_BASE_URL;
 
 let coursesData = [];

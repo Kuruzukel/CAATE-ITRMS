@@ -1,11 +1,9 @@
 /* Competencies Page Functionality */
 
-// API Configuration
+// API Configuration - Works for both localhost and network access
 const API_BASE_URL = (typeof config !== 'undefined' && config.api)
     ? config.api.baseUrl
-    : (window.location.hostname === 'localhost'
-        ? 'http://localhost/CAATE-ITRMS/backend/public'
-        : '/backend/public');
+    : window.location.origin + '/CAATE-ITRMS/backend/public';
 
 let coursesData = [];
 

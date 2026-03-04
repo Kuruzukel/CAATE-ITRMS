@@ -3,10 +3,8 @@
  * Protects pages that require authentication
  */
 
-// API Base URL
-const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-    ? 'http://localhost/CAATE-ITRMS/backend/public'
-    : '/backend/public';
+// API Base URL - Works for both localhost and network access
+const API_BASE_URL = window.location.origin + '/CAATE-ITRMS/backend/public';
 
 // Check if user is authenticated
 async function checkAuthentication(requiredRole = null) {

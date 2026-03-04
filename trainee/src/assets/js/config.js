@@ -25,9 +25,7 @@ let config = {
     borderColor: '#eceef1'
   },
   api: {
-    // API Base URL - adjust this based on your environment
-    baseUrl: window.location.hostname === 'localhost'
-      ? 'http://localhost/CAATE-ITRMS/backend/public'
-      : '/backend/public'
+    // API Base URL - Works for both localhost and network access
+    baseUrl: window.location.origin + '/CAATE-ITRMS/backend/public'
   }
 };

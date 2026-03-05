@@ -1,11 +1,9 @@
 /* Courses specific JavaScript */
 
-// API Configuration - uses global config if available, otherwise fallback
+// API Configuration - Works for both localhost and network access
 const API_BASE_URL = (typeof config !== 'undefined' && config.api)
     ? config.api.baseUrl
-    : (window.location.hostname === 'localhost'
-        ? 'http://localhost/CAATE-ITRMS/backend/public'
-        : '/backend/public');
+    : window.location.origin + '/CAATE-ITRMS/backend/public';
 
 // Store courses data globally
 let coursesData = [];

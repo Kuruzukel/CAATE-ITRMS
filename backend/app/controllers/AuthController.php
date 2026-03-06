@@ -281,4 +281,119 @@ class AuthController {
             ]);
         }
     }
+    
+    public function changePassword() {
+        session_start();
+        
+        // Check if user is authenticated
+        if (!isset($_SESSION['user_id']) || !isset($_SESSION['user_role'])) {
+            http_response_code(401);
+            echo json_encode([
+                'success' => false,
+                'error' => 'Unauthorized. Please login first.'
+            ]);
+            return;
+        }
+        
+        $data = json_decode(file_get_contents('php://input'), true);
+        
+        if (!isset($data['currentPassword']) || !isset($data['newPassword'])) {
+            http_response_code(400);
+            echo json_encode([
+                'success' => false,
+                'error' => 'Current password and new password are required'
+            ]);
+            return;
+        }
+        
+        $userId = $_SESSION['user_id'];
+        $userRole = $_SESSION['user_role'];
+        $currentPassword = $data['currentPassword'];
+        $newPassword = $data['newPassword'];
+        
+        // Validate new password strength
+        if (strlen($newPassword) < 8) {
+            http_response_code(400);
+            echo json_encode([
+                'success' => false,
+                'error' => 'New password must be at least 8 characters long'
+            ]);
+            return;
+        }
+        
+        // Get user based on role
+        if ($userRole === 'admin') {
+            $adminModel = new Admin();
+            $user = $adminModel->findById($userId);
+            
+            if (!$user) {
+                http_response_code(404);
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'User not found'
+                ]);
+                return;
+            }
+            
+            // Verify current password
+            if ($user['password'] !== $currentPassword) {
+                http_response_code(400);
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'Current password is incorrect'
+                ]);
+                return;
+            }
+            
+            // Update password (plain text for admin)
+            $adminModel->update($userId, ['password' => $newPassword]);
+            
+        } else if ($userRole === 'trainee') {
+            $traineeModel = new Trainee();
+            $user = $traineeModel->findById($userId);
+            
+            if (!$user) {
+                http_response_code(404);
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'User not found'
+                ]);
+                return;
+            }
+            
+            // Verify current password (support both hashed and plain text)
+            $passwordMatches = false;
+            if (password_verify($currentPassword, $user['password'])) {
+                $passwordMatches = true;
+            } elseif ($user['password'] === $currentPassword) {
+                $passwordMatches = true;
+            }
+            
+            if (!$passwordMatches) {
+                http_response_code(400);
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'Current password is incorrect'
+                ]);
+                return;
+            }
+            
+            // Update password (hashed for trainee)
+            $hashedPassword = password_hash($newPassword, PASSWORD_BCRYPT);
+            $traineeModel->update($userId, ['password' => $hashedPassword]);
+            
+        } else {
+            http_response_code(400);
+            echo json_encode([
+                'success' => false,
+                'error' => 'Invalid user role'
+            ]);
+            return;
+        }
+        
+        echo json_encode([
+            'success' => true,
+            'message' => 'Password changed successfully'
+        ]);
+    }
 }

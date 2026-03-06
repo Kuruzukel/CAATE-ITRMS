@@ -1,5 +1,10 @@
 /* Change Password Functionality */
 
+// API Configuration
+const API_BASE_URL = (typeof config !== 'undefined' && config.api)
+    ? config.api.baseURL
+    : '/CAATE-ITRMS/backend/public';
+
 // Toggle password visibility
 function togglePassword(fieldId) {
     const field = document.getElementById(fieldId);
@@ -119,16 +124,19 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('currentPassword').addEventListener('input', validateForm);
 
     // Form submission
-    document.getElementById('changePasswordForm').addEventListener('submit', function (e) {
+    document.getElementById('changePasswordForm').addEventListener('submit', async function (e) {
         e.preventDefault();
 
         const currentPassword = document.getElementById('currentPassword').value;
         const newPassword = document.getElementById('newPassword').value;
         const confirmPassword = document.getElementById('confirmPassword').value;
+        const submitBtn = document.getElementById('submitBtn');
 
         // Hide previous alerts
         document.getElementById('successAlert').classList.add('d-none');
         document.getElementById('errorAlert').classList.add('d-none');
+        document.getElementById('currentPasswordError').classList.add('d-none');
+        document.getElementById('currentPassword').classList.remove('is-invalid');
 
         // Validate passwords match
         if (newPassword !== confirmPassword) {
@@ -137,17 +145,32 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        // Simulate API call (replace with actual API call)
-        setTimeout(() => {
-            // Simulate success
-            const success = true; // Change to false to test error state
+        // Disable submit button and show loading
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="bx bx-loader-alt bx-spin me-1"></i> Changing Password...';
 
-            if (success) {
+        try {
+            // Call API
+            const response = await fetch(`${API_BASE_URL}/api/v1/auth/change-password`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify({
+                    currentPassword: currentPassword,
+                    newPassword: newPassword
+                })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                // Show success message
                 document.getElementById('successAlert').classList.remove('d-none');
                 document.getElementById('changePasswordForm').reset();
                 document.getElementById('strengthBar').className = 'password-strength-bar';
                 document.getElementById('strengthText').textContent = '';
-                document.getElementById('submitBtn').disabled = true;
 
                 // Reset requirements
                 ['req-length', 'req-uppercase', 'req-lowercase', 'req-number', 'req-special'].forEach(id => {
@@ -156,15 +179,32 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 // Redirect after 2 seconds
                 setTimeout(() => {
-                    window.location.href = 'manage-profile.html';
+                    window.location.href = 'dashboard.html';
                 }, 2000);
             } else {
-                document.getElementById('errorMessage').textContent = 'Current password is incorrect.';
+                // Show error message
+                document.getElementById('errorMessage').textContent = data.error || 'Failed to change password';
                 document.getElementById('errorAlert').classList.remove('d-none');
-                document.getElementById('currentPassword').classList.add('is-invalid');
-                document.getElementById('currentPasswordError').classList.remove('d-none');
+
+                if (data.error && data.error.includes('Current password')) {
+                    document.getElementById('currentPassword').classList.add('is-invalid');
+                    document.getElementById('currentPasswordError').textContent = data.error;
+                    document.getElementById('currentPasswordError').classList.remove('d-none');
+                }
+
+                // Re-enable submit button
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="bx bx-check me-1"></i> Change Password';
             }
-        }, 500);
+        } catch (error) {
+            console.error('Error changing password:', error);
+            document.getElementById('errorMessage').textContent = 'Network error. Please try again.';
+            document.getElementById('errorAlert').classList.remove('d-none');
+
+            // Re-enable submit button
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="bx bx-check me-1"></i> Change Password';
+        }
     });
 
     // Menu toggle is handled by main.js - no need to duplicate here

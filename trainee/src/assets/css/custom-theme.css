@@ -1800,7 +1800,7 @@ body:has(.layout-menu.menu-hidden) .layout-container {
 /* Search input specific styling */
 .card input[type="search"],
 .card input[type="text"].form-control {
-    padding-left: 2.5rem !important;
+    /* padding-left: 2.5rem !important; */
 }
 
 /* Date input styling */

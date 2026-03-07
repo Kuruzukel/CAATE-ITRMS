@@ -14,19 +14,8 @@ function showToast(message, type = 'success') {
     const toast = document.createElement('div');
     toast.className = `toast-notification ${type}`;
 
-    // Set icon based on type
-    let icon = '';
-    if (type === 'success') {
-        icon = '<i class="bx bx-check-circle"></i>';
-    } else if (type === 'error') {
-        icon = '<i class="bx bx-error-circle"></i>';
-    } else if (type === 'info') {
-        icon = '<i class="bx bx-info-circle"></i>';
-    }
-
     toast.innerHTML = `
         <div class="toast-content">
-            ${icon}
             <div class="toast-message">${message}</div>
         </div>
     `;

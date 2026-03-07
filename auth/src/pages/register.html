@@ -88,13 +88,13 @@
                   <div class="mb-3">
                     <label for="username" class="form-label">Username <span class="text-danger">*</span></label>
                     <input type="text" class="form-control" id="username" name="username"
-                      placeholder="Enter your username" autocomplete="username" />
+                      placeholder="Enter your username" autocomplete="off" />
                   </div>
 
                   <div class="mb-3">
                     <label for="email" class="form-label">E-Mail Address <span class="text-danger">*</span></label>
                     <input type="email" class="form-control" id="email" name="email"
-                      placeholder="Enter your email address" autocomplete="email" />
+                      placeholder="Enter your email address" autocomplete="off" />
                   </div>
                 </div>
 
@@ -104,8 +104,8 @@
                     <label class="form-label" for="password">Password <span class="text-danger">*</span></label>
                     <div class="position-relative">
                       <input type="password" id="password" class="form-control" name="password"
-                        placeholder="Enter your password" aria-describedby="password" autocomplete="new-password"
-                        style="padding-right: 45px;" />
+                        placeholder="Enter your password" aria-describedby="password" autocomplete="off"
+                        style="padding-right: 45px;" data-form-type="other" />
                       <button class="btn btn-link position-absolute top-50 end-0 translate-middle-y" type="button"
                         id="togglePassword" style="text-decoration: none; padding: 0 12px; z-index: 10;">
                         <i class="bx bx-hide" id="togglePasswordIcon" style="font-size: 1.2rem; color: #697a8d;"></i>
@@ -118,8 +118,8 @@
                         class="text-danger">*</span></label>
                     <div class="position-relative">
                       <input type="password" id="confirmPassword" class="form-control" name="confirmPassword"
-                        placeholder="Confirm your password" aria-describedby="confirmPassword"
-                        autocomplete="new-password" style="padding-right: 45px;" />
+                        placeholder="Confirm your password" aria-describedby="confirmPassword" autocomplete="off"
+                        style="padding-right: 45px;" data-form-type="other" />
                       <button class="btn btn-link position-absolute top-50 end-0 translate-middle-y" type="button"
                         id="toggleConfirmPassword" style="text-decoration: none; padding: 0 12px; z-index: 10;">
                         <i class="bx bx-hide" id="toggleConfirmPasswordIcon"

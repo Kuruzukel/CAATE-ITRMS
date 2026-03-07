@@ -9,6 +9,11 @@
     <title>CAATE | Trainee Dashboard</title>
     <meta name="description" content="" />
 
+    <!-- Prevent page caching -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="../assets/images/CAATE_META_LOGO.png" />
 
@@ -98,12 +103,63 @@
             } catch (error) {
                 console.error('Logout error:', error);
             }
+
+            // Clear all storage
             localStorage.removeItem('authToken');
             localStorage.removeItem('userRole');
             localStorage.removeItem('userData');
+            sessionStorage.clear();
+
+            // Prevent back button access after logout
+            window.history.pushState(null, '', window.location.href);
+
             const baseUrl = window.location.origin + '/CAATE-ITRMS';
-            window.location.href = baseUrl + '/auth/src/pages/login.html';
+            window.location.replace(baseUrl + '/auth/src/pages/login.html');
         }
+
+        // Comprehensive browser cache prevention
+        (function preventBackButtonAccess() {
+            // Disable browser caching
+            window.history.pushState(null, '', window.location.href);
+            window.addEventListener('popstate', function () {
+                window.history.pushState(null, '', window.location.href);
+                const pageRole = document.body.getAttribute('data-required-role');
+                if (!checkAuthentication(pageRole)) {
+                    redirectToLogin();
+                }
+            });
+
+            // Prevent back/forward cache (bfcache)
+            window.addEventListener('pageshow', function (event) {
+                if (event.persisted) {
+                    // Page loaded from bfcache - force reload
+                    window.location.reload();
+                }
+            });
+
+            // Re-validate session when page becomes visible
+            document.addEventListener('visibilitychange', function () {
+                if (!document.hidden) {
+                    const pageRole = document.body.getAttribute('data-required-role');
+                    checkAuthentication(pageRole);
+                }
+            });
+
+            // Prevent caching on unload
+            window.addEventListener('beforeunload', function () {
+                // Mark that we're leaving the page
+                sessionStorage.setItem('navigatingAway', 'true');
+            });
+
+            // Check if we came back via back button
+            window.addEventListener('load', function () {
+                if (sessionStorage.getItem('navigatingAway') === 'true') {
+                    sessionStorage.removeItem('navigatingAway');
+                    const pageRole = document.body.getAttribute('data-required-role');
+                    checkAuthentication(pageRole);
+                }
+            });
+        })();
 
         document.addEventListener('DOMContentLoaded', function () {
             const pageRole = document.body.getAttribute('data-required-role');

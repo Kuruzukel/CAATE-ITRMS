@@ -45,6 +45,18 @@ window.closeToast = function (button) {
 
 // Form validation and submission
 document.addEventListener('DOMContentLoaded', function () {
+    // Clear any existing session data when arriving at login page
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('userRole');
+    localStorage.removeItem('userData');
+    sessionStorage.clear();
+
+    // Prevent back button to cached authenticated pages
+    window.history.pushState(null, '', window.location.href);
+    window.addEventListener('popstate', function () {
+        window.history.pushState(null, '', window.location.href);
+    });
+
     const loginForm = document.getElementById('formAuthentication');
     const emailInput = document.getElementById('email');
     const passwordInput = document.getElementById('password');

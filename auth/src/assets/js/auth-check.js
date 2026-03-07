@@ -104,3 +104,24 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 });
+
+// Prevent back button cache access
+window.addEventListener('pageshow', function (event) {
+    if (event.persisted) {
+        // Page was loaded from bfcache (back/forward cache)
+        window.location.reload();
+    }
+});
+
+// Re-validate session when page becomes visible
+document.addEventListener('visibilitychange', function () {
+    if (!document.hidden) {
+        const pageRole = document.body.getAttribute('data-required-role');
+        checkAuthentication(pageRole);
+    }
+});
+
+// Prevent caching on unload
+window.addEventListener('beforeunload', function () {
+    // This helps ensure the page isn't cached
+});

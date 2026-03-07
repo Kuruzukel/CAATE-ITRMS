@@ -252,6 +252,11 @@ class AuthController {
     }
     
     public function logout() {
+        // Set headers to prevent caching
+        header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+        header('Cache-Control: post-check=0, pre-check=0', false);
+        header('Pragma: no-cache');
+        
         session_start();
         session_destroy();
         echo json_encode([
@@ -261,6 +266,11 @@ class AuthController {
     }
     
     public function checkSession() {
+        // Set headers to prevent caching
+        header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+        header('Cache-Control: post-check=0, pre-check=0', false);
+        header('Pragma: no-cache');
+        
         session_start();
         
         if (isset($_SESSION['user_id']) && isset($_SESSION['user_role'])) {

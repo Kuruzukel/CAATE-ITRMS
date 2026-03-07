@@ -1,4 +1,3 @@
-/* CAATE Auth Login Custom Styles */
 :root {
     /* Primary Colors - Matching Admin Dashboard */
     --primary-blue: #3691bf;
@@ -41,6 +40,18 @@
     --transition-slow: 0.5s ease;
 }
 
+/* Universal scrollbar hiding - applies to all elements */
+* {
+    -ms-overflow-style: none !important;
+    scrollbar-width: none !important;
+}
+
+*::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+
 /* Body Background - Light Blue like Admin Dashboard */
 body {
     background-image: url('../../assets/images/CAATEBGEDITED.png') !important;
@@ -50,25 +61,30 @@ body {
     background-attachment: fixed !important;
     min-height: 100vh;
     position: relative;
-    overflow-x: hidden;
-    overflow-y: auto;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
     -ms-overflow-style: none !important;
     scrollbar-width: none !important;
 }
 
 body::-webkit-scrollbar {
     display: none !important;
+    width: 0 !important;
+    height: 0 !important;
 }
 
 /* Hide scrollbar for HTML element */
 html {
     -ms-overflow-style: none !important;
     scrollbar-width: none !important;
-    overflow-x: hidden;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
 }
 
 html::-webkit-scrollbar {
     display: none !important;
+    width: 0 !important;
+    height: 0 !important;
 }
 
 /* Blur the background image */
@@ -120,12 +136,30 @@ body::after {
     background-color: transparent !important;
     position: relative;
     z-index: 10;
+    -ms-overflow-style: none !important;
+    scrollbar-width: none !important;
+    overflow-x: hidden !important;
+}
+
+.container-xxl::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
 }
 
 .authentication-wrapper {
     background-color: transparent !important;
     position: relative;
     z-index: 10;
+    -ms-overflow-style: none !important;
+    scrollbar-width: none !important;
+    overflow-x: hidden !important;
+}
+
+.authentication-wrapper::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
 }
 
 /* Card Styles with Glassmorphism - Matching Admin Dashboard Navbar */

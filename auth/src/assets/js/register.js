@@ -48,56 +48,6 @@ function validatePassword(password) {
 document.addEventListener('DOMContentLoaded', function () {
     const registerForm = document.getElementById('formAuthentication');
 
-    // Password toggle for password field
-    const togglePasswordBtn = document.getElementById('togglePassword');
-    const passwordInput = document.getElementById('password');
-    const togglePasswordIcon = document.getElementById('togglePasswordIcon');
-
-    if (togglePasswordBtn && passwordInput && togglePasswordIcon) {
-        togglePasswordBtn.addEventListener('click', function (e) {
-            e.preventDefault();
-
-            const currentType = passwordInput.getAttribute('type');
-            const newType = currentType === 'password' ? 'text' : 'password';
-
-            passwordInput.setAttribute('type', newType);
-
-            // Toggle icon
-            if (newType === 'text') {
-                togglePasswordIcon.classList.remove('bx-hide');
-                togglePasswordIcon.classList.add('bx-show');
-            } else {
-                togglePasswordIcon.classList.remove('bx-show');
-                togglePasswordIcon.classList.add('bx-hide');
-            }
-        });
-    }
-
-    // Password toggle for confirm password field
-    const toggleConfirmPasswordBtn = document.getElementById('toggleConfirmPassword');
-    const confirmPasswordInput = document.getElementById('confirmPassword');
-    const toggleConfirmPasswordIcon = document.getElementById('toggleConfirmPasswordIcon');
-
-    if (toggleConfirmPasswordBtn && confirmPasswordInput && toggleConfirmPasswordIcon) {
-        toggleConfirmPasswordBtn.addEventListener('click', function (e) {
-            e.preventDefault();
-
-            const currentType = confirmPasswordInput.getAttribute('type');
-            const newType = currentType === 'password' ? 'text' : 'password';
-
-            confirmPasswordInput.setAttribute('type', newType);
-
-            // Toggle icon
-            if (newType === 'text') {
-                toggleConfirmPasswordIcon.classList.remove('bx-hide');
-                toggleConfirmPasswordIcon.classList.add('bx-show');
-            } else {
-                toggleConfirmPasswordIcon.classList.remove('bx-show');
-                toggleConfirmPasswordIcon.classList.add('bx-hide');
-            }
-        });
-    }
-
     if (registerForm) {
         registerForm.addEventListener('submit', async function (e) {
             e.preventDefault();

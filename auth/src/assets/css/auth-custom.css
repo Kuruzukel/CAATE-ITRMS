@@ -284,10 +284,28 @@ p {
     font-size: 0.95rem !important;
     backdrop-filter: blur(5px) !important;
     -webkit-backdrop-filter: blur(5px) !important;
+    font-family: "Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif !important;
 }
 
 .form-control::placeholder {
     color: rgba(255, 255, 255, 0.4) !important;
+    font-family: "Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif !important;
+    font-weight: 400 !important;
+    opacity: 1 !important;
+}
+
+/* Ensure password input placeholders match other inputs */
+input[type="password"]::placeholder {
+    color: rgba(255, 255, 255, 0.4) !important;
+    font-family: "Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif !important;
+    font-weight: 400 !important;
+    opacity: 1 !important;
+    letter-spacing: normal !important;
+}
+
+/* Ensure password input itself uses the same font */
+input[type="password"] {
+    font-family: "Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif !important;
 }
 
 .form-control:focus {

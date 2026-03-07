@@ -82,15 +82,6 @@ document.addEventListener('DOMContentLoaded', function () {
     // Load saved credentials if "Remember Me" was checked
     loadSavedCredentials();
 
-    // Show a helpful notification about Remember Me feature on first visit
-    const hasSeenRememberMeNotification = sessionStorage.getItem('seenRememberMeNotification');
-    if (!hasSeenRememberMeNotification && rememberMeCheckbox) {
-        setTimeout(() => {
-            showToast('Tip: Check "Remember Me" to save your login credentials for next time', 'info');
-            sessionStorage.setItem('seenRememberMeNotification', 'true');
-        }, 1000);
-    }
-
     if (loginForm) {
         loginForm.addEventListener('submit', async function (e) {
             e.preventDefault();

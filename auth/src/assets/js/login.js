@@ -14,21 +14,33 @@ function showToast(message, type = 'success') {
     const toast = document.createElement('div');
     toast.className = `toast-notification ${type}`;
 
+    // Set icon based on type
+    let icon = '';
+    if (type === 'success') {
+        icon = '<i class="bx bx-check-circle"></i>';
+    } else if (type === 'error') {
+        icon = '<i class="bx bx-error-circle"></i>';
+    } else if (type === 'info') {
+        icon = '<i class="bx bx-info-circle"></i>';
+    }
+
     toast.innerHTML = `
         <div class="toast-content">
+            ${icon}
             <div class="toast-message">${message}</div>
         </div>
     `;
 
     container.appendChild(toast);
 
-    // Auto remove after 3 seconds
+    // Auto remove after 5 seconds for info, 3 seconds for others
+    const duration = type === 'info' ? 5000 : 3000;
     setTimeout(() => {
         toast.classList.add('hiding');
         setTimeout(() => {
             toast.remove();
         }, 200);
-    }, 3000);
+    }, duration);
 }
 
 
@@ -62,8 +74,22 @@ document.addEventListener('DOMContentLoaded', function () {
     const passwordInput = document.getElementById('password');
     const rememberMeCheckbox = document.getElementById('remember-me');
 
+    // Remove any required attribute from remember-me checkbox
+    if (rememberMeCheckbox) {
+        rememberMeCheckbox.removeAttribute('required');
+    }
+
     // Load saved credentials if "Remember Me" was checked
     loadSavedCredentials();
+
+    // Show a helpful notification about Remember Me feature on first visit
+    const hasSeenRememberMeNotification = sessionStorage.getItem('seenRememberMeNotification');
+    if (!hasSeenRememberMeNotification && rememberMeCheckbox) {
+        setTimeout(() => {
+            showToast('Tip: Check "Remember Me" to save your login credentials for next time', 'info');
+            sessionStorage.setItem('seenRememberMeNotification', 'true');
+        }, 1000);
+    }
 
     if (loginForm) {
         loginForm.addEventListener('submit', async function (e) {

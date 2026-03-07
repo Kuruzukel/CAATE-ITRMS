@@ -52,12 +52,23 @@ body {
     position: relative;
     overflow-x: hidden;
     overflow-y: auto;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+    -ms-overflow-style: none !important;
+    scrollbar-width: none !important;
 }
 
 body::-webkit-scrollbar {
-    display: none;
+    display: none !important;
+}
+
+/* Hide scrollbar for HTML element */
+html {
+    -ms-overflow-style: none !important;
+    scrollbar-width: none !important;
+    overflow-x: hidden;
+}
+
+html::-webkit-scrollbar {
+    display: none !important;
 }
 
 /* Blur the background image */

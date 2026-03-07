@@ -32,18 +32,6 @@ function showToast(message, type = 'success') {
     }, duration);
 }
 
-// Password validation function
-function validatePassword(password) {
-    // At least 8 characters, 1 uppercase, 1 lowercase, 1 number, 1 special character
-    const minLength = password.length >= 8;
-    const hasUpperCase = /[A-Z]/.test(password);
-    const hasLowerCase = /[a-z]/.test(password);
-    const hasNumber = /[0-9]/.test(password);
-    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
-
-    return minLength && hasUpperCase && hasLowerCase && hasNumber && hasSpecialChar;
-}
-
 // Form validation and submission
 document.addEventListener('DOMContentLoaded', function () {
     const registerForm = document.getElementById('formAuthentication');
@@ -80,13 +68,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (!password) {
                 showToast('Please enter a password', 'error');
-                document.getElementById('password').focus();
-                return false;
-            }
-
-            // Validate password strength
-            if (!validatePassword(password)) {
-                showToast('Password must be at least 8 characters long and include an uppercase letter, a lowercase letter, a number, and a special character.', 'error');
                 document.getElementById('password').focus();
                 return false;
             }

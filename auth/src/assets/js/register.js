@@ -106,7 +106,6 @@ document.addEventListener('DOMContentLoaded', function () {
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
             const confirmPassword = document.getElementById('confirmPassword').value;
-            const termsCheckbox = document.getElementById('terms-conditions');
 
             // Validate all fields are filled
             if (!username) {
@@ -152,12 +151,6 @@ document.addEventListener('DOMContentLoaded', function () {
             if (password !== confirmPassword) {
                 showToast('Passwords do not match. Please try again.', 'error');
                 document.getElementById('confirmPassword').focus();
-                return false;
-            }
-
-            // Check if terms are accepted
-            if (!termsCheckbox.checked) {
-                showToast('Please agree to the privacy policy and terms to continue.', 'error');
                 return false;
             }
 

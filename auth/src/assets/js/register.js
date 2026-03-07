@@ -9,42 +9,38 @@ const API_BASE_URL = window.location.origin + '/CAATE-ITRMS/backend/public';
 // Toast notification function
 function showToast(message, type = 'success') {
     const container = document.getElementById('toastContainer');
-    if (!container) {
-        // Create container if it doesn't exist
-        const newContainer = document.createElement('div');
-        newContainer.id = 'toastContainer';
-        newContainer.style.cssText = 'position: fixed; top: 20px; right: 20px; z-index: 9999;';
-        document.body.appendChild(newContainer);
-    }
+    if (!container) return;
 
-    const toastContainer = document.getElementById('toastContainer');
     const toast = document.createElement('div');
     toast.className = `toast-notification ${type}`;
-    toast.style.cssText = `
-        background: ${type === 'success' ? '#28a745' : type === 'error' ? '#dc3545' : '#ffc107'};
-        color: white;
-        padding: 15px 20px;
-        margin-bottom: 10px;
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        min-width: 300px;
-        animation: slideIn 0.3s ease-out;
-    `;
+
+    // Set icon based on type
+    let icon = '';
+    if (type === 'success') {
+        icon = '<i class="bx bx-check-circle"></i>';
+    } else if (type === 'error') {
+        icon = '<i class="bx bx-error-circle"></i>';
+    } else if (type === 'info') {
+        icon = '<i class="bx bx-info-circle"></i>';
+    }
 
     toast.innerHTML = `
-        <div style="flex: 1;">${message}</div>
-        <button onclick="this.parentElement.remove()" style="background: none; border: none; color: white; font-size: 20px; cursor: pointer; padding: 0; line-height: 1;">&times;</button>
+        <div class="toast-content">
+            ${icon}
+            <div class="toast-message">${message}</div>
+        </div>
     `;
 
-    toastContainer.appendChild(toast);
+    container.appendChild(toast);
 
-    // Auto remove after 5 seconds
+    // Auto remove after 5 seconds for info, 3 seconds for others
+    const duration = type === 'info' ? 5000 : 3000;
     setTimeout(() => {
-        toast.remove();
-    }, 5000);
+        toast.classList.add('hiding');
+        setTimeout(() => {
+            toast.remove();
+        }, 200);
+    }, duration);
 }
 
 // Password validation function
@@ -123,15 +119,50 @@ document.addEventListener('DOMContentLoaded', function () {
             const confirmPassword = document.getElementById('confirmPassword').value;
             const termsCheckbox = document.getElementById('terms-conditions');
 
-            // Check if passwords match
-            if (password !== confirmPassword) {
-                showToast('Passwords do not match. Please try again.', 'error');
+            // Validate all fields are filled
+            if (!username) {
+                showToast('Please enter a username', 'error');
+                document.getElementById('username').focus();
+                return false;
+            }
+
+            if (!email) {
+                showToast('Please enter your email address', 'error');
+                document.getElementById('email').focus();
+                return false;
+            }
+
+            // Validate email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showToast('Please enter a valid email address', 'error');
+                document.getElementById('email').focus();
+                return false;
+            }
+
+            if (!password) {
+                showToast('Please enter a password', 'error');
+                document.getElementById('password').focus();
                 return false;
             }
 
             // Validate password strength
             if (!validatePassword(password)) {
                 showToast('Password must be at least 8 characters long and include an uppercase letter, a lowercase letter, a number, and a special character.', 'error');
+                document.getElementById('password').focus();
+                return false;
+            }
+
+            if (!confirmPassword) {
+                showToast('Please confirm your password', 'error');
+                document.getElementById('confirmPassword').focus();
+                return false;
+            }
+
+            // Check if passwords match
+            if (password !== confirmPassword) {
+                showToast('Passwords do not match. Please try again.', 'error');
+                document.getElementById('confirmPassword').focus();
                 return false;
             }
 
@@ -172,17 +203,13 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
 
-        // Real-time password match validation
+        // Remove real-time password match validation that uses setCustomValidity
         const confirmPasswordInput = document.getElementById('confirmPassword');
-        confirmPasswordInput.addEventListener('input', function () {
-            const password = document.getElementById('password').value;
-            const confirmPassword = this.value;
-
-            if (confirmPassword && password !== confirmPassword) {
-                this.setCustomValidity('Passwords do not match');
-            } else {
+        if (confirmPasswordInput) {
+            confirmPasswordInput.addEventListener('input', function () {
+                // Clear any custom validity
                 this.setCustomValidity('');
-            }
-        });
+            });
+        }
     }
 });

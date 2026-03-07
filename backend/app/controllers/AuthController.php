@@ -46,9 +46,13 @@ class AuthController {
                 'trainee_id' => $traineeId,
                 'first_name' => $firstName,
                 'last_name' => $lastName,
+                'middle_name' => '',
+                'second_name' => '',
+                'suffix' => '',
                 'email' => $data['email'],
                 'phone' => $data['phone'] ?? '',
-                'password' => password_hash($data['password'], PASSWORD_BCRYPT),
+                'username' => $data['username'] ?? $data['name'],
+                'password' => $data['password'],  // Store password as plain text
                 'created_at' => new MongoDB\BSON\UTCDateTime(),
                 'updated_at' => new MongoDB\BSON\UTCDateTime()
             ];

@@ -88,9 +88,20 @@ function getCurrentUser() {
 async function logout() {
     const token = localStorage.getItem('authToken');
 
-    // Clear all storage first
+    // Clear all storage first (but preserve "Remember Me" credentials)
+    const rememberedUser = localStorage.getItem('rememberedUser');
+    const rememberedPass = localStorage.getItem('rememberedPass');
+    const rememberMe = localStorage.getItem('rememberMe');
+
     localStorage.clear();
     sessionStorage.clear();
+
+    // Restore "Remember Me" credentials if they existed
+    if (rememberMe === 'true' && rememberedUser && rememberedPass) {
+        localStorage.setItem('rememberedUser', rememberedUser);
+        localStorage.setItem('rememberedPass', rememberedPass);
+        localStorage.setItem('rememberMe', rememberMe);
+    }
 
     try {
         await fetch(`${API_BASE_URL}/api/v1/auth/logout`, {

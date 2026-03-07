@@ -60,6 +60,10 @@ document.addEventListener('DOMContentLoaded', function () {
     const loginForm = document.getElementById('formAuthentication');
     const emailInput = document.getElementById('email');
     const passwordInput = document.getElementById('password');
+    const rememberMeCheckbox = document.getElementById('remember-me');
+
+    // Load saved credentials if "Remember Me" was checked
+    loadSavedCredentials();
 
     if (loginForm) {
         loginForm.addEventListener('submit', async function (e) {
@@ -67,6 +71,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const identifier = emailInput.value.trim();
             const password = passwordInput.value;
+            const rememberMe = rememberMeCheckbox ? rememberMeCheckbox.checked : false;
 
             // Validation - check each field independently
             if (!identifier && !password) {
@@ -102,6 +107,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 const result = await response.json();
 
                 if (result.success) {
+                    // Handle "Remember Me" functionality
+                    if (rememberMe) {
+                        saveCredentials(identifier, password);
+                    } else {
+                        clearSavedCredentials();
+                    }
+
                     // Store authentication data
                     localStorage.setItem('authToken', result.token);
                     localStorage.setItem('userRole', result.role);
@@ -127,3 +139,61 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
+
+/**
+ * Save credentials to localStorage (encrypted with base64)
+ */
+function saveCredentials(identifier, password) {
+    try {
+        // Simple encoding (base64) - NOT secure encryption, just obfuscation
+        const encodedIdentifier = btoa(identifier);
+        const encodedPassword = btoa(password);
+
+        localStorage.setItem('rememberedUser', encodedIdentifier);
+        localStorage.setItem('rememberedPass', encodedPassword);
+        localStorage.setItem('rememberMe', 'true');
+    } catch (error) {
+        console.error('Error saving credentials:', error);
+    }
+}
+
+/**
+ * Load saved credentials from localStorage
+ */
+function loadSavedCredentials() {
+    try {
+        const rememberMe = localStorage.getItem('rememberMe');
+
+        if (rememberMe === 'true') {
+            const encodedIdentifier = localStorage.getItem('rememberedUser');
+            const encodedPassword = localStorage.getItem('rememberedPass');
+
+            if (encodedIdentifier && encodedPassword) {
+                // Decode the credentials
+                const identifier = atob(encodedIdentifier);
+                const password = atob(encodedPassword);
+
+                // Fill in the form
+                const emailInput = document.getElementById('email');
+                const passwordInput = document.getElementById('password');
+                const rememberMeCheckbox = document.getElementById('remember-me');
+
+                if (emailInput) emailInput.value = identifier;
+                if (passwordInput) passwordInput.value = password;
+                if (rememberMeCheckbox) rememberMeCheckbox.checked = true;
+            }
+        }
+    } catch (error) {
+        console.error('Error loading credentials:', error);
+        clearSavedCredentials();
+    }
+}
+
+/**
+ * Clear saved credentials from localStorage
+ */
+function clearSavedCredentials() {
+    localStorage.removeItem('rememberedUser');
+    localStorage.removeItem('rememberedPass');
+    localStorage.removeItem('rememberMe');
+}

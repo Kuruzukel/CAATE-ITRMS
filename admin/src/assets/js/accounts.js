@@ -316,7 +316,8 @@ function createTraineeRow(trainee, index) {
     }
 
     const initials = `${trainee.first_name.charAt(0)}${trainee.last_name.charAt(0)}`;
-    const displayId = trainee.trainee_id || String(index).padStart(2, '0');
+    // Display trainee ID or show format example
+    const displayId = trainee.trainee_id || `TRN-${new Date().getFullYear()}-${String(index + 1).padStart(3, '0')}`;
 
     tr.innerHTML = `
         <td><strong>${displayId}</strong></td>
@@ -1327,6 +1328,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         uploadPreviewBody.innerHTML = '';
 
+        // Get current year for trainee ID format
+        const currentYear = new Date().getFullYear();
+
         uploadedData.forEach((trainee, index) => {
             const fullName = [
                 trainee.first_name,
@@ -1336,9 +1340,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 trainee.suffix
             ].filter(Boolean).join(' ');
 
+            // Generate preview trainee ID in format TRN-YYYY-XXX
+            const previewId = trainee.trainee_id || `TRN-${currentYear}-${String(index + 1).padStart(3, '0')}`;
+
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td>${trainee.trainee_id || 'Auto-generated'}</td>
+                <td>${previewId}</td>
                 <td>${fullName || 'N/A'}</td>
                 <td>${trainee.email || 'N/A'}</td>
                 <td>${trainee.phone || 'N/A'}</td>

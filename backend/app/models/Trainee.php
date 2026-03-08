@@ -92,6 +92,11 @@ class Trainee {
     
     public function create($data) {
         try {
+            // Generate trainee_id if not provided or empty
+            if (empty($data['trainee_id'])) {
+                $data['trainee_id'] = $this->generateTraineeId();
+            }
+            
             // Don't hash password - store as plain text
             // Password is already in plain text from the form
             
@@ -105,6 +110,31 @@ class Trainee {
             error_log("Error creating trainee: " . $e->getMessage());
             throw $e;
         }
+    }
+    
+    private function generateTraineeId() {
+        // Get current year
+        $year = date('Y');
+        
+        // Find the last trainee ID for this year
+        $lastTrainee = $this->collection->findOne(
+            ['trainee_id' => ['$regex' => "^TRN-$year-"]],
+            ['sort' => ['trainee_id' => -1]]
+        );
+        
+        if ($lastTrainee && isset($lastTrainee['trainee_id'])) {
+            // Extract the number from the last ID (e.g., "TRN-2026-005" -> 5)
+            $lastId = $lastTrainee['trainee_id'];
+            $parts = explode('-', $lastId);
+            $lastNumber = isset($parts[2]) ? (int)$parts[2] : 0;
+            $newNumber = $lastNumber + 1;
+        } else {
+            // First trainee for this year
+            $newNumber = 1;
+        }
+        
+        // Format: TRN-YYYY-NNN (e.g., TRN-2026-001)
+        return sprintf('TRN-%d-%03d', $year, $newNumber);
     }
     
     public function update($id, $data) {

@@ -363,10 +363,29 @@
                                 <div class="card">
                                     <div class="card-header d-flex justify-content-between align-items-center">
                                         <h5 class="mb-0">All Trainees</h5>
-                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                            data-bs-target="#addTraineeModal">
-                                            <i class="bx bx-plus"></i> Add New Trainee
-                                        </button>
+                                        <div class="d-flex gap-2">
+                                            <button type="button" class="btn btn-primary" id="bulkUploadBtn">
+                                                <i class="bx bx-upload"></i> Bulk Upload
+                                            </button>
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-primary dropdown-toggle"
+                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="bx bx-download"></i> Export
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li><a class="dropdown-item" href="javascript:void(0);"
+                                                            id="exportCsvBtn"><i class="bx bx-file me-2"></i>Export as
+                                                            CSV</a></li>
+                                                    <li><a class="dropdown-item" href="javascript:void(0);"
+                                                            id="exportJsonBtn"><i class="bx bx-code-alt me-2"></i>Export
+                                                            as JSON</a></li>
+                                                </ul>
+                                            </div>
+                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                                data-bs-target="#addTraineeModal">
+                                                <i class="bx bx-plus"></i> Add New Trainee
+                                            </button>
+                                        </div>
                                     </div>
                                     <div class="card-body">
                                         <!-- Filter Panel -->
@@ -817,6 +836,55 @@
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
                     <button type="button" class="btn btn-danger" onclick="confirmDeleteTrainee()">
                         <i class="bx bx-trash me-1"></i> Delete
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bulk Upload Modal -->
+    <div class="modal fade" id="bulkUploadModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Bulk Upload Trainees</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Upload File (CSV or JSON)</label>
+                        <input type="file" class="form-control" id="bulkUploadFile" accept=".csv,.json">
+                        <div class="form-text">Supported formats: CSV, JSON</div>
+                    </div>
+                    <div class="alert alert-info">
+                        <i class="bx bx-info-circle me-2"></i>
+                        <strong>CSV Format:</strong> trainee_id, username, first_name, second_name, middle_name,
+                        last_name, suffix, email, phone, password<br>
+                        <strong>JSON Format:</strong> Array of objects with the same fields
+                    </div>
+                    <div id="uploadPreview" class="mt-3" style="display: none;">
+                        <h6>Preview:</h6>
+                        <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
+                            <table class="table table-sm table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Trainee ID</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="uploadPreviewBody">
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="text-muted mt-2">Total records: <strong id="uploadRecordCount">0</strong></p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="confirmBulkUpload" disabled>
+                        <i class="bx bx-upload"></i> Upload Trainees
                     </button>
                 </div>
             </div>

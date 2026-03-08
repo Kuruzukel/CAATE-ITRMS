@@ -1217,3 +1217,253 @@ function resetFilters() {
 
     renderTrainees(traineesData);
 }
+
+// ==================== BULK UPLOAD & EXPORT FUNCTIONALITY ====================
+
+// Bulk Upload Button Event Listener
+document.addEventListener('DOMContentLoaded', function () {
+    const bulkUploadBtn = document.getElementById('bulkUploadBtn');
+    const bulkUploadModal = new bootstrap.Modal(document.getElementById('bulkUploadModal'));
+    const bulkUploadFile = document.getElementById('bulkUploadFile');
+    const confirmBulkUpload = document.getElementById('confirmBulkUpload');
+    const uploadPreview = document.getElementById('uploadPreview');
+    const uploadPreviewBody = document.getElementById('uploadPreviewBody');
+    const uploadRecordCount = document.getElementById('uploadRecordCount');
+
+    let uploadedData = [];
+
+    // Open bulk upload modal
+    if (bulkUploadBtn) {
+        bulkUploadBtn.addEventListener('click', function () {
+            bulkUploadModal.show();
+        });
+    }
+
+    // Handle file selection
+    if (bulkUploadFile) {
+        bulkUploadFile.addEventListener('change', function (e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const fileExtension = file.name.split('.').pop().toLowerCase();
+
+            if (fileExtension === 'csv') {
+                parseCSVFile(file);
+            } else if (fileExtension === 'json') {
+                parseJSONFile(file);
+            } else {
+                showToast('Invalid file format. Please upload CSV or JSON file.', 'error');
+            }
+        });
+    }
+
+    // Parse CSV file
+    function parseCSVFile(file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            try {
+                const text = e.target.result;
+                const lines = text.split('\n').filter(line => line.trim());
+
+                if (lines.length < 2) {
+                    showToast('CSV file is empty or invalid.', 'error');
+                    return;
+                }
+
+                // Parse header
+                const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
+
+                // Parse data rows
+                uploadedData = [];
+                for (let i = 1; i < lines.length; i++) {
+                    const values = lines[i].split(',').map(v => v.trim());
+                    const trainee = {};
+
+                    headers.forEach((header, index) => {
+                        trainee[header] = values[index] || '';
+                    });
+
+                    uploadedData.push(trainee);
+                }
+
+                displayUploadPreview();
+            } catch (error) {
+                console.error('Error parsing CSV:', error);
+                showToast('Error parsing CSV file.', 'error');
+            }
+        };
+        reader.readAsText(file);
+    }
+
+    // Parse JSON file
+    function parseJSONFile(file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            try {
+                const data = JSON.parse(e.target.result);
+
+                if (!Array.isArray(data)) {
+                    showToast('JSON file must contain an array of trainee objects.', 'error');
+                    return;
+                }
+
+                uploadedData = data;
+                displayUploadPreview();
+            } catch (error) {
+                console.error('Error parsing JSON:', error);
+                showToast('Error parsing JSON file.', 'error');
+            }
+        };
+        reader.readAsText(file);
+    }
+
+    // Display upload preview
+    function displayUploadPreview() {
+        if (uploadedData.length === 0) {
+            uploadPreview.style.display = 'none';
+            confirmBulkUpload.disabled = true;
+            return;
+        }
+
+        uploadPreviewBody.innerHTML = '';
+
+        uploadedData.forEach((trainee, index) => {
+            const fullName = [
+                trainee.first_name,
+                trainee.second_name,
+                trainee.middle_name,
+                trainee.last_name,
+                trainee.suffix
+            ].filter(Boolean).join(' ');
+
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${trainee.trainee_id || 'Auto-generated'}</td>
+                <td>${fullName || 'N/A'}</td>
+                <td>${trainee.email || 'N/A'}</td>
+                <td>${trainee.phone || 'N/A'}</td>
+            `;
+            uploadPreviewBody.appendChild(row);
+        });
+
+        uploadRecordCount.textContent = uploadedData.length;
+        uploadPreview.style.display = 'block';
+        confirmBulkUpload.disabled = false;
+    }
+
+    // Confirm bulk upload
+    if (confirmBulkUpload) {
+        confirmBulkUpload.addEventListener('click', async function () {
+            if (uploadedData.length === 0) return;
+
+            confirmBulkUpload.disabled = true;
+            confirmBulkUpload.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Uploading...';
+
+            try {
+                let successCount = 0;
+                let errorCount = 0;
+
+                for (const trainee of uploadedData) {
+                    try {
+                        const response = await fetch(`${API_BASE_URL}/trainees`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(trainee)
+                        });
+
+                        if (response.ok) {
+                            successCount++;
+                        } else {
+                            errorCount++;
+                        }
+                    } catch (error) {
+                        errorCount++;
+                    }
+                }
+
+                if (successCount > 0) {
+                    showToast(`Successfully uploaded ${successCount} trainee(s).`, 'success');
+                    loadTrainees();
+                    loadStatistics();
+                }
+
+                if (errorCount > 0) {
+                    showToast(`Failed to upload ${errorCount} trainee(s).`, 'warning');
+                }
+
+                bulkUploadModal.hide();
+                resetBulkUploadForm();
+            } catch (error) {
+                console.error('Error during bulk upload:', error);
+                showToast('Error during bulk upload.', 'error');
+            } finally {
+                confirmBulkUpload.disabled = false;
+                confirmBulkUpload.innerHTML = '<i class="bx bx-upload"></i> Upload Trainees';
+            }
+        });
+    }
+
+    // Reset bulk upload form
+    function resetBulkUploadForm() {
+        bulkUploadFile.value = '';
+        uploadedData = [];
+        uploadPreview.style.display = 'none';
+        confirmBulkUpload.disabled = true;
+    }
+
+    // Export to CSV
+    const exportCsvBtn = document.getElementById('exportCsvBtn');
+    if (exportCsvBtn) {
+        exportCsvBtn.addEventListener('click', function () {
+            if (traineesData.length === 0) {
+                showToast('No data to export.', 'warning');
+                return;
+            }
+
+            const headers = ['trainee_id', 'username', 'first_name', 'second_name', 'middle_name', 'last_name', 'suffix', 'email', 'phone'];
+            const csvContent = [
+                headers.join(','),
+                ...traineesData.map(trainee =>
+                    headers.map(header => {
+                        const value = trainee[header] || '';
+                        // Escape commas and quotes in values
+                        return value.toString().includes(',') ? `"${value}"` : value;
+                    }).join(',')
+                )
+            ].join('\n');
+
+            downloadFile(csvContent, 'trainees_export.csv', 'text/csv');
+            showToast('CSV file exported successfully.', 'success');
+        });
+    }
+
+    // Export to JSON
+    const exportJsonBtn = document.getElementById('exportJsonBtn');
+    if (exportJsonBtn) {
+        exportJsonBtn.addEventListener('click', function () {
+            if (traineesData.length === 0) {
+                showToast('No data to export.', 'warning');
+                return;
+            }
+
+            const jsonContent = JSON.stringify(traineesData, null, 2);
+            downloadFile(jsonContent, 'trainees_export.json', 'application/json');
+            showToast('JSON file exported successfully.', 'success');
+        });
+    }
+
+    // Download file helper function
+    function downloadFile(content, filename, mimeType) {
+        const blob = new Blob([content], { type: mimeType });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+    }
+});

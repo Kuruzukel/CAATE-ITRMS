@@ -697,3 +697,63 @@ span.badge.bg-success {
 .course-item:hover {
     transform: translateX(4px);
 }
+
+/* Bulk Upload & Export Button Styling */
+.card-header .d-flex.gap-2 {
+    gap: 0.5rem !important;
+}
+
+.card-header .btn-group .dropdown-menu {
+    min-width: 180px;
+}
+
+.card-header .btn-group .dropdown-item {
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.card-header .btn-group .dropdown-item i {
+    font-size: 1.1rem;
+}
+
+.card-header .btn-group .dropdown-item:hover {
+    background-color: rgba(54, 145, 191, 0.1);
+}
+
+/* Bulk Upload Modal Styling */
+#bulkUploadModal .alert-info {
+    background-color: rgba(54, 145, 191, 0.1);
+    border-color: rgba(54, 145, 191, 0.3);
+    color: #b8c5d6;
+}
+
+#uploadPreview .table {
+    font-size: 0.875rem;
+}
+
+#uploadPreview .table th {
+    background-color: #1a2332;
+    color: #b8c5d6;
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+#uploadPreview .table td {
+    color: #b8c5d6;
+}
+
+/* Responsive button layout for mobile */
+@media (max-width: 768px) {
+    .card-header .d-flex.gap-2 {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .card-header .d-flex.gap-2 .btn,
+    .card-header .d-flex.gap-2 .btn-group {
+        width: 100%;
+    }
+}

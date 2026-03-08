@@ -1416,41 +1416,104 @@ document.addEventListener('DOMContentLoaded', function () {
     // Export to CSV
     const exportCsvBtn = document.getElementById('exportCsvBtn');
     if (exportCsvBtn) {
-        exportCsvBtn.addEventListener('click', function () {
-            if (traineesData.length === 0) {
-                showToast('No data to export.', 'warning');
-                return;
+        exportCsvBtn.addEventListener('click', async function () {
+            // Disable button and show loading state
+            exportCsvBtn.disabled = true;
+            const originalText = exportCsvBtn.innerHTML;
+            exportCsvBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Fetching data...';
+
+            try {
+                // Fetch all trainees from API
+                const response = await fetch(`${API_BASE_URL}/trainees`);
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch trainees data');
+                }
+
+                const data = await response.json();
+                const allTrainees = data.data || [];
+
+                if (allTrainees.length === 0) {
+                    showToast('No data to export.', 'warning');
+                    return;
+                }
+
+                // Prepare CSV content
+                const headers = ['trainee_id', 'username', 'first_name', 'second_name', 'middle_name', 'last_name', 'suffix', 'email', 'phone'];
+                const csvContent = [
+                    headers.join(','),
+                    ...allTrainees.map(trainee =>
+                        headers.map(header => {
+                            const value = trainee[header] || '';
+                            // Escape commas and quotes in values
+                            const stringValue = value.toString();
+                            if (stringValue.includes(',') || stringValue.includes('"') || stringValue.includes('\n')) {
+                                return `"${stringValue.replace(/"/g, '""')}"`;
+                            }
+                            return stringValue;
+                        }).join(',')
+                    )
+                ].join('\n');
+
+                // Generate filename with timestamp
+                const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
+                const filename = `trainees_export_${timestamp}.csv`;
+
+                downloadFile(csvContent, filename, 'text/csv');
+                showToast(`Successfully exported ${allTrainees.length} trainee(s) to CSV.`, 'success');
+            } catch (error) {
+                console.error('Error exporting CSV:', error);
+                showToast('Error exporting data. Please try again.', 'error');
+            } finally {
+                // Re-enable button
+                exportCsvBtn.disabled = false;
+                exportCsvBtn.innerHTML = originalText;
             }
-
-            const headers = ['trainee_id', 'username', 'first_name', 'second_name', 'middle_name', 'last_name', 'suffix', 'email', 'phone'];
-            const csvContent = [
-                headers.join(','),
-                ...traineesData.map(trainee =>
-                    headers.map(header => {
-                        const value = trainee[header] || '';
-                        // Escape commas and quotes in values
-                        return value.toString().includes(',') ? `"${value}"` : value;
-                    }).join(',')
-                )
-            ].join('\n');
-
-            downloadFile(csvContent, 'trainees_export.csv', 'text/csv');
-            showToast('CSV file exported successfully.', 'success');
         });
     }
 
     // Export to JSON
     const exportJsonBtn = document.getElementById('exportJsonBtn');
     if (exportJsonBtn) {
-        exportJsonBtn.addEventListener('click', function () {
-            if (traineesData.length === 0) {
-                showToast('No data to export.', 'warning');
-                return;
-            }
+        exportJsonBtn.addEventListener('click', async function () {
+            // Disable button and show loading state
+            exportJsonBtn.disabled = true;
+            const originalText = exportJsonBtn.innerHTML;
+            exportJsonBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Fetching data...';
 
-            const jsonContent = JSON.stringify(traineesData, null, 2);
-            downloadFile(jsonContent, 'trainees_export.json', 'application/json');
-            showToast('JSON file exported successfully.', 'success');
+            try {
+                // Fetch all trainees from API
+                const response = await fetch(`${API_BASE_URL}/trainees`);
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch trainees data');
+                }
+
+                const data = await response.json();
+                const allTrainees = data.data || [];
+
+                if (allTrainees.length === 0) {
+                    showToast('No data to export.', 'warning');
+                    return;
+                }
+
+                // Prepare JSON content with proper formatting
+                const jsonContent = JSON.stringify(allTrainees, null, 2);
+
+                // Generate filename with timestamp
+                const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
+                const filename = `trainees_export_${timestamp}.json`;
+
+                downloadFile(jsonContent, filename, 'application/json');
+                showToast(`Successfully exported ${allTrainees.length} trainee(s) to JSON.`, 'success');
+            } catch (error) {
+                console.error('Error exporting JSON:', error);
+                showToast('Error exporting data. Please try again.', 'error');
+            } finally {
+                // Re-enable button
+                exportJsonBtn.disabled = false;
+                exportJsonBtn.innerHTML = originalText;
+            }
         });
     }
 

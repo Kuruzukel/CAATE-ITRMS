@@ -232,21 +232,16 @@ function showEmptyState(message) {
 // Load statistics from API
 async function loadStatistics() {
     try {
-        console.log('Fetching statistics from:', `${API_BASE_URL}/trainees/statistics`);
         const response = await fetch(`${API_BASE_URL}/trainees/statistics`);
 
         if (!response.ok) {
-            console.error('Statistics API error:', response.status, response.statusText);
             return;
         }
 
         const result = await response.json();
-        console.log('Statistics response:', result);
 
         if (result.success) {
             updateStatistics(result.data);
-        } else {
-            console.error('Statistics API returned success: false', result);
         }
     } catch (error) {
         console.error('Error loading statistics:', error);
@@ -313,19 +308,22 @@ function createTraineeRow(trainee, index) {
     const tr = document.createElement('tr');
 
     // Build full name with all name parts
-    let fullName = trainee.first_name;
+    let fullName = trainee.first_name || '';
     if (trainee.second_name) {
         fullName += ' ' + trainee.second_name;
     }
     if (trainee.middle_name) {
         fullName += ' ' + trainee.middle_name;
     }
-    fullName += ' ' + trainee.last_name;
+    fullName += ' ' + (trainee.last_name || '');
     if (trainee.suffix) {
         fullName += ' ' + trainee.suffix;
     }
 
-    const initials = `${trainee.first_name.charAt(0)}${trainee.last_name.charAt(0)}`;
+    // Safely get initials with fallback
+    const firstInitial = (trainee.first_name && trainee.first_name.charAt(0)) || '?';
+    const lastInitial = (trainee.last_name && trainee.last_name.charAt(0)) || '?';
+    const initials = `${firstInitial}${lastInitial}`;
     // Display trainee ID or show format example
     const displayId = trainee.trainee_id || `TRN-${new Date().getFullYear()}-${String(index + 1).padStart(3, '0')}`;
 
@@ -382,16 +380,11 @@ function getAvatarColor(index) {
 
 // Update statistics
 function updateStatistics(stats) {
-    console.log('Updating statistics with data:', stats);
-
     // Update Total Trainees
     const totalElement = document.getElementById('totalTraineesCount');
     if (totalElement) {
         const totalValue = stats.total || 0;
         totalElement.textContent = totalValue.toLocaleString();
-        console.log('Total Trainees updated to:', totalValue);
-    } else {
-        console.error('Element totalTraineesCount not found');
     }
 
     // Update Total Enrollment
@@ -399,9 +392,6 @@ function updateStatistics(stats) {
     if (enrollmentElement) {
         const enrollmentValue = stats.totalEnrollment || 0;
         enrollmentElement.textContent = enrollmentValue.toLocaleString();
-        console.log('Total Enrollment updated to:', enrollmentValue);
-    } else {
-        console.error('Element totalEnrollmentCount not found');
     }
 
     // Update Total Application
@@ -409,9 +399,6 @@ function updateStatistics(stats) {
     if (applicationElement) {
         const applicationValue = stats.totalApplication || 0;
         applicationElement.textContent = applicationValue.toLocaleString();
-        console.log('Total Application updated to:', applicationValue);
-    } else {
-        console.error('Element totalApplicationCount not found');
     }
 
     // Update Total Admission
@@ -419,9 +406,6 @@ function updateStatistics(stats) {
     if (admissionElement) {
         const admissionValue = stats.totalAdmission || 0;
         admissionElement.textContent = admissionValue.toLocaleString();
-        console.log('Total Admission updated to:', admissionValue);
-    } else {
-        console.error('Element totalAdmissionCount not found');
     }
 }
 
@@ -1296,11 +1280,32 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 if (lines.length < 2) {
                     showToast('CSV file is empty or invalid.', 'error');
+                    resetBulkUploadForm();
                     return;
                 }
 
                 // Parse header
                 const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
+
+                // Required fields for CSV
+                const requiredFields = ['trainee_id', 'first_name', 'last_name', 'email', 'phone'];
+                const validFields = ['trainee_id', 'username', 'first_name', 'second_name', 'middle_name', 'last_name', 'suffix', 'email', 'phone', 'password'];
+
+                // Check if all required fields are present
+                const missingFields = requiredFields.filter(field => !headers.includes(field));
+                if (missingFields.length > 0) {
+                    showToast(`CSV file is missing required fields: ${missingFields.join(', ')}. Expected format: trainee_id, username, first_name, second_name, middle_name, last_name, suffix, email, phone, password`, 'error');
+                    resetBulkUploadForm();
+                    return;
+                }
+
+                // Check if there are any invalid fields
+                const invalidFields = headers.filter(header => !validFields.includes(header));
+                if (invalidFields.length > 0) {
+                    showToast(`CSV file contains invalid fields: ${invalidFields.join(', ')}. Valid fields are: ${validFields.join(', ')}`, 'error');
+                    resetBulkUploadForm();
+                    return;
+                }
 
                 // Parse data rows
                 uploadedData = [];
@@ -1312,13 +1317,21 @@ document.addEventListener('DOMContentLoaded', function () {
                         trainee[header] = values[index] || '';
                     });
 
+                    // Validate required fields in each row
+                    const rowMissingFields = requiredFields.filter(field => !trainee[field] || trainee[field].trim() === '');
+                    if (rowMissingFields.length > 0) {
+                        showToast(`Row ${i + 1} is missing required fields: ${rowMissingFields.join(', ')}`, 'error');
+                        resetBulkUploadForm();
+                        return;
+                    }
+
                     uploadedData.push(trainee);
                 }
 
                 displayUploadPreview();
             } catch (error) {
-                console.error('Error parsing CSV:', error);
-                showToast('Error parsing CSV file.', 'error');
+                showToast('Error parsing CSV file. Please check the file format.', 'error');
+                resetBulkUploadForm();
             }
         };
         reader.readAsText(file);
@@ -1333,14 +1346,54 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 if (!Array.isArray(data)) {
                     showToast('JSON file must contain an array of trainee objects.', 'error');
+                    resetBulkUploadForm();
                     return;
+                }
+
+                if (data.length === 0) {
+                    showToast('JSON file is empty.', 'error');
+                    resetBulkUploadForm();
+                    return;
+                }
+
+                // Required fields for JSON
+                const requiredFields = ['trainee_id', 'first_name', 'last_name', 'email', 'phone'];
+                const validFields = ['trainee_id', 'username', 'first_name', 'second_name', 'middle_name', 'last_name', 'suffix', 'email', 'phone', 'password'];
+
+                // Validate each object in the array
+                for (let i = 0; i < data.length; i++) {
+                    const trainee = data[i];
+
+                    // Check if it's an object
+                    if (typeof trainee !== 'object' || trainee === null) {
+                        showToast(`Item ${i + 1} in JSON file is not a valid object.`, 'error');
+                        resetBulkUploadForm();
+                        return;
+                    }
+
+                    // Check for required fields
+                    const missingFields = requiredFields.filter(field => !trainee[field] || trainee[field].toString().trim() === '');
+                    if (missingFields.length > 0) {
+                        showToast(`Item ${i + 1} is missing required fields: ${missingFields.join(', ')}. Expected format: Array of objects with fields: trainee_id, username, first_name, second_name, middle_name, last_name, suffix, email, phone, password`, 'error');
+                        resetBulkUploadForm();
+                        return;
+                    }
+
+                    // Check for invalid fields
+                    const objectFields = Object.keys(trainee);
+                    const invalidFields = objectFields.filter(field => !validFields.includes(field));
+                    if (invalidFields.length > 0) {
+                        showToast(`Item ${i + 1} contains invalid fields: ${invalidFields.join(', ')}. Valid fields are: ${validFields.join(', ')}`, 'error');
+                        resetBulkUploadForm();
+                        return;
+                    }
                 }
 
                 uploadedData = data;
                 displayUploadPreview();
             } catch (error) {
-                console.error('Error parsing JSON:', error);
-                showToast('Error parsing JSON file.', 'error');
+                showToast('Error parsing JSON file. Please check the file format and ensure it contains valid JSON.', 'error');
+                resetBulkUploadForm();
             }
         };
         reader.readAsText(file);

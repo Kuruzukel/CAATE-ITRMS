@@ -1287,8 +1287,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Parse header
                 const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
 
-                // Required fields for CSV
-                const requiredFields = ['trainee_id', 'first_name', 'last_name', 'email', 'phone'];
+                // Required fields for CSV (trainee_id is optional, will be auto-generated)
+                const requiredFields = ['first_name', 'last_name', 'email', 'phone'];
                 const validFields = ['trainee_id', 'username', 'first_name', 'second_name', 'middle_name', 'last_name', 'suffix', 'email', 'phone', 'password'];
 
                 // Check if all required fields are present
@@ -1317,7 +1317,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         trainee[header] = values[index] || '';
                     });
 
-                    // Validate required fields in each row
+                    // Validate required fields in each row (trainee_id is optional)
                     const rowMissingFields = requiredFields.filter(field => !trainee[field] || trainee[field].trim() === '');
                     if (rowMissingFields.length > 0) {
                         showToast(`Row ${i + 1} is missing required fields: ${rowMissingFields.join(', ')}`, 'error');
@@ -1356,8 +1356,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     return;
                 }
 
-                // Required fields for JSON
-                const requiredFields = ['trainee_id', 'first_name', 'last_name', 'email', 'phone'];
+                // Required fields for JSON (trainee_id is optional, will be auto-generated)
+                const requiredFields = ['first_name', 'last_name', 'email', 'phone'];
                 const validFields = ['trainee_id', 'username', 'first_name', 'second_name', 'middle_name', 'last_name', 'suffix', 'email', 'phone', 'password'];
 
                 // Validate each object in the array

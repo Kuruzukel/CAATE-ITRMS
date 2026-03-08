@@ -1,0 +1,62 @@
+[
+  {
+    "trainee_id": "TRN-2026-001",
+    "username": "acruz",
+    "first_name": "Anna",
+    "second_name": "",
+    "middle_name": "Marie",
+    "last_name": "Cruz",
+    "suffix": "",
+    "email": "anna.cruz@email.com",
+    "phone": "09123456789",
+    "password": "SecurePass123"
+  },
+  {
+    "trainee_id": "TRN-2026-002",
+    "username": "bsantos",
+    "first_name": "Benjamin",
+    "second_name": "",
+    "middle_name": "Jose",
+    "last_name": "Santos",
+    "suffix": "Jr.",
+    "email": "benjamin.santos@email.com",
+    "phone": "09234567890",
+    "password": "Password456"
+  },
+  {
+    "trainee_id": "TRN-2026-003",
+    "username": "creyes",
+    "first_name": "Catherine",
+    "second_name": "",
+    "middle_name": "Rose",
+    "last_name": "Reyes",
+    "suffix": "",
+    "email": "catherine.reyes@email.com",
+    "phone": "09345678901",
+    "password": "MyPass789"
+  },
+  {
+    "trainee_id": "TRN-2026-004",
+    "username": "dgarcia",
+    "first_name": "Daniel",
+    "second_name": "",
+    "middle_name": "Luis",
+    "last_name": "Garcia",
+    "suffix": "",
+    "email": "daniel.garcia@email.com",
+    "phone": "09456789012",
+    "password": "TestPass321"
+  },
+  {
+    "trainee_id": "TRN-2026-005",
+    "username": "eflores",
+    "first_name": "Elena",
+    "second_name": "",
+    "middle_name": "Sofia",
+    "last_name": "Flores",
+    "suffix": "",
+    "email": "elena.flores@email.com",
+    "phone": "09567890123",
+    "password": "Welcome2024"
+  }
+]

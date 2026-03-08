@@ -232,11 +232,21 @@ function showEmptyState(message) {
 // Load statistics from API
 async function loadStatistics() {
     try {
+        console.log('Fetching statistics from:', `${API_BASE_URL}/trainees/statistics`);
         const response = await fetch(`${API_BASE_URL}/trainees/statistics`);
+
+        if (!response.ok) {
+            console.error('Statistics API error:', response.status, response.statusText);
+            return;
+        }
+
         const result = await response.json();
+        console.log('Statistics response:', result);
 
         if (result.success) {
             updateStatistics(result.data);
+        } else {
+            console.error('Statistics API returned success: false', result);
         }
     } catch (error) {
         console.error('Error loading statistics:', error);
@@ -372,28 +382,46 @@ function getAvatarColor(index) {
 
 // Update statistics
 function updateStatistics(stats) {
+    console.log('Updating statistics with data:', stats);
+
     // Update Total Trainees
     const totalElement = document.getElementById('totalTraineesCount');
     if (totalElement) {
-        totalElement.textContent = stats.total.toLocaleString();
+        const totalValue = stats.total || 0;
+        totalElement.textContent = totalValue.toLocaleString();
+        console.log('Total Trainees updated to:', totalValue);
+    } else {
+        console.error('Element totalTraineesCount not found');
     }
 
     // Update Total Enrollment
     const enrollmentElement = document.getElementById('totalEnrollmentCount');
     if (enrollmentElement) {
-        enrollmentElement.textContent = (stats.totalEnrollment || 0).toLocaleString();
+        const enrollmentValue = stats.totalEnrollment || 0;
+        enrollmentElement.textContent = enrollmentValue.toLocaleString();
+        console.log('Total Enrollment updated to:', enrollmentValue);
+    } else {
+        console.error('Element totalEnrollmentCount not found');
     }
 
     // Update Total Application
     const applicationElement = document.getElementById('totalApplicationCount');
     if (applicationElement) {
-        applicationElement.textContent = (stats.totalApplication || 0).toLocaleString();
+        const applicationValue = stats.totalApplication || 0;
+        applicationElement.textContent = applicationValue.toLocaleString();
+        console.log('Total Application updated to:', applicationValue);
+    } else {
+        console.error('Element totalApplicationCount not found');
     }
 
     // Update Total Admission
     const admissionElement = document.getElementById('totalAdmissionCount');
     if (admissionElement) {
-        admissionElement.textContent = (stats.totalAdmission || 0).toLocaleString();
+        const admissionValue = stats.totalAdmission || 0;
+        admissionElement.textContent = admissionValue.toLocaleString();
+        console.log('Total Admission updated to:', admissionValue);
+    } else {
+        console.error('Element totalAdmissionCount not found');
     }
 }
 

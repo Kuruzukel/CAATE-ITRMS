@@ -175,29 +175,22 @@ class Trainee {
             $year = isset($_GET['year']) ? (int)$_GET['year'] : date('Y');
             $db = getMongoConnection();
             
-            // Total trainees
+            // Total trainees - count all trainees in the collection
             $totalTrainees = $this->collection->countDocuments();
             
             // Get enrollment, application, and admission counts from their respective collections
-            // Only count records with valid status (submitted by trainees)
             $enrollmentCollection = $db->enrollments;
             $applicationCollection = $db->applications;
             $admissionCollection = $db->admissions;
             
-            // Count only enrollments with valid status (e.g., 'pending', 'approved', 'enrolled')
-            $totalEnrollment = $enrollmentCollection->countDocuments([
-                'status' => ['$in' => ['pending', 'approved', 'enrolled', 'active', 'completed']]
-            ]);
+            // Count all enrollments (regardless of status)
+            $totalEnrollment = $enrollmentCollection->countDocuments();
             
-            // Count only applications with valid status (e.g., 'pending', 'approved', 'rejected')
-            $totalApplication = $applicationCollection->countDocuments([
-                'status' => ['$in' => ['pending', 'approved', 'rejected', 'submitted']]
-            ]);
+            // Count all applications (regardless of status)
+            $totalApplication = $applicationCollection->countDocuments();
             
-            // Count only admissions with valid status
-            $totalAdmission = $admissionCollection->countDocuments([
-                'status' => ['$in' => ['pending', 'approved', 'rejected', 'admitted']]
-            ]);
+            // Count all admissions (regardless of status)
+            $totalAdmission = $admissionCollection->countDocuments();
             
             // Active trainees (you may need to adjust the criteria)
             $activeTrainees = $this->collection->countDocuments(['status' => 'active']);
@@ -220,6 +213,9 @@ class Trainee {
                 
                 $monthlyEnrollments[] = $count;
             }
+            
+            // Log statistics for debugging
+            error_log("Statistics - Total Trainees: $totalTrainees, Enrollments: $totalEnrollment, Applications: $totalApplication, Admissions: $totalAdmission");
             
             return [
                 'total' => $totalTrainees,

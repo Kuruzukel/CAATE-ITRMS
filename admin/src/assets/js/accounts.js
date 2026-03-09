@@ -144,11 +144,31 @@ document.addEventListener('DOMContentLoaded', function () {
                     addButton.blur();
                 }, 100);
             }
+
+            // Reset the form
+            const form = document.getElementById('addTraineeForm');
+            if (form) {
+                form.reset();
+            }
+
+            // Clear the trainee ID field
+            const traineeIdInput = document.getElementById('addTraineeId');
+            if (traineeIdInput) {
+                traineeIdInput.value = '';
+            }
         });
 
         // Generate trainee ID when modal is shown
-        addTraineeModal.addEventListener('show.bs.modal', function () {
-            generateTraineeId();
+        addTraineeModal.addEventListener('show.bs.modal', async function () {
+            const traineeIdInput = document.getElementById('addTraineeId');
+            if (traineeIdInput) {
+                // Show loading state
+                traineeIdInput.value = 'Generating...';
+
+                // Generate and set the new trainee ID
+                const newId = await generateTraineeId();
+                traineeIdInput.value = newId;
+            }
         });
     }
 
@@ -810,13 +830,13 @@ async function generateTraineeId() {
         if (result.success) {
             const trainees = result.data;
 
-            // Filter trainees with IDs matching the current year pattern
-            const yearPattern = new RegExp(`^TRN-${currentYear}-(\\d+)$`);
+            // Find the highest trainee number across all years
             let maxNumber = 0;
+            const traineePattern = /^TRN-\d{4}-(\d+)$/;
 
             trainees.forEach(trainee => {
                 if (trainee.trainee_id) {
-                    const match = trainee.trainee_id.match(yearPattern);
+                    const match = trainee.trainee_id.match(traineePattern);
                     if (match) {
                         const num = parseInt(match[1], 10);
                         if (num > maxNumber) {
@@ -826,7 +846,7 @@ async function generateTraineeId() {
                 }
             });
 
-            // Generate next sequential number
+            // Generate next sequential number based on total count
             const nextNumber = maxNumber + 1;
             const paddedNumber = String(nextNumber).padStart(3, '0');
 
@@ -842,6 +862,7 @@ async function generateTraineeId() {
         return `TRN-${currentYear}-001`;
     }
 }
+
 
 // Save new trainee
 window.saveNewTrainee = async function saveNewTrainee() {

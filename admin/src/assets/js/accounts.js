@@ -199,7 +199,7 @@ function showTableLoader() {
 
     tbody.innerHTML = `
         <tr>
-            <td colspan="5" class="text-center" style="padding: 60px 20px;">
+            <td colspan="6" class="text-center" style="padding: 60px 20px;">
                 <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
                     <span class="visually-hidden">Loading...</span>
                 </div>
@@ -327,40 +327,56 @@ function renderTrainees(trainees) {
 function createTraineeRow(trainee, index) {
     const tr = document.createElement('tr');
 
-    // Build full name with all name parts
-    let fullName = trainee.first_name || '';
-    if (trainee.second_name) {
-        fullName += ' ' + trainee.second_name;
-    }
-    if (trainee.middle_name) {
-        fullName += ' ' + trainee.middle_name;
-    }
-    fullName += ' ' + (trainee.last_name || '');
-    if (trainee.suffix) {
-        fullName += ' ' + trainee.suffix;
+    // Build full name with all name parts - only if first_name or last_name exists
+    let fullName = '';
+    let hasName = false;
+
+    if (trainee.first_name || trainee.last_name) {
+        hasName = true;
+        fullName = trainee.first_name || '';
+        if (trainee.second_name) {
+            fullName += (fullName ? ' ' : '') + trainee.second_name;
+        }
+        if (trainee.middle_name) {
+            fullName += (fullName ? ' ' : '') + trainee.middle_name;
+        }
+        if (trainee.last_name) {
+            fullName += (fullName ? ' ' : '') + trainee.last_name;
+        }
+        if (trainee.suffix) {
+            fullName += (fullName ? ' ' : '') + trainee.suffix;
+        }
+        fullName = fullName.trim();
     }
 
     // Safely get initials with fallback
-    const firstInitial = (trainee.first_name && trainee.first_name.charAt(0)) || '?';
-    const lastInitial = (trainee.last_name && trainee.last_name.charAt(0)) || '?';
+    const firstInitial = (trainee.first_name && trainee.first_name.charAt(0)) || (trainee.username && trainee.username.charAt(0)) || '?';
+    const lastInitial = (trainee.last_name && trainee.last_name.charAt(0)) || (trainee.username && trainee.username.charAt(1)) || '?';
     const initials = `${firstInitial}${lastInitial}`;
     // Display trainee ID or show format example
     const displayId = trainee.trainee_id || `TRN-${new Date().getFullYear()}-${String(index + 1).padStart(3, '0')}`;
 
+    // Display username or show N/A
+    const displayUsername = trainee.username || '<span class="text-muted">N/A</span>';
+
+    // Display name or show N/A if no name exists
+    const displayName = hasName ? fullName : '<span class="text-muted">N/A</span>';
+
     tr.innerHTML = `
         <td><strong>${displayId}</strong></td>
+        <td>${displayUsername}</td>
         <td>
             <div class="d-flex align-items-center">
                 <div class="avatar avatar-sm me-3" style="background: linear-gradient(135deg, rgba(54, 145, 191, 0.1) 0%, rgba(50, 85, 150, 0.1) 100%); backdrop-filter: blur(10px) saturate(180%); -webkit-backdrop-filter: blur(10px) saturate(180%); border: 1px solid rgba(54, 145, 191, 0.4); box-shadow: 0 4px 12px rgba(22, 56, 86, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3); color: white; display: flex; align-items: center; justify-content: center; border-radius: 50%; width: 38px; height: 38px; font-weight: 600;">
                     ${initials}
                 </div>
                 <div>
-                    <strong>${fullName}</strong>
+                    <strong>${displayName}</strong>
                 </div>
             </div>
         </td>
         <td>${trainee.email}</td>
-        <td>${trainee.phone}</td>
+        <td>${trainee.phone || '<span class="text-muted">N/A</span>'}</td>
         <td>
             <div class="dropdown">
                 <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
@@ -383,6 +399,7 @@ function createTraineeRow(trainee, index) {
 
     return tr;
 }
+
 
 
 // Get avatar color based on index

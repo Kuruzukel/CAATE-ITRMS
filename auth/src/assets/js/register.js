@@ -93,10 +93,9 @@ document.addEventListener('DOMContentLoaded', function () {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        name: username,  // Backend expects 'name' field
                         email: email,
                         password: password,
-                        username: username  // Also send username for future use
+                        username: username
                     })
                 });
 

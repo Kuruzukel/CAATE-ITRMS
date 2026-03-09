@@ -10,11 +10,11 @@ class AuthController {
     public function register() {
             $data = json_decode(file_get_contents('php://input'), true);
 
-            if (!isset($data['name']) || !isset($data['email']) || !isset($data['password'])) {
+            if (!isset($data['email']) || !isset($data['password']) || !isset($data['username'])) {
                 http_response_code(400);
                 echo json_encode([
                     'success' => false,
-                    'error' => 'Name, email and password are required'
+                    'error' => 'Username, email and password are required'
                 ]);
                 return;
             }
@@ -32,26 +32,33 @@ class AuthController {
                 return;
             }
 
-            // Split name into first and last name
-            $nameParts = explode(' ', trim($data['name']), 2);
-            $firstName = $nameParts[0];
-            $lastName = isset($nameParts[1]) ? $nameParts[1] : '';
+            // Check if username already exists
+            $existingUsername = $traineeModel->findByUsername($data['username']);
+            if ($existingUsername) {
+                http_response_code(200);
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'Username already exists'
+                ]);
+                return;
+            }
 
             // Generate trainee ID
             $currentYear = date('Y');
             $traineeId = $this->generateTraineeId($traineeModel, $currentYear);
 
-            // Create trainee account
+            // Create trainee account - only store username, email, and password
+            // Name fields will be empty until filled in by admin
             $traineeData = [
                 'trainee_id' => $traineeId,
-                'first_name' => $firstName,
-                'last_name' => $lastName,
+                'first_name' => '',
+                'last_name' => '',
                 'middle_name' => '',
                 'second_name' => '',
                 'suffix' => '',
                 'email' => $data['email'],
-                'phone' => $data['phone'] ?? '',
-                'username' => $data['username'] ?? $data['name'],
+                'phone' => '',
+                'username' => $data['username'],
                 'password' => $data['password'],  // Store password as plain text
                 'created_at' => new MongoDB\BSON\UTCDateTime(),
                 'updated_at' => new MongoDB\BSON\UTCDateTime()
@@ -73,7 +80,7 @@ class AuthController {
                 'role' => 'trainee',
                 'user' => [
                     'id' => (string)$trainee['_id'],
-                    'name' => $firstName . ' ' . $lastName,
+                    'username' => $trainee['username'],
                     'email' => $trainee['email']
                 ]
             ]);

@@ -829,6 +829,7 @@ async function generateTraineeId() {
 
         if (result.success) {
             const trainees = result.data;
+            console.log('Total trainees found:', trainees.length);
 
             // Find the highest trainee number across all years
             let maxNumber = 0;
@@ -839,6 +840,7 @@ async function generateTraineeId() {
                     const match = trainee.trainee_id.match(traineePattern);
                     if (match) {
                         const num = parseInt(match[1], 10);
+                        console.log(`Found trainee ID: ${trainee.trainee_id}, number: ${num}`);
                         if (num > maxNumber) {
                             maxNumber = num;
                         }
@@ -846,13 +848,18 @@ async function generateTraineeId() {
                 }
             });
 
+            console.log('Highest number found:', maxNumber);
+
             // Generate next sequential number based on total count
             const nextNumber = maxNumber + 1;
             const paddedNumber = String(nextNumber).padStart(3, '0');
+            const newId = `TRN-${currentYear}-${paddedNumber}`;
 
-            return `TRN-${currentYear}-${paddedNumber}`;
+            console.log('Generated new trainee ID:', newId);
+            return newId;
         } else {
             // If API fails, start with 001
+            console.log('API call failed, using default ID');
             return `TRN-${currentYear}-001`;
         }
     } catch (error) {

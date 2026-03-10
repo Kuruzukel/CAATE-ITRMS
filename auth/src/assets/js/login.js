@@ -123,7 +123,15 @@ document.addEventListener('DOMContentLoaded', function () {
                     // Store authentication data
                     localStorage.setItem('authToken', result.token);
                     localStorage.setItem('userRole', result.role);
+                    localStorage.setItem('userId', result.user.id || result.user._id);
                     localStorage.setItem('userData', JSON.stringify(result.user));
+
+                    console.log('Login successful, stored data:', {
+                        token: !!result.token,
+                        role: result.role,
+                        userId: result.user.id || result.user._id,
+                        user: result.user
+                    });
 
                     // Redirect immediately - no toast needed
                     const baseUrl = window.location.origin + '/CAATE-ITRMS';

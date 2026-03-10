@@ -443,7 +443,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
 
                 appointmentsHTML += `
-                    <div class="list-group-item list-group-item-action" style="cursor: pointer; border-left: 4px solid ${getStatusColorHex(eventStatus)};" data-event-id="${event.id}">
+                    <div class="list-group-item list-group-item-action" data-event-id="${event.id}">
                         <div class="d-flex align-items-center">
                             <div style="background: linear-gradient(135deg, rgba(54, 145, 191, 0.1) 0%, rgba(50, 85, 150, 0.1) 100%); 
                                         backdrop-filter: blur(10px) saturate(180%); 
@@ -567,7 +567,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
 
                 appointmentsHTML += `
-                    <div class="list-group-item appointment-item" data-event-index="${index}" style="cursor: pointer; border-left: 4px solid ${getStatusColorHex(eventStatus)};">
+                    <div class="list-group-item appointment-item" data-event-index="${index}">
                         <div class="d-flex align-items-center">
                             <div style="background: linear-gradient(135deg, rgba(54, 145, 191, 0.1) 0%, rgba(50, 85, 150, 0.1) 100%); 
                                         backdrop-filter: blur(10px) saturate(180%); 

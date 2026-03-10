@@ -81,4 +81,62 @@ class AdminController {
             echo json_encode(['error' => 'Admin not found']);
         }
     }
+    
+    public function uploadProfileImage($id) {
+        if (!isset($_FILES['profileImage'])) {
+            http_response_code(400);
+            echo json_encode(['error' => 'No image file provided']);
+            return;
+        }
+        
+        $file = $_FILES['profileImage'];
+        
+        // Validate file type
+        $allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+        if (!in_array($file['type'], $allowedTypes)) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Invalid file type. Only JPG and PNG are allowed.']);
+            return;
+        }
+        
+        // Validate file size (2MB max)
+        $maxSize = 2 * 1024 * 1024;
+        if ($file['size'] > $maxSize) {
+            http_response_code(400);
+            echo json_encode(['error' => 'File size too large. Maximum 2MB allowed.']);
+            return;
+        }
+        
+        // Create upload directory if it doesn't exist
+        $uploadDir = __DIR__ . '/../../public/uploads/profiles/';
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0755, true);
+        }
+        
+        // Generate unique filename
+        $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
+        $filename = 'admin_' . $id . '_' . time() . '.' . $extension;
+        $uploadPath = $uploadDir . $filename;
+        
+        // Move uploaded file
+        if (move_uploaded_file($file['tmp_name'], $uploadPath)) {
+            // Update admin record with new profile image path
+            $adminModel = new Admin();
+            $imagePath = '/CAATE-ITRMS/backend/public/uploads/profiles/' . $filename;
+            $result = $adminModel->update($id, ['profile_image' => $imagePath]);
+            
+            if ($result) {
+                echo json_encode([
+                    'message' => 'Profile image updated successfully',
+                    'image_path' => $imagePath
+                ]);
+            } else {
+                http_response_code(500);
+                echo json_encode(['error' => 'Failed to update admin record']);
+            }
+        } else {
+            http_response_code(500);
+            echo json_encode(['error' => 'Failed to upload file']);
+        }
+    }
 }

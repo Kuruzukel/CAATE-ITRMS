@@ -3,8 +3,198 @@
 // API Configuration - Works for both localhost and network access
 const API_BASE_URL = window.location.origin + '/CAATE-ITRMS/backend/public/api/v1';
 
+// Authentication check
+function checkAuthentication() {
+    const token = localStorage.getItem('authToken');
+    const userRole = localStorage.getItem('userRole');
+    const userId = localStorage.getItem('userId');
+
+    if (!token || !userRole || !userId) {
+        window.location.href = '../../../auth/src/pages/login.html';
+        return false;
+    }
+
+    if (userRole !== 'admin') {
+        const baseUrl = window.location.origin + '/CAATE-ITRMS';
+        if (userRole === 'trainee') {
+            window.location.href = baseUrl + '/trainee/src/pages/dashboard.html';
+        } else {
+            window.location.href = baseUrl + '/auth/src/pages/login.html';
+        }
+        return false;
+    }
+
+    return true;
+}
+
+// Load admin profile data for navbar dropdown
+async function loadAdminProfileForNavbar() {
+    try {
+        const token = localStorage.getItem('authToken');
+        const userId = localStorage.getItem('userId');
+
+        if (!token || !userId) {
+            window.location.href = '../../../auth/src/pages/login.html';
+            return;
+        }
+
+        // Fetch admin data from the admins collection
+        const response = await fetch(`${config.api.baseURL}/api/v1/admins/${userId}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            let adminData = result.data || result.admin || result;
+
+            // Update navbar user info
+            updateNavbarUserInfo(adminData);
+        } else {
+            console.error('Failed to fetch admin data:', response.status);
+        }
+    } catch (error) {
+        console.error('Error loading admin profile:', error);
+    }
+}
+
+// Update navbar user info
+function updateNavbarUserInfo(data) {
+    const userName = document.querySelector('.dropdown-menu .flex-grow-1 .fw-semibold');
+    if (userName) {
+        // Use name field from database first
+        let displayName = data.name || 'Admin';
+        userName.textContent = displayName;
+    }
+
+    // Update profile images if they exist
+    const profileImages = document.querySelectorAll('.avatar img');
+    profileImages.forEach(img => {
+        if (data.profileImage && data.profileImage !== '../assets/images/DEFAULT_AVATAR.png') {
+            img.src = data.profileImage;
+        } else {
+            img.src = '../assets/images/DEFAULT_AVATAR.png';
+        }
+        img.onerror = function () {
+            this.src = '../assets/images/DEFAULT_AVATAR.png';
+        };
+    });
+}
+
 // State
 let traineesData = [];
+
+// Authentication check and navbar update
+function checkAuthenticationAndUpdateNavbar() {
+    const token = localStorage.getItem('authToken');
+    const userRole = localStorage.getItem('userRole');
+    const userId = localStorage.getItem('userId');
+
+    if (!token || !userRole || !userId) {
+        window.location.href = '../../../auth/src/pages/login.html';
+        return false;
+    }
+
+    if (userRole !== 'admin') {
+        const baseUrl = window.location.origin + '/CAATE-ITRMS';
+        if (userRole === 'trainee') {
+            window.location.href = baseUrl + '/trainee/src/pages/dashboard.html';
+        } else {
+            window.location.href = baseUrl + '/auth/src/pages/login.html';
+        }
+        return false;
+    }
+
+    // Load admin profile data for navbar
+    loadAdminProfileForNavbar();
+    return true;
+}
+
+// Load admin profile data for navbar
+async function loadAdminProfileForNavbar() {
+    try {
+        const token = localStorage.getItem('authToken');
+        const userId = localStorage.getItem('userId');
+
+        if (!token || !userId) {
+            return;
+        }
+
+        // Try to get cached data first
+        const cachedData = localStorage.getItem('userData');
+        if (cachedData) {
+            try {
+                const userData = JSON.parse(cachedData);
+                updateNavbarUserInfo(userData);
+            } catch (e) {
+                console.warn('Failed to parse cached user data');
+            }
+        }
+
+        // Fetch fresh data from API
+        const response = await fetch(`${config.api.baseURL}/api/v1/admins/${userId}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            let adminData = result.data || result.admin || result;
+
+            const mappedData = {
+                _id: adminData._id,
+                name: adminData.name,
+                email: adminData.email,
+                username: adminData.username,
+                role: adminData.role,
+                firstName: adminData.firstName,
+                middleName: adminData.middleName,
+                lastName: adminData.lastName,
+                phone: adminData.phone,
+                phoneNumber: adminData.phone,
+                address: adminData.address,
+                profileImage: adminData.profileImage || '../assets/images/DEFAULT_AVATAR.png'
+            };
+
+            // Update navbar user info
+            updateNavbarUserInfo(mappedData);
+
+            // Update cached data
+            localStorage.setItem('userData', JSON.stringify(mappedData));
+        }
+    } catch (error) {
+        console.error('Error loading admin profile for navbar:', error);
+    }
+}
+
+// Update navbar user info
+function updateNavbarUserInfo(data) {
+    // Update user name in dropdown
+    const userName = document.querySelector('.dropdown-menu .flex-grow-1 .fw-semibold');
+    if (userName) {
+        let displayName = data.name || 'Admin';
+        userName.textContent = displayName;
+    }
+
+    // Update profile images in navbar
+    const navbarImages = document.querySelectorAll('.navbar .avatar img');
+    navbarImages.forEach(img => {
+        if (data.profileImage && data.profileImage !== '../assets/images/DEFAULT_AVATAR.png') {
+            img.src = data.profileImage;
+        } else {
+            img.src = '../assets/images/DEFAULT_AVATAR.png';
+        }
+        img.onerror = function () {
+            this.src = '../assets/images/DEFAULT_AVATAR.png';
+        };
+    });
+}
 
 // Password generation characters
 const upper = 'ABCDEFGHIJKLMNPQRSTUVWXYZ';
@@ -26,6 +216,11 @@ function generateRandomPassword(length = 12) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
+    // Check authentication and update navbar
+    if (!checkAuthenticationAndUpdateNavbar()) {
+        return;
+    }
+
     // Load trainees data
     loadTrainees();
     loadStatistics();

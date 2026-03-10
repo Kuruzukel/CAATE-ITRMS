@@ -45,6 +45,9 @@
     <!-- Helpers -->
     <script src="../assets/vendor/js/helpers.js"></script>
     <script src="../assets/js/config.js"></script>
+
+    <!-- Auth Guard - MUST be loaded first -->
+    <script src="../assets/js/auth-guard.js"></script>
 </head>
 
 <body>
@@ -243,22 +246,24 @@
                                 <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);"
                                     data-bs-toggle="dropdown">
                                     <div class="avatar avatar-online">
-                                        <img src="../assets/images/DEFAULT_AVATAR.png" alt
-                                            class="w-px-40 h-auto rounded-circle" />
+                                        <img src="../assets/images/DEFAULT_AVATAR.png" alt=""
+                                            class="w-px-40 h-auto rounded-circle"
+                                            onerror="this.src='../assets/images/DEFAULT_AVATAR.png'" />
                                     </div>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end">
                                     <li>
-                                        <a class="dropdown-item" href="#">
+                                        <a class="dropdown-item" href="manage-profile.html">
                                             <div class="d-flex">
                                                 <div class="flex-shrink-0 me-3">
                                                     <div class="avatar avatar-online">
-                                                        <img src="../assets/images/DEFAULT_AVATAR.png" alt
-                                                            class="w-px-40 h-auto rounded-circle" />
+                                                        <img src="../assets/images/DEFAULT_AVATAR.png" alt=""
+                                                            class="w-px-40 h-auto rounded-circle"
+                                                            onerror="this.src='../assets/images/DEFAULT_AVATAR.png'" />
                                                     </div>
                                                 </div>
                                                 <div class="flex-grow-1">
-                                                    <span class="fw-semibold d-block text-white">KEL</span>
+                                                    <span class="fw-semibold d-block text-white">Loading...</span>
                                                     <small class="text-white">Admin</small>
                                                 </div>
                                             </div>

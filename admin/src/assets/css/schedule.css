@@ -255,6 +255,29 @@
     z-index: 1;
 }
 
+/* Ensure day frames maintain their structure and don't adjust */
+.fc-daygrid-day-frame,
+.fc-scrollgrid-sync-inner,
+.fc-daygrid-day-top,
+.fc-daygrid-day-events,
+.fc-daygrid-day-bottom,
+.fc-daygrid-day-bg {
+    position: relative !important;
+    height: auto !important;
+    min-height: unset !important;
+}
+
+.fc-daygrid-day-frame {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+}
+
+.fc-daygrid-day-events {
+    flex: 1 1 auto !important;
+    overflow: visible !important;
+}
+
 .fc-daygrid-day {
     position: relative;
     min-height: 100px;
@@ -319,19 +342,25 @@
     font-size: 0.8rem;
     line-height: 1.4;
     border-radius: 8px !important;
-    border: 1px solid rgba(255, 255, 255, 0.3) !important;
-    background: rgba(54, 145, 191, 0.2) !important;
-    backdrop-filter: blur(10px) !important;
-    -webkit-backdrop-filter: blur(10px) !important;
+    border: none !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
     color: white !important;
     cursor: pointer;
-    padding: 4px 8px !important;
+    padding: 2px !important;
     margin: 2px !important;
     text-decoration: none;
     font-weight: 500;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
-    overflow: hidden;
+    box-shadow: none !important;
+    overflow: visible;
+}
+
+/* Hide the time and dot - only show avatar */
+.fc-event-time,
+.fc-daygrid-event-dot {
+    display: none !important;
 }
 
 /* Remove event pseudo-elements */
@@ -670,3 +699,25 @@
 }
 
 /* Remove shine animations */
+
+
+/* Hide time and dot - only show avatar icon */
+.fc-event-time,
+.fc-daygrid-event-dot {
+    display: none !important;
+}
+
+/* Make event background transparent to only show avatar */
+.fc-event {
+    background: transparent !important;
+    border: none !important;
+    padding: 2px !important;
+    box-shadow: none !important;
+}
+
+.fc-event:hover {
+    background: transparent !important;
+    border: none !important;
+    transform: none !important;
+    box-shadow: none !important;
+}

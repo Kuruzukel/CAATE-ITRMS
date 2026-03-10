@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
         calendarEl.innerHTML = '<div class="text-center p-4"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div><p class="mt-2">Loading calendar...</p></div>';
 
         // Wait a bit for FullCalendar to load
-        setTimeout(function () {
+        setTimeout(async function () {
             try {
                 // Check if FullCalendar is loaded or failed to load
                 if (typeof FullCalendar === 'undefined' || window.FullCalendarLoadFailed) {
@@ -17,6 +17,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     createFallbackCalendar(calendarEl);
                     return;
                 }
+
+                // Fetch appointments from API
+                const appointments = await fetchAppointments();
+                const events = convertToCalendarEvents(appointments);
 
                 const calendar = new FullCalendar.Calendar(calendarEl, {
                     initialView: 'dayGridMonth',
@@ -26,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         right: 'dayGridMonth,timeGridWeek,timeGridDay'
                     },
                     height: 'auto',
-                    events: getSampleEvents(),
+                    events: events,
                     eventClick: function (info) {
                         showAppointmentDetails(info.event);
                     },
@@ -34,22 +38,54 @@ document.addEventListener('DOMContentLoaded', function () {
                         // Date clicked
                     },
                     eventDidMount: function (info) {
+                        // Add avatar to event - only show avatar, no name
+                        const initials = info.event.extendedProps.initials;
+                        if (initials) {
+                            const eventTitle = info.el.querySelector('.fc-event-title');
+                            if (eventTitle) {
+                                // Only show the avatar icon
+                                eventTitle.innerHTML = `
+                                    <div style="background: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 100%); 
+                                                backdrop-filter: blur(10px) saturate(180%); 
+                                                -webkit-backdrop-filter: blur(10px) saturate(180%); 
+                                                border: 1px solid rgba(255, 255, 255, 0.4); 
+                                                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3); 
+                                                color: white; 
+                                                display: inline-flex; 
+                                                align-items: center; 
+                                                justify-content: center; 
+                                                border-radius: 50%; 
+                                                width: 28px; 
+                                                height: 28px; 
+                                                font-weight: 600; 
+                                                font-size: 11px;
+                                                margin: 2px;">
+                                        ${initials}
+                                    </div>
+                                `;
+                            }
+                        }
+
+                        // Apply status-based styling
                         const status = info.event.extendedProps.status;
                         if (status === 'pending') {
-                            info.el.style.backgroundColor = '#f59e0b';
-                            info.el.style.borderColor = '#f59e0b';
-                        } else if (status === 'confirmed') {
-                            info.el.style.backgroundColor = '#10b981';
-                            info.el.style.borderColor = '#10b981';
+                            info.el.style.backgroundColor = 'transparent';
+                            info.el.style.borderColor = 'transparent';
+                        } else if (status === 'approved' || status === 'confirmed') {
+                            info.el.style.backgroundColor = 'transparent';
+                            info.el.style.borderColor = 'transparent';
                         } else if (status === 'cancelled') {
-                            info.el.style.backgroundColor = '#ef4444';
-                            info.el.style.borderColor = '#ef4444';
-                            info.el.style.opacity = '0.7';
+                            info.el.style.backgroundColor = 'transparent';
+                            info.el.style.borderColor = 'transparent';
+                            info.el.style.opacity = '0.5';
                         }
                     }
                 });
 
                 calendar.render();
+
+                // Update statistics
+                updateStatistics(appointments);
             } catch (error) {
                 console.error('Error initializing calendar:', error);
                 createFallbackCalendar(calendarEl);
@@ -57,138 +93,120 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 1000);
     }
 
-    // Sample events data
-    function getSampleEvents() {
-        return [
-            {
-                id: '1',
-                title: 'Beauty Care Consultation',
-                start: '2026-02-15T10:00:00',
-                end: '2026-02-15T11:00:00',
-                backgroundColor: '#10b981',
-                borderColor: '#10b981',
-                extendedProps: {
-                    client: 'Maria Santos',
-                    service: 'Beauty Care (Skincare)',
-                    status: 'confirmed',
-                    phone: '+63 912 345 6789',
-                    email: 'maria.santos@email.com',
-                    notes: 'First-time client, interested in anti-aging treatments'
-                }
-            },
-            {
-                id: '2',
-                title: 'Advanced Skincare Session',
-                start: '2026-02-16T14:00:00',
-                end: '2026-02-16T16:00:00',
-                backgroundColor: '#10b981',
-                borderColor: '#10b981',
-                extendedProps: {
-                    client: 'Ana Cruz',
-                    service: 'Advanced Skincare',
-                    status: 'confirmed',
-                    phone: '+63 917 123 4567',
-                    email: 'ana.cruz@email.com',
-                    notes: 'Regular client, acne treatment follow-up'
-                }
-            },
-            {
-                id: '3',
-                title: 'Nail Care Appointment',
-                start: '2026-02-17T09:00:00',
-                end: '2026-02-17T10:30:00',
-                backgroundColor: '#f59e0b',
-                borderColor: '#f59e0b',
-                extendedProps: {
-                    client: 'Lisa Garcia',
-                    service: 'Beauty Care (Nail Care)',
-                    status: 'pending',
-                    phone: '+63 905 987 6543',
-                    email: 'lisa.garcia@email.com',
-                    notes: 'Gel manicure and pedicure service'
-                }
-            },
-            {
-                id: '4',
-                title: 'Aesthetic Services',
-                start: '2026-02-18T13:00:00',
-                end: '2026-02-18T15:00:00',
-                backgroundColor: '#10b981',
-                borderColor: '#10b981',
-                extendedProps: {
-                    client: 'Carmen Reyes',
-                    service: 'Aesthetic Services',
-                    status: 'confirmed',
-                    phone: '+63 920 456 7890',
-                    email: 'carmen.reyes@email.com',
-                    notes: 'Facial treatment and skin analysis'
-                }
-            },
-            {
-                id: '5',
-                title: 'Permanent Makeup Consultation',
-                start: '2026-02-19T11:00:00',
-                end: '2026-02-19T12:00:00',
-                backgroundColor: '#ef4444',
-                borderColor: '#ef4444',
-                extendedProps: {
-                    client: 'Sofia Mendoza',
-                    service: 'Permanent Makeup Tattoo',
-                    status: 'cancelled',
-                    phone: '+63 918 765 4321',
-                    email: 'sofia.mendoza@email.com',
-                    notes: 'Client cancelled due to scheduling conflict'
-                }
-            },
-            {
-                id: '6',
-                title: 'Skincare Training Session',
-                start: '2026-02-20T10:00:00',
-                end: '2026-02-20T12:00:00',
-                backgroundColor: '#10b981',
-                borderColor: '#10b981',
-                extendedProps: {
-                    client: 'Jennifer Lopez',
-                    service: 'Beauty Care (Skincare)',
-                    status: 'confirmed',
-                    phone: '+63 915 234 5678',
-                    email: 'jennifer.lopez@email.com',
-                    notes: 'Hands-on training for skincare techniques'
-                }
-            },
-            {
-                id: '7',
-                title: 'Nail Art Workshop',
-                start: '2026-02-21T14:00:00',
-                end: '2026-02-21T17:00:00',
-                backgroundColor: '#f59e0b',
-                borderColor: '#f59e0b',
-                extendedProps: {
-                    client: 'Michelle Torres',
-                    service: 'Beauty Care (Nail Care)',
-                    status: 'pending',
-                    phone: '+63 908 876 5432',
-                    email: 'michelle.torres@email.com',
-                    notes: 'Advanced nail art techniques workshop'
-                }
-            },
-            {
-                id: '8',
-                title: 'Eyebrow Microblading',
-                start: '2026-02-22T09:00:00',
-                end: '2026-02-22T11:00:00',
-                backgroundColor: '#10b981',
-                borderColor: '#10b981',
-                extendedProps: {
-                    client: 'Rachel Kim',
-                    service: 'Permanent Makeup Tattoo',
-                    status: 'confirmed',
-                    phone: '+63 922 345 6789',
-                    email: 'rachel.kim@email.com',
-                    notes: 'Eyebrow microblading procedure'
-                }
+    // Fetch appointments from API
+    async function fetchAppointments() {
+        try {
+            const response = await fetch('/CAATE-ITRMS/backend/public/api/v1/appointments');
+            const result = await response.json();
+
+            if (result.success && result.data) {
+                return result.data;
             }
-        ];
+            return [];
+        } catch (error) {
+            console.error('Error fetching appointments:', error);
+            return [];
+        }
+    }
+
+    // Convert appointments to calendar events
+    function convertToCalendarEvents(appointments) {
+        return appointments.map(appointment => {
+            // Build full name
+            const fullName = [
+                appointment.firstName,
+                appointment.secondName,
+                appointment.middleName,
+                appointment.lastName,
+                appointment.suffix
+            ].filter(Boolean).join(' ');
+
+            // Get initials for avatar
+            const firstName = appointment.firstName || '';
+            const lastName = appointment.lastName || '';
+            const initials = (firstName.charAt(0) + lastName.charAt(0)).toUpperCase() || 'NA';
+
+            // Format service category
+            const categoryMap = {
+                'skincare': 'Skin Care',
+                'haircare': 'Hair Care',
+                'nailcare': 'Nail Care',
+                'bodytreatment': 'Body Treatment',
+                'aesthetic': 'Aesthetic Services'
+            };
+            const serviceCategory = categoryMap[appointment.serviceCategory] || appointment.serviceCategory || '';
+
+            // Format service type
+            const serviceType = appointment.serviceType
+                ? appointment.serviceType.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+                : '';
+
+            // Combine date and time for start
+            const startDateTime = appointment.preferredDate && appointment.preferredTime
+                ? `${appointment.preferredDate}T${appointment.preferredTime}:00`
+                : null;
+
+            // Calculate end time (add 1 hour by default)
+            let endDateTime = null;
+            if (startDateTime) {
+                const start = new Date(startDateTime);
+                const end = new Date(start.getTime() + 60 * 60 * 1000); // Add 1 hour
+                endDateTime = end.toISOString().slice(0, 19);
+            }
+
+            // Determine status color
+            let backgroundColor, borderColor;
+            const status = appointment.status ? appointment.status.toLowerCase() : 'pending';
+
+            if (status === 'approved' || status === 'confirmed') {
+                backgroundColor = '#10b981';
+                borderColor = '#10b981';
+            } else if (status === 'pending') {
+                backgroundColor = '#f59e0b';
+                borderColor = '#f59e0b';
+            } else if (status === 'cancelled') {
+                backgroundColor = '#ef4444';
+                borderColor = '#ef4444';
+            } else {
+                backgroundColor = '#6c757d';
+                borderColor = '#6c757d';
+            }
+
+            return {
+                id: appointment._id,
+                title: '', // Empty title - only avatar will show
+                start: startDateTime,
+                end: endDateTime,
+                backgroundColor: 'transparent',
+                borderColor: 'transparent',
+                extendedProps: {
+                    client: fullName,
+                    initials: initials,
+                    service: `${serviceCategory}${serviceType ? ' (' + serviceType + ')' : ''}`,
+                    status: appointment.status || 'Pending',
+                    phone: appointment.contactNumber || 'N/A',
+                    email: appointment.email || 'N/A',
+                    notes: appointment.specialNotes || 'No special notes',
+                    adminNotes: appointment.adminNotes || 'No admin notes'
+                }
+            };
+        }).filter(event => event.start); // Only include events with valid dates
+    }
+
+    // Update statistics cards
+    function updateStatistics(appointments) {
+        const total = appointments.length;
+        const confirmed = appointments.filter(a => a.status && (a.status.toLowerCase() === 'approved' || a.status.toLowerCase() === 'confirmed')).length;
+        const pending = appointments.filter(a => a.status && a.status.toLowerCase() === 'pending').length;
+        const cancelled = appointments.filter(a => a.status && a.status.toLowerCase() === 'cancelled').length;
+
+        const statsCards = document.querySelectorAll('.card-body h3');
+        if (statsCards.length >= 4) {
+            statsCards[0].textContent = total;
+            statsCards[1].textContent = confirmed;
+            statsCards[2].textContent = pending;
+            statsCards[3].textContent = cancelled;
+        }
     }
 
     // Fallback calendar function
@@ -256,7 +274,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     const todayClass = isToday ? 'fc-day-today' : '';
                     html += `<td class="fc-daygrid-day ${todayClass}" style="height: 100px;">
                         <div class="fc-daygrid-day-number">${day}</div>
-                        ${getFallbackEvents(day)}
                     </td>`;
                     day++;
                 }
@@ -265,18 +282,6 @@ document.addEventListener('DOMContentLoaded', function () {
             if (day > daysInMonth) break;
         }
         return html;
-    }
-
-    // Helper function to get sample events for specific days
-    function getFallbackEvents(day) {
-        const events = {
-            15: '<div class="fc-event" style="background-color: #10b981; border-color: #10b981;">Beauty Care Consultation</div>',
-            16: '<div class="fc-event" style="background-color: #10b981; border-color: #10b981;">Advanced Skincare</div>',
-            17: '<div class="fc-event" style="background-color: #f59e0b; border-color: #f59e0b;">Nail Care</div>',
-            18: '<div class="fc-event" style="background-color: #10b981; border-color: #10b981;">Aesthetic Services</div>',
-            19: '<div class="fc-event" style="background-color: #ef4444; border-color: #ef4444; opacity: 0.7;">Permanent Makeup</div>'
-        };
-        return events[day] || '';
     }
 
     // Helper function to get month name
@@ -309,20 +314,42 @@ document.addEventListener('DOMContentLoaded', function () {
             }) : 'N/A';
 
             const client = event.extendedProps.client || 'N/A';
+            const initials = event.extendedProps.initials || 'NA';
             const service = event.extendedProps.service || 'N/A';
             const status = event.extendedProps.status || 'N/A';
             const phone = event.extendedProps.phone || 'N/A';
             const email = event.extendedProps.email || 'N/A';
             const notes = event.extendedProps.notes || 'No additional notes';
+            const adminNotes = event.extendedProps.adminNotes || 'No admin notes';
 
             modalBody.innerHTML = `
                 <div class="row">
                     <div class="col-md-12">
-                        <h6 class="mb-3">Contact Information</h6>
-                        <div class="row mb-2">
-                            <div class="col-sm-4"><strong>Name:</strong></div>
-                            <div class="col-sm-8">${client}</div>
+                        <div class="d-flex align-items-center mb-3">
+                            <div style="background: linear-gradient(135deg, rgba(54, 145, 191, 0.1) 0%, rgba(50, 85, 150, 0.1) 100%); 
+                                        backdrop-filter: blur(10px) saturate(180%); 
+                                        -webkit-backdrop-filter: blur(10px) saturate(180%); 
+                                        border: 1px solid rgba(54, 145, 191, 0.4); 
+                                        box-shadow: 0 4px 12px rgba(22, 56, 86, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3); 
+                                        color: white; 
+                                        display: flex; 
+                                        align-items: center; 
+                                        justify-content: center; 
+                                        border-radius: 50%; 
+                                        width: 48px; 
+                                        height: 48px; 
+                                        font-weight: 600; 
+                                        font-size: 18px; 
+                                        margin-right: 15px;">
+                                ${initials}
+                            </div>
+                            <div>
+                                <h5 class="mb-0">${client}</h5>
+                                <small class="text-muted">${email}</small>
+                            </div>
                         </div>
+                        <hr />
+                        <h6 class="mb-3">Contact Information</h6>
                         <div class="row mb-2">
                             <div class="col-sm-4"><strong>Email:</strong></div>
                             <div class="col-sm-8">${email}</div>
@@ -350,10 +377,14 @@ document.addEventListener('DOMContentLoaded', function () {
                             <div class="col-sm-8"><span class="badge bg-${getStatusColor(status)}">${status.charAt(0).toUpperCase() + status.slice(1)}</span></div>
                         </div>
                         <hr />
-                        <h6 class="mb-3">Admin Notes</h6>
+                        <h6 class="mb-3">Notes</h6>
                         <div class="alert alert-secondary mb-2">
-                            <small class="text-muted d-block mb-1"><i class="bx bx-time"></i> ${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} - Admin</small>
+                            <small class="text-muted d-block mb-1"><i class="bx bx-note"></i> Client Notes</small>
                             <p class="mb-0">${notes}</p>
+                        </div>
+                        <div class="alert alert-info mb-0">
+                            <small class="text-muted d-block mb-1"><i class="bx bx-user-circle"></i> Admin Notes</small>
+                            <p class="mb-0">${adminNotes}</p>
                         </div>
                     </div>
                 </div>
@@ -375,6 +406,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Helper function to get status color
     function getStatusColor(status) {
         switch (status) {
+            case 'approved':
             case 'confirmed':
                 return 'success';
             case 'pending':
@@ -391,6 +423,8 @@ document.addEventListener('DOMContentLoaded', function () {
     if (searchInput) {
         searchInput.addEventListener('input', function (e) {
             const searchTerm = e.target.value.toLowerCase();
+            // TODO: Implement search filtering
+            console.log('Search term:', searchTerm);
         });
     }
 

@@ -124,9 +124,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 calendar = new FullCalendar.Calendar(calendarEl, {
                     initialView: 'dayGridMonth',
                     headerToolbar: {
-                        left: 'prev,next today',
+                        left: 'prev,next',
                         center: 'title',
-                        right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                        right: 'today'
                     },
                     height: 'auto',
                     dayMaxEvents: false, // Show all events, no limit
@@ -153,32 +153,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         const view = calendar.view.type;
                         if (view === 'dayGridMonth') {
                             info.el.style.display = 'none';
-                        } else {
-                            // In week/day view, show the event with proper styling
-                            info.el.style.display = 'block';
-
-                            // Add custom styling for better visibility
-                            const status = info.event.extendedProps.status ? info.event.extendedProps.status.toLowerCase() : '';
-                            let backgroundColor = '#6c757d';
-
-                            if (status === 'approved' || status === 'confirmed') {
-                                backgroundColor = '#10b981';
-                            } else if (status === 'pending') {
-                                backgroundColor = '#f59e0b';
-                            } else if (status === 'cancelled') {
-                                backgroundColor = '#ef4444';
-                            }
-
-                            info.el.style.backgroundColor = backgroundColor;
-                            info.el.style.borderColor = backgroundColor;
-                            info.el.style.color = 'white';
-
-                            // Set the event title to show client name
-                            const titleEl = info.el.querySelector('.fc-event-title');
-                            if (titleEl) {
-                                titleEl.textContent = info.event.extendedProps.client || 'Appointment';
-                            }
                         }
+                        // Events will show automatically in week/day views with their assigned colors
                     },
                     viewDidMount: function () {
                         // After calendar renders, show status counts only in month view
@@ -298,8 +274,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 title: fullName, // Show client name in week/day views
                 start: startDateTime,
                 end: endDateTime,
-                backgroundColor: 'transparent',
-                borderColor: 'transparent',
+                backgroundColor: backgroundColor,
+                borderColor: borderColor,
                 extendedProps: {
                     client: fullName,
                     initials: initials,

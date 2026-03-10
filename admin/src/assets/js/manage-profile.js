@@ -79,7 +79,7 @@ async function loadAdminProfile() {
                     address: adminData.address,
                     created_at: adminData.created_at,
                     updated_at: adminData.updated_at,
-                    profileImage: adminData.profileImage || '../assets/images/AVATARNIKEL.jpg'
+                    profileImage: adminData.profileImage || '../assets/images/DEFAULT_AVATAR.png'
                 };
 
                 // Update profile overview
@@ -183,10 +183,10 @@ function updateProfileOverview(data) {
     // Profile image - use uploaded image if available, otherwise default avatar
     const profileImage = document.getElementById('profileImage');
     if (profileImage) {
-        if (data.profileImage && data.profileImage !== '../assets/images/AVATARNIKEL.jpg') {
+        if (data.profileImage && data.profileImage !== '../assets/images/DEFAULT_AVATAR.png') {
             profileImage.src = data.profileImage;
         } else {
-            profileImage.src = '../assets/images/AVATARNIKEL.jpg';
+            profileImage.src = '../assets/images/DEFAULT_AVATAR.png';
         }
     }
 

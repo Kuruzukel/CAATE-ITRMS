@@ -59,7 +59,7 @@ img/
 │   └── color.jpg
 ├── 📄 Other Assets (3 files)
 │   ├── 11.png
-│   ├── AVATARNIKEL.jpg                  # Avatar/profile image
+│   ├── DEFAULT_AVATAR.png                  # Avatar/profile image
 │   └── ADMINLOGONOBG.png                # Admin logo no background
 └── 📄 README.md                         # This file
 ```
@@ -132,7 +132,7 @@ Decorative and functional background assets:
 Miscellaneous images:
 
 - **11.png** - Generic asset
-- **AVATARNIKEL.jpg** - Default avatar/profile picture
+- **DEFAULT_AVATAR.png** - Default avatar/profile picture
 - **ADMINLOGONOBG.png** - Admin logo without background
 
 ## Usage Guidelines

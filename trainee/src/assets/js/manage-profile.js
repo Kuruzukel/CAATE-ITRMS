@@ -183,10 +183,10 @@ function updateProfileOverview(data) {
     // Profile image - use uploaded image if available, otherwise default avatar
     const profileImage = document.getElementById('profileImage');
     if (profileImage) {
-        if (data.profileImage && data.profileImage !== '../assets/images/AVATARNIKEL.jpg') {
+        if (data.profileImage && data.profileImage !== '../assets/images/DEFAULT_AVATAR.png') {
             profileImage.src = data.profileImage;
         } else {
-            profileImage.src = '../assets/images/AVATARNIKEL.jpg';
+            profileImage.src = '../assets/images/DEFAULT_AVATAR.png';
         }
     }
 

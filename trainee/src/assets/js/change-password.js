@@ -198,7 +198,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 // Redirect after 2 seconds
                 setTimeout(() => {
-                    window.location.href = 'manage-profile.html';
+                    window.location.href = '../../../auth/src/pages/login.html';
                 }, 2000);
             } else {
                 showToast('Current password is incorrect', 'error');

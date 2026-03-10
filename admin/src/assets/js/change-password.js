@@ -219,7 +219,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 // Redirect after 2 seconds
                 setTimeout(() => {
-                    window.location.href = 'dashboard.html';
+                    window.location.href = '../../../auth/src/pages/login.html';
                 }, 2000);
             } else {
                 // Show error toast

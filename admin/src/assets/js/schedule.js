@@ -20,7 +20,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 // Fetch appointments from API
                 const appointments = await fetchAppointments();
-                const events = convertToCalendarEvents(appointments);
 
                 const calendar = new FullCalendar.Calendar(calendarEl, {
                     initialView: 'dayGridMonth',
@@ -30,7 +29,16 @@ document.addEventListener('DOMContentLoaded', function () {
                         right: 'dayGridMonth,timeGridWeek,timeGridDay'
                     },
                     height: 'auto',
-                    events: events,
+                    events: function (info, successCallback, failureCallback) {
+                        // Fetch appointments dynamically when calendar changes
+                        fetchAppointments().then(appointments => {
+                            const events = convertToCalendarEvents(appointments);
+                            successCallback(events);
+                        }).catch(error => {
+                            console.error('Error loading events:', error);
+                            failureCallback(error);
+                        });
+                    },
                     eventClick: function (info) {
                         showAppointmentDetails(info.event);
                     },
@@ -41,10 +49,34 @@ document.addEventListener('DOMContentLoaded', function () {
                         // Add avatar to event - only show avatar, no name
                         const initials = info.event.extendedProps.initials;
                         if (initials) {
+                            // Find the event title element
                             const eventTitle = info.el.querySelector('.fc-event-title');
+                            const eventMain = info.el.querySelector('.fc-event-main');
+
                             if (eventTitle) {
                                 // Only show the avatar icon
                                 eventTitle.innerHTML = `
+                                    <div style="background: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 100%); 
+                                                backdrop-filter: blur(10px) saturate(180%); 
+                                                -webkit-backdrop-filter: blur(10px) saturate(180%); 
+                                                border: 1px solid rgba(255, 255, 255, 0.4); 
+                                                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3); 
+                                                color: white; 
+                                                display: inline-flex; 
+                                                align-items: center; 
+                                                justify-content: center; 
+                                                border-radius: 50%; 
+                                                width: 28px; 
+                                                height: 28px; 
+                                                font-weight: 600; 
+                                                font-size: 11px;
+                                                margin: 2px;">
+                                        ${initials}
+                                    </div>
+                                `;
+                            } else if (eventMain) {
+                                // Fallback: if no title element, add to main
+                                eventMain.innerHTML = `
                                     <div style="background: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 100%); 
                                                 backdrop-filter: blur(10px) saturate(180%); 
                                                 -webkit-backdrop-filter: blur(10px) saturate(180%); 

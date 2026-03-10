@@ -285,63 +285,68 @@ function initializeEditForm() {
     if (!saveButton) return;
 
     saveButton.addEventListener('click', async function () {
-        await saveProfileChanges();
+        // Show loading state
+        const originalText = saveButton.innerHTML;
+        saveButton.disabled = true;
+        saveButton.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i> Saving...';
+
+        try {
+            await saveProfileChanges();
+        } finally {
+            // Reset button state
+            saveButton.disabled = false;
+            saveButton.innerHTML = originalText;
+        }
     });
 }
 
 // Save profile changes
 async function saveProfileChanges() {
-    try {
-        const token = localStorage.getItem('authToken');
-        const userId = localStorage.getItem('userId');
+    const token = localStorage.getItem('authToken');
+    const userId = localStorage.getItem('userId');
 
-        if (!token || !userId) {
-            window.location.href = '../../../auth/src/pages/login.html';
-            return;
-        }
+    if (!token || !userId) {
+        window.location.href = '../../../auth/src/pages/login.html';
+        return;
+    }
 
-        const editFirstName = document.getElementById('editFirstName');
-        const editMiddleName = document.getElementById('editMiddleName');
-        const editLastName = document.getElementById('editLastName');
-        const editPhone = document.getElementById('editPhone');
-        const editEmail = document.getElementById('editEmail');
-        const editAddress = document.getElementById('editAddress');
+    const editFirstName = document.getElementById('editFirstName');
+    const editMiddleName = document.getElementById('editMiddleName');
+    const editLastName = document.getElementById('editLastName');
+    const editPhone = document.getElementById('editPhone');
+    const editEmail = document.getElementById('editEmail');
+    const editAddress = document.getElementById('editAddress');
 
-        const updatedData = {
-            first_name: editFirstName ? editFirstName.value : '',
-            middle_name: editMiddleName ? editMiddleName.value : '',
-            last_name: editLastName ? editLastName.value : '',
-            phone: editPhone ? editPhone.value : '',
-            email: editEmail ? editEmail.value : '',
-            address: editAddress ? editAddress.value : ''
-        };
+    const updatedData = {
+        first_name: editFirstName ? editFirstName.value : '',
+        middle_name: editMiddleName ? editMiddleName.value : '',
+        last_name: editLastName ? editLastName.value : '',
+        phone: editPhone ? editPhone.value : '',
+        email: editEmail ? editEmail.value : '',
+        address: editAddress ? editAddress.value : ''
+    };
 
-        const response = await fetch(`${config.api.baseURL}/api/v1/admins/${userId}`, {
-            method: 'PUT',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(updatedData)
-        });
+    const response = await fetch(`${config.api.baseURL}/api/v1/admins/${userId}`, {
+        method: 'PUT',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updatedData)
+    });
 
-        if (response.ok) {
-            // Close modal
-            const modal = bootstrap.Modal.getInstance(document.getElementById('editInformationModal'));
-            if (modal) modal.hide();
+    if (response.ok) {
+        // Close modal
+        const modal = bootstrap.Modal.getInstance(document.getElementById('editInformationModal'));
+        if (modal) modal.hide();
 
-            // Reload profile data
-            await loadAdminProfile();
+        // Reload profile data
+        await loadAdminProfile();
 
-            // Show success toast
-            showToast('Profile updated successfully!', 'success');
-        } else {
-            throw new Error('Failed to update profile');
-        }
-
-    } catch (error) {
-        console.error('Profile update error:', error);
-        showToast('Failed to update profile. Please try again.', 'error');
+        // Show success toast
+        showToast('Profile updated successfully!', 'success');
+    } else {
+        throw new Error('Failed to update profile');
     }
 }
 
@@ -398,7 +403,7 @@ async function uploadProfileImage(file) {
         const formData = new FormData();
         formData.append('profileImage', file);
 
-        const response = await fetch(`${API_BASE_URL}/api/v1/users/${userId}/profile-image`, {
+        const response = await fetch(`${config.api.baseURL}/api/v1/admins/${userId}/profile-image`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`

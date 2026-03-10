@@ -911,6 +911,19 @@ async function saveAppointmentChanges() {
         return;
     }
 
+    // Check if time slot is available (exclude current appointment from check)
+    const availability = await checkTimeSlotAvailability(
+        updatedData.preferredDate,
+        updatedData.preferredTime,
+        id // Exclude current appointment ID
+    );
+
+    if (!availability.available) {
+        showToast(`This time slot is already booked. Please select a different time.`, 'error');
+        document.getElementById('editPreferredTime').focus();
+        return;
+    }
+
     try {
         const response = await fetch(`/CAATE-ITRMS/backend/public/api/v1/appointments/${id}`, {
             method: 'PUT',
@@ -1097,6 +1110,40 @@ function updateRowWithNewData(row, data) {
 
 
 // Handle Save New Appointment
+// Check if time slot is already booked for a specific date
+async function checkTimeSlotAvailability(date, time, excludeAppointmentId = null) {
+    try {
+        // Fetch all appointments for the selected date
+        const response = await fetch('/CAATE-ITRMS/backend/public/api/v1/appointments');
+        const result = await response.json();
+
+        if (result.success && result.data) {
+            // Filter appointments for the selected date and time
+            const conflictingAppointments = result.data.filter(appointment => {
+                // Skip the current appointment when editing
+                if (excludeAppointmentId && appointment._id === excludeAppointmentId) {
+                    return false;
+                }
+
+                // Check if date and time match
+                return appointment.preferredDate === date &&
+                    appointment.preferredTime === time &&
+                    appointment.status !== 'Cancelled'; // Don't count cancelled appointments
+            });
+
+            return {
+                available: conflictingAppointments.length === 0,
+                conflictCount: conflictingAppointments.length
+            };
+        }
+
+        return { available: true, conflictCount: 0 };
+    } catch (error) {
+        console.error('Error checking time slot availability:', error);
+        return { available: true, conflictCount: 0 }; // Allow booking if check fails
+    }
+}
+
 async function handleSaveNewAppointment() {
     const btn = document.getElementById('saveNewAppointmentBtn');
     const originalText = btn.innerHTML;
@@ -1165,6 +1212,14 @@ async function handleSaveNewAppointment() {
 
     if (!preferredTime) {
         showToast('Preferred Time is required', 'error');
+        document.getElementById('addAppointmentTime').focus();
+        return;
+    }
+
+    // Check if time slot is available
+    const availability = await checkTimeSlotAvailability(preferredDate, preferredTime);
+    if (!availability.available) {
+        showToast(`This time slot is already booked. Please select a different time.`, 'error');
         document.getElementById('addAppointmentTime').focus();
         return;
     }

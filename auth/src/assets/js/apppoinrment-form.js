@@ -108,7 +108,7 @@ serviceCategorySelect.addEventListener('change', function () {
 });
 
 // Form Submission Handler
-appointmentForm.addEventListener('submit', function (e) {
+appointmentForm.addEventListener('submit', async function (e) {
     e.preventDefault();
     e.stopPropagation();
 
@@ -186,6 +186,14 @@ appointmentForm.addEventListener('submit', function (e) {
     const timeInput = document.getElementById('preferredTime');
     if (!timeInput.value) {
         showToast('Preferred Time is required. Please select your appointment time.', 'error');
+        highlightError(timeInput);
+        return;
+    }
+
+    // Check if time slot is available
+    const availability = await checkTimeSlotAvailability(dateInput.value, timeInput.value);
+    if (!availability.available) {
+        showToast('This time slot is already booked. Please select a different time.', 'error');
         highlightError(timeInput);
         return;
     }

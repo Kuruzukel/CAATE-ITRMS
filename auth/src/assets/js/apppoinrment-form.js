@@ -43,11 +43,136 @@ const serviceTypes = {
     ]
 };
 
+// Check if time slot is already booked for a specific date
+async function checkTimeSlotAvailability(date, time) {
+    try {
+        // Fetch all appointments for the selected date
+        const response = await fetch('/CAATE-ITRMS/backend/public/api/v1/appointments');
+        const result = await response.json();
+
+        if (result.success && result.data) {
+            // Filter appointments for the selected date and time
+            const conflictingAppointments = result.data.filter(appointment => {
+                // Check if date and time match
+                return appointment.preferredDate === date &&
+                    appointment.preferredTime === time &&
+                    appointment.status !== 'Cancelled'; // Don't count cancelled appointments
+            });
+
+            return {
+                available: conflictingAppointments.length === 0,
+                conflictCount: conflictingAppointments.length
+            };
+        }
+
+        return { available: true, conflictCount: 0 };
+    } catch (error) {
+        console.error('Error checking time slot availability:', error);
+        // In case of error, allow the booking but log the error
+        return { available: true, conflictCount: 0 };
+    }
+}
+
 // DOM Elements
 const serviceCategorySelect = document.getElementById('serviceCategory');
 const serviceTypeSelect = document.getElementById('serviceType');
 const appointmentForm = document.getElementById('appointmentForm');
 const preferredDateInput = document.getElementById('preferredDate');
+const preferredTimeSelect = document.getElementById('preferredTime');
+
+// All available time slots
+const allTimeSlots = [
+    { value: '09:00', text: '09:00 AM' },
+    { value: '10:00', text: '10:00 AM' },
+    { value: '11:00', text: '11:00 AM' },
+    { value: '13:00', text: '01:00 PM' },
+    { value: '14:00', text: '02:00 PM' },
+    { value: '15:00', text: '03:00 PM' },
+    { value: '16:00', text: '04:00 PM' }
+];
+
+// Function to get booked time slots for a specific date
+async function getBookedTimeSlots(date) {
+    try {
+        const response = await fetch('/CAATE-ITRMS/backend/public/api/v1/appointments');
+        const result = await response.json();
+
+        if (result.success && result.data) {
+            // Get all booked time slots for the selected date (excluding cancelled)
+            const bookedSlots = result.data
+                .filter(appointment =>
+                    appointment.preferredDate === date &&
+                    appointment.status !== 'Cancelled'
+                )
+                .map(appointment => appointment.preferredTime);
+
+            return bookedSlots;
+        }
+
+        return [];
+    } catch (error) {
+        console.error('Error fetching booked time slots:', error);
+        return [];
+    }
+}
+
+// Function to update available time slots based on selected date
+async function updateAvailableTimeSlots() {
+    const selectedDate = preferredDateInput.value;
+
+    if (!selectedDate) {
+        // Reset to all time slots if no date selected
+        preferredTimeSelect.innerHTML = '<option value="">Select a time</option>';
+        allTimeSlots.forEach(slot => {
+            const option = document.createElement('option');
+            option.value = slot.value;
+            option.textContent = slot.text;
+            preferredTimeSelect.appendChild(option);
+        });
+        return;
+    }
+
+    // Show loading state
+    preferredTimeSelect.innerHTML = '<option value="">Loading available times...</option>';
+    preferredTimeSelect.disabled = true;
+
+    // Get booked time slots for the selected date
+    const bookedSlots = await getBookedTimeSlots(selectedDate);
+
+    // Clear and rebuild time slot options
+    preferredTimeSelect.innerHTML = '<option value="">Select a time</option>';
+
+    let availableCount = 0;
+    allTimeSlots.forEach(slot => {
+        const option = document.createElement('option');
+        option.value = slot.value;
+
+        if (bookedSlots.includes(slot.value)) {
+            // Mark as booked (disabled)
+            option.textContent = `${slot.text} (Booked)`;
+            option.disabled = true;
+            option.style.color = '#999';
+        } else {
+            // Available slot
+            option.textContent = slot.text;
+            availableCount++;
+        }
+
+        preferredTimeSelect.appendChild(option);
+    });
+
+    // Re-enable the select
+    preferredTimeSelect.disabled = false;
+
+    // Show message if no slots available
+    if (availableCount === 0) {
+        showToast('All time slots are booked for this date. Please select another date.', 'warning');
+        preferredTimeSelect.innerHTML = '<option value="">No available time slots</option>';
+    }
+}
+
+// Listen for date changes
+preferredDateInput.addEventListener('change', updateAvailableTimeSlots);
 
 // Set minimum date to today
 const today = new Date().toISOString().split('T')[0];

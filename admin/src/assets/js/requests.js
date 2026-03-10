@@ -220,6 +220,18 @@ document.addEventListener('DOMContentLoaded', function () {
         saveNewAppointmentBtn.addEventListener('click', handleSaveNewAppointment);
     }
 
+    // Add event listener for date change in Add Appointment modal
+    const addAppointmentDate = document.getElementById('addAppointmentDate');
+    if (addAppointmentDate) {
+        addAppointmentDate.addEventListener('change', updateAvailableTimeSlotsForAdd);
+    }
+
+    // Add event listener for date change in Edit Appointment modal
+    const editPreferredDate = document.getElementById('editPreferredDate');
+    if (editPreferredDate) {
+        editPreferredDate.addEventListener('change', updateAvailableTimeSlotsForEdit);
+    }
+
     // Menu toggle is handled by main.js
 });
 
@@ -1110,6 +1122,17 @@ function updateRowWithNewData(row, data) {
 
 
 // Handle Save New Appointment
+// All available time slots
+const allTimeSlots = [
+    { value: '09:00', text: '09:00 AM' },
+    { value: '10:00', text: '10:00 AM' },
+    { value: '11:00', text: '11:00 AM' },
+    { value: '13:00', text: '01:00 PM' },
+    { value: '14:00', text: '02:00 PM' },
+    { value: '15:00', text: '03:00 PM' },
+    { value: '16:00', text: '04:00 PM' }
+];
+
 // Check if time slot is already booked for a specific date
 async function checkTimeSlotAvailability(date, time, excludeAppointmentId = null) {
     try {
@@ -1141,6 +1164,164 @@ async function checkTimeSlotAvailability(date, time, excludeAppointmentId = null
     } catch (error) {
         console.error('Error checking time slot availability:', error);
         return { available: true, conflictCount: 0 }; // Allow booking if check fails
+    }
+}
+
+// Function to get booked time slots for a specific date
+async function getBookedTimeSlots(date, excludeAppointmentId = null) {
+    try {
+        const response = await fetch('/CAATE-ITRMS/backend/public/api/v1/appointments');
+        const result = await response.json();
+
+        if (result.success && result.data) {
+            // Get all booked time slots for the selected date (excluding cancelled)
+            const bookedSlots = result.data
+                .filter(appointment => {
+                    // Skip the current appointment when editing
+                    if (excludeAppointmentId && appointment._id === excludeAppointmentId) {
+                        return false;
+                    }
+                    return appointment.preferredDate === date &&
+                        appointment.status !== 'Cancelled';
+                })
+                .map(appointment => appointment.preferredTime);
+
+            return bookedSlots;
+        }
+
+        return [];
+    } catch (error) {
+        console.error('Error fetching booked time slots:', error);
+        return [];
+    }
+}
+
+// Function to update available time slots for Add Appointment modal
+async function updateAvailableTimeSlotsForAdd() {
+    const dateInput = document.getElementById('addAppointmentDate');
+    const timeSelect = document.getElementById('addAppointmentTime');
+
+    if (!dateInput || !timeSelect) return;
+
+    const selectedDate = dateInput.value;
+
+    if (!selectedDate) {
+        // Reset to all time slots if no date selected
+        timeSelect.innerHTML = '<option value="">Select a time</option>';
+        allTimeSlots.forEach(slot => {
+            const option = document.createElement('option');
+            option.value = slot.value;
+            option.textContent = slot.text;
+            timeSelect.appendChild(option);
+        });
+        return;
+    }
+
+    // Show loading state
+    timeSelect.innerHTML = '<option value="">Loading available times...</option>';
+    timeSelect.disabled = true;
+
+    // Get booked time slots for the selected date
+    const bookedSlots = await getBookedTimeSlots(selectedDate);
+
+    // Clear and rebuild time slot options
+    timeSelect.innerHTML = '<option value="">Select a time</option>';
+
+    let availableCount = 0;
+    allTimeSlots.forEach(slot => {
+        const option = document.createElement('option');
+        option.value = slot.value;
+
+        if (bookedSlots.includes(slot.value)) {
+            // Mark as booked (disabled)
+            option.textContent = `${slot.text} (Booked)`;
+            option.disabled = true;
+            option.style.color = '#999';
+        } else {
+            // Available slot
+            option.textContent = slot.text;
+            availableCount++;
+        }
+
+        timeSelect.appendChild(option);
+    });
+
+    // Re-enable the select
+    timeSelect.disabled = false;
+
+    // Show message if no slots available
+    if (availableCount === 0) {
+        showToast('All time slots are booked for this date. Please select another date.', 'warning');
+        timeSelect.innerHTML = '<option value="">No available time slots</option>';
+    }
+}
+
+// Function to update available time slots for Edit Appointment modal
+async function updateAvailableTimeSlotsForEdit() {
+    const dateInput = document.getElementById('editPreferredDate');
+    const timeSelect = document.getElementById('editPreferredTime');
+
+    if (!dateInput || !timeSelect || !currentEditingAppointmentRow) return;
+
+    const selectedDate = dateInput.value;
+    const currentAppointmentId = currentEditingAppointmentRow.getAttribute('data-id');
+
+    if (!selectedDate) {
+        // Reset to all time slots if no date selected
+        timeSelect.innerHTML = '<option value="">Select a time</option>';
+        allTimeSlots.forEach(slot => {
+            const option = document.createElement('option');
+            option.value = slot.value;
+            option.textContent = slot.text;
+            timeSelect.appendChild(option);
+        });
+        return;
+    }
+
+    // Store current selection
+    const currentSelection = timeSelect.value;
+
+    // Show loading state
+    timeSelect.innerHTML = '<option value="">Loading available times...</option>';
+    timeSelect.disabled = true;
+
+    // Get booked time slots for the selected date (excluding current appointment)
+    const bookedSlots = await getBookedTimeSlots(selectedDate, currentAppointmentId);
+
+    // Clear and rebuild time slot options
+    timeSelect.innerHTML = '<option value="">Select a time</option>';
+
+    let availableCount = 0;
+    allTimeSlots.forEach(slot => {
+        const option = document.createElement('option');
+        option.value = slot.value;
+
+        if (bookedSlots.includes(slot.value)) {
+            // Mark as booked (disabled)
+            option.textContent = `${slot.text} (Booked)`;
+            option.disabled = true;
+            option.style.color = '#999';
+        } else {
+            // Available slot
+            option.textContent = slot.text;
+            availableCount++;
+        }
+
+        timeSelect.appendChild(option);
+    });
+
+    // Restore previous selection if it's still available
+    if (currentSelection && !bookedSlots.includes(currentSelection)) {
+        timeSelect.value = currentSelection;
+    }
+
+    // Re-enable the select
+    timeSelect.disabled = false;
+
+    // Show message if no slots available
+    if (availableCount === 0) {
+        showToast('All time slots are booked for this date. Please select another date.', 'warning');
+        timeSelect.innerHTML = '<option value="">No available time slots</option>';
     }
 }
 

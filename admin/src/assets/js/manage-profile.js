@@ -168,7 +168,17 @@ function updateProfileOverview(data) {
         statusBadge.className = 'badge bg-success';
     }
 
+    // Phone number
+    const phoneElement = document.getElementById('profilePhone');
+    if (phoneElement) {
+        phoneElement.textContent = data.phone || data.phoneNumber || 'N/A';
+    }
 
+    // Address
+    const addressElement = document.getElementById('profileAddress');
+    if (addressElement) {
+        addressElement.textContent = data.address || 'N/A';
+    }
 
     // Profile image
     const profileImage = document.getElementById('profileImage');

@@ -44,12 +44,12 @@ document.addEventListener('DOMContentLoaded', function () {
             // Clear existing content
             eventsContainer.innerHTML = '';
 
-            // Create status indicators
+            // Create status indicators with click handlers
             const statusHTML = [];
 
             if (pendingCount > 0) {
                 statusHTML.push(`
-                    <span style="display: inline-flex; align-items: center; margin: 2px 4px; font-size: 11px; font-weight: 600;">
+                    <span class="status-indicator" data-date="${dateStr}" data-status="pending" style="display: inline-flex; align-items: center; margin: 2px 4px; font-size: 11px; font-weight: 600; cursor: pointer;">
                         <span style="width: 8px; height: 8px; border-radius: 50%; background: #f59e0b; margin-right: 3px;"></span>
                         <span style="color: #f59e0b;">${pendingCount}p</span>
                     </span>
@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (approvedCount > 0) {
                 statusHTML.push(`
-                    <span style="display: inline-flex; align-items: center; margin: 2px 4px; font-size: 11px; font-weight: 600;">
+                    <span class="status-indicator" data-date="${dateStr}" data-status="approved" style="display: inline-flex; align-items: center; margin: 2px 4px; font-size: 11px; font-weight: 600; cursor: pointer;">
                         <span style="width: 8px; height: 8px; border-radius: 50%; background: #10b981; margin-right: 3px;"></span>
                         <span style="color: #10b981;">${approvedCount}a</span>
                     </span>
@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (cancelledCount > 0) {
                 statusHTML.push(`
-                    <span style="display: inline-flex; align-items: center; margin: 2px 4px; font-size: 11px; font-weight: 600;">
+                    <span class="status-indicator" data-date="${dateStr}" data-status="cancelled" style="display: inline-flex; align-items: center; margin: 2px 4px; font-size: 11px; font-weight: 600; cursor: pointer;">
                         <span style="width: 8px; height: 8px; border-radius: 50%; background: #ef4444; margin-right: 3px;"></span>
                         <span style="color: #ef4444;">${cancelledCount}c</span>
                     </span>
@@ -75,6 +75,16 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             eventsContainer.innerHTML = statusHTML.join('');
+        });
+
+        // Attach click handlers to status indicators
+        document.querySelectorAll('.status-indicator').forEach(indicator => {
+            indicator.addEventListener('click', function (e) {
+                e.stopPropagation();
+                const date = this.getAttribute('data-date');
+                const status = this.getAttribute('data-status');
+                showAppointmentsByDateAndStatus(calendarInstance, date, status);
+            });
         });
     }
 
@@ -365,6 +375,244 @@ document.addEventListener('DOMContentLoaded', function () {
         return months[month];
     }
 
+    // Function to show appointments by date and status
+    function showAppointmentsByDateAndStatus(calendarInstance, date, status) {
+        if (!calendarInstance) return;
+
+        // Get all events for this date with matching status
+        const events = calendarInstance.getEvents().filter(event => {
+            const eventDate = event.start.toISOString().split('T')[0];
+            const eventStatus = event.extendedProps.status ? event.extendedProps.status.toLowerCase() : '';
+
+            // Match status (handle both 'approved' and 'confirmed' as approved)
+            let statusMatch = false;
+            if (status === 'approved') {
+                statusMatch = eventStatus === 'approved' || eventStatus === 'confirmed';
+            } else {
+                statusMatch = eventStatus === status;
+            }
+
+            return eventDate === date && statusMatch;
+        });
+
+        if (events.length === 0) return;
+
+        const modal = document.getElementById('appointmentModal');
+        const modalTitle = document.getElementById('appointmentModalTitle');
+        const modalBody = document.getElementById('appointmentModalBody');
+
+        if (modal && modalTitle && modalBody) {
+            // Format date for title
+            const dateObj = new Date(date + 'T00:00:00');
+            const formattedDate = dateObj.toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+
+            const statusLabel = status.charAt(0).toUpperCase() + status.slice(1);
+            modalTitle.textContent = `${statusLabel} Appointments - ${formattedDate}`;
+
+            // Build list of appointments
+            let appointmentsHTML = '<div class="list-group">';
+
+            events.forEach(event => {
+                const client = event.extendedProps.client || 'N/A';
+                const initials = event.extendedProps.initials || 'NA';
+                const service = event.extendedProps.service || 'N/A';
+                const eventStatus = event.extendedProps.status || 'N/A';
+                const phone = event.extendedProps.phone || 'N/A';
+                const email = event.extendedProps.email || 'N/A';
+                const startTime = event.start.toLocaleTimeString('en-US', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+
+                appointmentsHTML += `
+                    <div class="list-group-item list-group-item-action" style="cursor: pointer; border-left: 4px solid ${getStatusColorHex(eventStatus)};" data-event-id="${event.id}">
+                        <div class="d-flex align-items-center">
+                            <div style="background: linear-gradient(135deg, rgba(54, 145, 191, 0.1) 0%, rgba(50, 85, 150, 0.1) 100%); 
+                                        backdrop-filter: blur(10px) saturate(180%); 
+                                        -webkit-backdrop-filter: blur(10px) saturate(180%); 
+                                        border: 1px solid rgba(54, 145, 191, 0.4); 
+                                        box-shadow: 0 4px 12px rgba(22, 56, 86, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3); 
+                                        color: white; 
+                                        display: flex; 
+                                        align-items: center; 
+                                        justify-content: center; 
+                                        border-radius: 50%; 
+                                        width: 40px; 
+                                        height: 40px; 
+                                        font-weight: 600; 
+                                        font-size: 14px; 
+                                        margin-right: 12px;
+                                        flex-shrink: 0;">
+                                ${initials}
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <h6 class="mb-1">${client}</h6>
+                                        <small class="text-muted"><i class="bx bx-time"></i> ${startTime} | ${service}</small>
+                                    </div>
+                                    <span class="badge bg-${getStatusColor(eventStatus)}">${eventStatus}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            appointmentsHTML += '</div>';
+            modalBody.innerHTML = appointmentsHTML;
+
+            // Add click handlers to each appointment item
+            setTimeout(() => {
+                document.querySelectorAll('[data-event-id]').forEach(item => {
+                    item.addEventListener('click', function () {
+                        const eventId = this.getAttribute('data-event-id');
+                        const event = calendarInstance.getEventById(eventId);
+                        if (event) {
+                            // Close current modal and show details
+                            const currentModal = bootstrap.Modal.getInstance(modal);
+                            if (currentModal) {
+                                currentModal.hide();
+                            }
+                            setTimeout(() => showAppointmentDetails(event), 300);
+                        }
+                    });
+                });
+            }, 100);
+
+            // Show the modal
+            try {
+                const bootstrapModal = new bootstrap.Modal(modal);
+                bootstrapModal.show();
+            } catch (error) {
+                console.error('Error showing modal:', error);
+                modal.style.display = 'block';
+                modal.classList.add('show');
+            }
+        }
+    }
+
+    // Function to show appointments filtered by status for a specific date
+    function showAppointmentsByStatus(calendarInstance, date, status) {
+        if (!calendarInstance) return;
+
+        // Get all events for this date with the specified status
+        const events = calendarInstance.getEvents().filter(event => {
+            const eventDate = event.start.toISOString().split('T')[0];
+            const eventStatus = event.extendedProps.status ? event.extendedProps.status.toLowerCase() : '';
+
+            // Match the date
+            if (eventDate !== date) return false;
+
+            // Match the status
+            if (status === 'pending' && eventStatus === 'pending') return true;
+            if (status === 'approved' && (eventStatus === 'approved' || eventStatus === 'confirmed')) return true;
+            if (status === 'cancelled' && eventStatus === 'cancelled') return true;
+
+            return false;
+        });
+
+        if (events.length === 0) return;
+
+        const modal = document.getElementById('appointmentModal');
+        const modalTitle = document.getElementById('appointmentModalTitle');
+        const modalBody = document.getElementById('appointmentModalBody');
+
+        if (modal && modalTitle && modalBody) {
+            // Format the date for display
+            const dateObj = new Date(date + 'T00:00:00');
+            const formattedDate = dateObj.toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+
+            // Capitalize status
+            const statusDisplay = status.charAt(0).toUpperCase() + status.slice(1);
+
+            modalTitle.textContent = `${statusDisplay} Appointments - ${formattedDate}`;
+
+            // Build the list of appointments
+            let appointmentsHTML = '<div class="list-group">';
+
+            events.forEach((event, index) => {
+                const client = event.extendedProps.client || 'N/A';
+                const initials = event.extendedProps.initials || 'NA';
+                const service = event.extendedProps.service || 'N/A';
+                const eventStatus = event.extendedProps.status || 'N/A';
+                const phone = event.extendedProps.phone || 'N/A';
+                const email = event.extendedProps.email || 'N/A';
+                const time = event.start.toLocaleTimeString('en-US', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+
+                appointmentsHTML += `
+                    <div class="list-group-item appointment-item" data-event-index="${index}" style="cursor: pointer; border-left: 4px solid ${getStatusColorHex(eventStatus)};">
+                        <div class="d-flex align-items-center">
+                            <div style="background: linear-gradient(135deg, rgba(54, 145, 191, 0.1) 0%, rgba(50, 85, 150, 0.1) 100%); 
+                                        backdrop-filter: blur(10px) saturate(180%); 
+                                        -webkit-backdrop-filter: blur(10px) saturate(180%); 
+                                        border: 1px solid rgba(54, 145, 191, 0.4); 
+                                        box-shadow: 0 4px 12px rgba(22, 56, 86, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3); 
+                                        color: white; 
+                                        display: flex; 
+                                        align-items: center; 
+                                        justify-content: center; 
+                                        border-radius: 50%; 
+                                        width: 40px; 
+                                        height: 40px; 
+                                        font-weight: 600; 
+                                        font-size: 14px; 
+                                        margin-right: 12px;
+                                        flex-shrink: 0;">
+                                ${initials}
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <h6 class="mb-1">${client}</h6>
+                                        <small class="text-muted d-block">${service}</small>
+                                        <small class="text-muted"><i class="bx bx-time"></i> ${time}</small>
+                                    </div>
+                                    <span class="badge bg-${getStatusColor(eventStatus)}">${eventStatus}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            appointmentsHTML += '</div>';
+            modalBody.innerHTML = appointmentsHTML;
+
+            // Add click handlers to each appointment item
+            setTimeout(() => {
+                document.querySelectorAll('.appointment-item').forEach((item, index) => {
+                    item.addEventListener('click', function () {
+                        showAppointmentDetails(events[index]);
+                    });
+                });
+            }, 100);
+
+            // Show the modal
+            try {
+                const bootstrapModal = new bootstrap.Modal(modal);
+                bootstrapModal.show();
+            } catch (error) {
+                console.error('Error showing modal:', error);
+                modal.style.display = 'block';
+                modal.classList.add('show');
+            }
+        }
+    }
+
     // Function to show appointment details in modal
     function showAppointmentDetails(event) {
         const modal = document.getElementById('appointmentModal');
@@ -479,7 +727,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Helper function to get status color
     function getStatusColor(status) {
-        switch (status) {
+        const statusLower = status ? status.toLowerCase() : '';
+        switch (statusLower) {
             case 'approved':
             case 'confirmed':
                 return 'success';
@@ -489,6 +738,22 @@ document.addEventListener('DOMContentLoaded', function () {
                 return 'danger';
             default:
                 return 'secondary';
+        }
+    }
+
+    // Helper function to get status color hex
+    function getStatusColorHex(status) {
+        const statusLower = status ? status.toLowerCase() : '';
+        switch (statusLower) {
+            case 'approved':
+            case 'confirmed':
+                return '#10b981';
+            case 'pending':
+                return '#f59e0b';
+            case 'cancelled':
+                return '#ef4444';
+            default:
+                return '#6c757d';
         }
     }
 

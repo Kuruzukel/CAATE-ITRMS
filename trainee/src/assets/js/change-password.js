@@ -145,14 +145,12 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('confirmPassword').addEventListener('input', validateForm);
     document.getElementById('currentPassword').addEventListener('input', validateForm);
 
-    // Form submission
+    // Form submission - show confirmation modal
     document.getElementById('changePasswordForm').addEventListener('submit', function (e) {
         e.preventDefault();
 
-        const currentPassword = document.getElementById('currentPassword').value;
         const newPassword = document.getElementById('newPassword').value;
         const confirmPassword = document.getElementById('confirmPassword').value;
-        const submitBtn = document.getElementById('submitBtn');
 
         // Validate passwords match
         if (newPassword !== confirmPassword) {
@@ -161,9 +159,26 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
+        // Show confirmation modal
+        const confirmModal = new bootstrap.Modal(document.getElementById('confirmChangePasswordModal'));
+        confirmModal.show();
+    });
+
+    // Handle confirmation button click
+    document.getElementById('confirmPasswordChangeBtn').addEventListener('click', function () {
+        const submitBtn = document.getElementById('submitBtn');
+        const confirmBtn = this;
+
+        // Close the modal
+        const confirmModal = bootstrap.Modal.getInstance(document.getElementById('confirmChangePasswordModal'));
+        confirmModal.hide();
+
         // Disable submit button and show loading
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<i class="bx bx-loader-alt bx-spin me-1"></i> Changing Password...';
+
+        // Disable confirm button
+        confirmBtn.disabled = true;
 
         // Simulate API call (replace with actual API call)
         setTimeout(() => {
@@ -192,6 +207,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Re-enable submit button
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = '<i class="bx bx-check me-1"></i> Change Password';
+                confirmBtn.disabled = false;
             }
         }, 500);
     });

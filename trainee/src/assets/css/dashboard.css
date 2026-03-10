@@ -27,6 +27,29 @@
 
 /* Green dot removed - avatar-online indicator disabled */
 
+/* Ensure avatar image loads properly */
+.avatar img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 50%;
+}
+
+/* Fix for avatar alignment */
+.navbar .avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Override any conflicting styles */
+.navbar-dropdown.dropdown-user .avatar img {
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 50% !important;
+    object-fit: cover !important;
+    display: block !important;
+}
+
 .navbar-dropdown.dropdown-user .dropdown-menu {
     padding: 0.5rem 0;
     margin-top: 0.5rem !important;

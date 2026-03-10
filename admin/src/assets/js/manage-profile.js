@@ -117,19 +117,19 @@ async function loadAdminProfile() {
                     updateProfileOverview(adminData);
                     updatePersonalInformation(adminData);
                     updateNavbarUserInfo(adminData);
-                    showNotification('Using cached profile data', 'warning');
+                    showToast('Using cached profile data', 'warning');
                 } catch (e) {
                     console.error('Error parsing cached data:', e);
-                    showNotification('Failed to load profile data', 'error');
+                    showToast('Failed to load profile data', 'error');
                 }
             } else {
-                showNotification('Failed to load profile data. Please try logging in again.', 'error');
+                showToast('Failed to load profile data. Please try logging in again.', 'error');
             }
         }
 
     } catch (error) {
         console.error('Profile loading error:', error);
-        showNotification('An error occurred while loading your profile', 'error');
+        showToast('An error occurred while loading your profile', 'error');
     }
 }
 
@@ -308,15 +308,15 @@ async function saveProfileChanges() {
         const editAddress = document.getElementById('editAddress');
 
         const updatedData = {
-            firstName: editFirstName ? editFirstName.value : '',
-            middleName: editMiddleName ? editMiddleName.value : '',
-            lastName: editLastName ? editLastName.value : '',
-            phoneNumber: editPhone ? editPhone.value : '',
+            first_name: editFirstName ? editFirstName.value : '',
+            middle_name: editMiddleName ? editMiddleName.value : '',
+            last_name: editLastName ? editLastName.value : '',
+            phone: editPhone ? editPhone.value : '',
             email: editEmail ? editEmail.value : '',
             address: editAddress ? editAddress.value : ''
         };
 
-        const response = await fetch(`${API_BASE_URL}/api/v1/users/${userId}`, {
+        const response = await fetch(`${config.api.baseURL}/api/v1/admins/${userId}`, {
             method: 'PUT',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -325,21 +325,23 @@ async function saveProfileChanges() {
             body: JSON.stringify(updatedData)
         });
 
-        if (!response.ok) {
+        if (response.ok) {
+            // Close modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('editInformationModal'));
+            if (modal) modal.hide();
+
+            // Reload profile data
+            await loadAdminProfile();
+
+            // Show success toast
+            showToast('Profile updated successfully!', 'success');
+        } else {
             throw new Error('Failed to update profile');
         }
 
-        // Close modal
-        const modal = bootstrap.Modal.getInstance(document.getElementById('editInformationModal'));
-        if (modal) modal.hide();
-
-        // Reload profile data
-        await loadAdminProfile();
-
-        showNotification('Profile updated successfully!', 'success');
-
     } catch (error) {
-        showNotification('Failed to update profile', 'error');
+        console.error('Profile update error:', error);
+        showToast('Failed to update profile. Please try again.', 'error');
     }
 }
 
@@ -362,14 +364,14 @@ function initializePhotoUpload() {
         // Validate file type
         const validTypes = ['image/jpeg', 'image/jpg', 'image/png'];
         if (!validTypes.includes(file.type)) {
-            showNotification('Please select a valid image file (JPG or PNG)', 'error');
+            showToast('Please select a valid image file (JPG or PNG)', 'error');
             return;
         }
 
         // Validate file size (2MB max)
         const maxSize = 2 * 1024 * 1024;
         if (file.size > maxSize) {
-            showNotification('File size must be less than 2MB', 'error');
+            showToast('File size must be less than 2MB', 'error');
             return;
         }
 
@@ -408,10 +410,10 @@ async function uploadProfileImage(file) {
             throw new Error('Failed to upload image');
         }
 
-        showNotification('Photo updated successfully!', 'success');
+        showToast('Photo updated successfully!', 'success');
 
     } catch (error) {
-        showNotification('Failed to upload photo', 'error');
+        showToast('Failed to upload photo', 'error');
     }
 }
 
@@ -432,11 +434,82 @@ function formatDateTime(dateString) {
     return date.toLocaleDateString('en-US', options).replace(',', ' -');
 }
 
+// Toast notification functions
+function showToast(message, type = 'success') {
+    const container = document.getElementById('toastContainer');
+    if (!container) return;
+
+    const toast = document.createElement('div');
+    toast.className = `toast-notification ${type}`;
+
+    const icon = type === 'success' ? 'bx-check' :
+        type === 'error' ? 'bx-x' :
+            type === 'warning' ? 'bx-error-alt' : 'bxs-info-circle';
+
+    toast.innerHTML = `
+        <i class="bx ${icon} toast-icon"></i>
+        <div class="toast-content">
+            <div class="toast-message">${message}</div>
+        </div>
+    `;
+
+    container.appendChild(toast);
+
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+        toast.classList.add('hiding');
+        setTimeout(() => toast.remove(), 300);
+    }, 5000);
+}
+
+// Show success message
+function showSuccess(message) {
+    showToast(message, 'success');
+}
+
+// Show error message
+function showError(message) {
+    showToast(message, 'error');
+}
+
 function showNotification(message, type = 'info') {
-    // Simple alert for now - can be replaced with toast notification
-    if (type === 'error') {
-        alert('Error: ' + message);
-    } else {
-        alert(message);
-    }
+    showToast(message, type);
+}
+
+// Toast notification function
+function showToast(message, type = 'success') {
+    const toastContainer = document.getElementById('toastContainer');
+    if (!toastContainer) return;
+
+    const toast = document.createElement('div');
+    toast.className = `toast-notification ${type}`;
+
+    const icon = type === 'success' ? 'bx-check' :
+        type === 'error' ? 'bx-x' :
+            type === 'warning' ? 'bx-error-alt' : 'bxs-info-circle';
+
+    toast.innerHTML = `
+        <i class="bx ${icon} toast-icon"></i>
+        <div class="toast-content">
+            <div class="toast-message">${message}</div>
+        </div>
+    `;
+
+    toastContainer.appendChild(toast);
+
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+        toast.classList.add('hiding');
+        setTimeout(() => toast.remove(), 300);
+    }, 5000);
+}
+
+// Show success message
+function showSuccess(message) {
+    showToast(message, 'success');
+}
+
+// Show error message
+function showError(message) {
+    showToast(message, 'error');
 }

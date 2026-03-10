@@ -568,16 +568,6 @@ function showError(message) {
     showToast(message, 'error');
 }
 
-// Show success message
-function showSuccess(message) {
-    showToast(message, 'success');
-}
-
-// Show error message
-function showError(message) {
-    showToast(message, 'error');
-}
-
 // Show info message
 function showInfo(message) {
     showToast(message, 'info');

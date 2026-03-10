@@ -27,8 +27,14 @@ class AdminController {
             if (isset($admin['login_history'])) {
                 $historyArray = $admin['login_history'];
                 
-                // Convert BSON array to PHP array if needed
+                // Convert BSON array to PHP array properly
                 if ($historyArray instanceof MongoDB\Model\BSONArray) {
+                    // Use iterator to convert BSONArray to regular PHP array
+                    $historyArray = iterator_to_array($historyArray);
+                } elseif ($historyArray instanceof MongoDB\BSON\PackedArray) {
+                    // Handle PackedArray type
+                    $historyArray = $historyArray->toArray();
+                } elseif (is_object($historyArray) && method_exists($historyArray, 'toArray')) {
                     $historyArray = $historyArray->toArray();
                 } elseif (is_object($historyArray)) {
                     $historyArray = (array)$historyArray;

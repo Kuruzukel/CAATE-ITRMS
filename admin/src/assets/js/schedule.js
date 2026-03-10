@@ -29,10 +29,14 @@ document.addEventListener('DOMContentLoaded', function () {
                         right: 'dayGridMonth,timeGridWeek,timeGridDay'
                     },
                     height: 'auto',
+                    dayMaxEvents: false, // Show all events, no limit
+                    displayEventTime: true, // Show event times in week/day view
+                    displayEventEnd: false,
                     events: function (info, successCallback, failureCallback) {
                         // Fetch appointments dynamically when calendar changes
                         fetchAppointments().then(appointments => {
                             const events = convertToCalendarEvents(appointments);
+                            console.log('Loaded events:', events.length, 'for date range:', info.startStr, 'to', info.endStr);
                             successCallback(events);
                         }).catch(error => {
                             console.error('Error loading events:', error);

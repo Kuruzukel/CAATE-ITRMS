@@ -769,24 +769,53 @@
 /* Force all calendar day cells to have the same fixed height */
 .fc-daygrid-day {
     min-height: 120px !important;
-    max-height: 120px !important;
-    height: 120px !important;
+    height: auto !important;
 }
 
 .fc-daygrid-day-frame {
     min-height: 120px !important;
-    max-height: 120px !important;
-    height: 120px !important;
+    height: auto !important;
 }
 
 .fc-scrollgrid-sync-inner {
     min-height: 120px !important;
-    max-height: 120px !important;
-    height: 120px !important;
+    height: auto !important;
 }
 
 /* Prevent day cells from expanding with content */
 .fc-daygrid-day-events {
-    overflow: hidden !important;
-    max-height: 80px !important;
+    overflow: visible !important;
+    max-height: none !important;
+}
+
+
+/* Allow calendar day cells to auto-adjust height based on content */
+.fc-daygrid-day {
+    min-height: 100px !important;
+    height: auto !important;
+    max-height: none !important;
+}
+
+.fc-daygrid-day-frame {
+    min-height: 100px !important;
+    height: auto !important;
+    max-height: none !important;
+}
+
+.fc-scrollgrid-sync-inner {
+    min-height: 100px !important;
+    height: auto !important;
+    max-height: none !important;
+}
+
+/* Allow events area to expand */
+.fc-daygrid-day-events {
+    overflow: visible !important;
+    max-height: none !important;
+    height: auto !important;
+}
+
+/* Ensure all rows have consistent minimum height */
+.fc-daygrid-body tr {
+    min-height: 100px !important;
 }

@@ -2,15 +2,19 @@
 document.addEventListener('DOMContentLoaded', function () {
     // Menu toggle is handled by main.js - no need to duplicate here
 
+    // Declare calendar at module level so it's accessible to all functions
+    let calendar = null;
+
     // Function to update status counts for each day
-    function updateStatusCounts() {
+    function updateStatusCounts(calendarInstance) {
+        if (!calendarInstance) return; // Exit if calendar not initialized yet
         const dayCells = document.querySelectorAll('.fc-daygrid-day');
         dayCells.forEach(cell => {
             const dateStr = cell.getAttribute('data-date');
             if (!dateStr) return;
 
             // Get all events for this date
-            const events = calendar.getEvents().filter(event => {
+            const events = calendarInstance.getEvents().filter(event => {
                 const eventDate = event.start.toISOString().split('T')[0];
                 return eventDate === dateStr;
             });
@@ -107,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Fetch appointments from API
                 const appointments = await fetchAppointments();
 
-                const calendar = new FullCalendar.Calendar(calendarEl, {
+                calendar = new FullCalendar.Calendar(calendarEl, {
                     initialView: 'dayGridMonth',
                     headerToolbar: {
                         left: 'prev,next today',
@@ -141,15 +145,15 @@ document.addEventListener('DOMContentLoaded', function () {
                     },
                     viewDidMount: function () {
                         // After calendar renders, show status counts
-                        setTimeout(updateStatusCounts, 100);
+                        setTimeout(() => updateStatusCounts(calendar), 100);
                     },
                     datesSet: function () {
                         // When dates change (month/week/day navigation), update status counts
-                        setTimeout(updateStatusCounts, 100);
+                        setTimeout(() => updateStatusCounts(calendar), 100);
                     },
                     eventsSet: function () {
                         // When events are loaded, update status counts
-                        setTimeout(updateStatusCounts, 100);
+                        setTimeout(() => updateStatusCounts(calendar), 100);
                     }
                 });
 

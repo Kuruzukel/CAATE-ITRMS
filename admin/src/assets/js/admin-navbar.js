@@ -90,16 +90,23 @@ async function loadAdminProfileForNavbar() {
 
 // Update navbar user info
 function updateNavbarUserInfo(data) {
+    console.log('Updating navbar with data:', data); // Debug log
+
     // Update user name in dropdown
     const userName = document.querySelector('.dropdown-menu .flex-grow-1 .fw-semibold');
+    console.log('Found userName element:', userName); // Debug log
+
     if (userName) {
         // Use name field from database first
         let displayName = data.name || 'Admin';
         userName.textContent = displayName;
+        console.log('Updated userName to:', displayName); // Debug log
     }
 
     // Update profile images in navbar
     const profileImages = document.querySelectorAll('.navbar .avatar img');
+    console.log('Found profile images:', profileImages.length); // Debug log
+
     profileImages.forEach(img => {
         if (data.profileImage && data.profileImage !== '../assets/images/DEFAULT_AVATAR.png') {
             img.src = data.profileImage;
@@ -114,10 +121,15 @@ function updateNavbarUserInfo(data) {
 
 // Initialize admin navbar functionality
 function initializeAdminNavbar() {
+    console.log('Initializing admin navbar...'); // Debug log
+
     // Check authentication first
     if (!checkAuthentication()) {
+        console.log('Authentication failed'); // Debug log
         return false;
     }
+
+    console.log('Authentication passed, loading profile...'); // Debug log
 
     // Load admin profile data for navbar
     loadAdminProfileForNavbar();

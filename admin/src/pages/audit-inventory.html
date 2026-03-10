@@ -530,6 +530,17 @@
     <!-- Dynamic Search Placeholder -->
     <script src="../assets/js/audit-inventory-filter.js"></script>
 
+    <!-- Initialize Admin Navbar after page scripts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Ensure admin navbar is initialized after page-specific scripts
+            if (typeof initializeAdminNavbar === 'function') {
+                initializeAdminNavbar();
+                window.adminNavbarInitialized = true;
+            }
+        });
+    </script>
+
     <!-- Add Inventory Modal -->
     <div class="modal fade" id="addInventoryModal" tabindex="-1" aria-labelledby="addInventoryModalLabel"
         aria-modal="true" role="dialog">

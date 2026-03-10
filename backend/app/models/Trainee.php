@@ -250,6 +250,7 @@ class Trainee {
             );
             return $result->getModifiedCount() > 0;
         } catch (Exception $e) {
+            error_log("Trainee::updateLoginTime - Exception: " . $e->getMessage());
             return false;
         }
     }
@@ -262,6 +263,7 @@ class Trainee {
             );
             return $result->getModifiedCount() > 0;
         } catch (Exception $e) {
+            error_log("Trainee::updateLogoutTime - Exception: " . $e->getMessage());
             return false;
         }
     }

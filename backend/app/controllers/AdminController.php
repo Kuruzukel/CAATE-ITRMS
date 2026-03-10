@@ -12,50 +12,72 @@ class AdminController {
     }
     
     public function show($id) {
-        $adminModel = new Admin();
-        $admin = $adminModel->findById($id);
-        
-        if (!$admin) {
-            http_response_code(404);
-            echo json_encode(['error' => 'Admin not found']);
-            return;
-        }
-        
-        // Format login history
-        $loginHistory = [];
-        if (isset($admin['login_history']) && is_array($admin['login_history'])) {
-            foreach (array_reverse($admin['login_history']) as $entry) {
-                $loginHistory[] = [
-                    'timestamp' => $entry['timestamp'] ?? null,
-                    'action' => $entry['action'] ?? 'unknown',
-                    'ipAddress' => $entry['ipAddress'] ?? 'Unknown',
-                    'device' => $entry['device'] ?? 'Unknown',
-                    'status' => $entry['status'] ?? 'unknown'
-                ];
+        try {
+            $adminModel = new Admin();
+            $admin = $adminModel->findById($id);
+            
+            if (!$admin) {
+                http_response_code(404);
+                echo json_encode(['error' => 'Admin not found']);
+                return;
             }
+            
+            // Format login history if it exists
+            $loginHistory = [];
+            if (isset($admin['login_history'])) {
+                $historyArray = $admin['login_history'];
+                
+                // Convert BSON array to PHP array if needed
+                if ($historyArray instanceof MongoDB\Model\BSONArray) {
+                    $historyArray = $historyArray->toArray();
+                } elseif (is_object($historyArray)) {
+                    $historyArray = (array)$historyArray;
+                }
+                
+                if (is_array($historyArray)) {
+                    foreach (array_reverse($historyArray) as $entry) {
+                        // Convert BSON document to array if needed
+                        if (is_object($entry)) {
+                            $entry = (array)$entry;
+                        }
+                        
+                        $loginHistory[] = [
+                            'timestamp' => $entry['timestamp'] ?? null,
+                            'action' => $entry['action'] ?? 'unknown',
+                            'ip_address' => $entry['ip_address'] ?? ($entry['ipAddress'] ?? 'Unknown'),
+                            'device' => $entry['device'] ?? 'Unknown',
+                            'status' => $entry['status'] ?? 'unknown'
+                        ];
+                    }
+                }
+            }
+            
+            // Format the admin data for the frontend
+            $formattedAdmin = [
+                'id' => (string)$admin['_id'],
+                'name' => $admin['name'] ?? '',
+                'email' => $admin['email'] ?? '',
+                'username' => $admin['username'] ?? '',
+                'role' => $admin['role'] ?? 'admin',
+                'firstName' => $admin['first_name'] ?? '',
+                'middleName' => $admin['middle_name'] ?? '',
+                'lastName' => $admin['last_name'] ?? '',
+                'phone' => $admin['phone'] ?? '',
+                'address' => $admin['address'] ?? '',
+                'created_at' => $admin['created_at'] ?? null,
+                'updated_at' => $admin['updated_at'] ?? null,
+                'lastLogin' => $admin['last_login'] ?? null,
+                'lastLogout' => $admin['last_logout'] ?? null,
+                'loginHistory' => $loginHistory,
+                'profileImage' => $admin['profile_image'] ?? null
+            ];
+            
+            echo json_encode(['data' => $formattedAdmin]);
+        } catch (Exception $e) {
+            error_log("AdminController::show - Exception: " . $e->getMessage());
+            http_response_code(500);
+            echo json_encode(['error' => 'Internal server error: ' . $e->getMessage()]);
         }
-        
-        // Format the admin data for the frontend
-        $formattedAdmin = [
-            'id' => (string)$admin['_id'],
-            'name' => $admin['name'] ?? '',
-            'email' => $admin['email'] ?? '',
-            'username' => $admin['username'] ?? '',
-            'role' => $admin['role'] ?? 'admin',
-            'firstName' => $admin['first_name'] ?? '',
-            'middleName' => $admin['middle_name'] ?? '',
-            'lastName' => $admin['last_name'] ?? '',
-            'phone' => $admin['phone'] ?? '',
-            'address' => $admin['address'] ?? '',
-            'created_at' => $admin['created_at'] ?? null,
-            'updated_at' => $admin['updated_at'] ?? null,
-            'lastLogin' => $admin['last_login'] ?? null,
-            'lastLogout' => $admin['last_logout'] ?? null,
-            'loginHistory' => $loginHistory,
-            'profileImage' => $admin['profile_image'] ?? null
-        ];
-        
-        echo json_encode(['data' => $formattedAdmin]);
     }
     
     public function store() {

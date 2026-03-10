@@ -117,9 +117,18 @@ class TraineeController {
         header('Content-Type: application/json');
         header('Access-Control-Allow-Origin: *');
         
-        $traineeModel = new Trainee();
-        $stats = $traineeModel->getStatistics();
-        
-        echo json_encode(['success' => true, 'data' => $stats]);
+        try {
+            $traineeModel = new Trainee();
+            $stats = $traineeModel->getStatistics();
+            
+            echo json_encode(['success' => true, 'data' => $stats]);
+        } catch (Exception $e) {
+            error_log("TraineeController::statistics - Exception: " . $e->getMessage());
+            http_response_code(500);
+            echo json_encode([
+                'success' => false, 
+                'error' => 'Failed to fetch statistics: ' . $e->getMessage()
+            ]);
+        }
     }
 }

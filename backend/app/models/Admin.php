@@ -107,26 +107,9 @@ class Admin {
     
     public function updateLoginTime($id) {
         try {
-            $loginEntry = [
-                'timestamp' => new MongoDB\BSON\UTCDateTime(),
-                'action' => 'login',
-                'ipAddress' => $_SERVER['REMOTE_ADDR'] ?? 'Unknown',
-                'userAgent' => $_SERVER['HTTP_USER_AGENT'] ?? 'Unknown',
-                'device' => $this->parseUserAgent($_SERVER['HTTP_USER_AGENT'] ?? ''),
-                'status' => 'success'
-            ];
-
             $result = $this->collection->updateOne(
                 ['_id' => new MongoDB\BSON\ObjectId($id)],
-                [
-                    '$set' => ['last_login' => new MongoDB\BSON\UTCDateTime()],
-                    '$push' => [
-                        'login_history' => [
-                            '$each' => [$loginEntry],
-                            '$slice' => -10 // Keep only last 10 entries
-                        ]
-                    ]
-                ]
+                ['$set' => ['last_login' => new MongoDB\BSON\UTCDateTime()]]
             );
             return $result->getModifiedCount() > 0;
         } catch (Exception $e) {
@@ -137,26 +120,9 @@ class Admin {
     
     public function updateLogoutTime($id) {
         try {
-            $logoutEntry = [
-                'timestamp' => new MongoDB\BSON\UTCDateTime(),
-                'action' => 'logout',
-                'ipAddress' => $_SERVER['REMOTE_ADDR'] ?? 'Unknown',
-                'userAgent' => $_SERVER['HTTP_USER_AGENT'] ?? 'Unknown',
-                'device' => $this->parseUserAgent($_SERVER['HTTP_USER_AGENT'] ?? ''),
-                'status' => 'success'
-            ];
-
             $result = $this->collection->updateOne(
                 ['_id' => new MongoDB\BSON\ObjectId($id)],
-                [
-                    '$set' => ['last_logout' => new MongoDB\BSON\UTCDateTime()],
-                    '$push' => [
-                        'login_history' => [
-                            '$each' => [$logoutEntry],
-                            '$slice' => -10 // Keep only last 10 entries
-                        ]
-                    ]
-                ]
+                ['$set' => ['last_logout' => new MongoDB\BSON\UTCDateTime()]]
             );
             return $result->getModifiedCount() > 0;
         } catch (Exception $e) {

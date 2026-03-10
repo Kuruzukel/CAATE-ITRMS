@@ -102,8 +102,17 @@ async function loadAdminProfile() {
                 localStorage.setItem('userData', JSON.stringify(mappedData));
 
             } else {
-                const errorData = await response.json();
-                throw new Error(`Failed to fetch admin data: ${response.status} - ${errorData.error || 'Unknown error'}`);
+                let errorMessage = `Failed to fetch admin data: ${response.status}`;
+
+                try {
+                    const errorData = await response.json();
+                    errorMessage = errorData.error || errorMessage;
+                } catch (e) {
+                    // If response is not JSON, use status text
+                    errorMessage = response.statusText || errorMessage;
+                }
+
+                throw new Error(errorMessage);
             }
 
         } catch (apiError) {

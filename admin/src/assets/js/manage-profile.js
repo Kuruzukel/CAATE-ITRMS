@@ -306,6 +306,7 @@ async function saveProfileChanges() {
     const userId = localStorage.getItem('userId');
 
     if (!token || !userId) {
+        showToast('Authentication required. Please log in again.', 'error');
         window.location.href = '../../../auth/src/pages/login.html';
         return;
     }
@@ -318,35 +319,56 @@ async function saveProfileChanges() {
     const editAddress = document.getElementById('editAddress');
 
     const updatedData = {
-        first_name: editFirstName ? editFirstName.value : '',
-        middle_name: editMiddleName ? editMiddleName.value : '',
-        last_name: editLastName ? editLastName.value : '',
-        phone: editPhone ? editPhone.value : '',
-        email: editEmail ? editEmail.value : '',
-        address: editAddress ? editAddress.value : ''
+        first_name: editFirstName ? editFirstName.value.trim() : '',
+        middle_name: editMiddleName ? editMiddleName.value.trim() : '',
+        last_name: editLastName ? editLastName.value.trim() : '',
+        phone: editPhone ? editPhone.value.trim() : '',
+        email: editEmail ? editEmail.value.trim() : '',
+        address: editAddress ? editAddress.value.trim() : ''
     };
 
-    const response = await fetch(`${config.api.baseURL}/api/v1/admins/${userId}`, {
-        method: 'PUT',
-        headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(updatedData)
-    });
+    // Basic validation
+    if (!updatedData.first_name || !updatedData.last_name || !updatedData.email) {
+        showToast('First name, last name, and email are required.', 'error');
+        return;
+    }
 
-    if (response.ok) {
-        // Close modal
-        const modal = bootstrap.Modal.getInstance(document.getElementById('editInformationModal'));
-        if (modal) modal.hide();
+    console.log('Saving profile changes for admin:', userId);
+    console.log('Updated data:', updatedData);
 
-        // Reload profile data
-        await loadAdminProfile();
+    try {
+        const response = await fetch(`${config.api.baseURL}/api/v1/admins/${userId}`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updatedData)
+        });
 
-        // Show success toast
-        showToast('Profile updated successfully!', 'success');
-    } else {
-        throw new Error('Failed to update profile');
+        console.log('Response status:', response.status);
+        console.log('Response headers:', response.headers);
+
+        if (response.ok) {
+            const result = await response.json();
+            console.log('Update successful:', result);
+
+            // Close modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('editInformationModal'));
+            if (modal) modal.hide();
+
+            // Reload profile data to reflect changes
+            await loadAdminProfile();
+
+            // Show success toast
+            showToast('Profile updated successfully!', 'success');
+        } else {
+            const errorData = await response.json();
+            throw new Error(errorData.error || `Server error: ${response.status}`);
+        }
+    } catch (error) {
+        console.error('Save profile error:', error);
+        showToast(`Failed to update profile: ${error.message}`, 'error');
     }
 }
 
@@ -479,34 +501,6 @@ function showError(message) {
 
 function showNotification(message, type = 'info') {
     showToast(message, type);
-}
-
-// Toast notification function
-function showToast(message, type = 'success') {
-    const toastContainer = document.getElementById('toastContainer');
-    if (!toastContainer) return;
-
-    const toast = document.createElement('div');
-    toast.className = `toast-notification ${type}`;
-
-    const icon = type === 'success' ? 'bx-check' :
-        type === 'error' ? 'bx-x' :
-            type === 'warning' ? 'bx-error-alt' : 'bxs-info-circle';
-
-    toast.innerHTML = `
-        <i class="bx ${icon} toast-icon"></i>
-        <div class="toast-content">
-            <div class="toast-message">${message}</div>
-        </div>
-    `;
-
-    toastContainer.appendChild(toast);
-
-    // Auto remove after 5 seconds
-    setTimeout(() => {
-        toast.classList.add('hiding');
-        setTimeout(() => toast.remove(), 300);
-    }, 5000);
 }
 
 // Show success message

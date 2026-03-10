@@ -77,12 +77,21 @@ class Admin {
             // Add updated timestamp
             $data['updated_at'] = new MongoDB\BSON\UTCDateTime();
             
+            error_log("Admin::update - ID: $id");
+            error_log("Admin::update - Data: " . json_encode($data));
+            
             $result = $this->collection->updateOne(
                 ['_id' => new MongoDB\BSON\ObjectId($id)],
                 ['$set' => $data]
             );
-            return $result->getModifiedCount() > 0;
+            
+            $success = $result->getModifiedCount() > 0;
+            error_log("Admin::update - Modified count: " . $result->getModifiedCount());
+            error_log("Admin::update - Success: " . ($success ? 'true' : 'false'));
+            
+            return $success;
         } catch (Exception $e) {
+            error_log("Admin::update - Exception: " . $e->getMessage());
             return false;
         }
     }

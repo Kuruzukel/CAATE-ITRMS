@@ -59,14 +59,38 @@ class AdminController {
     public function update($id) {
         $data = json_decode(file_get_contents('php://input'), true);
         
+        // Log the incoming data for debugging
+        error_log("AdminController::update - ID: $id");
+        error_log("AdminController::update - Data: " . json_encode($data));
+        
+        // If individual name fields are being updated, also update the combined name field
+        if (isset($data['first_name']) || isset($data['middle_name']) || isset($data['last_name'])) {
+            $adminModel = new Admin();
+            $currentAdmin = $adminModel->findById($id);
+            
+            if ($currentAdmin) {
+                $firstName = $data['first_name'] ?? $currentAdmin['first_name'] ?? '';
+                $middleName = $data['middle_name'] ?? $currentAdmin['middle_name'] ?? '';
+                $lastName = $data['last_name'] ?? $currentAdmin['last_name'] ?? '';
+                
+                // Construct full name
+                $nameParts = array_filter([$firstName, $middleName, $lastName]);
+                $data['name'] = implode(' ', $nameParts);
+                
+                error_log("AdminController::update - Updated name: " . $data['name']);
+            }
+        }
+        
         $adminModel = new Admin();
         $result = $adminModel->update($id, $data);
+        
+        error_log("AdminController::update - Result: " . ($result ? 'success' : 'failed'));
         
         if ($result) {
             echo json_encode(['message' => 'Admin updated successfully']);
         } else {
             http_response_code(404);
-            echo json_encode(['error' => 'Admin not found']);
+            echo json_encode(['error' => 'Admin not found or update failed']);
         }
     }
     

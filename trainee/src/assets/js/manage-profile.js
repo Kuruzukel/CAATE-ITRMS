@@ -146,42 +146,33 @@ async function loadTraineeProfile() {
 
 // Update profile overview section
 function updateProfileOverview(data) {
-    // Full name - use name field first, then fallback to firstName + lastName
+    // Full name - use name field from database
     const fullNameElement = document.getElementById('profileFullName');
     if (fullNameElement) {
-        let fullName = '';
-        if (data.name) {
-            fullName = data.name;
-        } else if (data.firstName || data.lastName) {
-            fullName = `${data.firstName || ''} ${data.lastName || ''}`.trim();
-        } else {
-            fullName = 'N/A';
-        }
-        fullNameElement.textContent = fullName;
+        fullNameElement.textContent = data.name || 'N/A';
     }
 
-    // Role badge
+    // Role badge - automatically Trainee for trainee accounts
     const roleBadge = document.getElementById('profileRole');
     if (roleBadge) {
         roleBadge.textContent = 'Trainee';
         roleBadge.className = 'badge bg-info';
     }
 
-    // Email
+    // Email - fetch from database
     const emailElement = document.getElementById('profileEmail');
     if (emailElement) {
         emailElement.textContent = data.email || 'N/A';
     }
 
-    // Account status
+    // Account status - static Active
     const statusBadge = document.getElementById('profileStatus');
     if (statusBadge) {
-        const status = data.status || 'active';
-        statusBadge.textContent = status.charAt(0).toUpperCase() + status.slice(1);
-        statusBadge.className = status === 'active' ? 'badge bg-success' : 'badge bg-danger';
+        statusBadge.textContent = 'Active';
+        statusBadge.className = 'badge bg-success';
     }
 
-    // Last login
+    // Last login - show actual date when available
     const lastLoginElement = document.getElementById('profileLastLogin');
     if (lastLoginElement) {
         if (data.lastLogin) {
@@ -215,6 +206,12 @@ function updatePersonalInformation(data) {
         firstNameInput.value = data.firstName || '';
     }
 
+    // Middle name
+    const middleNameInput = document.getElementById('personalMiddleName');
+    if (middleNameInput) {
+        middleNameInput.value = data.middleName || '';
+    }
+
     // Last name
     const lastNameInput = document.getElementById('personalLastName');
     if (lastNameInput) {
@@ -241,12 +238,14 @@ function updatePersonalInformation(data) {
 
     // Update edit modal fields if they exist
     const editFirstName = document.getElementById('editFirstName');
+    const editMiddleName = document.getElementById('editMiddleName');
     const editLastName = document.getElementById('editLastName');
     const editPhone = document.getElementById('editPhone');
     const editDob = document.getElementById('editDob');
     const editAddress = document.getElementById('editAddress');
 
     if (editFirstName) editFirstName.value = data.firstName || '';
+    if (editMiddleName) editMiddleName.value = data.middleName || '';
     if (editLastName) editLastName.value = data.lastName || '';
     if (editPhone) editPhone.value = data.phoneNumber || data.phone || '';
     if (editDob && data.dateOfBirth) editDob.value = data.dateOfBirth.split('T')[0];
@@ -379,14 +378,8 @@ function updateAcademicSummary(completedCourses) {
 function updateNavbarUserInfo(data) {
     const userName = document.querySelector('.dropdown-menu .flex-grow-1 .fw-semibold');
     if (userName) {
-        let displayName = '';
-        if (data.name) {
-            displayName = data.name;
-        } else if (data.firstName || data.lastName) {
-            displayName = `${data.firstName || ''} ${data.lastName || ''}`.trim();
-        } else {
-            displayName = 'Trainee';
-        }
+        // Use name field from database first
+        let displayName = data.name || 'Trainee';
         userName.textContent = displayName;
     }
 }
@@ -413,6 +406,7 @@ async function saveProfileChanges() {
         }
 
         const editFirstName = document.getElementById('editFirstName');
+        const editMiddleName = document.getElementById('editMiddleName');
         const editLastName = document.getElementById('editLastName');
         const editPhone = document.getElementById('editPhone');
         const editDob = document.getElementById('editDob');
@@ -420,6 +414,7 @@ async function saveProfileChanges() {
 
         const updatedData = {
             firstName: editFirstName ? editFirstName.value : '',
+            middleName: editMiddleName ? editMiddleName.value : '',
             lastName: editLastName ? editLastName.value : '',
             phoneNumber: editPhone ? editPhone.value : '',
             dateOfBirth: editDob ? editDob.value : '',

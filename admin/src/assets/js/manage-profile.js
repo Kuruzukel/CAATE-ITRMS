@@ -64,50 +64,65 @@ async function loadAdminProfile() {
         if (adminData) {
             updateProfileOverview(adminData);
             updatePersonalInformation(adminData);
-            updateLoginHistory(adminData.loginHistory || []);
             return;
         }
 
         // Otherwise, try to fetch from API with fallback strategy
-        // Try general users endpoint first
-        let response = await fetch(`${API_BASE_URL}/api/v1/users/${userId}`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            }
-        });
-
-        if (!response.ok) {
-            // Try admin-specific endpoint
-            response = await fetch(`${API_BASE_URL}/api/v1/admins/${userId}`, {
+        try {
+            // Try general users endpoint first
+            let response = await fetch(`${API_BASE_URL}/api/v1/users/${userId}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 }
             });
-        }
 
-        if (response.ok) {
-            const result = await response.json();
-            adminData = result.data || result.user || result;
+            if (!response.ok) {
+                // Try admin-specific endpoint
+                response = await fetch(`${API_BASE_URL}/api/v1/admins/${userId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+            }
 
-            // Update profile overview
-            updateProfileOverview(adminData);
+            if (response.ok) {
+                const result = await response.json();
+                adminData = result.data || result.user || result;
 
-            // Update personal information
-            updatePersonalInformation(adminData);
+                // Update profile overview
+                updateProfileOverview(adminData);
 
-            // Update login history
-            updateLoginHistory(adminData.loginHistory || []);
-        } else {
-            throw new Error('Failed to fetch from API');
+                // Update personal information
+                updatePersonalInformation(adminData);
+
+                // Update login history if available
+                if (adminData.loginHistory) {
+                    updateLoginHistory(adminData.loginHistory);
+                }
+            } else {
+                throw new Error('Failed to fetch from API');
+            }
+
+        } catch (apiError) {
+            // Fallback: use data from localStorage
+            if (userData) {
+                try {
+                    const adminData = JSON.parse(userData);
+                    updateProfileOverview(adminData);
+                    updatePersonalInformation(adminData);
+                } catch (e) {
+                    showNotification('Failed to load profile data', 'error');
+                }
+            } else {
+                showNotification('Failed to load profile data', 'error');
+            }
         }
 
     } catch (error) {
-        // Error loading admin profile
-
         // Fallback: use data from localStorage
         const userData = localStorage.getItem('userData');
         if (userData) {
@@ -115,7 +130,6 @@ async function loadAdminProfile() {
                 const adminData = JSON.parse(userData);
                 updateProfileOverview(adminData);
                 updatePersonalInformation(adminData);
-                updateLoginHistory(adminData.loginHistory || []);
             } catch (e) {
                 showNotification('Failed to load profile data', 'error');
             }
@@ -127,42 +141,34 @@ async function loadAdminProfile() {
 
 // Update profile overview section
 function updateProfileOverview(data) {
-    // Full name - use name field first, then fallback to firstName + lastName
+    // Full name - use name field from database
     const fullNameElement = document.getElementById('profileFullName');
     if (fullNameElement) {
-        let fullName = '';
-        if (data.name) {
-            fullName = data.name;
-        } else if (data.firstName || data.lastName) {
-            fullName = `${data.firstName || ''} ${data.lastName || ''}`.trim();
-        } else {
-            fullName = 'N/A';
-        }
-        fullNameElement.textContent = fullName;
+        fullNameElement.textContent = data.name || 'N/A';
     }
 
-    // Role badge
+    // Role badge - fetch from database but default to Administrator for admin
     const roleBadge = document.getElementById('profileRole');
     if (roleBadge) {
-        roleBadge.textContent = 'Administrator';
+        const role = data.role === 'admin' ? 'Administrator' : (data.role || 'Administrator');
+        roleBadge.textContent = role;
         roleBadge.className = 'badge bg-primary';
     }
 
-    // Email
+    // Email - fetch from database
     const emailElement = document.getElementById('profileEmail');
     if (emailElement) {
         emailElement.textContent = data.email || 'N/A';
     }
 
-    // Account status
+    // Account status - static Active
     const statusBadge = document.getElementById('profileStatus');
     if (statusBadge) {
-        const status = data.status || 'active';
-        statusBadge.textContent = status.charAt(0).toUpperCase() + status.slice(1);
-        statusBadge.className = status === 'active' ? 'badge bg-success' : 'badge bg-danger';
+        statusBadge.textContent = 'Active';
+        statusBadge.className = 'badge bg-success';
     }
 
-    // Last login - only show if available
+    // Last login - show actual date when available
     const lastLoginElement = document.getElementById('profileLastLogin');
     if (lastLoginElement) {
         if (data.lastLogin) {
@@ -172,7 +178,7 @@ function updateProfileOverview(data) {
         }
     }
 
-    // Last logout - only show if available
+    // Last logout - show actual date when available
     const lastLogoutElement = document.getElementById('profileLastLogout');
     if (lastLogoutElement) {
         if (data.lastLogout) {
@@ -200,6 +206,12 @@ function updatePersonalInformation(data) {
         firstNameInput.value = data.firstName || '';
     }
 
+    // Middle name
+    const middleNameInput = document.getElementById('personalMiddleName');
+    if (middleNameInput) {
+        middleNameInput.value = data.middleName || '';
+    }
+
     // Last name
     const lastNameInput = document.getElementById('personalLastName');
     if (lastNameInput) {
@@ -212,10 +224,10 @@ function updatePersonalInformation(data) {
         phoneInput.value = data.phoneNumber || data.phone || '';
     }
 
-    // Department
-    const departmentInput = document.getElementById('personalDepartment');
-    if (departmentInput) {
-        departmentInput.value = data.department || 'Administration';
+    // Email address
+    const emailInput = document.getElementById('personalEmail');
+    if (emailInput) {
+        emailInput.value = data.email || '';
     }
 
     // Address
@@ -226,15 +238,17 @@ function updatePersonalInformation(data) {
 
     // Update edit modal fields
     const editFirstName = document.getElementById('editFirstName');
+    const editMiddleName = document.getElementById('editMiddleName');
     const editLastName = document.getElementById('editLastName');
     const editPhone = document.getElementById('editPhone');
-    const editDepartment = document.getElementById('editDepartment');
+    const editEmail = document.getElementById('editEmail');
     const editAddress = document.getElementById('editAddress');
 
     if (editFirstName) editFirstName.value = data.firstName || '';
+    if (editMiddleName) editMiddleName.value = data.middleName || '';
     if (editLastName) editLastName.value = data.lastName || '';
     if (editPhone) editPhone.value = data.phoneNumber || data.phone || '';
-    if (editDepartment) editDepartment.value = data.department || 'Administration';
+    if (editEmail) editEmail.value = data.email || '';
     if (editAddress) editAddress.value = data.address || '';
 }
 
@@ -262,14 +276,8 @@ function updateLoginHistory(loginHistory) {
 function updateNavbarUserInfo(data) {
     const userName = document.querySelector('.dropdown-menu .flex-grow-1 .fw-semibold');
     if (userName) {
-        let displayName = '';
-        if (data.name) {
-            displayName = data.name;
-        } else if (data.firstName || data.lastName) {
-            displayName = `${data.firstName || ''} ${data.lastName || ''}`.trim();
-        } else {
-            displayName = 'Admin';
-        }
+        // Use name field from database first
+        let displayName = data.name || 'Admin';
         userName.textContent = displayName;
     }
 }
@@ -296,16 +304,18 @@ async function saveProfileChanges() {
         }
 
         const editFirstName = document.getElementById('editFirstName');
+        const editMiddleName = document.getElementById('editMiddleName');
         const editLastName = document.getElementById('editLastName');
         const editPhone = document.getElementById('editPhone');
-        const editDepartment = document.getElementById('editDepartment');
+        const editEmail = document.getElementById('editEmail');
         const editAddress = document.getElementById('editAddress');
 
         const updatedData = {
             firstName: editFirstName ? editFirstName.value : '',
+            middleName: editMiddleName ? editMiddleName.value : '',
             lastName: editLastName ? editLastName.value : '',
             phoneNumber: editPhone ? editPhone.value : '',
-            department: editDepartment ? editDepartment.value : '',
+            email: editEmail ? editEmail.value : '',
             address: editAddress ? editAddress.value : ''
         };
 

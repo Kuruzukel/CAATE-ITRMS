@@ -21,9 +21,6 @@ class AdminController {
             return;
         }
         
-        // Debug: Log the raw admin data
-        error_log('Raw admin data: ' . json_encode($admin));
-        
         // Format the admin data for the frontend
         $formattedAdmin = [
             'id' => (string)$admin['_id'],
@@ -42,9 +39,6 @@ class AdminController {
             'lastLogout' => $admin['last_logout'] ?? null,
             'profileImage' => $admin['profile_image'] ?? null
         ];
-        
-        // Debug: Log the formatted data
-        error_log('Formatted admin data: ' . json_encode($formattedAdmin));
         
         echo json_encode(['data' => $formattedAdmin]);
     }

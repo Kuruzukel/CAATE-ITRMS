@@ -84,8 +84,6 @@ async function loadAdminProfile() {
                     profileImage: adminData.profileImage || '../assets/images/AVATARNIKEL.jpg'
                 };
 
-                console.log('Mapped Data:', mappedData); // Debug log
-
                 // Update profile overview
                 updateProfileOverview(mappedData);
 

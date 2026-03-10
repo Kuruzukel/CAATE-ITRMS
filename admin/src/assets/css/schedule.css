@@ -271,16 +271,19 @@
     display: flex !important;
     flex-direction: column !important;
     height: 100% !important;
+    min-height: 120px !important;
 }
 
 .fc-daygrid-day-events {
     flex: 1 1 auto !important;
     overflow: visible !important;
+    min-height: 80px !important;
 }
 
 .fc-daygrid-day {
     position: relative;
-    min-height: 100px;
+    min-height: 120px !important;
+    height: 120px !important;
     background: rgba(255, 255, 255, 0.05) !important;
     backdrop-filter: blur(8px) !important;
     transition: all 0.3s ease !important;
@@ -720,4 +723,70 @@
     border: none !important;
     transform: none !important;
     box-shadow: none !important;
+}
+
+
+/* Display multiple avatars horizontally in a row */
+.fc-daygrid-day-events {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    justify-content: flex-end !important;
+    align-items: center !important;
+    gap: 4px !important;
+}
+
+.fc-daygrid-event-harness {
+    display: inline-flex !important;
+    margin: 0 !important;
+}
+
+/* Ensure events display inline horizontally */
+.fc-event {
+    display: inline-flex !important;
+    width: auto !important;
+    margin: 2px !important;
+}
+
+
+/* Display multiple events horizontally in the same day */
+.fc-daygrid-day-events {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    justify-content: flex-end !important;
+    align-items: center !important;
+    gap: 4px !important;
+}
+
+.fc-daygrid-event-harness {
+    position: relative !important;
+    display: inline-flex !important;
+    margin: 0 !important;
+}
+
+
+/* Force all calendar day cells to have the same fixed height */
+.fc-daygrid-day {
+    min-height: 120px !important;
+    max-height: 120px !important;
+    height: 120px !important;
+}
+
+.fc-daygrid-day-frame {
+    min-height: 120px !important;
+    max-height: 120px !important;
+    height: 120px !important;
+}
+
+.fc-scrollgrid-sync-inner {
+    min-height: 120px !important;
+    max-height: 120px !important;
+    height: 120px !important;
+}
+
+/* Prevent day cells from expanding with content */
+.fc-daygrid-day-events {
+    overflow: hidden !important;
+    max-height: 80px !important;
 }

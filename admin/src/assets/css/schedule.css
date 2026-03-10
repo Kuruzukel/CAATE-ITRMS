@@ -705,10 +705,12 @@
     flex-direction: row !important;
     flex-wrap: wrap !important;
     justify-content: flex-start !important;
-    align-items: center !important;
+    align-items: flex-start !important;
     gap: 4px !important;
     padding: 4px 2px !important;
-    min-height: auto !important;
+    min-height: 0 !important;
+    height: auto !important;
+    flex: 1 !important;
 }
 
 /* Center avatars when there are 1-2 only */
@@ -731,19 +733,22 @@
 
 /* Ensure all calendar rows have the same height */
 .fc-daygrid-body tr {
-    height: auto !important;
+    height: 80px !important;
 }
 
 .fc-daygrid-day {
-    height: auto !important;
-    min-height: 60px !important;
+    height: 80px !important;
+    min-height: 80px !important;
+    max-height: 80px !important;
 }
 
 .fc-daygrid-day-frame {
-    height: auto !important;
-    min-height: 60px !important;
+    height: 80px !important;
+    min-height: 80px !important;
+    max-height: 80px !important;
     display: flex !important;
     flex-direction: column !important;
+    overflow: hidden !important;
 }
 
 /* Make sure all cells in a row have equal height */
@@ -752,15 +757,18 @@
 }
 
 .fc-scrollgrid-sync-table tbody tr {
-    height: auto !important;
+    height: 80px !important;
+    max-height: 80px !important;
 }
 
 .fc-scrollgrid-sync-table tbody td {
-    height: auto !important;
+    height: 80px !important;
+    max-height: 80px !important;
     vertical-align: top !important;
 }
 
 .fc-scrollgrid-sync-inner {
-    height: auto !important;
-    min-height: 60px !important;
+    height: 80px !important;
+    min-height: 80px !important;
+    max-height: 80px !important;
 }

@@ -2,6 +2,78 @@
 document.addEventListener('DOMContentLoaded', function () {
     // Menu toggle is handled by main.js - no need to duplicate here
 
+    // Function to update status counts for each day
+    function updateStatusCounts() {
+        const dayCells = document.querySelectorAll('.fc-daygrid-day');
+        dayCells.forEach(cell => {
+            const dateStr = cell.getAttribute('data-date');
+            if (!dateStr) return;
+
+            // Get all events for this date
+            const events = calendar.getEvents().filter(event => {
+                const eventDate = event.start.toISOString().split('T')[0];
+                return eventDate === dateStr;
+            });
+
+            if (events.length === 0) return;
+
+            // Count by status
+            let pendingCount = 0;
+            let approvedCount = 0;
+            let cancelledCount = 0;
+
+            events.forEach(event => {
+                const status = event.extendedProps.status ? event.extendedProps.status.toLowerCase() : '';
+                if (status === 'pending') {
+                    pendingCount++;
+                } else if (status === 'approved' || status === 'confirmed') {
+                    approvedCount++;
+                } else if (status === 'cancelled') {
+                    cancelledCount++;
+                }
+            });
+
+            // Find the day events container
+            const eventsContainer = cell.querySelector('.fc-daygrid-day-events');
+            if (!eventsContainer) return;
+
+            // Clear existing content
+            eventsContainer.innerHTML = '';
+
+            // Create status indicators
+            const statusHTML = [];
+
+            if (pendingCount > 0) {
+                statusHTML.push(`
+                    <span style="display: inline-flex; align-items: center; margin: 2px 4px; font-size: 11px; font-weight: 600;">
+                        <span style="width: 8px; height: 8px; border-radius: 50%; background: #f59e0b; margin-right: 3px;"></span>
+                        <span style="color: #f59e0b;">${pendingCount}p</span>
+                    </span>
+                `);
+            }
+
+            if (approvedCount > 0) {
+                statusHTML.push(`
+                    <span style="display: inline-flex; align-items: center; margin: 2px 4px; font-size: 11px; font-weight: 600;">
+                        <span style="width: 8px; height: 8px; border-radius: 50%; background: #10b981; margin-right: 3px;"></span>
+                        <span style="color: #10b981;">${approvedCount}a</span>
+                    </span>
+                `);
+            }
+
+            if (cancelledCount > 0) {
+                statusHTML.push(`
+                    <span style="display: inline-flex; align-items: center; margin: 2px 4px; font-size: 11px; font-weight: 600;">
+                        <span style="width: 8px; height: 8px; border-radius: 50%; background: #ef4444; margin-right: 3px;"></span>
+                        <span style="color: #ef4444;">${cancelledCount}c</span>
+                    </span>
+                `);
+            }
+
+            eventsContainer.innerHTML = statusHTML.join('');
+        });
+    }
+
     // Function to update avatar alignment based on count
     function updateAvatarAlignment() {
         const dayCells = document.querySelectorAll('.fc-daygrid-day-events');
@@ -64,79 +136,20 @@ document.addEventListener('DOMContentLoaded', function () {
                         // Date clicked
                     },
                     eventDidMount: function (info) {
-                        // Add avatar to event - only show avatar, no name
-                        const initials = info.event.extendedProps.initials;
-                        if (initials) {
-                            // Find the event title element
-                            const eventTitle = info.el.querySelector('.fc-event-title');
-                            const eventMain = info.el.querySelector('.fc-event-main');
-
-                            if (eventTitle) {
-                                // Only show the avatar icon
-                                eventTitle.innerHTML = `
-                                    <div style="background: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 100%); 
-                                                backdrop-filter: blur(10px) saturate(180%); 
-                                                -webkit-backdrop-filter: blur(10px) saturate(180%); 
-                                                border: 1px solid rgba(255, 255, 255, 0.4); 
-                                                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3); 
-                                                color: white; 
-                                                display: inline-flex; 
-                                                align-items: center; 
-                                                justify-content: center; 
-                                                border-radius: 50%; 
-                                                width: 28px; 
-                                                height: 28px; 
-                                                font-weight: 600; 
-                                                font-size: 11px;
-                                                margin: 2px;">
-                                        ${initials}
-                                    </div>
-                                `;
-                            } else if (eventMain) {
-                                // Fallback: if no title element, add to main
-                                eventMain.innerHTML = `
-                                    <div style="background: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 100%); 
-                                                backdrop-filter: blur(10px) saturate(180%); 
-                                                -webkit-backdrop-filter: blur(10px) saturate(180%); 
-                                                border: 1px solid rgba(255, 255, 255, 0.4); 
-                                                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3); 
-                                                color: white; 
-                                                display: inline-flex; 
-                                                align-items: center; 
-                                                justify-content: center; 
-                                                border-radius: 50%; 
-                                                width: 28px; 
-                                                height: 28px; 
-                                                font-weight: 600; 
-                                                font-size: 11px;
-                                                margin: 2px;">
-                                        ${initials}
-                                    </div>
-                                `;
-                            }
-                        }
-
-                        // Apply status-based styling
-                        const status = info.event.extendedProps.status;
-                        if (status === 'pending') {
-                            info.el.style.backgroundColor = 'transparent';
-                            info.el.style.borderColor = 'transparent';
-                        } else if (status === 'approved' || status === 'confirmed') {
-                            info.el.style.backgroundColor = 'transparent';
-                            info.el.style.borderColor = 'transparent';
-                        } else if (status === 'cancelled') {
-                            info.el.style.backgroundColor = 'transparent';
-                            info.el.style.borderColor = 'transparent';
-                            info.el.style.opacity = '0.5';
-                        }
+                        // Hide individual events - we'll show aggregated counts instead
+                        info.el.style.display = 'none';
                     },
                     viewDidMount: function () {
-                        // After calendar renders, check each day cell and center if 1-2 avatars
-                        updateAvatarAlignment();
+                        // After calendar renders, show status counts
+                        setTimeout(updateStatusCounts, 100);
                     },
                     datesSet: function () {
-                        // When dates change (month/week/day navigation), update alignment
-                        setTimeout(updateAvatarAlignment, 100);
+                        // When dates change (month/week/day navigation), update status counts
+                        setTimeout(updateStatusCounts, 100);
+                    },
+                    eventsSet: function () {
+                        // When events are loaded, update status counts
+                        setTimeout(updateStatusCounts, 100);
                     }
                 });
 

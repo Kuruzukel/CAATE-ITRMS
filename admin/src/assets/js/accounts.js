@@ -3,87 +3,6 @@
 // API Configuration - Works for both localhost and network access
 const API_BASE_URL = window.location.origin + '/CAATE-ITRMS/backend/public/api/v1';
 
-// Authentication check
-function checkAuthentication() {
-    const token = localStorage.getItem('authToken');
-    const userRole = localStorage.getItem('userRole');
-    const userId = localStorage.getItem('userId');
-
-    if (!token || !userRole || !userId) {
-        window.location.href = '../../../auth/src/pages/login.html';
-        return false;
-    }
-
-    if (userRole !== 'admin') {
-        const baseUrl = window.location.origin + '/CAATE-ITRMS';
-        if (userRole === 'trainee') {
-            window.location.href = baseUrl + '/trainee/src/pages/dashboard.html';
-        } else {
-            window.location.href = baseUrl + '/auth/src/pages/login.html';
-        }
-        return false;
-    }
-
-    return true;
-}
-
-// Load admin profile data for navbar dropdown
-async function loadAdminProfileForNavbar() {
-    try {
-        const token = localStorage.getItem('authToken');
-        const userId = localStorage.getItem('userId');
-
-        if (!token || !userId) {
-            window.location.href = '../../../auth/src/pages/login.html';
-            return;
-        }
-
-        // Fetch admin data from the admins collection
-        const response = await fetch(`${config.api.baseURL}/api/v1/admins/${userId}`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            }
-        });
-
-        if (response.ok) {
-            const result = await response.json();
-            let adminData = result.data || result.admin || result;
-
-            // Update navbar user info
-            updateNavbarUserInfo(adminData);
-        } else {
-            console.error('Failed to fetch admin data:', response.status);
-        }
-    } catch (error) {
-        console.error('Error loading admin profile:', error);
-    }
-}
-
-// Update navbar user info
-function updateNavbarUserInfo(data) {
-    const userName = document.querySelector('.dropdown-menu .flex-grow-1 .fw-semibold');
-    if (userName) {
-        // Use name field from database first
-        let displayName = data.name || 'Admin';
-        userName.textContent = displayName;
-    }
-
-    // Update profile images if they exist
-    const profileImages = document.querySelectorAll('.avatar img');
-    profileImages.forEach(img => {
-        if (data.profileImage && data.profileImage !== '../assets/images/DEFAULT_AVATAR.png') {
-            img.src = data.profileImage;
-        } else {
-            img.src = '../assets/images/DEFAULT_AVATAR.png';
-        }
-        img.onerror = function () {
-            this.src = '../assets/images/DEFAULT_AVATAR.png';
-        };
-    });
-}
-
 // State
 let traineesData = [];
 
@@ -216,10 +135,16 @@ function generateRandomPassword(length = 12) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    // Check authentication and update navbar
-    if (!checkAuthenticationAndUpdateNavbar()) {
+    // Mark that page-specific initialization is being done
+    window.adminNavbarInitialized = true;
+
+    // Check authentication and load navbar data
+    if (!checkAuthentication()) {
         return;
     }
+
+    // Load admin profile data for navbar
+    loadAdminProfileForNavbar();
 
     // Load trainees data
     loadTrainees();

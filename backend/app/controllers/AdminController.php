@@ -63,22 +63,45 @@ class AdminController {
         error_log("AdminController::update - ID: $id");
         error_log("AdminController::update - Data: " . json_encode($data));
         
+        // Validate required fields
+        if (isset($data['email']) && !filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+            http_response_code(422);
+            echo json_encode(['error' => 'Invalid email address format']);
+            return;
+        }
+        
+        if (isset($data['first_name']) && empty(trim($data['first_name']))) {
+            http_response_code(422);
+            echo json_encode(['error' => 'First name is required']);
+            return;
+        }
+        
+        if (isset($data['last_name']) && empty(trim($data['last_name']))) {
+            http_response_code(422);
+            echo json_encode(['error' => 'Last name is required']);
+            return;
+        }
+        
         // If individual name fields are being updated, also update the combined name field
         if (isset($data['first_name']) || isset($data['middle_name']) || isset($data['last_name'])) {
             $adminModel = new Admin();
             $currentAdmin = $adminModel->findById($id);
             
-            if ($currentAdmin) {
-                $firstName = $data['first_name'] ?? $currentAdmin['first_name'] ?? '';
-                $middleName = $data['middle_name'] ?? $currentAdmin['middle_name'] ?? '';
-                $lastName = $data['last_name'] ?? $currentAdmin['last_name'] ?? '';
-                
-                // Construct full name
-                $nameParts = array_filter([$firstName, $middleName, $lastName]);
-                $data['name'] = implode(' ', $nameParts);
-                
-                error_log("AdminController::update - Updated name: " . $data['name']);
+            if (!$currentAdmin) {
+                http_response_code(404);
+                echo json_encode(['error' => 'Admin not found']);
+                return;
             }
+            
+            $firstName = $data['first_name'] ?? $currentAdmin['first_name'] ?? '';
+            $middleName = $data['middle_name'] ?? $currentAdmin['middle_name'] ?? '';
+            $lastName = $data['last_name'] ?? $currentAdmin['last_name'] ?? '';
+            
+            // Construct full name
+            $nameParts = array_filter([$firstName, $middleName, $lastName]);
+            $data['name'] = implode(' ', $nameParts);
+            
+            error_log("AdminController::update - Updated name: " . $data['name']);
         }
         
         $adminModel = new Admin();
@@ -89,8 +112,8 @@ class AdminController {
         if ($result) {
             echo json_encode(['message' => 'Admin updated successfully']);
         } else {
-            http_response_code(404);
-            echo json_encode(['error' => 'Admin not found or update failed']);
+            http_response_code(500);
+            echo json_encode(['error' => 'Failed to update admin profile. Please try again.']);
         }
     }
     

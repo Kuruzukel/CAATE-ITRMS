@@ -333,6 +333,46 @@ async function saveProfileChanges() {
         return;
     }
 
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(updatedData.email)) {
+        showToast('Please enter a valid email address.', 'error');
+        return;
+    }
+
+    // Phone number validation (optional but if provided, should be valid)
+    if (updatedData.phone && updatedData.phone.length > 0) {
+        const phoneRegex = /^[\+]?[0-9\s\-\(\)]{10,15}$/;
+        if (!phoneRegex.test(updatedData.phone)) {
+            showToast('Please enter a valid phone number (10-15 digits).', 'error');
+            return;
+        }
+    }
+
+    // Check if there are any changes by comparing with current displayed values
+    const currentFirstName = document.getElementById('personalFirstName')?.value || '';
+    const currentMiddleName = document.getElementById('personalMiddleName')?.value || '';
+    const currentLastName = document.getElementById('personalLastName')?.value || '';
+    const currentPhone = document.getElementById('personalPhone')?.value || '';
+    const currentEmail = document.getElementById('personalEmail')?.value || '';
+    const currentAddress = document.getElementById('personalAddress')?.value || '';
+
+    const hasChanges =
+        updatedData.first_name !== currentFirstName ||
+        updatedData.middle_name !== currentMiddleName ||
+        updatedData.last_name !== currentLastName ||
+        updatedData.phone !== currentPhone ||
+        updatedData.email !== currentEmail ||
+        updatedData.address !== currentAddress;
+
+    if (!hasChanges) {
+        showToast('No changes detected. Your profile is already up to date.', 'info');
+        // Close modal
+        const modal = bootstrap.Modal.getInstance(document.getElementById('editInformationModal'));
+        if (modal) modal.hide();
+        return;
+    }
+
     console.log('Saving profile changes for admin:', userId);
     console.log('Updated data:', updatedData);
 
@@ -364,11 +404,43 @@ async function saveProfileChanges() {
             showToast('Profile updated successfully!', 'success');
         } else {
             const errorData = await response.json();
-            throw new Error(errorData.error || `Server error: ${response.status}`);
+            let errorMessage = 'Failed to update profile';
+
+            // Handle specific error cases
+            if (response.status === 404) {
+                errorMessage = 'Admin account not found. Please contact support.';
+            } else if (response.status === 401) {
+                errorMessage = 'Authentication expired. Please log in again.';
+                setTimeout(() => {
+                    window.location.href = '../../../auth/src/pages/login.html';
+                }, 2000);
+            } else if (response.status === 403) {
+                errorMessage = 'You do not have permission to update this profile.';
+            } else if (response.status === 422) {
+                errorMessage = errorData.error || 'Invalid data provided. Please check your inputs.';
+            } else if (response.status === 409) {
+                errorMessage = 'Email address is already in use by another account.';
+            } else if (response.status === 500) {
+                errorMessage = 'Server error occurred. Please try again later.';
+            } else if (response.status === 503) {
+                errorMessage = 'Service temporarily unavailable. Please try again in a few minutes.';
+            } else if (errorData.error) {
+                errorMessage = errorData.error;
+            }
+
+            throw new Error(errorMessage);
         }
     } catch (error) {
         console.error('Save profile error:', error);
-        showToast(`Failed to update profile: ${error.message}`, 'error');
+
+        // Handle network errors
+        if (error.name === 'TypeError' && error.message.includes('fetch')) {
+            showToast('Network error. Please check your connection and try again.', 'error');
+        } else if (error.message.includes('Authentication expired')) {
+            showToast('Session expired. Redirecting to login...', 'error');
+        } else {
+            showToast(error.message, 'error');
+        }
     }
 }
 
@@ -471,7 +543,8 @@ function showToast(message, type = 'success') {
 
     const icon = type === 'success' ? 'bx-check' :
         type === 'error' ? 'bx-x' :
-            type === 'warning' ? 'bx-error-alt' : 'bxs-info-circle';
+            type === 'warning' ? 'bx-error-alt' :
+                type === 'info' ? 'bx-info-circle' : 'bxs-info-circle';
 
     toast.innerHTML = `
         <i class="bx ${icon} toast-icon"></i>
@@ -482,11 +555,12 @@ function showToast(message, type = 'success') {
 
     container.appendChild(toast);
 
-    // Auto remove after 5 seconds
+    // Auto remove after 5 seconds (or 3 seconds for info messages)
+    const timeout = type === 'info' ? 3000 : 5000;
     setTimeout(() => {
         toast.classList.add('hiding');
         setTimeout(() => toast.remove(), 300);
-    }, 5000);
+    }, timeout);
 }
 
 // Show success message
@@ -497,18 +571,28 @@ function showSuccess(message) {
 // Show error message
 function showError(message) {
     showToast(message, 'error');
+}
+
+// Show success message
+function showSuccess(message) {
+    showToast(message, 'success');
+}
+
+// Show error message
+function showError(message) {
+    showToast(message, 'error');
+}
+
+// Show info message
+function showInfo(message) {
+    showToast(message, 'info');
+}
+
+// Show warning message
+function showWarning(message) {
+    showToast(message, 'warning');
 }
 
 function showNotification(message, type = 'info') {
     showToast(message, type);
-}
-
-// Show success message
-function showSuccess(message) {
-    showToast(message, 'success');
-}
-
-// Show error message
-function showError(message) {
-    showToast(message, 'error');
 }

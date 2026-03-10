@@ -930,7 +930,9 @@ a,
 
 /* Remove Avatar Online Status Indicator */
 .avatar.avatar-online:after,
-.avatar.avatar-online::after {
+.avatar.avatar-online::after,
+.avatar.avatar-online:before,
+.avatar.avatar-online::before {
     display: none !important;
 }
 

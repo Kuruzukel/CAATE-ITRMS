@@ -81,9 +81,6 @@
     <!-- CRITICAL: Authentication Guard - Must load synchronously BEFORE page renders -->
     <script src="../assets/js/auth-guard.js"></script>
 
-    <!-- Trainee Navbar - Common navbar functionality -->
-    <script src="../assets/js/trainee-navbar.js"></script>
-
     <!-- Clear stored password data immediately to prevent password manager popup -->
     <script>
         // Clear any stored password data that might trigger Google Password Manager
@@ -550,6 +547,9 @@
 
     <!-- Authentication JS - Must load before other scripts -->
     <script src="../assets/js/auth-dashboard.js"></script>
+
+    <!-- Trainee Navbar - Common navbar functionality (must load after auth-dashboard.js) -->
+    <script src="../assets/js/trainee-navbar.js"></script>
 
     <!-- Menu Toggle JS -->
     <script src="../assets/js/menu-toggle.js"></script>

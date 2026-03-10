@@ -124,9 +124,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 calendar = new FullCalendar.Calendar(calendarEl, {
                     initialView: 'dayGridMonth',
                     headerToolbar: {
-                        left: 'prev,next',
+                        left: 'prev',
                         center: 'title',
-                        right: 'today'
+                        right: 'next'
                     },
                     height: 'auto',
                     dayMaxEvents: false, // Show all events, no limit

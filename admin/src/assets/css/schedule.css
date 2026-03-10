@@ -163,7 +163,7 @@
 /* Enhanced Glassmorphism Header Toolbar */
 .fc-header-toolbar {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     margin-bottom: 1.5rem;
     border-radius: var(--border-radius-md) !important;

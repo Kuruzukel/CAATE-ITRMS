@@ -232,6 +232,44 @@ document.addEventListener('DOMContentLoaded', function () {
         editPreferredDate.addEventListener('change', updateAvailableTimeSlotsForEdit);
     }
 
+    // Initialize time slots when Add New Appointment modal is shown
+    const calendarModal = document.getElementById('calendarModal');
+    if (calendarModal) {
+        calendarModal.addEventListener('shown.bs.modal', function () {
+            // Reset and initialize time slots when modal opens
+            const dateInput = document.getElementById('addAppointmentDate');
+            const timeSelect = document.getElementById('addAppointmentTime');
+
+            if (dateInput && timeSelect) {
+                // If a date is already selected, update time slots
+                if (dateInput.value) {
+                    updateAvailableTimeSlotsForAdd();
+                } else {
+                    // Initialize with all time slots
+                    timeSelect.innerHTML = '<option value="">Select a time</option>';
+                    allTimeSlots.forEach(slot => {
+                        const option = document.createElement('option');
+                        option.value = slot.value;
+                        option.textContent = slot.text;
+                        timeSelect.appendChild(option);
+                    });
+                }
+            }
+        });
+    }
+
+    // Initialize time slots when Edit Appointment modal is shown
+    const editAppointmentModal = document.getElementById('editAppointmentModal');
+    if (editAppointmentModal) {
+        editAppointmentModal.addEventListener('shown.bs.modal', function () {
+            // Update time slots based on selected date when modal opens
+            const dateInput = document.getElementById('editPreferredDate');
+            if (dateInput && dateInput.value) {
+                updateAvailableTimeSlotsForEdit();
+            }
+        });
+    }
+
     // Menu toggle is handled by main.js
 });
 

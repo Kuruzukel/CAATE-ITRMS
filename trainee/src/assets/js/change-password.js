@@ -100,6 +100,34 @@ function validateForm() {
     return { allRequirementsMet, passwordsMatch };
 }
 
+// Show toast notification
+function showToast(message, type = 'success') {
+    const container = document.getElementById('toastContainer');
+    if (!container) return;
+
+    const toast = document.createElement('div');
+    toast.className = `toast-notification ${type}`;
+
+    const icon = type === 'success' ? 'bx-check' :
+        type === 'error' ? 'bx-x' :
+            type === 'warning' ? 'bx-error-alt' : 'bxs-info-circle';
+
+    toast.innerHTML = `
+        <i class="bx ${icon} toast-icon"></i>
+        <div class="toast-content">
+            <div class="toast-message">${message}</div>
+        </div>
+    `;
+
+    container.appendChild(toast);
+
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+        toast.classList.add('hiding');
+        setTimeout(() => toast.remove(), 300);
+    }, 5000);
+}
+
 // Event listeners
 document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('newPassword').addEventListener('input', function () {
@@ -124,17 +152,18 @@ document.addEventListener('DOMContentLoaded', function () {
         const currentPassword = document.getElementById('currentPassword').value;
         const newPassword = document.getElementById('newPassword').value;
         const confirmPassword = document.getElementById('confirmPassword').value;
-
-        // Hide previous alerts
-        document.getElementById('successAlert').classList.add('d-none');
-        document.getElementById('errorAlert').classList.add('d-none');
+        const submitBtn = document.getElementById('submitBtn');
 
         // Validate passwords match
         if (newPassword !== confirmPassword) {
-            document.getElementById('confirmPasswordError').classList.remove('d-none');
+            showToast('Passwords do not match', 'error');
             document.getElementById('confirmPassword').classList.add('is-invalid');
             return;
         }
+
+        // Disable submit button and show loading
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="bx bx-loader-alt bx-spin me-1"></i> Changing Password...';
 
         // Simulate API call (replace with actual API call)
         setTimeout(() => {
@@ -142,11 +171,10 @@ document.addEventListener('DOMContentLoaded', function () {
             const success = true; // Change to false to test error state
 
             if (success) {
-                document.getElementById('successAlert').classList.remove('d-none');
+                showToast('Your password has been changed successfully', 'success');
                 document.getElementById('changePasswordForm').reset();
                 document.getElementById('strengthBar').className = 'password-strength-bar';
                 document.getElementById('strengthText').textContent = '';
-                document.getElementById('submitBtn').disabled = true;
 
                 // Reset requirements
                 ['req-length', 'req-uppercase', 'req-lowercase', 'req-number', 'req-special'].forEach(id => {
@@ -158,10 +186,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     window.location.href = 'manage-profile.html';
                 }, 2000);
             } else {
-                document.getElementById('errorMessage').textContent = 'Current password is incorrect.';
-                document.getElementById('errorAlert').classList.remove('d-none');
+                showToast('Current password is incorrect', 'error');
                 document.getElementById('currentPassword').classList.add('is-invalid');
-                document.getElementById('currentPasswordError').classList.remove('d-none');
+
+                // Re-enable submit button
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="bx bx-check me-1"></i> Change Password';
             }
         }, 500);
     });

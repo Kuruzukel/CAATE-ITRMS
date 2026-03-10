@@ -105,6 +105,34 @@ function validateForm() {
     return { allRequirementsMet, passwordsMatch };
 }
 
+// Show toast notification
+function showToast(message, type = 'success') {
+    const container = document.getElementById('toastContainer');
+    if (!container) return;
+
+    const toast = document.createElement('div');
+    toast.className = `toast-notification ${type}`;
+
+    const icon = type === 'success' ? 'bx-check' :
+        type === 'error' ? 'bx-x' :
+            type === 'warning' ? 'bx-error-alt' : 'bxs-info-circle';
+
+    toast.innerHTML = `
+        <i class="bx ${icon} toast-icon"></i>
+        <div class="toast-content">
+            <div class="toast-message">${message}</div>
+        </div>
+    `;
+
+    container.appendChild(toast);
+
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+        toast.classList.add('hiding');
+        setTimeout(() => toast.remove(), 300);
+    }, 5000);
+}
+
 // Initialize event listeners when DOM is loaded
 document.addEventListener('DOMContentLoaded', function () {
     // Password strength checking
@@ -132,16 +160,9 @@ document.addEventListener('DOMContentLoaded', function () {
         const confirmPassword = document.getElementById('confirmPassword').value;
         const submitBtn = document.getElementById('submitBtn');
 
-        // Hide previous alerts
-        document.getElementById('successAlert').classList.add('d-none');
-        document.getElementById('errorAlert').classList.add('d-none');
-        document.getElementById('currentPasswordError').classList.add('d-none');
-        document.getElementById('currentPassword').classList.remove('is-invalid');
-
         // Validate passwords match
         if (newPassword !== confirmPassword) {
-            document.getElementById('confirmPasswordError').classList.remove('d-none');
-            document.getElementById('confirmPassword').classList.add('is-invalid');
+            showToast('Passwords do not match', 'error');
             return;
         }
 
@@ -166,8 +187,10 @@ document.addEventListener('DOMContentLoaded', function () {
             const data = await response.json();
 
             if (data.success) {
-                // Show success message
-                document.getElementById('successAlert').classList.remove('d-none');
+                // Show success toast
+                showToast('Your password has been changed successfully', 'success');
+
+                // Reset form
                 document.getElementById('changePasswordForm').reset();
                 document.getElementById('strengthBar').className = 'password-strength-bar';
                 document.getElementById('strengthText').textContent = '';
@@ -182,15 +205,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     window.location.href = 'dashboard.html';
                 }, 2000);
             } else {
-                // Show error message
-                document.getElementById('errorMessage').textContent = data.error || 'Failed to change password';
-                document.getElementById('errorAlert').classList.remove('d-none');
-
-                if (data.error && data.error.includes('Current password')) {
-                    document.getElementById('currentPassword').classList.add('is-invalid');
-                    document.getElementById('currentPasswordError').textContent = data.error;
-                    document.getElementById('currentPasswordError').classList.remove('d-none');
-                }
+                // Show error toast
+                showToast(data.error || 'Failed to change password', 'error');
 
                 // Re-enable submit button
                 submitBtn.disabled = false;
@@ -198,8 +214,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         } catch (error) {
             console.error('Error changing password:', error);
-            document.getElementById('errorMessage').textContent = 'Network error. Please try again.';
-            document.getElementById('errorAlert').classList.remove('d-none');
+            showToast('Network error. Please try again.', 'error');
 
             // Re-enable submit button
             submitBtn.disabled = false;

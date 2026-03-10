@@ -180,10 +180,10 @@ function updateProfileOverview(data) {
         traineeIdElement.textContent = data.traineeId || data.studentId || 'N/A';
     }
 
-    // Profile image
+    // Profile image - always use default avatar
     const profileImage = document.getElementById('profileImage');
-    if (profileImage && data.profileImage) {
-        profileImage.src = data.profileImage;
+    if (profileImage) {
+        profileImage.src = '../assets/images/AVATARNIKEL.jpg';
     }
 
     // Update navbar user info
@@ -471,11 +471,12 @@ function initializePhotoUpload() {
         }
 
         // Preview the image
-        const reader = new FileReader();
-        reader.onload = function (event) {
-            profileImage.src = event.target.result;
-        };
-        reader.readAsDataURL(file);
+        // Keep default avatar - don't preview uploaded image
+        // const reader = new FileReader();
+        // reader.onload = function (event) {
+        //     profileImage.src = event.target.result;
+        // };
+        // reader.readAsDataURL(file);
 
         // Upload to server
         await uploadProfileImage(file);

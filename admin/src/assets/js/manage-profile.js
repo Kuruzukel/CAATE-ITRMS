@@ -9,16 +9,12 @@ function checkAuthentication() {
     const userRole = localStorage.getItem('userRole');
     const userId = localStorage.getItem('userId');
 
-    console.log('Auth check - Admin Page:', { token: !!token, userRole, userId });
-
     if (!token || !userRole || !userId) {
-        console.log('Missing authentication data, redirecting to login');
         window.location.href = '../../../auth/src/pages/login.html';
         return false;
     }
 
     if (userRole !== 'admin') {
-        console.log('User role is not admin:', userRole);
         const baseUrl = window.location.origin + '/CAATE-ITRMS';
         if (userRole === 'trainee') {
             window.location.href = baseUrl + '/trainee/src/pages/dashboard.html';
@@ -28,7 +24,6 @@ function checkAuthentication() {
         return false;
     }
 
-    console.log('Authentication passed for admin user');
     return true;
 }
 
@@ -48,51 +43,34 @@ async function loadAdminProfile() {
     try {
         const token = localStorage.getItem('authToken');
         const userId = localStorage.getItem('userId');
-        const userRole = localStorage.getItem('userRole');
         const userData = localStorage.getItem('userData');
 
-        console.log('Debug - localStorage data:', {
-            token: token ? 'exists' : 'missing',
-            userId: userId,
-            userRole: userRole,
-            userData: userData ? 'exists' : 'missing'
-        });
-
-        if (!token) {
-            console.log('No auth token found, redirecting to login');
+        if (!token || !userId) {
             window.location.href = '../../../auth/src/pages/login.html';
             return;
         }
 
-        if (!userRole || userRole !== 'admin') {
-            console.log('Invalid user role:', userRole);
-            window.location.href = '../../../auth/src/pages/login.html';
-            return;
-        }
-
-        // If userId is not available, try to get it from userData
-        let actualUserId = userId;
-        if (!actualUserId && userData) {
+        // Try to get user data from localStorage first
+        let adminData = null;
+        if (userData) {
             try {
-                const parsedUserData = JSON.parse(userData);
-                actualUserId = parsedUserData.id || parsedUserData._id;
-                if (actualUserId) {
-                    localStorage.setItem('userId', actualUserId);
-                }
+                adminData = JSON.parse(userData);
             } catch (e) {
-                console.error('Error parsing userData:', e);
+                // Error parsing userData
             }
         }
 
-        if (!actualUserId) {
-            console.log('No user ID found, redirecting to login');
-            window.location.href = '../../../auth/src/pages/login.html';
+        // If we have user data from localStorage, use it
+        if (adminData) {
+            updateProfileOverview(adminData);
+            updatePersonalInformation(adminData);
+            updateLoginHistory(adminData.loginHistory || []);
             return;
         }
 
-        console.log('Fetching admin profile for userId:', actualUserId);
-
-        const response = await fetch(`${API_BASE_URL}/api/v1/admins/${actualUserId}`, {
+        // Otherwise, try to fetch from API with fallback strategy
+        // Try general users endpoint first
+        let response = await fetch(`${API_BASE_URL}/api/v1/users/${userId}`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -101,76 +79,107 @@ async function loadAdminProfile() {
         });
 
         if (!response.ok) {
-            if (response.status === 401) {
-                console.log('Unauthorized, redirecting to login');
-                localStorage.clear();
-                window.location.href = '../../../auth/src/pages/login.html';
-                return;
-            }
-            throw new Error(`HTTP ${response.status}: Failed to fetch admin profile`);
+            // Try admin-specific endpoint
+            response = await fetch(`${API_BASE_URL}/api/v1/admins/${userId}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
         }
 
-        const result = await response.json();
-        const adminData = result.data;
+        if (response.ok) {
+            const result = await response.json();
+            adminData = result.data || result.user || result;
 
-        console.log('Admin profile loaded successfully:', adminData);
+            // Update profile overview
+            updateProfileOverview(adminData);
 
-        // Update profile overview
-        updateProfileOverview(adminData);
+            // Update personal information
+            updatePersonalInformation(adminData);
 
-        // Update personal information
-        updatePersonalInformation(adminData);
-
-        // Update login history if available
-        if (adminData.loginHistory) {
-            updateLoginHistory(adminData.loginHistory);
+            // Update login history
+            updateLoginHistory(adminData.loginHistory || []);
+        } else {
+            throw new Error('Failed to fetch from API');
         }
 
     } catch (error) {
-        console.error('Error loading admin profile:', error);
-        showNotification('Failed to load profile data: ' + error.message, 'error');
+        // Error loading admin profile
+
+        // Fallback: use data from localStorage
+        const userData = localStorage.getItem('userData');
+        if (userData) {
+            try {
+                const adminData = JSON.parse(userData);
+                updateProfileOverview(adminData);
+                updatePersonalInformation(adminData);
+                updateLoginHistory(adminData.loginHistory || []);
+            } catch (e) {
+                showNotification('Failed to load profile data', 'error');
+            }
+        } else {
+            showNotification('Failed to load profile data', 'error');
+        }
     }
 }
 
 // Update profile overview section
 function updateProfileOverview(data) {
-    // Full name
-    const fullNameElement = document.querySelector('.col-lg-8 .row:nth-child(1) .col-md-6:nth-child(1) .form-control-plaintext');
+    // Full name - use name field first, then fallback to firstName + lastName
+    const fullNameElement = document.getElementById('profileFullName');
     if (fullNameElement) {
-        fullNameElement.textContent = `${data.firstName || ''} ${data.lastName || ''}`.trim() || 'N/A';
+        let fullName = '';
+        if (data.name) {
+            fullName = data.name;
+        } else if (data.firstName || data.lastName) {
+            fullName = `${data.firstName || ''} ${data.lastName || ''}`.trim();
+        } else {
+            fullName = 'N/A';
+        }
+        fullNameElement.textContent = fullName;
     }
 
     // Role badge
-    const roleBadge = document.querySelector('.col-lg-8 .row:nth-child(1) .col-md-6:nth-child(2) .badge');
+    const roleBadge = document.getElementById('profileRole');
     if (roleBadge) {
         roleBadge.textContent = 'Administrator';
         roleBadge.className = 'badge bg-primary';
     }
 
     // Email
-    const emailElement = document.querySelector('.col-lg-8 .row:nth-child(2) .col-md-6:nth-child(1) .form-control-plaintext');
+    const emailElement = document.getElementById('profileEmail');
     if (emailElement) {
         emailElement.textContent = data.email || 'N/A';
     }
 
     // Account status
-    const statusBadge = document.querySelector('.col-lg-8 .row:nth-child(2) .col-md-6:nth-child(2) .badge');
+    const statusBadge = document.getElementById('profileStatus');
     if (statusBadge) {
         const status = data.status || 'active';
         statusBadge.textContent = status.charAt(0).toUpperCase() + status.slice(1);
         statusBadge.className = status === 'active' ? 'badge bg-success' : 'badge bg-danger';
     }
 
-    // Last login
-    const lastLoginElement = document.querySelector('.col-lg-8 .row:nth-child(3) .col-md-6:nth-child(1) .form-control-plaintext');
-    if (lastLoginElement && data.lastLogin) {
-        lastLoginElement.textContent = formatDateTime(data.lastLogin);
+    // Last login - only show if available
+    const lastLoginElement = document.getElementById('profileLastLogin');
+    if (lastLoginElement) {
+        if (data.lastLogin) {
+            lastLoginElement.textContent = formatDateTime(data.lastLogin);
+        } else {
+            lastLoginElement.textContent = 'N/A';
+        }
     }
 
-    // Last logout
-    const lastLogoutElement = document.querySelector('.col-lg-8 .row:nth-child(3) .col-md-6:nth-child(2) .form-control-plaintext');
-    if (lastLogoutElement && data.lastLogout) {
-        lastLogoutElement.textContent = formatDateTime(data.lastLogout);
+    // Last logout - only show if available
+    const lastLogoutElement = document.getElementById('profileLastLogout');
+    if (lastLogoutElement) {
+        if (data.lastLogout) {
+            lastLogoutElement.textContent = formatDateTime(data.lastLogout);
+        } else {
+            lastLogoutElement.textContent = 'N/A';
+        }
     }
 
     // Profile image
@@ -186,46 +195,52 @@ function updateProfileOverview(data) {
 // Update personal information section
 function updatePersonalInformation(data) {
     // First name
-    const firstNameInput = document.querySelector('.card-body .row:nth-child(1) .col-md-6:nth-child(1) input');
+    const firstNameInput = document.getElementById('personalFirstName');
     if (firstNameInput) {
         firstNameInput.value = data.firstName || '';
     }
 
     // Last name
-    const lastNameInput = document.querySelector('.card-body .row:nth-child(1) .col-md-6:nth-child(2) input');
+    const lastNameInput = document.getElementById('personalLastName');
     if (lastNameInput) {
         lastNameInput.value = data.lastName || '';
     }
 
     // Phone number
-    const phoneInput = document.querySelector('.card-body .row:nth-child(2) .col-md-6:nth-child(1) input');
+    const phoneInput = document.getElementById('personalPhone');
     if (phoneInput) {
-        phoneInput.value = data.phoneNumber || '';
+        phoneInput.value = data.phoneNumber || data.phone || '';
     }
 
     // Department
-    const departmentInput = document.querySelector('.card-body .row:nth-child(2) .col-md-6:nth-child(2) input');
+    const departmentInput = document.getElementById('personalDepartment');
     if (departmentInput) {
         departmentInput.value = data.department || 'Administration';
     }
 
     // Address
-    const addressTextarea = document.querySelector('.card-body .row:nth-child(3) textarea');
+    const addressTextarea = document.getElementById('personalAddress');
     if (addressTextarea) {
         addressTextarea.value = data.address || '';
     }
 
     // Update edit modal fields
-    document.getElementById('editFirstName').value = data.firstName || '';
-    document.getElementById('editLastName').value = data.lastName || '';
-    document.getElementById('editPhone').value = data.phoneNumber || '';
-    document.getElementById('editDepartment').value = data.department || 'Administration';
-    document.getElementById('editAddress').value = data.address || '';
+    const editFirstName = document.getElementById('editFirstName');
+    const editLastName = document.getElementById('editLastName');
+    const editPhone = document.getElementById('editPhone');
+    const editDepartment = document.getElementById('editDepartment');
+    const editAddress = document.getElementById('editAddress');
+
+    if (editFirstName) editFirstName.value = data.firstName || '';
+    if (editLastName) editLastName.value = data.lastName || '';
+    if (editPhone) editPhone.value = data.phoneNumber || data.phone || '';
+    if (editDepartment) editDepartment.value = data.department || 'Administration';
+    if (editAddress) editAddress.value = data.address || '';
 }
 
 // Update login history table
 function updateLoginHistory(loginHistory) {
-    const tbody = document.querySelector('.table tbody');
+    const tbody = document.getElementById('loginHistoryTable');
     if (!tbody || !Array.isArray(loginHistory) || loginHistory.length === 0) return;
 
     tbody.innerHTML = '';
@@ -247,7 +262,15 @@ function updateLoginHistory(loginHistory) {
 function updateNavbarUserInfo(data) {
     const userName = document.querySelector('.dropdown-menu .flex-grow-1 .fw-semibold');
     if (userName) {
-        userName.textContent = `${data.firstName || ''} ${data.lastName || ''}`.trim() || 'Admin';
+        let displayName = '';
+        if (data.name) {
+            displayName = data.name;
+        } else if (data.firstName || data.lastName) {
+            displayName = `${data.firstName || ''} ${data.lastName || ''}`.trim();
+        } else {
+            displayName = 'Admin';
+        }
+        userName.textContent = displayName;
     }
 }
 
@@ -272,15 +295,21 @@ async function saveProfileChanges() {
             return;
         }
 
+        const editFirstName = document.getElementById('editFirstName');
+        const editLastName = document.getElementById('editLastName');
+        const editPhone = document.getElementById('editPhone');
+        const editDepartment = document.getElementById('editDepartment');
+        const editAddress = document.getElementById('editAddress');
+
         const updatedData = {
-            firstName: document.getElementById('editFirstName').value,
-            lastName: document.getElementById('editLastName').value,
-            phoneNumber: document.getElementById('editPhone').value,
-            department: document.getElementById('editDepartment').value,
-            address: document.getElementById('editAddress').value
+            firstName: editFirstName ? editFirstName.value : '',
+            lastName: editLastName ? editLastName.value : '',
+            phoneNumber: editPhone ? editPhone.value : '',
+            department: editDepartment ? editDepartment.value : '',
+            address: editAddress ? editAddress.value : ''
         };
 
-        const response = await fetch(`${API_BASE_URL}/api/v1/admins/${userId}`, {
+        const response = await fetch(`${API_BASE_URL}/api/v1/users/${userId}`, {
             method: 'PUT',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -295,7 +324,7 @@ async function saveProfileChanges() {
 
         // Close modal
         const modal = bootstrap.Modal.getInstance(document.getElementById('editInformationModal'));
-        modal.hide();
+        if (modal) modal.hide();
 
         // Reload profile data
         await loadAdminProfile();
@@ -303,7 +332,6 @@ async function saveProfileChanges() {
         showNotification('Profile updated successfully!', 'success');
 
     } catch (error) {
-        console.error('Error saving profile:', error);
         showNotification('Failed to update profile', 'error');
     }
 }
@@ -361,7 +389,7 @@ async function uploadProfileImage(file) {
         const formData = new FormData();
         formData.append('profileImage', file);
 
-        const response = await fetch(`${API_BASE_URL}/api/v1/admins/${userId}/profile-image`, {
+        const response = await fetch(`${API_BASE_URL}/api/v1/users/${userId}/profile-image`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -376,7 +404,6 @@ async function uploadProfileImage(file) {
         showNotification('Photo updated successfully!', 'success');
 
     } catch (error) {
-        console.error('Error uploading image:', error);
         showNotification('Failed to upload photo', 'error');
     }
 }

@@ -42,6 +42,9 @@
     <!-- Helpers -->
     <script src="../assets/vendor/js/helpers.js"></script>
     <script src="../assets/js/config.js"></script>
+
+    <!-- Auth Guard - MUST be loaded first -->
+    <script src="../assets/js/auth-guard.js"></script>
 </head>
 
 <body>
@@ -310,14 +313,16 @@
                                                         <label class="form-label fw-semibold">
                                                             <i class="bx bx-user me-2"></i>Full Name
                                                         </label>
-                                                        <p class="form-control-plaintext">KEL</p>
+                                                        <p id="profileFullName" class="form-control-plaintext">
+                                                            Loading...</p>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <label class="form-label fw-semibold">
                                                             <i class="bx bx-briefcase me-2"></i>Role
                                                         </label>
                                                         <p class="form-control-plaintext">
-                                                            <span class="badge bg-primary">Administrator</span>
+                                                            <span id="profileRole"
+                                                                class="badge bg-primary">Administrator</span>
                                                         </p>
                                                     </div>
                                                 </div>
@@ -326,14 +331,16 @@
                                                         <label class="form-label fw-semibold">
                                                             <i class="bx bx-envelope me-2"></i>Email Address
                                                         </label>
-                                                        <p class="form-control-plaintext">kel.admin@caate.edu.ph</p>
+                                                        <p id="profileEmail" class="form-control-plaintext">Loading...
+                                                        </p>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <label class="form-label fw-semibold">
                                                             <i class="bx bx-check-circle me-2"></i>Account Status
                                                         </label>
                                                         <p class="form-control-plaintext">
-                                                            <span class="badge bg-success">Active</span>
+                                                            <span id="profileStatus"
+                                                                class="badge bg-success">Active</span>
                                                         </p>
                                                     </div>
                                                 </div>
@@ -342,16 +349,16 @@
                                                         <label class="form-label fw-semibold">
                                                             <i class="bx bx-log-in me-2"></i>Last Login
                                                         </label>
-                                                        <p class="form-control-plaintext">
-                                                            January 28, 2026 - 09:15 AM
+                                                        <p id="profileLastLogin" class="form-control-plaintext">
+                                                            N/A
                                                         </p>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <label class="form-label fw-semibold">
                                                             <i class="bx bx-log-out me-2"></i>Last Logout
                                                         </label>
-                                                        <p class="form-control-plaintext">
-                                                            January 27, 2026 - 06:30 PM
+                                                        <p id="profileLastLogout" class="form-control-plaintext">
+                                                            N/A
                                                         </p>
                                                     </div>
                                                 </div>
@@ -377,29 +384,32 @@
                                         <div class="row mb-3">
                                             <div class="col-md-6">
                                                 <label class="form-label fw-semibold">First Name</label>
-                                                <input type="text" class="form-control" value="KEL" readonly>
+                                                <input type="text" id="personalFirstName" class="form-control" value=""
+                                                    readonly>
                                             </div>
                                             <div class="col-md-6">
                                                 <label class="form-label fw-semibold">Last Name</label>
-                                                <input type="text" class="form-control" value="Admin" readonly>
+                                                <input type="text" id="personalLastName" class="form-control" value=""
+                                                    readonly>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <div class="col-md-6">
                                                 <label class="form-label fw-semibold">Phone Number</label>
-                                                <input type="text" class="form-control" value="+63 912 345 6789"
+                                                <input type="text" id="personalPhone" class="form-control" value=""
                                                     readonly>
                                             </div>
                                             <div class="col-md-6">
                                                 <label class="form-label fw-semibold">Department</label>
-                                                <input type="text" class="form-control" value="Administration" readonly>
+                                                <input type="text" id="personalDepartment" class="form-control" value=""
+                                                    readonly>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-12">
                                                 <label class="form-label fw-semibold">Address</label>
-                                                <textarea class="form-control" rows="2"
-                                                    readonly>Creative Aesthetic Academy & Technical Education Inc., Philippines</textarea>
+                                                <textarea id="personalAddress" class="form-control" rows="2"
+                                                    readonly></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -426,42 +436,8 @@
                                                         <th>Status</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody class="table-border-bottom-0">
-                                                    <tr>
-                                                        <td><strong>Jan 28, 2026 - 09:15 AM</strong></td>
-                                                        <td><span class="badge bg-success">Login</span></td>
-                                                        <td>192.168.1.100</td>
-                                                        <td>Windows 11 - Chrome</td>
-                                                        <td><span class="badge bg-success">Success</span></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><strong>Jan 27, 2026 - 06:30 PM</strong></td>
-                                                        <td><span class="badge bg-danger">Logout</span></td>
-                                                        <td>192.168.1.100</td>
-                                                        <td>Windows 11 - Chrome</td>
-                                                        <td><span class="badge bg-success">Success</span></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><strong>Jan 27, 2026 - 08:00 AM</strong></td>
-                                                        <td><span class="badge bg-success">Login</span></td>
-                                                        <td>192.168.1.100</td>
-                                                        <td>Windows 11 - Chrome</td>
-                                                        <td><span class="badge bg-success">Success</span></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><strong>Jan 26, 2026 - 05:45 PM</strong></td>
-                                                        <td><span class="badge bg-danger">Logout</span></td>
-                                                        <td>192.168.1.100</td>
-                                                        <td>Windows 11 - Chrome</td>
-                                                        <td><span class="badge bg-success">Success</span></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><strong>Jan 26, 2026 - 07:30 AM</strong></td>
-                                                        <td><span class="badge bg-success">Login</span></td>
-                                                        <td>192.168.1.100</td>
-                                                        <td>Windows 11 - Chrome</td>
-                                                        <td><span class="badge bg-success">Success</span></td>
-                                                    </tr>
+                                                <tbody class="table-border-bottom-0" id="loginHistoryTable">
+                                                    <!-- Login history will be populated dynamically -->
                                                 </tbody>
                                             </table>
                                         </div>
@@ -513,28 +489,27 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="editFirstName" class="form-label">First Name</label>
-                                <input type="text" id="editFirstName" class="form-control" value="KEL">
+                                <input type="text" id="editFirstName" class="form-control" value="">
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="editLastName" class="form-label">Last Name</label>
-                                <input type="text" id="editLastName" class="form-control" value="Admin">
+                                <input type="text" id="editLastName" class="form-control" value="">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="editPhone" class="form-label">Phone Number</label>
-                                <input type="text" id="editPhone" class="form-control" value="+63 912 345 6789">
+                                <input type="text" id="editPhone" class="form-control" value="">
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="editDepartment" class="form-label">Department</label>
-                                <input type="text" id="editDepartment" class="form-control" value="Administration">
+                                <input type="text" id="editDepartment" class="form-control" value="">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-12 mb-3">
                                 <label for="editAddress" class="form-label">Address</label>
-                                <textarea id="editAddress" class="form-control"
-                                    rows="2">Creative Aesthetic Academy & Technical Education Inc., Philippines</textarea>
+                                <textarea id="editAddress" class="form-control" rows="2"></textarea>
                             </div>
                         </div>
                     </form>

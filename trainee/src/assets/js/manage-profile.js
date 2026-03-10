@@ -9,16 +9,12 @@ function checkAuthentication() {
     const userRole = localStorage.getItem('userRole');
     const userId = localStorage.getItem('userId');
 
-    console.log('Auth check - Trainee Page:', { token: !!token, userRole, userId });
-
     if (!token || !userRole || !userId) {
-        console.log('Missing authentication data, redirecting to login');
         window.location.href = '../../../auth/src/pages/login.html';
         return false;
     }
 
     if (userRole !== 'trainee') {
-        console.log('User role is not trainee:', userRole);
         const baseUrl = window.location.origin + '/CAATE-ITRMS';
         if (userRole === 'admin') {
             window.location.href = baseUrl + '/admin/src/pages/dashboard.html';
@@ -28,7 +24,6 @@ function checkAuthentication() {
         return false;
     }
 
-    console.log('Authentication passed for trainee user');
     return true;
 }
 
@@ -48,118 +43,138 @@ async function loadTraineeProfile() {
     try {
         const token = localStorage.getItem('authToken');
         const userId = localStorage.getItem('userId');
-        const userRole = localStorage.getItem('userRole');
         const userData = localStorage.getItem('userData');
 
-        console.log('Debug - localStorage data:', {
-            token: token ? 'exists' : 'missing',
-            userId: userId,
-            userRole: userRole,
-            userData: userData ? 'exists' : 'missing'
-        });
-
-        if (!token) {
-            console.log('No auth token found, redirecting to login');
+        if (!token || !userId) {
             window.location.href = '../../../auth/src/pages/login.html';
             return;
         }
 
-        if (!userRole || userRole !== 'trainee') {
-            console.log('Invalid user role:', userRole);
-            window.location.href = '../../../auth/src/pages/login.html';
-            return;
-        }
-
-        // If userId is not available, try to get it from userData
-        let actualUserId = userId;
-        if (!actualUserId && userData) {
+        // Try to get user data from localStorage first
+        let traineeData = null;
+        if (userData) {
             try {
-                const parsedUserData = JSON.parse(userData);
-                actualUserId = parsedUserData.id || parsedUserData._id;
-                if (actualUserId) {
-                    localStorage.setItem('userId', actualUserId);
-                }
+                traineeData = JSON.parse(userData);
             } catch (e) {
-                console.error('Error parsing userData:', e);
+                // Error parsing userData
             }
         }
 
-        if (!actualUserId) {
-            console.log('No user ID found, redirecting to login');
-            window.location.href = '../../../auth/src/pages/login.html';
+        // If we have user data from localStorage, use it
+        if (traineeData) {
+            updateProfileOverview(traineeData);
+            updatePersonalInformation(traineeData);
             return;
         }
 
-        console.log('Fetching trainee profile for userId:', actualUserId);
+        // Otherwise, try to fetch from API with fallback strategy
+        try {
+            // Try general users endpoint first
+            let response = await fetch(`${API_BASE_URL}/api/v1/users/${userId}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
 
-        const response = await fetch(`${API_BASE_URL}/api/v1/trainees/${actualUserId}`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
+            if (!response.ok) {
+                // Try trainee-specific endpoint
+                response = await fetch(`${API_BASE_URL}/api/v1/trainees/${userId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
             }
-        });
 
-        if (!response.ok) {
-            if (response.status === 401) {
-                console.log('Unauthorized, redirecting to login');
-                localStorage.clear();
-                window.location.href = '../../../auth/src/pages/login.html';
-                return;
+            if (response.ok) {
+                const result = await response.json();
+                traineeData = result.data || result.user || result;
+
+                // Update profile overview
+                updateProfileOverview(traineeData);
+
+                // Update personal information
+                updatePersonalInformation(traineeData);
+
+                // Update enrollment information if available
+                if (traineeData.enrollments) {
+                    updateEnrollmentInformation(traineeData.enrollments);
+                }
+
+                // Update completed courses if available
+                if (traineeData.completedCourses) {
+                    updateCompletedCourses(traineeData.completedCourses);
+                }
+            } else {
+                throw new Error('Failed to fetch from API');
             }
-            throw new Error(`HTTP ${response.status}: Failed to fetch trainee profile`);
-        }
 
-        const result = await response.json();
-        const traineeData = result.data;
-
-        console.log('Trainee profile loaded successfully:', traineeData);
-
-        // Update profile overview
-        updateProfileOverview(traineeData);
-
-        // Update personal information
-        updatePersonalInformation(traineeData);
-
-        // Update enrollment information if available
-        if (traineeData.enrollments) {
-            updateEnrollmentInformation(traineeData.enrollments);
-        }
-
-        // Update completed courses if available
-        if (traineeData.completedCourses) {
-            updateCompletedCourses(traineeData.completedCourses);
+        } catch (apiError) {
+            // Fallback: use data from localStorage
+            if (userData) {
+                try {
+                    const traineeData = JSON.parse(userData);
+                    updateProfileOverview(traineeData);
+                    updatePersonalInformation(traineeData);
+                } catch (e) {
+                    showNotification('Failed to load profile data', 'error');
+                }
+            } else {
+                showNotification('Failed to load profile data', 'error');
+            }
         }
 
     } catch (error) {
-        console.error('Error loading trainee profile:', error);
-        showNotification('Failed to load profile data: ' + error.message, 'error');
+        // Fallback: use data from localStorage
+        const userData = localStorage.getItem('userData');
+        if (userData) {
+            try {
+                const traineeData = JSON.parse(userData);
+                updateProfileOverview(traineeData);
+                updatePersonalInformation(traineeData);
+            } catch (e) {
+                showNotification('Failed to load profile data', 'error');
+            }
+        } else {
+            showNotification('Failed to load profile data', 'error');
+        }
     }
 }
 
 // Update profile overview section
 function updateProfileOverview(data) {
-    // Full name
-    const fullNameElement = document.querySelector('.col-lg-8 .row:nth-child(1) .col-md-6:nth-child(1) .form-control-plaintext');
+    // Full name - use name field first, then fallback to firstName + lastName
+    const fullNameElement = document.getElementById('profileFullName');
     if (fullNameElement) {
-        fullNameElement.textContent = `${data.firstName || ''} ${data.lastName || ''}`.trim() || 'N/A';
+        let fullName = '';
+        if (data.name) {
+            fullName = data.name;
+        } else if (data.firstName || data.lastName) {
+            fullName = `${data.firstName || ''} ${data.lastName || ''}`.trim();
+        } else {
+            fullName = 'N/A';
+        }
+        fullNameElement.textContent = fullName;
     }
 
     // Role badge
-    const roleBadge = document.querySelector('.col-lg-8 .row:nth-child(1) .col-md-6:nth-child(2) .badge');
+    const roleBadge = document.getElementById('profileRole');
     if (roleBadge) {
         roleBadge.textContent = 'Trainee';
         roleBadge.className = 'badge bg-info';
     }
 
     // Email
-    const emailElement = document.querySelector('.col-lg-8 .row:nth-child(2) .col-md-6:nth-child(1) .form-control-plaintext');
+    const emailElement = document.getElementById('profileEmail');
     if (emailElement) {
         emailElement.textContent = data.email || 'N/A';
     }
 
     // Account status
-    const statusBadge = document.querySelector('.col-lg-8 .row:nth-child(2) .col-md-6:nth-child(2) .badge');
+    const statusBadge = document.getElementById('profileStatus');
     if (statusBadge) {
         const status = data.status || 'active';
         statusBadge.textContent = status.charAt(0).toUpperCase() + status.slice(1);
@@ -167,15 +182,19 @@ function updateProfileOverview(data) {
     }
 
     // Last login
-    const lastLoginElement = document.querySelector('.col-lg-8 .row:nth-child(3) .col-md-6:nth-child(1) .form-control-plaintext');
-    if (lastLoginElement && data.lastLogin) {
-        lastLoginElement.textContent = formatDateTime(data.lastLogin);
+    const lastLoginElement = document.getElementById('profileLastLogin');
+    if (lastLoginElement) {
+        if (data.lastLogin) {
+            lastLoginElement.textContent = formatDateTime(data.lastLogin);
+        } else {
+            lastLoginElement.textContent = 'N/A';
+        }
     }
 
     // Trainee ID
-    const traineeIdElement = document.querySelector('.col-lg-8 .row:nth-child(3) .col-md-6:nth-child(2) .form-control-plaintext');
+    const traineeIdElement = document.getElementById('profileTraineeId');
     if (traineeIdElement) {
-        traineeIdElement.textContent = data.traineeId || 'N/A';
+        traineeIdElement.textContent = data.traineeId || data.studentId || 'N/A';
     }
 
     // Profile image
@@ -191,31 +210,31 @@ function updateProfileOverview(data) {
 // Update personal information section
 function updatePersonalInformation(data) {
     // First name
-    const firstNameInput = document.querySelector('.card-body .row:nth-child(1) .col-md-6:nth-child(1) input');
+    const firstNameInput = document.getElementById('personalFirstName');
     if (firstNameInput) {
         firstNameInput.value = data.firstName || '';
     }
 
     // Last name
-    const lastNameInput = document.querySelector('.card-body .row:nth-child(1) .col-md-6:nth-child(2) input');
+    const lastNameInput = document.getElementById('personalLastName');
     if (lastNameInput) {
         lastNameInput.value = data.lastName || '';
     }
 
     // Phone number
-    const phoneInput = document.querySelector('.card-body .row:nth-child(2) .col-md-6:nth-child(1) input');
+    const phoneInput = document.getElementById('personalPhone');
     if (phoneInput) {
-        phoneInput.value = data.phoneNumber || '';
+        phoneInput.value = data.phoneNumber || data.phone || '';
     }
 
     // Date of birth
-    const dobInput = document.querySelector('.card-body .row:nth-child(2) .col-md-6:nth-child(2) input');
+    const dobInput = document.getElementById('personalDob');
     if (dobInput && data.dateOfBirth) {
         dobInput.value = formatDate(data.dateOfBirth);
     }
 
     // Address
-    const addressTextarea = document.querySelector('.card-body .row:nth-child(3) textarea');
+    const addressTextarea = document.getElementById('personalAddress');
     if (addressTextarea) {
         addressTextarea.value = data.address || '';
     }
@@ -229,14 +248,14 @@ function updatePersonalInformation(data) {
 
     if (editFirstName) editFirstName.value = data.firstName || '';
     if (editLastName) editLastName.value = data.lastName || '';
-    if (editPhone) editPhone.value = data.phoneNumber || '';
+    if (editPhone) editPhone.value = data.phoneNumber || data.phone || '';
     if (editDob && data.dateOfBirth) editDob.value = data.dateOfBirth.split('T')[0];
     if (editAddress) editAddress.value = data.address || '';
 }
 
 // Update enrollment information table
 function updateEnrollmentInformation(enrollments) {
-    const tbody = document.querySelector('.row.mb-4:nth-child(3) .table tbody');
+    const tbody = document.getElementById('enrollmentTable');
     if (!tbody || !Array.isArray(enrollments) || enrollments.length === 0) return;
 
     tbody.innerHTML = '';
@@ -267,11 +286,11 @@ function updateEnrollmentInformation(enrollments) {
 
 // Update completed courses section
 function updateCompletedCourses(completedCourses) {
-    const coursesContainer = document.querySelector('.row:last-child .card-body .row');
+    const coursesContainer = document.getElementById('completedCoursesContainer');
     if (!coursesContainer || !Array.isArray(completedCourses) || completedCourses.length === 0) return;
 
     // Update badge count
-    const countBadge = document.querySelector('.row:last-child .card-header .badge');
+    const countBadge = document.getElementById('completedCoursesCount');
     if (countBadge) {
         countBadge.textContent = `${completedCourses.length} Completed Course${completedCourses.length !== 1 ? 's' : ''}`;
     }
@@ -319,13 +338,56 @@ function updateCompletedCourses(completedCourses) {
 
         coursesContainer.appendChild(courseCard);
     });
+
+    // Update academic summary
+    updateAcademicSummary(completedCourses);
+}
+
+// Update academic performance summary
+function updateAcademicSummary(completedCourses) {
+    const summaryElement = document.getElementById('academicSummary');
+    if (!summaryElement || !Array.isArray(completedCourses)) return;
+
+    const totalCourses = completedCourses.length;
+    let totalHours = 0;
+    let totalGrades = 0;
+    let gradeCount = 0;
+
+    completedCourses.forEach(course => {
+        if (course.hours) {
+            totalHours += parseInt(course.hours) || 0;
+        }
+        if (course.finalGrade) {
+            const grade = parseFloat(course.finalGrade.replace('%', ''));
+            if (!isNaN(grade)) {
+                totalGrades += grade;
+                gradeCount++;
+            }
+        }
+    });
+
+    const averageGrade = gradeCount > 0 ? (totalGrades / gradeCount).toFixed(1) + '%' : 'N/A';
+
+    summaryElement.innerHTML = `
+        Total Completed Courses: <strong class="text-white">${totalCourses}</strong> |
+        Average Grade: <strong class="text-white">${averageGrade}</strong> |
+        Total Training Hours: <strong class="text-white">${totalHours} Hours</strong>
+    `;
 }
 
 // Update navbar user info
 function updateNavbarUserInfo(data) {
     const userName = document.querySelector('.dropdown-menu .flex-grow-1 .fw-semibold');
     if (userName) {
-        userName.textContent = `${data.firstName || ''} ${data.lastName || ''}`.trim() || 'Trainee';
+        let displayName = '';
+        if (data.name) {
+            displayName = data.name;
+        } else if (data.firstName || data.lastName) {
+            displayName = `${data.firstName || ''} ${data.lastName || ''}`.trim();
+        } else {
+            displayName = 'Trainee';
+        }
+        userName.textContent = displayName;
     }
 }
 
@@ -364,7 +426,7 @@ async function saveProfileChanges() {
             address: editAddress ? editAddress.value : ''
         };
 
-        const response = await fetch(`${API_BASE_URL}/api/v1/trainees/${userId}`, {
+        const response = await fetch(`${API_BASE_URL}/api/v1/users/${userId}`, {
             method: 'PUT',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -387,7 +449,6 @@ async function saveProfileChanges() {
         showNotification('Profile updated successfully!', 'success');
 
     } catch (error) {
-        console.error('Error saving profile:', error);
         showNotification('Failed to update profile', 'error');
     }
 }
@@ -445,7 +506,7 @@ async function uploadProfileImage(file) {
         const formData = new FormData();
         formData.append('profileImage', file);
 
-        const response = await fetch(`${API_BASE_URL}/api/v1/trainees/${userId}/profile-image`, {
+        const response = await fetch(`${API_BASE_URL}/api/v1/users/${userId}/profile-image`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -460,7 +521,6 @@ async function uploadProfileImage(file) {
         showNotification('Photo updated successfully!', 'success');
 
     } catch (error) {
-        console.error('Error uploading image:', error);
         showNotification('Failed to upload photo', 'error');
     }
 }

@@ -43,6 +43,9 @@
     <!-- Helpers -->
     <script src="../assets/vendor/js/helpers.js"></script>
     <script src="../assets/js/config.js"></script>
+
+    <!-- Auth Guard - MUST be loaded first -->
+    <script src="../assets/js/auth-guard.js"></script>
 </head>
 
 <body>
@@ -278,14 +281,15 @@
                                                         <label class="form-label fw-semibold">
                                                             <i class="bx bx-user me-2"></i>Full Name
                                                         </label>
-                                                        <p class="form-control-plaintext">John Doe</p>
+                                                        <p id="profileFullName" class="form-control-plaintext">
+                                                            Loading...</p>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <label class="form-label fw-semibold">
                                                             <i class="bx bx-briefcase me-2"></i>Role
                                                         </label>
                                                         <p class="form-control-plaintext">
-                                                            <span class="badge bg-info">Trainee</span>
+                                                            <span id="profileRole" class="badge bg-info">Trainee</span>
                                                         </p>
                                                     </div>
                                                 </div>
@@ -294,14 +298,16 @@
                                                         <label class="form-label fw-semibold">
                                                             <i class="bx bx-envelope me-2"></i>Email Address
                                                         </label>
-                                                        <p class="form-control-plaintext">john.doe@caate.edu.ph</p>
+                                                        <p id="profileEmail" class="form-control-plaintext">Loading...
+                                                        </p>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <label class="form-label fw-semibold">
                                                             <i class="bx bx-check-circle me-2"></i>Account Status
                                                         </label>
                                                         <p class="form-control-plaintext">
-                                                            <span class="badge bg-success">Active</span>
+                                                            <span id="profileStatus"
+                                                                class="badge bg-success">Active</span>
                                                         </p>
                                                     </div>
                                                 </div>
@@ -310,16 +316,16 @@
                                                         <label class="form-label fw-semibold">
                                                             <i class="bx bx-log-in me-2"></i>Last Login
                                                         </label>
-                                                        <p class="form-control-plaintext">
-                                                            February 4, 2026 - 09:15 AM
+                                                        <p id="profileLastLogin" class="form-control-plaintext">
+                                                            N/A
                                                         </p>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <label class="form-label fw-semibold">
                                                             <i class="bx bx-id-card me-2"></i>Trainee ID
                                                         </label>
-                                                        <p class="form-control-plaintext">
-                                                            CAATE-2026-001
+                                                        <p id="profileTraineeId" class="form-control-plaintext">
+                                                            N/A
                                                         </p>
                                                     </div>
                                                 </div>
@@ -345,30 +351,32 @@
                                         <div class="row mb-3">
                                             <div class="col-md-6">
                                                 <label class="form-label fw-semibold">First Name</label>
-                                                <input type="text" class="form-control" value="John" readonly>
+                                                <input type="text" id="personalFirstName" class="form-control" value=""
+                                                    readonly>
                                             </div>
                                             <div class="col-md-6">
                                                 <label class="form-label fw-semibold">Last Name</label>
-                                                <input type="text" class="form-control" value="Doe" readonly>
+                                                <input type="text" id="personalLastName" class="form-control" value=""
+                                                    readonly>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <div class="col-md-6">
                                                 <label class="form-label fw-semibold">Phone Number</label>
-                                                <input type="text" class="form-control" value="+63 912 345 6789"
+                                                <input type="text" id="personalPhone" class="form-control" value=""
                                                     readonly>
                                             </div>
                                             <div class="col-md-6">
                                                 <label class="form-label fw-semibold">Date of Birth</label>
-                                                <input type="text" class="form-control" value="January 15, 2000"
+                                                <input type="text" id="personalDob" class="form-control" value=""
                                                     readonly>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-12">
                                                 <label class="form-label fw-semibold">Address</label>
-                                                <textarea class="form-control" rows="2"
-                                                    readonly>123 Main Street, Manila, Philippines</textarea>
+                                                <textarea id="personalAddress" class="form-control" rows="2"
+                                                    readonly></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -395,35 +403,8 @@
                                                         <th>Progress</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody class="table-border-bottom-0">
-                                                    <tr>
-                                                        <td><strong>Beauty Care (Skin Care) Services NC II</strong></td>
-                                                        <td>January 15, 2026</td>
-                                                        <td>421 Hours (53 Days)</td>
-                                                        <td><span class="badge bg-success">Active</span></td>
-                                                        <td>
-                                                            <div class="progress" style="height: 8px;">
-                                                                <div class="progress-bar bg-primary" role="progressbar"
-                                                                    style="width: 45%;" aria-valuenow="45"
-                                                                    aria-valuemin="0" aria-valuemax="100"></div>
-                                                            </div>
-                                                            <small class="text-muted">45% Complete</small>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><strong>Beauty Care (Nail Care) Services NC II</strong></td>
-                                                        <td>December 1, 2025</td>
-                                                        <td>307 Hours (39 Days)</td>
-                                                        <td><span class="badge bg-success">Completed</span></td>
-                                                        <td>
-                                                            <div class="progress" style="height: 8px;">
-                                                                <div class="progress-bar bg-success" role="progressbar"
-                                                                    style="width: 100%;" aria-valuenow="100"
-                                                                    aria-valuemin="0" aria-valuemax="100"></div>
-                                                            </div>
-                                                            <small class="text-muted">100% Complete</small>
-                                                        </td>
-                                                    </tr>
+                                                <tbody class="table-border-bottom-0" id="enrollmentTable">
+                                                    <!-- Enrollment data will be populated dynamically -->
                                                 </tbody>
                                             </table>
                                         </div>
@@ -438,75 +419,12 @@
                                 <div class="card">
                                     <div class="card-header d-flex justify-content-between align-items-center">
                                         <h5 class="mb-0"><i class="bx bx-award me-2"></i>Completed Courses</h5>
-                                        <span class="badge bg-success">2 Completed Courses</span>
+                                        <span id="completedCoursesCount" class="badge bg-success">0 Completed
+                                            Courses</span>
                                     </div>
                                     <div class="card-body">
-                                        <div class="row">
-                                            <!-- Certificate 1 -->
-                                            <div class="col-md-6 mb-4">
-                                                <div class="card border shadow-sm h-100">
-                                                    <div class="card-body">
-                                                        <div class="d-flex align-items-start mb-3">
-                                                            <div class="flex-shrink-0 me-3">
-                                                                <img src="https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&h=250&fit=crop"
-                                                                    alt="Nail Care" class="rounded-circle"
-                                                                    style="width: 60px; height: 60px; object-fit: cover; border: 3px solid #10b981;">
-                                                            </div>
-                                                            <div class="flex-grow-1">
-                                                                <h6 class="mb-1">Beauty Care (Nail Care) Services NC II
-                                                                </h6>
-                                                                <small class="text-muted">SOCBCN220</small>
-                                                            </div>
-                                                        </div>
-                                                        <div class="mb-2">
-                                                            <small class="text-muted d-block">Completion Date</small>
-                                                            <strong>January 28, 2026</strong>
-                                                        </div>
-                                                        <div class="mb-2">
-                                                            <small class="text-muted d-block">Certificate Number</small>
-                                                            <strong>CAATE-NC2-2026-001</strong>
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <small class="text-muted d-block">Final Grade</small>
-                                                            <span class="badge bg-success">95% - Excellent</span>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <!-- Certificate 2 -->
-                                            <div class="col-md-6 mb-4">
-                                                <div class="card border shadow-sm h-100">
-                                                    <div class="card-body">
-                                                        <div class="d-flex align-items-start mb-3">
-                                                            <div class="flex-shrink-0 me-3">
-                                                                <img src="https://tse3.mm.bing.net/th/id/OIP.f7lQ7Rt0CCBsxUWqGsYPwQHaE8?pid=Api&P=0&h=180"
-                                                                    alt="Eyelash and Eyebrow" class="rounded-circle"
-                                                                    style="width: 60px; height: 60px; object-fit: cover; border: 3px solid #10b981;">
-                                                            </div>
-                                                            <div class="flex-grow-1">
-                                                                <h6 class="mb-1">Eyelash and Eyebrow Services Level III
-                                                                </h6>
-                                                                <small class="text-muted">Level III</small>
-                                                            </div>
-                                                        </div>
-                                                        <div class="mb-2">
-                                                            <small class="text-muted d-block">Completion Date</small>
-                                                            <strong>December 15, 2025</strong>
-                                                        </div>
-                                                        <div class="mb-2">
-                                                            <small class="text-muted d-block">Certificate Number</small>
-                                                            <strong>CAATE-L3-2025-045</strong>
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <small class="text-muted d-block">Final Grade</small>
-                                                            <span class="badge bg-success">92% - Excellent</span>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                            </div>
+                                        <div class="row" id="completedCoursesContainer">
+                                            <!-- Completed courses will be populated dynamically -->
                                         </div>
 
                                         <!-- Course History Summary -->
@@ -521,12 +439,12 @@
                                                             <div>
                                                                 <h6 class="text-white mb-2">Academic Performance Summary
                                                                 </h6>
-                                                                <p class="mb-0 text-white-50">
+                                                                <p id="academicSummary" class="mb-0 text-white-50">
                                                                     Total Completed Courses: <strong
-                                                                        class="text-white">2</strong> |
+                                                                        class="text-white">0</strong> |
                                                                     Average Grade: <strong
-                                                                        class="text-white">93.5%</strong> |
-                                                                    Total Training Hours: <strong class="text-white">387
+                                                                        class="text-white">N/A</strong> |
+                                                                    Total Training Hours: <strong class="text-white">0
                                                                         Hours</strong>
                                                                 </p>
                                                             </div>
@@ -583,28 +501,27 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="editFirstName" class="form-label">First Name</label>
-                                <input type="text" id="editFirstName" class="form-control" value="John">
+                                <input type="text" id="editFirstName" class="form-control" value="">
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="editLastName" class="form-label">Last Name</label>
-                                <input type="text" id="editLastName" class="form-control" value="Doe">
+                                <input type="text" id="editLastName" class="form-control" value="">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="editPhone" class="form-label">Phone Number</label>
-                                <input type="text" id="editPhone" class="form-control" value="+63 912 345 6789">
+                                <input type="text" id="editPhone" class="form-control" value="">
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="editDateOfBirth" class="form-label">Date of Birth</label>
-                                <input type="text" id="editDateOfBirth" class="form-control" value="January 15, 2000">
+                                <label for="editDob" class="form-label">Date of Birth</label>
+                                <input type="date" id="editDob" class="form-control" value="">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-12 mb-3">
                                 <label for="editAddress" class="form-label">Address</label>
-                                <textarea id="editAddress" class="form-control"
-                                    rows="2">123 Main Street, Manila, Philippines</textarea>
+                                <textarea id="editAddress" class="form-control" rows="2"></textarea>
                             </div>
                         </div>
                     </form>

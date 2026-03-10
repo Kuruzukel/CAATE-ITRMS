@@ -126,7 +126,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         // Fetch appointments dynamically when calendar changes
                         fetchAppointments().then(appointments => {
                             const events = convertToCalendarEvents(appointments);
-                            console.log('Loaded events:', events.length, 'for date range:', info.startStr, 'to', info.endStr);
                             successCallback(events);
                         }).catch(error => {
                             console.error('Error loading events:', error);
@@ -499,7 +498,6 @@ document.addEventListener('DOMContentLoaded', function () {
         searchInput.addEventListener('input', function (e) {
             const searchTerm = e.target.value.toLowerCase();
             // TODO: Implement search filtering
-            console.log('Search term:', searchTerm);
         });
     }
 

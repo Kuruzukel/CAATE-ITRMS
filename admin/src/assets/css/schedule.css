@@ -255,35 +255,8 @@
     z-index: 1;
 }
 
-/* Ensure day frames maintain their structure and don't adjust */
-.fc-daygrid-day-frame,
-.fc-scrollgrid-sync-inner,
-.fc-daygrid-day-top,
-.fc-daygrid-day-events,
-.fc-daygrid-day-bottom,
-.fc-daygrid-day-bg {
-    position: relative !important;
-    height: auto !important;
-    min-height: unset !important;
-}
-
-.fc-daygrid-day-frame {
-    display: flex !important;
-    flex-direction: column !important;
-    height: 100% !important;
-    min-height: 120px !important;
-}
-
-.fc-daygrid-day-events {
-    flex: 1 1 auto !important;
-    overflow: visible !important;
-    min-height: 80px !important;
-}
-
 .fc-daygrid-day {
     position: relative;
-    min-height: 120px !important;
-    height: 120px !important;
     background: rgba(255, 255, 255, 0.05) !important;
     backdrop-filter: blur(8px) !important;
     transition: all 0.3s ease !important;
@@ -726,37 +699,21 @@
 }
 
 
-/* Display multiple avatars horizontally in a row */
+/* Display avatars horizontally - left-align by default, center for 1-2 avatars */
 .fc-daygrid-day-events {
     display: flex !important;
     flex-direction: row !important;
     flex-wrap: wrap !important;
-    justify-content: flex-end !important;
+    justify-content: flex-start !important;
     align-items: center !important;
     gap: 4px !important;
+    padding: 8px 4px !important;
+    min-height: 80px !important;
 }
 
-.fc-daygrid-event-harness {
-    display: inline-flex !important;
-    margin: 0 !important;
-}
-
-/* Ensure events display inline horizontally */
-.fc-event {
-    display: inline-flex !important;
-    width: auto !important;
-    margin: 2px !important;
-}
-
-
-/* Display multiple events horizontally in the same day */
-.fc-daygrid-day-events {
-    display: flex !important;
-    flex-direction: row !important;
-    flex-wrap: wrap !important;
-    justify-content: flex-end !important;
-    align-items: center !important;
-    gap: 4px !important;
+/* Center avatars when there are 1-2 only */
+.fc-daygrid-day-events.center-avatars {
+    justify-content: center !important;
 }
 
 .fc-daygrid-event-harness {
@@ -765,57 +722,45 @@
     margin: 0 !important;
 }
 
-
-/* Force all calendar day cells to have the same fixed height */
-.fc-daygrid-day {
-    min-height: 120px !important;
-    height: auto !important;
+/* Ensure events display inline horizontally */
+.fc-event {
+    display: inline-flex !important;
+    width: auto !important;
+    margin: 0 !important;
 }
 
-.fc-daygrid-day-frame {
-    min-height: 120px !important;
-    height: auto !important;
-}
-
-.fc-scrollgrid-sync-inner {
-    min-height: 120px !important;
-    height: auto !important;
-}
-
-/* Prevent day cells from expanding with content */
-.fc-daygrid-day-events {
-    overflow: visible !important;
-    max-height: none !important;
-}
-
-
-/* Allow calendar day cells to auto-adjust height based on content */
-.fc-daygrid-day {
-    min-height: 100px !important;
-    height: auto !important;
-    max-height: none !important;
-}
-
-.fc-daygrid-day-frame {
-    min-height: 100px !important;
-    height: auto !important;
-    max-height: none !important;
-}
-
-.fc-scrollgrid-sync-inner {
-    min-height: 100px !important;
-    height: auto !important;
-    max-height: none !important;
-}
-
-/* Allow events area to expand */
-.fc-daygrid-day-events {
-    overflow: visible !important;
-    max-height: none !important;
-    height: auto !important;
-}
-
-/* Ensure all rows have consistent minimum height */
+/* Ensure all calendar rows have the same height */
 .fc-daygrid-body tr {
-    min-height: 100px !important;
+    height: 140px !important;
+}
+
+.fc-daygrid-day {
+    height: 140px !important;
+    min-height: 140px !important;
+}
+
+.fc-daygrid-day-frame {
+    height: 140px !important;
+    min-height: 140px !important;
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+/* Make sure all cells in a row have equal height */
+.fc-scrollgrid-sync-table {
+    table-layout: fixed !important;
+}
+
+.fc-scrollgrid-sync-table tbody tr {
+    height: 140px !important;
+}
+
+.fc-scrollgrid-sync-table tbody td {
+    height: 140px !important;
+    vertical-align: top !important;
+}
+
+.fc-scrollgrid-sync-inner {
+    height: 140px !important;
+    min-height: 140px !important;
 }

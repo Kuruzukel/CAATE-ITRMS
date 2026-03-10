@@ -2,6 +2,20 @@
 document.addEventListener('DOMContentLoaded', function () {
     // Menu toggle is handled by main.js - no need to duplicate here
 
+    // Function to update avatar alignment based on count
+    function updateAvatarAlignment() {
+        const dayCells = document.querySelectorAll('.fc-daygrid-day-events');
+        dayCells.forEach(cell => {
+            const eventCount = cell.querySelectorAll('.fc-daygrid-event-harness').length;
+            // Center align if 1-2 avatars, left align if 3 or more
+            if (eventCount > 0 && eventCount <= 2) {
+                cell.classList.add('center-avatars');
+            } else {
+                cell.classList.remove('center-avatars');
+            }
+        });
+    }
+
     // Initialize Calendar with fallback
     const calendarEl = document.getElementById('calendar');
     if (calendarEl) {
@@ -115,6 +129,14 @@ document.addEventListener('DOMContentLoaded', function () {
                             info.el.style.borderColor = 'transparent';
                             info.el.style.opacity = '0.5';
                         }
+                    },
+                    viewDidMount: function () {
+                        // After calendar renders, check each day cell and center if 1-2 avatars
+                        updateAvatarAlignment();
+                    },
+                    datesSet: function () {
+                        // When dates change (month/week/day navigation), update alignment
+                        setTimeout(updateAvatarAlignment, 100);
                     }
                 });
 

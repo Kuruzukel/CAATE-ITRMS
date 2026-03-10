@@ -3,6 +3,7 @@
 require_once __DIR__ . '/../app/config/database.php';
 require_once __DIR__ . '/../app/controllers/AuthController.php';
 require_once __DIR__ . '/../app/controllers/UserController.php';
+require_once __DIR__ . '/../app/controllers/AdminController.php';
 require_once __DIR__ . '/../app/controllers/TraineeController.php';
 require_once __DIR__ . '/../app/controllers/CourseController.php';
 require_once __DIR__ . '/../app/controllers/CompetencyController.php';
@@ -31,6 +32,11 @@ function handleRequest($uri, $method) {
         'POST:/api/v1/users' => ['UserController', 'store'],
         'PUT:/api/v1/users/{id}' => ['UserController', 'update'],
         'DELETE:/api/v1/users/{id}' => ['UserController', 'destroy'],
+        'GET:/api/v1/admins' => ['AdminController', 'index'],
+        'GET:/api/v1/admins/{id}' => ['AdminController', 'show'],
+        'POST:/api/v1/admins' => ['AdminController', 'store'],
+        'PUT:/api/v1/admins/{id}' => ['AdminController', 'update'],
+        'DELETE:/api/v1/admins/{id}' => ['AdminController', 'destroy'],
         'GET:/api/v1/trainees/statistics' => ['TraineeController', 'statistics'],
         'GET:/api/v1/trainees' => ['TraineeController', 'index'],
         'GET:/api/v1/trainees/{id}' => ['TraineeController', 'show'],

@@ -1,7 +1,7 @@
 /* Manage Profile Page Script - Admin */
 
 // API Configuration
-const API_BASE_URL = window.location.origin + '/CAATE-ITRMS/backend/public';
+const API_BASE_URL = config.api.baseURL;
 
 // Authentication check
 function checkAuthentication() {
@@ -43,34 +43,18 @@ async function loadAdminProfile() {
     try {
         const token = localStorage.getItem('authToken');
         const userId = localStorage.getItem('userId');
-        const userData = localStorage.getItem('userData');
 
         if (!token || !userId) {
             window.location.href = '../../../auth/src/pages/login.html';
             return;
         }
 
-        // Try to get user data from localStorage first
-        let adminData = null;
-        if (userData) {
-            try {
-                adminData = JSON.parse(userData);
-            } catch (e) {
-                // Error parsing userData
-            }
-        }
-
-        // If we have user data from localStorage, use it
-        if (adminData) {
-            updateProfileOverview(adminData);
-            updatePersonalInformation(adminData);
-            return;
-        }
-
-        // Otherwise, try to fetch from API with fallback strategy
+        // Fetch admin data from the admins collection
         try {
-            // Try general users endpoint first
-            let response = await fetch(`${API_BASE_URL}/api/v1/users/${userId}`, {
+            console.log('Fetching admin data for user ID:', userId);
+            console.log('API URL:', `${config.api.baseURL}/api/v1/admins/${userId}`);
+
+            const response = await fetch(`${config.api.baseURL}/api/v1/admins/${userId}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -78,66 +62,87 @@ async function loadAdminProfile() {
                 }
             });
 
-            if (!response.ok) {
-                // Try admin-specific endpoint
-                response = await fetch(`${API_BASE_URL}/api/v1/admins/${userId}`, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    }
-                });
-            }
+            console.log('API Response status:', response.status);
 
             if (response.ok) {
                 const result = await response.json();
-                adminData = result.data || result.user || result;
+                console.log('API Response data:', result);
+
+                let adminData = result.data || result.admin || result;
+
+                // Map database fields to expected format
+                const mappedData = {
+                    _id: adminData._id,
+                    name: adminData.name,
+                    email: adminData.email,
+                    username: adminData.username,
+                    role: adminData.role,
+                    firstName: adminData.first_name,
+                    middleName: adminData.middle_name,
+                    lastName: adminData.last_name,
+                    phone: adminData.phone,
+                    phoneNumber: adminData.phone, // Alternative field name
+                    address: adminData.address,
+                    created_at: adminData.created_at,
+                    updated_at: adminData.updated_at,
+                    lastLogin: adminData.last_login,
+                    lastLogout: adminData.last_logout,
+                    profileImage: adminData.profile_image || '../assets/images/AVATARNIKEL.jpg'
+                };
+
+                console.log('Mapped admin data:', mappedData);
 
                 // Update profile overview
-                updateProfileOverview(adminData);
+                updateProfileOverview(mappedData);
 
                 // Update personal information
-                updatePersonalInformation(adminData);
+                updatePersonalInformation(mappedData);
+
+                // Update navbar user info
+                updateNavbarUserInfo(mappedData);
 
                 // Update login history if available
                 if (adminData.loginHistory) {
                     updateLoginHistory(adminData.loginHistory);
                 }
+
+                // Store the mapped data in localStorage for future use
+                localStorage.setItem('userData', JSON.stringify(mappedData));
+
             } else {
-                throw new Error('Failed to fetch from API');
+                const errorData = await response.json();
+                console.error('API Error Response:', errorData);
+                throw new Error(`Failed to fetch admin data: ${response.status} - ${errorData.error || 'Unknown error'}`);
             }
 
         } catch (apiError) {
-            // Fallback: use data from localStorage
+            console.error('API Error:', apiError);
+
+            // Fallback: try to use data from localStorage
+            const userData = localStorage.getItem('userData');
             if (userData) {
                 try {
                     const adminData = JSON.parse(userData);
                     updateProfileOverview(adminData);
                     updatePersonalInformation(adminData);
+                    updateNavbarUserInfo(adminData);
+                    showNotification('Using cached profile data', 'warning');
                 } catch (e) {
+                    console.error('Error parsing cached data:', e);
                     showNotification('Failed to load profile data', 'error');
                 }
             } else {
-                showNotification('Failed to load profile data', 'error');
+                showNotification('Failed to load profile data. Please try logging in again.', 'error');
             }
         }
 
     } catch (error) {
-        // Fallback: use data from localStorage
-        const userData = localStorage.getItem('userData');
-        if (userData) {
-            try {
-                const adminData = JSON.parse(userData);
-                updateProfileOverview(adminData);
-                updatePersonalInformation(adminData);
-            } catch (e) {
-                showNotification('Failed to load profile data', 'error');
-            }
-        } else {
-            showNotification('Failed to load profile data', 'error');
-        }
+        console.error('Profile loading error:', error);
+        showNotification('An error occurred while loading your profile', 'error');
     }
 }
+
+
 
 // Update profile overview section
 function updateProfileOverview(data) {

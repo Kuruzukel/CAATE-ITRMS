@@ -61,6 +61,18 @@
 
   <!-- Admin Navbar - Common navbar functionality -->
   <script src="../assets/js/admin-navbar.js"></script>
+
+  <!-- Clear stored password data immediately to prevent password manager popup -->
+  <script>
+    // Clear any stored password data that might trigger Google Password Manager
+    if (localStorage.getItem('rememberedPass')) {
+      localStorage.removeItem('rememberedPass');
+    }
+    // Also clear any other password-related data
+    if (localStorage.getItem('password')) {
+      localStorage.removeItem('password');
+    }
+  </script>
 </head>
 
 <body data-required-role="admin">

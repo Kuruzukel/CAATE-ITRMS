@@ -11,6 +11,11 @@
 
     <meta name="description" content="" />
 
+    <!-- Prevent password manager popups -->
+    <meta name="password-manager" content="disabled" />
+    <meta name="save-password" content="false" />
+    <meta name="autocomplete" content="off" />
+
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="../assets/images/CAATE_META_LOGO.png" />
 
@@ -46,6 +51,9 @@
 
     <!-- Auth Guard - MUST be loaded first -->
     <script src="../assets/js/auth-guard.js"></script>
+
+    <!-- Disable password manager popups -->
+    <script src="../assets/js/disable-password-manager.js"></script>
 </head>
 
 <body>

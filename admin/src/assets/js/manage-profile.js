@@ -170,7 +170,7 @@ function updateProfileOverview(data) {
         if (data.lastLogin) {
             lastLoginElement.textContent = formatDateTime(data.lastLogin);
         } else {
-            lastLoginElement.textContent = 'N/A';
+            lastLoginElement.textContent = 'Never logged in';
         }
     }
 
@@ -180,7 +180,7 @@ function updateProfileOverview(data) {
         if (data.lastLogout) {
             lastLogoutElement.textContent = formatDateTime(data.lastLogout);
         } else {
-            lastLogoutElement.textContent = 'N/A';
+            lastLogoutElement.textContent = 'Never logged out';
         }
     }
 
@@ -252,18 +252,51 @@ function updatePersonalInformation(data) {
 // Update login history table
 function updateLoginHistory(loginHistory) {
     const tbody = document.getElementById('loginHistoryTable');
-    if (!tbody || !Array.isArray(loginHistory) || loginHistory.length === 0) return;
+    if (!tbody) return;
 
     tbody.innerHTML = '';
 
-    loginHistory.slice(0, 5).forEach(entry => {
+    if (!Array.isArray(loginHistory) || loginHistory.length === 0) {
+        // Show "No login history available" message
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td><strong>${formatDateTime(entry.timestamp)}</strong></td>
-            <td><span class="badge ${entry.action === 'login' ? 'bg-success' : 'bg-danger'}">${entry.action.charAt(0).toUpperCase() + entry.action.slice(1)}</span></td>
-            <td>${entry.ipAddress || 'N/A'}</td>
-            <td>${entry.device || 'N/A'}</td>
-            <td><span class="badge ${entry.status === 'success' ? 'bg-success' : 'bg-danger'}">${entry.status.charAt(0).toUpperCase() + entry.status.slice(1)}</span></td>
+            <td colspan="5" class="text-center text-muted">
+                <i class="bx bx-info-circle me-2"></i>No login history available
+            </td>
+        `;
+        tbody.appendChild(row);
+        return;
+    }
+
+    // Display up to 5 most recent entries
+    loginHistory.slice(0, 5).forEach(entry => {
+        const row = document.createElement('tr');
+
+        // Format timestamp
+        const timestamp = entry.timestamp ? formatDateTime(entry.timestamp) : 'Unknown';
+
+        // Format action with appropriate badge
+        const actionBadge = entry.action === 'login'
+            ? '<span class="badge bg-success">Login</span>'
+            : '<span class="badge bg-warning">Logout</span>';
+
+        // Format IP address
+        const ipAddress = entry.ipAddress || entry.ip_address || 'Unknown';
+
+        // Format device
+        const device = entry.device || 'Unknown Device';
+
+        // Format status
+        const statusBadge = entry.status === 'success'
+            ? '<span class="badge bg-success">Success</span>'
+            : '<span class="badge bg-danger">Failed</span>';
+
+        row.innerHTML = `
+            <td><strong>${timestamp}</strong></td>
+            <td>${actionBadge}</td>
+            <td>${ipAddress}</td>
+            <td>${device}</td>
+            <td>${statusBadge}</td>
         `;
         tbody.appendChild(row);
     });
@@ -520,17 +553,34 @@ async function uploadProfileImage(file) {
 function formatDateTime(dateString) {
     if (!dateString) return 'N/A';
 
-    const date = new Date(dateString);
+    let date;
+
+    // Handle MongoDB BSON date objects
+    if (typeof dateString === 'object' && dateString.$date) {
+        date = new Date(dateString.$date);
+    } else if (typeof dateString === 'string') {
+        date = new Date(dateString);
+    } else if (dateString instanceof Date) {
+        date = dateString;
+    } else {
+        return 'N/A';
+    }
+
+    // Check if date is valid
+    if (isNaN(date.getTime())) {
+        return 'N/A';
+    }
+
     const options = {
         year: 'numeric',
-        month: 'long',
+        month: 'short',
         day: 'numeric',
         hour: '2-digit',
         minute: '2-digit',
         hour12: true
     };
 
-    return date.toLocaleDateString('en-US', options).replace(',', ' -');
+    return date.toLocaleDateString('en-US', options);
 }
 
 // Toast notification functions

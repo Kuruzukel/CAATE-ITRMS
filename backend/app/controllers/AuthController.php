@@ -148,6 +148,9 @@ class AuthController {
                     $_SESSION['user_name'] = $admin['name'];
                     $_SESSION['user_email'] = $admin['email'];
                     
+                    // Track login activity
+                    $this->trackLoginActivity((string)$admin['_id'], 'admin', 'login');
+                    
                     $token = JwtHelper::generateToken([
                         'user_id' => (string)$admin['_id'],
                         'role' => 'admin'
@@ -224,6 +227,9 @@ class AuthController {
                     $_SESSION['user_name'] = $fullName;
                     $_SESSION['user_email'] = $trainee['email'];
                     
+                    // Track login activity
+                    $this->trackLoginActivity((string)$trainee['_id'], 'trainee', 'login');
+                    
                     $token = JwtHelper::generateToken([
                         'user_id' => (string)$trainee['_id'],
                         'role' => 'trainee'
@@ -269,6 +275,12 @@ class AuthController {
         header('Pragma: no-cache');
         
         session_start();
+        
+        // Track logout activity before destroying session
+        if (isset($_SESSION['user_id']) && isset($_SESSION['user_role'])) {
+            $this->trackLoginActivity($_SESSION['user_id'], $_SESSION['user_role'], 'logout');
+        }
+        
         session_destroy();
         echo json_encode([
             'success' => true,
@@ -416,5 +428,97 @@ class AuthController {
             'success' => true,
             'message' => 'Password changed successfully'
         ]);
+    }
+    
+    private function trackLoginActivity($userId, $userRole, $action) {
+        try {
+            // Get client information
+            $ipAddress = $this->getClientIpAddress();
+            $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'Unknown';
+            $device = $this->parseUserAgent($userAgent);
+            
+            $loginEntry = [
+                'timestamp' => new MongoDB\BSON\UTCDateTime(),
+                'action' => $action, // 'login' or 'logout'
+                'ip_address' => $ipAddress,
+                'user_agent' => $userAgent,
+                'device' => $device,
+                'status' => 'success'
+            ];
+            
+            if ($userRole === 'admin') {
+                $adminModel = new Admin();
+                
+                // Update last login/logout time
+                if ($action === 'login') {
+                    $adminModel->updateLoginTime($userId);
+                } else {
+                    $adminModel->updateLogoutTime($userId);
+                }
+                
+                // Add to login history
+                $adminModel->addLoginHistory($userId, $loginEntry);
+                
+            } elseif ($userRole === 'trainee') {
+                $traineeModel = new Trainee();
+                
+                // Update last login/logout time
+                if ($action === 'login') {
+                    $traineeModel->updateLoginTime($userId);
+                } else {
+                    $traineeModel->updateLogoutTime($userId);
+                }
+                
+                // Add to login history
+                $traineeModel->addLoginHistory($userId, $loginEntry);
+            }
+            
+        } catch (Exception $e) {
+            error_log("Failed to track login activity: " . $e->getMessage());
+        }
+    }
+    
+    private function getClientIpAddress() {
+        // Check for various headers that might contain the real IP
+        $ipKeys = ['HTTP_X_FORWARDED_FOR', 'HTTP_X_REAL_IP', 'HTTP_CLIENT_IP', 'REMOTE_ADDR'];
+        
+        foreach ($ipKeys as $key) {
+            if (!empty($_SERVER[$key])) {
+                $ip = $_SERVER[$key];
+                // Handle comma-separated IPs (X-Forwarded-For can contain multiple IPs)
+                if (strpos($ip, ',') !== false) {
+                    $ip = trim(explode(',', $ip)[0]);
+                }
+                // Validate IP address
+                if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
+                    return $ip;
+                }
+            }
+        }
+        
+        return $_SERVER['REMOTE_ADDR'] ?? 'Unknown';
+    }
+    
+    private function parseUserAgent($userAgent) {
+        // Simple user agent parsing to extract device/browser info
+        if (strpos($userAgent, 'Mobile') !== false || strpos($userAgent, 'Android') !== false) {
+            if (strpos($userAgent, 'Chrome') !== false) {
+                return 'Mobile Chrome';
+            } elseif (strpos($userAgent, 'Safari') !== false) {
+                return 'Mobile Safari';
+            } else {
+                return 'Mobile Browser';
+            }
+        } elseif (strpos($userAgent, 'Chrome') !== false) {
+            return 'Desktop Chrome';
+        } elseif (strpos($userAgent, 'Firefox') !== false) {
+            return 'Desktop Firefox';
+        } elseif (strpos($userAgent, 'Safari') !== false) {
+            return 'Desktop Safari';
+        } elseif (strpos($userAgent, 'Edge') !== false) {
+            return 'Desktop Edge';
+        } else {
+            return 'Unknown Browser';
+        }
     }
 }

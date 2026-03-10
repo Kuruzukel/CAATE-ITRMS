@@ -107,25 +107,144 @@ class Admin {
     
     public function updateLoginTime($id) {
         try {
+            $loginEntry = [
+                'timestamp' => new MongoDB\BSON\UTCDateTime(),
+                'action' => 'login',
+                'ipAddress' => $_SERVER['REMOTE_ADDR'] ?? 'Unknown',
+                'userAgent' => $_SERVER['HTTP_USER_AGENT'] ?? 'Unknown',
+                'device' => $this->parseUserAgent($_SERVER['HTTP_USER_AGENT'] ?? ''),
+                'status' => 'success'
+            ];
+
             $result = $this->collection->updateOne(
                 ['_id' => new MongoDB\BSON\ObjectId($id)],
-                ['$set' => ['last_login' => new MongoDB\BSON\UTCDateTime()]]
+                [
+                    '$set' => ['last_login' => new MongoDB\BSON\UTCDateTime()],
+                    '$push' => [
+                        'login_history' => [
+                            '$each' => [$loginEntry],
+                            '$slice' => -10 // Keep only last 10 entries
+                        ]
+                    ]
+                ]
             );
             return $result->getModifiedCount() > 0;
         } catch (Exception $e) {
+            error_log("Admin::updateLoginTime - Exception: " . $e->getMessage());
             return false;
         }
     }
     
     public function updateLogoutTime($id) {
         try {
+            $logoutEntry = [
+                'timestamp' => new MongoDB\BSON\UTCDateTime(),
+                'action' => 'logout',
+                'ipAddress' => $_SERVER['REMOTE_ADDR'] ?? 'Unknown',
+                'userAgent' => $_SERVER['HTTP_USER_AGENT'] ?? 'Unknown',
+                'device' => $this->parseUserAgent($_SERVER['HTTP_USER_AGENT'] ?? ''),
+                'status' => 'success'
+            ];
+
             $result = $this->collection->updateOne(
                 ['_id' => new MongoDB\BSON\ObjectId($id)],
-                ['$set' => ['last_logout' => new MongoDB\BSON\UTCDateTime()]]
+                [
+                    '$set' => ['last_logout' => new MongoDB\BSON\UTCDateTime()],
+                    '$push' => [
+                        'login_history' => [
+                            '$each' => [$logoutEntry],
+                            '$slice' => -10 // Keep only last 10 entries
+                        ]
+                    ]
+                ]
             );
             return $result->getModifiedCount() > 0;
         } catch (Exception $e) {
+            error_log("Admin::updateLogoutTime - Exception: " . $e->getMessage());
             return false;
+        }
+    }
+
+    private function parseUserAgent($userAgent) {
+        if (empty($userAgent)) return 'Unknown Device';
+        
+        // Simple device detection
+        if (strpos($userAgent, 'Mobile') !== false || strpos($userAgent, 'Android') !== false) {
+            return 'Mobile Device';
+        } elseif (strpos($userAgent, 'iPad') !== false || strpos($userAgent, 'Tablet') !== false) {
+            return 'Tablet';
+        } else {
+            // Extract browser info
+            if (strpos($userAgent, 'Chrome') !== false) {
+                return 'Desktop - Chrome';
+            } elseif (strpos($userAgent, 'Firefox') !== false) {
+                return 'Desktop - Firefox';
+            } elseif (strpos($userAgent, 'Safari') !== false) {
+                return 'Desktop - Safari';
+            } elseif (strpos($userAgent, 'Edge') !== false) {
+                return 'Desktop - Edge';
+            } else {
+                return 'Desktop Browser';
+            }
+        }
+    }
+    
+    public function addLoginHistory($id, $loginEntry) {
+        try {
+            $result = $this->collection->updateOne(
+                ['_id' => new MongoDB\BSON\ObjectId($id)],
+                [
+                    '$push' => [
+                        'login_history' => [
+                            '$each' => [$loginEntry],
+                            '$slice' => -10 // Keep only last 10 entries
+                        ]
+                    ]
+                ]
+            );
+            return $result->getModifiedCount() > 0;
+        } catch (Exception $e) {
+            error_log("Admin::addLoginHistory - Exception: " . $e->getMessage());
+            return false;
+        }
+    }
+    
+    public function addLoginHistory($id, $loginEntry) {
+        try {
+            $result = $this->collection->updateOne(
+                ['_id' => new MongoDB\BSON\ObjectId($id)],
+                [
+                    '$push' => [
+                        'login_history' => [
+                            '$each' => [$loginEntry],
+                            '$slice' => -50 // Keep only the last 50 entries
+                        ]
+                    ]
+                ]
+            );
+            return $result->getModifiedCount() > 0;
+        } catch (Exception $e) {
+            error_log("Failed to add login history: " . $e->getMessage());
+            return false;
+        }
+    }
+    
+    public function getLoginHistory($id, $limit = 10) {
+        try {
+            $admin = $this->collection->findOne(
+                ['_id' => new MongoDB\BSON\ObjectId($id)],
+                ['projection' => ['login_history' => 1]]
+            );
+            
+            if ($admin && isset($admin['login_history'])) {
+                $history = array_reverse($admin['login_history']->toArray());
+                return array_slice($history, 0, $limit);
+            }
+            
+            return [];
+        } catch (Exception $e) {
+            error_log("Failed to get login history: " . $e->getMessage());
+            return [];
         }
     }
 }

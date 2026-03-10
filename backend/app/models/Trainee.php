@@ -241,4 +241,67 @@ class Trainee {
             ];
         }
     }
+    
+    public function updateLoginTime($id) {
+        try {
+            $result = $this->collection->updateOne(
+                ['_id' => new MongoDB\BSON\ObjectId($id)],
+                ['$set' => ['last_login' => new MongoDB\BSON\UTCDateTime()]]
+            );
+            return $result->getModifiedCount() > 0;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+    
+    public function updateLogoutTime($id) {
+        try {
+            $result = $this->collection->updateOne(
+                ['_id' => new MongoDB\BSON\ObjectId($id)],
+                ['$set' => ['last_logout' => new MongoDB\BSON\UTCDateTime()]]
+            );
+            return $result->getModifiedCount() > 0;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+    
+    public function addLoginHistory($id, $loginEntry) {
+        try {
+            $result = $this->collection->updateOne(
+                ['_id' => new MongoDB\BSON\ObjectId($id)],
+                [
+                    '$push' => [
+                        'login_history' => [
+                            '$each' => [$loginEntry],
+                            '$slice' => -50 // Keep only the last 50 entries
+                        ]
+                    ]
+                ]
+            );
+            return $result->getModifiedCount() > 0;
+        } catch (Exception $e) {
+            error_log("Failed to add login history: " . $e->getMessage());
+            return false;
+        }
+    }
+    
+    public function getLoginHistory($id, $limit = 10) {
+        try {
+            $trainee = $this->collection->findOne(
+                ['_id' => new MongoDB\BSON\ObjectId($id)],
+                ['projection' => ['login_history' => 1]]
+            );
+            
+            if ($trainee && isset($trainee['login_history'])) {
+                $history = array_reverse($trainee['login_history']->toArray());
+                return array_slice($history, 0, $limit);
+            }
+            
+            return [];
+        } catch (Exception $e) {
+            error_log("Failed to get login history: " . $e->getMessage());
+            return [];
+        }
+    }
 }

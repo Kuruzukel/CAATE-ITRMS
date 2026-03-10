@@ -21,6 +21,20 @@ class AdminController {
             return;
         }
         
+        // Format login history
+        $loginHistory = [];
+        if (isset($admin['login_history']) && is_array($admin['login_history'])) {
+            foreach (array_reverse($admin['login_history']) as $entry) {
+                $loginHistory[] = [
+                    'timestamp' => $entry['timestamp'] ?? null,
+                    'action' => $entry['action'] ?? 'unknown',
+                    'ipAddress' => $entry['ipAddress'] ?? 'Unknown',
+                    'device' => $entry['device'] ?? 'Unknown',
+                    'status' => $entry['status'] ?? 'unknown'
+                ];
+            }
+        }
+        
         // Format the admin data for the frontend
         $formattedAdmin = [
             'id' => (string)$admin['_id'],
@@ -37,6 +51,7 @@ class AdminController {
             'updated_at' => $admin['updated_at'] ?? null,
             'lastLogin' => $admin['last_login'] ?? null,
             'lastLogout' => $admin['last_logout'] ?? null,
+            'loginHistory' => $loginHistory,
             'profileImage' => $admin['profile_image'] ?? null
         ];
         

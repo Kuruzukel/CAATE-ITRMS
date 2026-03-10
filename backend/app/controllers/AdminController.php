@@ -22,41 +22,7 @@ class AdminController {
                 return;
             }
             
-            // Format login history if it exists
-            $loginHistory = [];
-            if (isset($admin['login_history'])) {
-                $historyArray = $admin['login_history'];
-                
-                // Convert BSON array to PHP array properly
-                if ($historyArray instanceof MongoDB\Model\BSONArray) {
-                    // Use iterator to convert BSONArray to regular PHP array
-                    $historyArray = iterator_to_array($historyArray);
-                } elseif ($historyArray instanceof MongoDB\BSON\PackedArray) {
-                    // Handle PackedArray type
-                    $historyArray = $historyArray->toArray();
-                } elseif (is_object($historyArray) && method_exists($historyArray, 'toArray')) {
-                    $historyArray = $historyArray->toArray();
-                } elseif (is_object($historyArray)) {
-                    $historyArray = (array)$historyArray;
-                }
-                
-                if (is_array($historyArray)) {
-                    foreach (array_reverse($historyArray) as $entry) {
-                        // Convert BSON document to array if needed
-                        if (is_object($entry)) {
-                            $entry = (array)$entry;
-                        }
-                        
-                        $loginHistory[] = [
-                            'timestamp' => $entry['timestamp'] ?? null,
-                            'action' => $entry['action'] ?? 'unknown',
-                            'ip_address' => $entry['ip_address'] ?? ($entry['ipAddress'] ?? 'Unknown'),
-                            'device' => $entry['device'] ?? 'Unknown',
-                            'status' => $entry['status'] ?? 'unknown'
-                        ];
-                    }
-                }
-            }
+
             
             // Format the admin data for the frontend
             $formattedAdmin = [
@@ -72,9 +38,6 @@ class AdminController {
                 'address' => $admin['address'] ?? '',
                 'created_at' => $admin['created_at'] ?? null,
                 'updated_at' => $admin['updated_at'] ?? null,
-                'lastLogin' => $admin['last_login'] ?? null,
-                'lastLogout' => $admin['last_logout'] ?? null,
-                'loginHistory' => $loginHistory,
                 'profileImage' => $admin['profile_image'] ?? null
             ];
             

@@ -79,8 +79,6 @@ async function loadAdminProfile() {
                     address: adminData.address,
                     created_at: adminData.created_at,
                     updated_at: adminData.updated_at,
-                    lastLogin: adminData.lastLogin,
-                    lastLogout: adminData.lastLogout,
                     profileImage: adminData.profileImage || '../assets/images/AVATARNIKEL.jpg'
                 };
 
@@ -93,10 +91,7 @@ async function loadAdminProfile() {
                 // Update navbar user info
                 updateNavbarUserInfo(mappedData);
 
-                // Update login history if available
-                if (adminData.loginHistory) {
-                    updateLoginHistory(adminData.loginHistory);
-                }
+
 
                 // Store the mapped data in localStorage for future use
                 localStorage.setItem('userData', JSON.stringify(mappedData));
@@ -173,25 +168,7 @@ function updateProfileOverview(data) {
         statusBadge.className = 'badge bg-success';
     }
 
-    // Last login - show actual date when available
-    const lastLoginElement = document.getElementById('profileLastLogin');
-    if (lastLoginElement) {
-        if (data.lastLogin) {
-            lastLoginElement.textContent = formatDateTime(data.lastLogin);
-        } else {
-            lastLoginElement.textContent = 'Never logged in';
-        }
-    }
 
-    // Last logout - show actual date when available
-    const lastLogoutElement = document.getElementById('profileLastLogout');
-    if (lastLogoutElement) {
-        if (data.lastLogout) {
-            lastLogoutElement.textContent = formatDateTime(data.lastLogout);
-        } else {
-            lastLogoutElement.textContent = 'Never logged out';
-        }
-    }
 
     // Profile image
     const profileImage = document.getElementById('profileImage');
@@ -258,58 +235,7 @@ function updatePersonalInformation(data) {
 }
 
 
-// Update login history table
-function updateLoginHistory(loginHistory) {
-    const tbody = document.getElementById('loginHistoryTable');
-    if (!tbody) return;
 
-    tbody.innerHTML = '';
-
-    if (!Array.isArray(loginHistory) || loginHistory.length === 0) {
-        // Show "No login history available" message
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td colspan="5" class="text-center text-muted">
-                <i class="bx bx-info-circle me-2"></i>No login history available
-            </td>
-        `;
-        tbody.appendChild(row);
-        return;
-    }
-
-    // Display up to 5 most recent entries
-    loginHistory.slice(0, 5).forEach(entry => {
-        const row = document.createElement('tr');
-
-        // Format timestamp
-        const timestamp = entry.timestamp ? formatDateTime(entry.timestamp) : 'Unknown';
-
-        // Format action with appropriate badge
-        const actionBadge = entry.action === 'login'
-            ? '<span class="badge bg-success">Login</span>'
-            : '<span class="badge bg-warning">Logout</span>';
-
-        // Format IP address
-        const ipAddress = entry.ipAddress || entry.ip_address || 'Unknown';
-
-        // Format device
-        const device = entry.device || 'Unknown Device';
-
-        // Format status
-        const statusBadge = entry.status === 'success'
-            ? '<span class="badge bg-success">Success</span>'
-            : '<span class="badge bg-danger">Failed</span>';
-
-        row.innerHTML = `
-            <td><strong>${timestamp}</strong></td>
-            <td>${actionBadge}</td>
-            <td>${ipAddress}</td>
-            <td>${device}</td>
-            <td>${statusBadge}</td>
-        `;
-        tbody.appendChild(row);
-    });
-}
 
 // Update navbar user info
 function updateNavbarUserInfo(data) {

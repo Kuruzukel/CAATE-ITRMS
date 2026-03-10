@@ -172,15 +172,7 @@ function updateProfileOverview(data) {
         statusBadge.className = 'badge bg-success';
     }
 
-    // Last login - show actual date when available
-    const lastLoginElement = document.getElementById('profileLastLogin');
-    if (lastLoginElement) {
-        if (data.lastLogin) {
-            lastLoginElement.textContent = formatDateTime(data.lastLogin);
-        } else {
-            lastLoginElement.textContent = 'N/A';
-        }
-    }
+
 
     // Trainee ID
     const traineeIdElement = document.getElementById('profileTraineeId');

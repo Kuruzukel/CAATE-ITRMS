@@ -8,20 +8,26 @@
     padding: 0.5rem;
     display: flex;
     align-items: center;
+    justify-content: center;
 }
 
 .navbar-dropdown.dropdown-user .avatar {
-    width: 40px;
-    height: 40px;
+    width: 40px !important;
+    height: 40px !important;
     position: relative;
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    overflow: hidden;
 }
 
 .navbar-dropdown.dropdown-user .avatar img {
-    width: 40px;
-    height: 40px;
+    width: 40px !important;
+    height: 40px !important;
     border-radius: 50%;
     object-fit: cover;
+    display: block;
 }
 
 .navbar-dropdown.dropdown-user .dropdown-menu {
@@ -106,4 +112,27 @@
         padding: 0.5rem 1rem;
         font-size: 0.875rem;
     }
+}
+
+/* Ensure avatar image loads properly */
+.avatar img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 50%;
+}
+
+/* Fix for avatar alignment */
+.navbar .avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Override any conflicting styles */
+.navbar-dropdown.dropdown-user .avatar img {
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 50% !important;
+    object-fit: cover !important;
+    display: block !important;
 }

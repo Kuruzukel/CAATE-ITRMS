@@ -163,26 +163,6 @@ class Admin {
                     '$push' => [
                         'login_history' => [
                             '$each' => [$loginEntry],
-                            '$slice' => -10 // Keep only last 10 entries
-                        ]
-                    ]
-                ]
-            );
-            return $result->getModifiedCount() > 0;
-        } catch (Exception $e) {
-            error_log("Admin::addLoginHistory - Exception: " . $e->getMessage());
-            return false;
-        }
-    }
-    
-    public function addLoginHistory($id, $loginEntry) {
-        try {
-            $result = $this->collection->updateOne(
-                ['_id' => new MongoDB\BSON\ObjectId($id)],
-                [
-                    '$push' => [
-                        'login_history' => [
-                            '$each' => [$loginEntry],
                             '$slice' => -50 // Keep only the last 50 entries
                         ]
                     ]

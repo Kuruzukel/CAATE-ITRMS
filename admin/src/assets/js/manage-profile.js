@@ -51,9 +51,6 @@ async function loadAdminProfile() {
 
         // Fetch admin data from the admins collection
         try {
-            console.log('Fetching admin data for user ID:', userId);
-            console.log('API URL:', `${config.api.baseURL}/api/v1/admins/${userId}`);
-
             const response = await fetch(`${config.api.baseURL}/api/v1/admins/${userId}`, {
                 method: 'GET',
                 headers: {
@@ -62,35 +59,32 @@ async function loadAdminProfile() {
                 }
             });
 
-            console.log('API Response status:', response.status);
-
             if (response.ok) {
                 const result = await response.json();
-                console.log('API Response data:', result);
 
                 let adminData = result.data || result.admin || result;
 
-                // Map database fields to expected format
+                // The AdminController already maps database fields to frontend format
                 const mappedData = {
                     _id: adminData._id,
                     name: adminData.name,
                     email: adminData.email,
                     username: adminData.username,
                     role: adminData.role,
-                    firstName: adminData.first_name,
-                    middleName: adminData.middle_name,
-                    lastName: adminData.last_name,
+                    firstName: adminData.firstName,        // AdminController maps first_name to firstName
+                    middleName: adminData.middleName,      // AdminController maps middle_name to middleName
+                    lastName: adminData.lastName,          // AdminController maps last_name to lastName
                     phone: adminData.phone,
-                    phoneNumber: adminData.phone, // Alternative field name
+                    phoneNumber: adminData.phone,
                     address: adminData.address,
                     created_at: adminData.created_at,
                     updated_at: adminData.updated_at,
-                    lastLogin: adminData.last_login,
-                    lastLogout: adminData.last_logout,
-                    profileImage: adminData.profile_image || '../assets/images/AVATARNIKEL.jpg'
+                    lastLogin: adminData.lastLogin,
+                    lastLogout: adminData.lastLogout,
+                    profileImage: adminData.profileImage || '../assets/images/AVATARNIKEL.jpg'
                 };
 
-                console.log('Mapped admin data:', mappedData);
+                console.log('Mapped Data:', mappedData); // Debug log
 
                 // Update profile overview
                 updateProfileOverview(mappedData);
@@ -111,7 +105,6 @@ async function loadAdminProfile() {
 
             } else {
                 const errorData = await response.json();
-                console.error('API Error Response:', errorData);
                 throw new Error(`Failed to fetch admin data: ${response.status} - ${errorData.error || 'Unknown error'}`);
             }
 
@@ -256,6 +249,7 @@ function updatePersonalInformation(data) {
     if (editEmail) editEmail.value = data.email || '';
     if (editAddress) editAddress.value = data.address || '';
 }
+
 
 // Update login history table
 function updateLoginHistory(loginHistory) {

@@ -149,20 +149,57 @@ document.addEventListener('DOMContentLoaded', function () {
                         // Date clicked
                     },
                     eventDidMount: function (info) {
-                        // Hide individual events - we'll show aggregated counts instead
-                        info.el.style.display = 'none';
+                        // Only hide events in month view - show them in week/day views
+                        const view = calendar.view.type;
+                        if (view === 'dayGridMonth') {
+                            info.el.style.display = 'none';
+                        } else {
+                            // In week/day view, show the event with proper styling
+                            info.el.style.display = 'block';
+
+                            // Add custom styling for better visibility
+                            const status = info.event.extendedProps.status ? info.event.extendedProps.status.toLowerCase() : '';
+                            let backgroundColor = '#6c757d';
+
+                            if (status === 'approved' || status === 'confirmed') {
+                                backgroundColor = '#10b981';
+                            } else if (status === 'pending') {
+                                backgroundColor = '#f59e0b';
+                            } else if (status === 'cancelled') {
+                                backgroundColor = '#ef4444';
+                            }
+
+                            info.el.style.backgroundColor = backgroundColor;
+                            info.el.style.borderColor = backgroundColor;
+                            info.el.style.color = 'white';
+
+                            // Set the event title to show client name
+                            const titleEl = info.el.querySelector('.fc-event-title');
+                            if (titleEl) {
+                                titleEl.textContent = info.event.extendedProps.client || 'Appointment';
+                            }
+                        }
                     },
                     viewDidMount: function () {
-                        // After calendar renders, show status counts
-                        setTimeout(() => updateStatusCounts(calendar), 100);
+                        // After calendar renders, show status counts only in month view
+                        const view = calendar.view.type;
+                        if (view === 'dayGridMonth') {
+                            setTimeout(() => updateStatusCounts(calendar), 100);
+                        }
                     },
                     datesSet: function () {
-                        // When dates change (month/week/day navigation), update status counts
-                        setTimeout(() => updateStatusCounts(calendar), 100);
+                        // When dates change (month/week/day navigation), update status counts only in month view
+                        const view = calendar.view.type;
+                        if (view === 'dayGridMonth') {
+                            setTimeout(() => updateStatusCounts(calendar), 100);
+                        }
                     },
                     eventsSet: function () {
-                        // When events are loaded, update status counts
-                        setTimeout(() => updateStatusCounts(calendar), 100);
+                        // When events are loaded, update status counts only in month view
+                        const view = calendar.view.type;
+                        if (view === 'dayGridMonth') {
+                            setTimeout(() => updateStatusCounts(calendar), 100);
+                        }
                     }
                 });
 
@@ -258,7 +295,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             return {
                 id: appointment._id,
-                title: '', // Empty title - only avatar will show
+                title: fullName, // Show client name in week/day views
                 start: startDateTime,
                 end: endDateTime,
                 backgroundColor: 'transparent',

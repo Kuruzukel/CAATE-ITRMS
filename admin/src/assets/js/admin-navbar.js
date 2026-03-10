@@ -26,9 +26,14 @@ function checkAuthentication() {
 
 // Load admin profile data for navbar dropdown
 async function loadAdminProfileForNavbar() {
+    console.log('Loading admin profile for navbar...'); // Debug log
+
     try {
         const token = localStorage.getItem('authToken');
         const userId = localStorage.getItem('userId');
+
+        console.log('Token:', token ? 'exists' : 'missing'); // Debug log
+        console.log('UserId:', userId); // Debug log
 
         if (!token || !userId) {
             window.location.href = '../../../auth/src/pages/login.html';
@@ -40,6 +45,7 @@ async function loadAdminProfileForNavbar() {
         if (cachedData) {
             try {
                 const userData = JSON.parse(cachedData);
+                console.log('Using cached data:', userData); // Debug log
                 updateNavbarUserInfo(userData);
             } catch (e) {
                 console.warn('Failed to parse cached user data');
@@ -47,7 +53,10 @@ async function loadAdminProfileForNavbar() {
         }
 
         // Fetch fresh admin data from the admins collection
-        const response = await fetch(`${config.api.baseURL}/api/v1/admins/${userId}`, {
+        const apiUrl = `${config.api.baseURL}/api/v1/admins/${userId}`;
+        console.log('Fetching from:', apiUrl); // Debug log
+
+        const response = await fetch(apiUrl, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -55,8 +64,12 @@ async function loadAdminProfileForNavbar() {
             }
         });
 
+        console.log('API Response status:', response.status); // Debug log
+
         if (response.ok) {
             const result = await response.json();
+            console.log('API Response data:', result); // Debug log
+
             let adminData = result.data || result.admin || result;
 
             // Map the data to consistent format
@@ -75,6 +88,8 @@ async function loadAdminProfileForNavbar() {
                 profileImage: adminData.profileImage || '../assets/images/DEFAULT_AVATAR.png'
             };
 
+            console.log('Mapped data:', mappedData); // Debug log
+
             // Update navbar user info
             updateNavbarUserInfo(mappedData);
 
@@ -82,6 +97,8 @@ async function loadAdminProfileForNavbar() {
             localStorage.setItem('userData', JSON.stringify(mappedData));
         } else {
             console.error('Failed to fetch admin data:', response.status);
+            const errorText = await response.text();
+            console.error('Error response:', errorText);
         }
     } catch (error) {
         console.error('Error loading admin profile:', error);

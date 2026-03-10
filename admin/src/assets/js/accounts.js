@@ -6,8 +6,8 @@ const API_BASE_URL = window.location.origin + '/CAATE-ITRMS/backend/public/api/v
 // State
 let traineesData = [];
 
-// Authentication check and navbar update
-function checkAuthenticationAndUpdateNavbar() {
+// Authentication check - simplified since admin-navbar.js handles the navbar updates
+function checkAuthentication() {
     const token = localStorage.getItem('authToken');
     const userRole = localStorage.getItem('userRole');
     const userId = localStorage.getItem('userId');
@@ -27,92 +27,7 @@ function checkAuthenticationAndUpdateNavbar() {
         return false;
     }
 
-    // Load admin profile data for navbar
-    loadAdminProfileForNavbar();
     return true;
-}
-
-// Load admin profile data for navbar
-async function loadAdminProfileForNavbar() {
-    try {
-        const token = localStorage.getItem('authToken');
-        const userId = localStorage.getItem('userId');
-
-        if (!token || !userId) {
-            return;
-        }
-
-        // Try to get cached data first
-        const cachedData = localStorage.getItem('userData');
-        if (cachedData) {
-            try {
-                const userData = JSON.parse(cachedData);
-                updateNavbarUserInfo(userData);
-            } catch (e) {
-                console.warn('Failed to parse cached user data');
-            }
-        }
-
-        // Fetch fresh data from API
-        const response = await fetch(`${config.api.baseURL}/api/v1/admins/${userId}`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            }
-        });
-
-        if (response.ok) {
-            const result = await response.json();
-            let adminData = result.data || result.admin || result;
-
-            const mappedData = {
-                _id: adminData._id,
-                name: adminData.name,
-                email: adminData.email,
-                username: adminData.username,
-                role: adminData.role,
-                firstName: adminData.firstName,
-                middleName: adminData.middleName,
-                lastName: adminData.lastName,
-                phone: adminData.phone,
-                phoneNumber: adminData.phone,
-                address: adminData.address,
-                profileImage: adminData.profileImage || '../assets/images/DEFAULT_AVATAR.png'
-            };
-
-            // Update navbar user info
-            updateNavbarUserInfo(mappedData);
-
-            // Update cached data
-            localStorage.setItem('userData', JSON.stringify(mappedData));
-        }
-    } catch (error) {
-        console.error('Error loading admin profile for navbar:', error);
-    }
-}
-
-// Update navbar user info
-function updateNavbarUserInfo(data) {
-    // Update user name in dropdown
-    const userName = document.querySelector('.dropdown-menu .flex-grow-1 .fw-semibold');
-    if (userName) {
-        let displayName = data.name || 'Admin';
-        userName.textContent = displayName;
-    }
-
-    // Update profile images in navbar
-    const navbarImages = document.querySelectorAll('.navbar .avatar img');
-    navbarImages.forEach(img => {
-        if (data.profileImage && data.profileImage !== '../assets/images/DEFAULT_AVATAR.png') {
-            img.src = data.profileImage;
-        } else {
-            img.src = '../assets/images/DEFAULT_AVATAR.png';
-        }
-        img.onerror = function () {
-            this.src = '../assets/images/DEFAULT_AVATAR.png';
-        };
-    });
 }
 
 // Password generation characters
@@ -138,13 +53,10 @@ document.addEventListener('DOMContentLoaded', function () {
     // Mark that page-specific initialization is being done
     window.adminNavbarInitialized = true;
 
-    // Check authentication and load navbar data
+    // Check authentication (navbar updates are handled by admin-navbar.js)
     if (!checkAuthentication()) {
         return;
     }
-
-    // Load admin profile data for navbar
-    loadAdminProfileForNavbar();
 
     // Load trainees data
     loadTrainees();

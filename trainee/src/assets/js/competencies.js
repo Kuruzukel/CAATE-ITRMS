@@ -6,7 +6,8 @@ if (typeof window.API_BASE_URL === 'undefined') {
         ? config.api.baseUrl
         : window.location.origin + '/CAATE-ITRMS/backend/public';
 }
-const API_BASE_URL = window.API_BASE_URL;
+
+// Use API_BASE_URL directly from window object to avoid redeclaration conflicts
 
 let coursesData = [];
 
@@ -29,7 +30,7 @@ async function loadCourses() {
         if (coursesGrid) coursesGrid.classList.add('d-none');
 
         // Fetch competencies (one document per course)
-        const response = await fetch(`${API_BASE_URL}/api/v1/competencies`);
+        const response = await fetch(`${window.API_BASE_URL}/api/v1/competencies`);
 
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);

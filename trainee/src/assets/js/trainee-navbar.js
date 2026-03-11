@@ -10,8 +10,7 @@ if (typeof window.API_BASE_URL === 'undefined') {
         : '/backend/public';
 }
 
-// Use the global API_BASE_URL
-const API_BASE_URL = window.API_BASE_URL;
+// Use window.API_BASE_URL directly to avoid redeclaration conflicts
 
 // Cache for trainee data to avoid repeated API calls
 let traineeDataCache = null;
@@ -53,7 +52,7 @@ async function loadTraineeProfileForNavbar() {
         // Fetch from API with fallback strategy
         try {
             // Try general users endpoint first
-            let response = await fetch(`${API_BASE_URL}/api/v1/users/${userId}`, {
+            let response = await fetch(`${window.API_BASE_URL}/api/v1/users/${userId}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -63,7 +62,7 @@ async function loadTraineeProfileForNavbar() {
 
             if (!response.ok) {
                 // Try trainee-specific endpoint
-                response = await fetch(`${API_BASE_URL}/api/v1/trainees/${userId}`, {
+                response = await fetch(`${window.API_BASE_URL}/api/v1/trainees/${userId}`, {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`,

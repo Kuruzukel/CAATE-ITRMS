@@ -4,7 +4,8 @@
 if (typeof window.API_BASE_URL === 'undefined') {
     window.API_BASE_URL = window.location.origin + '/CAATE-ITRMS/backend/public';
 }
-const API_BASE_URL = window.API_BASE_URL;
+
+// Use API_BASE_URL directly from window object to avoid redeclaration conflicts
 
 // Authentication check
 function checkAuthentication() {
@@ -73,7 +74,7 @@ async function loadTraineeProfile() {
         // Otherwise, try to fetch from API with fallback strategy
         try {
             // Try general users endpoint first
-            let response = await fetch(`${API_BASE_URL}/api/v1/users/${userId}`, {
+            let response = await fetch(`${window.API_BASE_URL}/api/v1/users/${userId}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -83,7 +84,7 @@ async function loadTraineeProfile() {
 
             if (!response.ok) {
                 // Try trainee-specific endpoint
-                response = await fetch(`${API_BASE_URL}/api/v1/trainees/${userId}`, {
+                response = await fetch(`${window.API_BASE_URL}/api/v1/trainees/${userId}`, {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -420,7 +421,7 @@ async function saveProfileChanges() {
             address: editAddress ? editAddress.value : ''
         };
 
-        const response = await fetch(`${API_BASE_URL}/api/v1/users/${userId}`, {
+        const response = await fetch(`${window.API_BASE_URL}/api/v1/users/${userId}`, {
             method: 'PUT',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -500,7 +501,7 @@ async function uploadProfileImage(file) {
         const formData = new FormData();
         formData.append('profileImage', file);
 
-        const response = await fetch(`${API_BASE_URL}/api/v1/users/${userId}/profile-image`, {
+        const response = await fetch(`${window.API_BASE_URL}/api/v1/users/${userId}/profile-image`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`

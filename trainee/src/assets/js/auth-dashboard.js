@@ -36,7 +36,7 @@ if (typeof window.API_BASE_URL === 'undefined') {
         ? 'http://localhost/CAATE-ITRMS/backend/public'
         : '/backend/public';
 }
-const API_BASE_URL = window.API_BASE_URL;
+// Use window.API_BASE_URL directly to avoid redeclaration conflicts
 
 /**
  * Check if user is authenticated (synchronous for immediate blocking)
@@ -96,7 +96,7 @@ async function logout() {
     sessionStorage.clear();
 
     try {
-        await fetch(`${API_BASE_URL}/api/v1/auth/logout`, {
+        await fetch(`${window.API_BASE_URL}/api/v1/auth/logout`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

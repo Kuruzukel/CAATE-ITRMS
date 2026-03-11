@@ -33,6 +33,14 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
     }
 
+    // Set flag to prevent admin-navbar.js from double-initializing
+    window.adminNavbarInitialized = true;
+
+    // Initialize navbar functionality manually since we're preventing auto-init
+    if (typeof initializeAdminNavbar === 'function') {
+        initializeAdminNavbar();
+    }
+
     initializePhotoUpload();
     loadAdminProfile();
     initializeEditForm();
@@ -648,7 +656,10 @@ async function uploadProfileImage(file) {
             setTimeout(async () => {
                 console.log('Reloading admin profile data from database...');
 
-                // Reload navbar data using the navbar function
+                // First, reload the current page profile data
+                await loadAdminProfile();
+
+                // Then, reload navbar data using the navbar function if available
                 if (typeof loadAdminProfileForNavbar === 'function') {
                     console.log('Calling loadAdminProfileForNavbar...');
                     await loadAdminProfileForNavbar();
@@ -656,9 +667,6 @@ async function uploadProfileImage(file) {
                     console.log('Calling window.refreshAdminNavbar...');
                     window.refreshAdminNavbar();
                 }
-
-                // Also reload the current page profile data
-                await loadAdminProfile();
 
                 // Trigger storage event to update other admin pages
                 window.dispatchEvent(new StorageEvent('storage', {

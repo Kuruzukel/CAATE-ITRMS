@@ -382,6 +382,29 @@ function initializeEditForm() {
             saveButton.innerHTML = originalText;
         }
     });
+
+    // Add phone number validation and formatting
+    const phoneInput = document.getElementById('editPhone');
+    if (phoneInput) {
+        phoneInput.addEventListener('input', function (e) {
+            // Remove all non-numeric characters
+            let value = e.target.value.replace(/\D/g, '');
+
+            // Limit to 11 digits
+            if (value.length > 11) {
+                value = value.slice(0, 11);
+            }
+
+            e.target.value = value;
+        });
+
+        phoneInput.addEventListener('keypress', function (e) {
+            // Only allow numeric characters
+            if (!/[0-9]/.test(e.key) && !['Backspace', 'Delete', 'Tab', 'Escape', 'Enter'].includes(e.key)) {
+                e.preventDefault();
+            }
+        });
+    }
 }
 
 // Save profile changes
@@ -430,9 +453,10 @@ async function saveProfileChanges() {
 
     // Phone number validation (optional but if provided, should be valid)
     if (updatedData.phone && updatedData.phone.length > 0) {
-        const phoneRegex = /^[\+]?[0-9\s\-\(\)]{10,15}$/;
-        if (!phoneRegex.test(updatedData.phone)) {
-            showToast('Please enter a valid phone number (10-15 digits).', 'error');
+        // Remove any non-digit characters for validation
+        const cleanPhone = updatedData.phone.replace(/\D/g, '');
+        if (cleanPhone.length !== 11 || !cleanPhone.startsWith('09')) {
+            showToast('Please enter a valid 11-digit phone number starting with 09 (e.g., 09123456789).', 'error');
             return;
         }
     }

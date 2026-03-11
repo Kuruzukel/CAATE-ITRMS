@@ -357,60 +357,60 @@
                                             <div class="col-md-6">
                                                 <label class="form-label fw-semibold">First Name</label>
                                                 <input type="text" id="personalFirstName" class="form-control" value=""
-                                                    readonly>
+                                                    placeholder="Enter your first name" readonly>
                                             </div>
                                             <div class="col-md-6">
                                                 <label class="form-label fw-semibold">Second Name</label>
                                                 <input type="text" id="personalSecondName" class="form-control" value=""
-                                                    readonly>
+                                                    placeholder="Enter your second name" readonly>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <div class="col-md-6">
                                                 <label class="form-label fw-semibold">Middle Name</label>
                                                 <input type="text" id="personalMiddleName" class="form-control" value=""
-                                                    readonly>
+                                                    placeholder="Enter your middle name" readonly>
                                             </div>
                                             <div class="col-md-6">
                                                 <label class="form-label fw-semibold">Last Name</label>
                                                 <input type="text" id="personalLastName" class="form-control" value=""
-                                                    readonly>
+                                                    placeholder="Enter your last name" readonly>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <div class="col-md-6">
                                                 <label class="form-label fw-semibold">Suffix</label>
                                                 <input type="text" id="personalSuffix" class="form-control" value=""
-                                                    readonly>
+                                                    placeholder="Jr., Sr., III, etc." readonly>
                                             </div>
                                             <div class="col-md-6">
                                                 <label class="form-label fw-semibold">Trainee ID</label>
                                                 <input type="text" id="personalTraineeId" class="form-control" value=""
-                                                    readonly>
+                                                    placeholder="Your trainee ID" readonly>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <div class="col-md-6">
                                                 <label class="form-label fw-semibold">Phone Number</label>
-                                                <input type="text" id="personalPhone" class="form-control" value=""
-                                                    readonly>
+                                                <input type="tel" id="personalPhone" class="form-control" value=""
+                                                    placeholder="09XX XXX XXXX" readonly>
                                             </div>
                                             <div class="col-md-6">
                                                 <label class="form-label fw-semibold">Email Address</label>
-                                                <input type="text" id="personalEmail" class="form-control" value=""
-                                                    readonly>
+                                                <input type="email" id="personalEmail" class="form-control" value=""
+                                                    placeholder="your.email@example.com" readonly>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <div class="col-md-6">
                                                 <label class="form-label fw-semibold">Date of Birth</label>
                                                 <input type="date" id="personalDateOfBirth" class="form-control"
-                                                    value="" readonly>
+                                                    value="" placeholder="Select your date of birth" readonly>
                                             </div>
                                             <div class="col-md-6">
                                                 <label class="form-label fw-semibold">Address</label>
                                                 <textarea id="personalAddress" class="form-control" rows="2"
-                                                    readonly></textarea>
+                                                    placeholder="Enter your complete address" readonly></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -463,47 +463,62 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="editFirstName" class="form-label">First Name</label>
-                                <input type="text" id="editFirstName" class="form-control" value="">
+                                <input type="text" id="editFirstName" class="form-control" value=""
+                                    placeholder="Enter your first name" pattern="[A-Za-z\s]+"
+                                    title="Please enter letters only">
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="editSecondName" class="form-label">Second Name</label>
-                                <input type="text" id="editSecondName" class="form-control" value="">
+                                <input type="text" id="editSecondName" class="form-control" value=""
+                                    placeholder="Enter your second name" pattern="[A-Za-z\s]*"
+                                    title="Please enter letters only">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="editMiddleName" class="form-label">Middle Name</label>
-                                <input type="text" id="editMiddleName" class="form-control" value="">
+                                <input type="text" id="editMiddleName" class="form-control" value=""
+                                    placeholder="Enter your middle name" pattern="[A-Za-z\s]*"
+                                    title="Please enter letters only">
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="editLastName" class="form-label">Last Name</label>
-                                <input type="text" id="editLastName" class="form-control" value="">
+                                <input type="text" id="editLastName" class="form-control" value=""
+                                    placeholder="Enter your last name" pattern="[A-Za-z\s]*"
+                                    title="Please enter letters only">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="editSuffix" class="form-label">Suffix</label>
-                                <input type="text" id="editSuffix" class="form-control" value="">
+                                <input type="text" id="editSuffix" class="form-control" value=""
+                                    placeholder="Jr., Sr., III, etc." pattern="[A-Za-z.,\s]*"
+                                    title="Please enter letters only">
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="editTraineeId" class="form-label">Trainee ID</label>
-                                <input type="text" id="editTraineeId" class="form-control" value="" disabled>
+                                <input type="text" id="editTraineeId" class="form-control" value=""
+                                    placeholder="Your trainee ID" disabled>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="editPhone" class="form-label">Phone Number</label>
-                                <input type="text" id="editPhone" class="form-control" value="">
+                                <input type="tel" id="editPhone" class="form-control" value=""
+                                    placeholder="09XX XXX XXXX" pattern="[0-9]{11}" maxlength="11"
+                                    title="Please enter 11 digits (e.g., 09123456789)">
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="editEmail" class="form-label">Email Address</label>
-                                <input type="text" id="editEmail" class="form-control" value="">
+                                <input type="email" id="editEmail" class="form-control" value=""
+                                    placeholder="your.email@example.com" title="Please enter a valid email address">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-12 mb-3">
                                 <label for="editAddress" class="form-label">Address</label>
-                                <textarea id="editAddress" class="form-control" rows="2"></textarea>
+                                <textarea id="editAddress" class="form-control" rows="2"
+                                    placeholder="Enter your complete address"></textarea>
                             </div>
                         </div>
                     </form>

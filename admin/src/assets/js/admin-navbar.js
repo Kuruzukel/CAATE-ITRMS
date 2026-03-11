@@ -77,6 +77,8 @@ async function loadAdminProfileForNavbar() {
                 profileImage: adminData.profileImage || '../assets/images/DEFAULT_AVATAR.png'
             };
 
+            console.log('Admin data loaded:', mappedData);
+
             // Update navbar user info
             updateNavbarUserInfo(mappedData);
 
@@ -100,27 +102,47 @@ function updateNavbarUserInfo(data) {
         userName.textContent = displayName;
     }
 
-    // Update profile images in navbar - both main avatar and dropdown avatar
-    const profileImages = document.querySelectorAll('.navbar .avatar img, .dropdown-menu .avatar img');
-    profileImages.forEach(img => {
-        if (data.profileImage && data.profileImage !== '../assets/images/DEFAULT_AVATAR.png') {
-            // Handle both relative and absolute paths
-            if (data.profileImage.startsWith('/CAATE-ITRMS/')) {
-                img.src = window.location.origin + data.profileImage;
-            } else if (data.profileImage.startsWith('http')) {
-                img.src = data.profileImage;
-            } else {
-                img.src = data.profileImage;
-            }
-        } else {
-            img.src = '../assets/images/DEFAULT_AVATAR.png';
-        }
+    // Update profile images in navbar - target all avatar images more comprehensively
+    const profileImageSelectors = [
+        '.navbar .avatar img',
+        '.dropdown-menu .avatar img',
+        '.navbar-dropdown .avatar img',
+        '.navbar img[src*="DEFAULT_AVATAR"]',
+        '.navbar img[alt=""]',
+        'img.w-px-40.h-auto.rounded-circle',
+        '.navbar img.rounded-circle',
+        '.dropdown-menu img.w-px-40',
+        '.dropdown-menu img.rounded-circle'
+    ];
 
-        // Add error handling to fallback to default avatar
-        img.onerror = function () {
-            this.src = '../assets/images/DEFAULT_AVATAR.png';
-        };
+    let totalUpdated = 0;
+    profileImageSelectors.forEach(selector => {
+        const images = document.querySelectorAll(selector);
+        images.forEach(img => {
+            if (data.profileImage && data.profileImage !== '../assets/images/DEFAULT_AVATAR.png') {
+                // Handle both relative and absolute paths
+                if (data.profileImage.startsWith('/CAATE-ITRMS/')) {
+                    img.src = window.location.origin + data.profileImage;
+                } else if (data.profileImage.startsWith('http')) {
+                    img.src = data.profileImage;
+                } else if (data.profileImage.startsWith('/')) {
+                    img.src = window.location.origin + data.profileImage;
+                } else {
+                    img.src = data.profileImage;
+                }
+                totalUpdated++;
+            } else {
+                img.src = '../assets/images/DEFAULT_AVATAR.png';
+            }
+
+            // Add error handling to fallback to default avatar
+            img.onerror = function () {
+                this.src = '../assets/images/DEFAULT_AVATAR.png';
+            };
+        });
     });
+
+    console.log('Updated navbar with profile image:', data.profileImage, `(${totalUpdated} images updated)`);
 }
 
 // Initialize admin navbar functionality
@@ -151,6 +173,22 @@ function initializeAdminNavbar() {
 // Function to refresh navbar data (can be called from other pages)
 window.refreshAdminNavbar = function () {
     loadAdminProfileForNavbar();
+};
+
+// Function to force update all avatar images with a specific image path
+window.forceUpdateAvatars = function (imagePath) {
+    console.log('Force updating all avatars with:', imagePath);
+    const allAvatarImages = document.querySelectorAll('img[src*="DEFAULT_AVATAR"], .navbar img, .dropdown-menu img, .avatar img');
+    allAvatarImages.forEach((img, index) => {
+        if (imagePath.startsWith('/CAATE-ITRMS/')) {
+            img.src = window.location.origin + imagePath;
+        } else if (imagePath.startsWith('/')) {
+            img.src = window.location.origin + imagePath;
+        } else {
+            img.src = imagePath;
+        }
+        console.log(`Force updated avatar ${index}:`, img.src);
+    });
 };
 
 // Auto-initialize when DOM is loaded (if not already initialized by page-specific script)

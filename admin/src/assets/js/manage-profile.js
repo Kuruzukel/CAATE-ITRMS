@@ -510,20 +510,50 @@ async function uploadProfileImage(file) {
 
         if (response.ok) {
             const result = await response.json();
+            console.log('Upload response:', result);
 
             // Update the profile image immediately
             const profileImage = document.getElementById('profileImage');
             if (profileImage && result.image_path) {
                 profileImage.src = result.image_path;
+                console.log('Updated profile image src to:', result.image_path);
             }
 
-            // Update navbar avatars immediately
-            const navbarAvatars = document.querySelectorAll('.navbar .avatar img');
-            navbarAvatars.forEach(img => {
-                if (result.image_path) {
-                    img.src = result.image_path;
-                }
+            // Update navbar avatars immediately - target all avatar images with more specific selectors
+            const navbarAvatarSelectors = [
+                '.navbar .avatar img',
+                '.dropdown-menu .avatar img',
+                '.navbar-dropdown .avatar img',
+                '.navbar img[src*="DEFAULT_AVATAR"]',
+                '.navbar img[alt=""]',
+                'img.w-px-40.h-auto.rounded-circle',
+                '.navbar img.rounded-circle',
+                '.dropdown-menu img.w-px-40',
+                '.dropdown-menu img.rounded-circle'
+            ];
+
+            let totalUpdated = 0;
+            navbarAvatarSelectors.forEach(selector => {
+                const images = document.querySelectorAll(selector);
+                console.log(`Found ${images.length} images with selector: ${selector}`);
+                images.forEach((img, index) => {
+                    if (result.image_path) {
+                        // Handle both relative and absolute paths
+                        if (result.image_path.startsWith('/CAATE-ITRMS/')) {
+                            img.src = window.location.origin + result.image_path;
+                        } else if (result.image_path.startsWith('http')) {
+                            img.src = result.image_path;
+                        } else if (result.image_path.startsWith('/')) {
+                            img.src = window.location.origin + result.image_path;
+                        } else {
+                            img.src = result.image_path;
+                        }
+                        console.log(`Updated image ${index} with selector ${selector} src to:`, img.src);
+                        totalUpdated++;
+                    }
+                });
             });
+            console.log(`Total navbar avatars updated: ${totalUpdated}`);
 
             // Update cached user data with new profile image
             const userData = localStorage.getItem('userData');
@@ -541,6 +571,34 @@ async function uploadProfileImage(file) {
             if (typeof window.refreshAdminNavbar === 'function') {
                 window.refreshAdminNavbar();
             }
+
+            // Force update all avatars immediately
+            if (typeof window.forceUpdateAvatars === 'function') {
+                window.forceUpdateAvatars(result.image_path);
+            }
+
+            // Force refresh navbar on current page after a short delay
+            setTimeout(() => {
+                console.log('Force refreshing navbar...');
+                loadAdminProfileForNavbar();
+
+                // Also directly update any remaining default avatars with brute force approach
+                const allPossibleAvatars = document.querySelectorAll('img');
+                allPossibleAvatars.forEach(img => {
+                    if (img.src.includes('DEFAULT_AVATAR') ||
+                        img.classList.contains('rounded-circle') ||
+                        img.classList.contains('w-px-40') ||
+                        img.closest('.avatar') ||
+                        img.closest('.dropdown-menu')) {
+                        if (result.image_path.startsWith('/CAATE-ITRMS/')) {
+                            img.src = window.location.origin + result.image_path;
+                        } else {
+                            img.src = result.image_path;
+                        }
+                        console.log('Force updated avatar:', img);
+                    }
+                });
+            }, 500);
 
             showToast('Profile photo updated successfully!', 'success');
         } else {

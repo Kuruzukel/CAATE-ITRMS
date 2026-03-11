@@ -48,6 +48,59 @@
 
     <!-- Trainee Navbar - Common navbar functionality -->
     <script src="../assets/js/trainee-navbar.js"></script>
+
+    <!-- Custom styles for white text and date input -->
+    <style>
+        .form-label {
+            color: white !important;
+        }
+
+        .form-label.fw-semibold {
+            color: white !important;
+        }
+
+        /* Style date input to have white calendar icon */
+        input[type="date"] {
+            color-scheme: light !important;
+            background-color: var(--bs-body-bg) !important;
+            border: 1px solid var(--bs-border-color) !important;
+            color: white !important;
+        }
+
+        /* Use a white calendar icon */
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='%23ffffff' d='M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM2 2a1 1 0 0 0-1 1v1h14V3a1 1 0 0 0-1-1H2zm13 3H1v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V5z'/%3e%3c/svg%3e") !important;
+            background-repeat: no-repeat !important;
+            background-position: center !important;
+            background-size: 16px 16px !important;
+            width: 20px !important;
+            height: 20px !important;
+            cursor: pointer !important;
+            opacity: 1 !important;
+            filter: none !important;
+        }
+
+        /* Ensure text is white */
+        input[type="date"]::-webkit-datetime-edit {
+            color: white !important;
+        }
+
+        input[type="date"]::-webkit-datetime-edit-text {
+            color: white !important;
+        }
+
+        input[type="date"]::-webkit-datetime-edit-month-field {
+            color: white !important;
+        }
+
+        input[type="date"]::-webkit-datetime-edit-day-field {
+            color: white !important;
+        }
+
+        input[type="date"]::-webkit-datetime-edit-year-field {
+            color: white !important;
+        }
+    </style>
 </head>
 
 <body>
@@ -476,44 +529,38 @@
                             <div class="col-md-6 mb-3">
                                 <label for="editUsername" class="form-label">Username</label>
                                 <input type="text" id="editUsername" class="form-control" value=""
-                                    placeholder="Your username" disabled>
+                                    placeholder="Your username">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="editFirstName" class="form-label">First Name</label>
                                 <input type="text" id="editFirstName" class="form-control" value=""
-                                    placeholder="Enter your first name" pattern="[A-Za-z\s]+"
-                                    title="Please enter letters only">
-                                title="Please enter letters only">
+                                    placeholder="Enter your first name" pattern="[A-Za-z\s]+">
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="editSecondName" class="form-label">Second Name</label>
+                                <label for="editSecondName" class="form-label">Second Name (if applicable)</label>
                                 <input type="text" id="editSecondName" class="form-control" value=""
-                                    placeholder="Enter your second name" pattern="[A-Za-z\s]*"
-                                    title="Please enter letters only">
+                                    placeholder="Enter your second name" pattern="[A-Za-z\s]*">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="editMiddleName" class="form-label">Middle Name</label>
+                                <label for="editMiddleName" class="form-label">Middle Name (if applicable)</label>
                                 <input type="text" id="editMiddleName" class="form-control" value=""
-                                    placeholder="Enter your middle name" pattern="[A-Za-z\s]*"
-                                    title="Please enter letters only">
+                                    placeholder="Enter your middle name" pattern="[A-Za-z\s]*">
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="editLastName" class="form-label">Last Name</label>
+                                <label for="editLastName" class="form-label">Last Name (if applicable)</label>
                                 <input type="text" id="editLastName" class="form-control" value=""
-                                    placeholder="Enter your last name" pattern="[A-Za-z\s]*"
-                                    title="Please enter letters only">
+                                    placeholder="Enter your last name" pattern="[A-Za-z\s]*">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="editSuffix" class="form-label">Suffix</label>
+                                <label for="editSuffix" class="form-label">Suffix (if applicable)</label>
                                 <input type="text" id="editSuffix" class="form-control" value=""
-                                    placeholder="Jr., Sr., III, etc." pattern="[A-Za-z.,\s]*"
-                                    title="Please enter letters only">
+                                    placeholder="Jr., Sr., III, etc." pattern="[A-Za-z.,\s]*">
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="editDateOfBirth" class="form-label">Date of Birth</label>
@@ -525,13 +572,12 @@
                             <div class="col-md-6 mb-3">
                                 <label for="editPhone" class="form-label">Phone Number</label>
                                 <input type="tel" id="editPhone" class="form-control" value=""
-                                    placeholder="09XX XXX XXXX" pattern="[0-9]{11}" maxlength="11"
-                                    title="Please enter 11 digits (e.g., 09123456789)">
+                                    placeholder="09XX XXX XXXX" pattern="[0-9]{11}" maxlength="11">
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="editEmail" class="form-label">Email Address</label>
                                 <input type="email" id="editEmail" class="form-control" value=""
-                                    placeholder="your.email@example.com" title="Please enter a valid email address">
+                                    placeholder="your.email@example.com">
                             </div>
                         </div>
                         <div class="row">

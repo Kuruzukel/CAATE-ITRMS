@@ -273,7 +273,12 @@ function updatePersonalInformation(data) {
     // Phone number
     const phoneInput = document.getElementById('personalPhone');
     if (phoneInput) {
-        phoneInput.value = data.phoneNumber || data.phone || '';
+        let phoneValue = data.phoneNumber || data.phone || '';
+        // Format phone number for display: 09XX XXX XXXX
+        if (phoneValue && phoneValue.length === 11) {
+            phoneValue = phoneValue.slice(0, 4) + ' ' + phoneValue.slice(4, 7) + ' ' + phoneValue.slice(7);
+        }
+        phoneInput.value = phoneValue;
     }
 
     // Email address
@@ -312,7 +317,14 @@ function updatePersonalInformation(data) {
         const dateValue = data.dateOfBirth ? new Date(data.dateOfBirth).toISOString().split('T')[0] : '';
         editDateOfBirth.value = dateValue;
     }
-    if (editPhone) editPhone.value = data.phoneNumber || data.phone || '';
+    if (editPhone) {
+        let phoneValue = data.phoneNumber || data.phone || '';
+        // Format phone number for display: 09XX XXX XXXX
+        if (phoneValue && phoneValue.length === 11) {
+            phoneValue = phoneValue.slice(0, 4) + ' ' + phoneValue.slice(4, 7) + ' ' + phoneValue.slice(7);
+        }
+        editPhone.value = phoneValue;
+    }
     if (editEmail) editEmail.value = data.email || '';
     if (editAddress) editAddress.value = data.address || '';
 }
@@ -408,12 +420,21 @@ function initializeEditForm() {
                 value = value.slice(0, 11);
             }
 
+            // Format with spacing like placeholder: 09XX XXX XXXX
+            if (value.length >= 4) {
+                if (value.length >= 7) {
+                    value = value.slice(0, 4) + ' ' + value.slice(4, 7) + ' ' + value.slice(7);
+                } else {
+                    value = value.slice(0, 4) + ' ' + value.slice(4);
+                }
+            }
+
             e.target.value = value;
         });
 
         phoneInput.addEventListener('keypress', function (e) {
-            // Only allow numeric characters
-            if (!/[0-9]/.test(e.key) && !['Backspace', 'Delete', 'Tab', 'Escape', 'Enter'].includes(e.key)) {
+            // Only allow numeric characters and space
+            if (!/[0-9\s]/.test(e.key) && !['Backspace', 'Delete', 'Tab', 'Escape', 'Enter'].includes(e.key)) {
                 e.preventDefault();
             }
         });
@@ -440,22 +461,24 @@ async function saveProfileChanges() {
     const editPhone = document.getElementById('editPhone');
     const editEmail = document.getElementById('editEmail');
     const editAddress = document.getElementById('editAddress');
+    const editUsername = document.getElementById('editUsername');
 
     const updatedData = {
+        username: editUsername ? editUsername.value.trim() : '',
         first_name: editFirstName ? editFirstName.value.trim() : '',
         second_name: editSecondName ? editSecondName.value.trim() : '',
         middle_name: editMiddleName ? editMiddleName.value.trim() : '',
         last_name: editLastName ? editLastName.value.trim() : '',
         suffix: editSuffix ? editSuffix.value.trim() : '',
         date_of_birth: editDateOfBirth ? editDateOfBirth.value : '',
-        phone: editPhone ? editPhone.value.trim() : '',
+        phone: editPhone ? editPhone.value.replace(/\s/g, '').trim() : '', // Remove spaces for storage
         email: editEmail ? editEmail.value.trim() : '',
         address: editAddress ? editAddress.value.trim() : ''
     };
 
-    // Basic validation
-    if (!updatedData.first_name || !updatedData.last_name || !updatedData.email) {
-        showToast('First name, last name, and email are required.', 'error');
+    // Basic validation - only first name, username, and email are required
+    if (!updatedData.first_name || !updatedData.email || !updatedData.username) {
+        showToast('First name, username, and email are required.', 'error');
         return;
     }
 
@@ -471,7 +494,7 @@ async function saveProfileChanges() {
         // Remove any non-digit characters for validation
         const cleanPhone = updatedData.phone.replace(/\D/g, '');
         if (cleanPhone.length !== 11 || !cleanPhone.startsWith('09')) {
-            showToast('Please enter a valid 11-digit phone number starting with 09 (e.g., 09123456789).', 'error');
+            showToast('Please enter a valid 11-digit phone number starting with 09 (e.g., 09XX XXX XXXX).', 'error');
             return;
         }
     }

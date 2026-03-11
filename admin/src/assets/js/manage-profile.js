@@ -640,6 +640,10 @@ async function uploadProfileImage(file) {
                 try {
                     const userDataObj = JSON.parse(userData);
                     userDataObj.profileImage = result.image_path;
+
+                    // Call the local updateNavbarUserInfo function immediately
+                    updateNavbarUserInfo(userDataObj);
+
                     localStorage.setItem('userData', JSON.stringify(userDataObj));
                     console.log('Updated cached user data with new profile image:', result.image_path);
                 } catch (e) {
@@ -651,6 +655,23 @@ async function uploadProfileImage(file) {
             window.dispatchEvent(new CustomEvent('profileImageUpdated', {
                 detail: { imagePath: result.image_path }
             }));
+
+            // Immediately update navbar avatars on current page
+            const currentUserData = localStorage.getItem('userData');
+            if (currentUserData) {
+                try {
+                    const userDataObj = JSON.parse(currentUserData);
+                    userDataObj.profileImage = result.image_path;
+
+                    // Call the local updateNavbarUserInfo function immediately
+                    console.log('Calling immediate navbar update with:', userDataObj.profileImage);
+                    updateNavbarUserInfo(userDataObj);
+
+                    localStorage.setItem('userData', JSON.stringify(userDataObj));
+                } catch (e) {
+                    console.warn('Failed to update navbar immediately');
+                }
+            }
 
             // Force reload admin profile data to get fresh data from database
             setTimeout(async () => {

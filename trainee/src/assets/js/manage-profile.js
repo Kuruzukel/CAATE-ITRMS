@@ -1,7 +1,7 @@
 /* Manage Profile Page Script - Trainee */
 
 // API Configuration
-const API_BASE_URL = config.api.baseURL;
+const API_BASE_URL = config.api.baseUrl;
 
 // Authentication check
 function checkAuthentication() {
@@ -59,7 +59,7 @@ async function loadTraineeProfile() {
 
         // Fetch trainee data from the trainees collection
         try {
-            const response = await fetch(`${config.api.baseURL}/api/v1/trainees/${userId}`, {
+            const response = await fetch(`${API_BASE_URL}/api/v1/trainees/${userId}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -80,8 +80,12 @@ async function loadTraineeProfile() {
                     username: traineeData.username,
                     role: traineeData.role,
                     firstName: traineeData.firstName || traineeData.first_name,
-                    middleName: traineeData.middleName || traineeData.middle_name,
+                    secondName: traineeData.secondName || traineeData.second_name || '',
+                    middleName: traineeData.middleName || traineeData.middle_name || '',
                     lastName: traineeData.lastName || traineeData.last_name,
+                    suffix: traineeData.suffix || '',
+                    traineeId: traineeData.traineeId || traineeData.trainee_id,
+                    dateOfBirth: traineeData.dateOfBirth || traineeData.date_of_birth,
                     phone: traineeData.phone || traineeData.phoneNumber,
                     phoneNumber: traineeData.phone || traineeData.phoneNumber,
                     address: traineeData.address,
@@ -117,8 +121,6 @@ async function loadTraineeProfile() {
             }
 
         } catch (apiError) {
-            console.error('API Error:', apiError);
-
             // Fallback: try to use data from localStorage
             const userData = localStorage.getItem('userData');
             if (userData) {
@@ -129,7 +131,6 @@ async function loadTraineeProfile() {
                     updateNavbarUserInfo(traineeData);
                     showToast('Using cached profile data', 'warning');
                 } catch (e) {
-                    console.error('Error parsing cached data:', e);
                     showToast('Failed to load profile data', 'error');
                 }
             } else {
@@ -138,24 +139,32 @@ async function loadTraineeProfile() {
         }
 
     } catch (error) {
-        console.error('Profile loading error:', error);
         showToast('An error occurred while loading your profile', 'error');
     }
 }
+
 // Update profile overview section
 function updateProfileOverview(data) {
-    // Full name - use name field from database
+    // Full name - combine first_name, second_name, middle_name, last_name, suffix
     const fullNameElement = document.getElementById('profileFullName');
     if (fullNameElement) {
-        fullNameElement.textContent = data.name || 'N/A';
+        const nameParts = [
+            data.firstName || '',
+            data.secondName || '',
+            data.middleName || '',
+            data.lastName || '',
+            data.suffix || ''
+        ].filter(part => part.trim() !== '');
+
+        const fullName = nameParts.join(' ') || 'N/A';
+        fullNameElement.textContent = fullName;
     }
 
-    // Role badge - fetch from database but default to Trainee for trainee
+    // Trainee ID - replace role badge
     const roleBadge = document.getElementById('profileRole');
     if (roleBadge) {
-        const role = data.role === 'trainee' ? 'Trainee' : (data.role || 'Trainee');
-        roleBadge.textContent = role;
-        roleBadge.className = 'badge bg-info';
+        roleBadge.textContent = data.traineeId || data._id || 'N/A';
+        roleBadge.className = 'badge bg-primary';
     }
 
     // Email - fetch from database
@@ -164,11 +173,12 @@ function updateProfileOverview(data) {
         emailElement.textContent = data.email || 'N/A';
     }
 
-    // Account status - static Active
+    // Date of Birth - replace account status
     const statusBadge = document.getElementById('profileStatus');
     if (statusBadge) {
-        statusBadge.textContent = 'Active';
-        statusBadge.className = 'badge bg-success';
+        const dateOfBirth = data.dateOfBirth ? new Date(data.dateOfBirth).toLocaleDateString() : 'N/A';
+        statusBadge.textContent = dateOfBirth;
+        statusBadge.className = 'badge bg-info';
     }
 
     // Phone number
@@ -267,8 +277,16 @@ function updatePersonalInformation(data) {
 function updateNavbarUserInfo(data) {
     const userName = document.querySelector('.dropdown-menu .flex-grow-1 .fw-semibold');
     if (userName) {
-        // Use name field from database first
-        let displayName = data.name || 'Trainee';
+        // Use combined full name
+        const nameParts = [
+            data.firstName || '',
+            data.secondName || '',
+            data.middleName || '',
+            data.lastName || '',
+            data.suffix || ''
+        ].filter(part => part.trim() !== '');
+
+        const displayName = nameParts.join(' ') || 'Trainee';
         userName.textContent = displayName;
     }
 
@@ -301,21 +319,18 @@ function updateNavbarUserInfo(data) {
                     img.src = data.profileImage;
                 }
                 totalUpdated++;
-                console.log('Updated avatar image in manage-profile:', img.src);
             } else {
                 img.src = '../assets/images/DEFAULT_AVATAR.png';
             }
 
             // Add error handling to fallback to default avatar
             img.onerror = function () {
-                console.log('Image load error, falling back to default avatar');
                 this.src = '../assets/images/DEFAULT_AVATAR.png';
             };
         });
     });
-
-    console.log('Manage-profile updated navbar with profile image:', data.profileImage, `(${totalUpdated} images updated)`);
 }
+
 // Initialize edit form
 function initializeEditForm() {
     const saveButton = document.querySelector('#editInformationModal .btn-primary');
@@ -349,16 +364,20 @@ async function saveProfileChanges() {
     }
 
     const editFirstName = document.getElementById('editFirstName');
+    const editSecondName = document.getElementById('editSecondName');
     const editMiddleName = document.getElementById('editMiddleName');
     const editLastName = document.getElementById('editLastName');
+    const editSuffix = document.getElementById('editSuffix');
     const editPhone = document.getElementById('editPhone');
     const editEmail = document.getElementById('editEmail');
     const editAddress = document.getElementById('editAddress');
 
     const updatedData = {
         first_name: editFirstName ? editFirstName.value.trim() : '',
+        second_name: editSecondName ? editSecondName.value.trim() : '',
         middle_name: editMiddleName ? editMiddleName.value.trim() : '',
         last_name: editLastName ? editLastName.value.trim() : '',
+        suffix: editSuffix ? editSuffix.value.trim() : '',
         phone: editPhone ? editPhone.value.trim() : '',
         email: editEmail ? editEmail.value.trim() : '',
         address: editAddress ? editAddress.value.trim() : ''
@@ -386,11 +405,8 @@ async function saveProfileChanges() {
         }
     }
 
-    console.log('Saving profile changes for trainee:', userId);
-    console.log('Updated data:', updatedData);
-
     try {
-        const response = await fetch(`${config.api.baseURL}/api/v1/trainees/${userId}`, {
+        const response = await fetch(`${API_BASE_URL}/api/v1/trainees/${userId}`, {
             method: 'PUT',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -401,7 +417,6 @@ async function saveProfileChanges() {
 
         if (response.ok) {
             const result = await response.json();
-            console.log('Update successful:', result);
 
             // Close modal
             const modal = bootstrap.Modal.getInstance(document.getElementById('editInformationModal'));
@@ -441,8 +456,6 @@ async function saveProfileChanges() {
             throw new Error(errorMessage);
         }
     } catch (error) {
-        console.error('Save profile error:', error);
-
         // Handle network errors
         if (error.name === 'TypeError' && error.message.includes('fetch')) {
             showToast('Network error. Please check your connection and try again.', 'error');
@@ -453,6 +466,7 @@ async function saveProfileChanges() {
         }
     }
 }
+
 // Photo upload functionality
 function initializePhotoUpload() {
     const changePhotoBtn = document.getElementById('changePhotoBtn');
@@ -515,7 +529,7 @@ async function uploadProfileImage(file) {
         const formData = new FormData();
         formData.append('profileImage', file);
 
-        const response = await fetch(`${config.api.baseURL}/api/v1/trainees/${userId}/profile-image`, {
+        const response = await fetch(`${API_BASE_URL}/api/v1/trainees/${userId}/profile-image`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -525,13 +539,11 @@ async function uploadProfileImage(file) {
 
         if (response.ok) {
             const result = await response.json();
-            console.log('Upload response:', result);
 
             // Update the profile image immediately
             const profileImage = document.getElementById('profileImage');
             if (profileImage && result.image_path) {
                 profileImage.src = result.image_path;
-                console.log('Updated profile image src to:', result.image_path);
             }
 
             // Update cached user data with new profile image
@@ -545,9 +557,8 @@ async function uploadProfileImage(file) {
                     updateNavbarUserInfo(userDataObj);
 
                     localStorage.setItem('userData', JSON.stringify(userDataObj));
-                    console.log('Updated cached user data with new profile image:', result.image_path);
                 } catch (e) {
-                    console.warn('Failed to update cached user data');
+                    // Silent fail for cache update
                 }
             }
 
@@ -558,17 +569,7 @@ async function uploadProfileImage(file) {
 
             // Force reload trainee profile data to get fresh data from database
             setTimeout(async () => {
-                console.log('Reloading trainee profile data from database...');
                 await loadTraineeProfile();
-
-                // Then, reload navbar data using the navbar function if available
-                if (typeof loadTraineeProfileForNavbar === 'function') {
-                    console.log('Calling loadTraineeProfileForNavbar...');
-                    await loadTraineeProfileForNavbar();
-                } else if (typeof window.refreshTraineeNavbar === 'function') {
-                    console.log('Calling window.refreshTraineeNavbar...');
-                    window.refreshTraineeNavbar();
-                }
 
                 // Trigger storage event to update other trainee pages
                 window.dispatchEvent(new StorageEvent('storage', {
@@ -584,7 +585,6 @@ async function uploadProfileImage(file) {
         }
 
     } catch (error) {
-        console.error('Upload error:', error);
         showToast(error.message || 'Failed to upload photo', 'error');
 
         // Reset the image to previous state on error

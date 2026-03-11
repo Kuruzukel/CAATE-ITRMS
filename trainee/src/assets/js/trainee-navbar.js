@@ -3,10 +3,15 @@
  * Handles authentication check and real data fetching for navbar dropdown
  */
 
-// API Base URL - Works for both localhost and network access
-const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-    ? 'http://localhost/CAATE-ITRMS/backend/public'
-    : '/backend/public';
+// API Base URL - Check if already defined globally to avoid conflicts
+if (typeof window.API_BASE_URL === 'undefined') {
+    window.API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+        ? 'http://localhost/CAATE-ITRMS/backend/public'
+        : '/backend/public';
+}
+
+// Use the global API_BASE_URL
+const API_BASE_URL = window.API_BASE_URL;
 
 // Cache for trainee data to avoid repeated API calls
 let traineeDataCache = null;

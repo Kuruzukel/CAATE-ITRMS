@@ -1,7 +1,10 @@
 /* Manage Profile Page Script - Trainee */
 
-// API Configuration
-const API_BASE_URL = window.location.origin + '/CAATE-ITRMS/backend/public';
+// API Configuration - Use global API_BASE_URL if available
+if (typeof window.API_BASE_URL === 'undefined') {
+    window.API_BASE_URL = window.location.origin + '/CAATE-ITRMS/backend/public';
+}
+const API_BASE_URL = window.API_BASE_URL;
 
 // Authentication check
 function checkAuthentication() {

@@ -30,10 +30,13 @@
     }
 })();
 
-// API Base URL - Works for both localhost and network access
-const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-    ? 'http://localhost/CAATE-ITRMS/backend/public'
-    : '/backend/public';
+// API Base URL - Use global API_BASE_URL if available
+if (typeof window.API_BASE_URL === 'undefined') {
+    window.API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+        ? 'http://localhost/CAATE-ITRMS/backend/public'
+        : '/backend/public';
+}
+const API_BASE_URL = window.API_BASE_URL;
 
 /**
  * Check if user is authenticated (synchronous for immediate blocking)

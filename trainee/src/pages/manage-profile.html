@@ -11,11 +11,6 @@
 
     <meta name="description" content="" />
 
-    <!-- Prevent password manager popups -->
-    <meta name="password-manager" content="disabled" />
-    <meta name="save-password" content="false" />
-    <meta name="autocomplete" content="off" />
-
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="../assets/images/CAATE_META_LOGO.png" />
 
@@ -37,10 +32,9 @@
 
     <!-- CAATE Custom Theme -->
     <link rel="stylesheet" href="../assets/css/custom-theme.css" />
-    <link rel="stylesheet" href="../assets/css/dashboard.css" />
 
-    <!-- Manage Profile CSS -->
-    <link rel="stylesheet" href="../assets/css/manage-profile.css" />
+    <!-- Trainee Dashboard CSS -->
+    <link rel="stylesheet" href="../assets/css/dashboard.css" />
 
     <!-- Vendors CSS -->
     <link rel="stylesheet" href="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
@@ -54,12 +48,12 @@
 
     <!-- Trainee Navbar - Common navbar functionality -->
     <script src="../assets/js/trainee-navbar.js"></script>
-
-    <!-- Disable password manager popups -->
-    <script src="../assets/js/disable-password-manager.js"></script>
 </head>
 
 <body>
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
     <!-- Layout wrapper -->
     <div class="layout-wrapper layout-content-navbar">
         <div class="layout-container">
@@ -197,17 +191,14 @@
                         </a>
                     </div>
 
-                    <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse"
-                        style="justify-content: space-between !important;">
+                    <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
                         <!-- Search -->
-                        <div class="navbar-nav align-items-center" style="flex: 0 0 auto; max-width: 250px;">
-                            <div class="nav-item d-flex align-items-center position-relative"
-                                style="width: 250px; max-width: 250px;">
+                        <div class="navbar-nav align-items-center">
+                            <div class="nav-item d-flex align-items-center position-relative">
                                 <i class="bx bx-search fs-4 lh-0 position-absolute"
                                     style="left: 12px; z-index: 10;"></i>
                                 <input type="text" class="form-control border-0 shadow-none" placeholder="Search..."
-                                    aria-label="Search..."
-                                    style="padding-left: 40px; width: 250px; max-width: 250px;" />
+                                    aria-label="Search..." style="padding-left: 40px;" />
                             </div>
                         </div>
                         <!-- /Search -->
@@ -220,9 +211,7 @@
                                     data-bs-toggle="dropdown">
                                     <div class="avatar avatar-online">
                                         <img src="../assets/images/DEFAULT_AVATAR.png" alt=""
-                                            class="w-px-40 h-auto rounded-circle"
-                                            style="width: 40px; height: 40px; object-fit: cover;"
-                                            onerror="this.src='../assets/images/DEFAULT_AVATAR.png'" />
+                                            class="w-px-40 h-auto rounded-circle" />
                                     </div>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end">
@@ -232,14 +221,11 @@
                                                 <div class="flex-shrink-0 me-3">
                                                     <div class="avatar avatar-online">
                                                         <img src="../assets/images/DEFAULT_AVATAR.png" alt=""
-                                                            class="w-px-40 h-auto rounded-circle"
-                                                            style="width: 40px; height: 40px; object-fit: cover;"
-                                                            onerror="this.src='../assets/images/DEFAULT_AVATAR.png'" />
+                                                            class="w-px-40 h-auto rounded-circle" />
                                                     </div>
                                                 </div>
                                                 <div class="flex-grow-1">
-                                                    <span
-                                                        class="fw-semibold d-block text-white user-name">Trainee</span>
+                                                    <span class="fw-semibold d-block text-white">Loading...</span>
                                                     <small class="text-white">Trainee</small>
                                                 </div>
                                             </div>
@@ -278,7 +264,8 @@
                                                 <div class="mb-3">
                                                     <img id="profileImage" src="../assets/images/DEFAULT_AVATAR.png"
                                                         alt="Profile Picture" class="rounded-circle"
-                                                        style="width: 150px; height: 150px; object-fit: cover; border: 4px solid #3691bf;">
+                                                        style="width: 150px; height: 150px; object-fit: cover; border: 4px solid #3691bf;"
+                                                        onerror="this.src='../assets/images/DEFAULT_AVATAR.png'">
                                                 </div>
                                                 <input type="file" id="profileImageInput"
                                                     accept="image/jpeg,image/png,image/jpg" style="display: none;">
@@ -291,7 +278,7 @@
 
                                             <!-- Profile Information Section -->
                                             <div class="col-lg-8">
-                                                <h4 class="mb-4">Profile Overview</h4>
+                                                <h4 class="mb-4" style="color: #ffffff;">Profile Overview</h4>
                                                 <div class="row mb-3">
                                                     <div class="col-md-6">
                                                         <label class="form-label fw-semibold">
@@ -330,13 +317,22 @@
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         <label class="form-label fw-semibold">
-                                                            <i class="bx bx-id-card me-2"></i>Trainee ID
+                                                            <i class="bx bx-phone me-2"></i>Phone Number
                                                         </label>
-                                                        <p id="profileTraineeId" class="form-control-plaintext">
-                                                            N/A
+                                                        <p id="profilePhone" class="form-control-plaintext">
+                                                            Loading...
+                                                        </p>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label fw-semibold">
+                                                            <i class="bx bx-map me-2"></i>Address
+                                                        </label>
+                                                        <p id="profileAddress" class="form-control-plaintext">
+                                                            Loading...
                                                         </p>
                                                     </div>
                                                 </div>
+
                                             </div>
                                         </div>
                                     </div>
@@ -380,8 +376,8 @@
                                                     readonly>
                                             </div>
                                             <div class="col-md-6">
-                                                <label class="form-label fw-semibold">Date of Birth</label>
-                                                <input type="text" id="personalDob" class="form-control" value=""
+                                                <label class="form-label fw-semibold">Email Address</label>
+                                                <input type="text" id="personalEmail" class="form-control" value=""
                                                     readonly>
                                             </div>
                                         </div>
@@ -397,79 +393,7 @@
                             </div>
                         </div>
 
-                        <!-- Enrollment Information Card -->
-                        <div class="row mb-4">
-                            <div class="col-12">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h5 class="mb-0">Enrollment Information</h5>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="table-responsive text-nowrap">
-                                            <table class="table table-hover">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Course</th>
-                                                        <th>Enrollment Date</th>
-                                                        <th>Duration</th>
-                                                        <th>Status</th>
-                                                        <th>Progress</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody class="table-border-bottom-0" id="enrollmentTable">
-                                                    <!-- Enrollment data will be populated dynamically -->
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
 
-                        <!-- Completed Courses -->
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="card">
-                                    <div class="card-header d-flex justify-content-between align-items-center">
-                                        <h5 class="mb-0"><i class="bx bx-award me-2"></i>Completed Courses</h5>
-                                        <span id="completedCoursesCount" class="badge bg-success">0 Completed
-                                            Courses</span>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="row" id="completedCoursesContainer">
-                                            <!-- Completed courses will be populated dynamically -->
-                                        </div>
-
-                                        <!-- Course History Summary -->
-                                        <div class="row mt-3">
-                                            <div class="col-12">
-                                                <div class="card border"
-                                                    style="background-color: #1e293b; border-color: #334155;">
-                                                    <div class="card-body">
-                                                        <div class="d-flex align-items-center">
-                                                            <i class="bx bx-info-circle me-3 text-info"
-                                                                style="font-size: 2rem;"></i>
-                                                            <div>
-                                                                <h6 class="text-white mb-2">Academic Performance Summary
-                                                                </h6>
-                                                                <p id="academicSummary" class="mb-0 text-white-50">
-                                                                    Total Completed Courses: <strong
-                                                                        class="text-white">0</strong> |
-                                                                    Average Grade: <strong
-                                                                        class="text-white">N/A</strong> |
-                                                                    Total Training Hours: <strong class="text-white">0
-                                                                        Hours</strong>
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
 
                     </div>
                     <!-- / Content -->
@@ -531,8 +455,8 @@
                                 <input type="text" id="editPhone" class="form-control" value="">
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="editDob" class="form-label">Date of Birth</label>
-                                <input type="date" id="editDob" class="form-control" value="">
+                                <label for="editEmail" class="form-label">Email Address</label>
+                                <input type="text" id="editEmail" class="form-control" value="">
                             </div>
                         </div>
                         <div class="row">
@@ -555,6 +479,7 @@
     <script src="../assets/vendor/libs/jquery/jquery.js"></script>
     <script src="../assets/vendor/libs/popper/popper.js"></script>
     <script src="../assets/vendor/js/bootstrap.js"></script>
+    <script src="../assets/js/fix-scrollbar-warnings.js"></script>
     <script src="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
     <script src="../assets/vendor/js/menu.js"></script>
 
@@ -564,12 +489,11 @@
     <!-- Menu Toggle JS -->
     <script src="../assets/js/menu-toggle.js"></script>
 
+    <!-- Trainee Dashboard JS - for menu toggle functionality -->
+    <script src="../assets/js/dashboard.js"></script>
+
     <!-- Manage Profile JS -->
     <script src="../assets/js/manage-profile.js"></script>
-
-
-
-
 </body>
 
 </html>

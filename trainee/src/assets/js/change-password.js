@@ -1,4 +1,9 @@
-/* Change Password specific JavaScript */
+/* Change Password Functionality - Trainee */
+
+// API Configuration
+const API_BASE_URL = (typeof config !== 'undefined' && config.api)
+    ? config.api.baseURL
+    : '/CAATE-ITRMS/backend/public';
 
 // Toggle password visibility
 function togglePassword(fieldId) {
@@ -128,8 +133,9 @@ function showToast(message, type = 'success') {
     }, 5000);
 }
 
-// Event listeners
+// Initialize event listeners when DOM is loaded
 document.addEventListener('DOMContentLoaded', function () {
+    // Password strength checking
     document.getElementById('newPassword').addEventListener('input', function () {
         const password = this.value;
         if (password) {
@@ -155,7 +161,6 @@ document.addEventListener('DOMContentLoaded', function () {
         // Validate passwords match
         if (newPassword !== confirmPassword) {
             showToast('Passwords do not match', 'error');
-            document.getElementById('confirmPassword').classList.add('is-invalid');
             return;
         }
 
@@ -165,7 +170,9 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // Handle confirmation button click
-    document.getElementById('confirmPasswordChangeBtn').addEventListener('click', function () {
+    document.getElementById('confirmPasswordChangeBtn').addEventListener('click', async function () {
+        const currentPassword = document.getElementById('currentPassword').value;
+        const newPassword = document.getElementById('newPassword').value;
         const submitBtn = document.getElementById('submitBtn');
         const confirmBtn = this;
 
@@ -180,13 +187,36 @@ document.addEventListener('DOMContentLoaded', function () {
         // Disable confirm button
         confirmBtn.disabled = true;
 
-        // Simulate API call (replace with actual API call)
-        setTimeout(() => {
-            // Simulate success
-            const success = true; // Change to false to test error state
+        try {
+            // Get user info for trainee-specific API call
+            const token = localStorage.getItem('authToken');
+            const userId = localStorage.getItem('userId');
+            const userRole = localStorage.getItem('userRole');
 
-            if (success) {
+            if (!token || !userId || userRole !== 'trainee') {
+                throw new Error('Authentication required. Please log in again.');
+            }
+
+            // Call trainee-specific API endpoint
+            const response = await fetch(`${API_BASE_URL}/api/v1/trainees/${userId}/change-password`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    currentPassword: currentPassword,
+                    newPassword: newPassword
+                })
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.success) {
+                // Show success toast
                 showToast('Your password has been changed successfully', 'success');
+
+                // Reset form
                 document.getElementById('changePasswordForm').reset();
                 document.getElementById('strengthBar').className = 'password-strength-bar';
                 document.getElementById('strengthText').textContent = '';
@@ -201,15 +231,23 @@ document.addEventListener('DOMContentLoaded', function () {
                     window.location.href = '../../../auth/src/pages/login.html';
                 }, 2000);
             } else {
-                showToast('Current password is incorrect', 'error');
-                document.getElementById('currentPassword').classList.add('is-invalid');
+                // Show error toast
+                showToast(data.error || 'Failed to change password', 'error');
 
                 // Re-enable submit button
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = '<i class="bx bx-check me-1"></i> Change Password';
                 confirmBtn.disabled = false;
             }
-        }, 500);
+        } catch (error) {
+            console.error('Error changing password:', error);
+            showToast(error.message || 'Network error. Please try again.', 'error');
+
+            // Re-enable submit button
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="bx bx-check me-1"></i> Change Password';
+            confirmBtn.disabled = false;
+        }
     });
 
     // Menu toggle is handled by main.js - no need to duplicate here

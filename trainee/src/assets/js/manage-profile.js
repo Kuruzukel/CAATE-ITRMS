@@ -1,11 +1,7 @@
 /* Manage Profile Page Script - Trainee */
 
-// API Configuration - Use global API_BASE_URL if available
-if (typeof window.API_BASE_URL === 'undefined') {
-    window.API_BASE_URL = window.location.origin + '/CAATE-ITRMS/backend/public';
-}
-
-// Use API_BASE_URL directly from window object to avoid redeclaration conflicts
+// API Configuration
+const API_BASE_URL = config.api.baseURL;
 
 // Authentication check
 function checkAuthentication() {
@@ -37,6 +33,14 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
     }
 
+    // Set flag to prevent trainee-navbar.js from double-initializing
+    window.traineeNavbarInitialized = true;
+
+    // Initialize navbar functionality manually since we're preventing auto-init
+    if (typeof initializeTraineeNavbar === 'function') {
+        initializeTraineeNavbar();
+    }
+
     initializePhotoUpload();
     loadTraineeProfile();
     initializeEditForm();
@@ -47,34 +51,15 @@ async function loadTraineeProfile() {
     try {
         const token = localStorage.getItem('authToken');
         const userId = localStorage.getItem('userId');
-        const userData = localStorage.getItem('userData');
 
         if (!token || !userId) {
             window.location.href = '../../../auth/src/pages/login.html';
             return;
         }
 
-        // Try to get user data from localStorage first
-        let traineeData = null;
-        if (userData) {
-            try {
-                traineeData = JSON.parse(userData);
-            } catch (e) {
-                // Error parsing userData
-            }
-        }
-
-        // If we have user data from localStorage, use it
-        if (traineeData) {
-            updateProfileOverview(traineeData);
-            updatePersonalInformation(traineeData);
-            return;
-        }
-
-        // Otherwise, try to fetch from API with fallback strategy
+        // Fetch trainee data from the trainees collection
         try {
-            // Try general users endpoint first
-            let response = await fetch(`${window.API_BASE_URL}/api/v1/users/${userId}`, {
+            const response = await fetch(`${config.api.baseURL}/api/v1/trainees/${userId}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -82,72 +67,81 @@ async function loadTraineeProfile() {
                 }
             });
 
-            if (!response.ok) {
-                // Try trainee-specific endpoint
-                response = await fetch(`${window.API_BASE_URL}/api/v1/trainees/${userId}`, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    }
-                });
-            }
-
             if (response.ok) {
                 const result = await response.json();
-                traineeData = result.data || result.user || result;
+
+                let traineeData = result.data || result.trainee || result;
+
+                // Map database fields to frontend format
+                const mappedData = {
+                    _id: traineeData._id,
+                    name: traineeData.name,
+                    email: traineeData.email,
+                    username: traineeData.username,
+                    role: traineeData.role,
+                    firstName: traineeData.firstName || traineeData.first_name,
+                    middleName: traineeData.middleName || traineeData.middle_name,
+                    lastName: traineeData.lastName || traineeData.last_name,
+                    phone: traineeData.phone || traineeData.phoneNumber,
+                    phoneNumber: traineeData.phone || traineeData.phoneNumber,
+                    address: traineeData.address,
+                    created_at: traineeData.created_at,
+                    updated_at: traineeData.updated_at,
+                    profileImage: traineeData.profileImage || '../assets/images/DEFAULT_AVATAR.png'
+                };
 
                 // Update profile overview
-                updateProfileOverview(traineeData);
+                updateProfileOverview(mappedData);
 
                 // Update personal information
-                updatePersonalInformation(traineeData);
+                updatePersonalInformation(mappedData);
 
-                // Update enrollment information if available
-                if (traineeData.enrollments) {
-                    updateEnrollmentInformation(traineeData.enrollments);
-                }
+                // Update navbar user info
+                updateNavbarUserInfo(mappedData);
 
-                // Update completed courses if available
-                if (traineeData.completedCourses) {
-                    updateCompletedCourses(traineeData.completedCourses);
-                }
+                // Store the mapped data in localStorage for future use
+                localStorage.setItem('userData', JSON.stringify(mappedData));
+
             } else {
-                throw new Error('Failed to fetch from API');
+                let errorMessage = `Failed to fetch trainee data: ${response.status}`;
+
+                try {
+                    const errorData = await response.json();
+                    errorMessage = errorData.error || errorMessage;
+                } catch (e) {
+                    // If response is not JSON, use status text
+                    errorMessage = response.statusText || errorMessage;
+                }
+
+                throw new Error(errorMessage);
             }
 
         } catch (apiError) {
-            // Fallback: use data from localStorage
+            console.error('API Error:', apiError);
+
+            // Fallback: try to use data from localStorage
+            const userData = localStorage.getItem('userData');
             if (userData) {
                 try {
                     const traineeData = JSON.parse(userData);
                     updateProfileOverview(traineeData);
                     updatePersonalInformation(traineeData);
+                    updateNavbarUserInfo(traineeData);
+                    showToast('Using cached profile data', 'warning');
                 } catch (e) {
-                    showNotification('Failed to load profile data', 'error');
+                    console.error('Error parsing cached data:', e);
+                    showToast('Failed to load profile data', 'error');
                 }
             } else {
-                showNotification('Failed to load profile data', 'error');
+                showToast('Failed to load profile data. Please try logging in again.', 'error');
             }
         }
 
     } catch (error) {
-        // Fallback: use data from localStorage
-        const userData = localStorage.getItem('userData');
-        if (userData) {
-            try {
-                const traineeData = JSON.parse(userData);
-                updateProfileOverview(traineeData);
-                updatePersonalInformation(traineeData);
-            } catch (e) {
-                showNotification('Failed to load profile data', 'error');
-            }
-        } else {
-            showNotification('Failed to load profile data', 'error');
-        }
+        console.error('Profile loading error:', error);
+        showToast('An error occurred while loading your profile', 'error');
     }
 }
-
 // Update profile overview section
 function updateProfileOverview(data) {
     // Full name - use name field from database
@@ -156,10 +150,11 @@ function updateProfileOverview(data) {
         fullNameElement.textContent = data.name || 'N/A';
     }
 
-    // Role badge - automatically Trainee for trainee accounts
+    // Role badge - fetch from database but default to Trainee for trainee
     const roleBadge = document.getElementById('profileRole');
     if (roleBadge) {
-        roleBadge.textContent = 'Trainee';
+        const role = data.role === 'trainee' ? 'Trainee' : (data.role || 'Trainee');
+        roleBadge.textContent = role;
         roleBadge.className = 'badge bg-info';
     }
 
@@ -176,22 +171,38 @@ function updateProfileOverview(data) {
         statusBadge.className = 'badge bg-success';
     }
 
+    // Phone number
+    const phoneElement = document.getElementById('profilePhone');
+    if (phoneElement) {
+        phoneElement.textContent = data.phone || data.phoneNumber || 'N/A';
+    }
 
-
-    // Trainee ID
-    const traineeIdElement = document.getElementById('profileTraineeId');
-    if (traineeIdElement) {
-        traineeIdElement.textContent = data.traineeId || data.studentId || 'N/A';
+    // Address
+    const addressElement = document.getElementById('profileAddress');
+    if (addressElement) {
+        addressElement.textContent = data.address || 'N/A';
     }
 
     // Profile image - use uploaded image if available, otherwise default avatar
     const profileImage = document.getElementById('profileImage');
     if (profileImage) {
         if (data.profileImage && data.profileImage !== '../assets/images/DEFAULT_AVATAR.png') {
-            profileImage.src = data.profileImage;
+            // Handle both relative and absolute paths
+            if (data.profileImage.startsWith('/CAATE-ITRMS/')) {
+                profileImage.src = window.location.origin + data.profileImage;
+            } else if (data.profileImage.startsWith('http')) {
+                profileImage.src = data.profileImage;
+            } else {
+                profileImage.src = data.profileImage;
+            }
         } else {
             profileImage.src = '../assets/images/DEFAULT_AVATAR.png';
         }
+
+        // Add error handling
+        profileImage.onerror = function () {
+            this.src = '../assets/images/DEFAULT_AVATAR.png';
+        };
     }
 
     // Update navbar user info
@@ -224,10 +235,10 @@ function updatePersonalInformation(data) {
         phoneInput.value = data.phoneNumber || data.phone || '';
     }
 
-    // Date of birth
-    const dobInput = document.getElementById('personalDob');
-    if (dobInput && data.dateOfBirth) {
-        dobInput.value = formatDate(data.dateOfBirth);
+    // Email address
+    const emailInput = document.getElementById('personalEmail');
+    if (emailInput) {
+        emailInput.value = data.email || '';
     }
 
     // Address
@@ -236,142 +247,20 @@ function updatePersonalInformation(data) {
         addressTextarea.value = data.address || '';
     }
 
-    // Update edit modal fields if they exist
+    // Update edit modal fields
     const editFirstName = document.getElementById('editFirstName');
     const editMiddleName = document.getElementById('editMiddleName');
     const editLastName = document.getElementById('editLastName');
     const editPhone = document.getElementById('editPhone');
-    const editDob = document.getElementById('editDob');
+    const editEmail = document.getElementById('editEmail');
     const editAddress = document.getElementById('editAddress');
 
     if (editFirstName) editFirstName.value = data.firstName || '';
     if (editMiddleName) editMiddleName.value = data.middleName || '';
     if (editLastName) editLastName.value = data.lastName || '';
     if (editPhone) editPhone.value = data.phoneNumber || data.phone || '';
-    if (editDob && data.dateOfBirth) editDob.value = data.dateOfBirth.split('T')[0];
+    if (editEmail) editEmail.value = data.email || '';
     if (editAddress) editAddress.value = data.address || '';
-}
-
-// Update enrollment information table
-function updateEnrollmentInformation(enrollments) {
-    const tbody = document.getElementById('enrollmentTable');
-    if (!tbody || !Array.isArray(enrollments) || enrollments.length === 0) return;
-
-    tbody.innerHTML = '';
-
-    enrollments.forEach(enrollment => {
-        const row = document.createElement('tr');
-        const progress = enrollment.progress || 0;
-        const statusClass = enrollment.status === 'completed' ? 'bg-success' : 'bg-success';
-        const progressBarClass = enrollment.status === 'completed' ? 'bg-success' : 'bg-primary';
-
-        row.innerHTML = `
-            <td><strong>${enrollment.courseName || 'N/A'}</strong></td>
-            <td>${formatDate(enrollment.enrollmentDate)}</td>
-            <td>${enrollment.duration || 'N/A'}</td>
-            <td><span class="badge ${statusClass}">${enrollment.status ? enrollment.status.charAt(0).toUpperCase() + enrollment.status.slice(1) : 'Active'}</span></td>
-            <td>
-                <div class="progress" style="height: 8px;">
-                    <div class="progress-bar ${progressBarClass}" role="progressbar"
-                        style="width: ${progress}%;" aria-valuenow="${progress}"
-                        aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-                <small class="text-muted">${progress}% Complete</small>
-            </td>
-        `;
-        tbody.appendChild(row);
-    });
-}
-
-// Update completed courses section
-function updateCompletedCourses(completedCourses) {
-    const coursesContainer = document.getElementById('completedCoursesContainer');
-    if (!coursesContainer || !Array.isArray(completedCourses) || completedCourses.length === 0) return;
-
-    // Update badge count
-    const countBadge = document.getElementById('completedCoursesCount');
-    if (countBadge) {
-        countBadge.textContent = `${completedCourses.length} Completed Course${completedCourses.length !== 1 ? 's' : ''}`;
-    }
-
-    coursesContainer.innerHTML = '';
-
-    completedCourses.forEach(course => {
-        const courseCard = document.createElement('div');
-        courseCard.className = 'col-md-6 mb-4';
-
-        courseCard.innerHTML = `
-            <div class="card border shadow-sm h-100">
-                <div class="card-body">
-                    <div class="d-flex align-items-start mb-3">
-                        <div class="flex-shrink-0 me-3">
-                            <img src="${course.image || 'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&h=250&fit=crop'}"
-                                alt="${course.courseName}" class="rounded-circle"
-                                style="width: 60px; height: 60px; object-fit: cover; border: 3px solid #10b981;">
-                        </div>
-                        <div class="flex-grow-1">
-                            <h6 class="mb-1">${course.courseName || 'N/A'}</h6>
-                            <small class="text-muted">${course.courseCode || 'N/A'}</small>
-                        </div>
-                    </div>
-                    <div class="mb-2">
-                        <small class="text-muted d-block">Completion Date</small>
-                        <strong>${formatDate(course.completionDate)}</strong>
-                    </div>
-                    <div class="mb-2">
-                        <small class="text-muted d-block">Certificate Number</small>
-                        <strong>${course.certificateNumber || 'N/A'}</strong>
-                    </div>
-                    <div class="mb-3">
-                        <small class="text-muted d-block">Final Grade</small>
-                        <span class="badge bg-success">${course.finalGrade || 'N/A'}</span>
-                    </div>
-                    ${course.certificateUrl ? `
-                        <button class="btn btn-sm btn-outline-primary w-100" onclick="window.open('${course.certificateUrl}', '_blank')">
-                            <i class="bx bx-download me-1"></i> Download Certificate
-                        </button>
-                    ` : ''}
-                </div>
-            </div>
-        `;
-
-        coursesContainer.appendChild(courseCard);
-    });
-
-    // Update academic summary
-    updateAcademicSummary(completedCourses);
-}
-
-// Update academic performance summary
-function updateAcademicSummary(completedCourses) {
-    const summaryElement = document.getElementById('academicSummary');
-    if (!summaryElement || !Array.isArray(completedCourses)) return;
-
-    const totalCourses = completedCourses.length;
-    let totalHours = 0;
-    let totalGrades = 0;
-    let gradeCount = 0;
-
-    completedCourses.forEach(course => {
-        if (course.hours) {
-            totalHours += parseInt(course.hours) || 0;
-        }
-        if (course.finalGrade) {
-            const grade = parseFloat(course.finalGrade.replace('%', ''));
-            if (!isNaN(grade)) {
-                totalGrades += grade;
-                gradeCount++;
-            }
-        }
-    });
-
-    const averageGrade = gradeCount > 0 ? (totalGrades / gradeCount).toFixed(1) + '%' : 'N/A';
-
-    summaryElement.innerHTML = `
-        Total Completed Courses: <strong class="text-white">${totalCourses}</strong> |
-        Average Grade: <strong class="text-white">${averageGrade}</strong> |
-        Total Training Hours: <strong class="text-white">${totalHours} Hours</strong>
-    `;
 }
 
 // Update navbar user info
@@ -382,46 +271,126 @@ function updateNavbarUserInfo(data) {
         let displayName = data.name || 'Trainee';
         userName.textContent = displayName;
     }
-}
 
+    // Update profile images in navbar - target all avatar images more comprehensively
+    const profileImageSelectors = [
+        '.navbar .avatar img',
+        '.dropdown-menu .avatar img',
+        '.navbar-dropdown .avatar img',
+        '.navbar img[src*="DEFAULT_AVATAR"]',
+        '.navbar img[alt=""]',
+        'img.w-px-40.h-auto.rounded-circle',
+        '.navbar img.rounded-circle',
+        '.dropdown-menu img.w-px-40',
+        '.dropdown-menu img.rounded-circle'
+    ];
+
+    let totalUpdated = 0;
+    profileImageSelectors.forEach(selector => {
+        const images = document.querySelectorAll(selector);
+        images.forEach(img => {
+            if (data.profileImage && data.profileImage !== '../assets/images/DEFAULT_AVATAR.png') {
+                // Handle both relative and absolute paths
+                if (data.profileImage.startsWith('/CAATE-ITRMS/')) {
+                    img.src = window.location.origin + data.profileImage;
+                } else if (data.profileImage.startsWith('http')) {
+                    img.src = data.profileImage;
+                } else if (data.profileImage.startsWith('/')) {
+                    img.src = window.location.origin + data.profileImage;
+                } else {
+                    img.src = data.profileImage;
+                }
+                totalUpdated++;
+                console.log('Updated avatar image in manage-profile:', img.src);
+            } else {
+                img.src = '../assets/images/DEFAULT_AVATAR.png';
+            }
+
+            // Add error handling to fallback to default avatar
+            img.onerror = function () {
+                console.log('Image load error, falling back to default avatar');
+                this.src = '../assets/images/DEFAULT_AVATAR.png';
+            };
+        });
+    });
+
+    console.log('Manage-profile updated navbar with profile image:', data.profileImage, `(${totalUpdated} images updated)`);
+}
 // Initialize edit form
 function initializeEditForm() {
     const saveButton = document.querySelector('#editInformationModal .btn-primary');
     if (!saveButton) return;
 
     saveButton.addEventListener('click', async function () {
-        await saveProfileChanges();
+        // Show loading state
+        const originalText = saveButton.innerHTML;
+        saveButton.disabled = true;
+        saveButton.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i> Saving...';
+
+        try {
+            await saveProfileChanges();
+        } finally {
+            // Reset button state
+            saveButton.disabled = false;
+            saveButton.innerHTML = originalText;
+        }
     });
 }
 
 // Save profile changes
 async function saveProfileChanges() {
-    try {
-        const token = localStorage.getItem('authToken');
-        const userId = localStorage.getItem('userId');
+    const token = localStorage.getItem('authToken');
+    const userId = localStorage.getItem('userId');
 
-        if (!token || !userId) {
-            window.location.href = '../../../auth/src/pages/login.html';
+    if (!token || !userId) {
+        showToast('Authentication required. Please log in again.', 'error');
+        window.location.href = '../../../auth/src/pages/login.html';
+        return;
+    }
+
+    const editFirstName = document.getElementById('editFirstName');
+    const editMiddleName = document.getElementById('editMiddleName');
+    const editLastName = document.getElementById('editLastName');
+    const editPhone = document.getElementById('editPhone');
+    const editEmail = document.getElementById('editEmail');
+    const editAddress = document.getElementById('editAddress');
+
+    const updatedData = {
+        first_name: editFirstName ? editFirstName.value.trim() : '',
+        middle_name: editMiddleName ? editMiddleName.value.trim() : '',
+        last_name: editLastName ? editLastName.value.trim() : '',
+        phone: editPhone ? editPhone.value.trim() : '',
+        email: editEmail ? editEmail.value.trim() : '',
+        address: editAddress ? editAddress.value.trim() : ''
+    };
+
+    // Basic validation
+    if (!updatedData.first_name || !updatedData.last_name || !updatedData.email) {
+        showToast('First name, last name, and email are required.', 'error');
+        return;
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(updatedData.email)) {
+        showToast('Please enter a valid email address.', 'error');
+        return;
+    }
+
+    // Phone number validation (optional but if provided, should be valid)
+    if (updatedData.phone && updatedData.phone.length > 0) {
+        const phoneRegex = /^[\+]?[0-9\s\-\(\)]{10,15}$/;
+        if (!phoneRegex.test(updatedData.phone)) {
+            showToast('Please enter a valid phone number (10-15 digits).', 'error');
             return;
         }
+    }
 
-        const editFirstName = document.getElementById('editFirstName');
-        const editMiddleName = document.getElementById('editMiddleName');
-        const editLastName = document.getElementById('editLastName');
-        const editPhone = document.getElementById('editPhone');
-        const editDob = document.getElementById('editDob');
-        const editAddress = document.getElementById('editAddress');
+    console.log('Saving profile changes for trainee:', userId);
+    console.log('Updated data:', updatedData);
 
-        const updatedData = {
-            firstName: editFirstName ? editFirstName.value : '',
-            middleName: editMiddleName ? editMiddleName.value : '',
-            lastName: editLastName ? editLastName.value : '',
-            phoneNumber: editPhone ? editPhone.value : '',
-            dateOfBirth: editDob ? editDob.value : '',
-            address: editAddress ? editAddress.value : ''
-        };
-
-        const response = await fetch(`${window.API_BASE_URL}/api/v1/users/${userId}`, {
+    try {
+        const response = await fetch(`${config.api.baseURL}/api/v1/trainees/${userId}`, {
             method: 'PUT',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -430,24 +399,60 @@ async function saveProfileChanges() {
             body: JSON.stringify(updatedData)
         });
 
-        if (!response.ok) {
-            throw new Error('Failed to update profile');
+        if (response.ok) {
+            const result = await response.json();
+            console.log('Update successful:', result);
+
+            // Close modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('editInformationModal'));
+            if (modal) modal.hide();
+
+            // Reload profile data to reflect changes
+            await loadTraineeProfile();
+
+            // Show success toast
+            showToast('Profile updated successfully!', 'success');
+        } else {
+            const errorData = await response.json();
+            let errorMessage = 'Failed to update profile';
+
+            // Handle specific error cases
+            if (response.status === 404) {
+                errorMessage = 'Trainee account not found. Please contact support.';
+            } else if (response.status === 401) {
+                errorMessage = 'Authentication expired. Please log in again.';
+                setTimeout(() => {
+                    window.location.href = '../../../auth/src/pages/login.html';
+                }, 2000);
+            } else if (response.status === 403) {
+                errorMessage = 'You do not have permission to update this profile.';
+            } else if (response.status === 422) {
+                errorMessage = errorData.error || 'Invalid data provided. Please check your inputs.';
+            } else if (response.status === 409) {
+                errorMessage = 'Email address is already in use by another account.';
+            } else if (response.status === 500) {
+                errorMessage = 'Server error occurred. Please try again later.';
+            } else if (response.status === 503) {
+                errorMessage = 'Service temporarily unavailable. Please try again in a few minutes.';
+            } else if (errorData.error) {
+                errorMessage = errorData.error;
+            }
+
+            throw new Error(errorMessage);
         }
-
-        // Close modal
-        const modal = bootstrap.Modal.getInstance(document.getElementById('editInformationModal'));
-        if (modal) modal.hide();
-
-        // Reload profile data
-        await loadTraineeProfile();
-
-        showNotification('Profile updated successfully!', 'success');
-
     } catch (error) {
-        showNotification('Failed to update profile', 'error');
+        console.error('Save profile error:', error);
+
+        // Handle network errors
+        if (error.name === 'TypeError' && error.message.includes('fetch')) {
+            showToast('Network error. Please check your connection and try again.', 'error');
+        } else if (error.message.includes('Authentication expired')) {
+            showToast('Session expired. Redirecting to login...', 'error');
+        } else {
+            showToast(error.message, 'error');
+        }
     }
 }
-
 // Photo upload functionality
 function initializePhotoUpload() {
     const changePhotoBtn = document.getElementById('changePhotoBtn');
@@ -467,14 +472,14 @@ function initializePhotoUpload() {
         // Validate file type
         const validTypes = ['image/jpeg', 'image/jpg', 'image/png'];
         if (!validTypes.includes(file.type)) {
-            showNotification('Please select a valid image file (JPG or PNG)', 'error');
+            showToast('Please select a valid image file (JPG or PNG)', 'error');
             return;
         }
 
         // Validate file size (2MB max)
         const maxSize = 2 * 1024 * 1024;
         if (file.size > maxSize) {
-            showNotification('File size must be less than 2MB', 'error');
+            showToast('File size must be less than 2MB', 'error');
             return;
         }
 
@@ -497,7 +502,7 @@ async function uploadProfileImage(file) {
         const userId = localStorage.getItem('userId');
 
         if (!token || !userId) {
-            showNotification('Authentication required. Please log in again.', 'error');
+            showToast('Authentication required. Please log in again.', 'error');
             return;
         }
 
@@ -510,7 +515,7 @@ async function uploadProfileImage(file) {
         const formData = new FormData();
         formData.append('profileImage', file);
 
-        const response = await fetch(`${window.API_BASE_URL}/api/v1/users/${userId}/profile-image`, {
+        const response = await fetch(`${config.api.baseURL}/api/v1/trainees/${userId}/profile-image`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -520,20 +525,14 @@ async function uploadProfileImage(file) {
 
         if (response.ok) {
             const result = await response.json();
+            console.log('Upload response:', result);
 
             // Update the profile image immediately
             const profileImage = document.getElementById('profileImage');
             if (profileImage && result.image_path) {
                 profileImage.src = result.image_path;
+                console.log('Updated profile image src to:', result.image_path);
             }
-
-            // Update navbar avatars immediately
-            const navbarAvatars = document.querySelectorAll('.navbar .avatar img');
-            navbarAvatars.forEach(img => {
-                if (result.image_path) {
-                    img.src = result.image_path;
-                }
-            });
 
             // Update cached user data with new profile image
             const userData = localStorage.getItem('userData');
@@ -541,18 +540,44 @@ async function uploadProfileImage(file) {
                 try {
                     const userDataObj = JSON.parse(userData);
                     userDataObj.profileImage = result.image_path;
+
+                    // Call the local updateNavbarUserInfo function immediately
+                    updateNavbarUserInfo(userDataObj);
+
                     localStorage.setItem('userData', JSON.stringify(userDataObj));
+                    console.log('Updated cached user data with new profile image:', result.image_path);
                 } catch (e) {
                     console.warn('Failed to update cached user data');
                 }
             }
 
-            // Trigger navbar refresh on other trainee pages
-            if (typeof window.refreshTraineeNavbar === 'function') {
-                window.refreshTraineeNavbar();
-            }
+            // Dispatch custom event to notify other pages/tabs
+            window.dispatchEvent(new CustomEvent('profileImageUpdated', {
+                detail: { imagePath: result.image_path }
+            }));
 
-            showNotification('Profile photo updated successfully!', 'success');
+            // Force reload trainee profile data to get fresh data from database
+            setTimeout(async () => {
+                console.log('Reloading trainee profile data from database...');
+                await loadTraineeProfile();
+
+                // Then, reload navbar data using the navbar function if available
+                if (typeof loadTraineeProfileForNavbar === 'function') {
+                    console.log('Calling loadTraineeProfileForNavbar...');
+                    await loadTraineeProfileForNavbar();
+                } else if (typeof window.refreshTraineeNavbar === 'function') {
+                    console.log('Calling window.refreshTraineeNavbar...');
+                    window.refreshTraineeNavbar();
+                }
+
+                // Trigger storage event to update other trainee pages
+                window.dispatchEvent(new StorageEvent('storage', {
+                    key: 'userData',
+                    newValue: localStorage.getItem('userData')
+                }));
+            }, 1000);
+
+            showToast('Profile photo updated successfully!', 'success');
         } else {
             const errorData = await response.json();
             throw new Error(errorData.error || 'Failed to upload image');
@@ -560,7 +585,7 @@ async function uploadProfileImage(file) {
 
     } catch (error) {
         console.error('Upload error:', error);
-        showNotification(error.message || 'Failed to upload photo', 'error');
+        showToast(error.message || 'Failed to upload photo', 'error');
 
         // Reset the image to previous state on error
         const profileImage = document.getElementById('profileImage');
@@ -581,41 +606,56 @@ async function uploadProfileImage(file) {
     }
 }
 
-// Utility functions
-function formatDateTime(dateString) {
-    if (!dateString) return 'N/A';
+// Toast notification functions
+function showToast(message, type = 'success') {
+    const container = document.getElementById('toastContainer');
+    if (!container) return;
 
-    const date = new Date(dateString);
-    const options = {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: true
-    };
+    const toast = document.createElement('div');
+    toast.className = `toast-notification ${type}`;
 
-    return date.toLocaleDateString('en-US', options).replace(',', ' -');
+    const icon = type === 'success' ? 'bx-check' :
+        type === 'error' ? 'bx-x' :
+            type === 'warning' ? 'bx-error-alt' :
+                type === 'info' ? 'bx-info-circle' : 'bxs-info-circle';
+
+    toast.innerHTML = `
+        <i class="bx ${icon} toast-icon"></i>
+        <div class="toast-content">
+            <div class="toast-message">${message}</div>
+        </div>
+    `;
+
+    container.appendChild(toast);
+
+    // Auto remove after 5 seconds (or 3 seconds for info messages)
+    const timeout = type === 'info' ? 3000 : 5000;
+    setTimeout(() => {
+        toast.classList.add('hiding');
+        setTimeout(() => toast.remove(), 300);
+    }, timeout);
 }
 
-function formatDate(dateString) {
-    if (!dateString) return 'N/A';
+// Show success message
+function showSuccess(message) {
+    showToast(message, 'success');
+}
 
-    const date = new Date(dateString);
-    const options = {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-    };
+// Show error message
+function showError(message) {
+    showToast(message, 'error');
+}
 
-    return date.toLocaleDateString('en-US', options);
+// Show info message
+function showInfo(message) {
+    showToast(message, 'info');
+}
+
+// Show warning message
+function showWarning(message) {
+    showToast(message, 'warning');
 }
 
 function showNotification(message, type = 'info') {
-    // Simple alert for now - can be replaced with toast notification
-    if (type === 'error') {
-        alert('Error: ' + message);
-    } else {
-        alert(message);
-    }
+    showToast(message, type);
 }

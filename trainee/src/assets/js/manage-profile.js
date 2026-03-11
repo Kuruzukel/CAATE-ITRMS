@@ -221,6 +221,18 @@ function updateProfileOverview(data) {
 
 // Update personal information section
 function updatePersonalInformation(data) {
+    // Trainee ID
+    const traineeIdInput = document.getElementById('personalTraineeId');
+    if (traineeIdInput) {
+        traineeIdInput.value = data.traineeId || data._id || '';
+    }
+
+    // Username
+    const usernameInput = document.getElementById('personalUsername');
+    if (usernameInput) {
+        usernameInput.value = data.username || '';
+    }
+
     // First name
     const firstNameInput = document.getElementById('personalFirstName');
     if (firstNameInput) {
@@ -251,10 +263,11 @@ function updatePersonalInformation(data) {
         suffixInput.value = data.suffix || '';
     }
 
-    // Trainee ID
-    const traineeIdInput = document.getElementById('personalTraineeId');
-    if (traineeIdInput) {
-        traineeIdInput.value = data.traineeId || data._id || '';
+    // Date of Birth
+    const dateOfBirthInput = document.getElementById('personalDateOfBirth');
+    if (dateOfBirthInput) {
+        const dateValue = data.dateOfBirth ? new Date(data.dateOfBirth).toISOString().split('T')[0] : '';
+        dateOfBirthInput.value = dateValue;
     }
 
     // Phone number
@@ -269,13 +282,6 @@ function updatePersonalInformation(data) {
         emailInput.value = data.email || '';
     }
 
-    // Date of Birth
-    const dateOfBirthInput = document.getElementById('personalDateOfBirth');
-    if (dateOfBirthInput) {
-        const dateValue = data.dateOfBirth ? new Date(data.dateOfBirth).toISOString().split('T')[0] : '';
-        dateOfBirthInput.value = dateValue;
-    }
-
     // Address
     const addressTextarea = document.getElementById('personalAddress');
     if (addressTextarea) {
@@ -283,22 +289,29 @@ function updatePersonalInformation(data) {
     }
 
     // Update edit modal fields
+    const editTraineeId = document.getElementById('editTraineeId');
+    const editUsername = document.getElementById('editUsername');
     const editFirstName = document.getElementById('editFirstName');
     const editSecondName = document.getElementById('editSecondName');
     const editMiddleName = document.getElementById('editMiddleName');
     const editLastName = document.getElementById('editLastName');
     const editSuffix = document.getElementById('editSuffix');
-    const editTraineeId = document.getElementById('editTraineeId');
+    const editDateOfBirth = document.getElementById('editDateOfBirth');
     const editPhone = document.getElementById('editPhone');
     const editEmail = document.getElementById('editEmail');
     const editAddress = document.getElementById('editAddress');
 
+    if (editTraineeId) editTraineeId.value = data.traineeId || data._id || '';
+    if (editUsername) editUsername.value = data.username || '';
     if (editFirstName) editFirstName.value = data.firstName || '';
     if (editSecondName) editSecondName.value = data.secondName || '';
     if (editMiddleName) editMiddleName.value = data.middleName || '';
     if (editLastName) editLastName.value = data.lastName || '';
     if (editSuffix) editSuffix.value = data.suffix || '';
-    if (editTraineeId) editTraineeId.value = data.traineeId || data._id || '';
+    if (editDateOfBirth) {
+        const dateValue = data.dateOfBirth ? new Date(data.dateOfBirth).toISOString().split('T')[0] : '';
+        editDateOfBirth.value = dateValue;
+    }
     if (editPhone) editPhone.value = data.phoneNumber || data.phone || '';
     if (editEmail) editEmail.value = data.email || '';
     if (editAddress) editAddress.value = data.address || '';
@@ -423,6 +436,7 @@ async function saveProfileChanges() {
     const editMiddleName = document.getElementById('editMiddleName');
     const editLastName = document.getElementById('editLastName');
     const editSuffix = document.getElementById('editSuffix');
+    const editDateOfBirth = document.getElementById('editDateOfBirth');
     const editPhone = document.getElementById('editPhone');
     const editEmail = document.getElementById('editEmail');
     const editAddress = document.getElementById('editAddress');
@@ -433,6 +447,7 @@ async function saveProfileChanges() {
         middle_name: editMiddleName ? editMiddleName.value.trim() : '',
         last_name: editLastName ? editLastName.value.trim() : '',
         suffix: editSuffix ? editSuffix.value.trim() : '',
+        date_of_birth: editDateOfBirth ? editDateOfBirth.value : '',
         phone: editPhone ? editPhone.value.trim() : '',
         email: editEmail ? editEmail.value.trim() : '',
         address: editAddress ? editAddress.value.trim() : ''

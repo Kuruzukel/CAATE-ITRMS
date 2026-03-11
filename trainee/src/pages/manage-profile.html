@@ -355,6 +355,18 @@
                                     <div class="card-body">
                                         <div class="row mb-3">
                                             <div class="col-md-6">
+                                                <label class="form-label fw-semibold">Trainee ID</label>
+                                                <input type="text" id="personalTraineeId" class="form-control" value=""
+                                                    placeholder="Your trainee ID" readonly>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label fw-semibold">Username</label>
+                                                <input type="text" id="personalUsername" class="form-control" value=""
+                                                    placeholder="Your username" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-6">
                                                 <label class="form-label fw-semibold">First Name</label>
                                                 <input type="text" id="personalFirstName" class="form-control" value=""
                                                     placeholder="Enter your first name" readonly>
@@ -384,9 +396,9 @@
                                                     placeholder="Jr., Sr., III, etc." readonly>
                                             </div>
                                             <div class="col-md-6">
-                                                <label class="form-label fw-semibold">Trainee ID</label>
-                                                <input type="text" id="personalTraineeId" class="form-control" value=""
-                                                    placeholder="Your trainee ID" readonly>
+                                                <label class="form-label fw-semibold">Date of Birth</label>
+                                                <input type="date" id="personalDateOfBirth" class="form-control"
+                                                    value="" placeholder="Select your date of birth" readonly>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
@@ -402,12 +414,7 @@
                                             </div>
                                         </div>
                                         <div class="row mb-3">
-                                            <div class="col-md-6">
-                                                <label class="form-label fw-semibold">Date of Birth</label>
-                                                <input type="date" id="personalDateOfBirth" class="form-control"
-                                                    value="" placeholder="Select your date of birth" readonly>
-                                            </div>
-                                            <div class="col-md-6">
+                                            <div class="col-md-12">
                                                 <label class="form-label fw-semibold">Address</label>
                                                 <textarea id="personalAddress" class="form-control" rows="2"
                                                     placeholder="Enter your complete address" readonly></textarea>
@@ -462,6 +469,30 @@
                     <form>
                         <div class="row">
                             <div class="col-md-6 mb-3">
+                                <label for="editTraineeId" class="form-label">Trainee ID</label>
+                                <input type="text" id="editTraineeId" class="form-control" value=""
+                                    placeholder="Your trainee ID" disabled>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="editUsername" class="form-label">Username</label>
+                                <input type="text" id="editUsername" class="form-control" value=""
+                                    placeholder="Your username" disabled>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="editTraineeId" class="form-label">Trainee ID</label>
+                                <input type="text" id="editTraineeId" class="form-control" value=""
+                                    placeholder="Your trainee ID" disabled>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="editUsername" class="form-label">Username</label>
+                                <input type="text" id="editUsername" class="form-control" value=""
+                                    placeholder="Your username" disabled>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
                                 <label for="editFirstName" class="form-label">First Name</label>
                                 <input type="text" id="editFirstName" class="form-control" value=""
                                     placeholder="Enter your first name" pattern="[A-Za-z\s]+"
@@ -496,9 +527,9 @@
                                     title="Please enter letters only">
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="editTraineeId" class="form-label">Trainee ID</label>
-                                <input type="text" id="editTraineeId" class="form-control" value=""
-                                    placeholder="Your trainee ID" disabled>
+                                <label for="editDateOfBirth" class="form-label">Date of Birth</label>
+                                <input type="date" id="editDateOfBirth" class="form-control" value=""
+                                    placeholder="Select your date of birth">
                             </div>
                         </div>
                         <div class="row">

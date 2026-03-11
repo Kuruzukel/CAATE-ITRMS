@@ -184,7 +184,12 @@ function updateProfileOverview(data) {
     // Phone number
     const phoneElement = document.getElementById('profilePhone');
     if (phoneElement) {
-        phoneElement.textContent = data.phone || data.phoneNumber || 'N/A';
+        let phoneValue = data.phone || data.phoneNumber || 'N/A';
+        // Format phone number for display: 09XX XXX XXXX
+        if (phoneValue && phoneValue !== 'N/A' && phoneValue.length === 11) {
+            phoneValue = phoneValue.slice(0, 4) + ' ' + phoneValue.slice(4, 7) + ' ' + phoneValue.slice(7);
+        }
+        phoneElement.textContent = phoneValue;
     }
 
     // Address

@@ -476,9 +476,21 @@ async function saveProfileChanges() {
         address: editAddress ? editAddress.value.trim() : ''
     };
 
-    // Basic validation - only first name, username, and email are required
+    // Basic validation - first name, username, email, date of birth, and address are required
     if (!updatedData.first_name || !updatedData.email || !updatedData.username) {
         showToast('First name, username, and email are required.', 'error');
+        return;
+    }
+
+    // Date of birth validation
+    if (!updatedData.date_of_birth) {
+        showToast('Date of birth is required.', 'error');
+        return;
+    }
+
+    // Address validation
+    if (!updatedData.address || updatedData.address.trim() === '') {
+        showToast('Address is required.', 'error');
         return;
     }
 

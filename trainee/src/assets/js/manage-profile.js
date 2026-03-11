@@ -227,6 +227,12 @@ function updatePersonalInformation(data) {
         firstNameInput.value = data.firstName || '';
     }
 
+    // Second name
+    const secondNameInput = document.getElementById('personalSecondName');
+    if (secondNameInput) {
+        secondNameInput.value = data.secondName || '';
+    }
+
     // Middle name
     const middleNameInput = document.getElementById('personalMiddleName');
     if (middleNameInput) {
@@ -243,6 +249,12 @@ function updatePersonalInformation(data) {
     const suffixInput = document.getElementById('personalSuffix');
     if (suffixInput) {
         suffixInput.value = data.suffix || '';
+    }
+
+    // Trainee ID
+    const traineeIdInput = document.getElementById('personalTraineeId');
+    if (traineeIdInput) {
+        traineeIdInput.value = data.traineeId || data._id || '';
     }
 
     // Phone number
@@ -272,15 +284,21 @@ function updatePersonalInformation(data) {
 
     // Update edit modal fields
     const editFirstName = document.getElementById('editFirstName');
+    const editSecondName = document.getElementById('editSecondName');
     const editMiddleName = document.getElementById('editMiddleName');
     const editLastName = document.getElementById('editLastName');
+    const editSuffix = document.getElementById('editSuffix');
+    const editTraineeId = document.getElementById('editTraineeId');
     const editPhone = document.getElementById('editPhone');
     const editEmail = document.getElementById('editEmail');
     const editAddress = document.getElementById('editAddress');
 
     if (editFirstName) editFirstName.value = data.firstName || '';
+    if (editSecondName) editSecondName.value = data.secondName || '';
     if (editMiddleName) editMiddleName.value = data.middleName || '';
     if (editLastName) editLastName.value = data.lastName || '';
+    if (editSuffix) editSuffix.value = data.suffix || '';
+    if (editTraineeId) editTraineeId.value = data.traineeId || data._id || '';
     if (editPhone) editPhone.value = data.phoneNumber || data.phone || '';
     if (editEmail) editEmail.value = data.email || '';
     if (editAddress) editAddress.value = data.address || '';

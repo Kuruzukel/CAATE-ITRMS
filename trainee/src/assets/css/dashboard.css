@@ -15,7 +15,6 @@
     width: 40px !important;
     height: 40px !important;
     position: relative;
-    display: inline-block;
 }
 
 .navbar-dropdown.dropdown-user .avatar img {

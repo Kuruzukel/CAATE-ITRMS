@@ -78,6 +78,7 @@ async function loadAdminProfileForNavbar() {
             };
 
             console.log('Admin data loaded:', mappedData);
+            console.log('Profile image from backend:', adminData.profileImage);
 
             // Update navbar user info
             updateNavbarUserInfo(mappedData);
@@ -131,18 +132,47 @@ function updateNavbarUserInfo(data) {
                     img.src = data.profileImage;
                 }
                 totalUpdated++;
+                console.log('Updated avatar image:', img.src);
             } else {
                 img.src = '../assets/images/DEFAULT_AVATAR.png';
             }
 
             // Add error handling to fallback to default avatar
             img.onerror = function () {
+                console.log('Image load error, falling back to default avatar');
                 this.src = '../assets/images/DEFAULT_AVATAR.png';
             };
         });
     });
 
     console.log('Updated navbar with profile image:', data.profileImage, `(${totalUpdated} images updated)`);
+
+    // Force update any remaining avatar images that might have been missed
+    setTimeout(() => {
+        const allImages = document.querySelectorAll('img');
+        let forceUpdated = 0;
+        allImages.forEach(img => {
+            if ((img.src.includes('DEFAULT_AVATAR') ||
+                img.classList.contains('rounded-circle') ||
+                img.classList.contains('w-px-40') ||
+                img.closest('.avatar') ||
+                img.closest('.dropdown-menu')) &&
+                data.profileImage &&
+                data.profileImage !== '../assets/images/DEFAULT_AVATAR.png') {
+
+                if (data.profileImage.startsWith('/CAATE-ITRMS/')) {
+                    img.src = window.location.origin + data.profileImage;
+                } else if (data.profileImage.startsWith('/')) {
+                    img.src = window.location.origin + data.profileImage;
+                } else {
+                    img.src = data.profileImage;
+                }
+                forceUpdated++;
+                console.log('Force updated missed avatar:', img);
+            }
+        });
+        console.log(`Force updated ${forceUpdated} additional avatars`);
+    }, 100);
 }
 
 // Initialize admin navbar functionality
@@ -161,9 +191,28 @@ function initializeAdminNavbar() {
             try {
                 const userData = JSON.parse(e.newValue);
                 updateNavbarUserInfo(userData);
+                console.log('Navbar updated from storage event:', userData.profileImage);
             } catch (error) {
                 console.warn('Failed to parse updated user data');
             }
+        }
+    });
+
+    // Listen for custom profile image update events
+    window.addEventListener('profileImageUpdated', function (e) {
+        console.log('Profile image updated event received:', e.detail);
+        if (e.detail && e.detail.imagePath) {
+            // Force update all avatars with the new image
+            const allAvatarImages = document.querySelectorAll('img[src*="DEFAULT_AVATAR"], .navbar img, .dropdown-menu img, .avatar img');
+            allAvatarImages.forEach((img) => {
+                if (e.detail.imagePath.startsWith('/CAATE-ITRMS/')) {
+                    img.src = window.location.origin + e.detail.imagePath;
+                } else if (e.detail.imagePath.startsWith('/')) {
+                    img.src = window.location.origin + e.detail.imagePath;
+                } else {
+                    img.src = e.detail.imagePath;
+                }
+            });
         }
     });
 
@@ -172,6 +221,7 @@ function initializeAdminNavbar() {
 
 // Function to refresh navbar data (can be called from other pages)
 window.refreshAdminNavbar = function () {
+    console.log('Refreshing admin navbar...');
     loadAdminProfileForNavbar();
 };
 
@@ -189,6 +239,17 @@ window.forceUpdateAvatars = function (imagePath) {
         }
         console.log(`Force updated avatar ${index}:`, img.src);
     });
+};
+
+// Function specifically for manage-profile page to reload navbar after image upload
+window.reloadNavbarAfterImageUpload = function () {
+    console.log('Reloading navbar after image upload...');
+    // Clear any cached data to force fresh fetch
+    localStorage.removeItem('userData');
+    // Reload profile data
+    setTimeout(() => {
+        loadAdminProfileForNavbar();
+    }, 500);
 };
 
 // Auto-initialize when DOM is loaded (if not already initialized by page-specific script)

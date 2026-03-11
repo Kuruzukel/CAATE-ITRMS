@@ -41,6 +41,9 @@ class AdminController {
                 'profileImage' => $admin['profile_image'] ?? null
             ];
             
+            // Log the profile image for debugging
+            error_log("AdminController::show - Profile Image: " . ($admin['profile_image'] ?? 'null'));
+            
             echo json_encode(['data' => $formattedAdmin]);
         } catch (Exception $e) {
             error_log("AdminController::show - Exception: " . $e->getMessage());
@@ -176,9 +179,19 @@ class AdminController {
             // Update admin record with new profile image path
             $adminModel = new Admin();
             $imagePath = '/CAATE-ITRMS/backend/public/uploads/profiles/' . $filename;
+            
+            // Log the update operation
+            error_log("AdminController::uploadProfileImage - Updating admin $id with image path: $imagePath");
+            
             $result = $adminModel->update($id, ['profile_image' => $imagePath]);
             
+            error_log("AdminController::uploadProfileImage - Update result: " . ($result ? 'success' : 'failed'));
+            
             if ($result) {
+                // Verify the update by fetching the admin record
+                $updatedAdmin = $adminModel->findById($id);
+                error_log("AdminController::uploadProfileImage - Verified profile_image in DB: " . ($updatedAdmin['profile_image'] ?? 'null'));
+                
                 echo json_encode([
                     'message' => 'Profile image updated successfully',
                     'image_path' => $imagePath

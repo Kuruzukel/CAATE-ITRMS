@@ -562,43 +562,39 @@ async function uploadProfileImage(file) {
                     const userDataObj = JSON.parse(userData);
                     userDataObj.profileImage = result.image_path;
                     localStorage.setItem('userData', JSON.stringify(userDataObj));
+                    console.log('Updated cached user data with new profile image:', result.image_path);
                 } catch (e) {
                     console.warn('Failed to update cached user data');
                 }
             }
 
-            // Trigger navbar refresh on other admin pages
-            if (typeof window.refreshAdminNavbar === 'function') {
-                window.refreshAdminNavbar();
-            }
+            // Dispatch custom event to notify other pages/tabs
+            window.dispatchEvent(new CustomEvent('profileImageUpdated', {
+                detail: { imagePath: result.image_path }
+            }));
 
-            // Force update all avatars immediately
-            if (typeof window.forceUpdateAvatars === 'function') {
-                window.forceUpdateAvatars(result.image_path);
-            }
+            // Force reload admin profile data to get fresh data from database
+            setTimeout(async () => {
+                console.log('Reloading admin profile data from database...');
 
-            // Force refresh navbar on current page after a short delay
-            setTimeout(() => {
-                console.log('Force refreshing navbar...');
-                loadAdminProfileForNavbar();
+                // Reload navbar data using the navbar function
+                if (typeof loadAdminProfileForNavbar === 'function') {
+                    console.log('Calling loadAdminProfileForNavbar...');
+                    await loadAdminProfileForNavbar();
+                } else if (typeof window.refreshAdminNavbar === 'function') {
+                    console.log('Calling window.refreshAdminNavbar...');
+                    window.refreshAdminNavbar();
+                }
 
-                // Also directly update any remaining default avatars with brute force approach
-                const allPossibleAvatars = document.querySelectorAll('img');
-                allPossibleAvatars.forEach(img => {
-                    if (img.src.includes('DEFAULT_AVATAR') ||
-                        img.classList.contains('rounded-circle') ||
-                        img.classList.contains('w-px-40') ||
-                        img.closest('.avatar') ||
-                        img.closest('.dropdown-menu')) {
-                        if (result.image_path.startsWith('/CAATE-ITRMS/')) {
-                            img.src = window.location.origin + result.image_path;
-                        } else {
-                            img.src = result.image_path;
-                        }
-                        console.log('Force updated avatar:', img);
-                    }
-                });
-            }, 500);
+                // Also reload the current page profile data
+                await loadAdminProfile();
+
+                // Trigger storage event to update other admin pages
+                window.dispatchEvent(new StorageEvent('storage', {
+                    key: 'userData',
+                    newValue: localStorage.getItem('userData')
+                }));
+            }, 1000);
 
             showToast('Profile photo updated successfully!', 'success');
         } else {

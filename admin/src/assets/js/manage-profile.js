@@ -271,6 +271,77 @@ function updateNavbarUserInfo(data) {
         let displayName = data.name || 'Admin';
         userName.textContent = displayName;
     }
+
+    // Update profile images in navbar - target all avatar images more comprehensively
+    const profileImageSelectors = [
+        '.navbar .avatar img',
+        '.dropdown-menu .avatar img',
+        '.navbar-dropdown .avatar img',
+        '.navbar img[src*="DEFAULT_AVATAR"]',
+        '.navbar img[alt=""]',
+        'img.w-px-40.h-auto.rounded-circle',
+        '.navbar img.rounded-circle',
+        '.dropdown-menu img.w-px-40',
+        '.dropdown-menu img.rounded-circle'
+    ];
+
+    let totalUpdated = 0;
+    profileImageSelectors.forEach(selector => {
+        const images = document.querySelectorAll(selector);
+        images.forEach(img => {
+            if (data.profileImage && data.profileImage !== '../assets/images/DEFAULT_AVATAR.png') {
+                // Handle both relative and absolute paths
+                if (data.profileImage.startsWith('/CAATE-ITRMS/')) {
+                    img.src = window.location.origin + data.profileImage;
+                } else if (data.profileImage.startsWith('http')) {
+                    img.src = data.profileImage;
+                } else if (data.profileImage.startsWith('/')) {
+                    img.src = window.location.origin + data.profileImage;
+                } else {
+                    img.src = data.profileImage;
+                }
+                totalUpdated++;
+                console.log('Updated avatar image in manage-profile:', img.src);
+            } else {
+                img.src = '../assets/images/DEFAULT_AVATAR.png';
+            }
+
+            // Add error handling to fallback to default avatar
+            img.onerror = function () {
+                console.log('Image load error, falling back to default avatar');
+                this.src = '../assets/images/DEFAULT_AVATAR.png';
+            };
+        });
+    });
+
+    console.log('Manage-profile updated navbar with profile image:', data.profileImage, `(${totalUpdated} images updated)`);
+
+    // Force update any remaining avatar images that might have been missed
+    setTimeout(() => {
+        const allImages = document.querySelectorAll('img');
+        let forceUpdated = 0;
+        allImages.forEach(img => {
+            if ((img.src.includes('DEFAULT_AVATAR') ||
+                img.classList.contains('rounded-circle') ||
+                img.classList.contains('w-px-40') ||
+                img.closest('.avatar') ||
+                img.closest('.dropdown-menu')) &&
+                data.profileImage &&
+                data.profileImage !== '../assets/images/DEFAULT_AVATAR.png') {
+
+                if (data.profileImage.startsWith('/CAATE-ITRMS/')) {
+                    img.src = window.location.origin + data.profileImage;
+                } else if (data.profileImage.startsWith('/')) {
+                    img.src = window.location.origin + data.profileImage;
+                } else {
+                    img.src = data.profileImage;
+                }
+                forceUpdated++;
+                console.log('Force updated missed avatar in manage-profile:', img);
+            }
+        });
+        console.log(`Manage-profile force updated ${forceUpdated} additional avatars`);
+    }, 100);
 }
 
 // Initialize edit form

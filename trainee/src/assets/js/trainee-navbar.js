@@ -219,36 +219,48 @@ function initializeTraineeNavbar() {
 
     // Override auth-dashboard.js updates
     overrideAuthDashboardUpdates();
+
+    // Ensure menu dropdowns work properly
+    ensureMenuDropdownsWork();
 }
 
 /**
  * Override auth-dashboard.js user name updates with real data
  */
 function overrideAuthDashboardUpdates() {
-    // Wait a bit for auth-dashboard.js to load and run
-    setTimeout(() => {
+    // Use requestAnimationFrame for better performance instead of setTimeout
+    requestAnimationFrame(() => {
         loadTraineeProfileForNavbar();
-    }, 500);
-
-    // Also override on DOM mutations (when auth-dashboard.js updates elements)
-    const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-            if (mutation.type === 'childList' || mutation.type === 'characterData') {
-                // Check if any user-name elements were updated with placeholder text
-                const userNameElements = document.querySelectorAll('.user-name');
-                userNameElements.forEach(element => {
-                    if (element && (element.textContent === 'dsad  sdasd' || element.textContent === 'dsad sdasd' || element.textContent.trim() === 'Trainee')) {
-                        // Re-load real data
-                        setTimeout(() => {
-                            loadTraineeProfileForNavbar();
-                        }, 100);
-                    }
-                });
-            }
-        });
     });
 
-    // Start observing
+    // Debounced mutation observer to prevent excessive calls
+    let debounceTimer;
+    const observer = new MutationObserver((mutations) => {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+            let shouldUpdate = false;
+
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'childList' || mutation.type === 'characterData') {
+                    // Check if any user-name elements were updated with placeholder text
+                    const userNameElements = document.querySelectorAll('.user-name');
+                    userNameElements.forEach(element => {
+                        if (element && (element.textContent === 'dsad  sdasd' || element.textContent === 'dsad sdasd' || element.textContent.trim() === 'Trainee')) {
+                            shouldUpdate = true;
+                        }
+                    });
+                }
+            });
+
+            if (shouldUpdate) {
+                requestAnimationFrame(() => {
+                    loadTraineeProfileForNavbar();
+                });
+            }
+        }, 50); // Reduced debounce time
+    });
+
+    // Start observing with more specific options
     observer.observe(document.body, {
         childList: true,
         subtree: true,
@@ -256,14 +268,18 @@ function overrideAuthDashboardUpdates() {
     });
 }
 
+
 // Function to refresh navbar data (can be called from other pages)
 window.refreshTraineeNavbar = function () {
     loadTraineeProfileForNavbar();
 };
 
-// Initialize when DOM is loaded
+// Initialize after menu system is ready
 document.addEventListener('DOMContentLoaded', function () {
-    initializeTraineeNavbar();
+    // Wait for menu system to initialize first
+    setTimeout(() => {
+        initializeTraineeNavbar();
+    }, 100);
 
     // Listen for profile updates from other pages
     window.addEventListener('storage', function (e) {
@@ -278,9 +294,30 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-// Also initialize immediately if DOM is already loaded
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initializeTraineeNavbar);
-} else {
-    initializeTraineeNavbar();
+/**
+ * Ensure menu dropdowns work properly
+ */
+function ensureMenuDropdownsWork() {
+    // Wait for menu system to be fully initialized
+    setTimeout(() => {
+        // Re-initialize menu if needed
+        if (window.Helpers && window.Helpers.mainMenu) {
+            // Menu is already initialized, just ensure it's working
+            const menuToggles = document.querySelectorAll('.menu-toggle');
+            menuToggles.forEach(toggle => {
+                if (!toggle.hasAttribute('data-menu-initialized')) {
+                    toggle.setAttribute('data-menu-initialized', 'true');
+                    toggle.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        const submenu = this.nextElementSibling;
+                        if (submenu && submenu.classList.contains('menu-sub')) {
+                            const isOpen = submenu.style.display === 'block';
+                            submenu.style.display = isOpen ? 'none' : 'block';
+                            this.classList.toggle('open', !isOpen);
+                        }
+                    });
+                }
+            });
+        }
+    }, 50);
 }

@@ -2971,3 +2971,12 @@ nav.layout-navbar.navbar-detached.container-xxl,
         opacity: 0;
     }
 }
+
+/* Fix for Settings dropdown visibility - Better approach */
+.menu-item .menu-sub {
+    display: none;
+}
+
+.menu-item.open .menu-sub {
+    display: block !important;
+}

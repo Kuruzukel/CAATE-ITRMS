@@ -147,11 +147,23 @@ function updateNavbarWithData(data) {
             }
         });
 
-        // Update profile images (use default avatar)
+        // Update profile images - handle both default and uploaded images
         const profileImages = document.querySelectorAll('img[src*="DEFAULT_AVATAR"], img[alt=""], .avatar img');
         profileImages.forEach(img => {
             if (img) {
-                img.src = '../assets/images/DEFAULT_AVATAR.png';
+                if (data.profileImage && data.profileImage !== '../assets/images/DEFAULT_AVATAR.png') {
+                    // Handle both relative and absolute paths
+                    if (data.profileImage.startsWith('/CAATE-ITRMS/')) {
+                        img.src = window.location.origin + data.profileImage;
+                    } else if (data.profileImage.startsWith('http')) {
+                        img.src = data.profileImage;
+                    } else {
+                        img.src = data.profileImage;
+                    }
+                } else {
+                    img.src = '../assets/images/DEFAULT_AVATAR.png';
+                }
+
                 img.onerror = function () {
                     this.src = '../assets/images/DEFAULT_AVATAR.png';
                 };
@@ -244,9 +256,26 @@ function overrideAuthDashboardUpdates() {
     });
 }
 
+// Function to refresh navbar data (can be called from other pages)
+window.refreshTraineeNavbar = function () {
+    loadTraineeProfileForNavbar();
+};
+
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', function () {
     initializeTraineeNavbar();
+
+    // Listen for profile updates from other pages
+    window.addEventListener('storage', function (e) {
+        if (e.key === 'userData' && e.newValue) {
+            try {
+                const userData = JSON.parse(e.newValue);
+                updateNavbarWithData(userData);
+            } catch (error) {
+                console.warn('Failed to parse updated user data');
+            }
+        }
+    });
 });
 
 // Also initialize immediately if DOM is already loaded

@@ -32,6 +32,7 @@ function handleRequest($uri, $method) {
         'POST:/api/v1/users' => ['UserController', 'store'],
         'PUT:/api/v1/users/{id}' => ['UserController', 'update'],
         'DELETE:/api/v1/users/{id}' => ['UserController', 'destroy'],
+        'POST:/api/v1/users/{id}/profile-image' => ['UserController', 'uploadProfileImage'],
         'GET:/api/v1/admins' => ['AdminController', 'index'],
         'GET:/api/v1/admins/{id}' => ['AdminController', 'show'],
         'POST:/api/v1/admins' => ['AdminController', 'store'],

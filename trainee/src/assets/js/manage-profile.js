@@ -496,7 +496,16 @@ async function uploadProfileImage(file) {
         const token = localStorage.getItem('authToken');
         const userId = localStorage.getItem('userId');
 
-        if (!token || !userId) return;
+        if (!token || !userId) {
+            showNotification('Authentication required. Please log in again.', 'error');
+            return;
+        }
+
+        // Show loading state
+        const changePhotoBtn = document.getElementById('changePhotoBtn');
+        const originalText = changePhotoBtn.innerHTML;
+        changePhotoBtn.disabled = true;
+        changePhotoBtn.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i> Uploading...';
 
         const formData = new FormData();
         formData.append('profileImage', file);
@@ -509,14 +518,66 @@ async function uploadProfileImage(file) {
             body: formData
         });
 
-        if (!response.ok) {
-            throw new Error('Failed to upload image');
+        if (response.ok) {
+            const result = await response.json();
+
+            // Update the profile image immediately
+            const profileImage = document.getElementById('profileImage');
+            if (profileImage && result.image_path) {
+                profileImage.src = result.image_path;
+            }
+
+            // Update navbar avatars immediately
+            const navbarAvatars = document.querySelectorAll('.navbar .avatar img');
+            navbarAvatars.forEach(img => {
+                if (result.image_path) {
+                    img.src = result.image_path;
+                }
+            });
+
+            // Update cached user data with new profile image
+            const userData = localStorage.getItem('userData');
+            if (userData) {
+                try {
+                    const userDataObj = JSON.parse(userData);
+                    userDataObj.profileImage = result.image_path;
+                    localStorage.setItem('userData', JSON.stringify(userDataObj));
+                } catch (e) {
+                    console.warn('Failed to update cached user data');
+                }
+            }
+
+            // Trigger navbar refresh on other trainee pages
+            if (typeof window.refreshTraineeNavbar === 'function') {
+                window.refreshTraineeNavbar();
+            }
+
+            showNotification('Profile photo updated successfully!', 'success');
+        } else {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Failed to upload image');
         }
 
-        showNotification('Photo updated successfully!', 'success');
-
     } catch (error) {
-        showNotification('Failed to upload photo', 'error');
+        console.error('Upload error:', error);
+        showNotification(error.message || 'Failed to upload photo', 'error');
+
+        // Reset the image to previous state on error
+        const profileImage = document.getElementById('profileImage');
+        const userData = localStorage.getItem('userData');
+        if (profileImage && userData) {
+            try {
+                const userDataObj = JSON.parse(userData);
+                profileImage.src = userDataObj.profileImage || '../assets/images/DEFAULT_AVATAR.png';
+            } catch (e) {
+                profileImage.src = '../assets/images/DEFAULT_AVATAR.png';
+            }
+        }
+    } finally {
+        // Reset button state
+        const changePhotoBtn = document.getElementById('changePhotoBtn');
+        changePhotoBtn.disabled = false;
+        changePhotoBtn.innerHTML = '<i class="bx bx-upload"></i> Change Photo';
     }
 }
 

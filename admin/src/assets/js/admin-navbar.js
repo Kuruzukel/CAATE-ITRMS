@@ -100,14 +100,23 @@ function updateNavbarUserInfo(data) {
         userName.textContent = displayName;
     }
 
-    // Update profile images in navbar
-    const profileImages = document.querySelectorAll('.navbar .avatar img');
+    // Update profile images in navbar - both main avatar and dropdown avatar
+    const profileImages = document.querySelectorAll('.navbar .avatar img, .dropdown-menu .avatar img');
     profileImages.forEach(img => {
         if (data.profileImage && data.profileImage !== '../assets/images/DEFAULT_AVATAR.png') {
-            img.src = data.profileImage;
+            // Handle both relative and absolute paths
+            if (data.profileImage.startsWith('/CAATE-ITRMS/')) {
+                img.src = window.location.origin + data.profileImage;
+            } else if (data.profileImage.startsWith('http')) {
+                img.src = data.profileImage;
+            } else {
+                img.src = data.profileImage;
+            }
         } else {
             img.src = '../assets/images/DEFAULT_AVATAR.png';
         }
+
+        // Add error handling to fallback to default avatar
         img.onerror = function () {
             this.src = '../assets/images/DEFAULT_AVATAR.png';
         };
@@ -123,8 +132,26 @@ function initializeAdminNavbar() {
 
     // Load admin profile data for navbar
     loadAdminProfileForNavbar();
+
+    // Listen for profile updates from other pages
+    window.addEventListener('storage', function (e) {
+        if (e.key === 'userData' && e.newValue) {
+            try {
+                const userData = JSON.parse(e.newValue);
+                updateNavbarUserInfo(userData);
+            } catch (error) {
+                console.warn('Failed to parse updated user data');
+            }
+        }
+    });
+
     return true;
 }
+
+// Function to refresh navbar data (can be called from other pages)
+window.refreshAdminNavbar = function () {
+    loadAdminProfileForNavbar();
+};
 
 // Auto-initialize when DOM is loaded (if not already initialized by page-specific script)
 document.addEventListener('DOMContentLoaded', function () {

@@ -239,6 +239,12 @@ function updatePersonalInformation(data) {
         lastNameInput.value = data.lastName || '';
     }
 
+    // Suffix
+    const suffixInput = document.getElementById('personalSuffix');
+    if (suffixInput) {
+        suffixInput.value = data.suffix || '';
+    }
+
     // Phone number
     const phoneInput = document.getElementById('personalPhone');
     if (phoneInput) {
@@ -249,6 +255,13 @@ function updatePersonalInformation(data) {
     const emailInput = document.getElementById('personalEmail');
     if (emailInput) {
         emailInput.value = data.email || '';
+    }
+
+    // Date of Birth
+    const dateOfBirthInput = document.getElementById('personalDateOfBirth');
+    if (dateOfBirthInput) {
+        const dateValue = data.dateOfBirth ? new Date(data.dateOfBirth).toISOString().split('T')[0] : '';
+        dateOfBirthInput.value = dateValue;
     }
 
     // Address
@@ -272,6 +285,7 @@ function updatePersonalInformation(data) {
     if (editEmail) editEmail.value = data.email || '';
     if (editAddress) editAddress.value = data.address || '';
 }
+
 
 // Update navbar user info
 function updateNavbarUserInfo(data) {

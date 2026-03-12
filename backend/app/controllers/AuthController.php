@@ -311,14 +311,25 @@ class AuthController {
     }
     
     public function changePassword() {
-        session_start();
+        // Get user from Bearer token
+        $token = $this->getBearerToken();
         
-        // Check if user is authenticated
-        if (!isset($_SESSION['user_id']) || !isset($_SESSION['user_role'])) {
+        if (!$token) {
             http_response_code(401);
             echo json_encode([
                 'success' => false,
                 'error' => 'Unauthorized. Please login first.'
+            ]);
+            return;
+        }
+        
+        // Verify token and get user info
+        $userInfo = $this->verifyToken($token);
+        if (!$userInfo) {
+            http_response_code(401);
+            echo json_encode([
+                'success' => false,
+                'error' => 'Invalid or expired token'
             ]);
             return;
         }
@@ -334,8 +345,8 @@ class AuthController {
             return;
         }
         
-        $userId = $_SESSION['user_id'];
-        $userRole = $_SESSION['user_role'];
+        $userId = $userInfo['id'];
+        $userRole = $userInfo['role'];
         $currentPassword = $data['currentPassword'];
         $newPassword = $data['newPassword'];
         

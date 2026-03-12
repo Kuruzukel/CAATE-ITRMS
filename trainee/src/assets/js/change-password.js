@@ -254,7 +254,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 confirmBtn.disabled = false;
             }
         } catch (error) {
-            console.error('Error changing password:', error);
             showToast(error.message || 'Network error. Please try again.', 'error');
 
             // Re-enable submit button

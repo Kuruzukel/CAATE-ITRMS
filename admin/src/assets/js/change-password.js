@@ -254,7 +254,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 confirmBtn.disabled = false;
             }
         } catch (error) {
-            console.error('Error changing password:', error);
             showToast('Network error. Please try again.', 'error');
 
             // Re-enable submit button
@@ -266,3 +265,4 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Menu toggle is handled by main.js - no need to duplicate here
 });
+

@@ -372,6 +372,16 @@ class AuthController {
             
             error_log("AuthController::changePassword - User ID: $userId, Role: $userRole");
             
+            // Validate new password is different from current password
+            if ($currentPassword === $newPassword) {
+                http_response_code(400);
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'New password must be different from current password'
+                ]);
+                return;
+            }
+            
             // Validate new password strength
             if (strlen($newPassword) < 8) {
                 http_response_code(400);

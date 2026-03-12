@@ -98,9 +98,10 @@ function validateForm() {
     const allRequirementsMet = Object.values(requirements).every(met => met);
     const passwordsMatch = newPassword === confirmPassword && confirmPassword !== '';
     const currentPasswordFilled = currentPassword !== '';
+    const passwordsDifferent = currentPassword !== newPassword;
 
     // Enable submit button only if all conditions are met
-    submitBtn.disabled = !(currentPasswordFilled && allRequirementsMet && passwordsMatch);
+    submitBtn.disabled = !(currentPasswordFilled && allRequirementsMet && passwordsMatch && passwordsDifferent);
 
     return { allRequirementsMet, passwordsMatch };
 }
@@ -169,12 +170,19 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('changePasswordForm').addEventListener('submit', function (e) {
         e.preventDefault();
 
+        const currentPassword = document.getElementById('currentPassword').value;
         const newPassword = document.getElementById('newPassword').value;
         const confirmPassword = document.getElementById('confirmPassword').value;
 
         // Validate passwords match
         if (newPassword !== confirmPassword) {
             showToast('Passwords do not match', 'error');
+            return;
+        }
+
+        // Validate new password is different from current password
+        if (currentPassword === newPassword) {
+            showToast('New password must be different from current password', 'error');
             return;
         }
 

@@ -674,71 +674,6 @@ async function uploadProfileImage(file) {
         }
     }
 }
-const userData = localStorage.getItem('userData');
-if (userData) {
-    try {
-        const userDataObj = JSON.parse(userData);
-        userDataObj.profileImage = imagePath;
-        userDataObj.profile_image = imagePath;
-
-        // Call the local updateNavbarUserInfo function immediately
-        updateNavbarUserInfo(userDataObj);
-
-        localStorage.setItem('userData', JSON.stringify(userDataObj));
-    } catch (e) {
-        console.error('Failed to update cached user data:', e);
-    }
-}
-
-// Dispatch custom event to notify other pages/tabs
-window.dispatchEvent(new CustomEvent('profileImageUpdated', {
-    detail: { imagePath: imagePath }
-}));
-
-// Force reload trainee profile data to get fresh data from database
-setTimeout(async () => {
-    await loadTraineeProfile();
-
-    // Trigger storage event to update other trainee pages
-    window.dispatchEvent(new StorageEvent('storage', {
-        key: 'userData',
-        newValue: localStorage.getItem('userData')
-    }));
-}, 1000);
-
-showToast('Profile photo updated successfully!', 'success');
-            } else {
-    throw new Error('No image path returned from server');
-}
-        } else {
-    const errorData = await response.json();
-    throw new Error(errorData.error || errorData.message || 'Failed to upload image');
-}
-
-    } catch (error) {
-    console.error('Profile image upload error:', error);
-    showToast(error.message || 'Failed to upload photo', 'error');
-
-    // Reset the image to previous state on error
-    const profileImage = document.getElementById('profileImage');
-    const userData = localStorage.getItem('userData');
-    if (profileImage && userData) {
-        try {
-            const userDataObj = JSON.parse(userData);
-            profileImage.src = userDataObj.profileImage || '../assets/images/DEFAULT_AVATAR.png';
-        } catch (e) {
-            profileImage.src = '../assets/images/DEFAULT_AVATAR.png';
-        }
-    }
-} finally {
-    // Reset button state
-    const changePhotoBtn = document.getElementById('changePhotoBtn');
-    if (changePhotoBtn) {
-        changePhotoBtn.disabled = false;
-        changePhotoBtn.innerHTML = '<i class="bx bx-upload"></i> Change Photo';
-    }
-}
-}
 
 // Toast notification functions
 function showToast(message, type = 'success') {
@@ -835,6 +770,39 @@ window.fixPlaceholderDisplayName = function () {
         console.log('No placeholder text found');
     }
 };
+// Test function to check profile image functionality
+window.testProfileImageUpdate = function (imagePath) {
+    console.log('Testing profile image update with:', imagePath);
+
+    // Update local images
+    updateAllProfileImages(imagePath);
+
+    // Update navbar images
+    if (window.updateTraineeProfileImages) {
+        window.updateTraineeProfileImages(imagePath);
+    }
+
+    // Update localStorage
+    const userData = localStorage.getItem('userData');
+    if (userData) {
+        try {
+            const userDataObj = JSON.parse(userData);
+            userDataObj.profileImage = imagePath;
+            userDataObj.profile_image = imagePath;
+            localStorage.setItem('userData', JSON.stringify(userDataObj));
+
+            // Trigger events
+            window.dispatchEvent(new CustomEvent('profileImageUpdated', {
+                detail: { imagePath: imagePath }
+            }));
+
+            console.log('Profile image test completed successfully');
+        } catch (e) {
+            console.error('Failed to update localStorage during test:', e);
+        }
+    }
+};
+
 // Function to update all profile images across the page
 function updateAllProfileImages(imagePath) {
     const profileImageSelectors = [
@@ -883,40 +851,44 @@ function updateAllProfileImages(imagePath) {
 
     console.log(`Updated ${totalUpdated} profile images with path: ${imagePath}`);
 }
+
 // Function to update all profile images across the page
 function updateAllProfileImages(imagePath) {
-    if (!imagePath) return;
-
-    // Handle different path formats
-    let imageSrc = imagePath;
-    if (imagePath.startsWith('/CAATE-ITRMS/')) {
-        imageSrc = window.location.origin + imagePath;
-    } else if (imagePath.startsWith('/')) {
-        imageSrc = window.location.origin + imagePath;
-    } else if (!imagePath.startsWith('http')) {
-        // Assume it's a filename and construct the full path
-        imageSrc = `${window.location.origin}/CAATE-ITRMS/backend/public/uploads/profiles/${imagePath}`;
-    }
-
-    // Update all profile image elements
     const profileImageSelectors = [
         '#profileImage', // Main profile image
-        '.navbar .avatar img', // Navbar avatar
-        '.dropdown-menu .avatar img', // Dropdown avatar
+        '.navbar .avatar img',
+        '.dropdown-menu .avatar img',
         '.navbar-dropdown .avatar img',
         '.navbar img[src*="DEFAULT_AVATAR"]',
         '.navbar img[alt=""]',
-        'img.w-px-40.h-auto.rounded-circle', // Specific navbar image
+        'img.w-px-40.h-auto.rounded-circle',
         '.navbar img.rounded-circle',
         '.dropdown-menu img.w-px-40',
-        '.dropdown-menu img.rounded-circle'
+        '.dropdown-menu img.rounded-circle',
+        '.avatar img', // Generic avatar images
+        'img[alt="Profile Picture"]' // Specific profile picture images
     ];
 
+    let totalUpdated = 0;
     profileImageSelectors.forEach(selector => {
         const images = document.querySelectorAll(selector);
         images.forEach(img => {
             if (img) {
-                img.src = imageSrc;
+                if (imagePath && imagePath !== '../assets/images/DEFAULT_AVATAR.png') {
+                    // Handle both relative and absolute paths
+                    if (imagePath.startsWith('/CAATE-ITRMS/')) {
+                        img.src = window.location.origin + imagePath;
+                    } else if (imagePath.startsWith('http')) {
+                        img.src = imagePath;
+                    } else if (imagePath.startsWith('/')) {
+                        img.src = window.location.origin + imagePath;
+                    } else {
+                        img.src = imagePath;
+                    }
+                    totalUpdated++;
+                } else {
+                    img.src = '../assets/images/DEFAULT_AVATAR.png';
+                }
 
                 // Add error handling to fallback to default avatar
                 img.onerror = function () {
@@ -926,8 +898,28 @@ function updateAllProfileImages(imagePath) {
         });
     });
 
-    console.log('Updated all profile images with:', imageSrc);
+    console.log(`Updated ${totalUpdated} profile images with path: ${imagePath}`);
 }
+
+// Function to manually refresh user display name (can be called from console for testing)
+window.refreshTraineeDisplayName = function () {
+    const userData = localStorage.getItem('userData');
+    if (userData) {
+        try {
+            const data = JSON.parse(userData);
+            updateNavbarUserInfo(data);
+            console.log('Display name refreshed with stored data:', data);
+        } catch (e) {
+            console.error('Failed to parse stored user data');
+            // Reload from API
+            loadTraineeProfile();
+        }
+    } else {
+        console.log('No stored user data found, loading from API...');
+        loadTraineeProfile();
+    }
+};
+
 // Test function to check profile image functionality
 window.testProfileImageUpdate = function (imagePath) {
     console.log('Testing profile image update with:', imagePath);

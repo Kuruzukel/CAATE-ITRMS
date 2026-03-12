@@ -249,6 +249,10 @@
         flex: 0 0 50% !important;
         max-width: 50% !important;
     }
+
+    .col-lg-4.col-md-4.order-1 .row .col-lg-6.col-md-12 .card {
+        height: 100% !important;
+    }
 }
 
 /* Keep original layout above 1086px */

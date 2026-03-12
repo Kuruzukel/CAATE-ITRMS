@@ -3937,3 +3937,42 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 input[type="date"]::-webkit-calendar-picker-indicator:hover {
     filter: invert(1) brightness(120) !important;
 }
+
+
+/* Input field padding and text alignment */
+.form-control {
+    padding: 0.625rem 0.875rem !important;
+    font-size: 0.9375rem !important;
+    line-height: 1.5 !important;
+    text-indent: 0 !important;
+}
+
+.form-control[readonly] {
+    padding: 0.625rem 0.875rem !important;
+    text-indent: 0 !important;
+}
+
+.form-control:focus {
+    padding: 0.625rem 0.875rem !important;
+}
+
+/* Textarea padding */
+textarea.form-control {
+    padding: 0.625rem 0.875rem !important;
+    line-height: 1.5 !important;
+}
+
+/* Input field spacing in modals */
+.modal-body .form-control {
+    padding: 0.625rem 0.875rem !important;
+}
+
+/* Row spacing in forms */
+.row.mb-3 {
+    margin-bottom: 1rem !important;
+}
+
+/* Ensure Address row has spacing */
+.card-body .row:last-child {
+    margin-bottom: 0 !important;
+}

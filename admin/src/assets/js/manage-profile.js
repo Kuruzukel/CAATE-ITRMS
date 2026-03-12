@@ -72,10 +72,6 @@ async function loadAdminProfile() {
 
                 let adminData = result.data || result.admin || result;
 
-                console.log('loadAdminProfile - Raw response data:', adminData);
-                console.log('loadAdminProfile - secondName from response:', adminData.secondName);
-                console.log('loadAdminProfile - suffix from response:', adminData.suffix);
-
                 // The AdminController already maps database fields to frontend format
                 const mappedData = {
                     _id: adminData._id,
@@ -96,10 +92,6 @@ async function loadAdminProfile() {
                     profileImage: adminData.profileImage || '../assets/images/DEFAULT_AVATAR.png'
                 };
 
-                console.log('loadAdminProfile - Mapped data:', mappedData);
-                console.log('loadAdminProfile - Mapped secondName:', mappedData.secondName);
-                console.log('loadAdminProfile - Mapped suffix:', mappedData.suffix);
-
                 // Update profile overview
                 updateProfileOverview(mappedData);
 
@@ -108,9 +100,6 @@ async function loadAdminProfile() {
 
                 // Update navbar user info
                 updateNavbarUserInfo(mappedData);
-
-                // Verify data mapping (for debugging)
-                setTimeout(() => verifyDataMapping(), 100);
 
                 // Store the mapped data in localStorage for future use
                 localStorage.setItem('userData', JSON.stringify(mappedData));
@@ -242,7 +231,6 @@ function updatePersonalInformation(data) {
     // Second name
     const secondNameInput = document.getElementById('personalSecondName');
     if (secondNameInput) {
-        console.log('updatePersonalInformation - Setting secondName:', data.secondName);
         secondNameInput.value = data.secondName || '';
     }
 
@@ -261,7 +249,6 @@ function updatePersonalInformation(data) {
     // Suffix
     const suffixInput = document.getElementById('personalSuffix');
     if (suffixInput) {
-        console.log('updatePersonalInformation - Setting suffix:', data.suffix);
         suffixInput.value = data.suffix || '';
     }
 
@@ -909,8 +896,6 @@ function showNotification(message, type = 'info') {
 
 // NEW Save profile changes function - 2024
 async function saveProfileChangesNew() {
-    console.log('NEW FUNCTION CALLED - saveProfileChangesNew');
-
     const token = localStorage.getItem('authToken');
     const userId = localStorage.getItem('userId');
 
@@ -942,33 +927,17 @@ async function saveProfileChangesNew() {
         address: editAddress ? editAddress.value.trim() : ''
     };
 
-    // NEW SPECIFIC VALIDATION - 2024
-    console.log('NEW Validation - Checking fields:', updatedData);
-    console.log('NEW Validation - Field values:');
-    console.log('- username:', updatedData.username);
-    console.log('- first_name:', updatedData.first_name);
-    console.log('- second_name:', updatedData.second_name);
-    console.log('- middle_name:', updatedData.middle_name);
-    console.log('- last_name:', updatedData.last_name);
-    console.log('- suffix:', updatedData.suffix);
-    console.log('- phone:', updatedData.phone);
-    console.log('- email:', updatedData.email);
-    console.log('- address:', updatedData.address);
-
     if (!updatedData.username || updatedData.username === '') {
-        console.log('NEW - Username validation failed');
         showToast('Username field is required.', 'error');
         return;
     }
 
     if (!updatedData.first_name || updatedData.first_name === '') {
-        console.log('NEW - First name validation failed');
         showToast('First name field is required.', 'error');
         return;
     }
 
     if (!updatedData.email || updatedData.email === '') {
-        console.log('NEW - Email validation failed');
         showToast('Email address field is required.', 'error');
         return;
     }
@@ -1020,13 +989,6 @@ async function saveProfileChangesNew() {
     }
 
     try {
-        console.log('NEW - Sending data to backend:', updatedData);
-        console.log('NEW - Request URL:', `${config.api.baseUrl}/api/v1/admins/${userId}`);
-        console.log('NEW - Request method: PUT');
-        console.log('NEW - Request headers:', {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-        });
         const response = await fetch(`${config.api.baseUrl}/api/v1/admins/${userId}`, {
             method: 'PUT',
             headers: {
@@ -1036,11 +998,8 @@ async function saveProfileChangesNew() {
             body: JSON.stringify(updatedData)
         });
 
-        console.log('NEW - Response status:', response.status);
-
         if (response.ok) {
             const result = await response.json();
-            console.log('NEW - Success result:', result);
 
             // Close modal
             const modal = bootstrap.Modal.getInstance(document.getElementById('editInformationModal'));
@@ -1049,14 +1008,10 @@ async function saveProfileChangesNew() {
             // Reload profile data to reflect changes
             await loadAdminProfile();
 
-            // Verify the changes were applied (for debugging)
-            setTimeout(() => verifyDataMapping(), 200);
-
             // Show success toast
             showToast('Profile updated successfully!', 'success');
         } else {
             const errorData = await response.json();
-            console.log('NEW - Error response:', errorData);
             let errorMessage = 'Failed to update profile';
 
             // Handle specific error cases
@@ -1084,7 +1039,6 @@ async function saveProfileChangesNew() {
             throw new Error(errorMessage);
         }
     } catch (error) {
-        console.log('NEW - Catch error:', error);
         // Handle network errors
         if (error.name === 'TypeError' && error.message.includes('fetch')) {
             showToast('Network error. Please check your connection and try again.', 'error');
@@ -1094,31 +1048,6 @@ async function saveProfileChangesNew() {
             showToast(error.message, 'error');
         }
     }
-}
-
-// Debug function to test database connection
-// Test function to verify data mapping
-function verifyDataMapping() {
-    console.log('=== VERIFICATION TEST ===');
-
-    // Check if form fields exist
-    const secondNameField = document.getElementById('personalSecondName');
-    const suffixField = document.getElementById('personalSuffix');
-    const editSecondNameField = document.getElementById('editSecondName');
-    const editSuffixField = document.getElementById('editSuffix');
-
-    console.log('Form fields exist:');
-    console.log('- personalSecondName:', !!secondNameField);
-    console.log('- personalSuffix:', !!suffixField);
-    console.log('- editSecondName:', !!editSecondNameField);
-    console.log('- editSuffix:', !!editSuffixField);
-
-    if (secondNameField) console.log('- personalSecondName value:', secondNameField.value);
-    if (suffixField) console.log('- personalSuffix value:', suffixField.value);
-    if (editSecondNameField) console.log('- editSecondName value:', editSecondNameField.value);
-    if (editSuffixField) console.log('- editSuffix value:', editSuffixField.value);
-
-    console.log('=== END VERIFICATION ===');
 }
 
 async function testDatabaseUpdate() {

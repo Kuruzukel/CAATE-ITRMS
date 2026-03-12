@@ -212,10 +212,22 @@ function updateProfileOverview(data) {
 
 // Update personal information section
 function updatePersonalInformation(data) {
+    // Username
+    const usernameInput = document.getElementById('personalUsername');
+    if (usernameInput) {
+        usernameInput.value = data.username || '';
+    }
+
     // First name
     const firstNameInput = document.getElementById('personalFirstName');
     if (firstNameInput) {
         firstNameInput.value = data.firstName || '';
+    }
+
+    // Second name
+    const secondNameInput = document.getElementById('personalSecondName');
+    if (secondNameInput) {
+        secondNameInput.value = data.secondName || '';
     }
 
     // Middle name
@@ -228,6 +240,12 @@ function updatePersonalInformation(data) {
     const lastNameInput = document.getElementById('personalLastName');
     if (lastNameInput) {
         lastNameInput.value = data.lastName || '';
+    }
+
+    // Suffix
+    const suffixInput = document.getElementById('personalSuffix');
+    if (suffixInput) {
+        suffixInput.value = data.suffix || '';
     }
 
     // Phone number
@@ -249,16 +267,22 @@ function updatePersonalInformation(data) {
     }
 
     // Update edit modal fields
+    const editUsername = document.getElementById('editUsername');
     const editFirstName = document.getElementById('editFirstName');
+    const editSecondName = document.getElementById('editSecondName');
     const editMiddleName = document.getElementById('editMiddleName');
     const editLastName = document.getElementById('editLastName');
+    const editSuffix = document.getElementById('editSuffix');
     const editPhone = document.getElementById('editPhone');
     const editEmail = document.getElementById('editEmail');
     const editAddress = document.getElementById('editAddress');
 
+    if (editUsername) editUsername.value = data.username || '';
     if (editFirstName) editFirstName.value = data.firstName || '';
+    if (editSecondName) editSecondName.value = data.secondName || '';
     if (editMiddleName) editMiddleName.value = data.middleName || '';
     if (editLastName) editLastName.value = data.lastName || '';
+    if (editSuffix) editSuffix.value = data.suffix || '';
     if (editPhone) editPhone.value = data.phoneNumber || data.phone || '';
     if (editEmail) editEmail.value = data.email || '';
     if (editAddress) editAddress.value = data.address || '';

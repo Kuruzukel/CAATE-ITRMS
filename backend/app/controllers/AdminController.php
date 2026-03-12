@@ -12,6 +12,9 @@ class AdminController {
     }
     
     public function show($id) {
+        header('Content-Type: application/json');
+        header('Access-Control-Allow-Origin: *');
+        
         try {
             $adminModel = new Admin();
             $admin = $adminModel->findById($id);
@@ -21,8 +24,6 @@ class AdminController {
                 echo json_encode(['error' => 'Admin not found']);
                 return;
             }
-            
-
             
             // Format the admin data for the frontend
             $formattedAdmin = [
@@ -47,6 +48,7 @@ class AdminController {
             echo json_encode(['data' => $formattedAdmin]);
         } catch (Exception $e) {
             error_log("AdminController::show - Exception: " . $e->getMessage());
+            error_log("AdminController::show - Stack trace: " . $e->getTraceAsString());
             http_response_code(500);
             echo json_encode(['error' => 'Internal server error: ' . $e->getMessage()]);
         }

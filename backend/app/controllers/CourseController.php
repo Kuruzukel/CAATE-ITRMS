@@ -364,10 +364,12 @@ class CourseController {
                 ]
             ]);
         } catch (Exception $e) {
+            error_log("CourseController::getEnrollmentStatistics - Exception: " . $e->getMessage());
+            error_log("CourseController::getEnrollmentStatistics - Stack trace: " . $e->getTraceAsString());
             http_response_code(500);
             echo json_encode([
                 'success' => false,
-                'error' => $e->getMessage()
+                'error' => 'Failed to fetch enrollment statistics: ' . $e->getMessage()
             ]);
         }
     }

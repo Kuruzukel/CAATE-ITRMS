@@ -202,7 +202,13 @@ class Trainee {
             $monthlyEnrollments = [];
             for ($month = 1; $month <= 12; $month++) {
                 $startDate = new MongoDB\BSON\UTCDateTime(strtotime("$year-$month-01") * 1000);
-                $endDate = new MongoDB\BSON\UTCDateTime(strtotime("$year-" . ($month + 1) . "-01") * 1000);
+                
+                // Calculate end date - handle December specially
+                if ($month === 12) {
+                    $endDate = new MongoDB\BSON\UTCDateTime(strtotime(($year + 1) . "-01-01") * 1000);
+                } else {
+                    $endDate = new MongoDB\BSON\UTCDateTime(strtotime("$year-" . ($month + 1) . "-01") * 1000);
+                }
                 
                 $count = $this->collection->countDocuments([
                     'created_at' => [

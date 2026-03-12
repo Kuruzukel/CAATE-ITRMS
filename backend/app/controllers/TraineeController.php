@@ -229,6 +229,7 @@ class TraineeController {
             echo json_encode(['success' => true, 'data' => $stats]);
         } catch (Exception $e) {
             error_log("TraineeController::statistics - Exception: " . $e->getMessage());
+            error_log("TraineeController::statistics - Stack trace: " . $e->getTraceAsString());
             http_response_code(500);
             echo json_encode([
                 'success' => false, 

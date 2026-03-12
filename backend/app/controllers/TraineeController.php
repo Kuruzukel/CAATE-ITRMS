@@ -84,15 +84,159 @@ class TraineeController {
     public function update($id) {
         header('Content-Type: application/json');
         header('Access-Control-Allow-Origin: *');
-        
-        $data = json_decode(file_get_contents('php://input'), true);
-        
+
         $traineeModel = new Trainee();
+        $data = [];
+        $imagePath = null;
+
+        // Get Content-Type header
+        $contentType = isset($_SERVER['CONTENT_TYPE']) ? $_SERVER['CONTENT_TYPE'] : '';
+        error_log("=== TraineeController::update START ===");
+        error_log("Content-Type: " . $contentType);
+        error_log("REQUEST_METHOD: " . $_SERVER['REQUEST_METHOD']);
+        error_log("Trainee ID: " . $id);
+        
+        if (strpos($contentType, 'multipart/form-data') !== false) {
+            error_log("Detected multipart/form-data, parsing manually...");
+            
+            // Extract boundary from Content-Type header
+            if (preg_match('/boundary=([^;]+)/', $contentType, $matches)) {
+                $boundary = trim($matches[1], '"');
+                error_log("Boundary: " . $boundary);
+                
+                $input = file_get_contents('php://input');
+                error_log("Input size: " . strlen($input) . " bytes");
+                error_log("First 200 bytes: " . bin2hex(substr($input, 0, 200)));
+                
+                // Split by boundary
+                $parts = preg_split('/--' . preg_quote($boundary) . '(?:--)?/', $input);
+                error_log("Number of parts: " . count($parts));
+                
+                foreach ($parts as $index => $part) {
+                    $part = trim($part);
+                    if (empty($part)) {
+                        continue;
+                    }
+                    
+                    error_log("Processing part $index, size: " . strlen($part));
+                    
+                    // Split headers from content using double CRLF
+                    if (strpos($part, "\r\n\r\n") !== false) {
+                        list($headers, $content) = explode("\r\n\r\n", $part, 2);
+                    } elseif (strpos($part, "\n\n") !== false) {
+                        list($headers, $content) = explode("\n\n", $part, 2);
+                    } else {
+                        error_log("Part $index: Could not find header/content separator");
+                        continue;
+                    }
+                    
+                    // Remove trailing CRLF or LF from content
+                    $content = rtrim($content, "\r\n");
+                    
+                    error_log("Part $index headers: " . substr($headers, 0, 150));
+                    error_log("Part $index content size: " . strlen($content));
+                    
+                    // Extract field name
+                    if (preg_match('/name="([^"]+)"/', $headers, $nameMatch)) {
+                        $fieldName = $nameMatch[1];
+                        error_log("Part $index field name: " . $fieldName);
+                        
+                        // Check if this is a file upload
+                        if (preg_match('/filename="([^"]+)"/', $headers, $filenameMatch)) {
+                            $fileName = $filenameMatch[1];
+                            error_log("Part $index is a file: " . $fileName);
+                            
+                            // This is the profile_image file
+                            if ($fieldName === 'profile_image') {
+                                error_log("Processing profile_image file...");
+                                
+                                $uploadDir = __DIR__ . '/../../public/uploads/profiles/';
+                                
+                                if (!is_dir($uploadDir)) {
+                                    mkdir($uploadDir, 0755, true);
+                                    error_log("Created upload directory: " . $uploadDir);
+                                }
+                                
+                                // Get file extension
+                                $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
+                                $newFileName = 'trainee_' . $id . '_' . time() . '.' . $fileExtension;
+                                $filePath = $uploadDir . $newFileName;
+                                
+                                error_log("File path: " . $filePath);
+                                error_log("File size: " . strlen($content) . " bytes");
+                                
+                                // Validate file type by checking magic bytes
+                                $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                                $mimeType = finfo_buffer($finfo, $content);
+                                finfo_close($finfo);
+                                
+                                error_log("Detected MIME type: " . $mimeType);
+                                
+                                $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+                                if (!in_array($mimeType, $allowedTypes)) {
+                                    error_log("Invalid MIME type: " . $mimeType);
+                                    http_response_code(400);
+                                    echo json_encode(['success' => false, 'error' => 'Invalid file type. Only JPG, PNG, GIF, and WebP are allowed.']);
+                                    return;
+                                }
+                                
+                                // Validate file size (max 2MB)
+                                if (strlen($content) > 2 * 1024 * 1024) {
+                                    error_log("File too large: " . strlen($content) . " bytes");
+                                    http_response_code(400);
+                                    echo json_encode(['success' => false, 'error' => 'File size exceeds 2MB limit.']);
+                                    return;
+                                }
+                                
+                                // Save file
+                                if (file_put_contents($filePath, $content)) {
+                                    $imagePath = '/CAATE-ITRMS/backend/public/uploads/profiles/' . $newFileName;
+                                    $data['profile_image'] = $imagePath;
+                                    error_log("File saved successfully: " . $imagePath);
+                                } else {
+                                    error_log("Failed to save file to: " . $filePath);
+                                    http_response_code(500);
+                                    echo json_encode(['success' => false, 'error' => 'Failed to save uploaded file.']);
+                                    return;
+                                }
+                            }
+                        } else {
+                            // Regular form field
+                            $data[$fieldName] = $content;
+                            error_log("Part $index is a form field: " . $fieldName . " = " . substr($content, 0, 50));
+                        }
+                    }
+                }
+            } else {
+                error_log("Could not extract boundary from Content-Type");
+            }
+        } else {
+            error_log("Not multipart/form-data, parsing as JSON");
+            // Handle JSON data
+            $data = json_decode(file_get_contents('php://input'), true);
+            if (!$data) {
+                $data = [];
+            }
+        }
+        
+        error_log("Data to update: " . json_encode($data));
+        
+        // Update trainee
         $result = $traineeModel->update($id, $data);
         
         if ($result) {
-            echo json_encode(['success' => true, 'message' => 'Trainee updated successfully']);
+            $response = ['success' => true, 'message' => 'Trainee updated successfully'];
+            
+            // Include image path in response if uploaded
+            if ($imagePath) {
+                $response['profile_image'] = $imagePath;
+                error_log("Returning image path in response: " . $imagePath);
+            }
+            
+            error_log("=== TraineeController::update END (SUCCESS) ===");
+            echo json_encode($response);
         } else {
+            error_log("=== TraineeController::update END (FAILED) ===");
             http_response_code(404);
             echo json_encode(['success' => false, 'error' => 'Trainee not found']);
         }
@@ -130,5 +274,30 @@ class TraineeController {
                 'error' => 'Failed to fetch statistics: ' . $e->getMessage()
             ]);
         }
+    }
+    
+    public function testUpload() {
+        header('Content-Type: application/json');
+        header('Access-Control-Allow-Origin: *');
+        
+        error_log("=== testUpload START ===");
+        error_log("REQUEST_METHOD: " . $_SERVER['REQUEST_METHOD']);
+        error_log("CONTENT_TYPE: " . (isset($_SERVER['CONTENT_TYPE']) ? $_SERVER['CONTENT_TYPE'] : 'NOT SET'));
+        error_log("_FILES: " . json_encode($_FILES));
+        error_log("_POST: " . json_encode($_POST));
+        
+        $input = file_get_contents('php://input');
+        error_log("Input size: " . strlen($input) . " bytes");
+        error_log("First 500 chars of input: " . substr($input, 0, 500));
+        
+        echo json_encode([
+            'success' => true,
+            'message' => 'Test upload endpoint',
+            'method' => $_SERVER['REQUEST_METHOD'],
+            'content_type' => isset($_SERVER['CONTENT_TYPE']) ? $_SERVER['CONTENT_TYPE'] : 'NOT SET',
+            'files' => $_FILES,
+            'post' => $_POST,
+            'input_size' => strlen($input)
+        ]);
     }
 }

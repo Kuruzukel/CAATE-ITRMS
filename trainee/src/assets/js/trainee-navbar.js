@@ -594,52 +594,7 @@ window.addEventListener('storage', function (e) {
     }
 });
 
-// Global function to update profile images across all trainee pages
-window.updateTraineeProfileImages = function (imagePath) {
-    const profileImageSelectors = [
-        '#profileImage', // Main profile image
-        '.navbar .avatar img',
-        '.dropdown-menu .avatar img',
-        '.navbar-dropdown .avatar img',
-        '.navbar img[src*="DEFAULT_AVATAR"]',
-        '.navbar img[alt=""]',
-        'img.w-px-40.h-auto.rounded-circle',
-        '.navbar img.rounded-circle',
-        '.dropdown-menu img.w-px-40',
-        '.dropdown-menu img.rounded-circle',
-        '.avatar img', // Generic avatar images
-        'img[alt="Profile Picture"]' // Specific profile picture images
-    ];
-
-    profileImageSelectors.forEach(selector => {
-        const images = document.querySelectorAll(selector);
-        images.forEach(img => {
-            if (img) {
-                if (imagePath && imagePath !== '../assets/images/DEFAULT_AVATAR.png') {
-                    // Handle both relative and absolute paths
-                    if (imagePath.startsWith('/CAATE-ITRMS/')) {
-                        img.src = window.location.origin + imagePath;
-                    } else if (imagePath.startsWith('http')) {
-                        img.src = imagePath;
-                    } else if (imagePath.startsWith('/')) {
-                        img.src = window.location.origin + imagePath;
-                    } else {
-                        img.src = imagePath;
-                    }
-                } else {
-                    img.src = '../assets/images/DEFAULT_AVATAR.png';
-                }
-
-                // Add error handling to fallback to default avatar
-                img.onerror = function () {
-                    this.src = '../assets/images/DEFAULT_AVATAR.png';
-                };
-            }
-        });
-    });
-
-    // Silently update profile images
-};
+// Duplicate function removed - using the first implementation above
 
 // Listen for profile image updates from other pages
 window.addEventListener('profileImageUpdated', function (event) {

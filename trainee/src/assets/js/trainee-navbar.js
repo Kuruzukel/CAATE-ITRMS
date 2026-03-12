@@ -78,12 +78,12 @@ async function loadTraineeProfileForNavbar() {
                 // Map the data to consistent format
                 const mappedData = {
                     _id: traineeData._id || traineeData.id,
-                    name: traineeData.name || `${traineeData.firstName || ''} ${traineeData.lastName || ''}`.trim() || 'Trainee',
+                    name: traineeData.name || `${traineeData.firstName || traineeData.first_name || ''} ${traineeData.lastName || traineeData.last_name || ''}`.trim() || 'Trainee',
                     email: traineeData.email || '',
-                    username: traineeData.username || '',
+                    username: traineeData.username || traineeData.trainee_id || '',
                     role: 'trainee',
-                    firstName: traineeData.firstName || '',
-                    lastName: traineeData.lastName || '',
+                    firstName: traineeData.firstName || traineeData.first_name || '',
+                    lastName: traineeData.lastName || traineeData.last_name || '',
                     profileImage: traineeData.profileImage || null
                 };
 
@@ -106,9 +106,9 @@ async function loadTraineeProfileForNavbar() {
                 try {
                     const fallbackData = JSON.parse(userData);
                     const mappedData = {
-                        name: fallbackData.name || `${fallbackData.firstName || ''} ${fallbackData.lastName || ''}`.trim() || 'Trainee',
+                        name: fallbackData.name || `${fallbackData.firstName || fallbackData.first_name || ''} ${fallbackData.lastName || fallbackData.last_name || ''}`.trim() || 'Trainee',
                         email: fallbackData.email || '',
-                        username: fallbackData.username || '',
+                        username: fallbackData.username || fallbackData.trainee_id || '',
                         role: 'trainee'
                     };
                     updateNavbarWithData(mappedData);
@@ -139,11 +139,29 @@ async function loadTraineeProfileForNavbar() {
  */
 function updateNavbarWithData(data) {
     try {
+        // Determine the display name - prioritize username, then full name, then fallback
+        let displayName = 'Trainee';
+        if (data.username && data.username.trim()) {
+            displayName = data.username.trim();
+        } else if (data.name && data.name.trim()) {
+            displayName = data.name.trim();
+        } else if (data.firstName || data.lastName) {
+            displayName = `${data.firstName || ''} ${data.lastName || ''}`.trim();
+        }
+
         // Update user name in dropdown and welcome messages
         const userNameElements = document.querySelectorAll('.user-name');
         userNameElements.forEach(element => {
             if (element) {
-                element.textContent = data.name || 'Trainee';
+                element.textContent = displayName;
+            }
+        });
+
+        // Update welcome messages specifically
+        const welcomeElements = document.querySelectorAll('.welcome-user-name, .dashboard-welcome .user-name');
+        welcomeElements.forEach(element => {
+            if (element) {
+                element.textContent = displayName;
             }
         });
 
@@ -169,6 +187,9 @@ function updateNavbarWithData(data) {
                 };
             }
         });
+
+        // Store the display name globally for other scripts to use
+        window.currentTraineeDisplayName = displayName;
 
     } catch (error) {
         console.error('Error updating navbar:', error);
@@ -245,7 +266,13 @@ function overrideAuthDashboardUpdates() {
                     // Check if any user-name elements were updated with placeholder text
                     const userNameElements = document.querySelectorAll('.user-name');
                     userNameElements.forEach(element => {
-                        if (element && (element.textContent === 'dsad  sdasd' || element.textContent === 'dsad sdasd' || element.textContent.trim() === 'Trainee')) {
+                        if (element && (
+                            element.textContent === 'dsad  sdasd' ||
+                            element.textContent === 'dsad sdasd' ||
+                            element.textContent.trim() === 'Trainee' ||
+                            element.textContent.trim() === 'Loading...' ||
+                            element.textContent.trim() === ''
+                        )) {
                             shouldUpdate = true;
                         }
                     });
@@ -321,3 +348,29 @@ function ensureMenuDropdownsWork() {
         }
     }, 50);
 }
+
+// Global function to refresh user display name across all pages
+window.refreshUserDisplayName = function () {
+    loadTraineeProfileForNavbar();
+};
+
+// Function to manually update display name (useful for testing or immediate updates)
+window.updateUserDisplayName = function (displayName) {
+    if (displayName && displayName.trim()) {
+        const userNameElements = document.querySelectorAll('.user-name');
+        userNameElements.forEach(element => {
+            if (element) {
+                element.textContent = displayName.trim();
+            }
+        });
+
+        const welcomeElements = document.querySelectorAll('.welcome-user-name, .dashboard-welcome .user-name');
+        welcomeElements.forEach(element => {
+            if (element) {
+                element.textContent = displayName.trim();
+            }
+        });
+
+        window.currentTraineeDisplayName = displayName.trim();
+    }
+};

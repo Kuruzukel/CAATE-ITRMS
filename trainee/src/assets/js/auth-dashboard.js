@@ -196,11 +196,8 @@ document.addEventListener('DOMContentLoaded', function () {
         localStorage.removeItem('rememberedPass');
     }
 
-    const user = getCurrentUser();
-    if (user) {
-        document.querySelectorAll('.user-name').forEach(el => el.textContent = user.name);
-        document.querySelectorAll('.user-email').forEach(el => el.textContent = user.email);
-    }
+    // Load user data immediately
+    loadUserDataForDisplay();
 
     document.querySelectorAll('[data-logout]').forEach(button => {
         button.addEventListener('click', function (e) {
@@ -209,3 +206,34 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 });
+
+/**
+ * Load and display user data immediately
+ */
+function loadUserDataForDisplay() {
+    const user = getCurrentUser();
+    if (user) {
+        // Determine display name - prioritize username, then full name
+        let displayName = 'Trainee';
+        if (user.username && user.username.trim()) {
+            displayName = user.username.trim();
+        } else if (user.name && user.name.trim()) {
+            displayName = user.name.trim();
+        } else if (user.firstName || user.lastName) {
+            displayName = `${user.firstName || ''} ${user.lastName || ''}`.trim();
+        }
+
+        // Update all user name elements
+        document.querySelectorAll('.user-name').forEach(el => {
+            if (el) el.textContent = displayName;
+        });
+
+        // Update email elements
+        document.querySelectorAll('.user-email').forEach(el => {
+            if (el) el.textContent = user.email || '';
+        });
+
+        // Store globally for other scripts
+        window.currentTraineeDisplayName = displayName;
+    }
+}

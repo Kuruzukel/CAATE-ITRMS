@@ -222,6 +222,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     currentPassword: currentPassword,
                     newPassword: newPassword
                 })
+            }).catch(() => {
+                // Suppress console errors
+                return { ok: false, json: () => Promise.resolve({ success: false, error: 'Network error' }) };
             });
 
             const data = await response.json();

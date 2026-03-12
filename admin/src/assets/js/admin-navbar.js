@@ -42,7 +42,7 @@ async function loadAdminProfileForNavbar() {
                 const userData = JSON.parse(cachedData);
                 updateNavbarUserInfo(userData);
             } catch (e) {
-                console.warn('Failed to parse cached user data');
+                // Silently handle parse errors
             }
         }
 
@@ -77,19 +77,16 @@ async function loadAdminProfileForNavbar() {
                 profileImage: adminData.profileImage || '../assets/images/DEFAULT_AVATAR.png'
             };
 
-            console.log('Admin data loaded:', mappedData);
-            console.log('Profile image from backend:', adminData.profileImage);
+
 
             // Update navbar user info
             updateNavbarUserInfo(mappedData);
 
             // Update cached data
             localStorage.setItem('userData', JSON.stringify(mappedData));
-        } else {
-            console.error('Failed to fetch admin data:', response.status);
         }
     } catch (error) {
-        console.error('Error loading admin profile:', error);
+        // Silent error handling
     }
 }
 
@@ -132,20 +129,18 @@ function updateNavbarUserInfo(data) {
                     img.src = data.profileImage;
                 }
                 totalUpdated++;
-                console.log('Updated avatar image:', img.src);
             } else {
                 img.src = '../assets/images/DEFAULT_AVATAR.png';
             }
 
             // Add error handling to fallback to default avatar
             img.onerror = function () {
-                console.log('Image load error, falling back to default avatar');
                 this.src = '../assets/images/DEFAULT_AVATAR.png';
             };
         });
     });
 
-    console.log('Updated navbar with profile image:', data.profileImage, `(${totalUpdated} images updated)`);
+
 
     // Force update any remaining avatar images that might have been missed
     setTimeout(() => {
@@ -168,10 +163,8 @@ function updateNavbarUserInfo(data) {
                     img.src = data.profileImage;
                 }
                 forceUpdated++;
-                console.log('Force updated missed avatar:', img);
             }
         });
-        console.log(`Force updated ${forceUpdated} additional avatars`);
     }, 100);
 }
 
@@ -191,16 +184,14 @@ function initializeAdminNavbar() {
             try {
                 const userData = JSON.parse(e.newValue);
                 updateNavbarUserInfo(userData);
-                console.log('Navbar updated from storage event:', userData.profileImage);
             } catch (error) {
-                console.warn('Failed to parse updated user data');
+                // Silent error handling
             }
         }
     });
 
     // Listen for custom profile image update events
     window.addEventListener('profileImageUpdated', function (e) {
-        console.log('Profile image updated event received:', e.detail);
         if (e.detail && e.detail.imagePath) {
             // Force update all avatars with the new image
             const allAvatarImages = document.querySelectorAll('img[src*="DEFAULT_AVATAR"], .navbar img, .dropdown-menu img, .avatar img');
@@ -221,15 +212,13 @@ function initializeAdminNavbar() {
 
 // Function to refresh navbar data (can be called from other pages)
 window.refreshAdminNavbar = function () {
-    console.log('Refreshing admin navbar...');
     loadAdminProfileForNavbar();
 };
 
 // Function to force update all avatar images with a specific image path
 window.forceUpdateAvatars = function (imagePath) {
-    console.log('Force updating all avatars with:', imagePath);
     const allAvatarImages = document.querySelectorAll('img[src*="DEFAULT_AVATAR"], .navbar img, .dropdown-menu img, .avatar img');
-    allAvatarImages.forEach((img, index) => {
+    allAvatarImages.forEach((img) => {
         if (imagePath.startsWith('/CAATE-ITRMS/')) {
             img.src = window.location.origin + imagePath;
         } else if (imagePath.startsWith('/')) {
@@ -237,13 +226,11 @@ window.forceUpdateAvatars = function (imagePath) {
         } else {
             img.src = imagePath;
         }
-        console.log(`Force updated avatar ${index}:`, img.src);
     });
 };
 
 // Function specifically for manage-profile page to reload navbar after image upload
 window.reloadNavbarAfterImageUpload = function () {
-    console.log('Reloading navbar after image upload...');
     // Clear any cached data to force fresh fetch
     localStorage.removeItem('userData');
     // Reload profile data

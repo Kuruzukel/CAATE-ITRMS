@@ -321,6 +321,7 @@ class AuthController {
             error_log("AuthController::changePassword - Token received: " . ($token ? "yes" : "no"));
             
             if (!$token) {
+                error_log("AuthController::changePassword - No token provided");
                 http_response_code(401);
                 echo json_encode([
                     'success' => false,
@@ -341,9 +342,16 @@ class AuthController {
                 return;
             }
             
-            $data = json_decode(file_get_contents('php://input'), true);
+            $rawInput = file_get_contents('php://input');
+            error_log("AuthController::changePassword - Raw input: " . $rawInput);
+            
+            $data = json_decode($rawInput, true);
+            error_log("AuthController::changePassword - Decoded data: " . json_encode($data));
+            error_log("AuthController::changePassword - Has currentPassword: " . (isset($data['currentPassword']) ? 'yes' : 'no'));
+            error_log("AuthController::changePassword - Has newPassword: " . (isset($data['newPassword']) ? 'yes' : 'no'));
             
             if (!isset($data['currentPassword']) || !isset($data['newPassword'])) {
+                error_log("AuthController::changePassword - Missing required fields");
                 http_response_code(400);
                 echo json_encode([
                     'success' => false,

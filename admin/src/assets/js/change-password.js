@@ -275,7 +275,6 @@ document.addEventListener('DOMContentLoaded', function () {
             // Re-enable submit button
             submitBtn.disabled = false;
             submitBtn.innerHTML = '<i class="bx bx-check me-1"></i> Change Password';
-            confirmBtn.disabled = false;
         }
     });
 

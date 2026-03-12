@@ -226,3 +226,40 @@
         display: none !important;
     }
 }
+
+/* Fix card layout below 1090px - move cards below welcome card */
+@media (max-width: 1089px) {
+    .col-lg-8.mb-4.order-0 {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+    }
+
+    .col-lg-4.col-md-4.order-1 {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+        order: 2 !important;
+    }
+
+    .col-lg-4.col-md-4.order-1 .row {
+        display: flex !important;
+        flex-wrap: wrap !important;
+    }
+
+    .col-lg-4.col-md-4.order-1 .row .col-lg-6.col-md-12 {
+        flex: 0 0 50% !important;
+        max-width: 50% !important;
+    }
+}
+
+/* Keep original layout above 1086px */
+@media (min-width: 1086px) {
+    .col-lg-8.mb-4.order-0 {
+        flex: 0 0 66.666667%;
+        max-width: 66.666667%;
+    }
+
+    .col-lg-4.col-md-4.order-1 {
+        flex: 0 0 33.333333%;
+        max-width: 33.333333%;
+    }
+}

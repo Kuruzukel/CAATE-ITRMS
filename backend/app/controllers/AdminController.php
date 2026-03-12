@@ -70,30 +70,38 @@ class AdminController {
     }
     
     public function update($id) {
-        $data = json_decode(file_get_contents('php://input'), true);
-        
-        // Enhanced logging for debugging
-        error_log("AdminController::update - ID: $id");
-        error_log("AdminController::update - Raw input: " . file_get_contents('php://input'));
-        error_log("AdminController::update - Decoded data: " . json_encode($data));
-        error_log("AdminController::update - Data keys: " . implode(', ', array_keys($data ?? [])));
+        try {
+            $rawInput = file_get_contents('php://input');
+            $data = json_decode($rawInput, true);
+            
+            // Enhanced logging for debugging
+            error_log("=== AdminController::update START ===");
+            error_log("AdminController::update - ID: $id");
+            error_log("AdminController::update - Raw input: " . $rawInput);
+            error_log("AdminController::update - Decoded data: " . json_encode($data));
+            error_log("AdminController::update - Data keys: " . implode(', ', array_keys($data ?? [])));
+            
+            // Check if data is valid
+            if (!$data) {
+                error_log("AdminController::update - ERROR: No data received or invalid JSON");
+                http_response_code(400);
+                echo json_encode(['error' => 'No data received or invalid JSON']);
+                return;
+            }
+            
+            // Validate ID format
+            if (!$id || strlen($id) !== 24) {
+                error_log("AdminController::update - ERROR: Invalid ID format: $id");
+                http_response_code(400);
+                echo json_encode(['error' => 'Invalid admin ID format']);
+                return;
+            }
         
         // Validate required fields
         if (isset($data['username']) && empty(trim($data['username']))) {
             http_response_code(422);
             echo json_encode(['error' => 'Username is required']);
             return;
-        }
-        
-        // Check for duplicate username
-        if (isset($data['username'])) {
-            $adminModel = new Admin();
-            $existingAdmin = $adminModel->findByUsername($data['username']);
-            if ($existingAdmin && (string)$existingAdmin['_id'] !== $id) {
-                http_response_code(422);
-                echo json_encode(['error' => 'Username is already taken']);
-                return;
-            }
         }
         
         if (isset($data['email']) && !filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
@@ -110,22 +118,36 @@ class AdminController {
         
         // Last name is optional - no validation needed
         
-        // If individual name fields are being updated, also update the combined name field
-        if (isset($data['first_name']) || isset($data['second_name']) || isset($data['middle_name']) || isset($data['last_name']) || isset($data['suffix'])) {
-            $adminModel = new Admin();
-            $currentAdmin = $adminModel->findById($id);
-            
-            if (!$currentAdmin) {
-                http_response_code(404);
-                echo json_encode(['error' => 'Admin not found']);
+        $adminModel = new Admin();
+        
+        // First check if admin exists
+        $existingAdmin = $adminModel->findById($id);
+        if (!$existingAdmin) {
+            error_log("AdminController::update - ERROR: Admin not found with ID: $id");
+            http_response_code(404);
+            echo json_encode(['error' => 'Admin not found']);
+            return;
+        }
+        
+        error_log("AdminController::update - Admin found, proceeding with validation");
+        
+        // Check for duplicate username (only if username is being changed)
+        if (isset($data['username']) && $data['username'] !== ($existingAdmin['username'] ?? '')) {
+            $duplicateAdmin = $adminModel->findByUsername($data['username']);
+            if ($duplicateAdmin && (string)$duplicateAdmin['_id'] !== $id) {
+                http_response_code(422);
+                echo json_encode(['error' => 'Username is already taken']);
                 return;
             }
-            
-            $firstName = $data['first_name'] ?? $currentAdmin['first_name'] ?? '';
-            $secondName = $data['second_name'] ?? $currentAdmin['second_name'] ?? '';
-            $middleName = $data['middle_name'] ?? $currentAdmin['middle_name'] ?? '';
-            $lastName = $data['last_name'] ?? $currentAdmin['last_name'] ?? '';
-            $suffix = $data['suffix'] ?? $currentAdmin['suffix'] ?? '';
+        }
+        
+        // If individual name fields are being updated, also update the combined name field
+        if (isset($data['first_name']) || isset($data['second_name']) || isset($data['middle_name']) || isset($data['last_name']) || isset($data['suffix'])) {
+            $firstName = $data['first_name'] ?? $existingAdmin['first_name'] ?? '';
+            $secondName = $data['second_name'] ?? $existingAdmin['second_name'] ?? '';
+            $middleName = $data['middle_name'] ?? $existingAdmin['middle_name'] ?? '';
+            $lastName = $data['last_name'] ?? $existingAdmin['last_name'] ?? '';
+            $suffix = $data['suffix'] ?? $existingAdmin['suffix'] ?? '';
             
             // Construct full name
             $nameParts = array_filter([$firstName, $secondName, $middleName, $lastName, $suffix]);
@@ -134,16 +156,26 @@ class AdminController {
             error_log("AdminController::update - Updated name: " . $data['name']);
         }
         
-        $adminModel = new Admin();
+        error_log("AdminController::update - About to call adminModel->update()");
+        error_log("AdminController::update - Final data to save: " . json_encode($data));
+        
         $result = $adminModel->update($id, $data);
         
-        error_log("AdminController::update - Result: " . ($result ? 'success' : 'failed'));
+        error_log("AdminController::update - Update result: " . ($result ? 'SUCCESS' : 'FAILED'));
+        error_log("=== AdminController::update END ===");
         
         if ($result) {
             echo json_encode(['message' => 'Admin updated successfully']);
         } else {
             http_response_code(500);
             echo json_encode(['error' => 'Failed to update admin profile. Please try again.']);
+        }
+        
+        } catch (Exception $e) {
+            error_log("AdminController::update - EXCEPTION: " . $e->getMessage());
+            error_log("AdminController::update - Stack trace: " . $e->getTraceAsString());
+            http_response_code(500);
+            echo json_encode(['error' => 'Internal server error: ' . $e->getMessage()]);
         }
     }
     
@@ -225,5 +257,43 @@ class AdminController {
             http_response_code(500);
             echo json_encode(['error' => 'Failed to upload file']);
         }
+    }
+    
+    // Debug method to test database connection
+    public function testUpdate($id) {
+        error_log("=== AdminController::testUpdate START ===");
+        
+        try {
+            $adminModel = new Admin();
+            
+            // Test 1: Check if admin exists
+            $admin = $adminModel->findById($id);
+            if (!$admin) {
+                error_log("testUpdate - Admin not found");
+                echo json_encode(['error' => 'Admin not found', 'id' => $id]);
+                return;
+            }
+            
+            error_log("testUpdate - Admin found: " . json_encode($admin));
+            
+            // Test 2: Try a simple update
+            $testData = ['test_field' => 'test_value_' . time()];
+            $result = $adminModel->update($id, $testData);
+            
+            error_log("testUpdate - Update result: " . ($result ? 'SUCCESS' : 'FAILED'));
+            
+            echo json_encode([
+                'message' => 'Test completed',
+                'admin_found' => true,
+                'update_result' => $result,
+                'test_data' => $testData
+            ]);
+            
+        } catch (Exception $e) {
+            error_log("testUpdate - Exception: " . $e->getMessage());
+            echo json_encode(['error' => $e->getMessage()]);
+        }
+        
+        error_log("=== AdminController::testUpdate END ===");
     }
 }

@@ -78,6 +78,15 @@ class Admin {
     
     public function update($id, $data) {
         try {
+            // Test database connection first
+            $testResult = $this->collection->findOne(['_id' => new MongoDB\BSON\ObjectId($id)]);
+            if (!$testResult) {
+                error_log("Admin::update - ERROR: Document not found with ID: $id");
+                return false;
+            }
+            
+            error_log("Admin::update - Document found, proceeding with update");
+            
             // Add updated timestamp
             $data['updated_at'] = new MongoDB\BSON\UTCDateTime();
             

@@ -397,7 +397,7 @@ function initializeEditForm() {
         saveButton.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i> Saving...';
 
         try {
-            await saveProfileChanges();
+            await saveProfileChangesNew();
         } finally {
             // Reset button state
             saveButton.disabled = false;
@@ -893,3 +893,221 @@ function showNotification(message, type = 'info') {
     showToast(message, type);
 }
 
+
+// NEW Save profile changes function - 2024
+async function saveProfileChangesNew() {
+    console.log('NEW FUNCTION CALLED - saveProfileChangesNew');
+
+    const token = localStorage.getItem('authToken');
+    const userId = localStorage.getItem('userId');
+
+    if (!token || !userId) {
+        showToast('Authentication required. Please log in again.', 'error');
+        window.location.href = '../../../auth/src/pages/login.html';
+        return;
+    }
+
+    const editUsername = document.getElementById('editUsername');
+    const editFirstName = document.getElementById('editFirstName');
+    const editSecondName = document.getElementById('editSecondName');
+    const editMiddleName = document.getElementById('editMiddleName');
+    const editLastName = document.getElementById('editLastName');
+    const editSuffix = document.getElementById('editSuffix');
+    const editPhone = document.getElementById('editPhone');
+    const editEmail = document.getElementById('editEmail');
+    const editAddress = document.getElementById('editAddress');
+
+    const updatedData = {
+        username: editUsername ? editUsername.value.trim() : '',
+        first_name: editFirstName ? editFirstName.value.trim() : '',
+        second_name: editSecondName ? editSecondName.value.trim() : '',
+        middle_name: editMiddleName ? editMiddleName.value.trim() : '',
+        last_name: editLastName ? editLastName.value.trim() : '',
+        suffix: editSuffix ? editSuffix.value.trim() : '',
+        phone: editPhone ? editPhone.value.trim() : '',
+        email: editEmail ? editEmail.value.trim() : '',
+        address: editAddress ? editAddress.value.trim() : ''
+    };
+
+    // NEW SPECIFIC VALIDATION - 2024
+    console.log('NEW Validation - Checking fields:', updatedData);
+    console.log('NEW Validation - Field values:');
+    console.log('- username:', updatedData.username);
+    console.log('- first_name:', updatedData.first_name);
+    console.log('- second_name:', updatedData.second_name);
+    console.log('- middle_name:', updatedData.middle_name);
+    console.log('- last_name:', updatedData.last_name);
+    console.log('- suffix:', updatedData.suffix);
+    console.log('- phone:', updatedData.phone);
+    console.log('- email:', updatedData.email);
+    console.log('- address:', updatedData.address);
+
+    if (!updatedData.username || updatedData.username === '') {
+        console.log('NEW - Username validation failed');
+        showToast('Username field is required.', 'error');
+        return;
+    }
+
+    if (!updatedData.first_name || updatedData.first_name === '') {
+        console.log('NEW - First name validation failed');
+        showToast('First name field is required.', 'error');
+        return;
+    }
+
+    if (!updatedData.email || updatedData.email === '') {
+        console.log('NEW - Email validation failed');
+        showToast('Email address field is required.', 'error');
+        return;
+    }
+
+    // Email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(updatedData.email)) {
+        showToast('Please enter a valid email address format.', 'error');
+        return;
+    }
+
+    // Phone number validation (optional but if provided, should be valid)
+    if (updatedData.phone && updatedData.phone.length > 0) {
+        const phoneRegex = /^[\+]?[0-9\s\-\(\)]{10,15}$/;
+        if (!phoneRegex.test(updatedData.phone)) {
+            showToast('Please enter a valid phone number format (10-15 digits).', 'error');
+            return;
+        }
+    }
+
+    // Check if there are any changes by comparing with current displayed values
+    const currentUsername = document.getElementById('personalUsername')?.value || '';
+    const currentFirstName = document.getElementById('personalFirstName')?.value || '';
+    const currentSecondName = document.getElementById('personalSecondName')?.value || '';
+    const currentMiddleName = document.getElementById('personalMiddleName')?.value || '';
+    const currentLastName = document.getElementById('personalLastName')?.value || '';
+    const currentSuffix = document.getElementById('personalSuffix')?.value || '';
+    const currentPhone = document.getElementById('personalPhone')?.value || '';
+    const currentEmail = document.getElementById('personalEmail')?.value || '';
+    const currentAddress = document.getElementById('personalAddress')?.value || '';
+
+    const hasChanges =
+        updatedData.username !== currentUsername ||
+        updatedData.first_name !== currentFirstName ||
+        updatedData.second_name !== currentSecondName ||
+        updatedData.middle_name !== currentMiddleName ||
+        updatedData.last_name !== currentLastName ||
+        updatedData.suffix !== currentSuffix ||
+        updatedData.phone !== currentPhone ||
+        updatedData.email !== currentEmail ||
+        updatedData.address !== currentAddress;
+
+    if (!hasChanges) {
+        showToast('No changes detected. Your profile is already up to date.', 'info');
+        // Close modal
+        const modal = bootstrap.Modal.getInstance(document.getElementById('editInformationModal'));
+        if (modal) modal.hide();
+        return;
+    }
+
+    try {
+        console.log('NEW - Sending data to backend:', updatedData);
+        console.log('NEW - Request URL:', `${config.api.baseUrl}/api/v1/admins/${userId}`);
+        console.log('NEW - Request method: PUT');
+        console.log('NEW - Request headers:', {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        });
+        const response = await fetch(`${config.api.baseUrl}/api/v1/admins/${userId}`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updatedData)
+        });
+
+        console.log('NEW - Response status:', response.status);
+
+        if (response.ok) {
+            const result = await response.json();
+            console.log('NEW - Success result:', result);
+
+            // Close modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('editInformationModal'));
+            if (modal) modal.hide();
+
+            // Reload profile data to reflect changes
+            await loadAdminProfile();
+
+            // Show success toast
+            showToast('Profile updated successfully!', 'success');
+        } else {
+            const errorData = await response.json();
+            console.log('NEW - Error response:', errorData);
+            let errorMessage = 'Failed to update profile';
+
+            // Handle specific error cases
+            if (response.status === 404) {
+                errorMessage = 'Admin account not found. Please contact support.';
+            } else if (response.status === 401) {
+                errorMessage = 'Authentication expired. Please log in again.';
+                setTimeout(() => {
+                    window.location.href = '../../../auth/src/pages/login.html';
+                }, 2000);
+            } else if (response.status === 403) {
+                errorMessage = 'You do not have permission to update this profile.';
+            } else if (response.status === 422) {
+                errorMessage = errorData.error || 'Invalid data provided. Please check your inputs.';
+            } else if (response.status === 409) {
+                errorMessage = 'Email address is already in use by another account.';
+            } else if (response.status === 500) {
+                errorMessage = 'Server error occurred. Please try again later.';
+            } else if (response.status === 503) {
+                errorMessage = 'Service temporarily unavailable. Please try again in a few minutes.';
+            } else if (errorData.error) {
+                errorMessage = errorData.error;
+            }
+
+            throw new Error(errorMessage);
+        }
+    } catch (error) {
+        console.log('NEW - Catch error:', error);
+        // Handle network errors
+        if (error.name === 'TypeError' && error.message.includes('fetch')) {
+            showToast('Network error. Please check your connection and try again.', 'error');
+        } else if (error.message.includes('Authentication expired')) {
+            showToast('Session expired. Redirecting to login...', 'error');
+        } else {
+            showToast(error.message, 'error');
+        }
+    }
+}
+
+// Debug function to test database connection
+async function testDatabaseUpdate() {
+    const token = localStorage.getItem('authToken');
+    const userId = localStorage.getItem('userId');
+
+    console.log('Testing database update with ID:', userId);
+
+    try {
+        const response = await fetch(`${config.api.baseUrl}/api/v1/admins/${userId}/test`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const result = await response.json();
+        console.log('Test result:', result);
+
+        if (response.ok) {
+            showToast('Database test completed - check console', 'info');
+        } else {
+            showToast('Database test failed - check console', 'error');
+        }
+    } catch (error) {
+        console.error('Test error:', error);
+        showToast('Database test error - check console', 'error');
+    }
+}
+
+// Test functionality removed - main save function should work now

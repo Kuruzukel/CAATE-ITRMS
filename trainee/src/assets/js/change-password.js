@@ -2,7 +2,7 @@
 
 // API Configuration
 const API_BASE_URL = (typeof config !== 'undefined' && config.api)
-    ? config.api.baseURL
+    ? config.api.baseUrl
     : '/CAATE-ITRMS/backend/public';
 
 // Toggle password visibility

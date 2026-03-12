@@ -47,7 +47,7 @@ async function loadAdminProfileForNavbar() {
         }
 
         // Fetch fresh admin data from the admins collection
-        const apiUrl = `${config.api.baseURL}/api/v1/admins/${userId}`;
+        const apiUrl = `${config.api.baseUrl}/api/v1/admins/${userId}`;
 
         const response = await fetch(apiUrl, {
             method: 'GET',

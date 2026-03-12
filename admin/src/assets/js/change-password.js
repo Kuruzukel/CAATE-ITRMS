@@ -2,7 +2,7 @@
 
 // API Configuration
 const API_BASE_URL = (typeof config !== 'undefined' && config.api)
-    ? config.api.baseURL
+    ? config.api.baseUrl
     : '/CAATE-ITRMS/backend/public';
 
 // Toggle password visibility
@@ -211,6 +211,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 throw new Error('Authentication required. Please log in again.');
             }
 
+
+
             // Call auth change-password endpoint
             const response = await fetch(`${API_BASE_URL}/api/v1/auth/change-password`, {
                 method: 'POST',
@@ -222,12 +224,14 @@ document.addEventListener('DOMContentLoaded', function () {
                     currentPassword: currentPassword,
                     newPassword: newPassword
                 })
-            }).catch(() => {
-                // Suppress console errors
-                return { ok: false, json: () => Promise.resolve({ success: false, error: 'Network error' }) };
             });
 
-            const data = await response.json();
+            let data;
+            try {
+                data = await response.json();
+            } catch (e) {
+                throw new Error('Invalid server response');
+            }
 
             if (response.ok && data.success) {
                 // Show success toast
@@ -248,8 +252,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     window.location.href = '../../../auth/src/pages/login.html';
                 }, 2000);
             } else {
-                // Show error toast
-                showToast(data.error || 'Failed to change password', 'error');
+                // Show specific error message from server
+                const errorMessage = data.error || `Server error (${response.status})`;
+                showToast(errorMessage, 'error');
 
                 // Re-enable submit button
                 submitBtn.disabled = false;
@@ -257,7 +262,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 confirmBtn.disabled = false;
             }
         } catch (error) {
-            showToast('Network error. Please try again.', 'error');
+            showToast(`Network error: ${error.message}`, 'error');
 
             // Re-enable submit button
             submitBtn.disabled = false;

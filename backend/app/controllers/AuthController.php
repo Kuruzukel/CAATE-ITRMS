@@ -314,6 +314,11 @@ class AuthController {
         header('Content-Type: application/json');
         header('Access-Control-Allow-Origin: *');
         
+        // Log the start of the method
+        error_log("=== AuthController::changePassword - START ===");
+        error_log("Request method: " . $_SERVER['REQUEST_METHOD']);
+        error_log("Request URI: " . $_SERVER['REQUEST_URI']);
+        
         try {
             // Get user from Bearer token
             $token = $this->getBearerToken();
@@ -362,8 +367,8 @@ class AuthController {
             
             $userId = $userInfo['id'];
             $userRole = $userInfo['role'];
-            $currentPassword = $data['currentPassword'];
-            $newPassword = $data['newPassword'];
+            $currentPassword = trim($data['currentPassword']);
+            $newPassword = trim($data['newPassword']);
             
             error_log("AuthController::changePassword - User ID: $userId, Role: $userRole");
             
@@ -392,7 +397,12 @@ class AuthController {
                 }
                 
                 // Verify current password
-                if ($user['password'] !== $currentPassword) {
+                $storedPassword = trim($user['password']);
+                error_log("AuthController::changePassword - Admin stored password: " . $storedPassword);
+                error_log("AuthController::changePassword - Admin current password input: " . $currentPassword);
+                
+                if ($storedPassword !== $currentPassword) {
+                    error_log("AuthController::changePassword - Admin password verification failed");
                     http_response_code(400);
                     echo json_encode([
                         'success' => false,
@@ -419,13 +429,25 @@ class AuthController {
                 
                 // Verify current password (support both hashed and plain text)
                 $passwordMatches = false;
+                
+                error_log("AuthController::changePassword - Stored password: " . $user['password']);
+                error_log("AuthController::changePassword - Current password input: " . $currentPassword);
+                
+                // First try hashed password verification
                 if (password_verify($currentPassword, $user['password'])) {
                     $passwordMatches = true;
-                } elseif ($user['password'] === $currentPassword) {
+                    error_log("AuthController::changePassword - Password verified using hash");
+                } 
+                // Then try plain text comparison (for legacy passwords)
+                elseif ($user['password'] === $currentPassword) {
                     $passwordMatches = true;
+                    error_log("AuthController::changePassword - Password verified using plain text");
                 }
                 
+                error_log("AuthController::changePassword - Password matches: " . ($passwordMatches ? 'yes' : 'no'));
+                
                 if (!$passwordMatches) {
+                    error_log("AuthController::changePassword - Password verification failed");
                     http_response_code(400);
                     echo json_encode([
                         'success' => false,

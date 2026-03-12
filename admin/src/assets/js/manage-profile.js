@@ -1,7 +1,7 @@
 /* Manage Profile Page Script - Admin */
 
 // API Configuration
-const API_BASE_URL = config.api.baseURL;
+const API_BASE_URL = config.api.baseUrl;
 
 // Authentication check
 function checkAuthentication() {
@@ -59,7 +59,7 @@ async function loadAdminProfile() {
 
         // Fetch admin data from the admins collection
         try {
-            const response = await fetch(`${config.api.baseURL}/api/v1/admins/${userId}`, {
+            const response = await fetch(`${config.api.baseUrl}/api/v1/admins/${userId}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -442,7 +442,7 @@ async function saveProfileChanges() {
 
 
     try {
-        const response = await fetch(`${config.api.baseURL}/api/v1/admins/${userId}`, {
+        const response = await fetch(`${config.api.baseUrl}/api/v1/admins/${userId}`, {
             method: 'PUT',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -568,7 +568,7 @@ async function uploadProfileImage(file) {
         const formData = new FormData();
         formData.append('profileImage', file);
 
-        const response = await fetch(`${config.api.baseURL}/api/v1/admins/${userId}/profile-image`, {
+        const response = await fetch(`${config.api.baseUrl}/api/v1/admins/${userId}/profile-image`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`

@@ -25,6 +25,6 @@ let config = {
     borderColor: '#eceef1'
   },
   api: {
-    baseURL: 'http://localhost/CAATE-ITRMS/backend/public'
+    baseUrl: window.location.origin + '/CAATE-ITRMS/backend/public'
   }
 };

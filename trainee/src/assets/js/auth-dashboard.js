@@ -213,14 +213,26 @@ document.addEventListener('DOMContentLoaded', function () {
 function loadUserDataForDisplay() {
     const user = getCurrentUser();
     if (user) {
-        // Determine display name - prioritize username, then full name
+        // Determine display name - prioritize full name, then username
         let displayName = 'Trainee';
-        if (user.username && user.username.trim()) {
-            displayName = user.username.trim();
+
+        // First try to build full name from all available name parts
+        const firstName = user.firstName || user.first_name || '';
+        const secondName = user.secondName || user.second_name || '';
+        const middleName = user.middleName || user.middle_name || '';
+        const lastName = user.lastName || user.last_name || '';
+        const suffix = user.suffix || '';
+
+        // Build complete full name with all parts
+        const nameParts = [firstName, secondName, middleName, lastName, suffix].filter(part => part.trim() !== '');
+        const fullName = nameParts.join(' ').trim();
+
+        if (fullName && fullName !== '') {
+            displayName = fullName;
         } else if (user.name && user.name.trim()) {
             displayName = user.name.trim();
-        } else if (user.firstName || user.lastName) {
-            displayName = `${user.firstName || ''} ${user.lastName || ''}`.trim();
+        } else if (user.username && user.username.trim()) {
+            displayName = user.username.trim();
         }
 
         // Update all user name elements

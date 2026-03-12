@@ -337,20 +337,41 @@ function updatePersonalInformation(data) {
 
 // Update navbar user info
 function updateNavbarUserInfo(data) {
+    // Build full name from all name parts
+    const nameParts = [
+        data.firstName || '',
+        data.secondName || '',
+        data.middleName || '',
+        data.lastName || '',
+        data.suffix || ''
+    ].filter(part => part.trim() !== '');
+
+    const displayName = nameParts.join(' ') || 'Trainee';
+
+    // Update all user-name elements (this is the main fix)
+    const userNameElements = document.querySelectorAll('.user-name');
+    userNameElements.forEach(element => {
+        if (element) {
+            element.textContent = displayName;
+        }
+    });
+
+    // Also update the specific dropdown element (legacy support)
     const userName = document.querySelector('.dropdown-menu .flex-grow-1 .fw-semibold');
     if (userName) {
-        // Use combined full name
-        const nameParts = [
-            data.firstName || '',
-            data.secondName || '',
-            data.middleName || '',
-            data.lastName || '',
-            data.suffix || ''
-        ].filter(part => part.trim() !== '');
-
-        const displayName = nameParts.join(' ') || 'Trainee';
         userName.textContent = displayName;
     }
+
+    // Update welcome messages
+    const welcomeElements = document.querySelectorAll('.welcome-user-name, .dashboard-welcome .user-name');
+    welcomeElements.forEach(element => {
+        if (element) {
+            element.textContent = displayName;
+        }
+    });
+
+    // Store globally for other scripts
+    window.currentTraineeDisplayName = displayName;
 
     // Update profile images in navbar - target all avatar images more comprehensively
     const profileImageSelectors = [
@@ -770,3 +791,45 @@ function showWarning(message) {
 function showNotification(message, type = 'info') {
     showToast(message, type);
 }
+// Function to manually refresh user display name (can be called from console for testing)
+window.refreshTraineeDisplayName = function () {
+    const userData = localStorage.getItem('userData');
+    if (userData) {
+        try {
+            const data = JSON.parse(userData);
+            updateNavbarUserInfo(data);
+            console.log('Display name refreshed with stored data:', data);
+        } catch (e) {
+            console.error('Failed to parse stored user data');
+            // Reload from API
+            loadTraineeProfile();
+        }
+    } else {
+        console.log('No stored user data found, loading from API...');
+        loadTraineeProfile();
+    }
+};
+
+// Function to fix placeholder text immediately
+window.fixPlaceholderDisplayName = function () {
+    const userNameElements = document.querySelectorAll('.user-name');
+    let foundPlaceholder = false;
+
+    userNameElements.forEach(element => {
+        if (element && (
+            element.textContent === 'dsad  sdasd' ||
+            element.textContent === 'dsad sdasd' ||
+            element.textContent.includes('dsad')
+        )) {
+            element.textContent = 'Loading...';
+            foundPlaceholder = true;
+        }
+    });
+
+    if (foundPlaceholder) {
+        console.log('Found placeholder text, refreshing user data...');
+        window.refreshTraineeDisplayName();
+    } else {
+        console.log('No placeholder text found');
+    }
+};

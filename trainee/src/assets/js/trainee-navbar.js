@@ -75,15 +75,43 @@ async function loadTraineeProfileForNavbar() {
                 const result = await response.json();
                 traineeData = result.data || result.user || result;
 
+                console.log('Raw trainee data from API:', traineeData); // Debug log
+
                 // Map the data to consistent format
+                const firstName = traineeData.firstName || traineeData.first_name || '';
+                const secondName = traineeData.secondName || traineeData.second_name || '';
+                const middleName = traineeData.middleName || traineeData.middle_name || '';
+                const lastName = traineeData.lastName || traineeData.last_name || '';
+                const suffix = traineeData.suffix || '';
+
+                // Build complete full name with all parts
+                const nameParts = [firstName, secondName, middleName, lastName, suffix].filter(part => part.trim() !== '');
+                const fullName = nameParts.join(' ').trim();
+
+                console.log('Extracted names:', { firstName, secondName, middleName, lastName, suffix, fullName }); // Debug log
+
+                let displayName = 'Trainee';
+                if (fullName && fullName !== '') {
+                    displayName = fullName;
+                } else if (traineeData.name && traineeData.name.trim()) {
+                    displayName = traineeData.name.trim();
+                } else if (traineeData.username || traineeData.trainee_id) {
+                    displayName = (traineeData.username || traineeData.trainee_id || '').trim();
+                }
+
+                console.log('Final display name:', displayName); // Debug log
+
                 const mappedData = {
                     _id: traineeData._id || traineeData.id,
-                    name: traineeData.name || `${traineeData.firstName || traineeData.first_name || ''} ${traineeData.lastName || traineeData.last_name || ''}`.trim() || 'Trainee',
+                    name: displayName,
                     email: traineeData.email || '',
                     username: traineeData.username || traineeData.trainee_id || '',
                     role: 'trainee',
-                    firstName: traineeData.firstName || traineeData.first_name || '',
-                    lastName: traineeData.lastName || traineeData.last_name || '',
+                    firstName: firstName,
+                    secondName: secondName,
+                    middleName: middleName,
+                    lastName: lastName,
+                    suffix: suffix,
                     profileImage: traineeData.profileImage || null
                 };
 
@@ -105,11 +133,36 @@ async function loadTraineeProfileForNavbar() {
             if (userData) {
                 try {
                     const fallbackData = JSON.parse(userData);
+                    // Build full name first, then fallback to other options
+                    const firstName = fallbackData.firstName || fallbackData.first_name || '';
+                    const secondName = fallbackData.secondName || fallbackData.second_name || '';
+                    const middleName = fallbackData.middleName || fallbackData.middle_name || '';
+                    const lastName = fallbackData.lastName || fallbackData.last_name || '';
+                    const suffix = fallbackData.suffix || '';
+
+                    // Build complete full name with all parts
+                    const nameParts = [firstName, secondName, middleName, lastName, suffix].filter(part => part.trim() !== '');
+                    const fullName = nameParts.join(' ').trim();
+
+                    let displayName = 'Trainee';
+                    if (fullName && fullName !== '') {
+                        displayName = fullName;
+                    } else if (fallbackData.name && fallbackData.name.trim()) {
+                        displayName = fallbackData.name.trim();
+                    } else if (fallbackData.username || fallbackData.trainee_id) {
+                        displayName = (fallbackData.username || fallbackData.trainee_id).trim();
+                    }
+
                     const mappedData = {
-                        name: fallbackData.name || `${fallbackData.firstName || fallbackData.first_name || ''} ${fallbackData.lastName || fallbackData.last_name || ''}`.trim() || 'Trainee',
+                        name: displayName,
                         email: fallbackData.email || '',
                         username: fallbackData.username || fallbackData.trainee_id || '',
-                        role: 'trainee'
+                        role: 'trainee',
+                        firstName: firstName,
+                        secondName: secondName,
+                        middleName: middleName,
+                        lastName: lastName,
+                        suffix: suffix
                     };
                     updateNavbarWithData(mappedData);
                     return mappedData;
@@ -139,14 +192,26 @@ async function loadTraineeProfileForNavbar() {
  */
 function updateNavbarWithData(data) {
     try {
-        // Determine the display name - prioritize username, then full name, then fallback
+        // Determine the display name - prioritize full name, then username, then fallback
         let displayName = 'Trainee';
-        if (data.username && data.username.trim()) {
-            displayName = data.username.trim();
+
+        // First try to build full name from all available name parts
+        const firstName = data.firstName || data.first_name || '';
+        const secondName = data.secondName || data.second_name || '';
+        const middleName = data.middleName || data.middle_name || '';
+        const lastName = data.lastName || data.last_name || '';
+        const suffix = data.suffix || '';
+
+        // Build complete full name with all parts
+        const nameParts = [firstName, secondName, middleName, lastName, suffix].filter(part => part.trim() !== '');
+        const fullName = nameParts.join(' ').trim();
+
+        if (fullName && fullName !== '') {
+            displayName = fullName;
         } else if (data.name && data.name.trim()) {
             displayName = data.name.trim();
-        } else if (data.firstName || data.lastName) {
-            displayName = `${data.firstName || ''} ${data.lastName || ''}`.trim();
+        } else if (data.username && data.username.trim()) {
+            displayName = data.username.trim();
         }
 
         // Update user name in dropdown and welcome messages
@@ -271,7 +336,8 @@ function overrideAuthDashboardUpdates() {
                             element.textContent === 'dsad sdasd' ||
                             element.textContent.trim() === 'Trainee' ||
                             element.textContent.trim() === 'Loading...' ||
-                            element.textContent.trim() === ''
+                            element.textContent.trim() === '' ||
+                            element.textContent.includes('dsad') // Catch any variation of the placeholder
                         )) {
                             shouldUpdate = true;
                         }
@@ -374,3 +440,95 @@ window.updateUserDisplayName = function (displayName) {
         window.currentTraineeDisplayName = displayName.trim();
     }
 };
+
+// Function to immediately fix placeholder text on page load
+function fixPlaceholderText() {
+    const userNameElements = document.querySelectorAll('.user-name');
+    userNameElements.forEach(element => {
+        if (element && (
+            element.textContent === 'dsad  sdasd' ||
+            element.textContent === 'dsad sdasd' ||
+            element.textContent.includes('dsad')
+        )) {
+            element.textContent = 'Loading...';
+            // Trigger immediate data load
+            loadTraineeProfileForNavbar();
+        }
+    });
+}
+
+// Run the fix immediately when script loads
+fixPlaceholderText();
+
+// Also run it when DOM is ready
+document.addEventListener('DOMContentLoaded', function () {
+    setTimeout(fixPlaceholderText, 100);
+});
+
+// Force refresh user display name from localStorage (useful for immediate updates)
+window.forceRefreshUserName = function () {
+    const userData = localStorage.getItem('userData');
+    if (userData) {
+        try {
+            const user = JSON.parse(userData);
+
+            // Build complete full name with all parts
+            const firstName = user.firstName || user.first_name || '';
+            const secondName = user.secondName || user.second_name || '';
+            const middleName = user.middleName || user.middle_name || '';
+            const lastName = user.lastName || user.last_name || '';
+            const suffix = user.suffix || '';
+
+            const nameParts = [firstName, secondName, middleName, lastName, suffix].filter(part => part.trim() !== '');
+            const fullName = nameParts.join(' ').trim();
+
+            let displayName = 'Trainee';
+            if (fullName && fullName !== '') {
+                displayName = fullName;
+            } else if (user.name && user.name.trim()) {
+                displayName = user.name.trim();
+            } else if (user.username && user.username.trim()) {
+                displayName = user.username.trim();
+            }
+
+            console.log('Force refreshing display name to:', displayName);
+
+            // Update all user name elements
+            const userNameElements = document.querySelectorAll('.user-name');
+            userNameElements.forEach(element => {
+                if (element) {
+                    element.textContent = displayName;
+                }
+            });
+
+            const welcomeElements = document.querySelectorAll('.welcome-user-name, .dashboard-welcome .user-name');
+            welcomeElements.forEach(element => {
+                if (element) {
+                    element.textContent = displayName;
+                }
+            });
+
+            window.currentTraineeDisplayName = displayName;
+
+        } catch (e) {
+            console.error('Error force refreshing user name:', e);
+        }
+    }
+};
+// Listen for profile updates from manage-profile page
+window.addEventListener('storage', function (e) {
+    if (e.key === 'userData' && e.newValue) {
+        console.log('User data updated in localStorage, refreshing display name...');
+        setTimeout(() => {
+            window.forceRefreshUserName();
+        }, 100);
+    }
+});
+
+// Also listen for custom profile update events
+window.addEventListener('profileUpdated', function (e) {
+    console.log('Profile updated event received, refreshing display name...');
+    setTimeout(() => {
+        window.forceRefreshUserName();
+    }, 100);
+});

@@ -1,4 +1,4 @@
-/* Manage Profile Page Script - Admin - Updated validation rules */
+/* Manage Profile Page Script - Admin - v2.0 - Cache Bust 2024 */
 
 // API Configuration
 const API_BASE_URL = config.api.baseUrl;
@@ -471,18 +471,23 @@ async function saveProfileChanges() {
         address: editAddress ? editAddress.value.trim() : ''
     };
 
-    // Specific field validation with individual messages
-    if (!updatedData.username) {
+    // Specific field validation with individual messages - Updated 2024
+    console.log('Validating fields:', updatedData);
+
+    if (!updatedData.username || updatedData.username.trim() === '') {
+        console.log('Username validation failed');
         showToast('Username is required.', 'error');
         return;
     }
 
-    if (!updatedData.first_name) {
+    if (!updatedData.first_name || updatedData.first_name.trim() === '') {
+        console.log('First name validation failed');
         showToast('First name is required.', 'error');
         return;
     }
 
-    if (!updatedData.email) {
+    if (!updatedData.email || updatedData.email.trim() === '') {
+        console.log('Email validation failed');
         showToast('Email address is required.', 'error');
         return;
     }
@@ -536,6 +541,7 @@ async function saveProfileChanges() {
 
 
     try {
+        console.log('Sending data to backend:', updatedData);
         const response = await fetch(`${config.api.baseUrl}/api/v1/admins/${userId}`, {
             method: 'PUT',
             headers: {
@@ -544,6 +550,9 @@ async function saveProfileChanges() {
             },
             body: JSON.stringify(updatedData)
         });
+
+        console.log('Response status:', response.status);
+        console.log('Response headers:', response.headers);
 
 
 

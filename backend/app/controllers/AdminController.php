@@ -72,9 +72,11 @@ class AdminController {
     public function update($id) {
         $data = json_decode(file_get_contents('php://input'), true);
         
-        // Log the incoming data for debugging
+        // Enhanced logging for debugging
         error_log("AdminController::update - ID: $id");
-        error_log("AdminController::update - Data: " . json_encode($data));
+        error_log("AdminController::update - Raw input: " . file_get_contents('php://input'));
+        error_log("AdminController::update - Decoded data: " . json_encode($data));
+        error_log("AdminController::update - Data keys: " . implode(', ', array_keys($data ?? [])));
         
         // Validate required fields
         if (isset($data['username']) && empty(trim($data['username']))) {

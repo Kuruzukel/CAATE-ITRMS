@@ -82,7 +82,8 @@ class Admin {
             $data['updated_at'] = new MongoDB\BSON\UTCDateTime();
             
             error_log("Admin::update - ID: $id");
-            error_log("Admin::update - Data: " . json_encode($data));
+            error_log("Admin::update - Data to save: " . json_encode($data));
+            error_log("Admin::update - Data keys: " . implode(', ', array_keys($data)));
             
             $result = $this->collection->updateOne(
                 ['_id' => new MongoDB\BSON\ObjectId($id)],
@@ -91,11 +92,19 @@ class Admin {
             
             $success = $result->getModifiedCount() > 0;
             error_log("Admin::update - Modified count: " . $result->getModifiedCount());
+            error_log("Admin::update - Matched count: " . $result->getMatchedCount());
             error_log("Admin::update - Success: " . ($success ? 'true' : 'false'));
+            
+            // If no documents were modified but one was matched, it might mean no actual changes
+            if ($result->getMatchedCount() > 0 && $result->getModifiedCount() === 0) {
+                error_log("Admin::update - Document matched but not modified (no changes detected)");
+                return true; // Consider this a success since the document exists
+            }
             
             return $success;
         } catch (Exception $e) {
             error_log("Admin::update - Exception: " . $e->getMessage());
+            error_log("Admin::update - Stack trace: " . $e->getTraceAsString());
             return false;
         }
     }

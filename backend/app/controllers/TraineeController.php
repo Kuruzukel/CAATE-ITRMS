@@ -9,17 +9,84 @@ class TraineeController {
         header('Access-Control-Allow-Origin: *');
         
         try {
-            $traineeModel = new Trainee();
-            echo json_encode([
+            $db = getMongoConnection();
+            
+            // Test basic connection
+            $collections = [];
+            $errors = [];
+            
+            // Test trainees collection
+            try {
+                $count = $db->trainees->countDocuments();
+                $collections['trainees'] = ['status' => 'ok', 'count' => $count];
+            } catch (Exception $e) {
+                $errors['trainees'] = $e->getMessage();
+                $collections['trainees'] = ['status' => 'error', 'error' => $e->getMessage()];
+            }
+            
+            // Test enrollments collection
+            try {
+                $count = $db->enrollments->countDocuments();
+                $collections['enrollments'] = ['status' => 'ok', 'count' => $count];
+            } catch (Exception $e) {
+                $errors['enrollments'] = $e->getMessage();
+                $collections['enrollments'] = ['status' => 'error', 'error' => $e->getMessage()];
+            }
+            
+            // Test courses collection
+            try {
+                $count = $db->courses->countDocuments();
+                $collections['courses'] = ['status' => 'ok', 'count' => $count];
+            } catch (Exception $e) {
+                $errors['courses'] = $e->getMessage();
+                $collections['courses'] = ['status' => 'error', 'error' => $e->getMessage()];
+            }
+            
+            // Test admins collection
+            try {
+                $count = $db->admins->countDocuments();
+                $collections['admins'] = ['status' => 'ok', 'count' => $count];
+            } catch (Exception $e) {
+                $errors['admins'] = $e->getMessage();
+                $collections['admins'] = ['status' => 'error', 'error' => $e->getMessage()];
+            }
+            
+            // Test applications collection
+            try {
+                $count = $db->applications->countDocuments();
+                $collections['applications'] = ['status' => 'ok', 'count' => $count];
+            } catch (Exception $e) {
+                $errors['applications'] = $e->getMessage();
+                $collections['applications'] = ['status' => 'error', 'error' => $e->getMessage()];
+            }
+            
+            // Test admissions collection
+            try {
+                $count = $db->admissions->countDocuments();
+                $collections['admissions'] = ['status' => 'ok', 'count' => $count];
+            } catch (Exception $e) {
+                $errors['admissions'] = $e->getMessage();
+                $collections['admissions'] = ['status' => 'error', 'error' => $e->getMessage()];
+            }
+            
+            $response = [
                 'success' => true,
                 'message' => 'API and Database connection OK',
-                'mongodb' => 'Connected'
-            ]);
+                'mongodb' => 'Connected',
+                'collections' => $collections
+            ];
+            
+            if (!empty($errors)) {
+                $response['warnings'] = $errors;
+            }
+            
+            echo json_encode($response);
         } catch (Exception $e) {
             http_response_code(500);
             echo json_encode([
                 'success' => false,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
             ]);
         }
     }

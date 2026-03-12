@@ -311,129 +311,147 @@ class AuthController {
     }
     
     public function changePassword() {
-        // Get user from Bearer token
-        $token = $this->getBearerToken();
+        header('Content-Type: application/json');
+        header('Access-Control-Allow-Origin: *');
         
-        if (!$token) {
-            http_response_code(401);
-            echo json_encode([
-                'success' => false,
-                'error' => 'Unauthorized. Please login first.'
-            ]);
-            return;
-        }
-        
-        // Verify token and get user info
-        $userInfo = $this->verifyToken($token);
-        if (!$userInfo) {
-            http_response_code(401);
-            echo json_encode([
-                'success' => false,
-                'error' => 'Invalid or expired token'
-            ]);
-            return;
-        }
-        
-        $data = json_decode(file_get_contents('php://input'), true);
-        
-        if (!isset($data['currentPassword']) || !isset($data['newPassword'])) {
-            http_response_code(400);
-            echo json_encode([
-                'success' => false,
-                'error' => 'Current password and new password are required'
-            ]);
-            return;
-        }
-        
-        $userId = $userInfo['id'];
-        $userRole = $userInfo['role'];
-        $currentPassword = $data['currentPassword'];
-        $newPassword = $data['newPassword'];
-        
-        // Validate new password strength
-        if (strlen($newPassword) < 8) {
-            http_response_code(400);
-            echo json_encode([
-                'success' => false,
-                'error' => 'New password must be at least 8 characters long'
-            ]);
-            return;
-        }
-        
-        // Get user based on role
-        if ($userRole === 'admin') {
-            $adminModel = new Admin();
-            $user = $adminModel->findById($userId);
+        try {
+            // Get user from Bearer token
+            $token = $this->getBearerToken();
             
-            if (!$user) {
-                http_response_code(404);
+            error_log("AuthController::changePassword - Token received: " . ($token ? "yes" : "no"));
+            
+            if (!$token) {
+                http_response_code(401);
                 echo json_encode([
                     'success' => false,
-                    'error' => 'User not found'
+                    'error' => 'Unauthorized. Please login first.'
                 ]);
                 return;
             }
             
-            // Verify current password
-            if ($user['password'] !== $currentPassword) {
+            // Verify token and get user info
+            $userInfo = $this->verifyToken($token);
+            if (!$userInfo) {
+                error_log("AuthController::changePassword - Token verification failed");
+                http_response_code(401);
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'Invalid or expired token'
+                ]);
+                return;
+            }
+            
+            $data = json_decode(file_get_contents('php://input'), true);
+            
+            if (!isset($data['currentPassword']) || !isset($data['newPassword'])) {
                 http_response_code(400);
                 echo json_encode([
                     'success' => false,
-                    'error' => 'Current password is incorrect'
+                    'error' => 'Current password and new password are required'
                 ]);
                 return;
             }
             
-            // Update password (plain text for admin)
-            $adminModel->update($userId, ['password' => $newPassword]);
+            $userId = $userInfo['id'];
+            $userRole = $userInfo['role'];
+            $currentPassword = $data['currentPassword'];
+            $newPassword = $data['newPassword'];
             
-        } else if ($userRole === 'trainee') {
-            $traineeModel = new Trainee();
-            $user = $traineeModel->findById($userId);
+            error_log("AuthController::changePassword - User ID: $userId, Role: $userRole");
             
-            if (!$user) {
-                http_response_code(404);
-                echo json_encode([
-                    'success' => false,
-                    'error' => 'User not found'
-                ]);
-                return;
-            }
-            
-            // Verify current password (support both hashed and plain text)
-            $passwordMatches = false;
-            if (password_verify($currentPassword, $user['password'])) {
-                $passwordMatches = true;
-            } elseif ($user['password'] === $currentPassword) {
-                $passwordMatches = true;
-            }
-            
-            if (!$passwordMatches) {
+            // Validate new password strength
+            if (strlen($newPassword) < 8) {
                 http_response_code(400);
                 echo json_encode([
                     'success' => false,
-                    'error' => 'Current password is incorrect'
+                    'error' => 'New password must be at least 8 characters long'
                 ]);
                 return;
             }
             
-            // Update password (hashed for trainee)
-            $hashedPassword = password_hash($newPassword, PASSWORD_BCRYPT);
-            $traineeModel->update($userId, ['password' => $hashedPassword]);
+            // Get user based on role
+            if ($userRole === 'admin') {
+                $adminModel = new Admin();
+                $user = $adminModel->findById($userId);
+                
+                if (!$user) {
+                    http_response_code(404);
+                    echo json_encode([
+                        'success' => false,
+                        'error' => 'User not found'
+                    ]);
+                    return;
+                }
+                
+                // Verify current password
+                if ($user['password'] !== $currentPassword) {
+                    http_response_code(400);
+                    echo json_encode([
+                        'success' => false,
+                        'error' => 'Current password is incorrect'
+                    ]);
+                    return;
+                }
+                
+                // Update password (plain text for admin)
+                $adminModel->update($userId, ['password' => $newPassword]);
+                
+            } else if ($userRole === 'trainee') {
+                $traineeModel = new Trainee();
+                $user = $traineeModel->findById($userId);
+                
+                if (!$user) {
+                    http_response_code(404);
+                    echo json_encode([
+                        'success' => false,
+                        'error' => 'User not found'
+                    ]);
+                    return;
+                }
+                
+                // Verify current password (support both hashed and plain text)
+                $passwordMatches = false;
+                if (password_verify($currentPassword, $user['password'])) {
+                    $passwordMatches = true;
+                } elseif ($user['password'] === $currentPassword) {
+                    $passwordMatches = true;
+                }
+                
+                if (!$passwordMatches) {
+                    http_response_code(400);
+                    echo json_encode([
+                        'success' => false,
+                        'error' => 'Current password is incorrect'
+                    ]);
+                    return;
+                }
+                
+                // Update password (hashed for trainee)
+                $hashedPassword = password_hash($newPassword, PASSWORD_BCRYPT);
+                $traineeModel->update($userId, ['password' => $hashedPassword]);
+                
+            } else {
+                http_response_code(400);
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'Invalid user role'
+                ]);
+                return;
+            }
             
-        } else {
-            http_response_code(400);
+            echo json_encode([
+                'success' => true,
+                'message' => 'Password changed successfully'
+            ]);
+        } catch (Exception $e) {
+            error_log("AuthController::changePassword - Exception: " . $e->getMessage());
+            error_log("AuthController::changePassword - Stack trace: " . $e->getTraceAsString());
+            http_response_code(500);
             echo json_encode([
                 'success' => false,
-                'error' => 'Invalid user role'
+                'error' => 'Internal server error: ' . $e->getMessage()
             ]);
-            return;
         }
-        
-        echo json_encode([
-            'success' => true,
-            'message' => 'Password changed successfully'
-        ]);
     }
 
     // Helper method to extract Bearer token from Authorization header
@@ -451,15 +469,22 @@ class AuthController {
     // Helper method to verify JWT token and extract user info
     private function verifyToken($token) {
         try {
-            $decoded = JwtHelper::verifyToken($token);
+            error_log("AuthController::verifyToken - Verifying token: " . substr($token, 0, 20) . "...");
+            
+            $decoded = JwtHelper::validateToken($token);
+            
             if ($decoded) {
+                error_log("AuthController::verifyToken - Token valid. User ID: " . ($decoded['user_id'] ?? 'N/A') . ", Role: " . ($decoded['role'] ?? 'N/A'));
                 return [
                     'id' => $decoded['user_id'],
                     'role' => $decoded['role']
                 ];
+            } else {
+                error_log("AuthController::verifyToken - Token validation returned false");
             }
         } catch (Exception $e) {
-            error_log("Token verification failed: " . $e->getMessage());
+            error_log("AuthController::verifyToken - Exception: " . $e->getMessage());
+            error_log("AuthController::verifyToken - Stack trace: " . $e->getTraceAsString());
         }
         return null;
     }

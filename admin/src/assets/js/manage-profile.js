@@ -72,6 +72,10 @@ async function loadAdminProfile() {
 
                 let adminData = result.data || result.admin || result;
 
+                console.log('loadAdminProfile - Raw response data:', adminData);
+                console.log('loadAdminProfile - secondName from response:', adminData.secondName);
+                console.log('loadAdminProfile - suffix from response:', adminData.suffix);
+
                 // The AdminController already maps database fields to frontend format
                 const mappedData = {
                     _id: adminData._id,
@@ -80,8 +84,10 @@ async function loadAdminProfile() {
                     username: adminData.username,
                     role: adminData.role,
                     firstName: adminData.firstName,        // AdminController maps first_name to firstName
+                    secondName: adminData.secondName,      // AdminController maps second_name to secondName
                     middleName: adminData.middleName,      // AdminController maps middle_name to middleName
                     lastName: adminData.lastName,          // AdminController maps last_name to lastName
+                    suffix: adminData.suffix,              // AdminController maps suffix to suffix
                     phone: adminData.phone,
                     phoneNumber: adminData.phone,
                     address: adminData.address,
@@ -89,6 +95,10 @@ async function loadAdminProfile() {
                     updated_at: adminData.updated_at,
                     profileImage: adminData.profileImage || '../assets/images/DEFAULT_AVATAR.png'
                 };
+
+                console.log('loadAdminProfile - Mapped data:', mappedData);
+                console.log('loadAdminProfile - Mapped secondName:', mappedData.secondName);
+                console.log('loadAdminProfile - Mapped suffix:', mappedData.suffix);
 
                 // Update profile overview
                 updateProfileOverview(mappedData);
@@ -99,7 +109,8 @@ async function loadAdminProfile() {
                 // Update navbar user info
                 updateNavbarUserInfo(mappedData);
 
-
+                // Verify data mapping (for debugging)
+                setTimeout(() => verifyDataMapping(), 100);
 
                 // Store the mapped data in localStorage for future use
                 localStorage.setItem('userData', JSON.stringify(mappedData));
@@ -231,6 +242,7 @@ function updatePersonalInformation(data) {
     // Second name
     const secondNameInput = document.getElementById('personalSecondName');
     if (secondNameInput) {
+        console.log('updatePersonalInformation - Setting secondName:', data.secondName);
         secondNameInput.value = data.secondName || '';
     }
 
@@ -249,6 +261,7 @@ function updatePersonalInformation(data) {
     // Suffix
     const suffixInput = document.getElementById('personalSuffix');
     if (suffixInput) {
+        console.log('updatePersonalInformation - Setting suffix:', data.suffix);
         suffixInput.value = data.suffix || '';
     }
 
@@ -1036,6 +1049,9 @@ async function saveProfileChangesNew() {
             // Reload profile data to reflect changes
             await loadAdminProfile();
 
+            // Verify the changes were applied (for debugging)
+            setTimeout(() => verifyDataMapping(), 200);
+
             // Show success toast
             showToast('Profile updated successfully!', 'success');
         } else {
@@ -1081,6 +1097,30 @@ async function saveProfileChangesNew() {
 }
 
 // Debug function to test database connection
+// Test function to verify data mapping
+function verifyDataMapping() {
+    console.log('=== VERIFICATION TEST ===');
+
+    // Check if form fields exist
+    const secondNameField = document.getElementById('personalSecondName');
+    const suffixField = document.getElementById('personalSuffix');
+    const editSecondNameField = document.getElementById('editSecondName');
+    const editSuffixField = document.getElementById('editSuffix');
+
+    console.log('Form fields exist:');
+    console.log('- personalSecondName:', !!secondNameField);
+    console.log('- personalSuffix:', !!suffixField);
+    console.log('- editSecondName:', !!editSecondNameField);
+    console.log('- editSuffix:', !!editSuffixField);
+
+    if (secondNameField) console.log('- personalSecondName value:', secondNameField.value);
+    if (suffixField) console.log('- personalSuffix value:', suffixField.value);
+    if (editSecondNameField) console.log('- editSecondName value:', editSecondNameField.value);
+    if (editSuffixField) console.log('- editSuffix value:', editSuffixField.value);
+
+    console.log('=== END VERIFICATION ===');
+}
+
 async function testDatabaseUpdate() {
     const token = localStorage.getItem('authToken');
     const userId = localStorage.getItem('userId');

@@ -86,6 +86,7 @@ class Admin {
             }
             
             error_log("Admin::update - Document found, proceeding with update");
+            error_log("Admin::update - Current document: " . json_encode($testResult));
             
             // Add updated timestamp
             $data['updated_at'] = new MongoDB\BSON\UTCDateTime();
@@ -93,6 +94,9 @@ class Admin {
             error_log("Admin::update - ID: $id");
             error_log("Admin::update - Data to save: " . json_encode($data));
             error_log("Admin::update - Data keys: " . implode(', ', array_keys($data)));
+            
+            // Log the exact MongoDB query
+            error_log("Admin::update - MongoDB query: updateOne(['_id' => ObjectId('$id')], ['\$set' => " . json_encode($data) . "])");
             
             $result = $this->collection->updateOne(
                 ['_id' => new MongoDB\BSON\ObjectId($id)],
@@ -104,9 +108,13 @@ class Admin {
             error_log("Admin::update - Matched count: " . $result->getMatchedCount());
             error_log("Admin::update - Success: " . ($success ? 'true' : 'false'));
             
+            // Check the document after update
+            $updatedDocument = $this->collection->findOne(['_id' => new MongoDB\BSON\ObjectId($id)]);
+            error_log("Admin::update - Document after update: " . json_encode($updatedDocument));
+            
             // If no documents were modified but one was matched, it might mean no actual changes
             if ($result->getMatchedCount() > 0 && $result->getModifiedCount() === 0) {
-                error_log("Admin::update - Document matched but not modified (no changes detected)");
+                error_log("Admin::update - Document matched but not modified (no changes detected or data identical)");
                 return true; // Consider this a success since the document exists
             }
             

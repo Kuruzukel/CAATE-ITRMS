@@ -48,15 +48,24 @@
                 '.password-manager-popup',
                 '.password-manager-dialog',
                 '[role="dialog"][aria-label*="password"]',
-                '[role="dialog"][aria-label*="Password"]'
+                '[role="dialog"][aria-label*="Password"]',
+                '[role="alertdialog"]',
+                'div[style*="position: fixed"][style*="z-index"]',
+                '.goog-tooltip',
+                '[data-breach-notification]'
             ];
 
             selectors.forEach(selector => {
                 const elements = document.querySelectorAll(selector);
                 elements.forEach(el => {
-                    el.style.display = 'none';
-                    el.style.visibility = 'hidden';
-                    el.style.opacity = '0';
+                    // Check if it's a password manager notification
+                    const text = el.textContent || '';
+                    if (text.includes('password') || text.includes('breach') || text.includes('data breach')) {
+                        el.style.display = 'none !important';
+                        el.style.visibility = 'hidden !important';
+                        el.style.opacity = '0 !important';
+                        el.style.pointerEvents = 'none !important';
+                    }
                 });
             });
         };
@@ -85,4 +94,35 @@
 
     // Run periodically to catch any dynamically added elements
     setInterval(disablePasswordManager, 2000);
+
+    // Use MutationObserver to catch dynamically added password manager notifications
+    if (window.MutationObserver && document.body) {
+        try {
+            const observer = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    if (mutation.addedNodes.length) {
+                        mutation.addedNodes.forEach((node) => {
+                            if (node.nodeType === 1) { // Element node
+                                const text = node.textContent || '';
+                                if (text.includes('password') || text.includes('breach') || text.includes('data breach')) {
+                                    node.style.display = 'none !important';
+                                    node.style.visibility = 'hidden !important';
+                                    node.style.opacity = '0 !important';
+                                    node.style.pointerEvents = 'none !important';
+                                }
+                            }
+                        });
+                    }
+                });
+            });
+
+            observer.observe(document.body, {
+                childList: true,
+                subtree: true,
+                attributes: false
+            });
+        } catch (e) {
+            // Ignore observer errors
+        }
+    }
 })();

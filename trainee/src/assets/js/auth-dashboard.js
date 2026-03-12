@@ -245,6 +245,19 @@ function loadUserDataForDisplay() {
             if (el) el.textContent = user.email || '';
         });
 
+        // Update avatar images with profile image if available
+        const profileImage = user.profile_image || user.profileImage || '';
+        if (profileImage) {
+            document.querySelectorAll('.avatar img').forEach(img => {
+                if (img) {
+                    img.src = profileImage;
+                    img.onerror = function () {
+                        this.src = '../assets/images/DEFAULT_AVATAR.png';
+                    };
+                }
+            });
+        }
+
         // Store globally for other scripts
         window.currentTraineeDisplayName = displayName;
     }

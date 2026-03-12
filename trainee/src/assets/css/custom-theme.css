@@ -2980,3 +2980,49 @@ nav.layout-navbar.navbar-detached.container-xxl,
 .menu-item.open .menu-sub {
     display: block !important;
 }
+
+
+/* Hide Google Password Manager Notifications */
+[data-password-manager-popup],
+[data-password-manager-dialog],
+.password-manager-popup,
+.password-manager-dialog,
+[role="dialog"][aria-label*="password"],
+[role="dialog"][aria-label*="Password"],
+[role="alertdialog"],
+div[style*="position: fixed"][style*="z-index"]:has(> *:contains("password")),
+div[style*="position: fixed"][style*="z-index"]:has(> *:contains("breach")),
+.goog-tooltip,
+[data-breach-notification] {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    height: 0 !important;
+    width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+}
+
+/* Prevent password manager styling on inputs */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px white inset !important;
+    box-shadow: 0 0 0 30px white inset !important;
+    -webkit-text-fill-color: #333 !important;
+}
+
+/* Hide any modal overlays that might contain password notifications */
+.modal-backdrop,
+.modal-backdrop.show {
+    display: none !important;
+}
+
+/* Suppress any fixed position elements that might be password manager notifications */
+body>div[style*="position: fixed"],
+body>div[style*="position: absolute"] {
+    display: none !important;
+}

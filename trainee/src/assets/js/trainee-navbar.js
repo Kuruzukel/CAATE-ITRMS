@@ -112,7 +112,8 @@ async function loadTraineeProfileForNavbar() {
                     middleName: middleName,
                     lastName: lastName,
                     suffix: suffix,
-                    profileImage: traineeData.profileImage || null
+                    profileImage: traineeData.profileImage || traineeData.profile_image || null,
+                    profile_image: traineeData.profile_image || traineeData.profileImage || null
                 };
 
                 // Cache the data
@@ -162,7 +163,9 @@ async function loadTraineeProfileForNavbar() {
                         secondName: secondName,
                         middleName: middleName,
                         lastName: lastName,
-                        suffix: suffix
+                        suffix: suffix,
+                        profileImage: fallbackData.profileImage || fallbackData.profile_image || null,
+                        profile_image: fallbackData.profile_image || fallbackData.profileImage || null
                     };
                     updateNavbarWithData(mappedData);
                     return mappedData;
@@ -231,17 +234,20 @@ function updateNavbarWithData(data) {
         });
 
         // Update profile images - handle both default and uploaded images
-        const profileImages = document.querySelectorAll('img[src*="DEFAULT_AVATAR"], img[alt=""], .avatar img');
+        const profileImages = document.querySelectorAll('img[src*="DEFAULT_AVATAR"], img[alt=""], .avatar img, img.w-px-40, img.rounded-circle');
         profileImages.forEach(img => {
             if (img) {
-                if (data.profileImage && data.profileImage !== '../assets/images/DEFAULT_AVATAR.png') {
+                const imagePath = data.profileImage || data.profile_image;
+                if (imagePath && imagePath !== '../assets/images/DEFAULT_AVATAR.png') {
                     // Handle both relative and absolute paths
-                    if (data.profileImage.startsWith('/CAATE-ITRMS/')) {
-                        img.src = window.location.origin + data.profileImage;
-                    } else if (data.profileImage.startsWith('http')) {
-                        img.src = data.profileImage;
+                    if (imagePath.startsWith('/CAATE-ITRMS/')) {
+                        img.src = window.location.origin + imagePath;
+                    } else if (imagePath.startsWith('http')) {
+                        img.src = imagePath;
+                    } else if (imagePath.startsWith('/')) {
+                        img.src = window.location.origin + imagePath;
                     } else {
-                        img.src = data.profileImage;
+                        img.src = imagePath;
                     }
                 } else {
                     img.src = '../assets/images/DEFAULT_AVATAR.png';
@@ -531,4 +537,129 @@ window.addEventListener('profileUpdated', function (e) {
     setTimeout(() => {
         window.forceRefreshUserName();
     }, 100);
+});
+// Global function to update profile images across all trainee pages
+window.updateTraineeProfileImages = function (imagePath) {
+    const profileImageSelectors = [
+        '#profileImage', // Main profile image
+        '.navbar .avatar img',
+        '.dropdown-menu .avatar img',
+        '.navbar-dropdown .avatar img',
+        '.navbar img[src*="DEFAULT_AVATAR"]',
+        '.navbar img[alt=""]',
+        'img.w-px-40.h-auto.rounded-circle',
+        '.navbar img.rounded-circle',
+        '.dropdown-menu img.w-px-40',
+        '.dropdown-menu img.rounded-circle',
+        '.avatar img', // Generic avatar images
+        'img[alt="Profile Picture"]' // Specific profile picture images
+    ];
+
+    let totalUpdated = 0;
+    profileImageSelectors.forEach(selector => {
+        const images = document.querySelectorAll(selector);
+        images.forEach(img => {
+            if (img) {
+                if (imagePath && imagePath !== '../assets/images/DEFAULT_AVATAR.png') {
+                    // Handle both relative and absolute paths
+                    if (imagePath.startsWith('/CAATE-ITRMS/')) {
+                        img.src = window.location.origin + imagePath;
+                    } else if (imagePath.startsWith('http')) {
+                        img.src = imagePath;
+                    } else if (imagePath.startsWith('/')) {
+                        img.src = window.location.origin + imagePath;
+                    } else {
+                        img.src = imagePath;
+                    }
+                    totalUpdated++;
+                } else {
+                    img.src = '../assets/images/DEFAULT_AVATAR.png';
+                }
+
+                // Add error handling to fallback to default avatar
+                img.onerror = function () {
+                    this.src = '../assets/images/DEFAULT_AVATAR.png';
+                };
+            }
+        });
+    });
+
+    console.log(`Updated ${totalUpdated} profile images across page with path: ${imagePath}`);
+};
+
+// Listen for profile image updates from other pages
+window.addEventListener('profileImageUpdated', function (e) {
+    if (e.detail && e.detail.imagePath) {
+        console.log('Profile image updated event received, updating images...');
+        window.updateTraineeProfileImages(e.detail.imagePath);
+    }
+});
+// Global function to update profile images across all trainee pages
+window.updateTraineeProfileImages = function (imagePath) {
+    const profileImageSelectors = [
+        '#profileImage', // Main profile image on manage-profile page
+        '.navbar .avatar img', // Navbar avatar
+        '.dropdown-menu .avatar img', // Dropdown avatar
+        '.navbar-dropdown .avatar img',
+        '.navbar img[src*="DEFAULT_AVATAR"]',
+        '.navbar img[alt=""]',
+        'img.w-px-40.h-auto.rounded-circle', // Specific navbar image
+        '.navbar img.rounded-circle',
+        '.dropdown-menu img.w-px-40',
+        '.dropdown-menu img.rounded-circle',
+        'img.w-px-40', // Any 40px width images (likely avatars)
+        'img.rounded-circle' // Any rounded circle images (likely avatars)
+    ];
+
+    profileImageSelectors.forEach(selector => {
+        const images = document.querySelectorAll(selector);
+        images.forEach(img => {
+            if (img && imagePath && imagePath !== '../assets/images/DEFAULT_AVATAR.png') {
+                // Handle different path formats
+                let imageSrc = imagePath;
+                if (imagePath.startsWith('/CAATE-ITRMS/')) {
+                    imageSrc = window.location.origin + imagePath;
+                } else if (imagePath.startsWith('/')) {
+                    imageSrc = window.location.origin + imagePath;
+                } else if (imagePath.startsWith('http')) {
+                    imageSrc = imagePath;
+                } else {
+                    // Assume it's a filename and construct the full path
+                    imageSrc = `${window.location.origin}/CAATE-ITRMS/backend/public/uploads/profiles/${imagePath}`;
+                }
+                img.src = imageSrc;
+            } else {
+                img.src = '../assets/images/DEFAULT_AVATAR.png';
+            }
+
+            // Add error handling to fallback to default avatar
+            img.onerror = function () {
+                this.src = '../assets/images/DEFAULT_AVATAR.png';
+            };
+        });
+    });
+
+    console.log('Updated all trainee profile images with:', imagePath);
+};
+
+// Listen for profile image updates from other pages
+window.addEventListener('profileImageUpdated', function (e) {
+    if (e.detail && e.detail.imagePath) {
+        console.log('Profile image updated event received:', e.detail.imagePath);
+        window.updateTraineeProfileImages(e.detail.imagePath);
+    }
+});
+
+// Listen for storage changes to update profile images
+window.addEventListener('storage', function (e) {
+    if (e.key === 'userData' && e.newValue) {
+        try {
+            const userData = JSON.parse(e.newValue);
+            if (userData.profileImage || userData.profile_image) {
+                window.updateTraineeProfileImages(userData.profileImage || userData.profile_image);
+            }
+        } catch (error) {
+            console.warn('Failed to parse updated user data for profile image');
+        }
+    }
 });

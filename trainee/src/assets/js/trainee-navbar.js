@@ -233,31 +233,9 @@ function updateNavbarWithData(data) {
             }
         });
 
-        // Update profile images - handle both default and uploaded images
-        const profileImages = document.querySelectorAll('img[src*="DEFAULT_AVATAR"], img[alt=""], .avatar img, img.w-px-40, img.rounded-circle');
-        profileImages.forEach(img => {
-            if (img) {
-                const imagePath = data.profileImage || data.profile_image;
-                if (imagePath && imagePath !== '../assets/images/DEFAULT_AVATAR.png') {
-                    // Handle both relative and absolute paths
-                    if (imagePath.startsWith('/CAATE-ITRMS/')) {
-                        img.src = window.location.origin + imagePath;
-                    } else if (imagePath.startsWith('http')) {
-                        img.src = imagePath;
-                    } else if (imagePath.startsWith('/')) {
-                        img.src = window.location.origin + imagePath;
-                    } else {
-                        img.src = imagePath;
-                    }
-                } else {
-                    img.src = '../assets/images/DEFAULT_AVATAR.png';
-                }
-
-                img.onerror = function () {
-                    this.src = '../assets/images/DEFAULT_AVATAR.png';
-                };
-            }
-        });
+        // Update profile images using the global function
+        const imagePath = data.profileImage || data.profile_image;
+        window.updateTraineeProfileImages(imagePath);
 
         // Store the display name globally for other scripts to use
         window.currentTraineeDisplayName = displayName;
@@ -560,8 +538,13 @@ window.updateTraineeProfileImages = function (imagePath) {
         const images = document.querySelectorAll(selector);
         images.forEach(img => {
             if (img) {
-                if (imagePath && imagePath !== '../assets/images/DEFAULT_AVATAR.png') {
-                    // Handle both relative and absolute paths
+                // Check if we have a valid uploaded image path
+                if (imagePath &&
+                    imagePath !== '../assets/images/DEFAULT_AVATAR.png' &&
+                    imagePath !== 'DEFAULT_AVATAR.png' &&
+                    !imagePath.includes('DEFAULT_AVATAR')) {
+
+                    // Handle different path formats for uploaded images
                     if (imagePath.startsWith('/CAATE-ITRMS/')) {
                         img.src = window.location.origin + imagePath;
                     } else if (imagePath.startsWith('http')) {
@@ -569,10 +552,12 @@ window.updateTraineeProfileImages = function (imagePath) {
                     } else if (imagePath.startsWith('/')) {
                         img.src = window.location.origin + imagePath;
                     } else {
-                        img.src = imagePath;
+                        // Assume it's a filename and construct the full path
+                        img.src = `${window.location.origin}/CAATE-ITRMS/backend/public/uploads/profiles/${imagePath}`;
                     }
                     totalUpdated++;
                 } else {
+                    // Use default avatar for empty or default paths
                     img.src = '../assets/images/DEFAULT_AVATAR.png';
                 }
 

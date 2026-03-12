@@ -202,13 +202,22 @@ document.addEventListener('DOMContentLoaded', function () {
         confirmBtn.disabled = true;
 
         try {
-            // Call API
-            const response = await fetch(`${API_BASE_URL}/api/v1/auth/change-password`, {
+            // Get user info for admin-specific API call
+            const token = localStorage.getItem('authToken');
+            const userId = localStorage.getItem('userId');
+            const userRole = localStorage.getItem('userRole');
+
+            if (!token || !userId || userRole !== 'admin') {
+                throw new Error('Authentication required. Please log in again.');
+            }
+
+            // Call admin-specific API endpoint
+            const response = await fetch(`${API_BASE_URL}/api/v1/admins/${userId}/change-password`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 },
-                credentials: 'include',
                 body: JSON.stringify({
                     currentPassword: currentPassword,
                     newPassword: newPassword
@@ -217,7 +226,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const data = await response.json();
 
-            if (data.success) {
+            if (response.ok && data.success) {
                 // Show success toast
                 showToast('Your password has been changed successfully', 'success');
 

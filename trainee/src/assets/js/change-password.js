@@ -211,8 +211,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 throw new Error('Authentication required. Please log in again.');
             }
 
-            // Call trainee-specific API endpoint
-            const response = await fetch(`${API_BASE_URL}/api/v1/trainees/${userId}/change-password`, {
+            // Call auth change-password endpoint
+            const response = await fetch(`${API_BASE_URL}/api/v1/auth/change-password`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

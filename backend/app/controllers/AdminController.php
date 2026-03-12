@@ -77,6 +77,23 @@ class AdminController {
         error_log("AdminController::update - Data: " . json_encode($data));
         
         // Validate required fields
+        if (isset($data['username']) && empty(trim($data['username']))) {
+            http_response_code(422);
+            echo json_encode(['error' => 'Username is required']);
+            return;
+        }
+        
+        // Check for duplicate username
+        if (isset($data['username'])) {
+            $adminModel = new Admin();
+            $existingAdmin = $adminModel->findByUsername($data['username']);
+            if ($existingAdmin && (string)$existingAdmin['_id'] !== $id) {
+                http_response_code(422);
+                echo json_encode(['error' => 'Username is already taken']);
+                return;
+            }
+        }
+        
         if (isset($data['email']) && !filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
             http_response_code(422);
             echo json_encode(['error' => 'Invalid email address format']);
@@ -92,7 +109,7 @@ class AdminController {
         // Last name is optional - no validation needed
         
         // If individual name fields are being updated, also update the combined name field
-        if (isset($data['first_name']) || isset($data['middle_name']) || isset($data['last_name'])) {
+        if (isset($data['first_name']) || isset($data['second_name']) || isset($data['middle_name']) || isset($data['last_name']) || isset($data['suffix'])) {
             $adminModel = new Admin();
             $currentAdmin = $adminModel->findById($id);
             
@@ -103,11 +120,13 @@ class AdminController {
             }
             
             $firstName = $data['first_name'] ?? $currentAdmin['first_name'] ?? '';
+            $secondName = $data['second_name'] ?? $currentAdmin['second_name'] ?? '';
             $middleName = $data['middle_name'] ?? $currentAdmin['middle_name'] ?? '';
             $lastName = $data['last_name'] ?? $currentAdmin['last_name'] ?? '';
+            $suffix = $data['suffix'] ?? $currentAdmin['suffix'] ?? '';
             
             // Construct full name
-            $nameParts = array_filter([$firstName, $middleName, $lastName]);
+            $nameParts = array_filter([$firstName, $secondName, $middleName, $lastName, $suffix]);
             $data['name'] = implode(' ', $nameParts);
             
             error_log("AdminController::update - Updated name: " . $data['name']);

@@ -449,25 +449,41 @@ async function saveProfileChanges() {
         return;
     }
 
+    const editUsername = document.getElementById('editUsername');
     const editFirstName = document.getElementById('editFirstName');
+    const editSecondName = document.getElementById('editSecondName');
     const editMiddleName = document.getElementById('editMiddleName');
     const editLastName = document.getElementById('editLastName');
+    const editSuffix = document.getElementById('editSuffix');
     const editPhone = document.getElementById('editPhone');
     const editEmail = document.getElementById('editEmail');
     const editAddress = document.getElementById('editAddress');
 
     const updatedData = {
+        username: editUsername ? editUsername.value.trim() : '',
         first_name: editFirstName ? editFirstName.value.trim() : '',
+        second_name: editSecondName ? editSecondName.value.trim() : '',
         middle_name: editMiddleName ? editMiddleName.value.trim() : '',
         last_name: editLastName ? editLastName.value.trim() : '',
+        suffix: editSuffix ? editSuffix.value.trim() : '',
         phone: editPhone ? editPhone.value.trim() : '',
         email: editEmail ? editEmail.value.trim() : '',
         address: editAddress ? editAddress.value.trim() : ''
     };
 
-    // Basic validation
-    if (!updatedData.first_name || !updatedData.email) {
-        showToast('First name and email are required.', 'error');
+    // Specific field validation with individual messages
+    if (!updatedData.username) {
+        showToast('Username is required.', 'error');
+        return;
+    }
+
+    if (!updatedData.first_name) {
+        showToast('First name is required.', 'error');
+        return;
+    }
+
+    if (!updatedData.email) {
+        showToast('Email address is required.', 'error');
         return;
     }
 
@@ -488,17 +504,23 @@ async function saveProfileChanges() {
     }
 
     // Check if there are any changes by comparing with current displayed values
+    const currentUsername = document.getElementById('personalUsername')?.value || '';
     const currentFirstName = document.getElementById('personalFirstName')?.value || '';
+    const currentSecondName = document.getElementById('personalSecondName')?.value || '';
     const currentMiddleName = document.getElementById('personalMiddleName')?.value || '';
     const currentLastName = document.getElementById('personalLastName')?.value || '';
+    const currentSuffix = document.getElementById('personalSuffix')?.value || '';
     const currentPhone = document.getElementById('personalPhone')?.value || '';
     const currentEmail = document.getElementById('personalEmail')?.value || '';
     const currentAddress = document.getElementById('personalAddress')?.value || '';
 
     const hasChanges =
+        updatedData.username !== currentUsername ||
         updatedData.first_name !== currentFirstName ||
+        updatedData.second_name !== currentSecondName ||
         updatedData.middle_name !== currentMiddleName ||
         updatedData.last_name !== currentLastName ||
+        updatedData.suffix !== currentSuffix ||
         updatedData.phone !== currentPhone ||
         updatedData.email !== currentEmail ||
         updatedData.address !== currentAddress;

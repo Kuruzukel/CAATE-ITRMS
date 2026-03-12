@@ -475,7 +475,7 @@ window.forceRefreshUserName = function () {
                 displayName = user.username.trim();
             }
 
-            console.log('Force refreshing display name to:', displayName);
+            // console.log('Force refreshing display name to:', displayName);
 
             // Update all user name elements
             const userNameElements = document.querySelectorAll('.user-name');
@@ -502,7 +502,7 @@ window.forceRefreshUserName = function () {
 // Listen for profile updates from manage-profile page
 window.addEventListener('storage', function (e) {
     if (e.key === 'userData' && e.newValue) {
-        console.log('User data updated in localStorage, refreshing display name...');
+        // console.log('User data updated in localStorage, refreshing display name...');
         setTimeout(() => {
             window.forceRefreshUserName();
         }, 100);
@@ -511,7 +511,7 @@ window.addEventListener('storage', function (e) {
 
 // Also listen for custom profile update events
 window.addEventListener('profileUpdated', function (e) {
-    console.log('Profile updated event received, refreshing display name...');
+    // console.log('Profile updated event received, refreshing display name...');
     setTimeout(() => {
         window.forceRefreshUserName();
     }, 100);
@@ -569,13 +569,13 @@ window.updateTraineeProfileImages = function (imagePath) {
         });
     });
 
-    console.log(`Updated ${totalUpdated} profile images across page with path: ${imagePath}`);
+    // console.log(`Updated ${totalUpdated} profile images across page with path: ${imagePath}`);
 };
 
 // Listen for profile image updates from other pages
 window.addEventListener('profileImageUpdated', function (e) {
     if (e.detail && e.detail.imagePath) {
-        console.log('Profile image updated event received:', e.detail.imagePath);
+        // console.log('Profile image updated event received:', e.detail.imagePath);
         window.updateTraineeProfileImages(e.detail.imagePath);
     }
 });
@@ -638,7 +638,7 @@ window.updateTraineeProfileImages = function (imagePath) {
         });
     });
 
-    console.log('Updated trainee profile images with:', imagePath);
+    // Silently update profile images
 };
 
 // Listen for profile image updates from other pages

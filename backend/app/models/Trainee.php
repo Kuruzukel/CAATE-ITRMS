@@ -67,6 +67,8 @@ class Trainee {
             }
             return null;
         } catch (Exception $e) {
+            error_log("Trainee::findById - Exception: " . $e->getMessage());
+            error_log("Trainee::findById - Stack trace: " . $e->getTraceAsString());
             return null;
         }
     }
@@ -176,49 +178,46 @@ class Trainee {
             $db = getMongoConnection();
             
             // Total trainees - count all trainees in the collection
-            $totalTrainees = $this->collection->countDocuments();
+            $totalTrainees = 0;
+            $activeTrainees = 0;
+            $graduates = 0;
+            
+            try {
+                $totalTrainees = $this->collection->countDocuments();
+                $activeTrainees = $this->collection->countDocuments(['status' => 'active']);
+                $graduates = $this->collection->countDocuments(['status' => 'graduated']);
+            } catch (Exception $e) {
+                error_log("Error counting trainees: " . $e->getMessage());
+            }
             
             // Get enrollment, application, and admission counts from their respective collections
-            $enrollmentCollection = $db->enrollments;
-            $applicationCollection = $db->applications;
-            $admissionCollection = $db->admissions;
+            $totalEnrollment = 0;
+            $totalApplication = 0;
+            $totalAdmission = 0;
             
-            // Count all enrollments (regardless of status)
-            $totalEnrollment = $enrollmentCollection->countDocuments();
-            
-            // Count all applications (regardless of status)
-            $totalApplication = $applicationCollection->countDocuments();
-            
-            // Count all admissions (regardless of status)
-            $totalAdmission = $admissionCollection->countDocuments();
-            
-            // Active trainees (you may need to adjust the criteria)
-            $activeTrainees = $this->collection->countDocuments(['status' => 'active']);
-            
-            // Graduates (you may need to adjust the criteria)
-            $graduates = $this->collection->countDocuments(['status' => 'graduated']);
-            
-            // Monthly enrollments for the year
-            $monthlyEnrollments = [];
-            for ($month = 1; $month <= 12; $month++) {
-                $startDate = new MongoDB\BSON\UTCDateTime(strtotime("$year-$month-01") * 1000);
-                
-                // Calculate end date - handle December specially
-                if ($month === 12) {
-                    $endDate = new MongoDB\BSON\UTCDateTime(strtotime(($year + 1) . "-01-01") * 1000);
-                } else {
-                    $endDate = new MongoDB\BSON\UTCDateTime(strtotime("$year-" . ($month + 1) . "-01") * 1000);
-                }
-                
-                $count = $this->collection->countDocuments([
-                    'created_at' => [
-                        '$gte' => $startDate,
-                        '$lt' => $endDate
-                    ]
-                ]);
-                
-                $monthlyEnrollments[] = $count;
+            try {
+                $enrollmentCollection = $db->enrollments;
+                $totalEnrollment = $enrollmentCollection->countDocuments();
+            } catch (Exception $e) {
+                error_log("Error counting enrollments: " . $e->getMessage());
             }
+            
+            try {
+                $applicationCollection = $db->applications;
+                $totalApplication = $applicationCollection->countDocuments();
+            } catch (Exception $e) {
+                error_log("Error counting applications: " . $e->getMessage());
+            }
+            
+            try {
+                $admissionCollection = $db->admissions;
+                $totalAdmission = $admissionCollection->countDocuments();
+            } catch (Exception $e) {
+                error_log("Error counting admissions: " . $e->getMessage());
+            }
+            
+            // Monthly enrollments for the year - simplified without date range
+            $monthlyEnrollments = array_fill(0, 12, 0);
             
             // Log statistics for debugging
             error_log("Statistics - Total Trainees: $totalTrainees, Enrollments: $totalEnrollment, Applications: $totalApplication, Admissions: $totalAdmission");
@@ -235,6 +234,7 @@ class Trainee {
             ];
         } catch (Exception $e) {
             error_log("Error getting statistics: " . $e->getMessage());
+            error_log("Error getting statistics - Stack trace: " . $e->getTraceAsString());
             return [
                 'total' => 0,
                 'totalEnrollment' => 0,

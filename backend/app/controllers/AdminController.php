@@ -16,10 +16,13 @@ class AdminController {
         header('Access-Control-Allow-Origin: *');
         
         try {
+            error_log("AdminController::show - Fetching admin with ID: $id");
+            
             $adminModel = new Admin();
             $admin = $adminModel->findById($id);
             
             if (!$admin) {
+                error_log("AdminController::show - Admin not found for ID: $id");
                 http_response_code(404);
                 echo json_encode(['error' => 'Admin not found']);
                 return;
@@ -27,7 +30,7 @@ class AdminController {
             
             // Format the admin data for the frontend
             $formattedAdmin = [
-                'id' => (string)$admin['_id'],
+                'id' => isset($admin['_id']) ? (string)$admin['_id'] : $id,
                 'name' => $admin['name'] ?? '',
                 'email' => $admin['email'] ?? '',
                 'username' => $admin['username'] ?? '',
@@ -42,8 +45,7 @@ class AdminController {
                 'profileImage' => $admin['profile_image'] ?? null
             ];
             
-            // Log the profile image for debugging
-            error_log("AdminController::show - Profile Image: " . ($admin['profile_image'] ?? 'null'));
+            error_log("AdminController::show - Successfully fetched admin: " . json_encode($formattedAdmin));
             
             echo json_encode(['data' => $formattedAdmin]);
         } catch (Exception $e) {

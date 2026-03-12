@@ -74,8 +74,16 @@ class Database {
     }
 }
 
-// MongoDB Connection Function (for backward compatibility)
+// MongoDB Connection Singleton
+$_mongoConnection = null;
+
 function getMongoConnection() {
-    $database = new Database();
-    return $database->getDatabase();
+    global $_mongoConnection;
+    
+    if ($_mongoConnection === null) {
+        $database = new Database();
+        $_mongoConnection = $database->getDatabase();
+    }
+    
+    return $_mongoConnection;
 }

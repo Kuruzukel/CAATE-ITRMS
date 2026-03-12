@@ -464,32 +464,4 @@ class AuthController {
         return null;
     }
     
-    // Helper method to extract Bearer token from Authorization header
-    private function getBearerToken() {
-        $headers = getallheaders();
-        if (isset($headers['Authorization'])) {
-            $matches = [];
-            if (preg_match('/Bearer\s+(.+)/', $headers['Authorization'], $matches)) {
-                return $matches[1];
-            }
-        }
-        return null;
-    }
-    
-    // Helper method to verify JWT token and extract user info
-    private function verifyToken($token) {
-        try {
-            $decoded = JwtHelper::verifyToken($token);
-            if ($decoded) {
-                return [
-                    'id' => $decoded['user_id'],
-                    'role' => $decoded['role']
-                ];
-            }
-        } catch (Exception $e) {
-            error_log("Token verification failed: " . $e->getMessage());
-        }
-        return null;
-    }
-    
 }

@@ -39,6 +39,8 @@ class Admin {
             $document = $this->collection->findOne(['_id' => new MongoDB\BSON\ObjectId($id)]);
             return $document ? (array)$document : null;
         } catch (Exception $e) {
+            error_log("Admin::findById - Exception: " . $e->getMessage());
+            error_log("Admin::findById - Stack trace: " . $e->getTraceAsString());
             return null;
         }
     }

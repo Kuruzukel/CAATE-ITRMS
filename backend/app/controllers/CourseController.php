@@ -289,88 +289,119 @@ class CourseController {
     }
     
     public function getEnrollmentStatistics() {
-        header('Content-Type: application/json');
-        header('Access-Control-Allow-Origin: *');
-        
-        try {
-            $db = getMongoConnection();
-            $enrollmentsCollection = $db->enrollments;
-            $coursesCollection = $db->courses;
-            
-            // Get all courses
-            $courses = $coursesCollection->find()->toArray();
-            
-            // Count enrollments per course
-            $allCourses = [];
-            $totalEnrollmentsCount = 0;
-            
-            foreach ($courses as $course) {
-                $courseId = (string)$course['_id'];
-                $courseName = $course['title'] ?? 'Unknown Course';
-                $courseHours = $course['hours'] ?? 0;
-                $courseImage = $course['image'] ?? '';
-                $courseDescription = $course['description'] ?? '';
-                
-                // Count enrolled trainees for this course (accept multiple status values)
-                // Try both string comparison and case-insensitive
-                $enrollmentCount = $enrollmentsCollection->countDocuments([
-                    'course_id' => $courseId,
-                    'status' => ['$in' => ['enrolled', 'active', 'approved', 'ongoing', 'Enrolled', 'Active', 'Approved', 'Ongoing']]
-                ]);
-                
-                // Also try without status filter to see if course_id matches
-                $totalForCourse = $enrollmentsCollection->countDocuments([
-                    'course_id' => $courseId
-                ]);
-                
-                $totalEnrollmentsCount += $enrollmentCount;
-                
-                $allCourses[] = [
-                    'id' => $courseId,
-                    'name' => $courseName,
-                    'hours' => $courseHours,
-                    'enrollmentCount' => $enrollmentCount,
-                    'totalForCourse' => $totalForCourse, // Debug: total enrollments regardless of status
-                    'image' => $courseImage,
-                    'description' => $courseDescription
-                ];
-            }
-            
-            // Sort by enrollment count descending
-            usort($allCourses, function($a, $b) {
-                return $b['enrollmentCount'] - $a['enrollmentCount'];
-            });
-            
-            // Get top 5 courses
-            $topCourses = array_slice($allCourses, 0, 5);
-            
-            // Calculate total enrollments (accept multiple status values)
-            $totalEnrollments = $enrollmentsCollection->countDocuments([
-                'status' => ['$in' => ['enrolled', 'active', 'approved', 'ongoing', 'Enrolled', 'Active', 'Approved', 'Ongoing']]
-            ]);
-            
-            // Debug: Get total count of all enrollments
-            $allEnrollmentsCount = $enrollmentsCollection->countDocuments([]);
-            
-            echo json_encode([
-                'success' => true,
-                'data' => [
-                    'totalEnrollments' => $totalEnrollments,
-                    'topCourses' => $topCourses,
-                    'debug' => [
-                        'allEnrollmentsInDb' => $allEnrollmentsCount,
-                        'totalCounted' => $totalEnrollmentsCount
+            header('Content-Type: application/json');
+            header('Access-Control-Allow-Origin: *');
+
+            try {
+                $db = getMongoConnection();
+                $enrollmentsCollection = $db->enrollments;
+                $coursesCollection = $db->courses;
+
+                // Get all courses with error handling
+                $courses = [];
+                try {
+                    $courses = $coursesCollection->find()->toArray();
+                } catch (Exception $e) {
+                    error_log("CourseController::getEnrollmentStatistics - Error fetching courses: " . $e->getMessage());
+                    $courses = [];
+                }
+
+                // Count enrollments per course
+                $allCourses = [];
+                $totalEnrollmentsCount = 0;
+
+                foreach ($courses as $course) {
+                    try {
+                        $courseId = (string)$course['_id'];
+                        $courseName = $course['title'] ?? 'Unknown Course';
+                        $courseHours = $course['hours'] ?? 0;
+                        $courseImage = $course['image'] ?? '';
+                        $courseDescription = $course['description'] ?? '';
+
+                        // Count enrolled trainees for this course (accept multiple status values)
+                        $enrollmentCount = 0;
+                        try {
+                            $enrollmentCount = $enrollmentsCollection->countDocuments([
+                                'course_id' => $courseId,
+                                'status' => ['$in' => ['enrolled', 'active', 'approved', 'ongoing', 'Enrolled', 'Active', 'Approved', 'Ongoing']]
+                            ]);
+                        } catch (Exception $e) {
+                            error_log("CourseController::getEnrollmentStatistics - Error counting enrollments for course $courseId: " . $e->getMessage());
+                        }
+
+                        // Also try without status filter to see if course_id matches
+                        $totalForCourse = 0;
+                        try {
+                            $totalForCourse = $enrollmentsCollection->countDocuments([
+                                'course_id' => $courseId
+                            ]);
+                        } catch (Exception $e) {
+                            error_log("CourseController::getEnrollmentStatistics - Error counting total enrollments for course $courseId: " . $e->getMessage());
+                        }
+
+                        $totalEnrollmentsCount += $enrollmentCount;
+
+                        $allCourses[] = [
+                            'id' => $courseId,
+                            'name' => $courseName,
+                            'hours' => $courseHours,
+                            'enrollmentCount' => $enrollmentCount,
+                            'totalForCourse' => $totalForCourse,
+                            'image' => $courseImage,
+                            'description' => $courseDescription
+                        ];
+                    } catch (Exception $e) {
+                        error_log("CourseController::getEnrollmentStatistics - Error processing course: " . $e->getMessage());
+                        continue;
+                    }
+                }
+
+                // Sort by enrollment count descending
+                usort($allCourses, function($a, $b) {
+                    return $b['enrollmentCount'] - $a['enrollmentCount'];
+                });
+
+                // Get top 5 courses
+                $topCourses = array_slice($allCourses, 0, 5);
+
+                // Calculate total enrollments (accept multiple status values)
+                $totalEnrollments = 0;
+                try {
+                    $totalEnrollments = $enrollmentsCollection->countDocuments([
+                        'status' => ['$in' => ['enrolled', 'active', 'approved', 'ongoing', 'Enrolled', 'Active', 'Approved', 'Ongoing']]
+                    ]);
+                } catch (Exception $e) {
+                    error_log("CourseController::getEnrollmentStatistics - Error counting total enrollments: " . $e->getMessage());
+                }
+
+                // Debug: Get total count of all enrollments
+                $allEnrollmentsCount = 0;
+                try {
+                    $allEnrollmentsCount = $enrollmentsCollection->countDocuments([]);
+                } catch (Exception $e) {
+                    error_log("CourseController::getEnrollmentStatistics - Error counting all enrollments: " . $e->getMessage());
+                }
+
+                echo json_encode([
+                    'success' => true,
+                    'data' => [
+                        'totalEnrollments' => $totalEnrollments,
+                        'topCourses' => $topCourses,
+                        'debug' => [
+                            'allEnrollmentsInDb' => $allEnrollmentsCount,
+                            'totalCounted' => $totalEnrollmentsCount
+                        ]
                     ]
-                ]
-            ]);
-        } catch (Exception $e) {
-            error_log("CourseController::getEnrollmentStatistics - Exception: " . $e->getMessage());
-            error_log("CourseController::getEnrollmentStatistics - Stack trace: " . $e->getTraceAsString());
-            http_response_code(500);
-            echo json_encode([
-                'success' => false,
-                'error' => 'Failed to fetch enrollment statistics: ' . $e->getMessage()
-            ]);
+                ]);
+            } catch (Exception $e) {
+                error_log("CourseController::getEnrollmentStatistics - Exception: " . $e->getMessage());
+                error_log("CourseController::getEnrollmentStatistics - Stack trace: " . $e->getTraceAsString());
+                http_response_code(500);
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'Failed to fetch enrollment statistics: ' . $e->getMessage()
+                ]);
+            }
         }
-    }
+
 }

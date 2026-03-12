@@ -135,6 +135,20 @@ function showToast(message, type = 'success') {
 
 // Initialize event listeners when DOM is loaded
 document.addEventListener('DOMContentLoaded', function () {
+    // Populate hidden username field for accessibility
+    const usernameField = document.getElementById('username');
+    if (usernameField) {
+        const userData = localStorage.getItem('userData');
+        if (userData) {
+            try {
+                const user = JSON.parse(userData);
+                usernameField.value = user.username || '';
+            } catch (e) {
+                // Silently handle parse errors
+            }
+        }
+    }
+
     // Password strength checking
     document.getElementById('newPassword').addEventListener('input', function () {
         const password = this.value;

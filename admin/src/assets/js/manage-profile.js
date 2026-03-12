@@ -1,4 +1,4 @@
-/* Manage Profile Page Script - Admin */
+/* Manage Profile Page Script - Admin - Updated validation rules */
 
 // API Configuration
 const API_BASE_URL = config.api.baseUrl;
@@ -466,8 +466,8 @@ async function saveProfileChanges() {
     };
 
     // Basic validation
-    if (!updatedData.first_name || !updatedData.last_name || !updatedData.email) {
-        showToast('First name, last name, and email are required.', 'error');
+    if (!updatedData.first_name || !updatedData.email) {
+        showToast('First name and email are required.', 'error');
         return;
     }
 

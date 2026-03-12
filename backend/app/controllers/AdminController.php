@@ -89,11 +89,7 @@ class AdminController {
             return;
         }
         
-        if (isset($data['last_name']) && empty(trim($data['last_name']))) {
-            http_response_code(422);
-            echo json_encode(['error' => 'Last name is required']);
-            return;
-        }
+        // Last name is optional - no validation needed
         
         // If individual name fields are being updated, also update the combined name field
         if (isset($data['first_name']) || isset($data['middle_name']) || isset($data['last_name'])) {

@@ -159,23 +159,27 @@ function updateProfileOverview(data) {
         roleBadge.className = 'badge bg-primary';
     }
 
+    // Username - use username field from database
+    const usernameElement = document.getElementById('profileUsername');
+    if (usernameElement) {
+        usernameElement.textContent = data.username || 'N/A';
+    }
+
     // Email - fetch from database
     const emailElement = document.getElementById('profileEmail');
     if (emailElement) {
         emailElement.textContent = data.email || 'N/A';
     }
 
-    // Account status - static Active
-    const statusBadge = document.getElementById('profileStatus');
-    if (statusBadge) {
-        statusBadge.textContent = 'Active';
-        statusBadge.className = 'badge bg-success';
-    }
-
     // Phone number
     const phoneElement = document.getElementById('profilePhone');
     if (phoneElement) {
-        phoneElement.textContent = data.phone || data.phoneNumber || 'N/A';
+        let phoneValue = data.phone || data.phoneNumber || 'N/A';
+        // Format phone number for display: 09XX XXX XXXX
+        if (phoneValue && phoneValue !== 'N/A' && phoneValue.length === 11) {
+            phoneValue = phoneValue.slice(0, 4) + ' ' + phoneValue.slice(4, 7) + ' ' + phoneValue.slice(7);
+        }
+        phoneElement.textContent = phoneValue;
     }
 
     // Address
@@ -251,7 +255,12 @@ function updatePersonalInformation(data) {
     // Phone number
     const phoneInput = document.getElementById('personalPhone');
     if (phoneInput) {
-        phoneInput.value = data.phoneNumber || data.phone || '';
+        let phoneValue = data.phoneNumber || data.phone || '';
+        // Format phone number for display: 09XX XXX XXXX
+        if (phoneValue && phoneValue.length === 11) {
+            phoneValue = phoneValue.slice(0, 4) + ' ' + phoneValue.slice(4, 7) + ' ' + phoneValue.slice(7);
+        }
+        phoneInput.value = phoneValue;
     }
 
     // Email address
@@ -283,7 +292,14 @@ function updatePersonalInformation(data) {
     if (editMiddleName) editMiddleName.value = data.middleName || '';
     if (editLastName) editLastName.value = data.lastName || '';
     if (editSuffix) editSuffix.value = data.suffix || '';
-    if (editPhone) editPhone.value = data.phoneNumber || data.phone || '';
+    if (editPhone) {
+        let phoneValue = data.phoneNumber || data.phone || '';
+        // Format phone number for display: 09XX XXX XXXX
+        if (phoneValue && phoneValue.length === 11) {
+            phoneValue = phoneValue.slice(0, 4) + ' ' + phoneValue.slice(4, 7) + ' ' + phoneValue.slice(7);
+        }
+        editPhone.value = phoneValue;
+    }
     if (editEmail) editEmail.value = data.email || '';
     if (editAddress) editAddress.value = data.address || '';
 }
@@ -388,6 +404,38 @@ function initializeEditForm() {
             saveButton.innerHTML = originalText;
         }
     });
+
+    // Add phone number validation and formatting
+    const phoneInput = document.getElementById('editPhone');
+    if (phoneInput) {
+        phoneInput.addEventListener('input', function (e) {
+            // Remove all non-numeric characters
+            let value = e.target.value.replace(/\D/g, '');
+
+            // Limit to 11 digits
+            if (value.length > 11) {
+                value = value.slice(0, 11);
+            }
+
+            // Format with spacing like placeholder: 09XX XXX XXXX
+            if (value.length >= 4) {
+                if (value.length >= 7) {
+                    value = value.slice(0, 4) + ' ' + value.slice(4, 7) + ' ' + value.slice(7);
+                } else {
+                    value = value.slice(0, 4) + ' ' + value.slice(4);
+                }
+            }
+
+            e.target.value = value;
+        });
+
+        phoneInput.addEventListener('keypress', function (e) {
+            // Only allow numeric characters and space
+            if (!/[0-9\s]/.test(e.key) && !['Backspace', 'Delete', 'Tab', 'Escape', 'Enter'].includes(e.key)) {
+                e.preventDefault();
+            }
+        });
+    }
 }
 
 // Save profile changes

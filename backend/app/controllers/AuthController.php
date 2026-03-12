@@ -466,9 +466,8 @@ class AuthController {
                     return;
                 }
                 
-                // Update password (hashed for trainee)
-                $hashedPassword = password_hash($newPassword, PASSWORD_BCRYPT);
-                $traineeModel->update($userId, ['password' => $hashedPassword]);
+                // Update password (plain text for trainee)
+                $traineeModel->update($userId, ['password' => $newPassword]);
                 
             } else {
                 http_response_code(400);

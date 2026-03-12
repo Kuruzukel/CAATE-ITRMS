@@ -119,8 +119,6 @@ async function loadAdminProfile() {
             }
 
         } catch (apiError) {
-            console.error('API Error:', apiError);
-
             // Fallback: try to use data from localStorage
             const userData = localStorage.getItem('userData');
             if (userData) {
@@ -131,7 +129,6 @@ async function loadAdminProfile() {
                     updateNavbarUserInfo(adminData);
                     showToast('Using cached profile data', 'warning');
                 } catch (e) {
-                    console.error('Error parsing cached data:', e);
                     showToast('Failed to load profile data', 'error');
                 }
             } else {
@@ -140,7 +137,6 @@ async function loadAdminProfile() {
         }
 
     } catch (error) {
-        console.error('Profile loading error:', error);
         showToast('An error occurred while loading your profile', 'error');
     }
 }
@@ -309,20 +305,18 @@ function updateNavbarUserInfo(data) {
                     img.src = data.profileImage;
                 }
                 totalUpdated++;
-                console.log('Updated avatar image in manage-profile:', img.src);
             } else {
                 img.src = '../assets/images/DEFAULT_AVATAR.png';
             }
 
             // Add error handling to fallback to default avatar
             img.onerror = function () {
-                console.log('Image load error, falling back to default avatar');
                 this.src = '../assets/images/DEFAULT_AVATAR.png';
             };
         });
     });
 
-    console.log('Manage-profile updated navbar with profile image:', data.profileImage, `(${totalUpdated} images updated)`);
+
 
     // Force update any remaining avatar images that might have been missed
     setTimeout(() => {
@@ -345,10 +339,9 @@ function updateNavbarUserInfo(data) {
                     img.src = data.profileImage;
                 }
                 forceUpdated++;
-                console.log('Force updated missed avatar in manage-profile:', img);
             }
         });
-        console.log(`Manage-profile force updated ${forceUpdated} additional avatars`);
+
     }, 100);
 }
 
@@ -446,8 +439,7 @@ async function saveProfileChanges() {
         return;
     }
 
-    console.log('Saving profile changes for admin:', userId);
-    console.log('Updated data:', updatedData);
+
 
     try {
         const response = await fetch(`${config.api.baseURL}/api/v1/admins/${userId}`, {
@@ -459,12 +451,10 @@ async function saveProfileChanges() {
             body: JSON.stringify(updatedData)
         });
 
-        console.log('Response status:', response.status);
-        console.log('Response headers:', response.headers);
+
 
         if (response.ok) {
             const result = await response.json();
-            console.log('Update successful:', result);
 
             // Close modal
             const modal = bootstrap.Modal.getInstance(document.getElementById('editInformationModal'));
@@ -504,7 +494,6 @@ async function saveProfileChanges() {
             throw new Error(errorMessage);
         }
     } catch (error) {
-        console.error('Save profile error:', error);
 
         // Handle network errors
         if (error.name === 'TypeError' && error.message.includes('fetch')) {
@@ -589,13 +578,11 @@ async function uploadProfileImage(file) {
 
         if (response.ok) {
             const result = await response.json();
-            console.log('Upload response:', result);
 
             // Update the profile image immediately
             const profileImage = document.getElementById('profileImage');
             if (profileImage && result.image_path) {
                 profileImage.src = result.image_path;
-                console.log('Updated profile image src to:', result.image_path);
             }
 
             // Update navbar avatars immediately - target all avatar images with more specific selectors
@@ -614,8 +601,7 @@ async function uploadProfileImage(file) {
             let totalUpdated = 0;
             navbarAvatarSelectors.forEach(selector => {
                 const images = document.querySelectorAll(selector);
-                console.log(`Found ${images.length} images with selector: ${selector}`);
-                images.forEach((img, index) => {
+                images.forEach((img) => {
                     if (result.image_path) {
                         // Handle both relative and absolute paths
                         if (result.image_path.startsWith('/CAATE-ITRMS/')) {
@@ -627,12 +613,10 @@ async function uploadProfileImage(file) {
                         } else {
                             img.src = result.image_path;
                         }
-                        console.log(`Updated image ${index} with selector ${selector} src to:`, img.src);
                         totalUpdated++;
                     }
                 });
             });
-            console.log(`Total navbar avatars updated: ${totalUpdated}`);
 
             // Update cached user data with new profile image
             const userData = localStorage.getItem('userData');
@@ -645,9 +629,8 @@ async function uploadProfileImage(file) {
                     updateNavbarUserInfo(userDataObj);
 
                     localStorage.setItem('userData', JSON.stringify(userDataObj));
-                    console.log('Updated cached user data with new profile image:', result.image_path);
                 } catch (e) {
-                    console.warn('Failed to update cached user data');
+                    // Silently handle errors
                 }
             }
 
@@ -664,28 +647,23 @@ async function uploadProfileImage(file) {
                     userDataObj.profileImage = result.image_path;
 
                     // Call the local updateNavbarUserInfo function immediately
-                    console.log('Calling immediate navbar update with:', userDataObj.profileImage);
                     updateNavbarUserInfo(userDataObj);
 
                     localStorage.setItem('userData', JSON.stringify(userDataObj));
                 } catch (e) {
-                    console.warn('Failed to update navbar immediately');
+                    // Silently handle errors
                 }
             }
 
             // Force reload admin profile data to get fresh data from database
             setTimeout(async () => {
-                console.log('Reloading admin profile data from database...');
-
                 // First, reload the current page profile data
                 await loadAdminProfile();
 
                 // Then, reload navbar data using the navbar function if available
                 if (typeof loadAdminProfileForNavbar === 'function') {
-                    console.log('Calling loadAdminProfileForNavbar...');
                     await loadAdminProfileForNavbar();
                 } else if (typeof window.refreshAdminNavbar === 'function') {
-                    console.log('Calling window.refreshAdminNavbar...');
                     window.refreshAdminNavbar();
                 }
 
@@ -703,7 +681,6 @@ async function uploadProfileImage(file) {
         }
 
     } catch (error) {
-        console.error('Upload error:', error);
         showToast(error.message || 'Failed to upload photo', 'error');
 
         // Reset the image to previous state on error
@@ -812,3 +789,4 @@ function showWarning(message) {
 function showNotification(message, type = 'info') {
     showToast(message, type);
 }
+

@@ -636,7 +636,7 @@ async function uploadProfileImage(file) {
                         updateNavbarUserInfo(userDataObj);
                         localStorage.setItem('userData', JSON.stringify(userDataObj));
                     } catch (e) {
-                        console.error('Failed to update cached user data:', e);
+                        // Silently handle errors
                     }
                 }
 
@@ -661,7 +661,6 @@ async function uploadProfileImage(file) {
         }
 
     } catch (error) {
-        console.error('Profile image upload error:', error);
         showToast(error.message || 'Failed to upload photo', 'error');
 
         // Reset image on error
@@ -748,7 +747,7 @@ window.refreshTraineeDisplayName = function () {
             const data = JSON.parse(userData);
             updateNavbarUserInfo(data);
         } catch (e) {
-            console.error('Failed to parse stored user data');
+            // Silently handle errors
             // Reload from API
             loadTraineeProfile();
         }
@@ -774,10 +773,9 @@ window.fixPlaceholderDisplayName = function () {
     });
 
     if (foundPlaceholder) {
-        console.log('Found placeholder text, refreshing user data...');
         window.refreshTraineeDisplayName();
     } else {
-        console.log('No placeholder text found');
+        window.refreshTraineeDisplayName();
     }
 };
 // Test function to check profile image functionality
@@ -804,8 +802,7 @@ window.testProfileImageUpdate = function (imagePath) {
                 detail: { imagePath: imagePath }
             }));
         } catch (e) {
-            console.error('Failed to update localStorage during test:', e);
-        }
+                    }
     }
 };
 
@@ -864,7 +861,6 @@ function updateAllProfileImages(imagePath) {
         });
     });
 
-    // console.log(`Updated ${totalUpdated} profile images with path: ${imagePath}`);
 }
 
 
@@ -879,7 +875,7 @@ window.refreshTraineeDisplayName = function () {
             const data = JSON.parse(userData);
             updateNavbarUserInfo(data);
         } catch (e) {
-            console.error('Failed to parse stored user data');
+            // Silently handle errors
             loadTraineeProfile();
         }
     } else {
@@ -907,7 +903,6 @@ window.testProfileImageUpdate = function (imagePath) {
                 detail: { imagePath: imagePath }
             }));
         } catch (e) {
-            console.error('Failed to update localStorage during test:', e);
-        }
+                    }
     }
 };

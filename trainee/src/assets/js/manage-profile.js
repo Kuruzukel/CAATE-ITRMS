@@ -605,40 +605,22 @@ async function uploadProfileImage(file) {
         const formData = new FormData();
         formData.append('profile_image', file);
 
-        // Debug: Log FormData contents
-        console.log('FormData contents:');
-        for (let [key, value] of formData.entries()) {
-            console.log(`  ${key}:`, value);
-        }
-
         const uploadUrl = `${API_BASE_URL}/api/v1/trainees/${userId}`;
-        console.log('Upload URL:', uploadUrl);
-        console.log('User ID:', userId);
-        console.log('Token:', token ? 'present' : 'missing');
 
         // Try the main trainee update endpoint
         const response = await fetch(uploadUrl, {
             method: 'PUT',
             headers: {
                 'Authorization': `Bearer ${token}`
-                // DO NOT set Content-Type - let browser set it with boundary
             },
             body: formData
         });
 
-        console.log('Response status:', response.status);
-        console.log('Response headers:', {
-            'content-type': response.headers.get('content-type')
-        });
-
         if (response.ok) {
             const result = await response.json();
-            console.log('Server response:', result);
 
             // Check if server returned an image path
             const imagePath = result.profile_image || result.profileImage || result.image_path || result.data?.profile_image || result.data?.profileImage;
-
-            console.log('Extracted image path:', imagePath);
 
             if (imagePath) {
                 // Server returned image path - update all profile images
@@ -666,7 +648,6 @@ async function uploadProfileImage(file) {
                 showToast('Profile photo updated successfully!', 'success');
             } else {
                 // Server returned success but no image path
-                console.log('Server returned success but no image path. Backend needs to be fixed to return image path.');
                 showToast('Profile photo uploaded successfully!', 'success');
 
                 // Reload profile to get the updated image path from database
@@ -703,6 +684,7 @@ async function uploadProfileImage(file) {
         }
     }
 }
+
 
 
 // Toast notification functions

@@ -245,6 +245,7 @@ class AuthController {
                             'name' => $fullName,
                             'email' => $trainee['email'],
                             'username' => $trainee['username'] ?? '',
+                            'profile_image' => $trainee['profile_image'] ?? '',
                             'role' => 'trainee'
                         ]
                     ]);

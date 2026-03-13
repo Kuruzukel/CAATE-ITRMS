@@ -3026,3 +3026,14 @@ body>div[style*="position: fixed"],
 body>div[style*="position: absolute"] {
     display: none !important;
 }
+
+/* Manage Profile Icon Styling */
+.form-label .bx {
+    color: var(--primary-blue) !important;
+    margin-right: 0.5rem !important;
+    transition: all var(--transition-fast) !important;
+}
+
+.form-label .bx:hover {
+    color: var(--primary-blue-dark) !important;
+}

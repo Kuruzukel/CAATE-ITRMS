@@ -1099,6 +1099,17 @@ footer span,
     padding-top: 1.5rem !important;
 }
 
+/* Manage Profile Icon Styling */
+.form-label .bx {
+    color: var(--primary-blue) !important;
+    margin-right: 0.5rem !important;
+    transition: all var(--transition-fast) !important;
+}
+
+.form-label .bx:hover {
+    color: var(--primary-blue-dark) !important;
+}
+
 /* Submenu Active State Styling */
 .menu-sub>.menu-item.active>.menu-link {
     background: rgba(54, 145, 191, 0.25) !important;

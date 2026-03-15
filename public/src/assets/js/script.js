@@ -1,113 +1,5 @@
 const navbar = document.getElementById("navbar");
 
-let audioContext = null;
-let navAudio = null;
-
-// Test function - you can call this from browser console: testSound()
-window.testSound = function () {
-  console.log('🧪 Testing sound directly...');
-  playNavSound();
-};
-
-function initAudioContext() {
-  if (!audioContext) {
-    try {
-      audioContext = new (window.AudioContext || window.webkitAudioContext)();
-      console.log('Audio context initialized');
-    } catch (error) {
-      console.log('Audio context not supported');
-    }
-  }
-
-  if (audioContext && audioContext.state === 'suspended') {
-    audioContext.resume();
-  }
-}
-
-// Initialize audio file
-function initNavAudio() {
-  try {
-    navAudio = new Audio('../assets/audio/nav-sound.mp3');
-    navAudio.volume = 0.8; // Increased volume from 0.4 to 0.8
-    navAudio.preload = 'auto';
-
-    navAudio.addEventListener('canplaythrough', () => {
-      console.log('✅ Audio file loaded successfully');
-    });
-
-    navAudio.addEventListener('error', () => {
-      console.log('⚠️ Audio file not found, will use generated sound');
-      navAudio = null;
-    });
-  } catch (error) {
-    console.log('⚠️ Could not create audio element, will use generated sound');
-    navAudio = null;
-  }
-}
-
-// Initialize audio on page load
-window.addEventListener('load', initNavAudio);
-
-function playNavSound() {
-  console.log('🔊 playNavSound function called!');
-
-  // Try to play audio file first
-  if (navAudio) {
-    try {
-      navAudio.currentTime = 0;
-      const playPromise = navAudio.play();
-
-      if (playPromise !== undefined) {
-        playPromise.then(() => {
-          console.log('🎵 Audio file played successfully!');
-        }).catch(error => {
-          console.log('⚠️ Audio file play failed, using generated sound:', error);
-          playGeneratedSound();
-        });
-      }
-      return;
-    } catch (error) {
-      console.log('⚠️ Audio file error, using generated sound:', error);
-    }
-  }
-
-  // Fallback to generated sound
-  playGeneratedSound();
-}
-
-function playGeneratedSound() {
-  initAudioContext();
-
-  if (!audioContext) {
-    console.log('❌ No audio context available');
-    return;
-  }
-
-  console.log('✅ Audio context state:', audioContext.state);
-
-  try {
-    const oscillator = audioContext.createOscillator();
-    const gainNode = audioContext.createGain();
-
-    oscillator.connect(gainNode);
-    gainNode.connect(audioContext.destination);
-
-    oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
-    oscillator.frequency.exponentialRampToValueAtTime(200, audioContext.currentTime + 0.4);
-    oscillator.type = 'sawtooth';
-
-    gainNode.gain.setValueAtTime(0.4, audioContext.currentTime); // Increased from 0.15 to 0.4
-    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.4);
-
-    oscillator.start(audioContext.currentTime);
-    oscillator.stop(audioContext.currentTime + 0.4);
-
-    console.log('🎵 Generated sound played successfully!');
-  } catch (error) {
-    console.log('❌ Error playing generated sound:', error);
-  }
-}
-
 window.addEventListener("scroll", () => {
   if (window.scrollY > 50) {
     navbar.classList.add("scrolled");
@@ -135,10 +27,6 @@ mobileMenuToggle.addEventListener("click", () => {
 const mobileMenuLinks = mobileMenu.querySelectorAll(".nav-link");
 mobileMenuLinks.forEach((link) => {
   link.addEventListener("click", () => {
-    console.log('📱 Mobile nav link clicked!');
-    // Play sound for mobile navigation links
-    playNavSound();
-
     mobileMenu.classList.remove("active");
     const icon = mobileMenuToggle.querySelector("i");
     icon.classList.remove("fa-times");
@@ -305,24 +193,11 @@ reveal();
 
 document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
   anchor.addEventListener("click", function (e) {
-    console.log('🖱️ Navigation link clicked!', this);
-    console.log('🔗 Href:', this.getAttribute("href"));
-    console.log('📝 Classes:', this.classList.toString());
-
     const href = this.getAttribute("href");
 
     // Skip if href is just "#" or empty
     if (!href || href === "#") {
-      console.log('⏭️ Skipping empty href');
       return;
-    }
-
-    // Play sound for navigation links
-    if (this.classList.contains('nav-link')) {
-      console.log('🎯 This is a nav-link, playing sound...');
-      playNavSound();
-    } else {
-      console.log('❌ This is NOT a nav-link');
     }
 
     e.preventDefault();

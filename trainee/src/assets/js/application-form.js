@@ -632,4 +632,69 @@ function initializePhilippineAddressDropdowns() {
             });
         }
     });
+
+    // Phone number formatting for TEL, MOBILE, and FAX fields
+    function formatPhoneNumber(value, type) {
+        // Remove all non-digit characters
+        const digits = value.replace(/\D/g, '');
+
+        if (type === 'mobile') {
+            // Mobile format: 0969 696 9696 (11 digits)
+            if (digits.length <= 4) {
+                return digits;
+            } else if (digits.length <= 7) {
+                return digits.slice(0, 4) + ' ' + digits.slice(4);
+            } else if (digits.length <= 11) {
+                return digits.slice(0, 4) + ' ' + digits.slice(4, 7) + ' ' + digits.slice(7, 11);
+            }
+            return digits.slice(0, 4) + ' ' + digits.slice(4, 7) + ' ' + digits.slice(7, 11);
+        } else {
+            // TEL and FAX format: (02) 123-4567
+            if (digits.length <= 2) {
+                return digits.length > 0 ? '(' + digits : '';
+            } else if (digits.length <= 5) {
+                return '(' + digits.slice(0, 2) + ') ' + digits.slice(2);
+            } else if (digits.length <= 9) {
+                return '(' + digits.slice(0, 2) + ') ' + digits.slice(2, 5) + '-' + digits.slice(5, 9);
+            }
+            return '(' + digits.slice(0, 2) + ') ' + digits.slice(2, 5) + '-' + digits.slice(5, 9);
+        }
+    }
+
+    // Apply phone formatting to TEL, MOBILE, and FAX fields
+    const phoneFields = [
+        { id: 'tel', type: 'landline' },
+        { id: 'mobile', type: 'mobile' },
+        { id: 'fax', type: 'landline' }
+    ];
+
+    phoneFields.forEach(({ id, type }) => {
+        const field = document.getElementById(id);
+        if (field) {
+            field.addEventListener('input', function (e) {
+                const cursorPosition = e.target.selectionStart;
+                const oldValue = e.target.value;
+                const newValue = formatPhoneNumber(oldValue, type);
+
+                if (oldValue !== newValue) {
+                    e.target.value = newValue;
+
+                    // Adjust cursor position
+                    let newCursorPosition = cursorPosition;
+                    if (newValue.length > oldValue.length) {
+                        newCursorPosition = cursorPosition + (newValue.length - oldValue.length);
+                    }
+                    e.target.setSelectionRange(newCursorPosition, newCursorPosition);
+                }
+            });
+
+            // Handle keypress to allow only digits and control keys
+            field.addEventListener('keypress', function (e) {
+                const char = String.fromCharCode(e.which);
+                if (!/[0-9]/.test(char) && e.which !== 8 && e.which !== 0 && e.which !== 46) {
+                    e.preventDefault();
+                }
+            });
+        }
+    });
 }

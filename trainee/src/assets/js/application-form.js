@@ -91,28 +91,53 @@ let isDrawing = false;
 let lastX = 0;
 let lastY = 0;
 
-// Mouse events
-canvas.addEventListener('mousedown', (e) => {
-    isDrawing = true;
+// Function to get correct coordinates accounting for canvas scaling
+function getCanvasCoordinates(e, canvas) {
     const rect = canvas.getBoundingClientRect();
-    [lastX, lastY] = [e.clientX - rect.left, e.clientY - rect.top];
-});
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
 
-canvas.addEventListener('mousemove', (e) => {
-    if (!isDrawing) return;
+    return {
+        x: (e.clientX - rect.left) * scaleX,
+        y: (e.clientY - rect.top) * scaleY
+    };
+}
+
+// Function to resize canvas to match display size
+function resizeCanvas() {
     const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    canvas.width = rect.width;
+    canvas.height = rect.height;
 
-    ctx.beginPath();
-    ctx.moveTo(lastX, lastY);
-    ctx.lineTo(x, y);
+    // Set drawing properties
     ctx.strokeStyle = '#000';
     ctx.lineWidth = 2;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
+}
+
+// Initialize canvas size
+resizeCanvas();
+
+// Resize canvas when window resizes
+window.addEventListener('resize', resizeCanvas);
+
+// Mouse events
+canvas.addEventListener('mousedown', (e) => {
+    isDrawing = true;
+    const coords = getCanvasCoordinates(e, canvas);
+    [lastX, lastY] = [coords.x, coords.y];
+});
+
+canvas.addEventListener('mousemove', (e) => {
+    if (!isDrawing) return;
+    const coords = getCanvasCoordinates(e, canvas);
+
+    ctx.beginPath();
+    ctx.moveTo(lastX, lastY);
+    ctx.lineTo(coords.x, coords.y);
     ctx.stroke();
-    [lastX, lastY] = [x, y];
+    [lastX, lastY] = [coords.x, coords.y];
 });
 
 canvas.addEventListener('mouseup', () => isDrawing = false);
@@ -122,28 +147,22 @@ canvas.addEventListener('mouseout', () => isDrawing = false);
 canvas.addEventListener('touchstart', (e) => {
     e.preventDefault();
     const touch = e.touches[0];
-    const rect = canvas.getBoundingClientRect();
+    const coords = getCanvasCoordinates(touch, canvas);
     isDrawing = true;
-    [lastX, lastY] = [touch.clientX - rect.left, touch.clientY - rect.top];
+    [lastX, lastY] = [coords.x, coords.y];
 });
 
 canvas.addEventListener('touchmove', (e) => {
     e.preventDefault();
     if (!isDrawing) return;
     const touch = e.touches[0];
-    const rect = canvas.getBoundingClientRect();
-    const x = touch.clientX - rect.left;
-    const y = touch.clientY - rect.top;
+    const coords = getCanvasCoordinates(touch, canvas);
 
     ctx.beginPath();
     ctx.moveTo(lastX, lastY);
-    ctx.lineTo(x, y);
-    ctx.strokeStyle = '#000';
-    ctx.lineWidth = 2;
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
+    ctx.lineTo(coords.x, coords.y);
     ctx.stroke();
-    [lastX, lastY] = [x, y];
+    [lastX, lastY] = [coords.x, coords.y];
 });
 
 canvas.addEventListener('touchend', () => isDrawing = false);
@@ -151,6 +170,11 @@ canvas.addEventListener('touchend', () => isDrawing = false);
 // Clear signature
 document.querySelector('.btn-clear').addEventListener('click', function () {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // Reapply drawing properties after clearing
+    ctx.strokeStyle = '#000';
+    ctx.lineWidth = 2;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
 });
 
 // Calculate age from birthdate

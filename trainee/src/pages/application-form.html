@@ -643,37 +643,70 @@
                                                 <div class="col-md-6 mb-3">
                                                     <label for="barangay"
                                                         class="form-label fw-semibold">Barangay</label>
-                                                    <input type="text" id="barangay" name="barangay"
-                                                        class="form-control" placeholder="Enter barangay"
-                                                        autocomplete="address-line2">
+                                                    <select id="barangay" name="barangay" class="form-control">
+                                                        <option value="">Select barangay...</option>
+                                                        <!-- Barangays will be populated based on city selection -->
+                                                    </select>
                                                 </div>
                                                 <div class="col-md-6 mb-3">
                                                     <label for="district"
                                                         class="form-label fw-semibold">District</label>
-                                                    <input type="text" id="district" name="district"
-                                                        class="form-control" placeholder="Enter district"
-                                                        autocomplete="address-line3">
+                                                    <select id="district" name="district" class="form-control">
+                                                        <option value="">Select district...</option>
+                                                        <option value="District 1">District 1</option>
+                                                        <option value="District 2">District 2</option>
+                                                        <option value="District 3">District 3</option>
+                                                        <option value="District 4">District 4</option>
+                                                        <option value="District 5">District 5</option>
+                                                        <option value="District 6">District 6</option>
+                                                        <option value="N/A">N/A</option>
+                                                    </select>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-6 mb-3">
                                                     <label for="city" class="form-label fw-semibold">City</label>
-                                                    <input type="text" id="city" name="city" class="form-control"
-                                                        placeholder="Enter city" autocomplete="address-level2">
+                                                    <select id="city" name="city" class="form-control">
+                                                        <option value="">Select city...</option>
+                                                        <!-- Cities will be populated based on province selection -->
+                                                    </select>
                                                 </div>
                                                 <div class="col-md-6 mb-3">
                                                     <label for="province"
                                                         class="form-label fw-semibold">Province</label>
-                                                    <input type="text" id="province" name="province"
-                                                        class="form-control" placeholder="Enter province"
-                                                        autocomplete="address-level1">
+                                                    <select id="province" name="province" class="form-control">
+                                                        <option value="">Select province...</option>
+                                                        <!-- Provinces will be populated based on region selection -->
+                                                    </select>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-6 mb-3">
                                                     <label for="region" class="form-label fw-semibold">Region</label>
-                                                    <input type="text" id="region" name="region" class="form-control"
-                                                        placeholder="Enter region" autocomplete="off">
+                                                    <select id="region" name="region" class="form-control">
+                                                        <option value="">Select region...</option>
+                                                        <option value="Region I">Ilocos Region (Region I)</option>
+                                                        <option value="Region II">Cagayan Valley (Region II)</option>
+                                                        <option value="Region III">Central Luzon (Region III)</option>
+                                                        <option value="Region IV-A">CALABARZON (Region IV-A)</option>
+                                                        <option value="Region V">Bicol Region (Region V)</option>
+                                                        <option value="Region VI">Western Visayas (Region VI)</option>
+                                                        <option value="Region VII">Central Visayas (Region VII)</option>
+                                                        <option value="Region VIII">Eastern Visayas (Region VIII)
+                                                        </option>
+                                                        <option value="Region IX">Zamboanga Peninsula (Region IX)
+                                                        </option>
+                                                        <option value="Region X">Northern Mindanao (Region X)</option>
+                                                        <option value="Region XI">Davao Region (Region XI)</option>
+                                                        <option value="Region XII">SOCCSKSARGEN (Region XII)</option>
+                                                        <option value="NCR">National Capital Region (NCR)</option>
+                                                        <option value="CAR">Cordillera Administrative Region (CAR)
+                                                        </option>
+                                                        <option value="BARMM">Bangsamoro Autonomous Region in Muslim
+                                                            Mindanao (BARMM)</option>
+                                                        <option value="Region XIII">Caraga (Region XIII)</option>
+                                                        <option value="MIMAROPA">MIMAROPA Region</option>
+                                                    </select>
                                                 </div>
                                                 <div class="col-md-6 mb-3">
                                                     <label for="zip" class="form-label fw-semibold">Zip</label>

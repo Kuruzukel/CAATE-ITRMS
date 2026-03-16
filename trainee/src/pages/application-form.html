@@ -472,12 +472,6 @@
                                                                 Signature</button>
                                                         </div>
                                                     </div>
-                                                    <div class="mb-3">
-                                                        <label for="applicationDate" class="form-label fw-semibold">Date
-                                                            of Application</label>
-                                                        <input type="date" id="applicationDate" name="applicationDate"
-                                                            class="form-control" required>
-                                                    </div>
                                                 </div>
                                             </div>
 
@@ -496,34 +490,42 @@
                                                     </select>
                                                 </div>
                                                 <div class="col-md-6 mb-3">
+                                                    <label for="assessmentTitle" class="form-label fw-semibold">Title of
+                                                        Assessment applied for</label>
+                                                    <select id="assessmentTitle" name="assessmentTitle"
+                                                        class="form-control" required>
+                                                        <option value="">Select an assessment...</option>
+                                                    </select>
+                                                    <div id="assessmentTitleLoading" class="d-none mt-2">
+                                                        <small class="text-muted">
+                                                            <i class="bx bx-loader-alt bx-spin me-1"></i>Loading
+                                                            assessment...
+                                                        </small>
+                                                    </div>
+                                                    <div id="assessmentTitleError" class="d-none mt-2">
+                                                        <small class="text-danger">
+                                                            <i class="bx bx-error me-1"></i>Failed to load assessments.
+                                                            Please
+                                                            refresh the page.
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Address and Date of Application -->
+                                            <div class="row mb-3">
+                                                <div class="col-md-6 mb-3">
                                                     <label for="schoolAddress"
                                                         class="form-label fw-semibold">Address</label>
                                                     <textarea id="schoolAddress" name="schoolAddress"
                                                         class="form-control" rows="2"
                                                         placeholder="Enter complete address" required></textarea>
                                                 </div>
-                                            </div>
-
-                                            <!-- Assessment Title -->
-                                            <div class="mb-3">
-                                                <label for="assessmentTitle" class="form-label fw-semibold">Title of
-                                                    Assessment applied for</label>
-                                                <select id="assessmentTitle" name="assessmentTitle" class="form-control"
-                                                    required>
-                                                    <option value="">Select an assessment...</option>
-                                                </select>
-                                                <div id="assessmentTitleLoading" class="d-none mt-2">
-                                                    <small class="text-muted">
-                                                        <i class="bx bx-loader-alt bx-spin me-1"></i>Loading
-                                                        assessment...
-                                                    </small>
-                                                </div>
-                                                <div id="assessmentTitleError" class="d-none mt-2">
-                                                    <small class="text-danger">
-                                                        <i class="bx bx-error me-1"></i>Failed to load assessments.
-                                                        Please
-                                                        refresh the page.
-                                                    </small>
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="applicationDate" class="form-label fw-semibold">Date
+                                                        of Application</label>
+                                                    <input type="date" id="applicationDate" name="applicationDate"
+                                                        class="form-control" required>
                                                 </div>
                                             </div>
 

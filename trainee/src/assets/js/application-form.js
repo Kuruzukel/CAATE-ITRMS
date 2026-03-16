@@ -339,8 +339,25 @@ window.addEventListener('load', function () {
         for (let key in data) {
             const field = form.elements[key];
             if (field && field.type !== 'file') {
-                // Skip file inputs - they can't be programmatically set for security reasons
-                field.value = data[key];
+                // Handle radio buttons properly
+                if (field.type === 'radio') {
+                    // Only check the radio button if the saved value matches this radio's value
+                    if (field.value === data[key]) {
+                        field.checked = true;
+                    }
+                } else if (field.length) {
+                    // Handle radio button groups (NodeList)
+                    for (let i = 0; i < field.length; i++) {
+                        if (field[i].type === 'radio' && field[i].value === data[key]) {
+                            field[i].checked = true;
+                        } else if (field[i].type !== 'radio') {
+                            field[i].value = data[key];
+                        }
+                    }
+                } else {
+                    // Handle other input types
+                    field.value = data[key];
+                }
             }
         }
     }
@@ -378,5 +395,15 @@ function confirmPrintApplication() {
 
 // Menu toggle is handled by main.js - no need to duplicate here
 document.addEventListener('DOMContentLoaded', function () {
+    // Clear any problematic localStorage data that might auto-select radio buttons
+    // Uncomment the line below if you want to clear all saved form data
+    // localStorage.removeItem('applicationFormDraft');
+
+    // Ensure all radio buttons start unchecked
+    const assessmentRadios = document.querySelectorAll('input[name="assessmentType"]');
+    assessmentRadios.forEach(radio => {
+        radio.checked = false;
+    });
+
     // Application form specific initialization can go here
 });

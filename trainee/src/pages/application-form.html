@@ -1208,6 +1208,20 @@
     <!-- Application Form JS -->
     <script src="../assets/js/application-form.js"></script>
 
+    <!-- Temporary script to clear localStorage and ensure radio buttons start unchecked -->
+    <script>
+        // Clear any saved form data that might be auto-selecting radio buttons
+        localStorage.removeItem('applicationFormDraft');
+
+        // Ensure radio buttons are unchecked when page loads
+        document.addEventListener('DOMContentLoaded', function () {
+            const assessmentRadios = document.querySelectorAll('input[name="assessmentType"]');
+            assessmentRadios.forEach(radio => {
+                radio.checked = false;
+            });
+        });
+    </script>
+
 
 </body>
 

@@ -377,7 +377,8 @@ document.addEventListener('DOMContentLoaded', function () {
 function ensureMenuDropdownsWork() {
     // Wait for menu system to be fully initialized
     setTimeout(() => {
-        // Re-initialize menu if needed
+        // Re-initialize menu if needed - DISABLED to prevent conflicts with main menu system
+        /*
         if (window.Helpers && window.Helpers.mainMenu) {
             // Menu is already initialized, just ensure it's working
             const menuToggles = document.querySelectorAll('.menu-toggle');
@@ -389,13 +390,34 @@ function ensureMenuDropdownsWork() {
                         const submenu = this.nextElementSibling;
                         if (submenu && submenu.classList.contains('menu-sub')) {
                             const isOpen = submenu.style.display === 'block';
+
+                            // Close all other submenus first
+                            const allSubmenus = document.querySelectorAll('.menu-sub');
+                            const allToggles = document.querySelectorAll('.menu-toggle');
+
+                            allSubmenus.forEach(sub => {
+                                if (sub !== submenu) {
+                                    sub.style.display = 'none';
+                                }
+                            });
+
+                            allToggles.forEach(tog => {
+                                if (tog !== this) {
+                                    tog.classList.remove('open');
+                                    tog.parentElement.classList.remove('open');
+                                }
+                            });
+
+                            // Toggle current submenu
                             submenu.style.display = isOpen ? 'none' : 'block';
                             this.classList.toggle('open', !isOpen);
+                            this.parentElement.classList.toggle('open', !isOpen);
                         }
                     });
                 }
             });
         }
+        */
     }, 50);
 }
 

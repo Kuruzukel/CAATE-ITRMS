@@ -1,5 +1,7 @@
 // Application Form JavaScript
 
+console.log('Application Form JS loaded - Version: 2026-03-16 - District removed, Province input, Zip number');
+
 // API Configuration - Use global API_BASE_URL if available
 if (typeof window.API_BASE_URL === 'undefined') {
     window.API_BASE_URL = (typeof config !== 'undefined' && config.api)
@@ -543,102 +545,90 @@ document.addEventListener('DOMContentLoaded', function () {
     // Application form specific initialization can go here
 });
 
-// Philippine Address Dropdowns
+// Philippine Address Dropdowns - DISABLED: All fields are now input fields
 function initializePhilippineAddressDropdowns() {
-    console.log('Starting Philippine address dropdowns initialization...');
+    console.log('Philippine address dropdowns disabled - all fields are now input fields');
+    // All address fields (region, province, city, barangay, district) are now input fields
+    // No dropdown functionality needed
 
-    const regionSelect = document.getElementById('region');
-    const provinceSelect = document.getElementById('province');
-    const citySelect = document.getElementById('city');
-    const barangaySelect = document.getElementById('barangay');
+    // Add single digit enforcement for district field
+    const districtField = document.getElementById('district');
+    if (districtField) {
+        // Prevent invalid keypress
+        districtField.addEventListener('keypress', function (e) {
+            // Allow only digits 1-9, backspace, delete, tab, escape, enter
+            const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter'];
+            const isNumber = /[1-9]/.test(e.key);
 
-    // Check if elements exist
-    if (!regionSelect) {
-        console.error('Region select element not found');
-        return;
+            // If field already has a value and user tries to type another character
+            if (this.value.length >= 1 && !allowedKeys.includes(e.key)) {
+                e.preventDefault();
+                return;
+            }
+
+            // Only allow digits 1-9
+            if (!isNumber && !allowedKeys.includes(e.key)) {
+                e.preventDefault();
+                return;
+            }
+
+            // Don't allow 0
+            if (e.key === '0') {
+                e.preventDefault();
+                return;
+            }
+        });
+
+        // Clean up input on paste or other input events
+        districtField.addEventListener('input', function (e) {
+            let value = e.target.value;
+
+            // Remove any non-digit characters
+            value = value.replace(/[^1-9]/g, '');
+
+            // Keep only the first digit
+            if (value.length > 1) {
+                value = value.charAt(0);
+            }
+
+            // Update the field value
+            e.target.value = value;
+        });
+
+        // Prevent paste of invalid content
+        districtField.addEventListener('paste', function (e) {
+            e.preventDefault();
+            const paste = (e.clipboardData || window.clipboardData).getData('text');
+            const validDigit = paste.match(/[1-9]/);
+            if (validDigit) {
+                this.value = validDigit[0];
+            }
+        });
     }
-    if (!provinceSelect) {
-        console.error('Province select element not found');
-        return;
-    }
-    if (!citySelect) {
-        console.error('City select element not found');
-        return;
-    }
-    if (!barangaySelect) {
-        console.error('Barangay select element not found');
-        return;
-    }
 
-    console.log('All dropdown elements found successfully');
+    // Add text-only validation for Barangay, City, and Province fields
+    const textOnlyFields = ['barangay', 'city', 'province'];
 
-    // Use comprehensive Philippine address data
-    const philippineData = PHILIPPINE_ADDRESS_DATA;
+    textOnlyFields.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (field) {
+            // Allow only letters, spaces, hyphens, apostrophes, and periods
+            field.addEventListener('keypress', function (e) {
+                const char = String.fromCharCode(e.which);
+                const allowedPattern = /[a-zA-Z\s\-'\.]/;
 
-    // Region change handler
-    regionSelect.addEventListener('change', function () {
-        const selectedRegion = this.value;
-        console.log('Region changed to:', selectedRegion);
-
-        // Clear dependent dropdowns
-        provinceSelect.innerHTML = '<option value="">Select province...</option>';
-        citySelect.innerHTML = '<option value="">Select city...</option>';
-        barangaySelect.innerHTML = '<option value="">Select barangay...</option>';
-
-        if (selectedRegion && philippineData[selectedRegion]) {
-            const provinces = Object.keys(philippineData[selectedRegion]);
-            console.log('Found provinces for', selectedRegion, ':', provinces);
-
-            provinces.forEach(province => {
-                const option = document.createElement('option');
-                option.value = province;
-                option.textContent = province;
-                provinceSelect.appendChild(option);
+                if (!allowedPattern.test(char) && e.which !== 8 && e.which !== 0) {
+                    e.preventDefault();
+                }
             });
 
-            console.log('Provinces populated successfully');
-        } else {
-            console.log('No data found for region:', selectedRegion);
-        }
-    });
-
-    // Province change handler
-    provinceSelect.addEventListener('change', function () {
-        const selectedRegion = regionSelect.value;
-        const selectedProvince = this.value;
-
-        // Clear dependent dropdowns
-        citySelect.innerHTML = '<option value="">Select city...</option>';
-        barangaySelect.innerHTML = '<option value="">Select barangay...</option>';
-
-        if (selectedRegion && selectedProvince && philippineData[selectedRegion][selectedProvince]) {
-            const cities = Object.keys(philippineData[selectedRegion][selectedProvince]);
-            cities.forEach(city => {
-                const option = document.createElement('option');
-                option.value = city;
-                option.textContent = city;
-                citySelect.appendChild(option);
-            });
-        }
-    });
-
-    // City change handler
-    citySelect.addEventListener('change', function () {
-        const selectedRegion = regionSelect.value;
-        const selectedProvince = provinceSelect.value;
-        const selectedCity = this.value;
-
-        // Clear dependent dropdown
-        barangaySelect.innerHTML = '<option value="">Select barangay...</option>';
-
-        if (selectedRegion && selectedProvince && selectedCity &&
-            philippineData[selectedRegion][selectedProvince][selectedCity]) {
-            const barangays = philippineData[selectedRegion][selectedProvince][selectedCity];
-            barangays.forEach(barangay => {
-                const option = document.createElement('option');
-                option.value = barangay;
-                option.textContent = barangay;
-                barangaySelect.appendChild(option);
+            // Clean up any invalid characters on input
+            field.addEventListener('input', function (e) {
+                // Remove any characters that are not letters, spaces, hyphens, apostrophes, or periods
+                const cleanValue = e.target.value.replace(/[^a-zA-Z\s\-'\.]/g, '');
+                if (e.target.value !== cleanValue) {
+                    e.target.value = cleanValue;
+                }
             });
         }
     });

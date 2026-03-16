@@ -798,3 +798,14 @@ select.form-control option[value=""] {
     white-space: nowrap;
     border-width: 0;
 }
+
+/* Hide number input spinner arrows */
+.no-spinner::-webkit-outer-spin-button,
+.no-spinner::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.no-spinner[type=number] {
+    -moz-appearance: textfield;
+}

@@ -7,6 +7,11 @@
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
+    <!-- Prevent caching for development -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
     <title>CAATE | Application Form</title>
 
     <meta name="description" content="" />
@@ -36,6 +41,8 @@
 
     <!-- Application Form CSS -->
     <link rel="stylesheet" href="../assets/css/application-form.css" />
+
+    <!-- Cache Buster - Updated: 2026-03-16 - District removed, Province input, Zip number -->
 
     <!-- Vendors CSS -->
     <link rel="stylesheet" href="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
@@ -639,45 +646,36 @@
                                                     class="form-control" placeholder="House/Building No. and Street"
                                                     autocomplete="address-line1">
                                             </div>
+                                            <!-- Address Section - Updated: All fields are input fields -->
                                             <div class="row">
                                                 <div class="col-md-6 mb-3">
                                                     <label for="barangay"
                                                         class="form-label fw-semibold">Barangay</label>
-                                                    <select id="barangay" name="barangay" class="form-control">
-                                                        <option value="">Select barangay...</option>
-                                                        <!-- Barangays will be populated based on city selection -->
-                                                    </select>
+                                                    <input type="text" id="barangay" name="barangay"
+                                                        class="form-control" placeholder="Enter barangay..."
+                                                        autocomplete="address-level3">
                                                 </div>
                                                 <div class="col-md-6 mb-3">
                                                     <label for="district"
                                                         class="form-label fw-semibold">District</label>
-                                                    <select id="district" name="district" class="form-control">
-                                                        <option value="">Select district...</option>
-                                                        <option value="District 1">District 1</option>
-                                                        <option value="District 2">District 2</option>
-                                                        <option value="District 3">District 3</option>
-                                                        <option value="District 4">District 4</option>
-                                                        <option value="District 5">District 5</option>
-                                                        <option value="District 6">District 6</option>
-                                                        <option value="N/A">N/A</option>
-                                                    </select>
+                                                    <input type="number" id="district" name="district"
+                                                        class="form-control no-spinner"
+                                                        placeholder="Enter district number..."
+                                                        autocomplete="address-level4" min="1" max="9" maxlength="1">
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-6 mb-3">
                                                     <label for="city" class="form-label fw-semibold">City</label>
-                                                    <select id="city" name="city" class="form-control">
-                                                        <option value="">Select city...</option>
-                                                        <!-- Cities will be populated based on province selection -->
-                                                    </select>
+                                                    <input type="text" id="city" name="city" class="form-control"
+                                                        placeholder="Enter city..." autocomplete="address-level2">
                                                 </div>
                                                 <div class="col-md-6 mb-3">
                                                     <label for="province"
                                                         class="form-label fw-semibold">Province</label>
-                                                    <select id="province" name="province" class="form-control">
-                                                        <option value="">Select province...</option>
-                                                        <!-- Provinces will be populated based on region selection -->
-                                                    </select>
+                                                    <input type="text" id="province" name="province"
+                                                        class="form-control" placeholder="Enter province..."
+                                                        autocomplete="address-level1">
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -710,8 +708,9 @@
                                                 </div>
                                                 <div class="col-md-6 mb-3">
                                                     <label for="zip" class="form-label fw-semibold">Zip</label>
-                                                    <input type="text" id="zip" name="zip" class="form-control"
-                                                        placeholder="Enter zip code" autocomplete="postal-code">
+                                                    <input type="number" id="zip" name="zip"
+                                                        class="form-control no-spinner" placeholder="Enter zip code"
+                                                        autocomplete="postal-code" min="0" max="9999">
                                                 </div>
                                             </div>
 

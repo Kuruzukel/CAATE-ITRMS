@@ -318,21 +318,6 @@ document.getElementById('applicationForm').addEventListener('submit', function (
         return;
     }
 
-    // Check if signature is drawn
-    if (!hasSignature()) {
-        alert('Please provide your signature');
-        document.getElementById('signatureCanvas').scrollIntoView({ behavior: 'smooth', block: 'center' });
-        return;
-    }
-
-    // Check if picture is uploaded
-    const picture = document.getElementById('picture');
-    if (!picture.files.length) {
-        alert('Please upload your picture');
-        document.getElementById('picture').scrollIntoView({ behavior: 'smooth', block: 'center' });
-        return;
-    }
-
     // If all validations pass
     if (confirm('Are you sure you want to submit this application?')) {
         // Show loading state

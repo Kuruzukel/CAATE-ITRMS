@@ -439,17 +439,25 @@
 }
 
 .data-table th {
-    background: linear-gradient(135deg, #3691bf 0%, #2a7ba8 100%);
+    background-color: rgba(15, 41, 66, 0.8) !important;
+    background: linear-gradient(135deg, rgba(15, 41, 66, 0.8) 0%, rgba(10, 31, 51, 0.8) 100%) !important;
+    backdrop-filter: blur(10px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(10px) saturate(180%) !important;
+    border: 1px solid rgba(54, 145, 191, 0.3) !important;
     font-weight: 700;
-    color: #ffffff;
+    color: rgba(255, 255, 255, 0.9) !important;
     font-size: 0.8rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 2px solid rgba(54, 145, 191, 0.3);
 }
 
 .data-table tbody tr {
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: rgba(15, 41, 66, 0.4) !important;
+    background: linear-gradient(135deg, rgba(15, 41, 66, 0.4) 0%, rgba(10, 31, 51, 0.4) 100%) !important;
+    backdrop-filter: blur(10px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(10px) saturate(180%) !important;
+    border: 1px solid rgba(54, 145, 191, 0.2) !important;
     transition: all 0.2s ease;
     border-bottom: 1px solid rgba(54, 145, 191, 0.2);
 }
@@ -459,7 +467,8 @@
 }
 
 .data-table tbody tr:hover {
-    background-color: rgba(255, 255, 255, 0.08);
+    background-color: rgba(15, 41, 66, 0.6) !important;
+    background: linear-gradient(135deg, rgba(15, 41, 66, 0.6) 0%, rgba(10, 31, 51, 0.6) 100%) !important;
     transform: translateX(2px);
 }
 
@@ -468,7 +477,7 @@
     border: none;
     border-bottom: 2px solid rgba(54, 145, 191, 0.3);
     padding: 0.5rem 0.25rem;
-    color: #ffffff;
+    color: rgba(255, 255, 255, 0.9) !important;
     font-weight: 500;
     font-size: 0.86rem;
     background-color: transparent;
@@ -477,8 +486,10 @@
 
 .data-table input:focus {
     outline: none;
-    border-bottom-color: #3691bf;
-    background-color: rgba(255, 255, 255, 0.05);
+    border-bottom-color: rgba(54, 145, 191, 0.6);
+    background-color: rgba(15, 41, 66, 0.3);
+    backdrop-filter: blur(10px) saturate(180%);
+    -webkit-backdrop-filter: blur(10px) saturate(180%);
 }
 
 .data-table input::placeholder {
@@ -490,20 +501,25 @@
 /* Buttons */
 .btn-add-row {
     padding: 0.65rem 1.5rem;
-    background: linear-gradient(135deg, #3691bf 0%, #2a7ba8 100%);
-    color: white;
-    border: none;
+    background-color: rgba(15, 41, 66, 0.6) !important;
+    background: linear-gradient(135deg, rgba(15, 41, 66, 0.6) 0%, rgba(10, 31, 51, 0.6) 100%) !important;
+    backdrop-filter: blur(10px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(10px) saturate(180%) !important;
+    border: 1px solid rgba(54, 145, 191, 0.3) !important;
+    color: rgba(255, 255, 255, 0.9) !important;
     border-radius: 6px;
     cursor: pointer;
     font-size: 0.9rem;
     font-weight: 700;
     transition: all 0.3s;
-    box-shadow: 0 2px 4px rgba(54, 145, 191, 0.3);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .btn-add-row:hover {
-    background: linear-gradient(135deg, #2a7ba8 0%, #1f5f7f 100%);
-    box-shadow: 0 4px 8px rgba(54, 145, 191, 0.4);
+    background-color: rgba(15, 41, 66, 0.8) !important;
+    background: linear-gradient(135deg, rgba(15, 41, 66, 0.8) 0%, rgba(10, 31, 51, 0.8) 100%) !important;
+    border: 1px solid rgba(54, 145, 191, 0.5) !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     transform: translateY(-1px);
 }
 

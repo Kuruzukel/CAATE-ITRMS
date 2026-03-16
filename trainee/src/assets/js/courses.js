@@ -50,8 +50,6 @@ async function loadCourses() {
             loadingState.classList.add('d-none');
             coursesGrid.classList.remove('d-none');
 
-            // Initialize enrollment after courses are rendered
-            initializeCourseEnrollment();
             initializeCourseFilters();
         } else {
             // No courses found
@@ -118,42 +116,6 @@ function createCourseCard(course) {
     `;
 
     return col;
-}
-
-// Course enrollment functionality
-function initializeCourseEnrollment() {
-    const enrollButtons = document.querySelectorAll('.enroll-course-btn');
-
-    enrollButtons.forEach(button => {
-        button.addEventListener('click', function () {
-            const card = this.closest('.card');
-            const courseTitle = card.querySelector('.card-title').textContent;
-            const courseBadge = card.querySelector('.badge').textContent;
-            const courseId = card.getAttribute('data-course-id');
-
-            // Show confirmation dialog
-            if (confirm(`Do you want to enroll in:\n\n${courseTitle}\n(${courseBadge})`)) {
-                enrollInCourse(this, courseTitle, courseBadge, courseId);
-            }
-        });
-    });
-}
-
-function enrollInCourse(button, courseTitle, courseBadge, courseId) {
-    // Show loading state
-    button.disabled = true;
-    button.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i> Enrolling...';
-
-    // Simulate API call (replace with actual enrollment API when available)
-    setTimeout(() => {
-        // Show success message
-        alert('Enrollment request submitted successfully!\n\nYou will be notified once your enrollment is confirmed.');
-
-        // Update button state
-        button.innerHTML = '<i class="bx bx-check"></i> Enrolled';
-        button.classList.remove('btn-primary');
-        button.classList.add('btn-success');
-    }, 1500);
 }
 
 // Course search functionality

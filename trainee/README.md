@@ -19,7 +19,6 @@ trainee/
 │   │   │   ├── custom-theme.css        # Custom theme
 │   │   │   ├── dashboard.css           # Dashboard styles
 │   │   │   ├── demo.css                # Demo styles
-│   │   │   ├── enrollment.css          # Enrollment styles
 │   │   │   ├── manage-profile.css      # Profile management styles
 │   │   │   └── style.css               # Main styles
 │   │   ├── 📂 images/                  # Application images (17 files)
@@ -42,7 +41,6 @@ trainee/
 │   │   │   ├── config.js               # Configuration
 │   │   │   ├── courses.js              # Courses functionality
 │   │   │   ├── dashboard.js            # Dashboard functionality
-│   │   │   ├── enrollment.js           # Enrollment functionality
 │   │   │   ├── main.js                 # Main application logic
 │   │   │   ├── manage-profile.js       # Profile management
 │   │   │   ├── menu-toggle.js          # Menu toggle functionality
@@ -57,7 +55,6 @@ trainee/
 │       ├── competencies.html           # Competencies tracking
 │       ├── courses.html                # Courses and programs
 │       ├── dashboard.html              # Main trainee dashboard
-│       ├── enrollment.html             # Enrollment management
 │       └── manage-profile.html         # Profile management
 ├── package.json                        # Dependencies and scripts
 └── README.md                           # This file
@@ -129,14 +126,6 @@ trainee/
 - Schedule information
 - Instructor contact information
 - Course completion status
-
-### Enrollment
-
-- Enrollment status tracking
-- Course registration
-- Enrollment history
-- Payment status
-- Enrollment documents
 
 ### Profile Management
 
@@ -281,15 +270,6 @@ Application-specific illustrations are in `src/assets/img/illustrations/`:
 - Course materials links
 - Completion certificates
 
-### Enrollment (`enrollment.html`)
-
-- Enrollment status overview
-- Course registration interface
-- Payment tracking
-- Enrollment documents
-- Registration history
-- Course availability
-
 ### Manage Profile (`manage-profile.html`)
 
 - Personal information form
@@ -347,7 +327,6 @@ The trainee portal expects backend endpoints for:
 
 - User authentication
 - Profile data retrieval and updates
-- Course enrollment data
 - Progress tracking
 - Admission slip generation
 - Application form submission

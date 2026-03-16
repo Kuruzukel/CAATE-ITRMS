@@ -17,11 +17,10 @@ HTML pages for the Trainee Portal application.
 - **attendance.html** - Attendance records
 - **class-roster.html** - Class roster and classmates
 
-### Admission & Enrollment
+### Admission
 
 - **admission-slip.html** - Admission slip/certificate
 - **application-form.html** - Application form view
-- **enrollment.html** - Enrollment management
 
 ## Page Structure
 

@@ -28,7 +28,6 @@ Page-specific styles:
 - custom-theme.css
 - dashboard.css
 - demo.css
-- enrollment.css
 - manage-profile.css
 - style.css (main)
 
@@ -45,7 +44,6 @@ Page-specific functionality:
 - config.js
 - courses.js
 - dashboard.js
-- enrollment.js
 - main.js
 - manage-profile.js
 - menu-toggle.js

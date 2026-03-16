@@ -11,9 +11,9 @@ document.getElementById('picture').addEventListener('change', function (e) {
             return;
         }
 
-        // Validate file size (max 5MB)
-        if (file.size > 5 * 1024 * 1024) {
-            alert('Image size should not exceed 5MB');
+        // Validate file size (max 2MB)
+        if (file.size > 2 * 1024 * 1024) {
+            alert('Image size should not exceed 2MB');
             this.value = '';
             return;
         }

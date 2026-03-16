@@ -194,24 +194,27 @@
 /* Picture and Signature Section */
 .picture-signature-section {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: auto 1fr;
     gap: 2rem;
     margin: 1.5rem 0;
+    align-items: start;
 }
 
 .picture-container {
     border: 2px dashed #3691bf;
     border-radius: 8px;
-    padding: 1.5rem;
+    padding: 1rem;
     text-align: center;
     cursor: pointer;
     transition: all 0.3s;
     background-color: rgba(255, 255, 255, 0.1);
     position: relative;
-    min-height: 200px;
+    width: 150px;
+    height: 200px;
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
 }
 
 .picture-container:hover {
@@ -673,6 +676,13 @@
 @media (max-width: 768px) {
     .picture-signature-section {
         grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .picture-container {
+        width: 120px;
+        height: 160px;
+        margin: 0 auto;
     }
 
     .reference-inputs {

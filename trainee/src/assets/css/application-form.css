@@ -501,13 +501,19 @@
     color: #3691bf !important;
 }
 
-/* Specific icon colors for application form sections */
-.card-header h4 i.bx-info-circle,
-.card-header h4 i.bx-user,
-.card-header h4 i.bx-briefcase,
-.card-header h4 i.bx-book-reader,
-.card-header h4 i.bx-certification,
-.card-header h4 i.bx-award {
+/* Specific icon colors for application form sections - Override dashboard.css white text rules */
+.content-wrapper .card-header h4 i.bx-info-circle,
+.content-wrapper .card-header h4 i.bx-user,
+.content-wrapper .card-header h4 i.bx-briefcase,
+.content-wrapper .card-header h4 i.bx-book-reader,
+.content-wrapper .card-header h4 i.bx-certification,
+.content-wrapper .card-header h4 i.bx-award,
+.layout-page .content-wrapper .container-xxl .card-header h4 i.bx-info-circle,
+.layout-page .content-wrapper .container-xxl .card-header h4 i.bx-user,
+.layout-page .content-wrapper .container-xxl .card-header h4 i.bx-briefcase,
+.layout-page .content-wrapper .container-xxl .card-header h4 i.bx-book-reader,
+.layout-page .content-wrapper .container-xxl .card-header h4 i.bx-certification,
+.layout-page .content-wrapper .container-xxl .card-header h4 i.bx-award {
     color: #3691bf !important;
 }
 

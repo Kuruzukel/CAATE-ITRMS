@@ -497,8 +497,21 @@
                                             <div class="mb-3">
                                                 <label for="assessmentTitle" class="form-label fw-semibold">Title of
                                                     Assessment applied for: <span class="text-danger">*</span></label>
-                                                <input type="text" id="assessmentTitle" name="assessmentTitle"
-                                                    class="form-control" required>
+                                                <select id="assessmentTitle" name="assessmentTitle" class="form-control"
+                                                    required>
+                                                    <option value="">Select a course...</option>
+                                                </select>
+                                                <div id="assessmentTitleLoading" class="d-none mt-2">
+                                                    <small class="text-muted">
+                                                        <i class="bx bx-loader-alt bx-spin me-1"></i>Loading courses...
+                                                    </small>
+                                                </div>
+                                                <div id="assessmentTitleError" class="d-none mt-2">
+                                                    <small class="text-danger">
+                                                        <i class="bx bx-error me-1"></i>Failed to load courses. Please
+                                                        refresh the page.
+                                                    </small>
+                                                </div>
                                             </div>
 
                                             <!-- Assessment Type -->

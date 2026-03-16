@@ -1,5 +1,69 @@
 // Application Form JavaScript
 
+// API Configuration - Use global API_BASE_URL if available
+if (typeof window.API_BASE_URL === 'undefined') {
+    window.API_BASE_URL = (typeof config !== 'undefined' && config.api)
+        ? config.api.baseUrl
+        : window.location.origin + '/CAATE-ITRMS/backend/public';
+}
+
+// Load courses for assessment title dropdown
+async function loadCoursesForDropdown() {
+    const dropdown = document.getElementById('assessmentTitle');
+    const loadingIndicator = document.getElementById('assessmentTitleLoading');
+    const errorIndicator = document.getElementById('assessmentTitleError');
+
+    try {
+        // Show loading
+        if (loadingIndicator) loadingIndicator.classList.remove('d-none');
+        if (errorIndicator) errorIndicator.classList.add('d-none');
+
+        // Fetch courses from competencies API
+        const response = await fetch(`${window.API_BASE_URL}/api/v1/competencies`);
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+
+        if (result.success && result.data && result.data.length > 0) {
+            // Clear existing options except the first one
+            dropdown.innerHTML = '<option value="">Select a course...</option>';
+
+            // Add course options
+            result.data.forEach(course => {
+                const option = document.createElement('option');
+                option.value = course.title || 'Untitled Course';
+                option.textContent = course.title || 'Untitled Course';
+                dropdown.appendChild(option);
+            });
+
+            // Hide loading
+            if (loadingIndicator) loadingIndicator.classList.add('d-none');
+        } else {
+            throw new Error('No courses found');
+        }
+    } catch (error) {
+        console.error('Error loading courses for dropdown:', error);
+
+        // Show error
+        if (loadingIndicator) loadingIndicator.classList.add('d-none');
+        if (errorIndicator) errorIndicator.classList.remove('d-none');
+
+        // Add a fallback option
+        dropdown.innerHTML = `
+            <option value="">Select a course...</option>
+            <option value="Manual Entry">Manual Entry (Type your course)</option>
+        `;
+    }
+}
+
+// Initialize course loading when page loads
+document.addEventListener('DOMContentLoaded', function () {
+    loadCoursesForDropdown();
+});
+
 // Picture upload handler
 document.getElementById('picture').addEventListener('change', function (e) {
     const file = e.target.files[0];
@@ -460,6 +524,9 @@ function confirmPrintApplication() {
 
 // Menu toggle is handled by main.js - no need to duplicate here
 document.addEventListener('DOMContentLoaded', function () {
+    // Load courses for the assessment title dropdown
+    loadCoursesForDropdown();
+
     // Clear any problematic localStorage data that might auto-select radio buttons
     // Uncomment the line below if you want to clear all saved form data
     // localStorage.removeItem('applicationFormDraft');

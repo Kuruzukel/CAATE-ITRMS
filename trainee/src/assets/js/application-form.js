@@ -572,78 +572,8 @@ function initializePhilippineAddressDropdowns() {
 
     console.log('All dropdown elements found successfully');
 
-    // Sample data structure - you can expand this with complete Philippine address data
-    const philippineData = {
-        'NCR': {
-            'Metro Manila': {
-                'Manila': ['Barangay 1', 'Barangay 2', 'Barangay 3', 'Ermita', 'Intramuros', 'Malate', 'Paco', 'Pandacan', 'Port Area', 'Quiapo', 'Sampaloc', 'San Andres', 'San Miguel', 'San Nicolas', 'Santa Ana', 'Santa Cruz', 'Santa Mesa', 'Tondo'],
-                'Quezon City': ['Barangay Commonwealth', 'Barangay Holy Spirit', 'Barangay Batasan Hills', 'Barangay Fairview', 'Barangay Novaliches', 'Barangay Diliman', 'Barangay Project 8', 'Barangay Cubao', 'Barangay Kamuning', 'Barangay Teachers Village'],
-                'Makati': ['Barangay Poblacion', 'Barangay Bel-Air', 'Barangay Forbes Park', 'Barangay Dasmariñas', 'Barangay San Lorenzo', 'Barangay Urdaneta', 'Barangay Valenzuela', 'Barangay Bangkal', 'Barangay La Paz', 'Barangay Magallanes'],
-                'Pasig': ['Barangay Rosario', 'Barangay Bagong Ilog', 'Barangay Kapitolyo', 'Barangay Ugong', 'Barangay Ortigas Center', 'Barangay San Miguel', 'Barangay Manggahan', 'Barangay Maybunga', 'Barangay Pinagbuhatan', 'Barangay Santolan'],
-                'Taguig': ['Barangay Fort Bonifacio', 'Barangay Bagumbayan', 'Barangay Bambang', 'Barangay Calzada', 'Barangay Central Bicutan', 'Barangay Central Signal Village', 'Barangay Hagonoy', 'Barangay Ibayo-Tipas', 'Barangay Katuparan', 'Barangay Ligid-Tipas'],
-                'Caloocan': ['Barangay 1', 'Barangay 2', 'Barangay 3', 'Barangay 4', 'Barangay 5'],
-                'Las Piñas': ['Barangay Almanza Dos', 'Barangay Almanza Uno', 'Barangay BF International Village', 'Barangay Daniel Fajardo', 'Barangay Elias Aldana'],
-                'Marikina': ['Barangay Barangka', 'Barangay Calumpang', 'Barangay Concepcion Dos', 'Barangay Concepcion Uno', 'Barangay Fortune'],
-                'Muntinlupa': ['Barangay Alabang', 'Barangay Ayala Alabang', 'Barangay Buli', 'Barangay Cupang', 'Barangay New Alabang Village'],
-                'Navotas': ['Barangay Bagumbayan North', 'Barangay Bagumbayan South', 'Barangay Bangculasi', 'Barangay Daanghari', 'Barangay NBBS Dagat-dagatan'],
-                'Parañaque': ['Barangay Baclaran', 'Barangay BF Homes', 'Barangay Don Bosco', 'Barangay La Huerta', 'Barangay Marcelo Green Village'],
-                'Pasay': ['Barangay 1', 'Barangay 2', 'Barangay 3', 'Barangay 4', 'Barangay 5'],
-                'Pateros': ['Barangay Aguho', 'Barangay Magtanggol', 'Barangay Martires del 96', 'Barangay Poblacion', 'Barangay San Pedro'],
-                'San Juan': ['Barangay Addition Hills', 'Barangay Balong-Bato', 'Barangay Batis', 'Barangay Corazon de Jesus', 'Barangay Ermitaño'],
-                'Valenzuela': ['Barangay Arkong Bato', 'Barangay Bagbaguin', 'Barangay Balangkas', 'Barangay Bignay', 'Barangay Bisig'],
-                'Malabon': ['Barangay Acacia', 'Barangay Baritan', 'Barangay Bayan-bayanan', 'Barangay Catmon', 'Barangay Concepcion']
-            }
-        },
-        'Region III': {
-            'Bulacan': {
-                'Malolos': ['Barangay Atlag', 'Barangay Bagbaguin', 'Barangay Balayong', 'Barangay Balite', 'Barangay Bangkal', 'Barangay Barihan', 'Barangay Bulihan', 'Barangay Bungahan', 'Barangay Caingin', 'Barangay Calero'],
-                'San Jose del Monte': ['Barangay Assumption', 'Barangay Bagong Buhay I', 'Barangay Bagong Buhay II', 'Barangay Bagong Buhay III', 'Barangay Ciudad Real', 'Barangay Dulong Bayan', 'Barangay Fatima I', 'Barangay Fatima II', 'Barangay Fatima III', 'Barangay Fatima IV'],
-                'Meycauayan': ['Barangay Bagbaguin', 'Barangay Bahay Pare', 'Barangay Bancal', 'Barangay Banga', 'Barangay Calvario'],
-                'Marilao': ['Barangay Abangan Norte', 'Barangay Abangan Sur', 'Barangay Ibayo', 'Barangay Lambakin', 'Barangay Lias'],
-                'Santa Maria': ['Barangay Bagbaguin', 'Barangay Balasing', 'Barangay Bulac', 'Barangay Camangyanan', 'Barangay Catmon']
-            },
-            'Pampanga': {
-                'San Fernando': ['Barangay Baliti', 'Barangay Dela Paz Norte', 'Barangay Dela Paz Sur', 'Barangay Dolores', 'Barangay Juliana', 'Barangay Lara', 'Barangay Magliman', 'Barangay Malino', 'Barangay Malpitic', 'Barangay Panipuan'],
-                'Angeles': ['Barangay Agapito del Rosario', 'Barangay Amsic', 'Barangay Balibago', 'Barangay Capaya', 'Barangay Claro M. Recto', 'Barangay Cuayan', 'Barangay Cutcut', 'Barangay Cutud', 'Barangay Lourdes Norte', 'Barangay Lourdes Sur'],
-                'Mabalacat': ['Barangay Atlu-Bola', 'Barangay Bundagul', 'Barangay Cacutud', 'Barangay Camachiles', 'Barangay Dapdap'],
-                'Lubao': ['Barangay Arthur', 'Barangay Balantacan', 'Barangay Bancal Pugad', 'Barangay Bancal Sinubli', 'Barangay Calzada']
-            },
-            'Nueva Ecija': {
-                'Cabanatuan': ['Barangay Aduas Norte', 'Barangay Aduas Sur', 'Barangay Bakero', 'Barangay Barrera', 'Barangay Bitas'],
-                'Gapan': ['Barangay Balante', 'Barangay Bayanihan', 'Barangay Bungo', 'Barangay Kapalangan', 'Barangay Lambac'],
-                'San Jose': ['Barangay Abar 1st', 'Barangay Abar 2nd', 'Barangay Bagong Sikat', 'Barangay Caanawan', 'Barangay Camanacsacan']
-            }
-        },
-        'Region IV-A': {
-            'Cavite': {
-                'Bacoor': ['Barangay Alima', 'Barangay Aniban I', 'Barangay Aniban II', 'Barangay Aniban III', 'Barangay Aniban IV', 'Barangay Aniban V', 'Barangay Banalo', 'Barangay Bayanan', 'Barangay Campo Santo', 'Barangay Daang Bukid'],
-                'Imus': ['Barangay Alapan I-A', 'Barangay Alapan I-B', 'Barangay Alapan II-A', 'Barangay Alapan II-B', 'Barangay Anabu I-A', 'Barangay Anabu I-B', 'Barangay Anabu I-C', 'Barangay Anabu I-D', 'Barangay Anabu I-E', 'Barangay Anabu I-F'],
-                'Dasmariñas': ['Barangay Bagong Bayan', 'Barangay Burol I', 'Barangay Burol II', 'Barangay Burol III', 'Barangay Langkaan I'],
-                'General Trias': ['Barangay Alingaro', 'Barangay Arnaldo Poblacion', 'Barangay Bacao I', 'Barangay Bacao II', 'Barangay Bagumbayan']
-            },
-            'Laguna': {
-                'Santa Rosa': ['Barangay Aplaya', 'Barangay Balibago', 'Barangay Caingin', 'Barangay Dila', 'Barangay Dita', 'Barangay Don Jose', 'Barangay Ibaba', 'Barangay Kanluran', 'Barangay Labas', 'Barangay Macabling'],
-                'Biñan': ['Barangay Biñan', 'Barangay Bungahan', 'Barangay Canlalay', 'Barangay Casile', 'Barangay De La Paz', 'Barangay Ganado', 'Barangay Langkiwa', 'Barangay Loma', 'Barangay Malaban', 'Barangay Malamig'],
-                'San Pedro': ['Barangay Calendola', 'Barangay Chrysanthemum', 'Barangay Cuyab', 'Barangay Fatima', 'Barangay G.S.I.S.'],
-                'Cabuyao': ['Barangay Banay-banay', 'Barangay Banlic', 'Barangay Bigaa', 'Barangay Butong', 'Barangay Casile']
-            },
-            'Batangas': {
-                'Batangas City': ['Barangay Alangilan', 'Barangay Balagtas', 'Barangay Balete', 'Barangay Banaba Center', 'Barangay Banaba Kanluran'],
-                'Lipa': ['Barangay Adya', 'Barangay Anilao', 'Barangay Antipolo del Norte', 'Barangay Antipolo del Sur', 'Barangay Bagong Pook'],
-                'Tanauan': ['Barangay Altura Bata', 'Barangay Altura Matanda', 'Barangay Ambulong', 'Barangay Balele', 'BarangayBanjo East']
-            },
-            'Rizal': {
-                'Antipolo': ['Barangay Bagong Nayon', 'Barangay Beverly Hills', 'Barangay Calawis', 'Barangay Cupang', 'Barangay Dalig'],
-                'Cainta': ['Barangay Dayap', 'Barangay San Andres', 'Barangay San Isidro', 'Barangay San Juan', 'Barangay Santo Domingo'],
-                'Taytay': ['Barangay Bagumbayan', 'Barangay Dolores', 'Barangay Muzon', 'Barangay San Isidro', 'Barangay San Juan']
-            },
-            'Quezon': {
-                'Lucena': ['Barangay Barra', 'Barangay Bocohan', 'Barangay Cotta', 'Barangay Dalahican', 'Barangay Gulang-Gulang'],
-                'Tayabas': ['Barangay Alitao', 'Barangay Angustias', 'Barangay Ayaas', 'Barangay Bukal', 'Barangay Domoit'],
-                'Sariaya': ['Barangay Antipolo', 'Barangay Bignay I', 'Barangay Bignay II', 'Barangay Bucal', 'Barangay Bunot']
-            }
-        }
-    };
+    // Use comprehensive Philippine address data
+    const philippineData = PHILIPPINE_ADDRESS_DATA;
 
     // Region change handler
     regionSelect.addEventListener('change', function () {

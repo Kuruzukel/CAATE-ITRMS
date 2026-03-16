@@ -1,5 +1,90 @@
 /* Dashboard specific styles */
 
+/* Global White Text Color for Dashboard */
+body,
+.content-wrapper,
+.container-xxl,
+.card-body,
+.card-title,
+.card-text,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+span,
+div,
+small,
+strong,
+.text-muted,
+.fw-semibold,
+.fw-bold,
+.badge,
+.progress,
+.mb-1,
+.mb-2,
+.mb-3,
+.mb-4,
+.d-block {
+    color: white !important;
+}
+
+/* Specific dashboard content text colors */
+.card-body h6,
+.card-body .card-title,
+.card-body span,
+.card-body small,
+.card-body strong,
+.card-body .text-muted,
+.card-body .fw-semibold,
+.card-body .d-block {
+    color: white !important;
+}
+
+/* Course completion text */
+.progress+small,
+.text-muted,
+small.text-muted {
+    color: white !important;
+}
+
+/* Certificate information text */
+.card-body .mb-2 small,
+.card-body .mb-2 strong,
+.card-body .mb-3 small {
+    color: white !important;
+}
+
+/* Welcome message text */
+.card-title.text-primary,
+.card-body p,
+.welcome-user-name,
+.user-name {
+    color: white !important;
+}
+
+/* Statistics cards text - restore original colors */
+.card-title.mb-2 {
+    color: white !important;
+}
+
+.fw-semibold.d-block.mb-1 {
+    color: white !important;
+    /* Make labels white */
+}
+
+.text-success.fw-semibold {
+    color: white !important;
+    /* Make "In Progress" text white */
+}
+
+.text-info.fw-semibold {
+    color: white !important;
+    /* Make "Certified" text white */
+}
+
 /* Navbar User Dropdown Styles */
 .navbar-dropdown.dropdown-user {
     position: relative;
@@ -99,12 +184,17 @@
 
 .navbar-dropdown.dropdown-user .fw-semibold {
     font-weight: 600;
-    color: #566a7f;
+    color: white !important;
     font-size: 0.9375rem;
 }
 
+.navbar-dropdown.dropdown-user .text-white {
+    color: white !important;
+    font-size: 0.8125rem;
+}
+
 .navbar-dropdown.dropdown-user .text-muted {
-    color: #a1acb8 !important;
+    color: white !important;
     font-size: 0.8125rem;
 }
 
@@ -266,4 +356,214 @@
         flex: 0 0 33.333333%;
         max-width: 33.333333%;
     }
+}
+
+/* Additional comprehensive white text styling */
+/* Override any Bootstrap text color classes */
+.text-primary,
+.text-secondary,
+.text-success,
+.text-info,
+.text-warning,
+.text-danger,
+.text-light,
+.text-dark,
+.text-muted {
+    color: white !important;
+}
+
+/* All text elements in cards */
+.card * {
+    color: white !important;
+}
+
+/* Ensure all content wrapper text is white */
+.content-wrapper * {
+    color: white !important;
+}
+
+/* Badge text should remain visible - keep success badges green text */
+.badge.bg-success {
+    color: white !important;
+}
+
+.badge.bg-primary {
+    color: white !important;
+}
+
+.badge.bg-info {
+    color: white !important;
+}
+
+/* Force all dashboard text to be white with highest specificity */
+.layout-page .content-wrapper .container-xxl * {
+    color: white !important;
+}
+
+/* Specific overrides for common elements */
+.layout-page .content-wrapper .container-xxl .card .card-body * {
+    color: white !important;
+}
+
+/* Progress bar text */
+.progress+* {
+    color: white !important;
+}
+
+/* All headings */
+.layout-page h1,
+.layout-page h2,
+.layout-page h3,
+.layout-page h4,
+.layout-page h5,
+.layout-page h6 {
+    color: white !important;
+}
+
+/* All paragraphs and spans */
+.layout-page p,
+.layout-page span,
+.layout-page div,
+.layout-page small,
+.layout-page strong {
+    color: white !important;
+}
+
+/* Restore original colors for statistics cards */
+.col-lg-6.col-md-12.col-6.mb-4 .card .card-body .fw-semibold.d-block.mb-1 {
+    color: white !important;
+    /* Make label white */
+}
+
+.col-lg-6.col-md-12.col-6.mb-4 .card .card-body .text-success.fw-semibold {
+    color: white !important;
+    /* Make "In Progress" white */
+}
+
+.col-lg-6.col-md-12.col-6.mb-4 .card .card-body .text-info.fw-semibold {
+    color: white !important;
+    /* Make "Certified" white */
+}
+
+/* Restore icon colors */
+.avatar.flex-shrink-0 i {
+    color: #10b981 !important;
+    /* Green for book icon */
+}
+
+.avatar.flex-shrink-0 i.bx-award {
+    color: #3b82f6 !important;
+    /* Blue for award icon */
+}
+
+/* Specific icon color overrides */
+.card .avatar i.bx-book-open {
+    color: #10b981 !important;
+}
+
+.card .avatar i.bx-award {
+    color: #3b82f6 !important;
+}
+
+/* Override the global white text for specific statistics elements */
+.card .card-body .fw-semibold.d-block.mb-1:not(.text-white) {
+    color: #697a8d !important;
+}
+
+.card .card-body .text-success {
+    color: white !important;
+}
+
+.card .card-body .text-info {
+    color: white !important;
+}
+
+/* More specific overrides for statistics cards */
+.col-lg-4.col-md-4.order-1 .card .card-body span.fw-semibold.d-block.mb-1 {
+    color: #697a8d !important;
+}
+
+.col-lg-4.col-md-4.order-1 .card .card-body small.text-success.fw-semibold {
+    color: white !important;
+}
+
+.col-lg-4.col-md-4.order-1 .card .card-body small.text-info.fw-semibold {
+    color: white !important;
+}
+
+/* Statistics card icons with proper colors */
+.col-lg-4.col-md-4.order-1 .card .avatar i {
+    color: inherit !important;
+}
+
+.col-lg-4.col-md-4.order-1 .card .avatar i[style*="color: #10b981"] {
+    color: #10b981 !important;
+}
+
+.col-lg-4.col-md-4.order-1 .card .avatar i[style*="color: #3b82f6"] {
+    color: #3b82f6 !important;
+}
+
+/* Force specific colors for the statistics elements */
+.row .col-lg-6.col-md-12.col-6.mb-4 .card .card-body span {
+    color: #697a8d !important;
+}
+
+.row .col-lg-6.col-md-12.col-6.mb-4 .card .card-body h3 {
+    color: white !important;
+}
+
+.row .col-lg-6.col-md-12.col-6.mb-4 .card .card-body small {
+    color: #10b981 !important;
+}
+
+.row .col-lg-6.col-md-12.col-6.mb-4:last-child .card .card-body small {
+    color: white !important;
+}
+
+/* Fix for small icons in statistics cards */
+.text-success.fw-semibold i.bx-up-arrow-alt {
+    color: #10b981 !important;
+    /* Green for up arrow */
+}
+
+.text-info.fw-semibold i.bx-check-circle {
+    color: #3b82f6 !important;
+    /* Blue for check circle */
+}
+
+/* Ensure "Certified" text is white with highest specificity */
+small.text-info.fw-semibold {
+    color: white !important;
+}
+
+/* Force all small icons in statistics cards to have proper colors */
+.col-lg-6.col-md-12.col-6.mb-4 .card .card-body small i {
+    color: inherit !important;
+}
+
+.col-lg-6.col-md-12.col-6.mb-4 .card .card-body small.text-success i {
+    color: #10b981 !important;
+}
+
+.col-lg-6.col-md-12.col-6.mb-4 .card .card-body small.text-info i {
+    color: #3b82f6 !important;
+}
+
+/* Override any global white text for these specific icons */
+.card-body small.text-success.fw-semibold i.bx {
+    color: #10b981 !important;
+}
+
+.card-body small.text-info.fw-semibold i.bx {
+    color: #3b82f6 !important;
+}
+
+/* Ensure text remains white but icons get proper colors */
+.card-body small.text-success.fw-semibold {
+    color: white !important;
+}
+
+.card-body small.text-info.fw-semibold {
+    color: white !important;
 }

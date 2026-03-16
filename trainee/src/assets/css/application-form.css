@@ -475,21 +475,29 @@
 .data-table input {
     width: 100%;
     border: none;
-    border-bottom: 2px solid rgba(54, 145, 191, 0.3);
+    border-bottom: 2px solid #64748b;
     padding: 0.5rem 0.25rem;
-    color: rgba(255, 255, 255, 0.9) !important;
+    color: #ffffff !important;
     font-weight: 500;
     font-size: 0.86rem;
     background-color: transparent;
     transition: all 0.3s ease;
 }
 
+.data-table input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+.data-table input[type="number"]::-webkit-outer-spin-button,
+.data-table input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
 .data-table input:focus {
     outline: none;
-    border-bottom-color: rgba(54, 145, 191, 0.6);
-    background-color: rgba(15, 41, 66, 0.3);
-    backdrop-filter: blur(10px) saturate(180%);
-    -webkit-backdrop-filter: blur(10px) saturate(180%);
+    border-bottom-color: #94a3b8;
+    background-color: rgba(0, 0, 0, 0.2);
 }
 
 .data-table input::placeholder {
@@ -815,7 +823,17 @@ select.form-control option[value=""] {
     border-width: 0;
 }
 
-/* Hide number input spinner arrows */
+/* Hide number input spinner arrows completely */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
 .no-spinner::-webkit-outer-spin-button,
 .no-spinner::-webkit-inner-spin-button {
     -webkit-appearance: none;

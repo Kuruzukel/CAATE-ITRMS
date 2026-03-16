@@ -29,7 +29,7 @@ async function loadCoursesForDropdown() {
 
         if (result.success && result.data && result.data.length > 0) {
             // Clear existing options except the first one
-            dropdown.innerHTML = '<option value="">Select a course...</option>';
+            dropdown.innerHTML = '<option value="">Select an assessment...</option>';
 
             // Add course options
             result.data.forEach(course => {
@@ -42,10 +42,10 @@ async function loadCoursesForDropdown() {
             // Hide loading
             if (loadingIndicator) loadingIndicator.classList.add('d-none');
         } else {
-            throw new Error('No courses found');
+            throw new Error('No assessments found');
         }
     } catch (error) {
-        console.error('Error loading courses for dropdown:', error);
+        console.error('Error loading assessments for dropdown:', error);
 
         // Show error
         if (loadingIndicator) loadingIndicator.classList.add('d-none');
@@ -53,8 +53,8 @@ async function loadCoursesForDropdown() {
 
         // Add a fallback option
         dropdown.innerHTML = `
-            <option value="">Select a course...</option>
-            <option value="Manual Entry">Manual Entry (Type your course)</option>
+            <option value="">Select an assessment...</option>
+            <option value="Manual Entry">Manual Entry (Type your assessment)</option>
         `;
     }
 }

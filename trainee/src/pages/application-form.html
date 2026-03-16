@@ -436,7 +436,23 @@
                                                         </div>
                                                         <input type="file" id="picture" name="picture" accept="image/*"
                                                             style="display: none;">
-                                                        <img id="picturePreview" style="display: none;">
+                                                        <div class="picture-preview-container"
+                                                            id="picturePreviewContainer" style="display: none;">
+                                                            <img id="picturePreview" class="picture-preview">
+                                                            <div class="picture-action-buttons"
+                                                                id="pictureActionButtons">
+                                                                <button type="button"
+                                                                    class="btn btn-sm btn-primary picture-view-btn"
+                                                                    id="viewPictureBtn">
+                                                                    <i class="bx bx-show"></i>
+                                                                </button>
+                                                                <button type="button"
+                                                                    class="btn btn-sm btn-danger picture-remove-btn"
+                                                                    id="removePictureBtn">
+                                                                    <i class="bx bx-trash"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div>

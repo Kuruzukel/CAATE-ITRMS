@@ -22,12 +22,66 @@ document.getElementById('picture').addEventListener('change', function (e) {
         reader.onload = function (event) {
             const preview = document.getElementById('picturePreview');
             const placeholder = document.getElementById('picturePlaceholder');
+            const previewContainer = document.getElementById('picturePreviewContainer');
+
             preview.src = event.target.result;
-            preview.style.display = 'block';
             placeholder.style.display = 'none';
+            previewContainer.style.display = 'flex';
         };
         reader.readAsDataURL(file);
     }
+});
+
+// Picture action buttons
+document.addEventListener('DOMContentLoaded', function () {
+    // View picture button
+    document.getElementById('viewPictureBtn').addEventListener('click', function (e) {
+        e.stopPropagation();
+        const preview = document.getElementById('picturePreview');
+        if (preview.src) {
+            // Create modal to view full image
+            const modal = document.createElement('div');
+            modal.className = 'modal fade';
+            modal.innerHTML = `
+                <div class="modal-dialog modal-lg modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Picture Preview</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body text-center">
+                            <img src="${preview.src}" class="img-fluid" style="max-height: 70vh;">
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            const bsModal = new bootstrap.Modal(modal);
+            bsModal.show();
+
+            // Remove modal from DOM when hidden
+            modal.addEventListener('hidden.bs.modal', function () {
+                document.body.removeChild(modal);
+            });
+        }
+    });
+
+    // Remove picture button
+    document.getElementById('removePictureBtn').addEventListener('click', function (e) {
+        e.stopPropagation();
+        const pictureInput = document.getElementById('picture');
+        const placeholder = document.getElementById('picturePlaceholder');
+        const previewContainer = document.getElementById('picturePreviewContainer');
+        const preview = document.getElementById('picturePreview');
+
+        // Clear the input
+        pictureInput.value = '';
+
+        // Reset display
+        preview.src = '';
+        previewContainer.style.display = 'none';
+        placeholder.style.display = 'flex';
+    });
 });
 
 // Signature canvas functionality
@@ -309,7 +363,9 @@ document.getElementById('applicationForm').addEventListener('reset', function (e
     // Clear picture preview
     const preview = document.getElementById('picturePreview');
     const placeholder = document.getElementById('picturePlaceholder');
-    preview.style.display = 'none';
+    const previewContainer = document.getElementById('picturePreviewContainer');
+    preview.src = '';
+    previewContainer.style.display = 'none';
     placeholder.style.display = 'flex';
 
     // Clear age field

@@ -300,6 +300,43 @@
     width: 18px;
     height: 18px;
     cursor: pointer;
+    accent-color: #3691bf;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: 2px solid #3691bf;
+    border-radius: 50%;
+    background-color: transparent;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.radio-label input[type="radio"]:checked {
+    background-color: #3691bf;
+    border-color: #3691bf;
+}
+
+.radio-label input[type="radio"]:checked::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: white;
+}
+
+.radio-label input[type="radio"]:hover {
+    border-color: #2a7ba8;
+    box-shadow: 0 0 0 3px rgba(54, 145, 191, 0.1);
+}
+
+.radio-label input[type="radio"]:focus {
+    outline: none;
+    border-color: #2a7ba8;
+    box-shadow: 0 0 0 3px rgba(54, 145, 191, 0.2);
 }
 
 .radio-label:hover {
@@ -461,7 +498,17 @@
 }
 
 .card-header h4 i {
-    color: #3691bf;
+    color: #3691bf !important;
+}
+
+/* Specific icon colors for application form sections */
+.card-header h4 i.bx-info-circle,
+.card-header h4 i.bx-user,
+.card-header h4 i.bx-briefcase,
+.card-header h4 i.bx-book-reader,
+.card-header h4 i.bx-certification,
+.card-header h4 i.bx-award {
+    color: #3691bf !important;
 }
 
 /* Helper Text */

@@ -480,9 +480,14 @@
                                                     <label for="schoolName" class="form-label fw-semibold">Name of
                                                         School/Training Center/Company: <span
                                                             class="text-danger">*</span></label>
-                                                    <input type="text" id="schoolName" name="schoolName"
-                                                        class="form-control"
-                                                        placeholder="Enter school/training center name" required>
+                                                    <select id="schoolName" name="schoolName" class="form-control"
+                                                        required>
+                                                        <option value="">Select school/training center...</option>
+                                                        <option
+                                                            value="Creative Aesthetic Academy & Technical Education Inc.">
+                                                            Creative Aesthetic Academy & Technical Education Inc.
+                                                        </option>
+                                                    </select>
                                                 </div>
                                                 <div class="col-md-6 mb-3">
                                                     <label for="schoolAddress" class="form-label fw-semibold">Address:
@@ -585,15 +590,20 @@
                                                     <input type="text" id="surname" name="surname" class="form-control"
                                                         placeholder="Enter your surname" autocomplete="family-name">
                                                 </div>
-                                                <div class="col-md-6 mb-3">
-                                                    <label for="firstname" class="form-label fw-semibold">FIRSTNAME
-                                                        <span class="text-danger">*</span></label>
+                                                <div class="col-md-4 mb-3">
+                                                    <label for="firstname" class="form-label fw-semibold">FIRST
+                                                        NAME</label>
                                                     <input type="text" id="firstname" name="firstname"
                                                         class="form-control" placeholder="Enter your first name"
-                                                        required autocomplete="given-name">
+                                                        autocomplete="given-name">
                                                 </div>
-                                            </div>
-                                            <div class="row">
+                                                <div class="col-md-4 mb-3">
+                                                    <label for="secondname" class="form-label fw-semibold">SECOND
+                                                        NAME</label>
+                                                    <input type="text" id="secondname" name="secondname"
+                                                        class="form-control" placeholder="Enter your second name"
+                                                        autocomplete="additional-name">
+                                                </div>
                                                 <div class="col-md-4 mb-3">
                                                     <label for="middleName" class="form-label fw-semibold">MIDDLE
                                                         NAME</label>
@@ -601,14 +611,16 @@
                                                         class="form-control" placeholder="Enter middle name"
                                                         autocomplete="additional-name">
                                                 </div>
-                                                <div class="col-md-4 mb-3">
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6 mb-3">
                                                     <label for="middleInitial" class="form-label fw-semibold">MIDDLE
                                                         INITIAL</label>
                                                     <input type="text" id="middleInitial" name="middleInitial"
                                                         class="form-control" placeholder="M.I." maxlength="1"
                                                         autocomplete="off">
                                                 </div>
-                                                <div class="col-md-4 mb-3">
+                                                <div class="col-md-6 mb-3">
                                                     <label for="nameExtension" class="form-label fw-semibold">Name
                                                         Extension (Jr, Sr, III)</label>
                                                     <input type="text" id="nameExtension" name="nameExtension"

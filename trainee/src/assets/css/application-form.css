@@ -1174,3 +1174,14 @@ input[type="radio"]:checked::before {
 #registrationForm .uli-input:nth-child(20) {
     background-color: #e0e0f0 !important;
 }
+
+/* Shield icon color for Privacy Consent section */
+.content-wrapper .card-header h4 i.bx-shield,
+.layout-page .content-wrapper .container-xxl .card-header h4 i.bx-shield {
+    color: #3691bf !important;
+}
+
+/* Ensure shield icon is visible in all contexts */
+i.bx-shield {
+    color: #3691bf !important;
+}

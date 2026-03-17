@@ -1,0 +1,269 @@
+/* Registration Form Specific Styles */
+
+/* Radio Groups - Set gap to 0rem for vertical layout */
+.radio-group.vertical {
+    flex-direction: column;
+    gap: 0rem;
+}
+
+/* ULI Input Section - Match Application Form Style */
+.uli-inputs {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.uli-input {
+    width: 55px !important;
+    height: 45px !important;
+    text-align: center;
+    font-weight: 600;
+    color: #2c3e50 !important;
+    font-size: 0.95rem;
+    border: 2px solid #6c757d !important;
+    border-radius: 8px !important;
+    padding: 0.5rem;
+    background-color: #b8d4f0 !important;
+    opacity: 1 !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+}
+
+.uli-input:focus {
+    border-color: #3691bf !important;
+    box-shadow: 0 0 0 0.2rem rgba(54, 145, 191, 0.15);
+    outline: none !important;
+}
+
+/* ULI Color Groups - Match Application Form */
+/* First 3 boxes - light blue */
+.uli-input:nth-child(1),
+.uli-input:nth-child(2),
+.uli-input:nth-child(3) {
+    background-color: #d4e8ff !important;
+    color: #2c3e50 !important;
+}
+
+/* Next 2 boxes - light pink */
+.uli-input:nth-child(5),
+.uli-input:nth-child(6) {
+    background-color: #ffe0e0 !important;
+    color: #2c3e50 !important;
+}
+
+/* Next 3 boxes - light green */
+.uli-input:nth-child(8),
+.uli-input:nth-child(9),
+.uli-input:nth-child(10) {
+    background-color: #e0f0c8 !important;
+    color: #2c3e50 !important;
+}
+
+/* Next 5 boxes - light peach */
+.uli-input:nth-child(12),
+.uli-input:nth-child(13),
+.uli-input:nth-child(14),
+.uli-input:nth-child(15),
+.uli-input:nth-child(16) {
+    background-color: #ffe8c8 !important;
+    color: #2c3e50 !important;
+}
+
+/* Last 3 boxes - light purple */
+.uli-input:nth-child(18),
+.uli-input:nth-child(19),
+.uli-input:nth-child(20) {
+    background-color: #e0e0f0 !important;
+    color: #2c3e50 !important;
+}
+
+.uli-separator {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #2c3e50;
+    padding: 0 5px;
+}
+
+/* Force circular radio buttons - most aggressive approach */
+.radio-label input[type="radio"],
+input[type="radio"] {
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+    width: 18px !important;
+    height: 18px !important;
+    border: 2px solid #3691bf !important;
+    border-radius: 50% !important;
+    background-color: transparent !important;
+    cursor: pointer !important;
+    position: relative !important;
+    transition: all 0.3s ease !important;
+    margin-right: 8px !important;
+    display: inline-block !important;
+    vertical-align: middle !important;
+    flex-shrink: 0 !important;
+}
+
+.radio-label input[type="radio"]:checked,
+input[type="radio"]:checked {
+    background-color: #3691bf !important;
+    border-color: #3691bf !important;
+}
+
+.radio-label input[type="radio"]:checked::before,
+input[type="radio"]:checked::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 8px !important;
+    height: 8px !important;
+    border-radius: 50% !important;
+    background-color: white !important;
+    display: block !important;
+}
+
+/* Checkbox styling for registration form */
+.radio-label input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    accent-color: #3691bf;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: 2px solid #2c3e50;
+    border-radius: 3px;
+    background-color: transparent;
+    position: relative;
+    transition: all 0.3s ease;
+    margin-right: 8px;
+}
+
+.radio-label input[type="checkbox"]:checked {
+    background-color: #3691bf;
+    border-color: #3691bf;
+}
+
+.radio-label input[type="checkbox"]:checked::before {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.radio-label input[type="checkbox"]:hover {
+    border-color: #2a7ba8;
+    box-shadow: 0 0 0 3px rgba(54, 145, 191, 0.1);
+}
+
+.radio-label input[type="checkbox"]:focus {
+    outline: none;
+    border-color: #2a7ba8;
+    box-shadow: 0 0 0 3px rgba(54, 145, 191, 0.2);
+}
+
+/* Radio Groups */
+.radio-group {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.radio-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    color: #2c3e50;
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 8px;
+}
+
+.radio-label:hover {
+    color: #3691bf;
+}
+
+/* Remove search icons from form input fields */
+input[type="text"]::-webkit-search-decoration,
+input[type="text"]::-webkit-search-cancel-button,
+input[type="text"]::-webkit-search-results-button,
+input[type="text"]::-webkit-search-results-decoration {
+    -webkit-appearance: none;
+    display: none;
+}
+
+/* Ensure no background images (search icons) on form inputs */
+input[type="text"].form-control,
+input[type="email"].form-control,
+input[type="tel"].form-control {
+    background-image: none !important;
+    background-position: initial !important;
+    background-repeat: initial !important;
+    padding-left: 0.75rem !important;
+}
+
+/* Force remove any search styling from registration form inputs */
+input[type="text"] {
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+    background-image: none !important;
+    background-position: initial !important;
+    background-repeat: no-repeat !important;
+    background-size: initial !important;
+    padding-left: 0.75rem !important;
+}
+
+/* Signature boxes */
+.signature-box {
+    min-height: 60px;
+    display: flex;
+    align-items: flex-end;
+    padding: 10px 0;
+}
+
+/* Privacy consent text styling */
+.card-body p em {
+    color: #2c3e50;
+    font-weight: 500;
+}
+
+/* Disability section styling */
+.card-header h4 em {
+    color: #6c757d;
+    font-size: 0.85rem;
+    font-weight: 400;
+}
+
+/* Others input field styling */
+.radio-label input[type="text"] {
+    margin-left: 10px;
+    width: 200px;
+    display: inline-block;
+    border: 1px solid #d0d5dd;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 0.8rem;
+}
+
+/* Responsive adjustments for registration form */
+@media (max-width: 768px) {
+    .radio-label input[type="text"] {
+        width: 100%;
+        margin-left: 0;
+        margin-top: 5px;
+    }
+
+    .signature-box {
+        min-height: 40px;
+    }
+}

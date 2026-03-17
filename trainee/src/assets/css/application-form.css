@@ -690,12 +690,30 @@ select.form-control option[value=""] {
 .content-wrapper .card-header h4 i.bx-book-reader,
 .content-wrapper .card-header h4 i.bx-certification,
 .content-wrapper .card-header h4 i.bx-award,
+.content-wrapper .card-header h4 i.bx-cog,
+.content-wrapper .card-header h4 i.bx-category,
+.content-wrapper .card-header h4 i.bx-accessibility,
+.content-wrapper .card-header h4 i.bx-help-circle,
+.content-wrapper .card-header h4 i.bx-calendar,
+.content-wrapper .card-header h4 i.bx-book,
+.content-wrapper .card-header h4 i.bx-group,
+.content-wrapper .card-header h4 i.bx-shield-check,
+.content-wrapper .card-header h4 i.bx-edit,
 .layout-page .content-wrapper .container-xxl .card-header h4 i.bx-info-circle,
 .layout-page .content-wrapper .container-xxl .card-header h4 i.bx-user,
 .layout-page .content-wrapper .container-xxl .card-header h4 i.bx-briefcase,
 .layout-page .content-wrapper .container-xxl .card-header h4 i.bx-book-reader,
 .layout-page .content-wrapper .container-xxl .card-header h4 i.bx-certification,
-.layout-page .content-wrapper .container-xxl .card-header h4 i.bx-award {
+.layout-page .content-wrapper .container-xxl .card-header h4 i.bx-award,
+.layout-page .content-wrapper .container-xxl .card-header h4 i.bx-cog,
+.layout-page .content-wrapper .container-xxl .card-header h4 i.bx-category,
+.layout-page .content-wrapper .container-xxl .card-header h4 i.bx-accessibility,
+.layout-page .content-wrapper .container-xxl .card-header h4 i.bx-help-circle,
+.layout-page .content-wrapper .container-xxl .card-header h4 i.bx-calendar,
+.layout-page .content-wrapper .container-xxl .card-header h4 i.bx-book,
+.layout-page .content-wrapper .container-xxl .card-header h4 i.bx-group,
+.layout-page .content-wrapper .container-xxl .card-header h4 i.bx-shield-check,
+.layout-page .content-wrapper .container-xxl .card-header h4 i.bx-edit {
     color: #3691bf !important;
 }
 
@@ -980,4 +998,124 @@ input[type="number"] {
     -webkit-appearance: none !important;
     -moz-appearance: none !important;
     appearance: none !important;
+}
+
+/* Ensure all radio buttons are circular - specific override */
+input[type="radio"] {
+    border-radius: 50% !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+    width: 18px !important;
+    height: 18px !important;
+    border: 2px solid #3691bf !important;
+    background-color: transparent !important;
+    cursor: pointer !important;
+    position: relative !important;
+    transition: all 0.3s ease !important;
+    margin-right: 8px !important;
+}
+
+input[type="radio"]:checked {
+    background-color: #3691bf !important;
+    border-color: #3691bf !important;
+}
+
+input[type="radio"]:checked::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 8px !important;
+    height: 8px !important;
+    border-radius: 50% !important;
+    background-color: white !important;
+}
+
+/* Force circular radio buttons for education section */
+input[name="education"] {
+    width: 18px !important;
+    height: 18px !important;
+    border: 2px solid #3691bf !important;
+    border-radius: 50% !important;
+    background-color: transparent !important;
+    cursor: pointer !important;
+    position: relative !important;
+    transition: all 0.3s ease !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+}
+
+input[name="education"]:checked {
+    background-color: #3691bf !important;
+    border-color: #3691bf !important;
+}
+
+input[name="education"]:checked::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 8px !important;
+    height: 8px !important;
+    border-radius: 50% !important;
+    background-color: white !important;
+}
+
+/* Force circular radio buttons - most aggressive approach */
+.radio-label input[type="radio"],
+input[type="radio"] {
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+    width: 18px !important;
+    height: 18px !important;
+    border: 2px solid #3691bf !important;
+    border-radius: 50% !important;
+    background-color: transparent !important;
+    cursor: pointer !important;
+    position: relative !important;
+    transition: all 0.3s ease !important;
+    margin-right: 8px !important;
+    display: inline-block !important;
+    vertical-align: middle !important;
+    flex-shrink: 0 !important;
+}
+
+.radio-label input[type="radio"]:checked,
+input[type="radio"]:checked {
+    background-color: #3691bf !important;
+    border-color: #3691bf !important;
+}
+
+.radio-label input[type="radio"]:checked::before,
+input[type="radio"]:checked::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 8px !important;
+    height: 8px !important;
+    border-radius: 50% !important;
+    background-color: white !important;
+    display: block !important;
+}
+
+/* Override any conflicting styles */
+.card .radio-label input[type="radio"] {
+    border-radius: 50% !important;
+    width: 18px !important;
+    height: 18px !important;
+}
+
+/* Ensure radio labels display properly */
+.radio-label {
+    display: flex !important;
+    align-items: flex-start !important;
+    gap: 8px !important;
+    margin-bottom: 8px !important;
 }

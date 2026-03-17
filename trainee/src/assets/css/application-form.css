@@ -1116,7 +1116,7 @@ input[type="radio"]:checked::before {
 .radio-label {
     display: flex !important;
     align-items: flex-start !important;
-    gap: 8px !important;
+    gap: 0px !important;
     margin-bottom: 8px !important;
 }
 

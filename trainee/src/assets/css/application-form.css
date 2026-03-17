@@ -1119,3 +1119,58 @@ input[type="radio"]:checked::before {
     gap: 8px !important;
     margin-bottom: 8px !important;
 }
+
+/* Registration Form ULI Input Styling - Match Application Form Colors */
+#registrationForm .uli-input {
+    width: 55px !important;
+    text-align: center;
+    font-weight: 600;
+    color: #ffffff !important;
+    font-size: 0.95rem;
+    border: 2px solid #6c757d !important;
+    padding: 0.5rem;
+    background-color: #b8d4f0 !important;
+    opacity: 1 !important;
+}
+
+#registrationForm .uli-input:focus {
+    border-color: #3691bf !important;
+    box-shadow: 0 0 0 0.2rem rgba(54, 145, 191, 0.15);
+}
+
+/* Registration Form ULI Color Groups - Match Application Form */
+/* First 3 boxes - light blue */
+#registrationForm .uli-input:nth-child(1),
+#registrationForm .uli-input:nth-child(2),
+#registrationForm .uli-input:nth-child(3) {
+    background-color: #d4e8ff !important;
+}
+
+/* Next 2 boxes - light pink */
+#registrationForm .uli-input:nth-child(5),
+#registrationForm .uli-input:nth-child(6) {
+    background-color: #ffe0e0 !important;
+}
+
+/* Next 3 boxes - light green */
+#registrationForm .uli-input:nth-child(8),
+#registrationForm .uli-input:nth-child(9),
+#registrationForm .uli-input:nth-child(10) {
+    background-color: #e0f0c8 !important;
+}
+
+/* Next 5 boxes - light peach */
+#registrationForm .uli-input:nth-child(12),
+#registrationForm .uli-input:nth-child(13),
+#registrationForm .uli-input:nth-child(14),
+#registrationForm .uli-input:nth-child(15),
+#registrationForm .uli-input:nth-child(16) {
+    background-color: #ffe8c8 !important;
+}
+
+/* Last 3 boxes - light purple */
+#registrationForm .uli-input:nth-child(18),
+#registrationForm .uli-input:nth-child(19),
+#registrationForm .uli-input:nth-child(20) {
+    background-color: #e0e0f0 !important;
+}

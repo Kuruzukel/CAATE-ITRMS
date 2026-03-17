@@ -843,3 +843,94 @@ input[type="number"] {
 .no-spinner[type=number] {
     -moz-appearance: textfield;
 }
+
+/* Registration Form Specific Styles */
+
+/* Checkbox styling for registration form */
+.radio-label input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    accent-color: #3691bf;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: 2px solid #2c3e50;
+    border-radius: 3px;
+    background-color: transparent;
+    position: relative;
+    transition: all 0.3s ease;
+    margin-right: 8px;
+}
+
+.radio-label input[type="checkbox"]:checked {
+    background-color: #3691bf;
+    border-color: #3691bf;
+}
+
+.radio-label input[type="checkbox"]:checked::before {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.radio-label input[type="checkbox"]:hover {
+    border-color: #2a7ba8;
+    box-shadow: 0 0 0 3px rgba(54, 145, 191, 0.1);
+}
+
+.radio-label input[type="checkbox"]:focus {
+    outline: none;
+    border-color: #2a7ba8;
+    box-shadow: 0 0 0 3px rgba(54, 145, 191, 0.2);
+}
+
+/* Signature boxes */
+.signature-box {
+    min-height: 60px;
+    display: flex;
+    align-items: flex-end;
+    padding: 10px 0;
+}
+
+/* Privacy consent text styling */
+.card-body p em {
+    color: #2c3e50;
+    font-weight: 500;
+}
+
+/* Disability section styling */
+.card-header h4 em {
+    color: #6c757d;
+    font-size: 0.85rem;
+    font-weight: 400;
+}
+
+/* Others input field styling */
+.radio-label input[type="text"] {
+    margin-left: 10px;
+    width: 200px;
+    display: inline-block;
+    border: 1px solid #d0d5dd;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 0.8rem;
+}
+
+/* Responsive adjustments for registration form */
+@media (max-width: 768px) {
+    .radio-label input[type="text"] {
+        width: 100%;
+        margin-left: 0;
+        margin-top: 5px;
+    }
+
+    .signature-box {
+        min-height: 40px;
+    }
+}

@@ -934,3 +934,50 @@ input[type="number"] {
         min-height: 40px;
     }
 }
+
+/* Remove search icons from form input fields */
+.card input[type="text"]::-webkit-search-decoration,
+.card input[type="text"]::-webkit-search-cancel-button,
+.card input[type="text"]::-webkit-search-results-button,
+.card input[type="text"]::-webkit-search-results-decoration {
+    -webkit-appearance: none;
+    display: none;
+}
+
+/* Ensure no background images (search icons) on form inputs */
+.card input[type="text"].form-control,
+.card input[type="email"].form-control,
+.card input[type="tel"].form-control {
+    background-image: none !important;
+    background-position: initial !important;
+    background-repeat: initial !important;
+    padding-left: 0.75rem !important;
+}
+
+/* Remove any pseudo-elements that might be adding search icons */
+.card input[type="text"].form-control::before,
+.card input[type="text"].form-control::after {
+    display: none !important;
+}
+
+/* Force remove any search styling from registration form inputs */
+#registrationForm input[type="text"] {
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+    background-image: none !important;
+    background-position: initial !important;
+    background-repeat: no-repeat !important;
+    background-size: initial !important;
+    padding-left: 0.75rem !important;
+}
+
+/* Specifically target name input fields */
+#firstName,
+#middleName,
+#lastName {
+    background-image: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+}

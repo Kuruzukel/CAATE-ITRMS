@@ -334,3 +334,25 @@ function toggleDisabilitySections() {
         }
     }
 }
+
+/**
+ * Toggle scholarship section based on Scholar checkbox
+ */
+function toggleScholarshipSection() {
+    const scholarCheckbox = document.getElementById('scholarCheckbox');
+    const scholarshipSection = document.getElementById('scholarshipSection');
+
+    if (scholarCheckbox && scholarshipSection) {
+        if (scholarCheckbox.checked) {
+            scholarshipSection.style.display = 'block';
+        } else {
+            scholarshipSection.style.display = 'none';
+
+            // Clear scholarship textarea when hiding section
+            const scholarshipTextarea = document.querySelector('textarea[name="scholarshipType"]');
+            if (scholarshipTextarea) {
+                scholarshipTextarea.value = '';
+            }
+        }
+    }
+}

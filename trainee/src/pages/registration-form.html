@@ -906,7 +906,11 @@
                                                                 onchange="toggleDisabilitySections()">
                                                             <span>Person with Disability (PWD)</span>
                                                         </label>
-                                                        style="font-size: 0.8rem;">
+                                                        <label class="radio-label">
+                                                            <input type="checkbox" name="clientClassification"
+                                                                value="scholar" id="scholarCheckbox"
+                                                                onchange="toggleScholarshipSection()">
+                                                            <span>Scholar</span>
                                                         </label>
                                                     </div>
                                                 </div>
@@ -1045,7 +1049,7 @@
                             </div>
 
                             <!-- Scholarship Section -->
-                            <div class="row mb-4">
+                            <div class="row mb-4" id="scholarshipSection" style="display: none;">
                                 <div class="col-12">
                                     <div class="card">
                                         <div class="card-header">

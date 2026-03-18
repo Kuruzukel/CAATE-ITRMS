@@ -309,8 +309,11 @@ input.uli-input.form-control:focus {
     color: #0f2942 !important;
 }
 
-/* Error validation styles for required fields */
-.form-control.is-invalid {
+/* Error validation styles for required fields - Enhanced */
+.form-control.is-invalid,
+input.is-invalid,
+textarea.is-invalid,
+select.is-invalid {
     border-color: #dc3545 !important;
     box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
 }
@@ -330,12 +333,7 @@ input.uli-input.form-control:focus {
     font-weight: bold;
 }
 
-/* Add red asterisk to required field labels */
-.form-label.required::after {
-    content: " *";
-    color: #dc3545;
-    font-weight: bold;
-}
+/* Required field asterisk styling - REMOVED */
 
 /* Enhanced required field styling */
 input[required],

@@ -1,6 +1,7 @@
 /**
  * Registration Form Handler
  * Handles form submission and database operations for the registration form
+ * Updated: 2026-03-18 - Simplified validation messages
  */
 
 'use strict';
@@ -400,7 +401,7 @@ class RegistrationFormHandler {
         this.clearAllErrors();
 
         const requiredFields = [
-            // Personal Information
+            // All form fields are now validated for consistency
             'lastName',
             'firstName',
             'middleName',
@@ -413,7 +414,6 @@ class RegistrationFormHandler {
             'emailFacebook',
             'contactNo',
             'nationality',
-            // Personal Details
             'sex',
             'civilStatus',
             'employmentStatus',
@@ -424,12 +424,9 @@ class RegistrationFormHandler {
             'birthCity',
             'birthProvince',
             'birthRegion',
-            // Education
             'education',
-            // Parent/Guardian
             'parentName',
             'parentAddress',
-            // Course
             'courseQualification'
         ];
 
@@ -465,7 +462,7 @@ class RegistrationFormHandler {
             'clientClassification': 'Learner/Trainee/Student Classification'
         };
 
-        // Check basic required fields
+        // Check basic required fields (all fields get consistent error styling)
         requiredFields.forEach(field => {
             if (!data[field] || data[field].toString().trim() === '') {
                 missingFields.push(fieldLabels[field] || field);
@@ -476,7 +473,7 @@ class RegistrationFormHandler {
                     isValid = false;
                 }
 
-                // Show error for text inputs
+                // Show error for ALL text inputs with consistent styling
                 const inputElement = document.getElementById(field) || document.querySelector(`[name="${field}"]`);
                 if (inputElement && (inputElement.type === 'text' || inputElement.type === 'number' || inputElement.type === 'email' || inputElement.tagName === 'TEXTAREA')) {
                     this.showFieldError(inputElement, `${fieldLabels[field]} is required`);
@@ -494,9 +491,7 @@ class RegistrationFormHandler {
             }
         }
 
-        // Check if at least one Client Classification is selected (now optional)
-        const clientClassifications = document.querySelectorAll('input[name="clientClassification"]:checked');
-        // Client classification is now optional - no validation required
+        // Client Classification is now optional - no validation required
 
         // Additional validation for birth information
         if (data.birthMonth && (data.birthMonth < 1 || data.birthMonth > 12)) {
@@ -521,7 +516,9 @@ class RegistrationFormHandler {
         }
 
         if (missingFields.length > 0) {
-            this.showToast('Please fill in all required fields: ' + missingFields.join(', '), 'error');
+            // Updated: Show simple error message instead of listing all fields
+            console.log('Validation failed - showing simple message');
+            this.showToast('Please complete all required fields.', 'error');
             return false;
         }
 

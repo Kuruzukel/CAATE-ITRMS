@@ -2666,23 +2666,7 @@ input[type="time"]::placeholder {
     overflow: hidden;
 }
 
-/* Glassmorphism glow effect on hover */
-.toast-notification::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, rgba(54, 145, 191, 0.1) 0%, rgba(50, 85, 150, 0.1) 100%);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    pointer-events: none;
-}
-
-.toast-notification:hover::before {
-    opacity: 1;
-}
+/* Removed glow effect for cleaner appearance */
 
 /* Success Toast */
 .toast-notification.success {

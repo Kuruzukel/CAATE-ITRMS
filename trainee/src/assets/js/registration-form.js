@@ -29,8 +29,14 @@ class RegistrationFormHandler {
     }
 
     setupEventListeners() {
-        // Form submission handler
-        this.form.addEventListener('submit', (e) => this.handleSubmit(e));
+        // Form submission handler - show confirmation modal first
+        this.form.addEventListener('submit', (e) => this.showConfirmationModal(e));
+
+        // Confirmation modal submit handler
+        const confirmSubmitBtn = document.getElementById('confirmSubmitBtn');
+        if (confirmSubmitBtn) {
+            confirmSubmitBtn.addEventListener('click', () => this.handleConfirmedSubmit());
+        }
     }
 
     setupULIInputs() {
@@ -43,6 +49,74 @@ class RegistrationFormHandler {
                 }
             });
         });
+    }
+
+    showConfirmationModal(e) {
+        e.preventDefault();
+
+        // Collect and validate form data first
+        const formData = this.collectFormData();
+
+        if (!this.validateForm(formData)) {
+            return;
+        }
+
+        // Store form data for later submission
+        this.pendingFormData = formData;
+
+        // Show info toast
+        this.showToast('Please confirm your registration details before submitting.', 'info');
+
+        // Show confirmation modal
+        const modal = new bootstrap.Modal(document.getElementById('confirmationModal'));
+
+        // Add event listener for modal dismissal
+        const modalElement = document.getElementById('confirmationModal');
+        modalElement.addEventListener('hidden.bs.modal', () => {
+            // Only show cancellation toast if form wasn't actually submitted
+            if (this.pendingFormData && !this.formSubmitted) {
+                this.showToast('Registration submission cancelled.', 'warning');
+            }
+            this.formSubmitted = false; // Reset flag
+        }, { once: true });
+
+        modal.show();
+    }
+
+    async handleConfirmedSubmit() {
+        // Set flag to indicate form is being submitted
+        this.formSubmitted = true;
+
+        // Hide confirmation modal
+        const confirmationModal = bootstrap.Modal.getInstance(document.getElementById('confirmationModal'));
+        if (confirmationModal) {
+            confirmationModal.hide();
+        }
+
+        // Show loading state
+        this.setLoadingState(true);
+
+        try {
+            // Submit to database using stored form data
+            const response = await this.submitToDatabase(this.pendingFormData);
+
+            if (response.success) {
+                // Show success toast
+                this.showToast('Registration submitted successfully! You will receive a confirmation email shortly.', 'success');
+                // Show success modal
+                this.showSuccessModal();
+                // Reset form
+                this.form.reset();
+            } else {
+                throw new Error(response.message || 'Failed to submit registration');
+            }
+
+        } catch (error) {
+            console.error('Registration submission error:', error);
+            this.showErrorMessage(error.message || 'An error occurred while submitting the registration');
+        } finally {
+            this.setLoadingState(false);
+        }
     }
 
     async handleSubmit(e) {
@@ -141,7 +215,7 @@ class RegistrationFormHandler {
         });
 
         if (missingFields.length > 0) {
-            this.showErrorMessage('Please fill in all required fields: ' + missingFields.join(', '));
+            this.showToast('Please fill in all required fields: ' + missingFields.join(', '), 'error');
             return false;
         }
 
@@ -190,42 +264,48 @@ class RegistrationFormHandler {
     }
 
     showSuccessModal() {
-        const modal = new bootstrap.Modal(document.getElementById('confirmationModal'));
+        const modal = new bootstrap.Modal(document.getElementById('successModal'));
         modal.show();
     }
 
-    showErrorMessage(message) {
-        // Create or update error alert
-        let errorAlert = document.getElementById('errorAlert');
+    showToast(message, type = 'success') {
+        const container = document.getElementById('toastContainer');
+        if (!container) return;
 
-        if (!errorAlert) {
-            errorAlert = document.createElement('div');
-            errorAlert.id = 'errorAlert';
-            errorAlert.className = 'alert alert-danger alert-dismissible fade show position-fixed';
-            errorAlert.style.cssText = 'top: 20px; right: 20px; z-index: 9999; max-width: 400px;';
+        const toast = document.createElement('div');
+        toast.className = `toast-notification ${type}`;
 
-            errorAlert.innerHTML = `
-                <i class="bx bx-error-circle me-2"></i>
-                <span id="errorMessage"></span>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            `;
+        const icon = type === 'success' ? 'bx-check' :
+            type === 'error' ? 'bx-x' :
+                type === 'warning' ? 'bx-error-alt' : 'bxs-info-circle';
 
-            document.body.appendChild(errorAlert);
-        }
+        toast.innerHTML = `
+            <i class="bx ${icon} toast-icon"></i>
+            <div class="toast-content">
+                <div class="toast-message">${message}</div>
+            </div>
+        `;
 
-        document.getElementById('errorMessage').textContent = message;
-        errorAlert.classList.add('show');
+        container.appendChild(toast);
 
-        // Auto-hide after 5 seconds
+        // Auto remove after 5 seconds
         setTimeout(() => {
-            if (errorAlert) {
-                errorAlert.classList.remove('show');
-            }
+            toast.classList.add('hiding');
+            setTimeout(() => toast.remove(), 300);
         }, 5000);
+    }
+
+    showErrorMessage(message) {
+        this.showToast(message, 'error');
     }
 }
 
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', function () {
-    new RegistrationFormHandler();
+    const handler = new RegistrationFormHandler();
+
+    // Add test function to window for debugging
+    window.testToast = function (message = 'Test notification', type = 'success') {
+        handler.showToast(message, type);
+    };
 });

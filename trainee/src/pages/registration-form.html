@@ -57,6 +57,9 @@
 </head>
 
 <body>
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
     <!-- Layout wrapper -->
     <div class="layout-wrapper layout-content-navbar">
         <div class="layout-container">
@@ -1218,6 +1221,36 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="confirmationModalLabel">
+                        <i class="bx bx-question-mark text-warning me-2"></i>Confirm Registration Submission
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <div class="mb-3">
+                        <i class="bx bx-question-mark text-warning" style="font-size: 4rem;"></i>
+                    </div>
+                    <h4 class="text-dark mb-3">Are you sure?</h4>
+                    <p class="mb-0">Do you want to submit your registration form? Please make sure all information is
+                        correct before proceeding.</p>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">
+                        <i class="bx bx-x me-2"></i>No, Cancel
+                    </button>
+                    <button type="button" class="btn btn-primary" id="confirmSubmitBtn">
+                        <i class="bx bx-check me-2"></i>Yes, Submit
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="successModalLabel">
                         <i class="bx bx-check-circle text-success me-2"></i>Registration Submitted Successfully
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>

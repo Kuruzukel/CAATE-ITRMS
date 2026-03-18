@@ -302,10 +302,7 @@ class RegistrationFormHandler {
         // Add event listener for modal dismissal
         const modalElement = document.getElementById('confirmationModal');
         modalElement.addEventListener('hidden.bs.modal', () => {
-            // Only show cancellation toast if form wasn't actually submitted
-            if (this.pendingFormData && !this.formSubmitted) {
-                this.showToast('Registration submission cancelled.', 'warning');
-            }
+            // Reset flag when modal is dismissed
             this.formSubmitted = false; // Reset flag
         }, { once: true });
 

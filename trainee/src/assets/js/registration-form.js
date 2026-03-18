@@ -435,9 +435,7 @@ class RegistrationFormHandler {
 
         const requiredFields = [
             // Personal Information
-            'lastName',
             'firstName',
-            'middleName',
             'numberStreet',
             'barangay',
             'district',
@@ -469,9 +467,7 @@ class RegistrationFormHandler {
 
         const missingFields = [];
         const fieldLabels = {
-            'lastName': 'Last Name',
             'firstName': 'First Name',
-            'middleName': 'Middle Name',
             'numberStreet': 'Number, Street',
             'barangay': 'Barangay',
             'district': 'District',

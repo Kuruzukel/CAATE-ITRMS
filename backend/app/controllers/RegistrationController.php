@@ -30,7 +30,7 @@ class RegistrationController {
             }
             
             // Validate required fields
-            $requiredFields = ['lastName', 'firstName', 'sex', 'civilStatus'];
+            $requiredFields = ['firstName', 'sex', 'civilStatus'];
             $missingFields = [];
             
             foreach ($requiredFields as $field) {

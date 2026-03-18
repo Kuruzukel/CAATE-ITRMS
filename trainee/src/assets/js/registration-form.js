@@ -80,8 +80,9 @@ class RegistrationFormHandler {
         if (birthYear) {
             birthYear.addEventListener('blur', () => {
                 const value = parseInt(birthYear.value);
-                if (birthYear.value && (value < 1900 || value > 2024)) {
-                    this.showFieldError(birthYear, 'Year must be between 1900 and 2024');
+                const currentYear = new Date().getFullYear();
+                if (birthYear.value && (value < 1900 || value > currentYear)) {
+                    this.showFieldError(birthYear, `Year must be between 1900 and ${currentYear}`);
                 } else {
                     this.clearFieldError(birthYear);
                 }
@@ -408,7 +409,6 @@ class RegistrationFormHandler {
             'birthYear',
             'age',
             'contactNo',
-            'employmentStatus',
             'education'
         ];
 
@@ -434,15 +434,15 @@ class RegistrationFormHandler {
             if (!data[field] || data[field].toString().trim() === '') {
                 missingFields.push(fieldLabels[field] || field);
 
-                // Show specific error for radio groups
-                if (field === 'employmentStatus' || field === 'education') {
+                // Show specific error for radio groups (excluding employmentStatus)
+                if (field === 'education') {
                     this.showRadioGroupError(field, `${fieldLabels[field]} is required`);
                     isValid = false;
                 }
             }
         });
 
-        // Check if Employment Type is required based on Employment Status
+        // Check if Employment Type is required based on Employment Status (optional validation)
         if (data.employmentStatus && (data.employmentStatus === 'wage' || data.employmentStatus === 'underemployed')) {
             if (!data.employmentType || data.employmentType.toString().trim() === '') {
                 missingFields.push(fieldLabels['employmentType']);
@@ -470,8 +470,9 @@ class RegistrationFormHandler {
             return false;
         }
 
-        if (data.birthYear && (data.birthYear < 1900 || data.birthYear > 2024)) {
-            this.showToast('Year of Birth must be between 1900 and 2024', 'error');
+        const currentYear = new Date().getFullYear();
+        if (data.birthYear && (data.birthYear < 1900 || data.birthYear > currentYear)) {
+            this.showToast(`Year of Birth must be between 1900 and ${currentYear}`, 'error');
             return false;
         }
 
@@ -501,7 +502,6 @@ class RegistrationFormHandler {
 
         // Clear enhanced error styling
         document.querySelectorAll('.card-body').forEach(cardBody => {
-            cardBody.style.borderLeft = '';
             cardBody.style.backgroundColor = '';
         });
     }

@@ -400,9 +400,8 @@ input[type="checkbox"].is-invalid {
     margin-left: 0.25rem;
 }
 
-/* Enhanced error visibility for radio groups */
+/* Enhanced error visibility for radio groups - removed red border */
 .card-body:has(.radio-group-error) {
-    border-left: 4px solid #dc3545;
     background-color: rgba(220, 53, 69, 0.05);
 }
 

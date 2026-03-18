@@ -40,6 +40,9 @@ class RegistrationFormHandler {
 
         // Real-time validation for birth information fields
         this.setupBirthFieldValidation();
+
+        // Real-time validation for employment and education fields
+        this.setupEmploymentEducationValidation();
     }
 
     setupBirthFieldValidation() {
@@ -131,6 +134,103 @@ class RegistrationFormHandler {
 
         // Remove error message
         const errorDiv = field.parentNode.querySelector('.invalid-feedback');
+        if (errorDiv) {
+            errorDiv.remove();
+        }
+    }
+
+    setupEmploymentEducationValidation() {
+        // Employment Status validation
+        const employmentStatusInputs = document.querySelectorAll('input[name="employmentStatus"]');
+        const employmentTypeInputs = document.querySelectorAll('input[name="employmentType"]');
+        const educationInputs = document.querySelectorAll('input[name="education"]');
+        const clientClassificationInputs = document.querySelectorAll('input[name="clientClassification"]');
+
+        // Employment Status change handler
+        employmentStatusInputs.forEach(input => {
+            input.addEventListener('change', () => {
+                this.clearRadioGroupError('employmentStatus');
+
+                // Show/hide employment type requirement based on selection
+                const selectedValue = document.querySelector('input[name="employmentStatus"]:checked')?.value;
+                const employmentTypeSection = document.querySelector('input[name="employmentType"]')?.closest('.mt-3');
+
+                if (selectedValue === 'wage' || selectedValue === 'underemployed') {
+                    if (employmentTypeSection) {
+                        employmentTypeSection.style.opacity = '1';
+                        employmentTypeSection.style.pointerEvents = 'auto';
+                    }
+                } else {
+                    if (employmentTypeSection) {
+                        employmentTypeSection.style.opacity = '0.5';
+                        employmentTypeSection.style.pointerEvents = 'none';
+                    }
+                    // Clear employment type selection if not needed
+                    employmentTypeInputs.forEach(typeInput => {
+                        typeInput.checked = false;
+                    });
+                    this.clearRadioGroupError('employmentType');
+                }
+            });
+        });
+
+        // Employment Type validation
+        employmentTypeInputs.forEach(input => {
+            input.addEventListener('change', () => {
+                this.clearRadioGroupError('employmentType');
+            });
+        });
+
+        // Education validation
+        educationInputs.forEach(input => {
+            input.addEventListener('change', () => {
+                this.clearRadioGroupError('education');
+            });
+        });
+
+        // Client Classification validation
+        clientClassificationInputs.forEach(input => {
+            input.addEventListener('change', () => {
+                this.clearRadioGroupError('clientClassification');
+            });
+        });
+    }
+
+    showRadioGroupError(groupName, message) {
+        // Remove existing error
+        this.clearRadioGroupError(groupName);
+
+        // Find the radio group container
+        const firstInput = document.querySelector(`input[name="${groupName}"]`);
+        if (!firstInput) return;
+
+        let container = firstInput.closest('.card-body') || firstInput.closest('.col-md-4') || firstInput.closest('.mb-3');
+        if (!container) return;
+
+        // Create error message element
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'invalid-feedback radio-group-error';
+        errorDiv.style.display = 'block';
+        errorDiv.textContent = message;
+        errorDiv.setAttribute('data-group', groupName);
+
+        // Add error styling to all inputs in the group
+        document.querySelectorAll(`input[name="${groupName}"]`).forEach(input => {
+            input.classList.add('is-invalid');
+        });
+
+        // Insert error message at the end of the container
+        container.appendChild(errorDiv);
+    }
+
+    clearRadioGroupError(groupName) {
+        // Remove error class from all inputs in the group
+        document.querySelectorAll(`input[name="${groupName}"]`).forEach(input => {
+            input.classList.remove('is-invalid');
+        });
+
+        // Remove error message
+        const errorDiv = document.querySelector(`.radio-group-error[data-group="${groupName}"]`);
         if (errorDiv) {
             errorDiv.remove();
         }
@@ -293,6 +393,11 @@ class RegistrationFormHandler {
     }
 
     validateForm(data) {
+        let isValid = true;
+
+        // Clear all previous errors
+        this.clearAllErrors();
+
         const requiredFields = [
             'lastName',
             'firstName',
@@ -302,7 +407,9 @@ class RegistrationFormHandler {
             'birthDay',
             'birthYear',
             'age',
-            'contactNo'
+            'contactNo',
+            'employmentStatus',
+            'education'
         ];
 
         const missingFields = [];
@@ -315,14 +422,42 @@ class RegistrationFormHandler {
             'birthDay': 'Day of Birth',
             'birthYear': 'Year of Birth',
             'age': 'Age',
-            'contactNo': 'Contact Number'
+            'contactNo': 'Contact Number',
+            'employmentStatus': 'Employment Status',
+            'employmentType': 'Employment Type',
+            'education': 'Educational Attainment',
+            'clientClassification': 'Learner/Trainee/Student Classification'
         };
 
+        // Check basic required fields
         requiredFields.forEach(field => {
             if (!data[field] || data[field].toString().trim() === '') {
                 missingFields.push(fieldLabels[field] || field);
+
+                // Show specific error for radio groups
+                if (field === 'employmentStatus' || field === 'education') {
+                    this.showRadioGroupError(field, `${fieldLabels[field]} is required`);
+                    isValid = false;
+                }
             }
         });
+
+        // Check if Employment Type is required based on Employment Status
+        if (data.employmentStatus && (data.employmentStatus === 'wage' || data.employmentStatus === 'underemployed')) {
+            if (!data.employmentType || data.employmentType.toString().trim() === '') {
+                missingFields.push(fieldLabels['employmentType']);
+                this.showRadioGroupError('employmentType', 'Employment Type is required for Wage-employed or Underemployed status');
+                isValid = false;
+            }
+        }
+
+        // Check if at least one Client Classification is selected
+        const clientClassifications = document.querySelectorAll('input[name="clientClassification"]:checked');
+        if (clientClassifications.length === 0) {
+            missingFields.push(fieldLabels['clientClassification']);
+            this.showRadioGroupError('clientClassification', 'At least one Learner/Trainee/Student Classification must be selected');
+            isValid = false;
+        }
 
         // Additional validation for birth information
         if (data.birthMonth && (data.birthMonth < 1 || data.birthMonth > 12)) {
@@ -350,7 +485,25 @@ class RegistrationFormHandler {
             return false;
         }
 
-        return true;
+        return isValid;
+    }
+
+    clearAllErrors() {
+        // Clear all field errors
+        document.querySelectorAll('.is-invalid').forEach(field => {
+            field.classList.remove('is-invalid');
+        });
+
+        // Clear all error messages
+        document.querySelectorAll('.invalid-feedback, .radio-group-error').forEach(error => {
+            error.remove();
+        });
+
+        // Clear enhanced error styling
+        document.querySelectorAll('.card-body').forEach(cardBody => {
+            cardBody.style.borderLeft = '';
+            cardBody.style.backgroundColor = '';
+        });
     }
 
     async submitToDatabase(data) {
@@ -440,49 +593,3 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 });
 
-/**
- * Toggle disability sections based on PWD checkbox
- */
-function toggleDisabilitySections() {
-    const pwdCheckbox = document.getElementById('pwdCheckbox');
-    const disabilitySection = document.getElementById('disabilitySection');
-    const disabilityCauseSection = document.getElementById('disabilityCauseSection');
-
-    if (pwdCheckbox && disabilitySection && disabilityCauseSection) {
-        if (pwdCheckbox.checked) {
-            disabilitySection.style.display = 'block';
-            disabilityCauseSection.style.display = 'block';
-        } else {
-            disabilitySection.style.display = 'none';
-            disabilityCauseSection.style.display = 'none';
-
-            // Clear all disability checkboxes when hiding sections
-            const disabilityCheckboxes = document.querySelectorAll('input[name="disabilityType"], input[name="disabilityCause"]');
-            disabilityCheckboxes.forEach(checkbox => {
-                checkbox.checked = false;
-            });
-        }
-    }
-}
-
-/**
- * Toggle scholarship section based on Scholar checkbox
- */
-function toggleScholarshipSection() {
-    const scholarCheckbox = document.getElementById('scholarCheckbox');
-    const scholarshipSection = document.getElementById('scholarshipSection');
-
-    if (scholarCheckbox && scholarshipSection) {
-        if (scholarCheckbox.checked) {
-            scholarshipSection.style.display = 'block';
-        } else {
-            scholarshipSection.style.display = 'none';
-
-            // Clear scholarship textarea when hiding section
-            const scholarshipTextarea = document.querySelector('textarea[name="scholarshipType"]');
-            if (scholarshipTextarea) {
-                scholarshipTextarea.value = '';
-            }
-        }
-    }
-}

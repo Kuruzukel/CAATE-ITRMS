@@ -287,7 +287,7 @@
                                                 style="border: 2px solid #2c3e50; width: 120px; height: 120px; display: flex; align-items: center; justify-content: center;">
                                                 <small
                                                     style="color: #6c757d; font-size: 0.8rem; text-align: center;">I.D.
-                                                    Picture</small>
+                                                    Picture<br><em>(Optional)</em></small>
                                             </div>
                                         </div>
                                     </div>
@@ -308,7 +308,8 @@
                                         <div class="card-body">
                                             <div class="mb-3">
                                                 <label for="uliNumber" class="form-label fw-semibold">1.1 Unique
-                                                    Learner Identifier (ULI) Number:</label>
+                                                    Learner Identifier (ULI) Number: <span
+                                                        class="text-muted">(Optional)</span></label>
                                                 <div class="uli-inputs">
                                                     <input type="text" id="uliNumber" class="form-control uli-input"
                                                         maxlength="1">
@@ -336,7 +337,7 @@
                                             <div class="row mt-5">
                                                 <div class="col-md-6 mb-3">
                                                     <label for="entryDate" class="form-label fw-semibold">1.2 Entry
-                                                        Date:</label>
+                                                        Date: <span class="text-muted">(Optional)</span></label>
                                                     <input type="date" id="entryDate" name="entryDate"
                                                         class="form-control">
                                                 </div>
@@ -1028,7 +1029,7 @@
                                             </h4>
                                         </div>
                                         <div class="card-body">
-                                            <textarea class="form-control" rows="3"
+                                            <textarea name="courseQualification" class="form-control" rows="3"
                                                 placeholder="Enter course/qualification name"></textarea>
                                         </div>
                                     </div>
@@ -1046,7 +1047,7 @@
                                             </h4>
                                         </div>
                                         <div class="card-body">
-                                            <textarea class="form-control" rows="2"
+                                            <textarea name="scholarshipType" class="form-control" rows="2"
                                                 placeholder="Enter scholarship type"></textarea>
                                         </div>
                                     </div>
@@ -1059,7 +1060,8 @@
                                     <div class="card">
                                         <div class="card-header">
                                             <h4 class="mb-0">
-                                                <i class="bx bx-shield me-2"></i>9. Privacy Consent and Disclaimer
+                                                <i class="bx bx-shield me-2"></i>9. Privacy Consent and Disclaimer <span
+                                                    class="text-muted">(Optional)</span>
                                             </h4>
                                         </div>
                                         <div class="card-body">
@@ -1076,7 +1078,7 @@
                                             </p>
                                             <div class="radio-group">
                                                 <label class="radio-label">
-                                                    <input type="radio" name="privacyConsent" value="agree" required>
+                                                    <input type="radio" name="privacyConsent" value="agree">
                                                     <span>Agree</span>
                                                 </label>
                                                 <label class="radio-label">
@@ -1095,7 +1097,8 @@
                                     <div class="card">
                                         <div class="card-header">
                                             <h4 class="mb-0">
-                                                <i class="bx bx-edit me-2"></i>10. Applicant's Signature
+                                                <i class="bx bx-edit me-2"></i>10. Applicant's Signature <span
+                                                    class="text-muted">(Optional)</span>
                                             </h4>
                                         </div>
                                         <div class="card-body">
@@ -1149,7 +1152,8 @@
                                                             style="border: 2px solid #2c3e50; width: 120px; height: 120px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
                                                             <small
                                                                 style="color: #6c757d; font-size: 0.8rem; text-align: center;">1x1
-                                                                picture taken<br>within the last 6<br>months</small>
+                                                                picture taken<br>within the last
+                                                                6<br>months<br><em>(Optional)</em></small>
                                                         </div>
                                                         <div
                                                             style="border: 2px solid #2c3e50; width: 120px; height: 120px; display: flex; align-items: center; justify-content: center;">
@@ -1171,7 +1175,7 @@
                                     <div class="card">
                                         <div class="card-body text-center">
                                             <button type="submit" class="btn btn-primary btn-lg me-3">
-                                                <i class="bx bx-save me-2"></i>Save Registration Form
+                                                <i class="bx bx-save me-2"></i>Submit Form
                                             </button>
                                             <button type="button" class="btn btn-secondary btn-lg"
                                                 onclick="window.print()">
@@ -1207,6 +1211,34 @@
         <!-- / Layout wrapper -->
     </div>
 
+    <!-- Confirmation Modal -->
+    <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmationModalLabel">
+                        <i class="bx bx-check-circle text-success me-2"></i>Registration Submitted Successfully
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <div class="mb-3">
+                        <i class="bx bx-check-circle text-success" style="font-size: 4rem;"></i>
+                    </div>
+                    <h4 class="text-success mb-3">Thank you!</h4>
+                    <p class="mb-0">Your registration form has been submitted successfully. You will receive a
+                        confirmation email shortly.</p>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
+                        <i class="bx bx-check me-2"></i>OK
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Core JS -->
     <script src="../assets/vendor/libs/jquery/jquery.js"></script>
     <script src="../assets/vendor/libs/popper/popper.js"></script>
@@ -1220,26 +1252,8 @@
     <!-- Menu Toggle JS -->
     <script src="../assets/js/simple-menu-toggle.js"></script>
 
-    <!-- Form JS -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Auto-move to next ULI input
-            const uliInputs = document.querySelectorAll('.uli-input');
-            uliInputs.forEach((input, index) => {
-                input.addEventListener('input', function () {
-                    if (this.value.length === 1 && index < uliInputs.length - 1) {
-                        uliInputs[index + 1].focus();
-                    }
-                });
-            });
-
-            // Form submission
-            document.getElementById('registrationForm').addEventListener('submit', function (e) {
-                e.preventDefault();
-                alert('Registration form saved successfully!');
-            });
-        });
-    </script>
+    <!-- Registration Form JS -->
+    <script src="../assets/js/registration-form.js"></script>
 </body>
 
 </html>

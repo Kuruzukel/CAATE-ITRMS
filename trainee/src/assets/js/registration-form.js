@@ -309,3 +309,28 @@ document.addEventListener('DOMContentLoaded', function () {
         handler.showToast(message, type);
     };
 });
+
+/**
+ * Toggle disability sections based on PWD checkbox
+ */
+function toggleDisabilitySections() {
+    const pwdCheckbox = document.getElementById('pwdCheckbox');
+    const disabilitySection = document.getElementById('disabilitySection');
+    const disabilityCauseSection = document.getElementById('disabilityCauseSection');
+
+    if (pwdCheckbox && disabilitySection && disabilityCauseSection) {
+        if (pwdCheckbox.checked) {
+            disabilitySection.style.display = 'block';
+            disabilityCauseSection.style.display = 'block';
+        } else {
+            disabilitySection.style.display = 'none';
+            disabilityCauseSection.style.display = 'none';
+
+            // Clear all disability checkboxes when hiding sections
+            const disabilityCheckboxes = document.querySelectorAll('input[name="disabilityType"], input[name="disabilityCause"]');
+            disabilityCheckboxes.forEach(checkbox => {
+                checkbox.checked = false;
+            });
+        }
+    }
+}

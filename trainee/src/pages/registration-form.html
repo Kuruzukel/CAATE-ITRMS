@@ -533,40 +533,37 @@
                                                             </label>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-4 mb-3">
-                                                    <div>
+                                                    <div class="mt-3">
                                                         <strong>Employment Type</strong>
                                                         <small>(if Wage-employed or Underemployed)</small>
                                                         <div class="radio-group vertical">
                                                             <label class="radio-label">
-                                                                <input type="radio" name="employmentType" value="none">
+                                                                <input type="radio" name="employmentStatus"
+                                                                    value="none">
                                                                 <span>None</span>
                                                             </label>
                                                             <label class="radio-label">
-                                                                <input type="radio" name="employmentType"
+                                                                <input type="radio" name="employmentStatus"
                                                                     value="casual">
                                                                 <span>Casual</span>
                                                             </label>
                                                             <label class="radio-label">
-                                                                <input type="radio" name="employmentType"
+                                                                <input type="radio" name="employmentStatus"
                                                                     value="regular">
                                                                 <span>Regular</span>
                                                             </label>
                                                             <label class="radio-label">
-                                                                <input type="radio" name="employmentType"
+                                                                <input type="radio" name="employmentStatus"
                                                                     value="joborder">
                                                                 <span>Job Order</span>
                                                             </label>
                                                             <label class="radio-label">
-                                                                <input type="radio" name="employmentType"
+                                                                <input type="radio" name="employmentStatus"
                                                                     value="permanent">
                                                                 <span>Permanent</span>
                                                             </label>
                                                             <label class="radio-label">
-                                                                <input type="radio" name="employmentType"
+                                                                <input type="radio" name="employmentStatus"
                                                                     value="temporary">
                                                                 <span>Temporary</span>
                                                             </label>
@@ -901,7 +898,15 @@
                                                             <span>Others</span>
                                                             <input type="text" class="form-control mt-1"
                                                                 placeholder="(Please Specify)"
-                                                                style="font-size: 0.8rem;">
+                                                                name="clientClassificationOthers">
+                                                        </label>
+                                                        <label class="radio-label">
+                                                            <input type="checkbox" name="clientClassification"
+                                                                value="pwd" id="pwdCheckbox"
+                                                                onchange="toggleDisabilitySections()">
+                                                            <span>Person with Disability (PWD)</span>
+                                                        </label>
+                                                        style="font-size: 0.8rem;">
                                                         </label>
                                                     </div>
                                                 </div>
@@ -912,7 +917,7 @@
                             </div>
 
                             <!-- Type of Disability Section -->
-                            <div class="row mb-4">
+                            <div class="row mb-4" id="disabilitySection" style="display: none;">
                                 <div class="col-12">
                                     <div class="card">
                                         <div class="card-header">
@@ -985,7 +990,7 @@
                             </div>
 
                             <!-- Causes of Disability Section -->
-                            <div class="row mb-4">
+                            <div class="row mb-4" id="disabilityCauseSection" style="display: none;">
                                 <div class="col-12">
                                     <div class="card">
                                         <div class="card-header">

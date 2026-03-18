@@ -30,11 +30,16 @@
     text-align: center;
     margin-bottom: 6px;
     font-weight: 600;
-    color: #2c3e50 !important;
+    color: #0f2942 !important;
     font-size: 0.95rem;
-    border: 2px solid #495057 !important;
+    border: 2px solid #6c757d !important;
+    border-radius: 8px !important;
     padding: 0.5rem;
     background-color: #ffffff !important;
+    opacity: 1 !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
 }
 
 /* Add different background colors for each reference input group - matching screenshot */
@@ -98,8 +103,10 @@
 }
 
 .reference-input-group input:focus {
-    border-color: #3691bf;
+    border-color: #3691bf !important;
     box-shadow: 0 0 0 0.2rem rgba(54, 145, 191, 0.15);
+    outline: none !important;
+    background-color: inherit !important;
 }
 
 .reference-input-group input:focus::placeholder {
@@ -134,7 +141,7 @@
     width: 55px !important;
     text-align: center;
     font-weight: 600;
-    color: #ffffff !important;
+    color: #0f2942 !important;
     font-size: 0.95rem;
     border: 2px solid #6c757d !important;
     padding: 0.5rem;
@@ -1125,7 +1132,7 @@ input[type="radio"]:checked::before {
     width: 55px !important;
     text-align: center;
     font-weight: 600;
-    color: #ffffff !important;
+    color: #0f2942 !important;
     font-size: 0.95rem;
     border: 2px solid #6c757d !important;
     padding: 0.5rem;
@@ -1184,4 +1191,174 @@ input[type="radio"]:checked::before {
 /* Ensure shield icon is visible in all contexts */
 i.bx-shield {
     color: #3691bf !important;
+}
+
+/* Force dark blue color for all reference and ULI inputs - Most specific selectors */
+.reference-inputs .reference-input-group input.form-control,
+.reference-inputs .reference-input-group input[type="text"],
+.reference-input-group input.form-control,
+.reference-input-group input[type="text"],
+#referenceQualifiable,
+#referenceYY1,
+#referenceYY2,
+#referenceRegion1,
+#referenceRegion2,
+#referenceProvince1,
+#referenceProvince2,
+#referenceAC1,
+#referenceAC2,
+#referenceAC3,
+#referenceSeries1,
+#referenceSeries2,
+#referenceSeries3,
+#referenceSeries4,
+#referenceSeries5,
+#referenceSeries6 {
+    color: #0f2942 !important;
+}
+
+/* Force dark blue color for all ULI inputs - Most specific selectors */
+.uli-inputs .uli-input.form-control,
+.uli-inputs input.uli-input,
+.uli-inputs input[type="text"],
+input.uli-input.form-control,
+input.uli-input[type="text"],
+#uli1,
+#uli2,
+#uli3,
+#uli4,
+#uli5,
+#uli6,
+#uli7,
+#uli8,
+#uli9,
+#uli10,
+#uli11,
+#uli12,
+#uli13,
+#uli14,
+#uli15,
+#uli16 {
+    color: #0f2942 !important;
+}
+
+/* Override any Bootstrap or other framework styles */
+.card .reference-inputs input,
+.card .uli-inputs input,
+.form-control.uli-input,
+input.form-control.uli-input {
+    color: #0f2942 !important;
+}
+
+/* Remove blue background on focus for all reference and ULI inputs */
+.reference-inputs .reference-input-group input:focus,
+.reference-inputs .reference-input-group input.form-control:focus,
+.reference-input-group input:focus,
+.reference-input-group input.form-control:focus,
+#referenceQualifiable:focus,
+#referenceYY1:focus,
+#referenceYY2:focus,
+#referenceRegion1:focus,
+#referenceRegion2:focus,
+#referenceProvince1:focus,
+#referenceProvince2:focus,
+#referenceAC1:focus,
+#referenceAC2:focus,
+#referenceAC3:focus,
+#referenceSeries1:focus,
+#referenceSeries2:focus,
+#referenceSeries3:focus,
+#referenceSeries4:focus,
+#referenceSeries5:focus,
+#referenceSeries6:focus,
+.uli-inputs .uli-input:focus,
+.uli-inputs input.uli-input:focus,
+.uli-inputs input.form-control:focus,
+input.uli-input:focus,
+input.uli-input.form-control:focus,
+#uli1:focus,
+#uli2:focus,
+#uli3:focus,
+#uli4:focus,
+#uli5:focus,
+#uli6:focus,
+#uli7:focus,
+#uli8:focus,
+#uli9:focus,
+#uli10:focus,
+#uli11:focus,
+#uli12:focus,
+#uli13:focus,
+#uli14:focus,
+#uli15:focus,
+#uli16:focus {
+    background-color: transparent !important;
+    color: #0f2942 !important;
+}
+
+/* Specific focus background colors for reference inputs to match their normal state */
+#referenceQualifiable:focus {
+    background-color: #9d9b6e !important;
+}
+
+#referenceYY1:focus,
+#referenceYY2:focus {
+    background-color: #b8d4f0 !important;
+}
+
+#referenceRegion1:focus,
+#referenceRegion2:focus {
+    background-color: #f0c8c8 !important;
+}
+
+#referenceProvince1:focus,
+#referenceProvince2:focus {
+    background-color: #c8d8a8 !important;
+}
+
+#referenceAC1:focus,
+#referenceAC2:focus,
+#referenceAC3:focus {
+    background-color: #f0d8a8 !important;
+}
+
+#referenceSeries1:focus,
+#referenceSeries2:focus,
+#referenceSeries3:focus,
+#referenceSeries4:focus,
+#referenceSeries5:focus,
+#referenceSeries6:focus {
+    background-color: #c8c8d8 !important;
+}
+
+/* Specific focus background colors for ULI inputs to match their normal state */
+#uli1:focus,
+#uli2:focus,
+#uli3:focus {
+    background-color: #d4e8ff !important;
+}
+
+#uli4:focus,
+#uli5:focus {
+    background-color: #ffe0e0 !important;
+}
+
+#uli6:focus,
+#uli7:focus,
+#uli8:focus {
+    background-color: #e0f0c8 !important;
+}
+
+#uli9:focus,
+#uli10:focus,
+#uli11:focus,
+#uli12:focus,
+#uli13:focus {
+    background-color: #ffe8c8 !important;
+}
+
+#uli14:focus,
+#uli15:focus,
+#uli16:focus {
+    background-color: #e0e0f0 !important;
 }

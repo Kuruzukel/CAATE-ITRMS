@@ -19,7 +19,7 @@
     height: 45px !important;
     text-align: center;
     font-weight: 600;
-    color: #2c3e50 !important;
+    color: #0f2942 !important;
     font-size: 0.95rem;
     border: 2px solid #6c757d !important;
     border-radius: 8px !important;
@@ -43,14 +43,12 @@
 .uli-input:nth-child(2),
 .uli-input:nth-child(3) {
     background-color: #d4e8ff !important;
-    color: #2c3e50 !important;
 }
 
 /* Next 2 boxes - light pink */
 .uli-input:nth-child(5),
 .uli-input:nth-child(6) {
     background-color: #ffe0e0 !important;
-    color: #2c3e50 !important;
 }
 
 /* Next 3 boxes - light green */
@@ -58,7 +56,6 @@
 .uli-input:nth-child(9),
 .uli-input:nth-child(10) {
     background-color: #e0f0c8 !important;
-    color: #2c3e50 !important;
 }
 
 /* Next 5 boxes - light peach */
@@ -68,7 +65,6 @@
 .uli-input:nth-child(15),
 .uli-input:nth-child(16) {
     background-color: #ffe8c8 !important;
-    color: #2c3e50 !important;
 }
 
 /* Last 3 boxes - light purple */
@@ -76,7 +72,6 @@
 .uli-input:nth-child(19),
 .uli-input:nth-child(20) {
     background-color: #e0e0f0 !important;
-    color: #2c3e50 !important;
 }
 
 .uli-separator {
@@ -286,4 +281,30 @@ input[type="text"] {
         font-size: 1.2rem;
         padding: 0 3px;
     }
+}
+
+/* Force dark blue color for all ULI inputs in registration form - Most specific selectors */
+.uli-inputs .uli-input.form-control,
+.uli-inputs input.uli-input,
+.uli-inputs input[type="text"],
+input.uli-input.form-control,
+input.uli-input[type="text"],
+.form-control.uli-input,
+input.form-control.uli-input {
+    color: #0f2942 !important;
+}
+
+/* Override any Bootstrap or other framework styles for registration form */
+.card .uli-inputs input {
+    color: #0f2942 !important;
+}
+
+/* Remove blue background on focus for ULI inputs in registration form */
+.uli-inputs .uli-input:focus,
+.uli-inputs input.uli-input:focus,
+.uli-inputs input.form-control:focus,
+input.uli-input:focus,
+input.uli-input.form-control:focus {
+    background-color: inherit !important;
+    color: #0f2942 !important;
 }

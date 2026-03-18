@@ -1,32 +1,41 @@
 /* Registration Form Specific Styles */
 
-/* Enhanced Modal Glassmorphism */
+/* Layout Overlay for Modal */
+.layout-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(1px);
+    -webkit-backdrop-filter: blur(1px);
+    z-index: 1099;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    display: none;
+    cursor: pointer;
+}
+
+.layout-overlay.active {
+    display: block;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Ensure modal appears above overlay */
+.modal {
+    z-index: 1100 !important;
+}
+
+.modal-dialog {
+    z-index: 1101 !important;
+}
+
+/* Remove Bootstrap modal backdrop */
 .modal-backdrop {
-    background: rgba(0, 0, 0, 0.8) !important;
-    backdrop-filter: blur(12px) !important;
-    -webkit-backdrop-filter: blur(12px) !important;
-}
-
-.modal-backdrop.show {
-    opacity: 1 !important;
-}
-
-/* Force darker backdrop when modal is shown */
-.modal.show~.modal-backdrop,
-.modal-backdrop.show {
-    background: rgba(0, 0, 0, 0.8) !important;
-    backdrop-filter: blur(12px) !important;
-    -webkit-backdrop-filter: blur(12px) !important;
-}
-
-/* Modal Animation */
-.modal.fade .modal-dialog {
-    transition: transform 0.3s ease-out !important;
-    transform: translate(0, -50px) !important;
-}
-
-.modal.show .modal-dialog {
-    transform: none !important;
+    display: none !important;
 }
 
 /* Radio Groups - Set gap to 0rem for vertical layout */

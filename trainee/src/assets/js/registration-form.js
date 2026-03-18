@@ -296,15 +296,32 @@ class RegistrationFormHandler {
         // Store form data for later submission
         this.pendingFormData = formData;
 
+        // Show layout overlay
+        const layoutOverlay = document.getElementById('layoutOverlay');
+        if (layoutOverlay) {
+            layoutOverlay.classList.add('active');
+        }
+
         // Show confirmation modal
         const modal = new bootstrap.Modal(document.getElementById('confirmationModal'));
 
         // Add event listener for modal dismissal
         const modalElement = document.getElementById('confirmationModal');
         modalElement.addEventListener('hidden.bs.modal', () => {
+            // Hide layout overlay
+            if (layoutOverlay) {
+                layoutOverlay.classList.remove('active');
+            }
             // Reset flag when modal is dismissed
             this.formSubmitted = false; // Reset flag
         }, { once: true });
+
+        // Add click event to overlay to close modal
+        if (layoutOverlay) {
+            layoutOverlay.addEventListener('click', () => {
+                modal.hide();
+            }, { once: true });
+        }
 
         modal.show();
     }
@@ -317,6 +334,12 @@ class RegistrationFormHandler {
         const confirmationModal = bootstrap.Modal.getInstance(document.getElementById('confirmationModal'));
         if (confirmationModal) {
             confirmationModal.hide();
+        }
+
+        // Hide layout overlay
+        const layoutOverlay = document.getElementById('layoutOverlay');
+        if (layoutOverlay) {
+            layoutOverlay.classList.remove('active');
         }
 
         // Show loading state

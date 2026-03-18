@@ -408,8 +408,7 @@ class RegistrationFormHandler {
             'birthDay',
             'birthYear',
             'age',
-            'contactNo',
-            'education'
+            'contactNo'
         ];
 
         const missingFields = [];
@@ -433,12 +432,6 @@ class RegistrationFormHandler {
         requiredFields.forEach(field => {
             if (!data[field] || data[field].toString().trim() === '') {
                 missingFields.push(fieldLabels[field] || field);
-
-                // Show specific error for radio groups (excluding employmentStatus)
-                if (field === 'education') {
-                    this.showRadioGroupError(field, `${fieldLabels[field]} is required`);
-                    isValid = false;
-                }
             }
         });
 
@@ -451,13 +444,9 @@ class RegistrationFormHandler {
             }
         }
 
-        // Check if at least one Client Classification is selected
+        // Check if at least one Client Classification is selected (optional)
         const clientClassifications = document.querySelectorAll('input[name="clientClassification"]:checked');
-        if (clientClassifications.length === 0) {
-            missingFields.push(fieldLabels['clientClassification']);
-            this.showRadioGroupError('clientClassification', 'At least one Learner/Trainee/Student Classification must be selected');
-            isValid = false;
-        }
+        // Removed requirement - now optional
 
         // Additional validation for birth information
         if (data.birthMonth && (data.birthMonth < 1 || data.birthMonth > 12)) {

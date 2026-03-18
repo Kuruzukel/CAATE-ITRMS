@@ -308,3 +308,56 @@ input.uli-input.form-control:focus {
     background-color: inherit !important;
     color: #0f2942 !important;
 }
+
+/* Error validation styles for required fields */
+.form-control.is-invalid {
+    border-color: #dc3545 !important;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+}
+
+.invalid-feedback {
+    display: block !important;
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    color: #dc3545;
+    font-weight: 500;
+}
+
+/* Required field asterisk styling */
+.text-danger {
+    color: #dc3545 !important;
+    font-weight: bold;
+}
+
+/* Birth information section highlighting */
+.birth-info-section .form-control:focus {
+    border-color: #3691bf !important;
+    box-shadow: 0 0 0 0.2rem rgba(54, 145, 191, 0.25) !important;
+}
+
+/* Error state for number inputs */
+input[type="number"].is-invalid {
+    border-color: #dc3545 !important;
+    background-image: none !important;
+}
+
+input[type="number"].is-invalid:focus {
+    border-color: #dc3545 !important;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+}
+
+/* Success state for validated fields */
+.form-control.is-valid {
+    border-color: #28a745 !important;
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25) !important;
+}
+
+.valid-feedback {
+    display: block !important;
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    color: #28a745;
+    font-weight: 500;
+}

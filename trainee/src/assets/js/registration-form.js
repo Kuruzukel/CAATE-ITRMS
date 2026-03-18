@@ -37,6 +37,103 @@ class RegistrationFormHandler {
         if (confirmSubmitBtn) {
             confirmSubmitBtn.addEventListener('click', () => this.handleConfirmedSubmit());
         }
+
+        // Real-time validation for birth information fields
+        this.setupBirthFieldValidation();
+    }
+
+    setupBirthFieldValidation() {
+        const birthMonth = document.getElementById('birthMonth');
+        const birthDay = document.getElementById('birthDay');
+        const birthYear = document.getElementById('birthYear');
+        const age = document.getElementById('age');
+        const contactNo = document.getElementById('contactNo');
+
+        // Birth Month validation
+        if (birthMonth) {
+            birthMonth.addEventListener('blur', () => {
+                const value = parseInt(birthMonth.value);
+                if (birthMonth.value && (value < 1 || value > 12)) {
+                    this.showFieldError(birthMonth, 'Month must be between 1 and 12');
+                } else {
+                    this.clearFieldError(birthMonth);
+                }
+            });
+        }
+
+        // Birth Day validation
+        if (birthDay) {
+            birthDay.addEventListener('blur', () => {
+                const value = parseInt(birthDay.value);
+                if (birthDay.value && (value < 1 || value > 31)) {
+                    this.showFieldError(birthDay, 'Day must be between 1 and 31');
+                } else {
+                    this.clearFieldError(birthDay);
+                }
+            });
+        }
+
+        // Birth Year validation
+        if (birthYear) {
+            birthYear.addEventListener('blur', () => {
+                const value = parseInt(birthYear.value);
+                if (birthYear.value && (value < 1900 || value > 2024)) {
+                    this.showFieldError(birthYear, 'Year must be between 1900 and 2024');
+                } else {
+                    this.clearFieldError(birthYear);
+                }
+            });
+        }
+
+        // Age validation
+        if (age) {
+            age.addEventListener('blur', () => {
+                const value = parseInt(age.value);
+                if (age.value && (value < 1 || value > 120)) {
+                    this.showFieldError(age, 'Age must be between 1 and 120');
+                } else {
+                    this.clearFieldError(age);
+                }
+            });
+        }
+
+        // Contact Number validation
+        if (contactNo) {
+            contactNo.addEventListener('blur', () => {
+                if (!contactNo.value || contactNo.value.trim() === '') {
+                    this.showFieldError(contactNo, 'Contact number is required');
+                } else {
+                    this.clearFieldError(contactNo);
+                }
+            });
+        }
+    }
+
+    showFieldError(field, message) {
+        // Remove existing error
+        this.clearFieldError(field);
+
+        // Add error class to field
+        field.classList.add('is-invalid');
+
+        // Create error message element
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'invalid-feedback';
+        errorDiv.textContent = message;
+
+        // Insert error message after the field
+        field.parentNode.appendChild(errorDiv);
+    }
+
+    clearFieldError(field) {
+        // Remove error class
+        field.classList.remove('is-invalid');
+
+        // Remove error message
+        const errorDiv = field.parentNode.querySelector('.invalid-feedback');
+        if (errorDiv) {
+            errorDiv.remove();
+        }
     }
 
     setupULIInputs() {
@@ -103,8 +200,7 @@ class RegistrationFormHandler {
             if (response.success) {
                 // Show success toast
                 this.showToast('Registration submitted successfully! You will receive a confirmation email shortly.', 'success');
-                // Show success modal
-                this.showSuccessModal();
+
                 // Reset form
                 this.form.reset();
             } else {
@@ -139,8 +235,6 @@ class RegistrationFormHandler {
             const response = await this.submitToDatabase(formData);
 
             if (response.success) {
-                // Show success modal
-                this.showSuccessModal();
                 // Reset form
                 this.form.reset();
             } else {
@@ -203,16 +297,53 @@ class RegistrationFormHandler {
             'lastName',
             'firstName',
             'sex',
-            'civilStatus'
+            'civilStatus',
+            'birthMonth',
+            'birthDay',
+            'birthYear',
+            'age',
+            'contactNo'
         ];
 
         const missingFields = [];
+        const fieldLabels = {
+            'lastName': 'Last Name',
+            'firstName': 'First Name',
+            'sex': 'Sex',
+            'civilStatus': 'Civil Status',
+            'birthMonth': 'Month of Birth',
+            'birthDay': 'Day of Birth',
+            'birthYear': 'Year of Birth',
+            'age': 'Age',
+            'contactNo': 'Contact Number'
+        };
 
         requiredFields.forEach(field => {
-            if (!data[field] || data[field].trim() === '') {
-                missingFields.push(field);
+            if (!data[field] || data[field].toString().trim() === '') {
+                missingFields.push(fieldLabels[field] || field);
             }
         });
+
+        // Additional validation for birth information
+        if (data.birthMonth && (data.birthMonth < 1 || data.birthMonth > 12)) {
+            this.showToast('Month of Birth must be between 1 and 12', 'error');
+            return false;
+        }
+
+        if (data.birthDay && (data.birthDay < 1 || data.birthDay > 31)) {
+            this.showToast('Day of Birth must be between 1 and 31', 'error');
+            return false;
+        }
+
+        if (data.birthYear && (data.birthYear < 1900 || data.birthYear > 2024)) {
+            this.showToast('Year of Birth must be between 1900 and 2024', 'error');
+            return false;
+        }
+
+        if (data.age && (data.age < 1 || data.age > 120)) {
+            this.showToast('Age must be between 1 and 120', 'error');
+            return false;
+        }
 
         if (missingFields.length > 0) {
             this.showToast('Please fill in all required fields: ' + missingFields.join(', '), 'error');
@@ -264,8 +395,7 @@ class RegistrationFormHandler {
     }
 
     showSuccessModal() {
-        const modal = new bootstrap.Modal(document.getElementById('successModal'));
-        modal.show();
+        // Modal removed - no longer showing success modal
     }
 
     showToast(message, type = 'success') {

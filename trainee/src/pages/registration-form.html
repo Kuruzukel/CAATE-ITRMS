@@ -314,27 +314,42 @@
                                                     Learner Identifier (ULI) Number: <span
                                                         class="text-muted">(Optional)</span></label>
                                                 <div class="uli-inputs">
-                                                    <input type="text" id="uliNumber" class="form-control uli-input"
-                                                        maxlength="1">
-                                                    <input type="text" class="form-control uli-input" maxlength="1">
-                                                    <input type="text" class="form-control uli-input" maxlength="1">
+                                                    <input type="number" id="uliNumber" class="form-control uli-input"
+                                                        maxlength="1" min="0" max="9">
+                                                    <input type="number" class="form-control uli-input" maxlength="1"
+                                                        min="0" max="9">
+                                                    <input type="number" class="form-control uli-input" maxlength="1"
+                                                        min="0" max="9">
                                                     <span class="uli-separator">-</span>
-                                                    <input type="text" class="form-control uli-input" maxlength="1">
-                                                    <input type="text" class="form-control uli-input" maxlength="1">
+                                                    <input type="number" class="form-control uli-input" maxlength="1"
+                                                        min="0" max="9">
+                                                    <input type="number" class="form-control uli-input" maxlength="1"
+                                                        min="0" max="9">
                                                     <span class="uli-separator">-</span>
-                                                    <input type="text" class="form-control uli-input" maxlength="1">
-                                                    <input type="text" class="form-control uli-input" maxlength="1">
-                                                    <input type="text" class="form-control uli-input" maxlength="1">
+                                                    <input type="number" class="form-control uli-input" maxlength="1"
+                                                        min="0" max="9">
+                                                    <input type="number" class="form-control uli-input" maxlength="1"
+                                                        min="0" max="9">
+                                                    <input type="number" class="form-control uli-input" maxlength="1"
+                                                        min="0" max="9">
                                                     <span class="uli-separator">-</span>
-                                                    <input type="text" class="form-control uli-input" maxlength="1">
-                                                    <input type="text" class="form-control uli-input" maxlength="1">
-                                                    <input type="text" class="form-control uli-input" maxlength="1">
-                                                    <input type="text" class="form-control uli-input" maxlength="1">
-                                                    <input type="text" class="form-control uli-input" maxlength="1">
+                                                    <input type="number" class="form-control uli-input" maxlength="1"
+                                                        min="0" max="9">
+                                                    <input type="number" class="form-control uli-input" maxlength="1"
+                                                        min="0" max="9">
+                                                    <input type="number" class="form-control uli-input" maxlength="1"
+                                                        min="0" max="9">
+                                                    <input type="number" class="form-control uli-input" maxlength="1"
+                                                        min="0" max="9">
+                                                    <input type="number" class="form-control uli-input" maxlength="1"
+                                                        min="0" max="9">
                                                     <span class="uli-separator">-</span>
-                                                    <input type="text" class="form-control uli-input" maxlength="1">
-                                                    <input type="text" class="form-control uli-input" maxlength="1">
-                                                    <input type="text" class="form-control uli-input" maxlength="1">
+                                                    <input type="number" class="form-control uli-input" maxlength="1"
+                                                        min="0" max="9">
+                                                    <input type="number" class="form-control uli-input" maxlength="1"
+                                                        min="0" max="9">
+                                                    <input type="number" class="form-control uli-input" maxlength="1"
+                                                        min="0" max="9">
                                                 </div>
                                             </div>
                                             <div class="row mt-5">
@@ -431,9 +446,10 @@
                                                 </div>
                                                 <div class="col-md-3 mb-3">
                                                     <label for="contactNo" class="form-label fw-semibold">Contact
-                                                        No.</label>
-                                                    <input type="tel" id="contactNo" name="contactNo"
-                                                        class="form-control" placeholder="Enter contact number">
+                                                        No. <span class="text-danger">*</span></label>
+                                                    <input type="number" id="contactNo" name="contactNo"
+                                                        class="form-control" placeholder="Enter contact number"
+                                                        required>
                                                 </div>
                                                 <div class="col-md-3 mb-3">
                                                     <label for="nationality"
@@ -589,26 +605,30 @@
                                             <div class="row">
                                                 <div class="col-md-3 mb-3">
                                                     <label for="birthMonth" class="form-label fw-semibold">Month of
-                                                        Birth</label>
-                                                    <input type="text" id="birthMonth" name="birthMonth"
-                                                        class="form-control" placeholder="Enter birth month">
+                                                        Birth <span class="text-danger">*</span></label>
+                                                    <input type="number" id="birthMonth" name="birthMonth"
+                                                        class="form-control" placeholder="Enter birth month" min="1"
+                                                        max="12" required>
                                                 </div>
                                                 <div class="col-md-3 mb-3">
                                                     <label for="birthDay" class="form-label fw-semibold">Day of
-                                                        Birth</label>
-                                                    <input type="text" id="birthDay" name="birthDay"
-                                                        class="form-control" placeholder="Enter birth day">
+                                                        Birth <span class="text-danger">*</span></label>
+                                                    <input type="number" id="birthDay" name="birthDay"
+                                                        class="form-control" placeholder="Enter birth day" min="1"
+                                                        max="31" required>
                                                 </div>
                                                 <div class="col-md-3 mb-3">
                                                     <label for="birthYear" class="form-label fw-semibold">Year of
-                                                        Birth</label>
-                                                    <input type="text" id="birthYear" name="birthYear"
-                                                        class="form-control" placeholder="Enter birth year">
+                                                        Birth <span class="text-danger">*</span></label>
+                                                    <input type="number" id="birthYear" name="birthYear"
+                                                        class="form-control" placeholder="Enter birth year" min="1900"
+                                                        max="2024" required>
                                                 </div>
                                                 <div class="col-md-3 mb-3">
-                                                    <label for="age" class="form-label fw-semibold">Age</label>
+                                                    <label for="age" class="form-label fw-semibold">Age <span
+                                                            class="text-danger">*</span></label>
                                                     <input type="number" id="age" name="age" class="form-control"
-                                                        placeholder="Enter age">
+                                                        placeholder="Enter age" min="1" max="120" required>
                                                 </div>
                                             </div>
 
@@ -1254,32 +1274,7 @@
         </div>
     </div>
 
-    <!-- Success Modal -->
-    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="successModalLabel">
-                        <i class="bx bx-check-circle text-success me-2"></i>Registration Submitted Successfully
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body text-center">
-                    <div class="mb-3">
-                        <i class="bx bx-check-circle text-success" style="font-size: 4rem;"></i>
-                    </div>
-                    <h4 class="text-success mb-3">Thank you!</h4>
-                    <p class="mb-0">Your registration form has been submitted successfully. You will receive a
-                        confirmation email shortly.</p>
-                </div>
-                <div class="modal-footer justify-content-center">
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
-                        <i class="bx bx-check me-2"></i>OK
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
+
 
     <!-- Core JS -->
     <script src="../assets/vendor/libs/jquery/jquery.js"></script>

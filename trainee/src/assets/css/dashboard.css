@@ -429,6 +429,26 @@ small.text-muted {
     color: white !important;
 }
 
+/* Override for Log Out text - make it red with highest specificity */
+.layout-page .dropdown-menu .dropdown-item .bx-power-off+span.align-middle {
+    color: rgba(var(--bs-danger-rgb), 1) !important;
+}
+
+/* Additional fallback selectors with maximum specificity */
+.layout-page .navbar .dropdown-menu .dropdown-item span.align-middle {
+    color: rgba(var(--bs-danger-rgb), 1) !important;
+}
+
+/* Even more specific - target the exact structure */
+.layout-page .navbar-nav .dropdown .dropdown-menu .dropdown-item span.align-middle {
+    color: rgba(var(--bs-danger-rgb), 1) !important;
+}
+
+/* Nuclear option - override everything for Log Out */
+.layout-page span.align-middle {
+    color: rgba(var(--bs-danger-rgb), 1) !important;
+}
+
 /* Restore original colors for statistics cards */
 .col-lg-6.col-md-12.col-6.mb-4 .card .card-body .fw-semibold.d-block.mb-1 {
     color: white !important;
@@ -566,4 +586,16 @@ small.text-info.fw-semibold {
 
 .card-body small.text-info.fw-semibold {
     color: white !important;
+}
+
+/* CRITICAL: Force Log Out text to be red - highest specificity */
+html body .layout-page .navbar .dropdown-menu .dropdown-item span.align-middle,
+html body .layout-page .dropdown-menu .dropdown-item .bx-power-off+span.align-middle,
+html body .layout-page span.align-middle {
+    color: rgba(var(--bs-danger-rgb), 1) !important;
+}
+
+/* Fallback with even higher specificity */
+.layout-page .navbar-nav .nav-item .dropdown-menu .dropdown-item span.align-middle {
+    color: rgba(var(--bs-danger-rgb), 1) !important;
 }

@@ -296,9 +296,6 @@ class RegistrationFormHandler {
         // Store form data for later submission
         this.pendingFormData = formData;
 
-        // Show info toast
-        this.showToast('Please confirm your registration details before submitting.', 'info');
-
         // Show confirmation modal
         const modal = new bootstrap.Modal(document.getElementById('confirmationModal'));
 

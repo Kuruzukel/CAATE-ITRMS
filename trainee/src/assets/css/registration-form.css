@@ -330,6 +330,27 @@ input.uli-input.form-control:focus {
     font-weight: bold;
 }
 
+/* Add red asterisk to required field labels */
+.form-label.required::after {
+    content: " *";
+    color: #dc3545;
+    font-weight: bold;
+}
+
+/* Enhanced required field styling */
+input[required],
+textarea[required],
+select[required] {
+    border-left: 3px solid #ffc107;
+}
+
+input[required]:focus,
+textarea[required]:focus,
+select[required]:focus {
+    border-left: 3px solid #3691bf;
+    box-shadow: 0 0 0 0.2rem rgba(54, 145, 191, 0.25);
+}
+
 /* Birth information section highlighting */
 .birth-info-section .form-control:focus {
     border-color: #3691bf !important;

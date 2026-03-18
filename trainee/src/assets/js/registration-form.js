@@ -400,31 +400,68 @@ class RegistrationFormHandler {
         this.clearAllErrors();
 
         const requiredFields = [
+            // Personal Information
             'lastName',
             'firstName',
+            'middleName',
+            'numberStreet',
+            'barangay',
+            'district',
+            'cityMunicipality',
+            'province',
+            'region',
+            'emailFacebook',
+            'contactNo',
+            'nationality',
+            // Personal Details
             'sex',
             'civilStatus',
+            'employmentStatus',
             'birthMonth',
             'birthDay',
             'birthYear',
             'age',
-            'contactNo'
+            'birthCity',
+            'birthProvince',
+            'birthRegion',
+            // Education
+            'education',
+            // Parent/Guardian
+            'parentName',
+            'parentAddress',
+            // Course
+            'courseQualification'
         ];
 
         const missingFields = [];
         const fieldLabels = {
             'lastName': 'Last Name',
             'firstName': 'First Name',
+            'middleName': 'Middle Name',
+            'numberStreet': 'Number, Street',
+            'barangay': 'Barangay',
+            'district': 'District',
+            'cityMunicipality': 'City/Municipality',
+            'province': 'Province',
+            'region': 'Region',
+            'emailFacebook': 'Email Address/Facebook Account',
+            'contactNo': 'Contact Number',
+            'nationality': 'Nationality',
             'sex': 'Sex',
             'civilStatus': 'Civil Status',
+            'employmentStatus': 'Employment Status',
+            'employmentType': 'Employment Type',
             'birthMonth': 'Month of Birth',
             'birthDay': 'Day of Birth',
             'birthYear': 'Year of Birth',
             'age': 'Age',
-            'contactNo': 'Contact Number',
-            'employmentStatus': 'Employment Status',
-            'employmentType': 'Employment Type',
+            'birthCity': 'Birth City/Municipality',
+            'birthProvince': 'Birth Province',
+            'birthRegion': 'Birth Region',
             'education': 'Educational Attainment',
+            'parentName': 'Parent/Guardian Name',
+            'parentAddress': 'Parent/Guardian Address',
+            'courseQualification': 'Course/Qualification Name',
             'clientClassification': 'Learner/Trainee/Student Classification'
         };
 
@@ -432,10 +469,23 @@ class RegistrationFormHandler {
         requiredFields.forEach(field => {
             if (!data[field] || data[field].toString().trim() === '') {
                 missingFields.push(fieldLabels[field] || field);
+
+                // Show specific error for radio groups
+                if (field === 'sex' || field === 'civilStatus' || field === 'employmentStatus' || field === 'education') {
+                    this.showRadioGroupError(field, `${fieldLabels[field]} is required`);
+                    isValid = false;
+                }
+
+                // Show error for text inputs
+                const inputElement = document.getElementById(field) || document.querySelector(`[name="${field}"]`);
+                if (inputElement && (inputElement.type === 'text' || inputElement.type === 'number' || inputElement.type === 'email' || inputElement.tagName === 'TEXTAREA')) {
+                    this.showFieldError(inputElement, `${fieldLabels[field]} is required`);
+                    isValid = false;
+                }
             }
         });
 
-        // Check if Employment Type is required based on Employment Status (optional validation)
+        // Check if Employment Type is required based on Employment Status
         if (data.employmentStatus && (data.employmentStatus === 'wage' || data.employmentStatus === 'underemployed')) {
             if (!data.employmentType || data.employmentType.toString().trim() === '') {
                 missingFields.push(fieldLabels['employmentType']);
@@ -444,9 +494,9 @@ class RegistrationFormHandler {
             }
         }
 
-        // Check if at least one Client Classification is selected (optional)
+        // Check if at least one Client Classification is selected (now optional)
         const clientClassifications = document.querySelectorAll('input[name="clientClassification"]:checked');
-        // Removed requirement - now optional
+        // Client classification is now optional - no validation required
 
         // Additional validation for birth information
         if (data.birthMonth && (data.birthMonth < 1 || data.birthMonth > 12)) {

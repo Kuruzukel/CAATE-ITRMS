@@ -151,7 +151,7 @@ class RegistrationFormHandler {
         // Employment Status change handler
         employmentStatusInputs.forEach(input => {
             input.addEventListener('change', () => {
-                this.clearRadioGroupError('employmentStatus');
+                this.clearRadioGroupRedBorder('employmentStatus');
 
                 // Show/hide employment type requirement based on selection
                 const selectedValue = document.querySelector('input[name="employmentStatus"]:checked')?.value;
@@ -171,7 +171,7 @@ class RegistrationFormHandler {
                     employmentTypeInputs.forEach(typeInput => {
                         typeInput.checked = false;
                     });
-                    this.clearRadioGroupError('employmentType');
+                    this.clearRadioGroupRedBorder('employmentType');
                 }
             });
         });
@@ -179,22 +179,55 @@ class RegistrationFormHandler {
         // Employment Type validation
         employmentTypeInputs.forEach(input => {
             input.addEventListener('change', () => {
-                this.clearRadioGroupError('employmentType');
+                this.clearRadioGroupRedBorder('employmentType');
             });
         });
 
         // Education validation
         educationInputs.forEach(input => {
             input.addEventListener('change', () => {
-                this.clearRadioGroupError('education');
+                this.clearRadioGroupRedBorder('education');
+            });
+        });
+
+        // Sex validation
+        const sexInputs = document.querySelectorAll('input[name="sex"]');
+        sexInputs.forEach(input => {
+            input.addEventListener('change', () => {
+                this.clearRadioGroupRedBorder('sex');
+            });
+        });
+
+        // Civil Status validation
+        const civilStatusInputs = document.querySelectorAll('input[name="civilStatus"]');
+        civilStatusInputs.forEach(input => {
+            input.addEventListener('change', () => {
+                this.clearRadioGroupRedBorder('civilStatus');
             });
         });
 
         // Client Classification validation
         clientClassificationInputs.forEach(input => {
             input.addEventListener('change', () => {
-                this.clearRadioGroupError('clientClassification');
+                this.clearRadioGroupRedBorder('clientClassification');
             });
+        });
+    }
+
+    showRadioGroupRedBorder(groupName) {
+        // Remove existing red borders
+        this.clearRadioGroupRedBorder(groupName);
+
+        // Add red border to all radio buttons in the group
+        document.querySelectorAll(`input[name="${groupName}"]`).forEach(input => {
+            input.classList.add('radio-required-error');
+        });
+    }
+
+    clearRadioGroupRedBorder(groupName) {
+        // Remove red border class from all inputs in the group
+        document.querySelectorAll(`input[name="${groupName}"]`).forEach(input => {
+            input.classList.remove('radio-required-error');
         });
     }
 
@@ -401,7 +434,7 @@ class RegistrationFormHandler {
         this.clearAllErrors();
 
         const requiredFields = [
-            // All form fields are now validated for consistency
+            // Personal Information
             'lastName',
             'firstName',
             'middleName',
@@ -414,9 +447,12 @@ class RegistrationFormHandler {
             'emailFacebook',
             'contactNo',
             'nationality',
+            // Personal Details (radio groups)
             'sex',
             'civilStatus',
             'employmentStatus',
+            'education',
+            // Birth Information
             'birthMonth',
             'birthDay',
             'birthYear',
@@ -424,9 +460,10 @@ class RegistrationFormHandler {
             'birthCity',
             'birthProvince',
             'birthRegion',
-            'education',
+            // Parent/Guardian
             'parentName',
             'parentAddress',
+            // Course
             'courseQualification'
         ];
 
@@ -462,18 +499,18 @@ class RegistrationFormHandler {
             'clientClassification': 'Learner/Trainee/Student Classification'
         };
 
-        // Check basic required fields (all fields get consistent error styling)
+        // Check basic required fields
         requiredFields.forEach(field => {
             if (!data[field] || data[field].toString().trim() === '') {
                 missingFields.push(fieldLabels[field] || field);
 
-                // Show specific error for radio groups
+                // Show red border for radio groups (no notification boxes)
                 if (field === 'sex' || field === 'civilStatus' || field === 'employmentStatus' || field === 'education') {
-                    this.showRadioGroupError(field, `${fieldLabels[field]} is required`);
+                    this.showRadioGroupRedBorder(field);
                     isValid = false;
                 }
 
-                // Show error for ALL text inputs with consistent styling
+                // Show error for text inputs
                 const inputElement = document.getElementById(field) || document.querySelector(`[name="${field}"]`);
                 if (inputElement && (inputElement.type === 'text' || inputElement.type === 'number' || inputElement.type === 'email' || inputElement.tagName === 'TEXTAREA')) {
                     this.showFieldError(inputElement, `${fieldLabels[field]} is required`);
@@ -482,11 +519,17 @@ class RegistrationFormHandler {
             }
         });
 
+        // Check if at least one Client Classification is selected
+        const clientClassifications = document.querySelectorAll('input[name="clientClassification"]:checked');
+        if (clientClassifications.length === 0) {
+            this.showRadioGroupRedBorder('clientClassification');
+            isValid = false;
+        }
+
         // Check if Employment Type is required based on Employment Status
         if (data.employmentStatus && (data.employmentStatus === 'wage' || data.employmentStatus === 'underemployed')) {
             if (!data.employmentType || data.employmentType.toString().trim() === '') {
-                missingFields.push(fieldLabels['employmentType']);
-                this.showRadioGroupError('employmentType', 'Employment Type is required for Wage-employed or Underemployed status');
+                this.showRadioGroupRedBorder('employmentType');
                 isValid = false;
             }
         }
@@ -534,6 +577,11 @@ class RegistrationFormHandler {
         // Clear all error messages
         document.querySelectorAll('.invalid-feedback, .radio-group-error').forEach(error => {
             error.remove();
+        });
+
+        // Clear radio button red borders
+        document.querySelectorAll('.radio-required-error').forEach(radio => {
+            radio.classList.remove('radio-required-error');
         });
 
         // Clear enhanced error styling

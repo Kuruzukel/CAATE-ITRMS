@@ -81,6 +81,26 @@
     padding: 0 5px;
 }
 
+/* Radio button error styling - bright red for required fields (RADIO ONLY) */
+input[type="radio"].radio-required-error {
+    border: 2px solid #dc3545 !important;
+    background-color: #dc3545 !important;
+    box-shadow: 0 0 0 0.3rem rgba(220, 53, 69, 0.4) !important;
+}
+
+/* Make the entire radio button red when error */
+input[type="radio"].radio-required-error::before {
+    background-color: white !important;
+    border: 2px solid #dc3545 !important;
+}
+
+/* Checkbox error styling (separate, lighter styling) */
+input[type="checkbox"].radio-required-error {
+    border-color: #dc3545 !important;
+    border-width: 2px !important;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+}
+
 /* Force circular radio buttons - most aggressive approach */
 .radio-label input[type="radio"],
 input[type="radio"] {

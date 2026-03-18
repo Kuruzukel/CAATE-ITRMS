@@ -543,6 +543,7 @@ class RegistrationFormHandler {
         if (data.employmentStatus && (data.employmentStatus === 'wage' || data.employmentStatus === 'underemployed')) {
             if (!data.employmentType || data.employmentType.toString().trim() === '') {
                 this.showRadioGroupRedBorder('employmentType');
+                this.showToast('Please select an Employment Type when Wage-Employed or Underemployed is selected.', 'error');
                 isValid = false;
             }
         }

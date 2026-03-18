@@ -84,13 +84,12 @@
 /* Radio button error styling - bright red for required fields (RADIO ONLY) */
 input[type="radio"].radio-required-error {
     border: 2px solid #dc3545 !important;
-    background-color: #dc3545 !important;
     box-shadow: 0 0 0 0.3rem rgba(220, 53, 69, 0.4) !important;
 }
 
-/* Make the entire radio button red when error */
-input[type="radio"].radio-required-error::before {
-    background-color: white !important;
+/* Override default radio button styling when in error state */
+.radio-label input[type="radio"].radio-required-error,
+input[type="radio"].radio-required-error {
     border: 2px solid #dc3545 !important;
 }
 

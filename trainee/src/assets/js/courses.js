@@ -45,7 +45,8 @@ function initializeEnrollButtonHandlers() {
             // If enrollment is open, proceed with enrollment logic
             const courseId = card.dataset.courseId;
             const courseTitle = card.querySelector('.card-title').textContent;
-            handleEnrollment(courseId, courseTitle);
+            const badgeText = card.querySelector('.badge').textContent.trim();
+            handleEnrollment(courseId, courseTitle, badgeText);
         }
     });
 }
@@ -275,33 +276,64 @@ function filterCoursesByType(filter) {
 }
 
 // Utility functions
-function handleEnrollment(courseId, courseTitle) {
-    // TODO: Implement actual enrollment logic here
-    console.log('Enrolling in course:', courseId, courseTitle);
-    // Add your enrollment logic here when ready
+function handleEnrollment(courseId, courseTitle, badgeText) {
+    console.log('Enrolling in course:', courseId, courseTitle, badgeText);
+
+    // Detect badge type
+    const badgeUpper = badgeText.toUpperCase();
+
+    if (badgeUpper.includes('NC II') || badgeUpper.includes('NC-II') || badgeUpper.includes('NCII')) {
+        // NC II courses - redirect to application form
+        showToast('Please fill up the Application Form and Admission Slip to complete your enrollment.', 'info');
+
+        // Redirect after 5 seconds
+        setTimeout(() => {
+            window.location.href = 'application-form.html';
+        }, 5000);
+
+    } else if (badgeUpper.includes('LEVEL III') || badgeUpper.includes('LEVEL 3') || badgeUpper.includes('LEVEL-III')) {
+        // Level III courses - redirect to registration form
+        showToast('Please fill up the Registration Form to complete your enrollment.', 'info');
+
+        // Redirect after 5 seconds
+        setTimeout(() => {
+            window.location.href = 'registration-form.html';
+        }, 5000);
+
+    } else {
+        // Default case - show generic message
+        showToast('Please complete the required forms to enroll in this course.', 'info');
+    }
 }
 
-function showNotification(message, type = 'info') {
-    const notification = document.createElement('div');
-    notification.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
-    notification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+function showToast(message, type = 'success') {
+    const container = document.getElementById('toastContainer');
+    if (!container) return;
 
-    // Determine icon based on type
-    let icon = 'bx-info-circle';
-    if (type === 'success') icon = 'bx-check-circle';
-    else if (type === 'warning') icon = 'bx-error';
-    else if (type === 'danger' || type === 'error') icon = 'bx-x-circle';
+    const toast = document.createElement('div');
+    toast.className = `toast-notification ${type}`;
 
-    notification.innerHTML = `
-        <i class="bx ${icon} me-2"></i>${message}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    const icon = type === 'success' ? 'bx-check' :
+        type === 'error' ? 'bx-x' :
+            type === 'warning' ? 'bx-error-alt' : 'bxs-info-circle';
+
+    toast.innerHTML = `
+        <i class="bx ${icon} toast-icon"></i>
+        <div class="toast-content">
+            <div class="toast-message">${message}</div>
+        </div>
     `;
 
-    document.body.appendChild(notification);
+    container.appendChild(toast);
 
+    // Auto remove after 5 seconds
     setTimeout(() => {
-        if (notification.parentElement) {
-            notification.remove();
-        }
+        toast.classList.add('hiding');
+        setTimeout(() => toast.remove(), 300);
     }, 5000);
+}
+
+// Alias for backward compatibility
+function showNotification(message, type = 'info', duration = 5000) {
+    showToast(message, type);
 }

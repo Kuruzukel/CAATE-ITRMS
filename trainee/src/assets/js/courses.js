@@ -277,9 +277,8 @@ function filterCoursesByType(filter) {
 // Utility functions
 function handleEnrollment(courseId, courseTitle) {
     // TODO: Implement actual enrollment logic here
-    // For now, just show a success message
-    showNotification(`Enrollment request submitted for: ${courseTitle}`, 'success');
     console.log('Enrolling in course:', courseId, courseTitle);
+    // Add your enrollment logic here when ready
 }
 
 function showNotification(message, type = 'info') {

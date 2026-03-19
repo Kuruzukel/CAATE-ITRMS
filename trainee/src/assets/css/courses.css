@@ -152,6 +152,22 @@
     background: #1e7e34;
 }
 
+/* Disabled enroll button styles */
+.enroll-course-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.enroll-course-btn.btn-secondary:disabled {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+.enroll-course-btn:disabled:hover {
+    transform: none;
+    box-shadow: none;
+}
+
 .course-progress {
     margin-top: 15px;
 }

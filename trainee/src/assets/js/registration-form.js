@@ -498,7 +498,15 @@ class RegistrationFormHandler {
         const checkboxGroups = ['clientClassification', 'disabilityType', 'disabilityCause'];
         checkboxGroups.forEach(group => {
             const checkboxes = document.querySelectorAll(`input[name="${group}"]:checked`);
-            data[group] = Array.from(checkboxes).map(cb => cb.value);
+            data[group] = Array.from(checkboxes).map(cb => {
+                // Special handling for "others" option
+                if (cb.value === 'others' && group === 'clientClassification') {
+                    const othersInput = document.querySelector('input[name="clientClassificationOthers"]');
+                    const othersText = othersInput ? othersInput.value.trim() : '';
+                    return othersText ? `others: ${othersText}` : 'others';
+                }
+                return cb.value;
+            });
         });
 
         // Add timestamp and status

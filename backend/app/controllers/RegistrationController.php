@@ -51,8 +51,32 @@ class RegistrationController {
             // Get MongoDB connection
             $db = getMongoConnection();
             
+            // Get trainee information from userId if provided
+            $traineeId = null;
+            $traineeFullName = null;
+            
+            if (isset($input['userId']) && !empty($input['userId'])) {
+                try {
+                    $trainee = $db->trainees->findOne(['_id' => new MongoDB\BSON\ObjectId($input['userId'])]);
+                    if ($trainee) {
+                        $traineeId = $trainee['trainee_id'] ?? null;
+                        $traineeFullName = trim(
+                            ($trainee['first_name'] ?? '') . ' ' . 
+                            ($trainee['middle_name'] ?? '') . ' ' . 
+                            ($trainee['last_name'] ?? '')
+                        );
+                    }
+                } catch (Exception $e) {
+                    // If user lookup fails, continue without trainee info
+                    error_log('Failed to lookup trainee: ' . $e->getMessage());
+                }
+            }
+            
             // Prepare registration data
             $registrationData = [
+                'userId' => $input['userId'] ?? null,
+                'traineeId' => $traineeId,
+                'traineeFullName' => $traineeFullName,
                 'uliNumber' => $input['uliNumber'] ?? '',
                 'entryDate' => $input['entryDate'] ?? '',
                 'lastName' => trim($input['lastName']),

@@ -483,6 +483,12 @@ class RegistrationFormHandler {
             }
         }
 
+        // Add userId from localStorage
+        const userId = localStorage.getItem('userId');
+        if (userId) {
+            data.userId = userId;
+        }
+
         // Collect ULI number from individual inputs
         const uliInputs = document.querySelectorAll('.uli-input');
         let uliNumber = '';

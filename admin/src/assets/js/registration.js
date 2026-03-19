@@ -62,7 +62,9 @@
         }
 
         tbody.innerHTML = data.map(registration => {
-            const fullName = `${registration.firstName} ${registration.middleName || ''} ${registration.lastName}`.trim();
+            // Use traineeFullName if available, otherwise construct from form data
+            const fullName = registration.traineeFullName ||
+                `${registration.firstName} ${registration.middleName || ''} ${registration.lastName}`.trim();
             const initials = getInitials(fullName);
             const formattedDate = formatDate(registration.submittedAt);
             const statusBadge = getStatusBadge(registration.status);
@@ -172,13 +174,39 @@
         if (!dateString) return 'N/A';
 
         try {
-            const date = new Date(dateString.$date || dateString);
+            let date;
+
+            // Handle MongoDB BSON date format
+            if (dateString.$date) {
+                if (typeof dateString.$date === 'number') {
+                    date = new Date(dateString.$date);
+                } else if (typeof dateString.$date === 'string') {
+                    date = new Date(dateString.$date);
+                } else if (dateString.$date.$numberLong) {
+                    date = new Date(parseInt(dateString.$date.$numberLong));
+                } else {
+                    date = new Date(dateString.$date);
+                }
+            } else if (typeof dateString === 'string') {
+                date = new Date(dateString);
+            } else if (typeof dateString === 'number') {
+                date = new Date(dateString);
+            } else {
+                return 'N/A';
+            }
+
+            // Check if date is valid
+            if (isNaN(date.getTime())) {
+                return 'N/A';
+            }
+
             return date.toLocaleDateString('en-US', {
                 year: 'numeric',
                 month: 'short',
                 day: 'numeric'
             });
         } catch (error) {
+            console.error('Date formatting error:', error, dateString);
             return 'N/A';
         }
     }

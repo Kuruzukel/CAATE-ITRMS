@@ -38,14 +38,16 @@ function initializeEnrollButtonHandlers() {
                 } else {
                     message = 'Enrollment is not available at this time.';
                 }
-                showNotification(message, 'warning');
+                showToast(message, 'warning');
                 return;
             }
 
             // If enrollment is open, proceed with enrollment logic
             const courseId = card.dataset.courseId;
             const courseTitle = card.querySelector('.card-title').textContent;
-            const badgeText = card.querySelector('.badge').textContent.trim();
+            // Get the course type badge (not the enrollment status badge)
+            // The course type badge is inside card-body, enrollment status is in position-absolute
+            const badgeText = card.querySelector('.card-body .badge').textContent.trim();
             handleEnrollment(courseId, courseTitle, badgeText);
         }
     });

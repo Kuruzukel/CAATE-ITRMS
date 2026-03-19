@@ -87,6 +87,8 @@ class RegistrationController {
                 'courseQualification' => trim($input['courseQualification'] ?? ''),
                 'scholarshipType' => trim($input['scholarshipType'] ?? ''),
                 'privacyConsent' => $input['privacyConsent'] ?? '',
+                'selectedCourse' => trim($input['selectedCourse'] ?? ''),
+                'selectedCourseId' => trim($input['selectedCourseId'] ?? ''),
                 'status' => 'pending',
                 'submittedAt' => new MongoDB\BSON\UTCDateTime(),
                 'createdAt' => new MongoDB\BSON\UTCDateTime(),

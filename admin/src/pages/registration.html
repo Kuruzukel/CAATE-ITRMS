@@ -764,3 +764,463 @@
 </body>
 
 </html>
+
+<!-- Add Registration Modal - Complete Version -->
+<div class="modal fade" id="addRegistrationModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document" style="max-width: 95%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add New Registration</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" style="max-height: 75vh; overflow-y: auto;">
+                <form id="addRegistrationForm">
+                    <!-- Name Section -->
+                    <h6 class="mb-3"><i class="bx bx-user me-2"></i>Name</h6>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="addLastName" class="form-label">Last Name, Extension Name (Jr., Sr.)</label>
+                            <input type="text" id="addLastName" class="form-control" placeholder="Enter last name">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="addFirstName" class="form-label">First Name, Second Name</label>
+                            <input type="text" id="addFirstName" class="form-control" placeholder="Enter first name"
+                                required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="addMiddleName" class="form-label">Middle Name</label>
+                            <input type="text" id="addMiddleName" class="form-control" placeholder="Enter middle name">
+                        </div>
+                    </div>
+
+                    <!-- Complete Permanent Mailing Address -->
+                    <h6 class="mb-3 mt-3"><i class="bx bx-map me-2"></i>Complete Permanent Mailing Address</h6>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="addStreet" class="form-label">Number, Street</label>
+                            <input type="text" id="addStreet" class="form-control" placeholder="Enter number and street"
+                                required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="addBarangay" class="form-label">Barangay</label>
+                            <input type="text" id="addBarangay" class="form-control" placeholder="Enter barangay"
+                                required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="addDistrict" class="form-label">District</label>
+                            <input type="text" id="addDistrict" class="form-control" placeholder="Enter district"
+                                required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="addCity" class="form-label">City/Municipality</label>
+                            <input type="text" id="addCity" class="form-control" placeholder="Enter city/municipality"
+                                required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="addProvince" class="form-label">Province</label>
+                            <input type="text" id="addProvince" class="form-control" placeholder="Enter province"
+                                required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="addRegion" class="form-label">Region</label>
+                            <input type="text" id="addRegion" class="form-control" placeholder="Enter region" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="addEmail" class="form-label">Email Address/Facebook Account</label>
+                            <input type="text" id="addEmail" class="form-control"
+                                placeholder="Enter email or Facebook account" required>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="addContactNo" class="form-label">Contact No.</label>
+                            <input type="text" id="addContactNo" class="form-control" placeholder="Enter contact number"
+                                required>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="addNationality" class="form-label">Nationality</label>
+                            <input type="text" id="addNationality" class="form-control" placeholder="Enter nationality"
+                                required>
+                        </div>
+                    </div>
+
+                    <!-- Personal Information -->
+                    <h6 class="mb-3 mt-3"><i class="bx bx-info-circle me-2"></i>Personal Information</h6>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Sex</label>
+                            <select id="addSex" class="form-select" required>
+                                <option value="">Select sex</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Civil Status</label>
+                            <select id="addCivilStatus" class="form-select" required>
+                                <option value="">Select civil status</option>
+                                <option value="single">Single</option>
+                                <option value="married">Married</option>
+                                <option value="separated">Separated/Divorced/Annulled</option>
+                                <option value="widower">Widower</option>
+                                <option value="commonlaw">Common Law/Live-in</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Employment Status</label>
+                            <select id="addEmploymentStatus" class="form-select" required>
+                                <option value="">Select employment status</option>
+                                <option value="wage">Wage-Employed</option>
+                                <option value="underemployed">Underemployed</option>
+                                <option value="selfemployed">Self-Employed</option>
+                                <option value="unemployed">Unemployed</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Birth Information -->
+                    <h6 class="mb-3 mt-3"><i class="bx bx-calendar me-2"></i>Birth Information</h6>
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label for="addBirthMonth" class="form-label">Month of Birth</label>
+                            <input type="number" id="addBirthMonth" class="form-control" placeholder="Month (1-12)"
+                                min="1" max="12" required>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="addBirthDay" class="form-label">Day of Birth</label>
+                            <input type="number" id="addBirthDay" class="form-control" placeholder="Day (1-31)" min="1"
+                                max="31" required>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="addBirthYear" class="form-label">Year of Birth</label>
+                            <input type="number" id="addBirthYear" class="form-control" placeholder="Year" min="1900"
+                                required>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="addAge" class="form-label">Age</label>
+                            <input type="number" id="addAge" class="form-control" placeholder="Enter age" min="1"
+                                max="120" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="addBirthCity" class="form-label">Birth City/Municipality</label>
+                            <input type="text" id="addBirthCity" class="form-control" placeholder="Enter birth city"
+                                required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="addBirthProvince" class="form-label">Birth Province</label>
+                            <input type="text" id="addBirthProvince" class="form-control"
+                                placeholder="Enter birth province" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="addBirthRegion" class="form-label">Birth Region</label>
+                            <input type="text" id="addBirthRegion" class="form-control" placeholder="Enter birth region"
+                                required>
+                        </div>
+                    </div>
+
+                    <!-- Educational Attainment -->
+                    <h6 class="mb-3 mt-3"><i class="bx bx-book me-2"></i>Educational Attainment</h6>
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <select id="addEducation" class="form-select" required>
+                                <option value="">Select educational attainment</option>
+                                <option value="nograde">No Grade Completed</option>
+                                <option value="elementary">Elementary Undergraduate</option>
+                                <option value="elementarygrad">Elementary Graduate</option>
+                                <option value="highschool">High School Undergraduate</option>
+                                <option value="highschoolgrad">High School Graduate</option>
+                                <option value="juniorhigh">Junior High (K-12)</option>
+                                <option value="seniorhigh">Senior High (K-12)</option>
+                                <option value="college">College Undergraduate</option>
+                                <option value="collegegrad">College Graduate</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Parent/Guardian -->
+                    <h6 class="mb-3 mt-3"><i class="bx bx-group me-2"></i>Parent/Guardian</h6>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="addParentName" class="form-label">Name</label>
+                            <input type="text" id="addParentName" class="form-control"
+                                placeholder="Enter parent/guardian name" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="addParentAddress" class="form-label">Complete Permanent Mailing
+                                Address</label>
+                            <textarea id="addParentAddress" class="form-control" rows="2"
+                                placeholder="Enter complete address" required></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Course Information -->
+                    <h6 class="mb-3 mt-3"><i class="bx bx-book-open me-2"></i>Course Information</h6>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="addCourseQualification" class="form-label">Course/Qualification Name</label>
+                            <input type="text" id="addCourseQualification" class="form-control"
+                                placeholder="Enter course/qualification" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="addCourse" class="form-label">Select Course (Level III)</label>
+                            <select id="addCourse" class="form-select" required>
+                                <option value="">Select a course...</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Status -->
+                    <h6 class="mb-3 mt-3"><i class="bx bx-check-circle me-2"></i>Registration Status</h6>
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <select id="addStatus" class="form-select" required>
+                                <option value="pending">Pending</option>
+                                <option value="approved">Approved</option>
+                                <option value="cancelled">Cancelled</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="saveRegistrationBtn">Add Registration</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Registration Modal -->
+<div class="modal fade" id="editRegistrationModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document" style="max-width: 95%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Registration Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" style="max-height: 75vh; overflow-y: auto;">
+                <form id="editRegistrationForm">
+                    <input type="hidden" id="editRegistrationId">
+
+                    <!-- Name Section -->
+                    <h6 class="mb-3"><i class="bx bx-user me-2"></i>Name</h6>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="editLastName" class="form-label">Last Name, Extension Name (Jr., Sr.)</label>
+                            <input type="text" id="editLastName" class="form-control" placeholder="Enter last name">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="editFirstName" class="form-label">First Name, Second Name</label>
+                            <input type="text" id="editFirstName" class="form-control" placeholder="Enter first name"
+                                required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="editMiddleName" class="form-label">Middle Name</label>
+                            <input type="text" id="editMiddleName" class="form-control" placeholder="Enter middle name">
+                        </div>
+                    </div>
+
+                    <!-- Complete Permanent Mailing Address -->
+                    <h6 class="mb-3 mt-3"><i class="bx bx-map me-2"></i>Complete Permanent Mailing Address</h6>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="editStreet" class="form-label">Number, Street</label>
+                            <input type="text" id="editStreet" class="form-control"
+                                placeholder="Enter number and street" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="editBarangay" class="form-label">Barangay</label>
+                            <input type="text" id="editBarangay" class="form-control" placeholder="Enter barangay"
+                                required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="editDistrict" class="form-label">District</label>
+                            <input type="text" id="editDistrict" class="form-control" placeholder="Enter district"
+                                required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="editCity" class="form-label">City/Municipality</label>
+                            <input type="text" id="editCity" class="form-control" placeholder="Enter city/municipality"
+                                required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="editProvince" class="form-label">Province</label>
+                            <input type="text" id="editProvince" class="form-control" placeholder="Enter province"
+                                required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="editRegion" class="form-label">Region</label>
+                            <input type="text" id="editRegion" class="form-control" placeholder="Enter region" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="editEmail" class="form-label">Email Address/Facebook Account</label>
+                            <input type="text" id="editEmail" class="form-control"
+                                placeholder="Enter email or Facebook account" required>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="editContactNo" class="form-label">Contact No.</label>
+                            <input type="text" id="editContactNo" class="form-control"
+                                placeholder="Enter contact number" required>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="editNationality" class="form-label">Nationality</label>
+                            <input type="text" id="editNationality" class="form-control" placeholder="Enter nationality"
+                                required>
+                        </div>
+                    </div>
+
+                    <!-- Personal Information -->
+                    <h6 class="mb-3 mt-3"><i class="bx bx-info-circle me-2"></i>Personal Information</h6>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Sex</label>
+                            <select id="editSex" class="form-select" required>
+                                <option value="">Select sex</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Civil Status</label>
+                            <select id="editCivilStatus" class="form-select" required>
+                                <option value="">Select civil status</option>
+                                <option value="single">Single</option>
+                                <option value="married">Married</option>
+                                <option value="separated">Separated/Divorced/Annulled</option>
+                                <option value="widower">Widower</option>
+                                <option value="commonlaw">Common Law/Live-in</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Employment Status</label>
+                            <select id="editEmploymentStatus" class="form-select" required>
+                                <option value="">Select employment status</option>
+                                <option value="wage">Wage-Employed</option>
+                                <option value="underemployed">Underemployed</option>
+                                <option value="selfemployed">Self-Employed</option>
+                                <option value="unemployed">Unemployed</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Birth Information -->
+                    <h6 class="mb-3 mt-3"><i class="bx bx-calendar me-2"></i>Birth Information</h6>
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label for="editBirthMonth" class="form-label">Month of Birth</label>
+                            <input type="number" id="editBirthMonth" class="form-control" placeholder="Month (1-12)"
+                                min="1" max="12" required>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="editBirthDay" class="form-label">Day of Birth</label>
+                            <input type="number" id="editBirthDay" class="form-control" placeholder="Day (1-31)" min="1"
+                                max="31" required>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="editBirthYear" class="form-label">Year of Birth</label>
+                            <input type="number" id="editBirthYear" class="form-control" placeholder="Year" min="1900"
+                                required>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="editAge" class="form-label">Age</label>
+                            <input type="number" id="editAge" class="form-control" placeholder="Enter age" min="1"
+                                max="120" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="editBirthCity" class="form-label">Birth City/Municipality</label>
+                            <input type="text" id="editBirthCity" class="form-control" placeholder="Enter birth city"
+                                required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="editBirthProvince" class="form-label">Birth Province</label>
+                            <input type="text" id="editBirthProvince" class="form-control"
+                                placeholder="Enter birth province" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="editBirthRegion" class="form-label">Birth Region</label>
+                            <input type="text" id="editBirthRegion" class="form-control"
+                                placeholder="Enter birth region" required>
+                        </div>
+                    </div>
+
+                    <!-- Educational Attainment -->
+                    <h6 class="mb-3 mt-3"><i class="bx bx-book me-2"></i>Educational Attainment</h6>
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <select id="editEducation" class="form-select" required>
+                                <option value="">Select educational attainment</option>
+                                <option value="nograde">No Grade Completed</option>
+                                <option value="elementary">Elementary Undergraduate</option>
+                                <option value="elementarygrad">Elementary Graduate</option>
+                                <option value="highschool">High School Undergraduate</option>
+                                <option value="highschoolgrad">High School Graduate</option>
+                                <option value="juniorhigh">Junior High (K-12)</option>
+                                <option value="seniorhigh">Senior High (K-12)</option>
+                                <option value="college">College Undergraduate</option>
+                                <option value="collegegrad">College Graduate</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Parent/Guardian -->
+                    <h6 class="mb-3 mt-3"><i class="bx bx-group me-2"></i>Parent/Guardian</h6>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="editParentName" class="form-label">Name</label>
+                            <input type="text" id="editParentName" class="form-control"
+                                placeholder="Enter parent/guardian name" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="editParentAddress" class="form-label">Complete Permanent Mailing Address</label>
+                            <textarea id="editParentAddress" class="form-control" rows="2"
+                                placeholder="Enter complete address" required></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Course Information -->
+                    <h6 class="mb-3 mt-3"><i class="bx bx-book-open me-2"></i>Course Information</h6>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="editCourseQualification" class="form-label">Course/Qualification Name</label>
+                            <input type="text" id="editCourseQualification" class="form-control"
+                                placeholder="Enter course/qualification" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="editCourse" class="form-label">Select Course (Level III)</label>
+                            <select id="editCourse" class="form-select" required>
+                                <option value="">Select a course...</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Status -->
+                    <h6 class="mb-3 mt-3"><i class="bx bx-check-circle me-2"></i>Registration Status</h6>
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <select id="editStatus" class="form-select" required>
+                                <option value="pending">Pending</option>
+                                <option value="approved">Approved</option>
+                                <option value="cancelled">Cancelled</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="updateRegistrationBtn">Update Registration</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>

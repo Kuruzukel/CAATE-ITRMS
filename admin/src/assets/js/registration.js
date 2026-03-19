@@ -305,9 +305,14 @@
 
         if (addRegistrationBtn) {
             addRegistrationBtn.addEventListener('click', () => {
-                // TODO: Implement add new registration modal
-                alert('Add New Registration feature - Coming soon!');
+                openAddRegistrationModal();
             });
+        }
+
+        // Save registration button
+        const saveRegistrationBtn = document.getElementById('saveRegistrationBtn');
+        if (saveRegistrationBtn) {
+            saveRegistrationBtn.addEventListener('click', saveNewRegistration);
         }
     }
 
@@ -614,3 +619,113 @@
     }
 
 })();
+
+/**
+ * Open add registration modal
+ */
+async function openAddRegistrationModal() {
+    // Load courses for the dropdown
+    await loadCoursesForModal();
+
+    // Show modal
+    const modal = new bootstrap.Modal(document.getElementById('addRegistrationModal'));
+    modal.show();
+}
+
+/**
+ * Load courses for modal dropdown
+ */
+async function loadCoursesForModal() {
+    const dropdown = document.getElementById('addCourse');
+    if (!dropdown) return;
+
+    try {
+        const response = await fetch(`${config.api.baseUrl}/api/v1/courses`);
+        const result = await response.json();
+
+        if (result.success && result.data && result.data.length > 0) {
+            dropdown.innerHTML = '<option value="">Select a course...</option>';
+
+            result.data.forEach(course => {
+                const option = document.createElement('option');
+                option.value = course.title || 'Untitled Course';
+                option.dataset.courseId = course._id?.$oid || course._id || '';
+                option.textContent = `${course.title || 'Untitled Course'} (${course.badge || course.course_code || ''})`;
+                dropdown.appendChild(option);
+            });
+        } else {
+            dropdown.innerHTML = '<option value="">No courses available</option>';
+        }
+    } catch (error) {
+        console.error('Error loading courses:', error);
+        dropdown.innerHTML = '<option value="">Error loading courses</option>';
+    }
+}
+
+/**
+ * Save new registration
+ */
+async function saveNewRegistration() {
+    const form = document.getElementById('addRegistrationForm');
+
+    if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+    }
+
+    const courseSelect = document.getElementById('addCourse');
+    const selectedOption = courseSelect.options[courseSelect.selectedIndex];
+
+    const registrationData = {
+        firstName: document.getElementById('addFirstName').value.trim(),
+        middleName: document.getElementById('addMiddleName').value.trim(),
+        lastName: document.getElementById('addLastName').value.trim(),
+        emailFacebook: document.getElementById('addEmail').value.trim(),
+        contactNo: document.getElementById('addContactNo').value.trim(),
+        numberStreet: document.getElementById('addStreet').value.trim(),
+        barangay: document.getElementById('addBarangay').value.trim(),
+        cityMunicipality: document.getElementById('addCity').value.trim(),
+        province: document.getElementById('addProvince').value.trim(),
+        region: document.getElementById('addRegion').value.trim(),
+        sex: document.getElementById('addSex').value,
+        civilStatus: document.getElementById('addCivilStatus').value,
+        age: parseInt(document.getElementById('addAge').value),
+        selectedCourse: courseSelect.value,
+        selectedCourseId: selectedOption.dataset.courseId || '',
+        status: document.getElementById('addStatus').value,
+        submittedAt: new Date().toISOString()
+    };
+
+    try {
+        const response = await fetch(`${config.api.baseUrl}/api/v1/registrations`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(registrationData)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            showSuccess('Registration added successfully');
+
+            // Close modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('addRegistrationModal'));
+            if (modal) {
+                modal.hide();
+            }
+
+            // Reset form
+            form.reset();
+
+            // Reload registrations
+            loadRegistrations();
+        } else {
+            throw new Error(result.message || 'Failed to add registration');
+        }
+    } catch (error) {
+        console.error('Error adding registration:', error);
+        showError('Failed to add registration: ' + error.message);
+    }
+}

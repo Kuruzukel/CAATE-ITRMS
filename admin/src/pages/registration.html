@@ -378,10 +378,25 @@
                                 <div class="card">
                                     <div class="card-header d-flex justify-content-between align-items-center">
                                         <h5 class="mb-0">Registration History</h5>
-                                        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
-                                            data-bs-target="#printExportModal">
-                                            <i class="bx bx-download"></i> Print/Export
-                                        </button>
+                                        <div class="d-flex gap-2">
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-primary dropdown-toggle"
+                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="bx bx-download"></i> Export
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li><a class="dropdown-item" href="javascript:void(0);"
+                                                            id="exportCsvBtn"><i class="bx bx-file me-2"></i>Export as
+                                                            CSV</a></li>
+                                                    <li><a class="dropdown-item" href="javascript:void(0);"
+                                                            id="exportJsonBtn"><i class="bx bx-code-alt me-2"></i>Export
+                                                            as JSON</a></li>
+                                                </ul>
+                                            </div>
+                                            <button type="button" class="btn btn-primary" id="addRegistrationBtn">
+                                                <i class="bx bx-plus"></i> Add New Registration
+                                            </button>
+                                        </div>
                                     </div>
                                     <div class="card-body">
                                         <!-- Filter Panel -->

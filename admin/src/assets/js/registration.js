@@ -289,6 +289,26 @@
         if (resetBtn) {
             resetBtn.addEventListener('click', resetFilters);
         }
+
+        // Export buttons
+        const exportCsvBtn = document.getElementById('exportCsvBtn');
+        const exportJsonBtn = document.getElementById('exportJsonBtn');
+        const addRegistrationBtn = document.getElementById('addRegistrationBtn');
+
+        if (exportCsvBtn) {
+            exportCsvBtn.addEventListener('click', exportToCSV);
+        }
+
+        if (exportJsonBtn) {
+            exportJsonBtn.addEventListener('click', exportToJSON);
+        }
+
+        if (addRegistrationBtn) {
+            addRegistrationBtn.addEventListener('click', () => {
+                // TODO: Implement add new registration modal
+                alert('Add New Registration feature - Coming soon!');
+            });
+        }
     }
 
     /**
@@ -490,6 +510,107 @@
         // TODO: Implement toast notification
         console.error('Error:', message);
         alert(message);
+    }
+
+    /**
+     * Export to CSV
+     */
+    function exportToCSV() {
+        try {
+            if (!registrations || registrations.length === 0) {
+                showError('No data to export');
+                return;
+            }
+
+            // Prepare CSV headers
+            const headers = ['Name', 'Trainee ID', 'Course', 'Date', 'Status', 'Contact', 'Email'];
+
+            // Prepare CSV rows
+            const rows = registrations.map(registration => {
+                const fullName = registration.traineeFullName ||
+                    `${registration.firstName} ${registration.middleName || ''} ${registration.lastName}`.trim();
+                const traineeId = registration.traineeId || 'N/A';
+                const course = registration.selectedCourse || registration.courseQualification || 'N/A';
+                const date = formatDate(registration.submittedAt);
+                const status = registration.status || 'N/A';
+                const contact = registration.contactNo || 'N/A';
+                const email = registration.emailFacebook || 'N/A';
+
+                return [
+                    `"${fullName}"`,
+                    `"${traineeId}"`,
+                    `"${course}"`,
+                    `"${date}"`,
+                    `"${status}"`,
+                    `"${contact}"`,
+                    `"${email}"`
+                ].join(',');
+            });
+
+            // Combine headers and rows
+            const csv = [headers.join(','), ...rows].join('\n');
+
+            // Create blob and download
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+
+            link.setAttribute('href', url);
+            link.setAttribute('download', `registrations_${new Date().toISOString().split('T')[0]}.csv`);
+            link.style.visibility = 'hidden';
+
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            showSuccess('CSV exported successfully');
+        } catch (error) {
+            console.error('Export CSV error:', error);
+            showError('Failed to export CSV');
+        }
+    }
+
+    /**
+     * Export to JSON
+     */
+    function exportToJSON() {
+        try {
+            if (!registrations || registrations.length === 0) {
+                showError('No data to export');
+                return;
+            }
+
+            // Prepare JSON data
+            const jsonData = registrations.map(registration => ({
+                name: registration.traineeFullName ||
+                    `${registration.firstName} ${registration.middleName || ''} ${registration.lastName}`.trim(),
+                traineeId: registration.traineeId || 'N/A',
+                course: registration.selectedCourse || registration.courseQualification || 'N/A',
+                date: formatDate(registration.submittedAt),
+                status: registration.status || 'N/A',
+                contact: registration.contactNo || 'N/A',
+                email: registration.emailFacebook || 'N/A',
+                fullData: registration
+            }));
+
+            // Create blob and download
+            const blob = new Blob([JSON.stringify(jsonData, null, 2)], { type: 'application/json' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+
+            link.setAttribute('href', url);
+            link.setAttribute('download', `registrations_${new Date().toISOString().split('T')[0]}.json`);
+            link.style.visibility = 'hidden';
+
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            showSuccess('JSON exported successfully');
+        } catch (error) {
+            console.error('Export JSON error:', error);
+            showError('Failed to export JSON');
+        }
     }
 
 })();

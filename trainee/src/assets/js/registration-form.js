@@ -296,6 +296,9 @@ class RegistrationFormHandler {
         // Store form data for later submission
         this.pendingFormData = formData;
 
+        // Load Level III courses with open enrollment
+        this.loadLevelIIICourses();
+
         // Show layout overlay
         const layoutOverlay = document.getElementById('layoutOverlay');
         if (layoutOverlay) {
@@ -327,6 +330,19 @@ class RegistrationFormHandler {
     }
 
     async handleConfirmedSubmit() {
+        // Validate course selection
+        const selectedCourse = document.getElementById('selectedCourse');
+        if (!selectedCourse || !selectedCourse.value) {
+            selectedCourse.classList.add('is-invalid');
+            this.showToast('Please select a course before submitting', 'error');
+            return;
+        }
+        selectedCourse.classList.remove('is-invalid');
+
+        // Add selected course to form data
+        this.pendingFormData.selectedCourse = selectedCourse.value;
+        this.pendingFormData.selectedCourseId = selectedCourse.options[selectedCourse.selectedIndex].dataset.courseId;
+
         // Set flag to indicate form is being submitted
         this.formSubmitted = true;
 
@@ -364,6 +380,54 @@ class RegistrationFormHandler {
             this.showErrorMessage(error.message || 'An error occurred while submitting the registration');
         } finally {
             this.setLoadingState(false);
+        }
+    }
+
+    async loadLevelIIICourses() {
+        const dropdown = document.getElementById('selectedCourse');
+        if (!dropdown) return;
+
+        try {
+            // Fetch courses from API
+            const API_BASE_URL = window.API_BASE_URL || window.location.origin + '/CAATE-ITRMS/backend/public';
+            const response = await fetch(`${API_BASE_URL}/api/v1/courses`);
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const result = await response.json();
+
+            if (result.success && result.data && result.data.length > 0) {
+                // Filter for Level III courses with Open Enrollment status
+                const levelIIICourses = result.data.filter(course => {
+                    const badge = (course.badge || course.course_code || '').toUpperCase();
+                    const enrollmentStatus = course.enrollment_status || '';
+                    return (badge.includes('LEVEL III') || badge.includes('LEVEL 3') || badge.includes('LEVEL-III'))
+                        && enrollmentStatus === 'Open Enrollment';
+                });
+
+                // Clear existing options
+                dropdown.innerHTML = '<option value="">Select a course...</option>';
+
+                if (levelIIICourses.length > 0) {
+                    // Add course options
+                    levelIIICourses.forEach(course => {
+                        const option = document.createElement('option');
+                        option.value = course.title || 'Untitled Course';
+                        option.dataset.courseId = course._id?.$oid || course._id || '';
+                        option.textContent = `${course.title || 'Untitled Course'} (${course.badge || course.course_code || ''})`;
+                        dropdown.appendChild(option);
+                    });
+                } else {
+                    dropdown.innerHTML = '<option value="">No Level III courses available with open enrollment</option>';
+                }
+            } else {
+                dropdown.innerHTML = '<option value="">No courses available</option>';
+            }
+        } catch (error) {
+            console.error('Error loading Level III courses:', error);
+            dropdown.innerHTML = '<option value="">Error loading courses</option>';
         }
     }
 

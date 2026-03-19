@@ -1258,11 +1258,31 @@
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body text-center">
-                    <h4 class="mb-3">Are you sure?</h4>
-                    <p class="mb-0">Do you want to submit your registration form? Please make
-                        sure all information is
-                        correct before proceeding.</p>
+                <div class="modal-body">
+                    <h4 class="mb-3 text-center">Select Your Course</h4>
+                    <p class="text-center mb-4">Please select the Level III course you want to enroll in:</p>
+
+                    <!-- Course Selection Dropdown -->
+                    <div class="mb-4">
+                        <label for="selectedCourse" class="form-label">Available Level III Courses</label>
+                        <select class="form-select" id="selectedCourse" required>
+                            <option value="">Loading courses...</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Please select a course before submitting.
+                        </div>
+                    </div>
+
+                    <div class="alert alert-info"
+                        style="background: linear-gradient(135deg, rgba(54, 145, 191, 0.1) 0%, rgba(50, 85, 150, 0.1) 100%); border: 1px solid rgba(54, 145, 191, 0.4); color: #3691bf;">
+                        <i class="bx bx-info-circle me-2"></i>
+                        <small>Only these courses are open for enrollment.</small>
+                    </div>
+
+                    <p class="text-center mb-0">
+                        <strong>Are you sure?</strong><br>
+                        <small>Please make sure all information is correct before proceeding.</small>
+                    </p>
                 </div>
                 <div class="modal-footer justify-content-center">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">

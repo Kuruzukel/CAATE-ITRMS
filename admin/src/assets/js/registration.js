@@ -767,19 +767,79 @@
 
         // Populate edit modal with registration data
         document.getElementById('editRegistrationId').value = id;
+
+        // T2MIS Auto Generated
+        document.getElementById('editUliNumber').value = registration.uliNumber || '';
+        document.getElementById('editEntryDate').value = registration.entryDate || '';
+
+        // Name
         document.getElementById('editFirstName').value = registration.firstName || '';
         document.getElementById('editMiddleName').value = registration.middleName || '';
         document.getElementById('editLastName').value = registration.lastName || '';
-        document.getElementById('editEmail').value = registration.emailFacebook || '';
-        document.getElementById('editContactNo').value = registration.contactNo || '';
+
+        // Address
         document.getElementById('editStreet').value = registration.numberStreet || '';
         document.getElementById('editBarangay').value = registration.barangay || '';
+        document.getElementById('editDistrict').value = registration.district || '';
         document.getElementById('editCity').value = registration.cityMunicipality || '';
         document.getElementById('editProvince').value = registration.province || '';
         document.getElementById('editRegion').value = registration.region || '';
+
+        // Contact
+        document.getElementById('editEmail').value = registration.emailFacebook || '';
+        document.getElementById('editContactNo').value = registration.contactNo || '';
+        document.getElementById('editNationality').value = registration.nationality || '';
+
+        // Personal Info
         document.getElementById('editSex').value = registration.sex || '';
         document.getElementById('editCivilStatus').value = registration.civilStatus || '';
         document.getElementById('editAge').value = registration.age || '';
+        document.getElementById('editEmploymentStatus').value = registration.employmentStatus || '';
+        document.getElementById('editEmploymentType').value = registration.employmentType || '';
+
+        // Birth Info
+        document.getElementById('editBirthMonth').value = registration.birthMonth || '';
+        document.getElementById('editBirthDay').value = registration.birthDay || '';
+        document.getElementById('editBirthYear').value = registration.birthYear || '';
+        document.getElementById('editBirthCity').value = registration.birthCity || '';
+        document.getElementById('editBirthProvince').value = registration.birthProvince || '';
+        document.getElementById('editBirthRegion').value = registration.birthRegion || '';
+
+        // Education
+        document.getElementById('editEducation').value = registration.education || '';
+
+        // Parent/Guardian
+        document.getElementById('editParentName').value = registration.parentName || '';
+        document.getElementById('editParentAddress').value = registration.parentAddress || '';
+
+        // Client Classification - handle array
+        if (registration.clientClassificationArray && Array.isArray(registration.clientClassificationArray)) {
+            document.getElementById('editClientClassification').value = registration.clientClassificationArray.join(', ');
+        } else {
+            document.getElementById('editClientClassification').value = '';
+        }
+
+        // Disability Type - handle array
+        if (registration.disabilityTypeArray && Array.isArray(registration.disabilityTypeArray)) {
+            document.getElementById('editDisabilityType').value = registration.disabilityTypeArray.join(', ');
+        } else {
+            document.getElementById('editDisabilityType').value = '';
+        }
+
+        // Disability Cause - handle array
+        if (registration.disabilityCauseArray && Array.isArray(registration.disabilityCauseArray)) {
+            document.getElementById('editDisabilityCause').value = registration.disabilityCauseArray.join(', ');
+        } else {
+            document.getElementById('editDisabilityCause').value = '';
+        }
+
+        // Course Info
+        document.getElementById('editCourseQualification').value = registration.courseQualification || '';
+        document.getElementById('editScholarshipType').value = registration.scholarshipType || '';
+        document.getElementById('editPrivacyConsent').value = registration.privacyConsent || '';
+
+        // Registration Info
+        document.getElementById('editTraineeId').value = registration.traineeId || '';
         document.getElementById('editStatus').value = registration.status || '';
 
         // Load courses and set selected course
@@ -839,22 +899,79 @@
         const courseSelect = document.getElementById('editCourse');
         const selectedOption = courseSelect.options[courseSelect.selectedIndex];
 
+        // Parse client classification array
+        const clientClassText = document.getElementById('editClientClassification').value.trim();
+        const clientClassArray = clientClassText ? clientClassText.split(',').map(item => item.trim()).filter(item => item) : [];
+
+        // Parse disability type array
+        const disabilityTypeText = document.getElementById('editDisabilityType').value.trim();
+        const disabilityTypeArray = disabilityTypeText ? disabilityTypeText.split(',').map(item => item.trim()).filter(item => item) : [];
+
+        // Parse disability cause array
+        const disabilityCauseText = document.getElementById('editDisabilityCause').value.trim();
+        const disabilityCauseArray = disabilityCauseText ? disabilityCauseText.split(',').map(item => item.trim()).filter(item => item) : [];
+
         const updatedData = {
+            // T2MIS Auto Generated
+            uliNumber: document.getElementById('editUliNumber').value.trim(),
+            entryDate: document.getElementById('editEntryDate').value,
+
+            // Name
             firstName: document.getElementById('editFirstName').value.trim(),
             middleName: document.getElementById('editMiddleName').value.trim(),
             lastName: document.getElementById('editLastName').value.trim(),
-            emailFacebook: document.getElementById('editEmail').value.trim(),
-            contactNo: document.getElementById('editContactNo').value.trim(),
+
+            // Address
             numberStreet: document.getElementById('editStreet').value.trim(),
             barangay: document.getElementById('editBarangay').value.trim(),
+            district: document.getElementById('editDistrict').value.trim(),
             cityMunicipality: document.getElementById('editCity').value.trim(),
             province: document.getElementById('editProvince').value.trim(),
             region: document.getElementById('editRegion').value.trim(),
+
+            // Contact
+            emailFacebook: document.getElementById('editEmail').value.trim(),
+            contactNo: document.getElementById('editContactNo').value.trim(),
+            nationality: document.getElementById('editNationality').value.trim(),
+
+            // Personal Info
             sex: document.getElementById('editSex').value,
             civilStatus: document.getElementById('editCivilStatus').value,
             age: parseInt(document.getElementById('editAge').value),
+            employmentStatus: document.getElementById('editEmploymentStatus').value,
+            employmentType: document.getElementById('editEmploymentType').value.trim(),
+
+            // Birth Info
+            birthMonth: document.getElementById('editBirthMonth').value,
+            birthDay: document.getElementById('editBirthDay').value,
+            birthYear: document.getElementById('editBirthYear').value,
+            birthCity: document.getElementById('editBirthCity').value.trim(),
+            birthProvince: document.getElementById('editBirthProvince').value.trim(),
+            birthRegion: document.getElementById('editBirthRegion').value.trim(),
+
+            // Education
+            education: document.getElementById('editEducation').value,
+
+            // Parent/Guardian
+            parentName: document.getElementById('editParentName').value.trim(),
+            parentAddress: document.getElementById('editParentAddress').value.trim(),
+
+            // Client Classification
+            clientClassificationArray: clientClassArray,
+
+            // Disability Info
+            disabilityTypeArray: disabilityTypeArray,
+            disabilityCauseArray: disabilityCauseArray,
+
+            // Course Info
+            courseQualification: document.getElementById('editCourseQualification').value.trim(),
             selectedCourse: courseSelect.value,
             selectedCourseId: selectedOption.dataset.courseId || '',
+            scholarshipType: document.getElementById('editScholarshipType').value,
+            privacyConsent: document.getElementById('editPrivacyConsent').value,
+
+            // Registration Info
+            traineeId: document.getElementById('editTraineeId').value.trim(),
             status: document.getElementById('editStatus').value
         };
 

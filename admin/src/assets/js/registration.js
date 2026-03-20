@@ -449,23 +449,92 @@
             return;
         }
 
-        // Populate view modal
+        console.log('Registration data:', registration); // Debug log
+
+        // T2MIS Auto Generated
+        document.getElementById('viewUliNumber').textContent = registration.uliNumber || '-';
+        document.getElementById('viewEntryDate').textContent = registration.entryDate || '-';
+
+        // Populate view modal - Name
         document.getElementById('viewLastName').textContent = registration.lastName || '-';
         document.getElementById('viewFirstName').textContent = registration.firstName || '-';
         document.getElementById('viewMiddleName').textContent = registration.middleName || '-';
+
+        // Address
         document.getElementById('viewStreet').textContent = registration.numberStreet || '-';
         document.getElementById('viewBarangay').textContent = registration.barangay || '-';
+        document.getElementById('viewDistrict').textContent = registration.district || '-';
         document.getElementById('viewCity').textContent = registration.cityMunicipality || '-';
         document.getElementById('viewProvince').textContent = registration.province || '-';
         document.getElementById('viewRegion').textContent = registration.region || '-';
+
+        // Contact
         document.getElementById('viewNationality').textContent = registration.nationality || '-';
         document.getElementById('viewEmail').textContent = registration.emailFacebook || '-';
         document.getElementById('viewContactNo').textContent = registration.contactNo || '-';
+
+        // Personal Info
         document.getElementById('viewSex').textContent = registration.sex ? registration.sex.charAt(0).toUpperCase() + registration.sex.slice(1) : '-';
         document.getElementById('viewAge').textContent = registration.age || '-';
         document.getElementById('viewCivilStatus').textContent = registration.civilStatus ? registration.civilStatus.charAt(0).toUpperCase() + registration.civilStatus.slice(1) : '-';
         document.getElementById('viewEmploymentStatus').textContent = registration.employmentStatus || '-';
+        document.getElementById('viewEmploymentType').textContent = registration.employmentType || '-';
+
+        // Birth Info
+        document.getElementById('viewBirthMonth').textContent = registration.birthMonth || '-';
+        document.getElementById('viewBirthDay').textContent = registration.birthDay || '-';
+        document.getElementById('viewBirthYear').textContent = registration.birthYear || '-';
+        document.getElementById('viewBirthCity').textContent = registration.birthCity || '-';
+        document.getElementById('viewBirthProvince').textContent = registration.birthProvince || '-';
+        document.getElementById('viewBirthRegion').textContent = registration.birthRegion || '-';
+
+        // Education
+        document.getElementById('viewEducation').textContent = registration.education || '-';
+
+        // Parent/Guardian
+        document.getElementById('viewParentName').textContent = registration.parentName || '-';
+        document.getElementById('viewParentAddress').textContent = registration.parentAddress || '-';
+
+        // Client Classification - handle array properly
+        let clientClass = '-';
+        if (registration.clientClassificationArray && Array.isArray(registration.clientClassificationArray) && registration.clientClassificationArray.length > 0) {
+            clientClass = registration.clientClassificationArray.map(item => {
+                // Capitalize first letter
+                return item.charAt(0).toUpperCase() + item.slice(1);
+            }).join(', ');
+        }
+        console.log('Client Classification:', clientClass); // Debug log
+        document.getElementById('viewClientClassification').textContent = clientClass;
+
+        // Disability Type - handle array properly
+        let disabilityType = '-';
+        if (registration.disabilityTypeArray && Array.isArray(registration.disabilityTypeArray) && registration.disabilityTypeArray.length > 0) {
+            disabilityType = registration.disabilityTypeArray.map(item => {
+                // Capitalize first letter
+                return item.charAt(0).toUpperCase() + item.slice(1);
+            }).join(', ');
+        }
+        console.log('Disability Type:', disabilityType); // Debug log
+        document.getElementById('viewDisabilityType').textContent = disabilityType;
+
+        // Disability Cause - handle array properly
+        let disabilityCause = '-';
+        if (registration.disabilityCauseArray && Array.isArray(registration.disabilityCauseArray) && registration.disabilityCauseArray.length > 0) {
+            disabilityCause = registration.disabilityCauseArray.map(item => {
+                // Capitalize first letter
+                return item.charAt(0).toUpperCase() + item.slice(1);
+            }).join(', ');
+        }
+        console.log('Disability Cause:', disabilityCause); // Debug log
+        document.getElementById('viewDisabilityCause').textContent = disabilityCause;
+
+        // Course Info
+        document.getElementById('viewCourseQualification').textContent = registration.courseQualification || '-';
         document.getElementById('viewCourse').textContent = registration.selectedCourse || registration.courseQualification || '-';
+        document.getElementById('viewScholarshipType').textContent = registration.scholarshipType || '-';
+        document.getElementById('viewPrivacyConsent').textContent = registration.privacyConsent || '-';
+
+        // Registration Info
         document.getElementById('viewTraineeId').textContent = registration.traineeId || '-';
 
         // Format status with badge
@@ -493,23 +562,80 @@
         // Load courses for dropdown
         await loadCoursesForEditModal();
 
-        // Populate edit modal
+        // Populate edit modal - T2MIS
         document.getElementById('editRegistrationId').value = id;
+        document.getElementById('editUliNumber').value = registration.uliNumber || '';
+        document.getElementById('editEntryDate').value = registration.entryDate || '';
+
+        // Name
         document.getElementById('editLastName').value = registration.lastName || '';
         document.getElementById('editFirstName').value = registration.firstName || '';
         document.getElementById('editMiddleName').value = registration.middleName || '';
+
+        // Address
         document.getElementById('editStreet').value = registration.numberStreet || '';
         document.getElementById('editBarangay').value = registration.barangay || '';
+        document.getElementById('editDistrict').value = registration.district || '';
         document.getElementById('editCity').value = registration.cityMunicipality || '';
         document.getElementById('editProvince').value = registration.province || '';
         document.getElementById('editRegion').value = registration.region || '';
+
+        // Contact
         document.getElementById('editNationality').value = registration.nationality || '';
         document.getElementById('editEmail').value = registration.emailFacebook || '';
         document.getElementById('editContactNo').value = registration.contactNo || '';
+
+        // Personal
         document.getElementById('editSex').value = registration.sex || '';
         document.getElementById('editAge').value = registration.age || '';
         document.getElementById('editCivilStatus').value = registration.civilStatus || '';
         document.getElementById('editEmploymentStatus').value = registration.employmentStatus || '';
+        document.getElementById('editEmploymentType').value = registration.employmentType || '';
+
+        // Birth
+        document.getElementById('editBirthMonth').value = registration.birthMonth || '';
+        document.getElementById('editBirthDay').value = registration.birthDay || '';
+        document.getElementById('editBirthYear').value = registration.birthYear || '';
+        document.getElementById('editBirthCity').value = registration.birthCity || '';
+        document.getElementById('editBirthProvince').value = registration.birthProvince || '';
+        document.getElementById('editBirthRegion').value = registration.birthRegion || '';
+
+        // Education
+        document.getElementById('editEducation').value = registration.education || '';
+
+        // Parent
+        document.getElementById('editParentName').value = registration.parentName || '';
+        document.getElementById('editParentAddress').value = registration.parentAddress || '';
+
+        // Client Classification checkboxes - handle array properly
+        const clientClassArray = registration.clientClassificationArray || [];
+        console.log('Client Classification Array:', clientClassArray); // Debug log
+        document.getElementById('editClassStudent').checked = Array.isArray(clientClassArray) && clientClassArray.includes('student');
+        document.getElementById('editClassOFW').checked = Array.isArray(clientClassArray) && clientClassArray.includes('ofw');
+        document.getElementById('editClassMILF').checked = Array.isArray(clientClassArray) && clientClassArray.includes('milf');
+        document.getElementById('editClassIP').checked = Array.isArray(clientClassArray) && clientClassArray.includes('ip');
+
+        // Disability Type checkboxes - handle array properly
+        const disabilityTypeArray = registration.disabilityTypeArray || [];
+        console.log('Disability Type Array:', disabilityTypeArray); // Debug log
+        document.getElementById('editDisabilityVisual').checked = Array.isArray(disabilityTypeArray) && disabilityTypeArray.includes('visual');
+        document.getElementById('editDisabilityHearing').checked = Array.isArray(disabilityTypeArray) && disabilityTypeArray.includes('hearing');
+        document.getElementById('editDisabilitySpeech').checked = Array.isArray(disabilityTypeArray) && disabilityTypeArray.includes('speech');
+        document.getElementById('editDisabilityPhysical').checked = Array.isArray(disabilityTypeArray) && disabilityTypeArray.includes('physical');
+
+        // Disability Cause checkboxes - handle array properly
+        const disabilityCauseArray = registration.disabilityCauseArray || [];
+        console.log('Disability Cause Array:', disabilityCauseArray); // Debug log
+        document.getElementById('editCauseBirth').checked = Array.isArray(disabilityCauseArray) && disabilityCauseArray.includes('birth');
+        document.getElementById('editCauseIllness').checked = Array.isArray(disabilityCauseArray) && disabilityCauseArray.includes('illness');
+        document.getElementById('editCauseInjury').checked = Array.isArray(disabilityCauseArray) && disabilityCauseArray.includes('injury');
+
+        // Course
+        document.getElementById('editCourseQualification').value = registration.courseQualification || '';
+        document.getElementById('editScholarshipType').value = registration.scholarshipType || '';
+        document.getElementById('editPrivacyConsent').value = registration.privacyConsent || '';
+
+        // Registration
         document.getElementById('editTraineeId').value = registration.traineeId || '';
         document.getElementById('editStatus').value = registration.status || 'pending';
 
@@ -845,24 +971,84 @@ async function saveEditedRegistration() {
     const courseSelect = document.getElementById('editCourse');
     const selectedOption = courseSelect.options[courseSelect.selectedIndex];
 
+    // Collect client classification checkboxes
+    const clientClassificationArray = [];
+    if (document.getElementById('editClassStudent').checked) clientClassificationArray.push('student');
+    if (document.getElementById('editClassOFW').checked) clientClassificationArray.push('ofw');
+    if (document.getElementById('editClassMILF').checked) clientClassificationArray.push('milf');
+    if (document.getElementById('editClassIP').checked) clientClassificationArray.push('ip');
+
+    // Collect disability type checkboxes
+    const disabilityTypeArray = [];
+    if (document.getElementById('editDisabilityVisual').checked) disabilityTypeArray.push('visual');
+    if (document.getElementById('editDisabilityHearing').checked) disabilityTypeArray.push('hearing');
+    if (document.getElementById('editDisabilitySpeech').checked) disabilityTypeArray.push('speech');
+    if (document.getElementById('editDisabilityPhysical').checked) disabilityTypeArray.push('physical');
+
+    // Collect disability cause checkboxes
+    const disabilityCauseArray = [];
+    if (document.getElementById('editCauseBirth').checked) disabilityCauseArray.push('birth');
+    if (document.getElementById('editCauseIllness').checked) disabilityCauseArray.push('illness');
+    if (document.getElementById('editCauseInjury').checked) disabilityCauseArray.push('injury');
+
     const registrationData = {
+        // T2MIS
+        uliNumber: document.getElementById('editUliNumber').value.trim(),
+        entryDate: document.getElementById('editEntryDate').value,
+
+        // Name
         firstName: document.getElementById('editFirstName').value.trim(),
         middleName: document.getElementById('editMiddleName').value.trim(),
         lastName: document.getElementById('editLastName').value.trim(),
-        emailFacebook: document.getElementById('editEmail').value.trim(),
-        contactNo: document.getElementById('editContactNo').value.trim(),
+
+        // Address
         numberStreet: document.getElementById('editStreet').value.trim(),
         barangay: document.getElementById('editBarangay').value.trim(),
+        district: document.getElementById('editDistrict').value.trim(),
         cityMunicipality: document.getElementById('editCity').value.trim(),
         province: document.getElementById('editProvince').value.trim(),
         region: document.getElementById('editRegion').value.trim(),
+
+        // Contact
+        emailFacebook: document.getElementById('editEmail').value.trim(),
+        contactNo: document.getElementById('editContactNo').value.trim(),
         nationality: document.getElementById('editNationality').value.trim(),
+
+        // Personal
         sex: document.getElementById('editSex').value,
+        age: parseInt(document.getElementById('editAge').value) || 0,
         civilStatus: document.getElementById('editCivilStatus').value,
         employmentStatus: document.getElementById('editEmploymentStatus').value,
-        age: parseInt(document.getElementById('editAge').value) || 0,
+        employmentType: document.getElementById('editEmploymentType').value,
+
+        // Birth
+        birthMonth: document.getElementById('editBirthMonth').value,
+        birthDay: document.getElementById('editBirthDay').value,
+        birthYear: document.getElementById('editBirthYear').value,
+        birthCity: document.getElementById('editBirthCity').value.trim(),
+        birthProvince: document.getElementById('editBirthProvince').value.trim(),
+        birthRegion: document.getElementById('editBirthRegion').value.trim(),
+
+        // Education
+        education: document.getElementById('editEducation').value,
+
+        // Parent
+        parentName: document.getElementById('editParentName').value.trim(),
+        parentAddress: document.getElementById('editParentAddress').value.trim(),
+
+        // Classifications and Disability
+        clientClassificationArray: clientClassificationArray,
+        disabilityTypeArray: disabilityTypeArray,
+        disabilityCauseArray: disabilityCauseArray,
+
+        // Course
+        courseQualification: document.getElementById('editCourseQualification').value.trim(),
         selectedCourse: courseSelect.value,
         selectedCourseId: selectedOption.dataset.courseId || '',
+        scholarshipType: document.getElementById('editScholarshipType').value,
+        privacyConsent: document.getElementById('editPrivacyConsent').value,
+
+        // Registration
         traineeId: document.getElementById('editTraineeId').value.trim(),
         status: document.getElementById('editStatus').value
     };

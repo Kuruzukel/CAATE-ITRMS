@@ -440,24 +440,9 @@
 
         if (courseValue) {
             filtered = filtered.filter(r => {
-                const course = (r.selectedCourse || r.courseQualification || '').toLowerCase();
-
-                // Map short codes to course name patterns
-                const courseMap = {
-                    'beauty-skin': 'skin care',
-                    'beauty-nail': 'nail care',
-                    'trainers': 'trainers methodology',
-                    'eyelash': 'eyelash',
-                    'aesthetic-2': 'aesthetic services level ii',
-                    'aesthetic-3': 'aesthetic services level iii',
-                    'advanced-skin': 'advanced skin care',
-                    'permanent-makeup': 'permanent makeup',
-                    'collagen-hairloss': 'collagen',
-                    'facial-peeling': 'facial peeling'
-                };
-
-                const searchPattern = courseMap[courseValue] || courseValue.toLowerCase();
-                return course.includes(searchPattern);
+                const course = (r.selectedCourse || r.courseQualification || '').trim();
+                // Exact match with the selected course
+                return course === courseValue;
             });
         }
 

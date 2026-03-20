@@ -314,6 +314,12 @@
         if (saveRegistrationBtn) {
             saveRegistrationBtn.addEventListener('click', saveNewRegistration);
         }
+
+        // Save edit button
+        const saveEditBtn = document.getElementById('saveEditBtn');
+        if (saveEditBtn) {
+            saveEditBtn.addEventListener('click', saveEditedRegistration);
+        }
     }
 
     /**
@@ -438,23 +444,87 @@
      */
     function viewDetails(id) {
         const registration = registrations.find(r => r._id.$oid === id);
-        if (registration) {
-            console.log('View details:', registration);
-            // TODO: Implement modal to show details
-            alert('View details feature - Coming soon!');
+        if (!registration) {
+            showError('Registration not found');
+            return;
         }
+
+        // Populate view modal
+        document.getElementById('viewLastName').textContent = registration.lastName || '-';
+        document.getElementById('viewFirstName').textContent = registration.firstName || '-';
+        document.getElementById('viewMiddleName').textContent = registration.middleName || '-';
+        document.getElementById('viewStreet').textContent = registration.numberStreet || '-';
+        document.getElementById('viewBarangay').textContent = registration.barangay || '-';
+        document.getElementById('viewCity').textContent = registration.cityMunicipality || '-';
+        document.getElementById('viewProvince').textContent = registration.province || '-';
+        document.getElementById('viewRegion').textContent = registration.region || '-';
+        document.getElementById('viewNationality').textContent = registration.nationality || '-';
+        document.getElementById('viewEmail').textContent = registration.emailFacebook || '-';
+        document.getElementById('viewContactNo').textContent = registration.contactNo || '-';
+        document.getElementById('viewSex').textContent = registration.sex ? registration.sex.charAt(0).toUpperCase() + registration.sex.slice(1) : '-';
+        document.getElementById('viewAge').textContent = registration.age || '-';
+        document.getElementById('viewCivilStatus').textContent = registration.civilStatus ? registration.civilStatus.charAt(0).toUpperCase() + registration.civilStatus.slice(1) : '-';
+        document.getElementById('viewEmploymentStatus').textContent = registration.employmentStatus || '-';
+        document.getElementById('viewCourse').textContent = registration.selectedCourse || registration.courseQualification || '-';
+        document.getElementById('viewTraineeId').textContent = registration.traineeId || '-';
+
+        // Format status with badge
+        const statusElement = document.getElementById('viewStatus');
+        const statusBadge = getStatusBadge(registration.status);
+        statusElement.innerHTML = statusBadge;
+
+        document.getElementById('viewSubmittedAt').textContent = formatDate(registration.submittedAt) || '-';
+
+        // Show modal
+        const modal = new bootstrap.Modal(document.getElementById('viewDetailsModal'));
+        modal.show();
     }
 
     /**
      * Edit registration details
      */
-    function editDetails(id) {
+    async function editDetails(id) {
         const registration = registrations.find(r => r._id.$oid === id);
-        if (registration) {
-            console.log('Edit details:', registration);
-            // TODO: Implement modal to edit details
-            alert('Edit details feature - Coming soon!');
+        if (!registration) {
+            showError('Registration not found');
+            return;
         }
+
+        // Load courses for dropdown
+        await loadCoursesForEditModal();
+
+        // Populate edit modal
+        document.getElementById('editRegistrationId').value = id;
+        document.getElementById('editLastName').value = registration.lastName || '';
+        document.getElementById('editFirstName').value = registration.firstName || '';
+        document.getElementById('editMiddleName').value = registration.middleName || '';
+        document.getElementById('editStreet').value = registration.numberStreet || '';
+        document.getElementById('editBarangay').value = registration.barangay || '';
+        document.getElementById('editCity').value = registration.cityMunicipality || '';
+        document.getElementById('editProvince').value = registration.province || '';
+        document.getElementById('editRegion').value = registration.region || '';
+        document.getElementById('editNationality').value = registration.nationality || '';
+        document.getElementById('editEmail').value = registration.emailFacebook || '';
+        document.getElementById('editContactNo').value = registration.contactNo || '';
+        document.getElementById('editSex').value = registration.sex || '';
+        document.getElementById('editAge').value = registration.age || '';
+        document.getElementById('editCivilStatus').value = registration.civilStatus || '';
+        document.getElementById('editEmploymentStatus').value = registration.employmentStatus || '';
+        document.getElementById('editTraineeId').value = registration.traineeId || '';
+        document.getElementById('editStatus').value = registration.status || 'pending';
+
+        // Set course dropdown
+        const courseSelect = document.getElementById('editCourse');
+        if (registration.selectedCourse) {
+            // Wait a bit for courses to load
+            setTimeout(() => {
+                courseSelect.value = registration.selectedCourse;
+            }, 100);
+        }
+
+        // Show modal
+        const modal = new bootstrap.Modal(document.getElementById('editDetailsModal'));
+        modal.show();
     }
 
     /**
@@ -663,6 +733,36 @@ async function loadCoursesForModal() {
 }
 
 /**
+ * Load courses for edit modal dropdown
+ */
+async function loadCoursesForEditModal() {
+    const dropdown = document.getElementById('editCourse');
+    if (!dropdown) return;
+
+    try {
+        const response = await fetch(`${config.api.baseUrl}/api/v1/courses`);
+        const result = await response.json();
+
+        if (result.success && result.data && result.data.length > 0) {
+            dropdown.innerHTML = '<option value="">Select a course...</option>';
+
+            result.data.forEach(course => {
+                const option = document.createElement('option');
+                option.value = course.title || 'Untitled Course';
+                option.dataset.courseId = course._id?.$oid || course._id || '';
+                option.textContent = `${course.title || 'Untitled Course'} (${course.badge || course.course_code || ''})`;
+                dropdown.appendChild(option);
+            });
+        } else {
+            dropdown.innerHTML = '<option value="">No courses available</option>';
+        }
+    } catch (error) {
+        console.error('Error loading courses:', error);
+        dropdown.innerHTML = '<option value="">Error loading courses</option>';
+    }
+}
+
+/**
  * Save new registration
  */
 async function saveNewRegistration() {
@@ -727,5 +827,73 @@ async function saveNewRegistration() {
     } catch (error) {
         console.error('Error adding registration:', error);
         showError('Failed to add registration: ' + error.message);
+    }
+}
+
+/**
+ * Save edited registration
+ */
+async function saveEditedRegistration() {
+    const form = document.getElementById('editRegistrationForm');
+    const id = document.getElementById('editRegistrationId').value;
+
+    if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+    }
+
+    const courseSelect = document.getElementById('editCourse');
+    const selectedOption = courseSelect.options[courseSelect.selectedIndex];
+
+    const registrationData = {
+        firstName: document.getElementById('editFirstName').value.trim(),
+        middleName: document.getElementById('editMiddleName').value.trim(),
+        lastName: document.getElementById('editLastName').value.trim(),
+        emailFacebook: document.getElementById('editEmail').value.trim(),
+        contactNo: document.getElementById('editContactNo').value.trim(),
+        numberStreet: document.getElementById('editStreet').value.trim(),
+        barangay: document.getElementById('editBarangay').value.trim(),
+        cityMunicipality: document.getElementById('editCity').value.trim(),
+        province: document.getElementById('editProvince').value.trim(),
+        region: document.getElementById('editRegion').value.trim(),
+        nationality: document.getElementById('editNationality').value.trim(),
+        sex: document.getElementById('editSex').value,
+        civilStatus: document.getElementById('editCivilStatus').value,
+        employmentStatus: document.getElementById('editEmploymentStatus').value,
+        age: parseInt(document.getElementById('editAge').value) || 0,
+        selectedCourse: courseSelect.value,
+        selectedCourseId: selectedOption.dataset.courseId || '',
+        traineeId: document.getElementById('editTraineeId').value.trim(),
+        status: document.getElementById('editStatus').value
+    };
+
+    try {
+        const response = await fetch(`${config.api.baseUrl}/api/v1/registrations/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(registrationData)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            showSuccess('Registration updated successfully');
+
+            // Close modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('editDetailsModal'));
+            if (modal) {
+                modal.hide();
+            }
+
+            // Reload registrations
+            loadRegistrations();
+        } else {
+            throw new Error(result.message || 'Failed to update registration');
+        }
+    } catch (error) {
+        console.error('Error updating registration:', error);
+        showError('Failed to update registration: ' + error.message);
     }
 }

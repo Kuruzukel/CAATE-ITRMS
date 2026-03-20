@@ -12,6 +12,7 @@
     // Initialize on page load
     document.addEventListener('DOMContentLoaded', function () {
         loadRegistrations();
+        loadCoursesForFilter();
         setupEventListeners();
     });
 
@@ -40,6 +41,37 @@
         } catch (error) {
             console.error('Error loading registrations:', error);
             showError('Error connecting to server');
+        }
+    }
+
+    /**
+     * Load courses for filter dropdown
+     */
+    async function loadCoursesForFilter() {
+        const courseSelect = document.querySelectorAll('select')[1];
+        if (!courseSelect) return;
+
+        try {
+            const response = await fetch(`${config.api.baseUrl}/api/v1/courses`);
+            const result = await response.json();
+
+            if (result.success && result.data && result.data.length > 0) {
+                // Keep the "All Courses" option
+                courseSelect.innerHTML = '<option value="">All Courses</option>';
+
+                // Add courses from API
+                result.data.forEach(course => {
+                    const option = document.createElement('option');
+                    const courseTitle = course.title || 'Untitled Course';
+                    option.value = courseTitle;
+                    option.textContent = courseTitle;
+                    courseSelect.appendChild(option);
+                });
+            } else {
+                console.log('No courses available or failed to load');
+            }
+        } catch (error) {
+            console.error('Error loading courses for filter:', error);
         }
     }
 
@@ -409,7 +441,23 @@
         if (courseValue) {
             filtered = filtered.filter(r => {
                 const course = (r.selectedCourse || r.courseQualification || '').toLowerCase();
-                return course.includes(courseValue.toLowerCase());
+
+                // Map short codes to course name patterns
+                const courseMap = {
+                    'beauty-skin': 'skin care',
+                    'beauty-nail': 'nail care',
+                    'trainers': 'trainers methodology',
+                    'eyelash': 'eyelash',
+                    'aesthetic-2': 'aesthetic services level ii',
+                    'aesthetic-3': 'aesthetic services level iii',
+                    'advanced-skin': 'advanced skin care',
+                    'permanent-makeup': 'permanent makeup',
+                    'collagen-hairloss': 'collagen',
+                    'facial-peeling': 'facial peeling'
+                };
+
+                const searchPattern = courseMap[courseValue] || courseValue.toLowerCase();
+                return course.includes(searchPattern);
             });
         }
 

@@ -361,8 +361,8 @@ class CourseController {
                     return $b['enrollmentCount'] - $a['enrollmentCount'];
                 });
 
-                // Get top 5 courses
-                $topCourses = array_slice($allCourses, 0, 5);
+                // Return all courses instead of just top 5
+                $topCourses = $allCourses;
 
                 // Calculate total enrollments (accept multiple status values)
                 $totalEnrollments = 0;

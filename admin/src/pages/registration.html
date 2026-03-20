@@ -766,8 +766,22 @@
                 </div>
                 <div class="modal-body" style="max-height: 75vh; overflow-y: auto;">
                     <form id="addRegistrationForm">
+                        <!-- T2MIS Auto Generated -->
+                        <h6 class="mb-3"><i class="bx bx-id-card me-2"></i>T2MIS Auto Generated</h6>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="addUliNumber" class="form-label">ULI Number</label>
+                                <input type="text" id="addUliNumber" class="form-control"
+                                    placeholder="XXX-XX-XXX-XXXXX-XXX">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="addEntryDate" class="form-label">Entry Date</label>
+                                <input type="date" id="addEntryDate" class="form-control">
+                            </div>
+                        </div>
+
                         <!-- Name Section -->
-                        <h6 class="mb-3"><i class="bx bx-user me-2"></i>Name</h6>
+                        <h6 class="mb-3 mt-3"><i class="bx bx-user me-2"></i>Name</h6>
                         <div class="row">
                             <div class="col-md-4 mb-3">
                                 <label for="addLastName" class="form-label">Last Name, Extension Name (Jr., Sr.)</label>
@@ -843,7 +857,7 @@
                         <h6 class="mb-3 mt-3"><i class="bx bx-info-circle me-2"></i>Personal Information</h6>
                         <div class="row">
                             <div class="col-md-4 mb-3">
-                                <label class="form-label">Sex</label>
+                                <label for="addSex" class="form-label">Sex</label>
                                 <select id="addSex" class="form-select" required>
                                     <option value="">Select sex</option>
                                     <option value="male">Male</option>
@@ -851,7 +865,12 @@
                                 </select>
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label class="form-label">Civil Status</label>
+                                <label for="addAge" class="form-label">Age</label>
+                                <input type="number" id="addAge" class="form-control" placeholder="Enter age" min="1"
+                                    max="120" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="addCivilStatus" class="form-label">Civil Status</label>
                                 <select id="addCivilStatus" class="form-select" required>
                                     <option value="">Select civil status</option>
                                     <option value="single">Single</option>
@@ -861,10 +880,23 @@
                                     <option value="commonlaw">Common Law/Live-in</option>
                                 </select>
                             </div>
-                            <div class="col-md-4 mb-3">
-                                <label class="form-label">Employment Status</label>
-                                <select id="addEmploymentStatus" class="form-select" required>
-                                    <option value="">Select employment status</option>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="addEmploymentType" class="form-label">Employment Type</label>
+                                <select id="addEmploymentType" class="form-select">
+                                    <option value="">Select employment type</option>
+                                    <option value="permanent">Permanent</option>
+                                    <option value="seasonal">Seasonal</option>
+                                    <option value="casual">Casual</option>
+                                    <option value="emergency">Emergency</option>
+                                    <option value="probationary">Probationary</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="addEmploymentStatus" class="form-label">Employment Status</label>
+                                <select id="addEmploymentStatus" class="form-select">
+                                    <option value="">Select status</option>
                                     <option value="wage">Wage-Employed</option>
                                     <option value="underemployed">Underemployed</option>
                                     <option value="selfemployed">Self-Employed</option>
@@ -877,41 +909,36 @@
                         <h6 class="mb-3 mt-3"><i class="bx bx-calendar me-2"></i>Birth Information</h6>
                         <div class="row">
                             <div class="col-md-3 mb-3">
-                                <label for="addBirthMonth" class="form-label">Month of Birth</label>
+                                <label for="addBirthMonth" class="form-label">Birth Month</label>
                                 <input type="number" id="addBirthMonth" class="form-control" placeholder="Month (1-12)"
                                     min="1" max="12" required>
                             </div>
                             <div class="col-md-3 mb-3">
-                                <label for="addBirthDay" class="form-label">Day of Birth</label>
+                                <label for="addBirthDay" class="form-label">Birth Day</label>
                                 <input type="number" id="addBirthDay" class="form-control" placeholder="Day (1-31)"
                                     min="1" max="31" required>
                             </div>
                             <div class="col-md-3 mb-3">
-                                <label for="addBirthYear" class="form-label">Year of Birth</label>
+                                <label for="addBirthYear" class="form-label">Birth Year</label>
                                 <input type="number" id="addBirthYear" class="form-control" placeholder="Year"
                                     min="1900" required>
                             </div>
                             <div class="col-md-3 mb-3">
-                                <label for="addAge" class="form-label">Age</label>
-                                <input type="number" id="addAge" class="form-control" placeholder="Enter age" min="1"
-                                    max="120" required>
+                                <label for="addBirthCity" class="form-label">Birth City</label>
+                                <input type="text" id="addBirthCity" class="form-control"
+                                    placeholder="Enter birth city">
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-4 mb-3">
-                                <label for="addBirthCity" class="form-label">Birth City/Municipality</label>
-                                <input type="text" id="addBirthCity" class="form-control" placeholder="Enter birth city"
-                                    required>
-                            </div>
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-6 mb-3">
                                 <label for="addBirthProvince" class="form-label">Birth Province</label>
                                 <input type="text" id="addBirthProvince" class="form-control"
-                                    placeholder="Enter birth province" required>
+                                    placeholder="Enter birth province">
                             </div>
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-6 mb-3">
                                 <label for="addBirthRegion" class="form-label">Birth Region</label>
                                 <input type="text" id="addBirthRegion" class="form-control"
-                                    placeholder="Enter birth region" required>
+                                    placeholder="Enter birth region">
                             </div>
                         </div>
 
@@ -930,6 +957,8 @@
                                     <option value="seniorhigh">Senior High (K-12)</option>
                                     <option value="college">College Undergraduate</option>
                                     <option value="collegegrad">College Graduate</option>
+                                    <option value="masteral">Masteral</option>
+                                    <option value="doctoral">Doctoral</option>
                                 </select>
                             </div>
                         </div>
@@ -938,15 +967,39 @@
                         <h6 class="mb-3 mt-3"><i class="bx bx-group me-2"></i>Parent/Guardian</h6>
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="addParentName" class="form-label">Name</label>
+                                <label for="addParentName" class="form-label">Parent Name</label>
                                 <input type="text" id="addParentName" class="form-control"
-                                    placeholder="Enter parent/guardian name" required>
+                                    placeholder="Enter parent/guardian name">
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="addParentAddress" class="form-label">Complete Permanent Mailing
-                                    Address</label>
+                                <label for="addParentAddress" class="form-label">Parent Address</label>
                                 <textarea id="addParentAddress" class="form-control" rows="2"
-                                    placeholder="Enter complete address" required></textarea>
+                                    placeholder="Enter complete address"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Client Classification -->
+                        <h6 class="mb-3 mt-3"><i class="bx bx-category me-2"></i>Client Classification</h6>
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <input type="text" id="addClientClassification" class="form-control"
+                                    placeholder="Enter client classifications (comma-separated)">
+                                <small class="text-muted">Example: student, ofw, rebel</small>
+                            </div>
+                        </div>
+
+                        <!-- Disability Information -->
+                        <h6 class="mb-3 mt-3"><i class="bx bx-accessibility me-2"></i>Disability Information</h6>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="addDisabilityType" class="form-label">Disability Type</label>
+                                <input type="text" id="addDisabilityType" class="form-control"
+                                    placeholder="Enter disability types (comma-separated)">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="addDisabilityCause" class="form-label">Disability Cause</label>
+                                <input type="text" id="addDisabilityCause" class="form-control"
+                                    placeholder="Enter disability causes (comma-separated)">
                             </div>
                         </div>
 
@@ -954,22 +1007,66 @@
                         <h6 class="mb-3 mt-3"><i class="bx bx-book-open me-2"></i>Course Information</h6>
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="addCourseQualification" class="form-label">Course/Qualification Name</label>
+                                <label for="addCourseQualification" class="form-label">Course Qualification</label>
                                 <input type="text" id="addCourseQualification" class="form-control"
-                                    placeholder="Enter course/qualification" required>
+                                    placeholder="Enter course qualification">
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="addCourse" class="form-label">Select Course (Level III)</label>
+                                <label for="addCourse" class="form-label">Selected Course</label>
                                 <select id="addCourse" class="form-select" required>
                                     <option value="">Select a course...</option>
+                                    <option value="beauty-nail">Beauty Care (Nail Care) Services NC II (NC II -
+                                        SOCBCN220)</option>
+                                    <option value="beauty-skin">Beauty Care (Skin Care) Services NC II (NC II -
+                                        SOCBEC219)</option>
+                                    <option value="aesthetic-3">Aesthetic Services Level III (Level III)</option>
+                                    <option value="advanced-skin">Advanced Skin Care Services Level III (Level III)
+                                    </option>
+                                    <option value="permanent-makeup">Permanent Make-Up Tattoo Services Level III (Level
+                                        III)</option>
+                                    <option value="collagen-hairloss">Perform Collagen Induction Therapy & Hair Loss
+                                        Treatment (Specialized)</option>
+                                    <option value="facial-peeling">Perform Advanced Facial Treatment & Chemical Skin
+                                        Peeling (Specialized)</option>
+                                    <option value="light-heat-therapy">Perform Light Therapy & Heat Therapy
+                                        (Specialized)</option>
+                                    <option value="trainers">Trainers Methodology Level I (Level I)</option>
+                                    <option value="eyelash">Eyelash and Eyebrow Services Level III (Level III)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="addScholarshipType" class="form-label">Scholarship Type</label>
+                                <select id="addScholarshipType" class="form-select">
+                                    <option value="">Select scholarship type</option>
+                                    <option value="twsp">TWSP</option>
+                                    <option value="pesfa">PESFA</option>
+                                    <option value="step">STEP</option>
+                                    <option value="sef">SEF</option>
+                                    <option value="utpras">UTPRAS</option>
+                                    <option value="others">Others</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="addPrivacyConsent" class="form-label">Privacy Consent</label>
+                                <select id="addPrivacyConsent" class="form-select">
+                                    <option value="">Select</option>
+                                    <option value="agree">Agree</option>
+                                    <option value="disagree">Disagree</option>
                                 </select>
                             </div>
                         </div>
 
-                        <!-- Status -->
-                        <h6 class="mb-3 mt-3"><i class="bx bx-check-circle me-2"></i>Registration Status</h6>
+                        <!-- Registration Information -->
+                        <h6 class="mb-3 mt-3"><i class="bx bx-receipt me-2"></i>Registration Information</h6>
                         <div class="row">
-                            <div class="col-md-12 mb-3">
+                            <div class="col-md-6 mb-3">
+                                <label for="addTraineeId" class="form-label">Trainee ID</label>
+                                <input type="text" id="addTraineeId" class="form-control" placeholder="Trainee ID">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="addStatus" class="form-label">Status</label>
                                 <select id="addStatus" class="form-select" required>
                                     <option value="pending">Pending</option>
                                     <option value="approved">Approved</option>
@@ -1502,6 +1599,54 @@
                             <label for="addCourse" class="form-label">Select Course (Level III)</label>
                             <select id="addCourse" class="form-select" required>
                                 <option value="">Select a course...</option>
+                                <option value="beauty-nail">Beauty Care (Nail Care) Services NC II (NC II - SOCBCN220)
+                                </option>
+                                <option value="beauty-skin">Beauty Care (Skin Care) Services NC II (NC II - SOCBEC219)
+                                </option>
+                                <option value="aesthetic-3">Aesthetic Services Level III (Level III)</option>
+                                <option value="advanced-skin">Advanced Skin Care Services Level III (Level III)</option>
+                                <option value="permanent-makeup">Permanent Make-Up Tattoo Services Level III (Level III)
+                                </option>
+                                <option value="collagen-hairloss">Perform Collagen Induction Therapy & Hair Loss
+                                    Treatment (Specialized)</option>
+                                <option value="facial-peeling">Perform Advanced Facial Treatment & Chemical Skin Peeling
+                                    (Specialized)</option>
+                                <option value="light-heat-therapy">Perform Light Therapy & Heat Therapy (Specialized)
+                                </option>
+                                <option value="trainers">Trainers Methodology Level I (Level I)</option>
+                                <option value="eyelash">Eyelash and Eyebrow Services Level III (Level III)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Course Information -->
+                    <h6 class="mb-3 mt-3"><i class="bx bx-book-open me-2"></i>Course Information</h6>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="addCourseQualification" class="form-label">Course/Qualification Name</label>
+                            <input type="text" id="addCourseQualification" class="form-control"
+                                placeholder="Enter course/qualification" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="addCourse" class="form-label">Select Course (Level III)</label>
+                            <select id="addCourse" class="form-select" required>
+                                <option value="">Select a course...</option>
+                                <option value="beauty-nail">Beauty Care (Nail Care) Services NC II (NC II - SOCBCN220)
+                                </option>
+                                <option value="beauty-skin">Beauty Care (Skin Care) Services NC II (NC II - SOCBEC219)
+                                </option>
+                                <option value="aesthetic-3">Aesthetic Services Level III (Level III)</option>
+                                <option value="advanced-skin">Advanced Skin Care Services Level III (Level III)</option>
+                                <option value="permanent-makeup">Permanent Make-Up Tattoo Services Level III (Level III)
+                                </option>
+                                <option value="collagen-hairloss">Perform Collagen Induction Therapy & Hair Loss
+                                    Treatment (Specialized)</option>
+                                <option value="facial-peeling">Perform Advanced Facial Treatment & Chemical Skin Peeling
+                                    (Specialized)</option>
+                                <option value="light-heat-therapy">Perform Light Therapy & Heat Therapy (Specialized)
+                                </option>
+                                <option value="trainers">Trainers Methodology Level I (Level I)</option>
+                                <option value="eyelash">Eyelash and Eyebrow Services Level III (Level III)</option>
                             </select>
                         </div>
                     </div>

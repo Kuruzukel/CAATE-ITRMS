@@ -282,6 +282,9 @@ function initYearFilter() {
 
 // Initialize styling when DOM is loaded
 document.addEventListener('DOMContentLoaded', function () {
+    // Initialize year labels with current year
+    updateYearLabels(selectedYear);
+
     // Initialize year filter
     initYearFilter();
 
@@ -637,6 +640,9 @@ function getStatusConfig(status) {
 
 // Single DOMContentLoaded event listener
 document.addEventListener('DOMContentLoaded', function () {
+    // Initialize year labels with current year
+    updateYearLabels(selectedYear);
+
     // Initialize year filter
     initYearFilter();
 

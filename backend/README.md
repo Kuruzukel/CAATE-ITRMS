@@ -186,7 +186,6 @@ backend/
 │   ├── get-available-years.php
 │   ├── index.php                       # Main entry point
 │   ├── seed.php
-│   ├── test-registration.php
 │   └── view-data.php                   # Data viewer
 ├── 📂 routes/
 │   └── api.php                         # API routes
@@ -208,12 +207,6 @@ backend/
 ├── seed-admin.php                      # Admin seeder
 ├── seed-inventory.php                  # Inventory seeder
 ├── seed-today-enrollments.php          # Enrollment seeder
-├── test-api-direct.php                 # API test
-├── test-api-stats.php                  # Stats test
-├── test-course-enrollments.php         # Course test
-├── test-courses.php                    # Course test
-├── test-enrollment-stats.php           # Enrollment test
-├── test-top-courses.php                # Top courses test
 ├── update-admin-passwords.php          # Password utility
 └── verify-admin.php                    # Admin verification
 ```

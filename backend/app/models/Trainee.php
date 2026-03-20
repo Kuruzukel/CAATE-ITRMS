@@ -306,6 +306,50 @@ class Trainee {
                 $monthPercentageIncrease = 100;
             }
             
+            // Calculate pending enrollments percentage change (this month vs last month)
+            $lastMonthPendingRegs = $registrationCollection->countDocuments([
+                'status' => 'pending',
+                'created_at' => ['$gte' => $lastMonthStart, '$lt' => $lastMonthEnd]
+            ]);
+            $lastMonthPendingApps = $applicationCollection->countDocuments([
+                'status' => 'pending',
+                'created_at' => ['$gte' => $lastMonthStart, '$lt' => $lastMonthEnd]
+            ]);
+            $lastMonthPendingAdms = $admissionCollection->countDocuments([
+                'status' => 'pending',
+                'created_at' => ['$gte' => $lastMonthStart, '$lt' => $lastMonthEnd]
+            ]);
+            $lastMonthPending = $lastMonthPendingRegs + $lastMonthPendingApps + $lastMonthPendingAdms;
+            
+            $pendingPercentageChange = 0;
+            if ($lastMonthPending > 0) {
+                $pendingPercentageChange = round((($pendingEnrollments - $lastMonthPending) / $lastMonthPending) * 100, 1);
+            } elseif ($pendingEnrollments > 0) {
+                $pendingPercentageChange = 100;
+            }
+            
+            // Calculate cancelled enrollments percentage change (this month vs last month)
+            $lastMonthCancelledRegs = $registrationCollection->countDocuments([
+                'status' => ['$in' => ['cancelled', 'rejected']],
+                'created_at' => ['$gte' => $lastMonthStart, '$lt' => $lastMonthEnd]
+            ]);
+            $lastMonthCancelledApps = $applicationCollection->countDocuments([
+                'status' => ['$in' => ['cancelled', 'rejected']],
+                'created_at' => ['$gte' => $lastMonthStart, '$lt' => $lastMonthEnd]
+            ]);
+            $lastMonthCancelledAdms = $admissionCollection->countDocuments([
+                'status' => ['$in' => ['cancelled', 'rejected']],
+                'created_at' => ['$gte' => $lastMonthStart, '$lt' => $lastMonthEnd]
+            ]);
+            $lastMonthCancelled = $lastMonthCancelledRegs + $lastMonthCancelledApps + $lastMonthCancelledAdms;
+            
+            $cancelledPercentageChange = 0;
+            if ($lastMonthCancelled > 0) {
+                $cancelledPercentageChange = round((($cancelledEnrollments - $lastMonthCancelled) / $lastMonthCancelled) * 100, 1);
+            } elseif ($cancelledEnrollments > 0) {
+                $cancelledPercentageChange = 100;
+            }
+            
             // Calculate current year and previous year enrollments
             $yearStart = new MongoDB\BSON\UTCDateTime(strtotime("$year-01-01") * 1000);
             $yearEnd = new MongoDB\BSON\UTCDateTime(strtotime(($year + 1) . "-01-01") * 1000);
@@ -377,7 +421,9 @@ class Trainee {
                 'todayPercentageIncrease' => $todayPercentageIncrease,
                 'approvedEnrollments' => $approvedEnrollments,
                 'pendingEnrollments' => $pendingEnrollments,
+                'pendingPercentageChange' => $pendingPercentageChange,
                 'cancelledEnrollments' => $cancelledEnrollments,
+                'cancelledPercentageChange' => $cancelledPercentageChange,
                 'monthEnrollments' => $monthEnrollments,
                 'monthPercentageIncrease' => $monthPercentageIncrease,
                 'currentYearEnrollments' => $currentYearEnrollments,
@@ -401,7 +447,9 @@ class Trainee {
                 'todayPercentageIncrease' => 0,
                 'approvedEnrollments' => 0,
                 'pendingEnrollments' => 0,
+                'pendingPercentageChange' => 0,
                 'cancelledEnrollments' => 0,
+                'cancelledPercentageChange' => 0,
                 'monthEnrollments' => 0,
                 'monthPercentageIncrease' => 0,
                 'currentYearEnrollments' => 0,

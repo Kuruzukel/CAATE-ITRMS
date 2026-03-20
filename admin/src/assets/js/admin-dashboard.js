@@ -149,8 +149,19 @@ function updateDashboardUI(data) {
     const pendingCard = document.querySelector('.bx-time-five');
     if (pendingCard) {
         const pendingCountElement = pendingCard.closest('.card-body').querySelector('h3.card-title');
+        const pendingPercentageElement = pendingCard.closest('.card-body').querySelector('small.fw-semibold');
+
         if (pendingCountElement) {
             pendingCountElement.textContent = data.pendingEnrollments || 0;
+        }
+
+        if (pendingPercentageElement && data.pendingPercentageChange !== undefined) {
+            const isPositive = data.pendingPercentageChange >= 0;
+            const icon = isPositive ? 'bx-up-arrow-alt' : 'bx-down-arrow-alt';
+            const colorClass = isPositive ? 'text-danger' : 'text-success'; // Reversed: more pending is bad
+
+            pendingPercentageElement.className = `fw-semibold ${colorClass}`;
+            pendingPercentageElement.innerHTML = `<i class="bx ${icon}"></i> ${isPositive ? '+' : ''}${data.pendingPercentageChange}%`;
         }
     }
 
@@ -158,8 +169,19 @@ function updateDashboardUI(data) {
     const cancelledCard = document.querySelector('.bx-x-circle');
     if (cancelledCard) {
         const cancelledCountElement = cancelledCard.closest('.card-body').querySelector('h3.card-title');
+        const cancelledPercentageElement = cancelledCard.closest('.card-body').querySelector('small.fw-semibold');
+
         if (cancelledCountElement) {
             cancelledCountElement.textContent = data.cancelledEnrollments || 0;
+        }
+
+        if (cancelledPercentageElement && data.cancelledPercentageChange !== undefined) {
+            const isPositive = data.cancelledPercentageChange >= 0;
+            const icon = isPositive ? 'bx-up-arrow-alt' : 'bx-down-arrow-alt';
+            const colorClass = isPositive ? 'text-danger' : 'text-success'; // Reversed: more cancelled is bad
+
+            cancelledPercentageElement.className = `fw-semibold ${colorClass}`;
+            cancelledPercentageElement.innerHTML = `<i class="bx ${icon}"></i> ${isPositive ? '+' : ''}${data.cancelledPercentageChange}%`;
         }
     }
 

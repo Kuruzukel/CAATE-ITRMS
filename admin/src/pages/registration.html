@@ -862,8 +862,7 @@
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="addAge" class="form-label">Age</label>
-                                <input type="number" id="addAge" class="form-control" placeholder="Enter age" min="1"
-                                    max="120" required>
+                                <input type="number" id="addAge" class="form-control" placeholder="Enter age" min="1">
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="addCivilStatus" class="form-label">Civil Status</label>
@@ -906,15 +905,18 @@
                         <div class="row">
                             <div class="col-md-3 mb-3">
                                 <label for="addBirthMonth" class="form-label">Birth Month</label>
-                                <input type="number" id="addBirthMonth" class="form-control" placeholder="Month (1-12)" min="1" max="12">
+                                <input type="number" id="addBirthMonth" class="form-control" placeholder="Month (1-12)"
+                                    min="1">
                             </div>
                             <div class="col-md-3 mb-3">
                                 <label for="addBirthDay" class="form-label">Birth Day</label>
-                                <input type="number" id="addBirthDay" class="form-control" placeholder="Day (1-31)" min="1" max="31">
+                                <input type="number" id="addBirthDay" class="form-control" placeholder="Day (1-31)"
+                                    min="1">
                             </div>
                             <div class="col-md-3 mb-3">
                                 <label for="addBirthYear" class="form-label">Birth Year</label>
-                                <input type="number" id="addBirthYear" class="form-control" placeholder="Year" min="1900">
+                                <input type="number" id="addBirthYear" class="form-control" placeholder="Year"
+                                    min="1900">
                             </div>
                             <div class="col-md-3 mb-3">
                                 <label for="addBirthCity" class="form-label">Birth City</label>
@@ -986,13 +988,29 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="addDisabilityType" class="form-label">Disability Type</label>
-                                <input type="text" id="addDisabilityType" class="form-control"
-                                    placeholder="Enter disability types (comma-separated)">
+                                <select id="addDisabilityType" class="form-select">
+                                    <option value="">Select disability type</option>
+                                    <option value="mental_intellectual">Mental/Intellectual</option>
+                                    <option value="hearing">Hearing Disability</option>
+                                    <option value="psychosocial">Psychosocial Disability</option>
+                                    <option value="visual">Visual Disability</option>
+                                    <option value="speech">Speech Impairment</option>
+                                    <option value="chronic_illness">Disability Due to Chronic Illness</option>
+                                    <option value="orthopedic">Orthopedic (Musculoskeletal) Disability</option>
+                                    <option value="multiple">Multiple Disabilities</option>
+                                    <option value="learning">Learning Disability</option>
+                                    <option value="none">None</option>
+                                </select>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="addDisabilityCause" class="form-label">Disability Cause</label>
-                                <input type="text" id="addDisabilityCause" class="form-control"
-                                    placeholder="Enter disability causes (comma-separated)">
+                                <select id="addDisabilityCause" class="form-select">
+                                    <option value="">Select disability cause</option>
+                                    <option value="congenital">Congenital/Inborn</option>
+                                    <option value="illness">Illness</option>
+                                    <option value="injury">Injury</option>
+                                    <option value="none">None</option>
+                                </select>
                             </div>
                         </div>
 
@@ -1110,13 +1128,11 @@
                     <div class="row">
                         <div class="col-md-4 mb-3">
                             <label for="editLastName" class="form-label">Last Name</label>
-                            <input type="text" id="editLastName" class="form-control" placeholder="Enter last name"
-                                required>
+                            <input type="text" id="editLastName" class="form-control" placeholder="Enter last name">
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="editFirstName" class="form-label">First Name</label>
-                            <input type="text" id="editFirstName" class="form-control" placeholder="Enter first name"
-                                required>
+                            <input type="text" id="editFirstName" class="form-control" placeholder="Enter first name">
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="editMiddleName" class="form-label">Middle Name</label>
@@ -1129,12 +1145,11 @@
                     <div class="row">
                         <div class="col-md-4 mb-3">
                             <label for="editStreet" class="form-label">Number, Street</label>
-                            <input type="text" id="editStreet" class="form-control" placeholder="Enter street" required>
+                            <input type="text" id="editStreet" class="form-control" placeholder="Enter street">
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="editBarangay" class="form-label">Barangay</label>
-                            <input type="text" id="editBarangay" class="form-control" placeholder="Enter barangay"
-                                required>
+                            <input type="text" id="editBarangay" class="form-control" placeholder="Enter barangay">
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="editDistrict" class="form-label">District</label>
@@ -1144,16 +1159,15 @@
                     <div class="row">
                         <div class="col-md-4 mb-3">
                             <label for="editCity" class="form-label">City/Municipality</label>
-                            <input type="text" id="editCity" class="form-control" placeholder="Enter city" required>
+                            <input type="text" id="editCity" class="form-control" placeholder="Enter city">
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="editProvince" class="form-label">Province</label>
-                            <input type="text" id="editProvince" class="form-control" placeholder="Enter province"
-                                required>
+                            <input type="text" id="editProvince" class="form-control" placeholder="Enter province">
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="editRegion" class="form-label">Region</label>
-                            <input type="text" id="editRegion" class="form-control" placeholder="Enter region" required>
+                            <input type="text" id="editRegion" class="form-control" placeholder="Enter region">
                         </div>
                     </div>
 
@@ -1162,12 +1176,12 @@
                     <div class="row">
                         <div class="col-md-4 mb-3">
                             <label for="editEmail" class="form-label">Email/Facebook</label>
-                            <input type="text" id="editEmail" class="form-control" placeholder="Enter email" required>
+                            <input type="text" id="editEmail" class="form-control" placeholder="Enter email">
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="editContactNo" class="form-label">Contact No.</label>
                             <input type="text" id="editContactNo" class="form-control"
-                                placeholder="Enter contact number" required>
+                                placeholder="Enter contact number">
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="editNationality" class="form-label">Nationality</label>
@@ -1181,7 +1195,7 @@
                     <div class="row">
                         <div class="col-md-4 mb-3">
                             <label for="editSex" class="form-label">Sex</label>
-                            <select id="editSex" class="form-select" required>
+                            <select id="editSex" class="form-select">
                                 <option value="">Select sex</option>
                                 <option value="male">Male</option>
                                 <option value="female">Female</option>
@@ -1189,12 +1203,11 @@
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="editAge" class="form-label">Age</label>
-                            <input type="number" id="editAge" class="form-control" placeholder="Enter age" min="1"
-                                max="120" required>
+                            <input type="number" id="editAge" class="form-control" placeholder="Enter age" min="1">
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="editCivilStatus" class="form-label">Civil Status</label>
-                            <select id="editCivilStatus" class="form-select" required>
+                            <select id="editCivilStatus" class="form-select">
                                 <option value="">Select civil status</option>
                                 <option value="single">Single</option>
                                 <option value="married">Married</option>
@@ -1234,12 +1247,12 @@
                         <div class="col-md-3 mb-3">
                             <label for="editBirthMonth" class="form-label">Birth Month</label>
                             <input type="number" id="editBirthMonth" class="form-control" placeholder="Month (1-12)"
-                                min="1" max="12">
+                                min="1">
                         </div>
                         <div class="col-md-3 mb-3">
                             <label for="editBirthDay" class="form-label">Birth Day</label>
-                            <input type="number" id="editBirthDay" class="form-control" placeholder="Day (1-31)" min="1"
-                                max="31">
+                            <input type="number" id="editBirthDay" class="form-control" placeholder="Day (1-31)"
+                                min="1">
                         </div>
                         <div class="col-md-3 mb-3">
                             <label for="editBirthYear" class="form-label">Birth Year</label>
@@ -1314,13 +1327,29 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="editDisabilityType" class="form-label">Disability Type</label>
-                            <input type="text" id="editDisabilityType" class="form-control"
-                                placeholder="Enter disability types (comma-separated)">
+                            <select id="editDisabilityType" class="form-select">
+                                <option value="">Select disability type</option>
+                                <option value="mental_intellectual">Mental/Intellectual</option>
+                                <option value="hearing">Hearing Disability</option>
+                                <option value="psychosocial">Psychosocial Disability</option>
+                                <option value="visual">Visual Disability</option>
+                                <option value="speech">Speech Impairment</option>
+                                <option value="chronic_illness">Disability Due to Chronic Illness</option>
+                                <option value="orthopedic">Orthopedic (Musculoskeletal) Disability</option>
+                                <option value="multiple">Multiple Disabilities</option>
+                                <option value="learning">Learning Disability</option>
+                                <option value="none">None</option>
+                            </select>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="editDisabilityCause" class="form-label">Disability Cause</label>
-                            <input type="text" id="editDisabilityCause" class="form-control"
-                                placeholder="Enter disability causes (comma-separated)">
+                            <select id="editDisabilityCause" class="form-select">
+                                <option value="">Select disability cause</option>
+                                <option value="congenital">Congenital/Inborn</option>
+                                <option value="illness">Illness</option>
+                                <option value="injury">Injury</option>
+                                <option value="none">None</option>
+                            </select>
                         </div>
                     </div>
 
@@ -1334,7 +1363,7 @@
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="editCourse" class="form-label">Selected Course</label>
-                            <select id="editCourse" class="form-select" required>
+                            <select id="editCourse" class="form-select">
                                 <option value="">Select a course...</option>
                             </select>
                         </div>
@@ -1371,7 +1400,7 @@
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="editStatus" class="form-label">Status</label>
-                            <select id="editStatus" class="form-select" required>
+                            <select id="editStatus" class="form-select">
                                 <option value="pending">Pending</option>
                                 <option value="approved">Approved</option>
                                 <option value="cancelled">Cancelled</option>
@@ -1407,8 +1436,7 @@
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="addFirstName" class="form-label">First Name, Second Name</label>
-                            <input type="text" id="addFirstName" class="form-control" placeholder="Enter first name"
-                                required>
+                            <input type="text" id="addFirstName" class="form-control" placeholder="Enter first name">
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="addMiddleName" class="form-label">Middle Name</label>
@@ -1421,51 +1449,46 @@
                     <div class="row">
                         <div class="col-md-4 mb-3">
                             <label for="addStreet" class="form-label">Number, Street</label>
-                            <input type="text" id="addStreet" class="form-control" placeholder="Enter number and street"
-                                required>
+                            <input type="text" id="addStreet" class="form-control"
+                                placeholder="Enter number and street">
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="addBarangay" class="form-label">Barangay</label>
-                            <input type="text" id="addBarangay" class="form-control" placeholder="Enter barangay"
-                                required>
+                            <input type="text" id="addBarangay" class="form-control" placeholder="Enter barangay">
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="addDistrict" class="form-label">District</label>
-                            <input type="text" id="addDistrict" class="form-control" placeholder="Enter district"
-                                required>
+                            <input type="text" id="addDistrict" class="form-control" placeholder="Enter district">
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-4 mb-3">
                             <label for="addCity" class="form-label">City/Municipality</label>
-                            <input type="text" id="addCity" class="form-control" placeholder="Enter city/municipality"
-                                required>
+                            <input type="text" id="addCity" class="form-control" placeholder="Enter city/municipality">
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="addProvince" class="form-label">Province</label>
-                            <input type="text" id="addProvince" class="form-control" placeholder="Enter province"
-                                required>
+                            <input type="text" id="addProvince" class="form-control" placeholder="Enter province">
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="addRegion" class="form-label">Region</label>
-                            <input type="text" id="addRegion" class="form-control" placeholder="Enter region" required>
+                            <input type="text" id="addRegion" class="form-control" placeholder="Enter region">
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="addEmail" class="form-label">Email Address/Facebook Account</label>
                             <input type="text" id="addEmail" class="form-control"
-                                placeholder="Enter email or Facebook account" required>
+                                placeholder="Enter email or Facebook account">
                         </div>
                         <div class="col-md-3 mb-3">
                             <label for="addContactNo" class="form-label">Contact No.</label>
-                            <input type="text" id="addContactNo" class="form-control" placeholder="Enter contact number"
-                                required>
+                            <input type="text" id="addContactNo" class="form-control"
+                                placeholder="Enter contact number">
                         </div>
                         <div class="col-md-3 mb-3">
                             <label for="addNationality" class="form-label">Nationality</label>
-                            <input type="text" id="addNationality" class="form-control" placeholder="Enter nationality"
-                                required>
+                            <input type="text" id="addNationality" class="form-control" placeholder="Enter nationality">
                         </div>
                     </div>
 
@@ -1493,7 +1516,7 @@
                         </div>
                         <div class="col-md-4 mb-3">
                             <label class="form-label">Employment Status</label>
-                            <select id="addEmploymentStatus" class="form-select" required>
+                            <select id="addEmploymentStatus" class="form-select">
                                 <option value="">Select employment status</option>
                                 <option value="wage">Wage-Employed</option>
                                 <option value="underemployed">Underemployed</option>
@@ -1508,39 +1531,36 @@
                     <div class="row">
                         <div class="col-md-3 mb-3">
                             <label for="addBirthMonth" class="form-label">Month of Birth</label>
-                            <input type="number" id="addBirthMonth" class="form-control" placeholder="Month (1-12)" min="1" max="12">
+                            <input type="number" id="addBirthMonth" class="form-control" placeholder="Month (1-12)"
+                                min="1">
                         </div>
                         <div class="col-md-3 mb-3">
                             <label for="addBirthDay" class="form-label">Day of Birth</label>
-                            <input type="number" id="addBirthDay" class="form-control" placeholder="Day (1-31)" min="1"
-                                max="31" required>
+                            <input type="number" id="addBirthDay" class="form-control" placeholder="Day (1-31)" min="1">
                         </div>
                         <div class="col-md-3 mb-3">
                             <label for="addBirthYear" class="form-label">Year of Birth</label>
-                            <input type="number" id="addBirthYear" class="form-control" placeholder="Year" min="1900"
-                                required>
+                            <input type="number" id="addBirthYear" class="form-control" placeholder="Year" min="1900">
                         </div>
                         <div class="col-md-3 mb-3">
                             <label for="addAge" class="form-label">Age</label>
-                            <input type="number" id="addAge" class="form-control" placeholder="Enter age" min="1"
-                                max="120" required>
+                            <input type="number" id="addAge" class="form-control" placeholder="Enter age" min="1">
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-4 mb-3">
                             <label for="addBirthCity" class="form-label">Birth City/Municipality</label>
-                            <input type="text" id="addBirthCity" class="form-control" placeholder="Enter birth city"
-                                required>
+                            <input type="text" id="addBirthCity" class="form-control" placeholder="Enter birth city">
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="addBirthProvince" class="form-label">Birth Province</label>
                             <input type="text" id="addBirthProvince" class="form-control"
-                                placeholder="Enter birth province" required>
+                                placeholder="Enter birth province">
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="addBirthRegion" class="form-label">Birth Region</label>
-                            <input type="text" id="addBirthRegion" class="form-control" placeholder="Enter birth region"
-                                required>
+                            <input type="text" id="addBirthRegion" class="form-control"
+                                placeholder="Enter birth region">
                         </div>
                     </div>
 
@@ -1569,13 +1589,13 @@
                         <div class="col-md-6 mb-3">
                             <label for="addParentName" class="form-label">Name</label>
                             <input type="text" id="addParentName" class="form-control"
-                                placeholder="Enter parent/guardian name" required>
+                                placeholder="Enter parent/guardian name">
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="addParentAddress" class="form-label">Complete Permanent Mailing
                                 Address</label>
                             <textarea id="addParentAddress" class="form-control" rows="2"
-                                placeholder="Enter complete address" required></textarea>
+                                placeholder="Enter complete address"></textarea>
                         </div>
                     </div>
 

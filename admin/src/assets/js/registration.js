@@ -867,28 +867,28 @@
         }
         document.getElementById('editClientClassification').value = clientClassValue;
 
-        // Disability Type - handle array
+        // Disability Type - handle array and set select value
         let disabilityTypeValue = '';
-        if (registration.disabilityTypeArray && Array.isArray(registration.disabilityTypeArray)) {
-            disabilityTypeValue = registration.disabilityTypeArray.join(', ');
+        if (registration.disabilityTypeArray && Array.isArray(registration.disabilityTypeArray) && registration.disabilityTypeArray.length > 0) {
+            disabilityTypeValue = registration.disabilityTypeArray[0];
         } else if (registration.disabilityType) {
             // Fallback for non-array format
-            if (Array.isArray(registration.disabilityType)) {
-                disabilityTypeValue = registration.disabilityType.join(', ');
+            if (Array.isArray(registration.disabilityType) && registration.disabilityType.length > 0) {
+                disabilityTypeValue = registration.disabilityType[0];
             } else if (typeof registration.disabilityType === 'string') {
                 disabilityTypeValue = registration.disabilityType;
             }
         }
         document.getElementById('editDisabilityType').value = disabilityTypeValue;
 
-        // Disability Cause - handle array
+        // Disability Cause - handle array and set select value
         let disabilityCauseValue = '';
-        if (registration.disabilityCauseArray && Array.isArray(registration.disabilityCauseArray)) {
-            disabilityCauseValue = registration.disabilityCauseArray.join(', ');
+        if (registration.disabilityCauseArray && Array.isArray(registration.disabilityCauseArray) && registration.disabilityCauseArray.length > 0) {
+            disabilityCauseValue = registration.disabilityCauseArray[0];
         } else if (registration.disabilityCause) {
             // Fallback for non-array format
-            if (Array.isArray(registration.disabilityCause)) {
-                disabilityCauseValue = registration.disabilityCause.join(', ');
+            if (Array.isArray(registration.disabilityCause) && registration.disabilityCause.length > 0) {
+                disabilityCauseValue = registration.disabilityCause[0];
             } else if (typeof registration.disabilityCause === 'string') {
                 disabilityCauseValue = registration.disabilityCause;
             }
@@ -952,8 +952,29 @@
     async function saveEditedRegistration() {
         const form = document.getElementById('editRegistrationForm');
 
-        if (!form.checkValidity()) {
-            form.reportValidity();
+        // Custom validation with toast notifications
+        // Validate age field
+        const ageElement = document.getElementById('editAge');
+        const ageValue = parseInt(ageElement.value);
+        if (ageValue && (ageValue < 1 || ageValue > 120)) {
+            showError('Age must be between 1 and 120');
+            ageElement.focus();
+            return;
+        }
+
+        // Validate birth month
+        const birthMonth = parseInt(document.getElementById('editBirthMonth').value);
+        if (birthMonth && (birthMonth < 1 || birthMonth > 12)) {
+            showError('Birth month must be between 1 and 12');
+            document.getElementById('editBirthMonth').focus();
+            return;
+        }
+
+        // Validate birth day
+        const birthDay = parseInt(document.getElementById('editBirthDay').value);
+        if (birthDay && (birthDay < 1 || birthDay > 31)) {
+            showError('Birth day must be between 1 and 31');
+            document.getElementById('editBirthDay').focus();
             return;
         }
 
@@ -965,13 +986,13 @@
         const clientClassText = document.getElementById('editClientClassification').value.trim();
         const clientClassArray = clientClassText ? clientClassText.split(',').map(item => item.trim()).filter(item => item) : [];
 
-        // Parse disability type array
-        const disabilityTypeText = document.getElementById('editDisabilityType').value.trim();
-        const disabilityTypeArray = disabilityTypeText ? disabilityTypeText.split(',').map(item => item.trim()).filter(item => item) : [];
+        // Get disability type value from select dropdown
+        const disabilityTypeValue = document.getElementById('editDisabilityType').value.trim();
+        const disabilityTypeArray = disabilityTypeValue ? [disabilityTypeValue] : [];
 
-        // Parse disability cause array
-        const disabilityCauseText = document.getElementById('editDisabilityCause').value.trim();
-        const disabilityCauseArray = disabilityCauseText ? disabilityCauseText.split(',').map(item => item.trim()).filter(item => item) : [];
+        // Get disability cause value from select dropdown
+        const disabilityCauseValue = document.getElementById('editDisabilityCause').value.trim();
+        const disabilityCauseArray = disabilityCauseValue ? [disabilityCauseValue] : [];
 
         // Check for changes
         if (window.originalRegistrationData) {
@@ -1402,6 +1423,31 @@
                 element.focus();
                 return;
             }
+        }
+
+        // Validate age field
+        const ageElement = document.getElementById('addAge');
+        const ageValue = parseInt(ageElement.value);
+        if (ageValue && (ageValue < 1 || ageValue > 120)) {
+            showError('Age must be between 1 and 120');
+            ageElement.focus();
+            return;
+        }
+
+        // Validate birth month
+        const birthMonth = parseInt(document.getElementById('addBirthMonth').value);
+        if (birthMonth && (birthMonth < 1 || birthMonth > 12)) {
+            showError('Birth month must be between 1 and 12');
+            document.getElementById('addBirthMonth').focus();
+            return;
+        }
+
+        // Validate birth day
+        const birthDay = parseInt(document.getElementById('addBirthDay').value);
+        if (birthDay && (birthDay < 1 || birthDay > 31)) {
+            showError('Birth day must be between 1 and 31');
+            document.getElementById('addBirthDay').focus();
+            return;
         }
 
         const courseSelect = document.getElementById('addCourse');

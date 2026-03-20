@@ -315,11 +315,11 @@
             saveRegistrationBtn.addEventListener('click', saveNewRegistration);
         }
 
-        // Save edit button
-        const saveEditBtn = document.getElementById('saveEditBtn');
-        if (saveEditBtn) {
-            saveEditBtn.addEventListener('click', saveEditedRegistration);
-        }
+        // Save edit button - DISABLED
+        // const saveEditBtn = document.getElementById('saveEditBtn');
+        // if (saveEditBtn) {
+        //     saveEditBtn.addEventListener('click', saveEditedRegistration);
+        // }
     }
 
     /**
@@ -553,104 +553,9 @@
      * Edit registration details
      */
     async function editDetails(id) {
-        const registration = registrations.find(r => r._id.$oid === id);
-        if (!registration) {
-            showError('Registration not found');
-            return;
-        }
-
-        // Load courses for dropdown
-        await loadCoursesForEditModal();
-
-        // Populate edit modal - T2MIS
-        document.getElementById('editRegistrationId').value = id;
-        document.getElementById('editUliNumber').value = registration.uliNumber || '';
-        document.getElementById('editEntryDate').value = registration.entryDate || '';
-
-        // Name
-        document.getElementById('editLastName').value = registration.lastName || '';
-        document.getElementById('editFirstName').value = registration.firstName || '';
-        document.getElementById('editMiddleName').value = registration.middleName || '';
-
-        // Address
-        document.getElementById('editStreet').value = registration.numberStreet || '';
-        document.getElementById('editBarangay').value = registration.barangay || '';
-        document.getElementById('editDistrict').value = registration.district || '';
-        document.getElementById('editCity').value = registration.cityMunicipality || '';
-        document.getElementById('editProvince').value = registration.province || '';
-        document.getElementById('editRegion').value = registration.region || '';
-
-        // Contact
-        document.getElementById('editNationality').value = registration.nationality || '';
-        document.getElementById('editEmail').value = registration.emailFacebook || '';
-        document.getElementById('editContactNo').value = registration.contactNo || '';
-
-        // Personal
-        document.getElementById('editSex').value = registration.sex || '';
-        document.getElementById('editAge').value = registration.age || '';
-        document.getElementById('editCivilStatus').value = registration.civilStatus || '';
-        document.getElementById('editEmploymentStatus').value = registration.employmentStatus || '';
-        document.getElementById('editEmploymentType').value = registration.employmentType || '';
-
-        // Birth
-        document.getElementById('editBirthMonth').value = registration.birthMonth || '';
-        document.getElementById('editBirthDay').value = registration.birthDay || '';
-        document.getElementById('editBirthYear').value = registration.birthYear || '';
-        document.getElementById('editBirthCity').value = registration.birthCity || '';
-        document.getElementById('editBirthProvince').value = registration.birthProvince || '';
-        document.getElementById('editBirthRegion').value = registration.birthRegion || '';
-
-        // Education
-        document.getElementById('editEducation').value = registration.education || '';
-
-        // Parent
-        document.getElementById('editParentName').value = registration.parentName || '';
-        document.getElementById('editParentAddress').value = registration.parentAddress || '';
-
-        // Client Classification checkboxes - handle array properly
-        const clientClassArray = registration.clientClassificationArray || [];
-        console.log('Client Classification Array:', clientClassArray); // Debug log
-        document.getElementById('editClassStudent').checked = Array.isArray(clientClassArray) && clientClassArray.includes('student');
-        document.getElementById('editClassOFW').checked = Array.isArray(clientClassArray) && clientClassArray.includes('ofw');
-        document.getElementById('editClassMILF').checked = Array.isArray(clientClassArray) && clientClassArray.includes('milf');
-        document.getElementById('editClassIP').checked = Array.isArray(clientClassArray) && clientClassArray.includes('ip');
-
-        // Disability Type checkboxes - handle array properly
-        const disabilityTypeArray = registration.disabilityTypeArray || [];
-        console.log('Disability Type Array:', disabilityTypeArray); // Debug log
-        document.getElementById('editDisabilityVisual').checked = Array.isArray(disabilityTypeArray) && disabilityTypeArray.includes('visual');
-        document.getElementById('editDisabilityHearing').checked = Array.isArray(disabilityTypeArray) && disabilityTypeArray.includes('hearing');
-        document.getElementById('editDisabilitySpeech').checked = Array.isArray(disabilityTypeArray) && disabilityTypeArray.includes('speech');
-        document.getElementById('editDisabilityPhysical').checked = Array.isArray(disabilityTypeArray) && disabilityTypeArray.includes('physical');
-
-        // Disability Cause checkboxes - handle array properly
-        const disabilityCauseArray = registration.disabilityCauseArray || [];
-        console.log('Disability Cause Array:', disabilityCauseArray); // Debug log
-        document.getElementById('editCauseBirth').checked = Array.isArray(disabilityCauseArray) && disabilityCauseArray.includes('birth');
-        document.getElementById('editCauseIllness').checked = Array.isArray(disabilityCauseArray) && disabilityCauseArray.includes('illness');
-        document.getElementById('editCauseInjury').checked = Array.isArray(disabilityCauseArray) && disabilityCauseArray.includes('injury');
-
-        // Course
-        document.getElementById('editCourseQualification').value = registration.courseQualification || '';
-        document.getElementById('editScholarshipType').value = registration.scholarshipType || '';
-        document.getElementById('editPrivacyConsent').value = registration.privacyConsent || '';
-
-        // Registration
-        document.getElementById('editTraineeId').value = registration.traineeId || '';
-        document.getElementById('editStatus').value = registration.status || 'pending';
-
-        // Set course dropdown
-        const courseSelect = document.getElementById('editCourse');
-        if (registration.selectedCourse) {
-            // Wait a bit for courses to load
-            setTimeout(() => {
-                courseSelect.value = registration.selectedCourse;
-            }, 100);
-        }
-
-        // Show modal
-        const modal = new bootstrap.Modal(document.getElementById('editDetailsModal'));
-        modal.show();
+        // Edit functionality has been disabled
+        showError('Edit functionality is currently disabled');
+        return;
     }
 
     /**

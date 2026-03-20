@@ -905,7 +905,6 @@ span.badge.bg-success {
 
 /* Course Enrollment List Scrollbar */
 #topEnrolledCoursesList {
-    max-height: 460px;
     overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: rgba(54, 145, 191, 0.8) rgba(197, 227, 245, 0.3);

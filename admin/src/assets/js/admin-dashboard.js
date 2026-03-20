@@ -5,21 +5,15 @@ var API_BASE_URL_DASHBOARD = window.location.origin.includes('localhost')
     ? 'http://localhost/CAATE-ITRMS/backend/public'
     : '/CAATE-ITRMS/backend/public';
 
-// Global variable to store selected year
-let selectedYear = 2026;
+// Global variable to store selected year - defaults to current year
+let selectedYear = new Date().getFullYear();
 
 // Function to update all year labels on the dashboard
 function updateYearLabels(year) {
     // Update chart title
-    const chartTitle = document.querySelector('.col-md-8 h5.card-header');
+    const chartTitle = document.querySelector('#chartYearTitle');
     if (chartTitle) {
-        chartTitle.textContent = `Monthly Trainee Enrollment ${year}`;
-    }
-
-    // Update enrollment activity trend badge
-    const activityBadge = document.getElementById('activityTrendYearBadge');
-    if (activityBadge) {
-        activityBadge.textContent = year;
+        chartTitle.textContent = year;
     }
 
     // Update year statistics labels (current year and previous year)
@@ -283,19 +277,77 @@ function ensureSuccessBadgeStyling() {
 
 // Initialize year filter functionality
 function initYearFilter() {
-    const yearDropdownItems = document.querySelectorAll('#growthReportYearMenu .dropdown-item');
+    // Fetch and populate year dropdown with years from database
+    fetchAndPopulateYears();
+}
 
-    yearDropdownItems.forEach(item => {
+// Function to fetch available years from database and populate dropdown
+async function fetchAndPopulateYears() {
+    try {
+        const response = await fetch(`${API_BASE_URL_DASHBOARD}/get-available-years.php`);
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+
+        if (result.success && result.years && result.years.length > 0) {
+            populateYearDropdown(result.years);
+        } else {
+            // Fallback to current year if no data
+            populateYearDropdown([new Date().getFullYear()]);
+        }
+    } catch (error) {
+        console.error('Error fetching available years:', error);
+        // Fallback to current year if fetch fails
+        populateYearDropdown([new Date().getFullYear()]);
+    }
+}
+
+// Function to populate year dropdown with available years from database
+function populateYearDropdown(years) {
+    const yearMenu = document.getElementById('growthReportYearMenu');
+    if (!yearMenu) return;
+
+    const currentYear = new Date().getFullYear();
+
+    // Check if current year is in the list, if not add it
+    if (!years.includes(currentYear)) {
+        years.unshift(currentYear);
+        years.sort((a, b) => b - a); // Sort descending
+    }
+
+    yearMenu.innerHTML = '';
+
+    years.forEach(year => {
+        const item = document.createElement('a');
+        item.className = 'dropdown-item';
+        item.href = 'javascript:void(0);';
+        item.setAttribute('data-year', year);
+        item.textContent = year;
+
+        // Highlight current year
+        if (year === currentYear) {
+            item.classList.add('active');
+        }
+
         item.addEventListener('click', function (e) {
             e.preventDefault();
-            const year = parseInt(this.getAttribute('data-year'));
+            const selectedYear = parseInt(this.getAttribute('data-year'));
 
-            if (!isNaN(year)) {
-                selectedYear = year;
-                updateYearLabels(year);
-                fetchDashboardStatistics(year);
+            if (!isNaN(selectedYear)) {
+                window.selectedYear = selectedYear;
+                updateYearLabels(selectedYear);
+                fetchDashboardStatistics(selectedYear);
+
+                // Update active state
+                yearMenu.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
             }
         });
+
+        yearMenu.appendChild(item);
     });
 }
 

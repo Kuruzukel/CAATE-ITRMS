@@ -387,7 +387,8 @@
                 <div class="card">
                   <div class="row row-bordered g-0">
                     <div class="col-md-8">
-                      <h5 class="card-header m-0 me-2 pb-3">Monthly Trainee Enrollment 2026</h5>
+                      <h5 class="card-header m-0 me-2 pb-3">Monthly Trainee Enrollment <span id="chartYearTitle"></span>
+                      </h5>
                       <div id="totalRevenueChart" class="px-2"></div>
                     </div>
                     <div class="col-md-4">
@@ -400,7 +401,7 @@
                             </button>
                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="growthReportId"
                               id="growthReportYearMenu">
-                              <a class="dropdown-item" href="javascript:void(0);" data-year="2026">2026</a>
+                              <!-- Years will be populated dynamically -->
                             </div>
                           </div>
                         </div>
@@ -415,7 +416,7 @@
                                 class="bx bx-calendar-check text-primary"></i></span>
                           </div>
                           <div class="d-flex flex-column">
-                            <small id="currentYearLabel">2026</small>
+                            <small id="currentYearLabel"></small>
                             <h6 class="mb-0" id="currentYearCount">0</h6>
                           </div>
                         </div>
@@ -424,7 +425,7 @@
                             <span class="badge bg-label-info p-2"><i class="bx bx-calendar-event text-info"></i></span>
                           </div>
                           <div class="d-flex flex-column">
-                            <small id="previousYearLabel">2025</small>
+                            <small id="previousYearLabel"></small>
                             <h6 class="mb-0" id="previousYearCount">0</h6>
                           </div>
                         </div>

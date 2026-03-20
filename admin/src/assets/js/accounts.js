@@ -284,6 +284,7 @@ function showEmptyState(message) {
 // Load statistics from API
 async function loadStatistics() {
     try {
+        // Fetch trainee statistics
         const response = await fetch(`${API_BASE_URL}/trainees/statistics`);
 
         if (!response.ok) {
@@ -292,8 +293,27 @@ async function loadStatistics() {
 
         const result = await response.json();
 
+        // Fetch registration count
+        let registrationCount = 0;
+        try {
+            const regResponse = await fetch(`${API_BASE_URL}/registrations`);
+            if (regResponse.ok) {
+                const regResult = await regResponse.json();
+                if (regResult.success && regResult.data) {
+                    registrationCount = regResult.data.length;
+                }
+            }
+        } catch (regError) {
+            console.error('Error fetching registration count:', regError);
+        }
+
         if (result.success) {
-            updateStatistics(result.data);
+            // Add registration count to statistics
+            const statsWithRegistration = {
+                ...result.data,
+                totalRegistration: registrationCount
+            };
+            updateStatistics(statsWithRegistration);
         }
     } catch (error) {
         console.error('Error loading statistics:', error);
@@ -456,11 +476,11 @@ function updateStatistics(stats) {
         totalElement.textContent = totalValue.toLocaleString();
     }
 
-    // Update Total Enrollment
-    const enrollmentElement = document.getElementById('totalEnrollmentCount');
-    if (enrollmentElement) {
-        const enrollmentValue = stats.totalEnrollment || 0;
-        enrollmentElement.textContent = enrollmentValue.toLocaleString();
+    // Update Total Registration
+    const registrationElement = document.getElementById('totalRegistrationCount');
+    if (registrationElement) {
+        const registrationValue = stats.totalRegistration || 0;
+        registrationElement.textContent = registrationValue.toLocaleString();
     }
 
     // Update Total Application

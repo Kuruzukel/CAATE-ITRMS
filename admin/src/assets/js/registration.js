@@ -394,21 +394,14 @@
      * Apply filters
      */
     function applyFilters() {
-        const searchValue = document.querySelector('input[placeholder="Name or Trainee ID"]')?.value.toLowerCase();
+        const searchValue = document.querySelector('input[placeholder="Name or Trainee ID"]')?.value.toLowerCase().trim();
         const statusValue = document.querySelector('select')?.value;
         const courseValue = document.querySelectorAll('select')[1]?.value;
         const dateValue = document.querySelector('#registrationDateFilter')?.value;
 
         let filtered = [...registrations];
 
-        if (searchValue) {
-            filtered = filtered.filter(r => {
-                const fullName = `${r.firstName} ${r.middleName || ''} ${r.lastName}`.toLowerCase();
-                const traineeId = (r.traineeId || '').toLowerCase();
-                return fullName.includes(searchValue) || traineeId.includes(searchValue);
-            });
-        }
-
+        // Only filter (hide rows) for non-search filters
         if (statusValue) {
             filtered = filtered.filter(r => r.status === statusValue);
         }
@@ -428,7 +421,80 @@
             });
         }
 
+        // Render filtered data (this shows/hides rows based on dropdown filters)
         renderRegistrations(filtered);
+
+        // Apply search highlighting without filtering
+        if (searchValue) {
+            setTimeout(() => {
+                clearAllHighlights();
+                highlightSearchResults(searchValue);
+            }, 50);
+        } else {
+            clearAllHighlights();
+        }
+    }
+
+    /**
+     * Clear all row highlights
+     */
+    function clearAllHighlights() {
+        const tbody = document.querySelector('.table tbody');
+        if (tbody) {
+            const rows = tbody.querySelectorAll('tr');
+            rows.forEach(row => {
+                row.style.boxShadow = '';
+                row.style.border = '';
+                row.style.borderLeft = '';
+                row.style.borderRadius = '';
+                row.style.background = '';
+                row.style.transition = '';
+                row.style.transform = '';
+                row.style.outline = '';
+                row.style.outlineOffset = '';
+                row.style.zIndex = '';
+                row.style.position = '';
+            });
+        }
+    }
+
+    /**
+     * Highlight search results
+     */
+    function highlightSearchResults(searchTerm) {
+        const tbody = document.querySelector('.table tbody');
+        if (!tbody) return;
+
+        const rows = tbody.querySelectorAll('tr');
+        let firstMatch = null;
+
+        rows.forEach(row => {
+            // Get row text content
+            const rowText = row.textContent.toLowerCase();
+
+            // Check if row matches search term
+            if (rowText.includes(searchTerm)) {
+                // Apply card hover design with proper spacing
+                row.style.position = 'relative';
+                row.style.boxShadow = '0 8px 24px rgba(22, 56, 86, 0.5), 0 4px 12px rgba(54, 145, 191, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15)';
+                row.style.outline = '2px solid rgba(54, 145, 191, 0.6)';
+                row.style.outlineOffset = '2px';
+                row.style.borderRadius = '10px';
+                row.style.background = 'linear-gradient(135deg, rgba(54, 145, 191, 0.08) 0%, rgba(50, 85, 150, 0.08) 100%)';
+                row.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+                row.style.zIndex = '10';
+
+                // Store first match for scrolling
+                if (!firstMatch) {
+                    firstMatch = row;
+                }
+            }
+        });
+
+        // Scroll to first match
+        if (firstMatch) {
+            firstMatch.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
     }
 
     /**
@@ -439,6 +505,7 @@
         document.querySelector('select').value = '';
         document.querySelectorAll('select')[1].value = '';
         document.querySelector('#registrationDateFilter').value = '';
+        clearAllHighlights();
         renderRegistrations(registrations);
     }
 

@@ -460,28 +460,10 @@ function updateWelcomeChart(approvedPercentage, pendingPercentage, cancelledPerc
 
 
 // Function to fetch course enrollment statistics
-async function fetchCourseEnrollmentStatistics() {
-    try {
-        const response = await fetch(`${API_BASE_URL_DASHBOARD}/api/v1/courses/enrollment-statistics`);
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const result = await response.json();
-
-        if (result.success) {
-            updateCourseEnrollmentUI(result.data);
-        }
-    } catch (error) {
-        console.error('Error fetching course enrollment statistics:', error);
-    }
-}
-
 // Function to fetch recent enrollment activity
 async function fetchRecentEnrollmentActivity() {
     try {
-        const response = await fetch(`${API_BASE_URL_DASHBOARD}/api/v1/enrollments/recent-activity`);
+        const response = await fetch(`${API_BASE_URL_DASHBOARD}/api/v1/enrollments/recent`);
 
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -533,12 +515,14 @@ function updateRecentEnrollmentActivityUI(activities) {
                 break;
         }
 
-        // Determine avatar (use image if available, otherwise use initials)
+        // Use traineeName from API response
+        const traineeName = activity.traineeName || activity.name || 'Unknown';
+
+        // Determine avatar (use image if available, otherwise use icon)
         let avatarHTML = '';
         if (activity.avatar) {
-            avatarHTML = `<img src="${activity.avatar}" alt="${activity.name}" class="rounded-circle" />`;
+            avatarHTML = `<img src="${activity.avatar}" alt="${traineeName}" class="rounded-circle" />`;
         } else {
-            const initials = activity.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
             avatarHTML = `<span class="avatar-initial rounded-circle bg-label-primary"><i class="bx bx-user"></i></span>`;
         }
 
@@ -548,7 +532,7 @@ function updateRecentEnrollmentActivityUI(activities) {
             </div>
             <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
                 <div class="me-2">
-                    <h6 class="mb-0">${activity.name}</h6>
+                    <h6 class="mb-0">${traineeName}</h6>
                     <small class="text-muted d-block">${activity.courseName}</small>
                 </div>
                 <div class="user-progress">
@@ -649,12 +633,6 @@ function updateCourseEnrollmentUI(data) {
             }
         }
     }
-}
-
-// Function to fetch recent enrollment activity
-async function fetchRecentEnrollmentActivity() {
-    // Endpoint not yet implemented - silently skip
-    return;
 }
 
 // Function to update recent enrollment activity UI

@@ -415,11 +415,11 @@
             saveRegistrationBtn.addEventListener('click', saveNewRegistration);
         }
 
-        // Save edit button - DISABLED
-        // const saveEditBtn = document.getElementById('saveEditBtn');
-        // if (saveEditBtn) {
-        //     saveEditBtn.addEventListener('click', saveEditedRegistration);
-        // }
+        // Save edit button
+        const saveEditBtn = document.getElementById('saveEditBtn');
+        if (saveEditBtn) {
+            saveEditBtn.addEventListener('click', saveEditedRegistration);
+        }
     }
 
     /**
@@ -759,9 +759,134 @@
      * Edit registration details
      */
     async function editDetails(id) {
-        // Edit functionality has been disabled
-        showError('Edit functionality is currently disabled');
-        return;
+        const registration = registrations.find(r => r._id.$oid === id);
+        if (!registration) {
+            showError('Registration not found');
+            return;
+        }
+
+        // Populate edit modal with registration data
+        document.getElementById('editRegistrationId').value = id;
+        document.getElementById('editFirstName').value = registration.firstName || '';
+        document.getElementById('editMiddleName').value = registration.middleName || '';
+        document.getElementById('editLastName').value = registration.lastName || '';
+        document.getElementById('editEmail').value = registration.emailFacebook || '';
+        document.getElementById('editContactNo').value = registration.contactNo || '';
+        document.getElementById('editStreet').value = registration.numberStreet || '';
+        document.getElementById('editBarangay').value = registration.barangay || '';
+        document.getElementById('editCity').value = registration.cityMunicipality || '';
+        document.getElementById('editProvince').value = registration.province || '';
+        document.getElementById('editRegion').value = registration.region || '';
+        document.getElementById('editSex').value = registration.sex || '';
+        document.getElementById('editCivilStatus').value = registration.civilStatus || '';
+        document.getElementById('editAge').value = registration.age || '';
+        document.getElementById('editStatus').value = registration.status || '';
+
+        // Load courses and set selected course
+        await loadCoursesForEditModal();
+        const editCourseSelect = document.getElementById('editCourse');
+        if (editCourseSelect) {
+            editCourseSelect.value = registration.selectedCourse || registration.courseQualification || '';
+        }
+
+        // Show modal
+        const modal = new bootstrap.Modal(document.getElementById('editRegistrationModal'));
+        modal.show();
+    }
+
+    /**
+     * Load courses for edit modal dropdown
+     */
+    async function loadCoursesForEditModal() {
+        const dropdown = document.getElementById('editCourse');
+        if (!dropdown) return;
+
+        try {
+            const response = await fetch(`${config.api.baseUrl}/api/v1/courses`);
+            const result = await response.json();
+
+            if (result.success && result.data && result.data.length > 0) {
+                dropdown.innerHTML = '<option value="">Select a course...</option>';
+
+                result.data.forEach(course => {
+                    const option = document.createElement('option');
+                    option.value = course.title || 'Untitled Course';
+                    option.dataset.courseId = course._id?.$oid || course._id || '';
+                    option.textContent = `${course.title || 'Untitled Course'} (${course.badge || course.course_code || ''})`;
+                    dropdown.appendChild(option);
+                });
+            } else {
+                dropdown.innerHTML = '<option value="">No courses available</option>';
+            }
+        } catch (error) {
+            console.error('Error loading courses:', error);
+            dropdown.innerHTML = '<option value="">Error loading courses</option>';
+        }
+    }
+
+    /**
+     * Save edited registration
+     */
+    async function saveEditedRegistration() {
+        const form = document.getElementById('editRegistrationForm');
+
+        if (!form.checkValidity()) {
+            form.reportValidity();
+            return;
+        }
+
+        const id = document.getElementById('editRegistrationId').value;
+        const courseSelect = document.getElementById('editCourse');
+        const selectedOption = courseSelect.options[courseSelect.selectedIndex];
+
+        const updatedData = {
+            firstName: document.getElementById('editFirstName').value.trim(),
+            middleName: document.getElementById('editMiddleName').value.trim(),
+            lastName: document.getElementById('editLastName').value.trim(),
+            emailFacebook: document.getElementById('editEmail').value.trim(),
+            contactNo: document.getElementById('editContactNo').value.trim(),
+            numberStreet: document.getElementById('editStreet').value.trim(),
+            barangay: document.getElementById('editBarangay').value.trim(),
+            cityMunicipality: document.getElementById('editCity').value.trim(),
+            province: document.getElementById('editProvince').value.trim(),
+            region: document.getElementById('editRegion').value.trim(),
+            sex: document.getElementById('editSex').value,
+            civilStatus: document.getElementById('editCivilStatus').value,
+            age: parseInt(document.getElementById('editAge').value),
+            selectedCourse: courseSelect.value,
+            selectedCourseId: selectedOption.dataset.courseId || '',
+            status: document.getElementById('editStatus').value
+        };
+
+        try {
+            const response = await fetch(`${config.api.baseUrl}/api/v1/registrations/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updatedData)
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                showSuccess('Registration updated successfully');
+
+                // Close modal
+                const modal = bootstrap.Modal.getInstance(document.getElementById('editRegistrationModal'));
+                if (modal) {
+                    modal.hide();
+                }
+
+                // Reload registrations
+                loadRegistrations();
+            } else {
+                throw new Error(result.message || 'Failed to update registration');
+            }
+        } catch (error) {
+            console.error('Error updating registration:', error);
+            showError('Failed to update registration: ' + error.message);
+        }
     }
 
     /**

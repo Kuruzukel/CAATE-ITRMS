@@ -12,20 +12,20 @@ try {
     $adminsCollection = $db->admins;
     
     // Check if admin already exists
-    $existingAdmin = $adminsCollection->findOne(['email' => 'kelmiyata@caate.edu']);
+    $existingAdmin = $adminsCollection->findOne(['email' => 'admin@example.com']);
     
     if ($existingAdmin) {
         echo "Admin user already exists!\n";
-        echo "Email: kelmiyata@caate.edu\n";
+        echo "Email: admin@example.com\n";
         exit(0);
     }
     
-    // Create admin user
+    // Create admin user with hashed password
     $adminData = [
         'name' => 'Kel Miyata',
-        'email' => 'kelmiyata@caate.edu',
-        'username' => 'kelmiyata',
-        'password' => 'admin123', // Plain text password for admins
+        'email' => 'admin@example.com',
+        'username' => 'admin',
+        'password' => password_hash('ChangeMe123!', PASSWORD_BCRYPT), // Hashed password
         'role' => 'admin',
         'created_at' => new MongoDB\BSON\UTCDateTime(),
         'updated_at' => new MongoDB\BSON\UTCDateTime()
@@ -37,10 +37,11 @@ try {
         echo "✓ Admin user created successfully!\n\n";
         echo "Login Credentials:\n";
         echo "==================\n";
-        echo "Email: kelmiyata@caate.edu\n";
-        echo "Username: kelmiyata\n";
-        echo "Password: admin123\n\n";
-        echo "⚠️  IMPORTANT: Please change the password after first login!\n";
+        echo "Email: admin@example.com\n";
+        echo "Username: admin\n";
+        echo "Password: ChangeMe123!\n\n";
+        echo "⚠️  CRITICAL: Change this password immediately after first login!\n";
+        echo "⚠️  This is a default password for development only!\n";
     } else {
         echo "✗ Failed to create admin user\n";
     }

@@ -225,6 +225,25 @@ function updateDashboardUI(data) {
     if (previousYearCount) {
         previousYearCount.textContent = data.previousYearEnrollments || 0;
     }
+
+    // Update the monthly enrollment chart with real data
+    if (window.totalRevenueChartInstance && data.monthly_enrollments) {
+        // Get previous year data (all zeros for now, can be enhanced later)
+        const previousYearData = Array(12).fill(0);
+
+        window.totalRevenueChartInstance.updateOptions({
+            series: [
+                {
+                    name: data.year.toString(),
+                    data: data.monthly_enrollments
+                },
+                {
+                    name: (data.year - 1).toString(),
+                    data: previousYearData
+                }
+            ]
+        });
+    }
 }
 
 // Function to style Present status badges

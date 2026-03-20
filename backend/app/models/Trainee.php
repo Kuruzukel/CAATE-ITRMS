@@ -388,11 +388,13 @@ class Trainee {
                 $yearGrowthPercentage = 100;
             }
             
-            // Monthly enrollments for the year
+            // Monthly enrollments for the current year
             $monthlyEnrollments = array_fill(0, 12, 0);
             for ($month = 1; $month <= 12; $month++) {
                 $monthStartDate = new MongoDB\BSON\UTCDateTime(strtotime("$year-$month-01") * 1000);
-                $monthEndDate = new MongoDB\BSON\UTCDateTime(strtotime("$year-" . ($month + 1) . "-01") * 1000);
+                $nextMonth = $month == 12 ? 1 : $month + 1;
+                $nextYear = $month == 12 ? $year + 1 : $year;
+                $monthEndDate = new MongoDB\BSON\UTCDateTime(strtotime("$nextYear-$nextMonth-01") * 1000);
                 
                 $monthRegs = $registrationCollection->countDocuments([
                     'created_at' => ['$gte' => $monthStartDate, '$lt' => $monthEndDate]
@@ -405,6 +407,27 @@ class Trainee {
                 ]);
                 
                 $monthlyEnrollments[$month - 1] = $monthRegs + $monthApps + $monthAdms;
+            }
+            
+            // Monthly enrollments for the previous year
+            $previousYearMonthlyEnrollments = array_fill(0, 12, 0);
+            for ($month = 1; $month <= 12; $month++) {
+                $monthStartDate = new MongoDB\BSON\UTCDateTime(strtotime(($year - 1) . "-$month-01") * 1000);
+                $nextMonth = $month == 12 ? 1 : $month + 1;
+                $nextYear = $month == 12 ? $year : $year - 1;
+                $monthEndDate = new MongoDB\BSON\UTCDateTime(strtotime("$nextYear-$nextMonth-01") * 1000);
+                
+                $monthRegs = $registrationCollection->countDocuments([
+                    'created_at' => ['$gte' => $monthStartDate, '$lt' => $monthEndDate]
+                ]);
+                $monthApps = $applicationCollection->countDocuments([
+                    'created_at' => ['$gte' => $monthStartDate, '$lt' => $monthEndDate]
+                ]);
+                $monthAdms = $admissionCollection->countDocuments([
+                    'created_at' => ['$gte' => $monthStartDate, '$lt' => $monthEndDate]
+                ]);
+                
+                $previousYearMonthlyEnrollments[$month - 1] = $monthRegs + $monthApps + $monthAdms;
             }
             
             // Log statistics for debugging
@@ -432,6 +455,7 @@ class Trainee {
                 'active_trainees' => $activeTrainees,
                 'graduates' => $graduates,
                 'monthly_enrollments' => $monthlyEnrollments,
+                'previous_year_monthly_enrollments' => $previousYearMonthlyEnrollments,
                 'year' => $year
             ];
         } catch (Exception $e) {
@@ -458,6 +482,7 @@ class Trainee {
                 'active_trainees' => 0,
                 'graduates' => 0,
                 'monthly_enrollments' => array_fill(0, 12, 0),
+                'previous_year_monthly_enrollments' => array_fill(0, 12, 0),
                 'year' => date('Y')
             ];
         }

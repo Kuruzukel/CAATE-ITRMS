@@ -495,34 +495,40 @@
         document.getElementById('viewParentName').textContent = registration.parentName || '-';
         document.getElementById('viewParentAddress').textContent = registration.parentAddress || '-';
 
-        // Client Classification - handle array properly
+        // Client Classification - handle array properly (support both field names)
         let clientClass = '-';
-        if (registration.clientClassificationArray && Array.isArray(registration.clientClassificationArray) && registration.clientClassificationArray.length > 0) {
-            clientClass = registration.clientClassificationArray.map(item => {
-                // Capitalize first letter
-                return item.charAt(0).toUpperCase() + item.slice(1);
+        const clientClassData = registration.clientClassificationArray || registration.clientClassification;
+        if (clientClassData && Array.isArray(clientClassData) && clientClassData.length > 0) {
+            clientClass = clientClassData.map(item => {
+                // Capitalize first letter and handle different formats
+                const str = String(item).trim();
+                return str.charAt(0).toUpperCase() + str.slice(1);
             }).join(', ');
         }
         console.log('Client Classification:', clientClass); // Debug log
         document.getElementById('viewClientClassification').textContent = clientClass;
 
-        // Disability Type - handle array properly
+        // Disability Type - handle array properly (support both field names)
         let disabilityType = '-';
-        if (registration.disabilityTypeArray && Array.isArray(registration.disabilityTypeArray) && registration.disabilityTypeArray.length > 0) {
-            disabilityType = registration.disabilityTypeArray.map(item => {
-                // Capitalize first letter
-                return item.charAt(0).toUpperCase() + item.slice(1);
+        const disabilityTypeData = registration.disabilityTypeArray || registration.disabilityType;
+        if (disabilityTypeData && Array.isArray(disabilityTypeData) && disabilityTypeData.length > 0) {
+            disabilityType = disabilityTypeData.map(item => {
+                // Capitalize first letter and handle different formats
+                const str = String(item).trim();
+                return str.charAt(0).toUpperCase() + str.slice(1);
             }).join(', ');
         }
         console.log('Disability Type:', disabilityType); // Debug log
         document.getElementById('viewDisabilityType').textContent = disabilityType;
 
-        // Disability Cause - handle array properly
+        // Disability Cause - handle array properly (support both field names)
         let disabilityCause = '-';
-        if (registration.disabilityCauseArray && Array.isArray(registration.disabilityCauseArray) && registration.disabilityCauseArray.length > 0) {
-            disabilityCause = registration.disabilityCauseArray.map(item => {
-                // Capitalize first letter
-                return item.charAt(0).toUpperCase() + item.slice(1);
+        const disabilityCauseData = registration.disabilityCauseArray || registration.disabilityCause;
+        if (disabilityCauseData && Array.isArray(disabilityCauseData) && disabilityCauseData.length > 0) {
+            disabilityCause = disabilityCauseData.map(item => {
+                // Capitalize first letter and handle different formats
+                const str = String(item).trim();
+                return str.charAt(0).toUpperCase() + str.slice(1);
             }).join(', ');
         }
         console.log('Disability Cause:', disabilityCause); // Debug log

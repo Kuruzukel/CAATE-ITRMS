@@ -549,92 +549,6 @@ function updateRecentEnrollmentActivityUI(activities) {
 // Removed duplicate function - consolidated below
 
 
-// Function to fetch course enrollment statistics
-async function fetchCourseEnrollmentStatistics() {
-    try {
-        const response = await fetch(`${API_BASE_URL_DASHBOARD}/api/v1/courses/enrollment-statistics`);
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const result = await response.json();
-
-        if (result.success && result.data) {
-            updateCourseEnrollmentUI(result.data);
-        }
-    } catch (error) {
-        console.error('Error fetching course enrollment statistics:', error);
-    }
-}
-
-// Function to update course enrollment UI
-function updateCourseEnrollmentUI(data) {
-    // Update total enrollments count
-    const totalEnrollmentsElement = document.getElementById('totalEnrollmentsCount');
-    if (totalEnrollmentsElement && data.totalEnrollments !== undefined) {
-        totalEnrollmentsElement.textContent = data.totalEnrollments.toLocaleString();
-    }
-
-    // Update top enrolled courses list
-    if (data.topCourses && Array.isArray(data.topCourses)) {
-        const listElement = document.getElementById('topEnrolledCoursesList');
-        if (listElement) {
-            if (data.topCourses.length > 0) {
-                // Clear existing content first
-                listElement.innerHTML = '';
-
-                // Force a reflow to ensure the clear takes effect
-                void listElement.offsetHeight;
-
-                // Build the new HTML
-                const html = data.topCourses.map((course, index) => {
-                    const isLast = index === data.topCourses.length - 1;
-                    // Use the image from the course data, with fallback to default
-                    let imageUrl = course.image && course.image.trim() !== ''
-                        ? course.image
-                        : 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400&h=250&fit=crop';
-
-                    // Add cache buster for external images
-                    if (imageUrl.includes('unsplash.com') || imageUrl.includes('bing.net') || imageUrl.includes('omyguard.com') || imageUrl.includes('northshoremedicalclinic.ca')) {
-                        imageUrl += (imageUrl.includes('?') ? '&' : '?') + 'cache=' + Date.now();
-                    }
-
-                    return `
-                        <li class="d-flex ${isLast ? '' : 'mb-4 pb-1'}">
-                            <div class="avatar flex-shrink-0 me-3">
-                                <img src="${imageUrl}" 
-                                     alt="${course.name}" 
-                                     class="rounded" 
-                                     style="width: 38px; height: 38px; object-fit: cover; display: block;" 
-                                     onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400&h=250&fit=crop';" />
-                            </div>
-                            <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                <div class="me-2">
-                                    <h6 class="mb-0">${course.name}</h6>
-                                    <small class="text-muted">${course.hours}</small>
-                                </div>
-                            </div>
-                        </li>
-                    `;
-                }).join('');
-
-                // Set the new HTML
-                listElement.innerHTML = html;
-
-                // Update the donut chart with real data
-                updateCourseDonutChart(data.topCourses);
-            } else {
-                listElement.innerHTML = `
-                    <li class="d-flex justify-content-center align-items-center py-5">
-                        <p class="text-muted">No courses available</p>
-                    </li>
-                `;
-            }
-        }
-    }
-}
-
 // Function to update recent enrollment activity UI
 function updateRecentEnrollmentUI(enrollments) {
     const listElement = document.getElementById('recentEnrollmentActivityList');
@@ -697,7 +611,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Fetch and display real dashboard statistics
     fetchDashboardStatistics();
-    fetchCourseEnrollmentStatistics();
     fetchRecentEnrollmentActivity();
 
     stylePresentBadges();
@@ -723,108 +636,6 @@ document.addEventListener('DOMContentLoaded', function () {
     // Refresh statistics every 30 seconds
     setInterval(() => {
         fetchDashboardStatistics(selectedYear);
-        fetchCourseEnrollmentStatistics();
         fetchRecentEnrollmentActivity();
     }, 30000);
 });
-
-
-// Function to update the course donut chart
-function updateCourseDonutChart(courses) {
-    if (!courses || courses.length === 0) return;
-
-    // Wait for ApexCharts to be available
-    if (typeof ApexCharts === 'undefined') {
-        setTimeout(() => updateCourseDonutChart(courses), 500);
-        return;
-    }
-
-    const chartElement = document.querySelector('#orderStatisticsChart');
-    if (!chartElement) return;
-
-    // Check if all enrollment counts are 0
-    const totalEnrollments = courses.reduce((sum, course) => sum + (course.enrollmentCount || 0), 0);
-
-    if (totalEnrollments === 0) {
-        // Destroy existing chart instance if it exists
-        if (window.orderStatisticsChartInstance) {
-            window.orderStatisticsChartInstance.destroy();
-            window.orderStatisticsChartInstance = null;
-        }
-        return;
-    }
-
-    // Prepare data for the chart
-    const labels = courses.map(course => course.name);
-    const series = courses.map(course => course.enrollmentCount);
-    const colors = ['#696cff', '#03c3ec', '#8592a3', '#71dd37', '#ffab00'];
-
-    // Check if chart instance exists
-    if (window.orderStatisticsChartInstance) {
-        // Update existing chart
-        window.orderStatisticsChartInstance.updateOptions({
-            labels: labels,
-            series: series,
-            colors: colors.slice(0, courses.length)
-        });
-    } else {
-        // Create new chart
-        const chartConfig = {
-            chart: {
-                height: 165,
-                width: 130,
-                type: 'donut'
-            },
-            labels: labels,
-            series: series,
-            colors: colors.slice(0, courses.length),
-            stroke: {
-                width: 5,
-                colors: ['#1a2942']
-            },
-            dataLabels: {
-                enabled: false,
-                formatter: function (val, opt) {
-                    return parseInt(val) + '%';
-                }
-            },
-            legend: {
-                show: false
-            },
-            grid: {
-                padding: {
-                    top: 0,
-                    bottom: 0,
-                    right: 15
-                }
-            },
-            plotOptions: {
-                pie: {
-                    donut: {
-                        size: '75%',
-                        labels: {
-                            show: false
-                        }
-                    }
-                }
-            },
-            tooltip: {
-                theme: 'dark',
-                style: {
-                    fontSize: '12px',
-                    fontFamily: 'Public Sans'
-                },
-                y: {
-                    formatter: function (val, opts) {
-                        const courseName = opts.w.globals.labels[opts.seriesIndex];
-                        return courseName + ': ' + val + ' trainees';
-                    }
-                }
-            }
-        };
-
-        window.orderStatisticsChartInstance = new ApexCharts(chartElement, chartConfig);
-        window.orderStatisticsChartInstance.render();
-    }
-}
-

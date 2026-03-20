@@ -7,55 +7,22 @@ Professional public-facing website for CAATE (Creative Aesthetic Academy & Techn
 ```
 public/
 ├── 📂 dist/                            # Built files (generated)
+│   └── README.md
 ├── 📂 docs/
-│   └── STRUCTURE.md                    # Structure documentation
+│   └── README.md
 ├── 📂 src/
 │   ├── 📂 assets/
-│   │   ├── 📂 css/                     # Stylesheets (11 files)
-│   │   │   ├── advanced-skincare.css   # Advanced skincare styles
-│   │   │   ├── aesthetic.css           # Aesthetic services styles
-│   │   │   ├── collagen-hairloss.css   # Collagen & hair loss styles
-│   │   │   ├── eyelash-eyebrow.css     # Eyelash & eyebrow styles
-│   │   │   ├── facial-peeling.css      # Facial peeling styles
-│   │   │   ├── light-heat-therapy.css  # Light & heat therapy styles
-│   │   │   ├── nailcare.css            # Nail care styles
-│   │   │   ├── permanent-makeup.css    # Permanent makeup styles
-│   │   │   ├── skincare.css            # Skincare styles
-│   │   │   ├── style.css               # Main styles
-│   │   │   └── trainers.css            # Trainers directory styles
+│   │   ├── 📂 css/                     # Stylesheets
 │   │   ├── 📂 fonts/                   # Font assets
-│   │   ├── 📂 images/                  # Application images (17 files)
-│   │   │   ├── 📂 CAATE FB COURSES/    # Course promotional images (5)
-│   │   │   ├── CAATE logos/            # CAATE branding (8)
-│   │   │   ├── TESDA logos/            # TESDA branding (4)
-│   │   │   └── Other assets/           # Miscellaneous
-│   │   └── 📂 js/                      # JavaScript files (12 files)
-│   │       ├── advanced-skincare.js    # Advanced skincare functionality
-│   │       ├── aesthetic.js            # Aesthetic services functionality
-│   │       ├── collagen-hairloss.js    # Collagen & hair loss functionality
-│   │       ├── eyelash-eyebrow.js      # Eyelash & eyebrow functionality
-│   │       ├── facial-peeling.js       # Facial peeling functionality
-│   │       ├── light-heat-therapy.js   # Light & heat therapy functionality
-│   │       ├── nailcare.js             # Nail care functionality
-│   │       ├── permanent-makeup.js     # Permanent makeup functionality
-│   │       ├── script.js               # Main application logic
-│   │       ├── service-worker.js       # Service worker for PWA
-│   │       ├── skincare.js             # Skincare functionality
-│   │       └── trainers.js             # Trainers directory functionality
-│   └── 📂 pages/                       # Public pages (11 files)
+│   │   ├── 📂 images/                  # Application images
+│   │   ├── 📂 js/                      # JavaScript files
+│   │   └── README.md
+│   └── 📂 pages/
 │       ├── 📂 courses/                 # Course information pages (10)
-│       │   ├── advanced-skincare.html  # Advanced skincare course
-│       │   ├── aesthetic.html          # Aesthetic services course
-│       │   ├── collagen-hairloss.html  # Collagen & hair loss course
-│       │   ├── eyelash-eyebrow.html    # Eyelash & eyebrow course
-│       │   ├── facial-peeling.html     # Facial peeling course
-│       │   ├── light-heat-therapy.html # Light & heat therapy course
-│       │   ├── nailcare.html           # Nail care course
-│       │   ├── permanent-makeup.html   # Permanent makeup course
-│       │   ├── skincare.html           # Skincare course
-│       │   └── trainers.html           # Trainers directory
-│       └── index.html                  # Landing page
+│       ├── index.html                  # Landing page
+│       └── README.md
 ├── .gitignore                          # Git ignore rules
+├── .htaccess
 ├── package.json                        # Dependencies and scripts
 └── README.md                           # This file
 ```

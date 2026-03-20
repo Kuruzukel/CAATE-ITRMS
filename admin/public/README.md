@@ -1,29 +1,16 @@
-# Admin Public Assets
+# Admin Public Directory
 
-Static files and public assets for the Admin Dashboard application.
+Static files and assets for the admin dashboard application.
 
 ## Purpose
 
-This folder contains files that are served directly without processing:
+This directory contains static files that are served directly without processing, such as:
 
+- Favicon files
 - Static HTML files
-- Robots.txt
-- Sitemap
-- Favicon
-- Other public assets
-
-## Usage
-
-Place files here that should be:
-
-- Accessible directly via URL
-- Not processed by the build system
-- Served as-is to the browser
-
-## Build Process
-
-Files in this folder are typically copied to the distribution folder during the build process.
+- Public assets
+- Build output (if configured)
 
 ---
 
-**Part of:** [CAATE-ITRMS Admin Dashboard](../README.md)
+**Part of:** [CAATE-ITRMS Admin](../README.md)

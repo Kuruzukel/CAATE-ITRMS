@@ -1,21 +1,19 @@
-# VS Code Configuration
+# VS Code Settings
 
-This folder contains Visual Studio Code workspace settings and configurations for the CAATE-ITRMS project.
+This folder contains Visual Studio Code workspace settings for the CAATE-ITRMS project.
 
-## Contents
+## Files
 
-- **settings.json** - Workspace-specific settings
-- **extensions.json** - Recommended extensions for the project
-- **launch.json** - Debug configurations (if applicable)
-- **tasks.json** - Task automation configurations (if applicable)
+- `settings.json` - Workspace-specific editor settings
 
-## Recommended Extensions
+## Purpose
 
-For optimal development experience, install the recommended extensions when prompted by VS Code.
+These settings ensure consistent development experience across the team by configuring:
 
-## Usage
-
-These settings are automatically applied when you open this workspace in VS Code. They ensure consistent development environment across all team members.
+- Editor formatting
+- File associations
+- Extension settings
+- Workspace preferences
 
 ---
 

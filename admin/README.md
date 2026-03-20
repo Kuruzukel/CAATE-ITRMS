@@ -7,95 +7,119 @@ Professional administration dashboard for CAATE (Creative Aesthetic Academy & Te
 ```
 admin/
 ├── 📂 config/
-│   └── gulpfile.js                     # Gulp build configuration
+│   ├── gulpfile.js                     # Gulp build configuration
+│   └── README.md                       # Config documentation
 ├── 📂 docs/
+│   ├── 📂 inventory-data/              # Inventory sample data
+│   │   ├── nail-care-inventory.csv
+│   │   ├── nail-care-inventory.json
+│   │   ├── skin-care-inventory.csv
+│   │   ├── skin-care-inventory.json
+│   │   └── README.md
 │   ├── MIGRATION_GUIDE.md              # Migration documentation
-│   ├── QUICK_START.md                  # Quick start guide
-│   └── STRUCTURE.md                    # Detailed structure docs
+│   ├── nail-care-inventory.csv         # Legacy inventory data
+│   ├── sample-trainees.csv             # Sample trainee data
+│   ├── sample-trainees.json
+│   └── README.md                       # Docs overview
 ├── 📂 public/                          # Static files
+│   └── README.md
 ├── 📂 src/
 │   ├── 📂 assets/
-│   │   ├── 📂 css/                     # Stylesheets (12 files)
-│   │   │   ├── admin-dashboard.css     # Dashboard styles
-│   │   │   ├── admission.css           # Admission page styles
-│   │   │   ├── application.css         # Application page styles
-│   │   │   ├── attendance.css          # Attendance page styles
-│   │   │   ├── audit-inventory.css     # Audit inventory styles
-│   │   │   ├── caate-inventory.css     # CAATE inventory styles
-│   │   │   ├── change-password.css     # Password change styles
-│   │   │   ├── custom-theme.css        # Custom theme
-│   │   │   ├── demo.css                # Demo styles
-│   │   │   ├── graduates.css           # Graduates page styles
-│   │   │   ├── schedule.css            # Schedule page styles
-│   │   │   ├── style.css               # Main styles
-│   │   │   └── table-scrollbar.css     # Table scrollbar styling
+│   │   ├── 📂 css/                     # Stylesheets (16 files)
+│   │   │   ├── admin-dashboard-scrollbar.css
+│   │   │   ├── admin-dashboard.css
+│   │   │   ├── admission.css
+│   │   │   ├── application.css
+│   │   │   ├── attendance.css
+│   │   │   ├── audit-inventory.css
+│   │   │   ├── caate-inventory.css
+│   │   │   ├── change-password.css
+│   │   │   ├── custom-theme.css
+│   │   │   ├── dashboard.css
+│   │   │   ├── demo.css
+│   │   │   ├── graduates.css
+│   │   │   ├── registration.css
+│   │   │   ├── schedule.css
+│   │   │   ├── style.css
+│   │   │   └── table-scrollbar.css
 │   │   ├── 📂 fonts/
-│   │   │   └── 📂 fonts/
-│   │   │       └── boxicons.scss       # Boxicons SCSS
-│   │   ├── 📂 images/                  # Application images (25 files)
+│   │   │   └── 📂 fonts/               # Font files
+│   │   ├── 📂 images/                  # Application images (30+ files)
 │   │   │   ├── 📂 CAATE FB COURSES/    # Course promotional images (5)
 │   │   │   ├── CAATE logos/            # CAATE branding (8)
-│   │   │   ├── TESDA logos/            # TESDA branding (4)
-│   │   │   └── Other assets/           # Miscellaneous (8)
+│   │   │   ├── TESDA logos/            # TESDA branding (6)
+│   │   │   └── Other assets/           # Miscellaneous
 │   │   ├── 📂 img/                     # Additional images
-│   │   │   ├── 📂 avatars/             # Avatar images (4)
-│   │   │   ├── 📂 backgrounds/         # Background images (1)
-│   │   │   ├── 📂 elements/            # UI elements (13)
-│   │   │   ├── 📂 favicon/             # Favicon (1)
+│   │   │   ├── 📂 avatars/             # Avatar images
+│   │   │   ├── 📂 backgrounds/         # Background images
+│   │   │   ├── 📂 elements/            # UI elements
+│   │   │   ├── 📂 favicon/             # Favicon
 │   │   │   ├── 📂 icons/               # Icon sets
-│   │   │   │   ├── 📂 brands/          # Brand icons (10)
-│   │   │   │   └── 📂 unicons/         # Unicons (8)
-│   │   │   ├── 📂 illustrations/       # Illustrations (3)
+│   │   │   │   ├── 📂 brands/          # Brand icons
+│   │   │   │   └── 📂 unicons/         # Unicons
+│   │   │   ├── 📂 illustrations/       # Illustrations
 │   │   │   └── 📂 layouts/             # Layout images
-│   │   ├── 📂 js/                      # JavaScript files (21 files)
-│   │   │   ├── accounts.js             # Account management
-│   │   │   ├── admin-dashboard.js      # Dashboard functionality
-│   │   │   ├── admission.js            # Admission logic
-│   │   │   ├── application.js          # Application handling
-│   │   │   ├── attendance.js           # Attendance management
-│   │   │   ├── audit-inventory.js      # Audit inventory logic
-│   │   │   ├── caate-inventory.js      # CAATE inventory logic
-│   │   │   ├── change-password.js      # Password change
-│   │   │   ├── competencies.js         # Competencies management
-│   │   │   ├── config.js               # Configuration
-│   │   │   ├── courses.js              # Course management
-│   │   │   ├── dashboards-analytics.js # Analytics
-│   │   │   ├── enrollment.js           # Enrollment processing
-│   │   │   ├── extended-ui-perfect-scrollbar.js # Scrollbar
-│   │   │   ├── form-basic-inputs.js    # Form handling
-│   │   │   ├── graduates.js            # Graduate management
-│   │   │   ├── main.js                 # Main application logic
-│   │   │   ├── manage-profile.js       # Profile management
-│   │   │   ├── menu-toggle.js          # Menu functionality
-│   │   │   ├── pages-account-settings-account.js # Account settings
-│   │   │   ├── requests.js             # Request management
-│   │   │   ├── schedule.js             # Schedule management
-│   │   │   ├── ui-modals.js            # Modal functionality
-│   │   │   ├── ui-popover.js           # Popover functionality
-│   │   │   └── ui-toasts.js            # Toast notifications
-│   │   └── 📂 vendor/                  # Third-party libraries
+│   │   ├── 📂 js/                      # JavaScript files (37 files)
+│   │   │   ├── accounts.js
+│   │   │   ├── admin-dashboard.js
+│   │   │   ├── admin-navbar.js
+│   │   │   ├── admission.js
+│   │   │   ├── application.js
+│   │   │   ├── attendance.js
+│   │   │   ├── audit-inventory-filter.js
+│   │   │   ├── audit-inventory.js
+│   │   │   ├── auth-dashboard.js
+│   │   │   ├── auth-guard.js
+│   │   │   ├── caate-inventory-filter.js
+│   │   │   ├── caate-inventory.js
+│   │   │   ├── change-password.js
+│   │   │   ├── competencies.js
+│   │   │   ├── config.js
+│   │   │   ├── courses.js
+│   │   │   ├── dashboard.js
+│   │   │   ├── dashboards-analytics.js
+│   │   │   ├── extended-ui-perfect-scrollbar.js
+│   │   │   ├── fix-scrollbar-warnings.js
+│   │   │   ├── form-basic-inputs.js
+│   │   │   ├── graduates.js
+│   │   │   ├── inventory-filter-dynamic.js
+│   │   │   ├── main.js
+│   │   │   ├── manage-profile.js
+│   │   │   ├── menu-toggle-debug.js
+│   │   │   ├── menu-toggle.js
+│   │   │   ├── navbar-utils.js
+│   │   │   ├── pages-account-settings-account.js
+│   │   │   ├── performance-fixes.js
+│   │   │   ├── registration.js
+│   │   │   ├── requests-optimized-functions.js
+│   │   │   ├── requests.js
+│   │   │   ├── schedule.js
+│   │   │   ├── ui-modals.js
+│   │   │   ├── ui-popover.js
+│   │   │   └── ui-toasts.js
+│   │   ├── 📂 vendor/                  # Third-party libraries
+│   │   └── README.md                   # Assets documentation
 │   ├── 📂 layouts/                     # Layout templates
+│   │   └── README.md
 │   └── 📂 pages/                       # HTML pages (15 files)
-│       ├── accounts.html               # User accounts management
-│       ├── admission.html              # Admission processing
-│       ├── application.html            # Application management
-│       ├── attendance.html             # Attendance records
-│       ├── audit-inventory.html        # Audit inventory
-│       ├── caate-inventory.html        # CAATE inventory
-│       ├── change-password.html        # Password management
-│       ├── competencies.html           # Competencies management
-│       ├── courses.html                # Course management
-│       ├── dashboard.html              # Main dashboard
-│       ├── enrollment.html             # Enrollment management
-│       ├── graduates.html              # Graduate tracking
-│       ├── manage-profile.html         # Profile management
-│       ├── requests.html               # Request management
-│       └── schedule.html               # Schedule management
+│       ├── accounts.html
+│       ├── admission.html
+│       ├── application.html
+│       ├── attendance.html
+│       ├── audit-inventory.html
+│       ├── caate-inventory.html
+│       ├── change-password.html
+│       ├── competencies.html
+│       ├── courses.html
+│       ├── dashboard.html
+│       ├── graduates.html
+│       ├── manage-profile.html
+│       ├── registration.html
+│       ├── requests.html
+│       └── schedule.html
 ├── .gitignore                          # Git ignore rules
 ├── build-config.js                     # Build configuration
 ├── gulpfile.js                         # Main Gulp configuration
-├── INDEX.md                            # Index documentation
-├── MIGRATION_SUMMARY.md                # Migration summary
 ├── package.json                        # Dependencies and scripts
 ├── README.md                           # This file
 └── webpack.config.js                   # Webpack configuration

@@ -1,28 +1,15 @@
-# Authentication System Documentation
+# Authentication Documentation
 
-Documentation for the Authentication & Admission System.
+Documentation for the authentication system.
 
-## Available Documentation
+## Files
 
-### STRUCTURE.md
+- `STRUCTURE.md` - Detailed structure and architecture documentation
 
-Detailed structure documentation including:
+## Purpose
 
-- File organization
-- Component architecture
-- Authentication flow
-- Admission workflow
-- Security considerations
-
-## Usage
-
-Refer to these documents when:
-
-- Understanding the authentication system
-- Implementing new auth features
-- Troubleshooting authentication issues
-- Contributing to the project
+Provides comprehensive documentation about the authentication system architecture, workflows, and implementation details.
 
 ---
 
-**Part of:** [CAATE-ITRMS Authentication System](../README.md)
+**Part of:** [CAATE-ITRMS Auth](../README.md)

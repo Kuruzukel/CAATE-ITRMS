@@ -1,24 +1,16 @@
-# Trainee Portal Public Assets
+# Trainee Public Directory
 
-Static files and public assets for the Trainee Portal.
+Static files and assets for the trainee dashboard application.
 
 ## Purpose
 
-This folder contains files that are served directly without processing:
+This directory contains static files that are served directly without processing, such as:
 
+- Favicon files
 - Static HTML files
-- Robots.txt
-- Favicon
-- Other public assets
-
-## Usage
-
-Place files here that should be:
-
-- Accessible directly via URL
-- Not processed by the build system
-- Served as-is to the browser
+- Public assets
+- Build output (if configured)
 
 ---
 
-**Part of:** [CAATE-ITRMS Trainee Portal](../README.md)
+**Part of:** [CAATE-ITRMS Trainee](../README.md)

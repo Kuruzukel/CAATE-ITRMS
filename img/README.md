@@ -12,6 +12,17 @@ img/
 │   ├── BEAUTYCARE(NAILCARE).png
 │   ├── BEAUTYCARE(SKINCARE).png
 │   └── PERMANENTMAKEUPTATTOO.png
+├── 📂 COURSES/                          # Course detail images (10 files)
+│   ├── Advanced Skin Care Services Level III.jpg
+│   ├── Aesthetic Services Level III.jpg
+│   ├── Beauty Care (Nail Care) Services NC II.jpg
+│   ├── Beauty Care (Skin Care) Services NC II.jpg
+│   ├── Eyelash and Eyebrow Services Level III.jpg
+│   ├── Perform Advanced Facial Treatment & Chemical Skin Peeling.jpg
+│   ├── Perform Collagen Induction Therapy & Hair Loss Treatment.jpg
+│   ├── Perform Light Therapy & Heat Therapy.jpg
+│   ├── Permanent Make-Up Tattoo Services Level III.jpg
+│   └── Trainers Methodology Level I.jpg
 ├── 📂 GRADUATES/                        # Graduate photos (21 files)
 │   ├── 1.png
 │   ├── AIRAH.png
@@ -57,10 +68,11 @@ img/
 │   ├── CAATEBGFINAL.png
 │   ├── CAATEBGX.png
 │   └── color.jpg
-├── 📄 Other Assets (3 files)
+├── 📄 Other Assets (4 files)
 │   ├── 11.png
-│   ├── DEFAULT_AVATAR.png                  # Avatar/profile image
-│   └── ADMINLOGONOBG.png                # Admin logo no background
+│   ├── AVATARNIKEL.jpg                  # Avatar image
+│   ├── DEFAULT_AVATAR.png               # Default avatar/profile image
+│   └── default_avatar.jpg               # Default avatar alternate
 └── 📄 README.md                         # This file
 ```
 
@@ -77,6 +89,23 @@ Promotional images for course offerings on social media and public website:
 - **PERMANENTMAKEUPTATTOO.png** - Permanent makeup course promotion
 
 **Usage**: Public website course pages, social media, marketing materials
+
+### Course Detail Images (`COURSES/`)
+
+Detailed course images for course pages and documentation:
+
+- **Advanced Skin Care Services Level III.jpg**
+- **Aesthetic Services Level III.jpg**
+- **Beauty Care (Nail Care) Services NC II.jpg**
+- **Beauty Care (Skin Care) Services NC II.jpg**
+- **Eyelash and Eyebrow Services Level III.jpg**
+- **Perform Advanced Facial Treatment & Chemical Skin Peeling.jpg**
+- **Perform Collagen Induction Therapy & Hair Loss Treatment.jpg**
+- **Perform Light Therapy & Heat Therapy.jpg**
+- **Permanent Make-Up Tattoo Services Level III.jpg**
+- **Trainers Methodology Level I.jpg**
+
+**Usage**: Course detail pages, curriculum documentation, certificates
 
 ### Graduate Photos (`GRADUATES/`)
 
@@ -241,13 +270,14 @@ When adding new images:
 
 | Category          | Count  | Total Size   | Format   |
 | ----------------- | ------ | ------------ | -------- |
-| Course Images     | 5      | ~2 MB        | PNG      |
+| Course Promo      | 5      | ~2 MB        | PNG      |
+| Course Details    | 10     | ~4 MB        | JPG      |
 | Graduate Photos   | 21     | ~5 MB        | PNG/JPG  |
-| CAATE Logos       | 6      | ~1 MB        | PNG      |
-| TESDA Logos       | 6      | ~1 MB        | PNG/WebP |
+| CAATE Logos       | 8      | ~1 MB        | PNG      |
+| TESDA Logos       | 7      | ~1 MB        | PNG/WebP |
 | Background Images | 5      | ~3 MB        | PNG/JPG  |
-| Other Assets      | 3      | ~500 KB      | PNG/JPG  |
-| **TOTAL**         | **46** | **~12.5 MB** | Mixed    |
+| Other Assets      | 4      | ~500 KB      | PNG/JPG  |
+| **TOTAL**         | **60** | **~16.5 MB** | Mixed    |
 
 ## Best Practices
 
@@ -266,7 +296,7 @@ For questions about specific images or to request new assets, refer to the main 
 
 **Developer:** KEL TO YAHHHH!  
 **Email:** developer@example.com  
-**Last Updated**: February 2026  
-**Total Assets**: 46 files  
+**Last Updated**: March 2026  
+**Total Assets**: 60 files  
 **Status**: Active  
 **Part of:** [CAATE-ITRMS Project](../README.md)

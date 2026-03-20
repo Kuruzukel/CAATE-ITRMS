@@ -135,41 +135,87 @@ The system includes the following MongoDB collections:
 
 ```
 backend/
-├── app/
-│   ├── config/          # Configuration files
-│   │   ├── app.php
-│   │   └── database.php
-│   ├── controllers/     # API Controllers
+├── 📂 app/
+│   ├── 📂 config/                      # Configuration files
+│   │   ├── app.php                     # App configuration
+│   │   └── database.php                # MongoDB connection
+│   ├── 📂 controllers/                 # API Controllers (10 files)
+│   │   ├── AdminController.php
+│   │   ├── AppointmentController.php
 │   │   ├── AuthController.php
+│   │   ├── CompetencyController.php
+│   │   ├── CourseController.php
+│   │   ├── EnrollmentController.php
+│   │   ├── InventoryController.php
+│   │   ├── RegistrationController.php
+│   │   ├── TraineeController.php
 │   │   └── UserController.php
-│   ├── models/          # MongoDB Models
-│   │   ├── User.php
-│   │   ├── Trainee.php
-│   │   ├── Course.php
-│   │   ├── Enrollment.php
-│   │   ├── Schedule.php
+│   ├── 📂 helpers/                     # Helper functions
+│   │   └── JwtHelper.php
+│   ├── 📂 middleware/                  # Middleware
+│   │   └── .gitkeep
+│   ├── 📂 models/                      # Data Models (14 files)
+│   │   ├── Admin.php
+│   │   ├── Admission.php
+│   │   ├── Application.php
+│   │   ├── Appointment.php
 │   │   ├── Attendance.php
 │   │   ├── Competency.php
-│   │   ├── Application.php
-│   │   ├── Admission.php
+│   │   ├── Course.php
+│   │   ├── Enrollment.php
 │   │   ├── Graduate.php
 │   │   ├── Inventory.php
-│   │   └── Request.php
-│   ├── middleware/      # Custom middleware
-│   └── helpers/         # Helper functions
-│       └── JwtHelper.php
-├── routes/
-│   └── api.php          # API route definitions
-├── public/
-│   ├── index.php        # Entry point
-│   └── .htaccess
-├── database/
-│   └── seeders/         # Database seeders
-│       ├── InitializeCollections.php
-│       └── SampleData.php
-├── storage/
-│   └── logs/            # Application logs
-└── tests/               # Test files
+│   │   ├── Request.php
+│   │   ├── Schedule.php
+│   │   ├── Trainee.php
+│   │   └── User.php
+│   └── 📂 stubs/
+│       └── mongodb.php
+├── 📂 database/
+│   ├── 📂 migrations/
+│   └── 📂 seeders/                     # Database seeders
+├── 📂 docs/                            # Backend documentation
+├── 📂 public/                          # Public entry point
+│   ├── 📂 uploads/                     # File uploads
+│   ├── .htaccess                       # Apache configuration
+│   ├── api-data.php                    # API data viewer
+│   ├── CAATE-ITRMS.competencies.json
+│   ├── CAATE-ITRMS.courses.json
+│   ├── CAATE-ITRMS.trainees.json
+│   ├── check_mongodb.php
+│   ├── get-available-years.php
+│   ├── index.php                       # Main entry point
+│   ├── seed.php
+│   ├── test-registration.php
+│   └── view-data.php                   # Data viewer
+├── 📂 routes/
+│   └── api.php                         # API routes
+├── 📂 storage/
+│   └── 📂 logs/                        # Application logs
+├── 📂 tests/                           # Unit tests
+│   └── .gitkeep
+├── 📂 vendor/                          # Composer dependencies
+│   ├── 📂 composer/
+│   ├── 📂 mongodb/
+│   ├── 📂 psr/
+│   └── autoload.php
+├── .env.example                        # Environment template
+├── .htaccess                           # Root Apache config
+├── add-trainee-passwords.php           # Utility script
+├── composer.json                       # PHP dependencies
+├── composer.lock                       # Dependency lock file
+├── README.md                           # This file
+├── seed-admin.php                      # Admin seeder
+├── seed-inventory.php                  # Inventory seeder
+├── seed-today-enrollments.php          # Enrollment seeder
+├── test-api-direct.php                 # API test
+├── test-api-stats.php                  # Stats test
+├── test-course-enrollments.php         # Course test
+├── test-courses.php                    # Course test
+├── test-enrollment-stats.php           # Enrollment test
+├── test-top-courses.php                # Top courses test
+├── update-admin-passwords.php          # Password utility
+└── verify-admin.php                    # Admin verification
 ```
 
 ## Requirements

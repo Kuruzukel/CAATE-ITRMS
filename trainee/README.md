@@ -7,55 +7,34 @@ Student/trainee dashboard for CAATE (Creative Aesthetic Academy & Technical Educ
 ```
 trainee/
 ├── 📂 public/                          # Static files
+│   └── README.md
 ├── 📂 src/
 │   ├── 📂 assets/
-│   │   ├── 📂 css/                     # Stylesheets (12 files)
-│   │   │   ├── admission-slip.css      # Admission slip styles
-│   │   │   ├── application-form.css    # Application form styles
-│   │   │   ├── attendance.css          # Attendance styles
-│   │   │   ├── change-password.css     # Password change styles
-│   │   │   ├── class-roster.css        # Class roster styles
-│   │   │   ├── courses.css             # Courses styles
-│   │   │   ├── custom-theme.css        # Custom theme
-│   │   │   ├── dashboard.css           # Dashboard styles
-│   │   │   ├── demo.css                # Demo styles
-│   │   │   ├── manage-profile.css      # Profile management styles
-│   │   │   └── style.css               # Main styles
-│   │   ├── 📂 images/                  # Application images (17 files)
-│   │   │   ├── 📂 CAATE FB COURSES/    # Course promotional images (5)
-│   │   │   ├── CAATE logos/            # CAATE branding (8)
-│   │   │   ├── TESDA logos/            # TESDA branding (4)
-│   │   │   └── Other assets/           # Miscellaneous
-│   │   ├── 📂 img/
-│   │   │   └── 📂 illustrations/       # Illustration assets (3)
-│   │   │       ├── girl-doing-yoga-light.png
-│   │   │       ├── man-with-laptop-light.png
-│   │   │       └── page-misc-error-light.png
-│   │   ├── 📂 js/                      # JavaScript files (13 files)
-│   │   │   ├── admission-slip.js       # Admission slip functionality
-│   │   │   ├── application-form.js     # Application form handling
-│   │   │   ├── attendance.js           # Attendance functionality
-│   │   │   ├── change-password.js      # Password change functionality
-│   │   │   ├── class-roster.js         # Class roster functionality
-│   │   │   ├── competencies.js         # Competencies functionality
-│   │   │   ├── config.js               # Configuration
-│   │   │   ├── courses.js              # Courses functionality
-│   │   │   ├── dashboard.js            # Dashboard functionality
-│   │   │   ├── main.js                 # Main application logic
-│   │   │   ├── manage-profile.js       # Profile management
-│   │   │   ├── menu-toggle.js          # Menu toggle functionality
-│   │   │   └── student-id.js           # Student ID functionality
-│   │   └── 📂 vendor/                  # Third-party libraries
+│   │   ├── 📂 css/                     # Stylesheets
+│   │   ├── 📂 images/                  # Application images
+│   │   ├── 📂 img/                     # Additional images
+│   │   │   ├── 📂 avatars/
+│   │   │   ├── 📂 backgrounds/
+│   │   │   ├── 📂 elements/
+│   │   │   ├── 📂 favicon/
+│   │   │   ├── 📂 icons/
+│   │   │   ├── 📂 illustrations/
+│   │   │   └── 📂 layouts/
+│   │   ├── 📂 js/                      # JavaScript files
+│   │   ├── 📂 vendor/                  # Third-party libraries
+│   │   └── README.md
 │   └── 📂 pages/                       # Trainee pages (10 files)
-│       ├── admission-slip.html         # Admission slip/certificate
-│       ├── application-form.html       # Application form
-│       ├── attendance.html             # Attendance tracking
-│       ├── change-password.html        # Password management
-│       ├── class-roster.html           # Class roster
-│       ├── competencies.html           # Competencies tracking
-│       ├── courses.html                # Courses and programs
-│       ├── dashboard.html              # Main trainee dashboard
-│       └── manage-profile.html         # Profile management
+│       ├── admission-slip.html
+│       ├── application-form.html
+│       ├── attendance.html
+│       ├── change-password.html
+│       ├── class-roster.html
+│       ├── competencies.html
+│       ├── courses.html
+│       ├── dashboard.html
+│       ├── manage-profile.html
+│       ├── registration-form.html
+│       └── README.md
 ├── package.json                        # Dependencies and scripts
 └── README.md                           # This file
 ```

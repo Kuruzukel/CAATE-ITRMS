@@ -1,83 +1,22 @@
-# Landing Page Assets
+# Public Assets
 
-Frontend assets for the Landing Page Website.
+All assets (CSS, JavaScript, images, fonts) for the public landing page.
 
 ## Structure
 
-```
-assets/
-├── css/        # Stylesheets (11 files)
-├── fonts/      # Font files
-├── images/     # Local images (17 files)
-└── js/         # JavaScript files (12 files)
-```
+- `css/` - Stylesheets for public pages
+- `js/` - JavaScript files for public functionality
+- `images/` - Local images and branding assets
+- `fonts/` - Font files
 
-## Asset Categories
+## Asset Organization
 
-### CSS (Stylesheets)
+Each course page has its own CSS and JS files for modularity.
 
-Course-specific and main styles:
+## Shared Assets
 
-- advanced-skincare.css
-- aesthetic.css
-- collagen-hairloss.css
-- eyelash-eyebrow.css
-- facial-peeling.css
-- light-heat-therapy.css
-- nailcare.css
-- permanent-makeup.css
-- skincare.css
-- style.css (main)
-- trainers.css
-
-### JavaScript
-
-- Course-specific functionality (9 files)
-- script.js (main)
-- service-worker.js (PWA support)
-- trainers.js
-
-### Images
-
-- CAATE branding and logos
-- TESDA logos
-- Course promotional images
-
-## Usage
-
-### Referencing Assets
-
-```html
-<!-- CSS -->
-<link rel="stylesheet" href="../assets/css/style.css" />
-
-<!-- JavaScript -->
-<script src="../assets/js/script.js"></script>
-
-<!-- Images -->
-<img src="../assets/images/CAATELOGOGRADIENT.png" alt="CAATE Logo" />
-
-<!-- Shared images from root -->
-<img src="../../../img/CAATE FB COURSES/ADVANCEDSKINCARE.png" alt="Course" />
-```
-
-## Progressive Web App (PWA)
-
-The service-worker.js enables:
-
-- Offline functionality
-- Caching strategies
-- Improved performance
-- App-like experience
-
-## Best Practices
-
-1. **Performance**: Optimize images and minimize CSS/JS
-2. **SEO**: Use descriptive file names and alt text
-3. **Accessibility**: Ensure proper contrast and semantic HTML
-4. **Responsive**: Test on multiple screen sizes
-5. **Caching**: Leverage service worker for better performance
+For shared images and branding, reference the `/img/` folder at project root using relative paths: `../../img/[filename]`
 
 ---
 
-**Part of:** [CAATE-ITRMS Landing Page](../README.md)
+**Part of:** [CAATE-ITRMS Public](../../README.md)

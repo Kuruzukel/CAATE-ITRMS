@@ -1,59 +1,24 @@
-# Trainee Portal Pages
+# Trainee Pages
 
-HTML pages for the Trainee Portal application.
+HTML pages for the trainee dashboard application.
 
-## Pages Overview
+## Pages
 
-### Core Pages
+- `dashboard.html` - Main trainee dashboard
+- `admission-slip.html` - Admission slip/certificate
+- `application-form.html` - Application form
+- `registration-form.html` - Registration form
+- `attendance.html` - Attendance tracking
+- `competencies.html` - Competencies tracking
+- `courses.html` - Course enrollment and tracking
+- `class-roster.html` - Class roster
+- `manage-profile.html` - Profile management
+- `change-password.html` - Password management
 
-- **dashboard.html** - Main trainee dashboard with overview
-- **manage-profile.html** - Profile management
-- **change-password.html** - Password change functionality
+## Purpose
 
-### Academic Pages
-
-- **courses.html** - Enrolled courses and programs
-- **competencies.html** - Competency tracking
-- **attendance.html** - Attendance records
-- **class-roster.html** - Class roster and classmates
-
-### Admission
-
-- **admission-slip.html** - Admission slip/certificate
-- **application-form.html** - Application form view
-
-## Page Structure
-
-Each page includes:
-
-- Header with navigation
-- Sidebar menu
-- Main content area
-- Page-specific functionality
-- Footer
-
-## Development
-
-When creating new pages:
-
-1. Use consistent layout structure
-2. Include corresponding CSS file in `../assets/css/`
-3. Include corresponding JS file in `../assets/js/`
-4. Follow naming conventions (kebab-case)
-5. Ensure responsive design
-6. Add accessibility features
-7. Implement proper authentication checks
-
-## User Experience
-
-Focus on:
-
-- Clear information hierarchy
-- Easy navigation
-- Quick access to important features
-- Mobile-friendly design
-- Helpful error messages
+These pages provide trainees with access to their courses, attendance, competencies, and profile management.
 
 ---
 
-**Part of:** [CAATE-ITRMS Trainee Portal](../README.md)
+**Part of:** [CAATE-ITRMS Trainee](../../README.md)

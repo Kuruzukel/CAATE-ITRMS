@@ -7,59 +7,25 @@ Unified authentication system for CAATE (Creative Aesthetic Academy & Technical 
 ```
 auth/
 ├── 📂 docs/
-│   └── STRUCTURE.md                    # Structure documentation
+│   ├── README.md                       # Auth documentation
+│   └── STRUCTURE.md                    # Structure details
 ├── 📂 public/                          # Static files
+│   └── README.md
 ├── 📂 src/
 │   ├── 📂 assets/
-│   │   ├── 📂 css/                     # Stylesheets (10 files)
-│   │   │   ├── admission.css           # Admission page styles
-│   │   │   ├── application-form.css    # Application form styles
-│   │   │   ├── appointment-form.css    # Appointment form styles
-│   │   │   ├── auth-custom.css         # Custom auth styles
-│   │   │   ├── boxicons.css            # Icon styles
-│   │   │   ├── consent-form.css        # Consent form styles
-│   │   │   ├── core.css                # Core styles
-│   │   │   ├── demo.css                # Demo styles
-│   │   │   ├── page-auth.css           # Authentication page styles
-│   │   │   ├── perfect-scrollbar.css   # Scrollbar styles
-│   │   │   └── theme-default.css       # Default theme
-│   │   ├── 📂 fonts/
-│   │   │   ├── 📂 boxicons/            # Boxicons font files (5)
-│   │   │   │   ├── boxicons.eot
-│   │   │   │   ├── boxicons.svg
-│   │   │   │   ├── boxicons.ttf
-│   │   │   │   ├── boxicons.woff
-│   │   │   │   └── boxicons.woff2
-│   │   │   └── boxicons.css            # Boxicons stylesheet
-│   │   ├── 📂 images/                  # Application images (17 files)
-│   │   │   ├── CAATE logos/            # CAATE branding (8)
-│   │   │   ├── TESDA logos/            # TESDA branding (4)
-│   │   │   ├── Course images/          # Course promotional (5)
-│   │   │   └── Other assets/           # Miscellaneous
-│   │   └── 📂 js/                      # JavaScript files (11 files)
-│   │       ├── admission.js            # Admission logic
-│   │       ├── application-form.js     # Application form handling
-│   │       ├── apppoinrment-form.js    # Appointment form handling
-│   │       ├── bootstrap.js            # Bootstrap initialization
-│   │       ├── config.js               # Configuration
-│   │       ├── consent-form.js         # Consent form handling
-│   │       ├── helpers.js              # Helper functions
-│   │       ├── jquery.js               # jQuery library
-│   │       ├── main.js                 # Main application logic
-│   │       ├── menu.js                 # Menu functionality
-│   │       ├── perfect-scrollbar.js    # Perfect scrollbar
-│   │       └── popper.js               # Popper.js library
-│   └── 📂 pages/                       # Authentication pages (7 files)
-│       ├── 📂 account/
-│       │   └── change-password.html    # Change password page
-│       ├── 📂 admission/               # Admission workflow pages (4)
-│       │   ├── admission.html          # Admission overview
-│       │   ├── application-form.html   # Application form
-│       │   ├── appointment-form.html   # Appointment scheduling
-│       │   └── consent-form.html       # Consent form
+│   │   ├── 📂 css/                     # Stylesheets
+│   │   ├── 📂 fonts/                   # Boxicons fonts
+│   │   │   └── 📂 boxicons/            # Boxicons font files
+│   │   ├── 📂 images/                  # Application images
+│   │   ├── 📂 js/                      # JavaScript files
+│   │   └── README.md
+│   └── 📂 pages/                       # Authentication pages
+│       ├── 📂 account/                 # Account management
+│       ├── 📂 admission/               # Admission workflow pages
 │       ├── forgot-password.html        # Password recovery page
 │       ├── login.html                  # User login page
-│       └── register.html               # User registration page
+│       ├── register.html               # User registration page
+│       └── README.md
 ├── .gitignore                          # Git ignore rules
 ├── package.json                        # Dependencies and scripts
 └── README.md                           # This file

@@ -296,23 +296,116 @@ CAATE-ITRMS/
 │
 ├── 📂 .git/                           # Git repository
 ├── 📂 .vscode/                        # VS Code settings
+│   ├── settings.json                  # Editor configuration
+│   └── README.md                      # VS Code documentation
 │
 ├── 📂 admin/                          # Admin Dashboard Application
 │   ├── 📂 config/
-│   │   └── gulpfile.js                # Gulp build configuration
+│   │   ├── gulpfile.js                # Gulp build configuration
+│   │   └── README.md                  # Config documentation
 │   ├── 📂 docs/
-│   │   └── MIGRATION_GUIDE.md         # Migration documentation
+│   │   ├── 📂 inventory-data/         # Inventory sample data
+│   │   │   ├── nail-care-inventory.csv
+│   │   │   ├── nail-care-inventory.json
+│   │   │   ├── skin-care-inventory.csv
+│   │   │   ├── skin-care-inventory.json
+│   │   │   └── README.md
+│   │   ├── MIGRATION_GUIDE.md         # Migration documentation
+│   │   ├── nail-care-inventory.csv    # Legacy inventory data
+│   │   ├── sample-trainees.csv        # Sample trainee data
+│   │   ├── sample-trainees.json
+│   │   └── README.md                  # Docs overview
 │   ├── 📂 public/                     # Static files
+│   │   └── README.md
 │   ├── 📂 src/
 │   │   ├── 📂 assets/
-│   │   │   ├── 📂 css/                # 12 CSS files
+│   │   │   ├── 📂 css/                # 16 CSS files
+│   │   │   │   ├── admin-dashboard-scrollbar.css
+│   │   │   │   ├── admin-dashboard.css
+│   │   │   │   ├── admission.css
+│   │   │   │   ├── application.css
+│   │   │   │   ├── attendance.css
+│   │   │   │   ├── audit-inventory.css
+│   │   │   │   ├── caate-inventory.css
+│   │   │   │   ├── change-password.css
+│   │   │   │   ├── custom-theme.css
+│   │   │   │   ├── dashboard.css
+│   │   │   │   ├── demo.css
+│   │   │   │   ├── graduates.css
+│   │   │   │   ├── registration.css
+│   │   │   │   ├── schedule.css
+│   │   │   │   ├── style.css
+│   │   │   │   └── table-scrollbar.css
 │   │   │   ├── 📂 fonts/              # Font assets
-│   │   │   ├── 📂 images/             # Local images
+│   │   │   │   └── 📂 fonts/          # Font files
+│   │   │   ├── 📂 images/             # Local images (30+ files)
+│   │   │   │   └── 📂 CAATE FB COURSES/
 │   │   │   ├── 📂 img/                # Additional images
-│   │   │   ├── 📂 js/                 # 21 JavaScript files
-│   │   │   └── 📂 vendor/             # Third-party libraries
+│   │   │   │   ├── 📂 avatars/
+│   │   │   │   ├── 📂 backgrounds/
+│   │   │   │   ├── 📂 elements/
+│   │   │   │   ├── 📂 favicon/
+│   │   │   │   ├── 📂 icons/
+│   │   │   │   ├── 📂 illustrations/
+│   │   │   │   └── 📂 layouts/
+│   │   │   ├── 📂 js/                 # 37 JavaScript files
+│   │   │   │   ├── accounts.js
+│   │   │   │   ├── admin-dashboard.js
+│   │   │   │   ├── admin-navbar.js
+│   │   │   │   ├── admission.js
+│   │   │   │   ├── application.js
+│   │   │   │   ├── attendance.js
+│   │   │   │   ├── audit-inventory-filter.js
+│   │   │   │   ├── audit-inventory.js
+│   │   │   │   ├── auth-dashboard.js
+│   │   │   │   ├── auth-guard.js
+│   │   │   │   ├── caate-inventory-filter.js
+│   │   │   │   ├── caate-inventory.js
+│   │   │   │   ├── change-password.js
+│   │   │   │   ├── competencies.js
+│   │   │   │   ├── config.js
+│   │   │   │   ├── courses.js
+│   │   │   │   ├── dashboard.js
+│   │   │   │   ├── dashboards-analytics.js
+│   │   │   │   ├── extended-ui-perfect-scrollbar.js
+│   │   │   │   ├── fix-scrollbar-warnings.js
+│   │   │   │   ├── form-basic-inputs.js
+│   │   │   │   ├── graduates.js
+│   │   │   │   ├── inventory-filter-dynamic.js
+│   │   │   │   ├── main.js
+│   │   │   │   ├── manage-profile.js
+│   │   │   │   ├── menu-toggle-debug.js
+│   │   │   │   ├── menu-toggle.js
+│   │   │   │   ├── navbar-utils.js
+│   │   │   │   ├── pages-account-settings-account.js
+│   │   │   │   ├── performance-fixes.js
+│   │   │   │   ├── registration.js
+│   │   │   │   ├── requests-optimized-functions.js
+│   │   │   │   ├── requests.js
+│   │   │   │   ├── schedule.js
+│   │   │   │   ├── ui-modals.js
+│   │   │   │   ├── ui-popover.js
+│   │   │   │   └── ui-toasts.js
+│   │   │   ├── 📂 vendor/             # Third-party libraries
+│   │   │   └── README.md              # Assets documentation
 │   │   ├── 📂 layouts/                # Layout templates
+│   │   │   └── README.md
 │   │   └── 📂 pages/                  # 15 HTML pages
+│   │       ├── accounts.html
+│   │       ├── admission.html
+│   │       ├── application.html
+│   │       ├── attendance.html
+│   │       ├── audit-inventory.html
+│   │       ├── caate-inventory.html
+│   │       ├── change-password.html
+│   │       ├── competencies.html
+│   │       ├── courses.html
+│   │       ├── dashboard.html
+│   │       ├── graduates.html
+│   │       ├── manage-profile.html
+│   │       ├── registration.html
+│   │       ├── requests.html
+│   │       └── schedule.html
 │   ├── .gitignore
 │   ├── build-config.js                # Build configuration
 │   ├── gulpfile.js                    # Main Gulp file
@@ -322,19 +415,24 @@ CAATE-ITRMS/
 │
 ├── 📂 auth/                           # Authentication System
 │   ├── 📂 docs/
+│   │   ├── README.md                  # Auth documentation
+│   │   └── STRUCTURE.md               # Structure details
 │   ├── 📂 public/                     # Static files
+│   │   └── README.md
 │   ├── 📂 src/
 │   │   ├── 📂 assets/
-│   │   │   ├── 📂 css/                # 10 CSS files
+│   │   │   ├── 📂 css/                # Stylesheets
 │   │   │   ├── 📂 fonts/              # Boxicons fonts
 │   │   │   ├── 📂 images/             # Local images
-│   │   │   └── 📂 js/                 # 11 JavaScript files
+│   │   │   ├── 📂 js/                 # JavaScript files
+│   │   │   └── README.md
 │   │   └── 📂 pages/
 │   │       ├── 📂 account/            # Account management
 │   │       ├── 📂 admission/          # Admission workflow
 │   │       ├── forgot-password.html   # Password recovery
 │   │       ├── login.html             # User login
-│   │       └── register.html          # User registration
+│   │       ├── register.html          # User registration
+│   │       └── README.md
 │   ├── .gitignore
 │   ├── package.json                   # Dependencies & scripts
 │   └── README.md                      # Auth documentation
@@ -342,74 +440,160 @@ CAATE-ITRMS/
 ├── 📂 backend/                        # Backend API (PHP + MongoDB)
 │   ├── 📂 app/
 │   │   ├── 📂 config/                 # Configuration files
+│   │   │   ├── app.php                # App configuration
 │   │   │   └── database.php           # MongoDB connection
-│   │   ├── 📂 controllers/            # API controllers
-│   │   │   ├── AuthController.php     # Authentication logic
-│   │   │   ├── TraineeController.php  # Trainee management
-│   │   │   └── UserController.php     # User management
+│   │   ├── 📂 controllers/            # API controllers (10 files)
+│   │   │   ├── AdminController.php
+│   │   │   ├── AppointmentController.php
+│   │   │   ├── AuthController.php
+│   │   │   ├── CompetencyController.php
+│   │   │   ├── CourseController.php
+│   │   │   ├── EnrollmentController.php
+│   │   │   ├── InventoryController.php
+│   │   │   ├── RegistrationController.php
+│   │   │   ├── TraineeController.php
+│   │   │   └── UserController.php
 │   │   ├── 📂 helpers/                # Helper functions
+│   │   │   └── JwtHelper.php
 │   │   ├── 📂 middleware/             # Middleware
-│   │   └── 📂 models/                 # Data models
-│   │       ├── Trainee.php            # Trainee model
-│   │       └── User.php               # User model
+│   │   │   └── .gitkeep
+│   │   ├── 📂 models/                 # Data models (14 files)
+│   │   │   ├── Admin.php
+│   │   │   ├── Admission.php
+│   │   │   ├── Application.php
+│   │   │   ├── Appointment.php
+│   │   │   ├── Attendance.php
+│   │   │   ├── Competency.php
+│   │   │   ├── Course.php
+│   │   │   ├── Enrollment.php
+│   │   │   ├── Graduate.php
+│   │   │   ├── Inventory.php
+│   │   │   ├── Request.php
+│   │   │   ├── Schedule.php
+│   │   │   ├── Trainee.php
+│   │   │   └── User.php
+│   │   └── 📂 stubs/
+│   │       └── mongodb.php
 │   ├── 📂 database/
-│   │   └── 📂 seeders/                # Database seeders
+│   │   ├── 📂 migrations/
+│   │   └── 📂 seeders/
+│   ├── 📂 docs/                       # Backend documentation
 │   ├── 📂 public/                     # Public entry point
+│   │   ├── 📂 uploads/                # File uploads
 │   │   ├── .htaccess                  # Apache configuration
 │   │   ├── api-data.php               # API data viewer
+│   │   ├── CAATE-ITRMS.competencies.json
+│   │   ├── CAATE-ITRMS.courses.json
+│   │   ├── CAATE-ITRMS.trainees.json
+│   │   ├── check_mongodb.php
+│   │   ├── get-available-years.php
 │   │   ├── index.php                  # Main entry point
+│   │   ├── seed.php
+│   │   ├── test-registration.php
 │   │   └── view-data.php              # Data viewer
 │   ├── 📂 routes/
 │   │   └── api.php                    # API routes
 │   ├── 📂 storage/
 │   │   └── 📂 logs/                   # Application logs
 │   ├── 📂 tests/                      # Unit tests
+│   │   └── .gitkeep
 │   ├── 📂 vendor/                     # Composer dependencies
+│   │   ├── 📂 composer/
+│   │   ├── 📂 mongodb/
+│   │   ├── 📂 psr/
+│   │   └── autoload.php
 │   ├── .env.example                   # Environment template
 │   ├── .htaccess                      # Root Apache config
+│   ├── add-trainee-passwords.php      # Utility script
 │   ├── composer.json                  # PHP dependencies
 │   ├── composer.lock                  # Dependency lock file
-│   └── README.md                      # Backend documentation
+│   ├── README.md                      # Backend documentation
+│   ├── seed-admin.php                 # Admin seeder
+│   ├── seed-inventory.php             # Inventory seeder
+│   ├── seed-today-enrollments.php     # Enrollment seeder
+│   ├── test-api-direct.php            # API test
+│   ├── test-api-stats.php             # Stats test
+│   ├── test-course-enrollments.php    # Course test
+│   ├── test-courses.php               # Course test
+│   ├── test-enrollment-stats.php      # Enrollment test
+│   ├── test-top-courses.php           # Top courses test
+│   ├── update-admin-passwords.php     # Password utility
+│   └── verify-admin.php               # Admin verification
 │
 ├── 📂 public/                         # Landing Page Website
 │   ├── 📂 dist/                       # Built files
+│   │   └── README.md
 │   ├── 📂 docs/
+│   │   └── README.md
 │   ├── 📂 src/
 │   │   ├── 📂 assets/
-│   │   │   ├── 📂 css/                # 11 CSS files
+│   │   │   ├── 📂 css/                # Stylesheets
 │   │   │   ├── 📂 fonts/              # Font assets
 │   │   │   ├── 📂 images/             # Local images
-│   │   │   └── 📂 js/                 # 12 JavaScript files
+│   │   │   ├── 📂 js/                 # JavaScript files
+│   │   │   └── README.md
 │   │   └── 📂 pages/
 │   │       ├── 📂 courses/            # 10 course pages
-│   │       └── index.html             # Landing page
+│   │       ├── index.html             # Landing page
+│   │       └── README.md
 │   ├── .gitignore
+│   ├── .htaccess
 │   ├── package.json                   # Dependencies & scripts
 │   └── README.md                      # Public documentation
 │
 ├── 📂 trainee/                        # Trainee Portal
 │   ├── 📂 public/                     # Static files
+│   │   └── README.md
 │   ├── 📂 src/
 │   │   ├── 📂 assets/
-│   │   │   ├── 📂 css/                # 12 CSS files
+│   │   │   ├── 📂 css/                # Stylesheets
 │   │   │   ├── 📂 images/             # Local images
 │   │   │   ├── 📂 img/                # Illustrations
-│   │   │   ├── 📂 js/                 # 13 JavaScript files
-│   │   │   └── 📂 vendor/             # Third-party libraries
+│   │   │   │   ├── 📂 avatars/
+│   │   │   │   ├── 📂 backgrounds/
+│   │   │   │   ├── 📂 elements/
+│   │   │   │   ├── 📂 favicon/
+│   │   │   │   ├── 📂 icons/
+│   │   │   │   ├── 📂 illustrations/
+│   │   │   │   └── 📂 layouts/
+│   │   │   ├── 📂 js/                 # JavaScript files
+│   │   │   ├── 📂 vendor/             # Third-party libraries
+│   │   │   └── README.md
 │   │   └── 📂 pages/                  # 10 HTML pages
+│   │       ├── admission-slip.html
+│   │       ├── application-form.html
+│   │       ├── attendance.html
+│   │       ├── change-password.html
+│   │       ├── class-roster.html
+│   │       ├── competencies.html
+│   │       ├── courses.html
+│   │       ├── dashboard.html
+│   │       ├── manage-profile.html
+│   │       ├── registration-form.html
+│   │       └── README.md
 │   ├── package.json                   # Dependencies & scripts
 │   └── README.md                      # Trainee documentation
 │
 ├── 📂 img/                            # Shared Assets Directory
 │   ├── 📂 CAATE FB COURSES/           # 5 course promotional images
+│   │   ├── ADVANCEDSKINCARE.png
+│   │   ├── AESTHETICSERVICES.png
+│   │   ├── BEAUTYCARE(NAILCARE).png
+│   │   ├── BEAUTYCARE(SKINCARE).png
+│   │   └── PERMANENTMAKEUPTATTOO.png
+│   ├── 📂 COURSES/                    # 10 course images
 │   ├── 📂 GRADUATES/                  # 21 graduate photos
-│   ├── CAATE Logos/                   # 6 CAATE branding assets
-│   ├── TESDA Logos/                   # 6 TESDA branding assets
-│   ├── Background Images/             # 5 background assets
-│   ├── Other Assets/                  # 3 miscellaneous files
+│   ├── CAATE Logos (6 files)          # CAATE branding assets
+│   ├── TESDA Logos (6 files)          # TESDA branding assets
+│   ├── Background Images (5 files)    # Background assets
+│   ├── Other Assets (3 files)         # Miscellaneous files
 │   └── README.md                      # Asset documentation
 │
-└── 📄 README.md                       # Main project documentation
+├── .gitignore                         # Git ignore rules
+├── .nojekyll                          # GitHub Pages config
+├── index.html                         # Root redirect page
+├── README.md                          # Main project documentation
+└── SECURITY.md                        # Security policy
 ```
 
 ---
@@ -420,7 +604,7 @@ CAATE-ITRMS/
 
 Professional administration interface for managing all aspects of the training center.
 
-**Pages:** 15 | **CSS Files:** 12 | **JS Files:** 21 | **Features:** Dashboard, Competencies, Courses, Schedule, Graduates, Accounts, Attendance, Enrollment, Applications, Inventory (Audit & CAATE), Profile, Change Password
+**Pages:** 15 | **CSS Files:** 16 | **JS Files:** 37 | **Features:** Dashboard, Competencies, Courses, Schedule, Graduates, Accounts, Attendance, Registration, Admission, Applications, Requests, Inventory (Audit & CAATE), Profile, Change Password
 
 [📖 Full Documentation](admin/README.md)
 
@@ -428,7 +612,7 @@ Professional administration interface for managing all aspects of the training c
 
 Secure authentication and comprehensive admission workflow.
 
-**Pages:** 7 | **CSS Files:** 10 | **JS Files:** 11 | **Features:** Login, Register, Password Recovery, Admission, Application Form, Appointment, Consent, Account Management
+**Pages:** 7+ | **CSS Files:** Multiple | **JS Files:** Multiple | **Features:** Login, Register, Password Recovery, Admission Workflow, Application Form, Appointment Scheduling, Consent Management, Account Settings
 
 [📖 Full Documentation](auth/README.md)
 
@@ -436,7 +620,7 @@ Secure authentication and comprehensive admission workflow.
 
 Professional public-facing website showcasing courses and training programs.
 
-**Pages:** 11 | **CSS Files:** 11 | **JS Files:** 12 | **Courses:** 10 professional courses + Trainer Directory
+**Pages:** 11+ | **CSS Files:** Multiple | **JS Files:** Multiple | **Courses:** 10 professional courses + Trainer Directory
 
 [📖 Full Documentation](public/README.md)
 
@@ -444,7 +628,7 @@ Professional public-facing website showcasing courses and training programs.
 
 Student dashboard for course management and profile administration.
 
-**Pages:** 10 | **CSS Files:** 12 | **JS Files:** 13 | **Features:** Dashboard, Admission Slip, Application, Courses, Attendance, Competencies, Class Roster, Profile, Password Management
+**Pages:** 10 | **CSS Files:** Multiple | **JS Files:** Multiple | **Features:** Dashboard, Admission Slip, Application Form, Registration Form, Courses, Attendance, Competencies, Class Roster, Profile, Password Management
 
 [📖 Full Documentation](trainee/README.md)
 
@@ -452,7 +636,7 @@ Student dashboard for course management and profile administration.
 
 RESTful API built with PHP and MongoDB for data management.
 
-**Technology:** PHP 7.4+ | **Database:** MongoDB | **Architecture:** REST API | **Features:** User Authentication, Trainee Management, CRUD Operations, Statistics API
+**Technology:** PHP 7.4+ | **Database:** MongoDB | **Architecture:** REST API | **Controllers:** 10 | **Models:** 14 | **Features:** Authentication, Trainee Management, Course Management, Enrollment, Attendance, Competencies, Inventory, Statistics API
 
 [📖 Full Documentation](backend/README.md)
 
@@ -638,13 +822,14 @@ npm run watch
 
 | Metric                  | Count                |
 | ----------------------- | -------------------- |
-| **Total Pages**         | 46 HTML pages        |
+| **Total Pages**         | 50+ HTML pages       |
 | **Applications**        | 5 (4 frontend + API) |
-| **CSS Files**           | 45+ stylesheets      |
-| **JavaScript Files**    | 57+ scripts          |
-| **PHP Files**           | 10+ backend files    |
-| **Shared Assets**       | 46 files             |
-| **Documentation Files** | 6 README files       |
+| **CSS Files**           | 50+ stylesheets      |
+| **JavaScript Files**    | 60+ scripts          |
+| **Controllers**         | 10 PHP controllers   |
+| **Models**              | 14 data models       |
+| **Shared Assets**       | 50+ files            |
+| **Documentation Files** | 15+ README files     |
 | **Database**            | MongoDB (NoSQL)      |
 
 ---

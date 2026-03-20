@@ -1,46 +1,27 @@
 # Authentication Pages
 
-HTML pages for the Authentication & Admission System.
+HTML pages for the authentication system and admission workflow.
 
-## Pages Overview
+## Pages
 
-### Authentication Pages
+### Authentication
 
-- **login.html** - User login page
-- **register.html** - New user registration
-- **forgot-password.html** - Password recovery
+- `login.html` - User login
+- `register.html` - User registration
+- `forgot-password.html` - Password recovery
 
 ### Account Management
 
-- **account/change-password.html** - Password change for authenticated users
+- `account/change-password.html` - Password change
 
 ### Admission Workflow
 
-- **admission/admission.html** - Admission overview and requirements
-- **admission/application-form.html** - Comprehensive application form
-- **admission/appointment-form.html** - Appointment scheduling
-- **admission/consent-form.html** - Legal consent and agreements
+- `admission/` - Complete admission workflow pages
 
-## Page Structure
+## Purpose
 
-Each page includes:
-
-- Clean, focused layout
-- Form validation
-- Error handling
-- Success messages
-- Responsive design
-
-## Development
-
-When creating new pages:
-
-1. Follow authentication best practices
-2. Include proper form validation
-3. Implement security measures
-4. Ensure accessibility
-5. Test on multiple devices
+These pages handle user authentication, registration, and the complete admission process for new trainees.
 
 ---
 
-**Part of:** [CAATE-ITRMS Authentication System](../README.md)
+**Part of:** [CAATE-ITRMS Auth](../../README.md)

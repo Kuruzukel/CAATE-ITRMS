@@ -1,43 +1,20 @@
-# Admin Layout Templates
+# Admin Layouts
 
-Reusable layout templates for the Admin Dashboard application.
+Reusable layout templates for the admin dashboard application.
 
 ## Purpose
 
-This folder contains layout templates that provide:
+Contains layout templates and components that are shared across multiple pages, such as:
 
-- Common page structure
-- Shared navigation
-- Header and footer components
-- Sidebar layouts
-- Consistent styling
+- Header/navigation templates
+- Sidebar templates
+- Footer templates
+- Common page structures
 
 ## Usage
 
-Layout templates are used to:
-
-- Maintain consistent UI across pages
-- Reduce code duplication
-- Simplify page creation
-- Ensure uniform navigation
-
-## Structure
-
-Layouts typically include:
-
-- Header with navigation
-- Sidebar menu
-- Main content area
-- Footer
-- Common scripts and styles
-
-## Best Practices
-
-- Keep layouts modular and reusable
-- Use semantic HTML
-- Include accessibility features
-- Maintain responsive design
+These layouts help maintain consistency across the admin dashboard and reduce code duplication.
 
 ---
 
-**Part of:** [CAATE-ITRMS Admin Dashboard](../README.md)
+**Part of:** [CAATE-ITRMS Admin](../../README.md)

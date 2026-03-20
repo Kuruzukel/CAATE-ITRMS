@@ -418,10 +418,9 @@
                               id="growthReportId" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                               Filter Year
                             </button>
-                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="growthReportId">
-                              <a class="dropdown-item" href="javascript:void(0);">2027</a>
-                              <a class="dropdown-item" href="javascript:void(0);">2026</a>
-                              <a class="dropdown-item" href="javascript:void(0);">2025</a>
+                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="growthReportId"
+                              id="growthReportYearMenu">
+                              <a class="dropdown-item" href="javascript:void(0);" data-year="2026">2026</a>
                             </div>
                           </div>
                         </div>
@@ -514,13 +513,11 @@
                           <div class="d-flex flex-sm-column flex-row align-items-start justify-content-between">
                             <div class="card-title">
                               <h5 class="text-nowrap mb-2">Enrollment Activity Trend</h5>
-                              <span class="badge bg-label-warning rounded-pill" id="activityTrendYearBadge">Year
-                                2026</span>
                             </div>
                             <div class="mt-sm-auto">
+                              <h3 class="mb-0" id="activityTrendCount">0</h3>
                               <small class="text-success text-nowrap fw-semibold" id="activityTrendPercentage"><i
                                   class="bx bx-chevron-up"></i> 0%</small>
-                              <h3 class="mb-0" id="activityTrendCount">0</h3>
                             </div>
                           </div>
                           <div id="profileReportChart"></div>

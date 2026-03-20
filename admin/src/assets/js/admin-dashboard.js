@@ -19,7 +19,7 @@ function updateYearLabels(year) {
     // Update enrollment activity trend badge
     const activityBadge = document.getElementById('activityTrendYearBadge');
     if (activityBadge) {
-        activityBadge.textContent = `Year ${year}`;
+        activityBadge.textContent = year;
     }
 
     // Update year statistics labels (current year and previous year)
@@ -264,12 +264,12 @@ function ensureSuccessBadgeStyling() {
 
 // Initialize year filter functionality
 function initYearFilter() {
-    const yearDropdownItems = document.querySelectorAll('#growthReportId + .dropdown-menu .dropdown-item');
+    const yearDropdownItems = document.querySelectorAll('#growthReportYearMenu .dropdown-item');
 
     yearDropdownItems.forEach(item => {
         item.addEventListener('click', function (e) {
             e.preventDefault();
-            const year = parseInt(this.textContent.trim());
+            const year = parseInt(this.getAttribute('data-year'));
 
             if (!isNaN(year)) {
                 selectedYear = year;

@@ -396,6 +396,16 @@
 
     // Store chart instance globally
     window.growthChartInstance = growthChart;
+
+    // Check if there's pending growth data to update
+    if (window.pendingGrowthData !== null && window.pendingGrowthData !== undefined) {
+      const growthValue = isNaN(window.pendingGrowthData) ? 0 : Math.max(0, Math.min(100, window.pendingGrowthData));
+      console.log('Applying pending growth data:', growthValue);
+      setTimeout(() => {
+        growthChart.updateSeries([growthValue]);
+        window.pendingGrowthData = null;
+      }, 100);
+    }
   }
 
   // Profit Report Line Chart

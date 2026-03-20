@@ -8,6 +8,9 @@ var API_BASE_URL_DASHBOARD = window.location.origin.includes('localhost')
 // Global variable to store selected year - defaults to current year
 let selectedYear = new Date().getFullYear();
 
+// Store pending growth chart data
+let pendingGrowthData = null;
+
 // Function to update all year labels on the dashboard
 function updateYearLabels(year) {
     // Update chart title
@@ -58,10 +61,11 @@ async function fetchDashboardStatistics(year = selectedYear) {
         const result = JSON.parse(text);
 
         if (result.success) {
+            console.log('Dashboard statistics received:', result.data);
             updateDashboardUI(result.data);
         }
     } catch (error) {
-        // Silently fail
+        console.error('Error fetching dashboard statistics:', error);
     }
 }
 
@@ -202,11 +206,21 @@ function updateDashboardUI(data) {
         growthTextElement.textContent = `${data.yearGrowthPercentage}% Enrollment Growth`;
     }
 
-    // Update growth chart if it exists
-    if (window.growthChartInstance && data.yearGrowthPercentage !== undefined && data.yearGrowthPercentage !== null) {
-        const growthValue = isNaN(data.yearGrowthPercentage) ? 0 : Math.max(0, Math.min(100, data.yearGrowthPercentage));
-        window.growthChartInstance.updateSeries([growthValue]);
-    }
+    // Update growth chart - wait for it to be ready if needed
+    const updateGrowthChart = () => {
+        if (window.growthChartInstance && data.yearGrowthPercentage !== undefined && data.yearGrowthPercentage !== null) {
+            const growthValue = isNaN(data.yearGrowthPercentage) ? 0 : Math.max(0, Math.min(100, data.yearGrowthPercentage));
+            console.log('Updating growth chart with value:', growthValue);
+            window.growthChartInstance.updateSeries([growthValue]);
+            pendingGrowthData = null; // Clear pending data
+        } else if (data.yearGrowthPercentage !== undefined) {
+            // Store data for later and retry
+            pendingGrowthData = data.yearGrowthPercentage;
+            console.log('Growth chart not ready, stored pending data:', pendingGrowthData);
+            setTimeout(updateGrowthChart, 100);
+        }
+    };
+    updateGrowthChart();
 
     // Update year statistics counts
     const currentYearCount = document.getElementById('currentYearCount');
@@ -308,6 +322,7 @@ async function fetchAndPopulateYears() {
 // Function to populate year dropdown with available years from database
 function populateYearDropdown(years) {
     const yearMenu = document.getElementById('growthReportYearMenu');
+    const yearTextElement = document.getElementById('selectedYearText');
     if (!yearMenu) return;
 
     const currentYear = new Date().getFullYear();
@@ -316,6 +331,11 @@ function populateYearDropdown(years) {
     if (!years.includes(currentYear)) {
         years.unshift(currentYear);
         years.sort((a, b) => b - a); // Sort descending
+    }
+
+    // Set button text to current year on initial load
+    if (yearTextElement) {
+        yearTextElement.textContent = currentYear;
     }
 
     yearMenu.innerHTML = '';
@@ -338,6 +358,12 @@ function populateYearDropdown(years) {
 
             if (!isNaN(selectedYear)) {
                 window.selectedYear = selectedYear;
+
+                // Update button text
+                if (yearTextElement) {
+                    yearTextElement.textContent = selectedYear;
+                }
+
                 updateYearLabels(selectedYear);
                 fetchDashboardStatistics(selectedYear);
 

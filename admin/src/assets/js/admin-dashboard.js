@@ -474,7 +474,6 @@ function updateCourseEnrollmentUI(data) {
         img.alt = course.name;
         img.className = 'rounded course-image';
         img.style.cssText = 'width: 40px; height: 40px; object-fit: cover;';
-        img.crossOrigin = 'anonymous';
         img.setAttribute('data-course-id', course.id);
 
         // Set image source with fallback

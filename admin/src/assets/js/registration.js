@@ -448,9 +448,41 @@
 
         if (dateValue) {
             filtered = filtered.filter(r => {
-                const regDate = new Date(r.submittedAt.$date || r.submittedAt);
-                const filterDate = new Date(dateValue);
-                return regDate.toDateString() === filterDate.toDateString();
+                try {
+                    let regDate;
+
+                    // Handle MongoDB BSON date format
+                    if (r.submittedAt && r.submittedAt.$date) {
+                        if (typeof r.submittedAt.$date === 'number') {
+                            regDate = new Date(r.submittedAt.$date);
+                        } else if (typeof r.submittedAt.$date === 'string') {
+                            regDate = new Date(r.submittedAt.$date);
+                        } else if (r.submittedAt.$date.$numberLong) {
+                            regDate = new Date(parseInt(r.submittedAt.$date.$numberLong));
+                        } else {
+                            regDate = new Date(r.submittedAt.$date);
+                        }
+                    } else if (r.submittedAt) {
+                        regDate = new Date(r.submittedAt);
+                    } else {
+                        return false;
+                    }
+
+                    // Check if date is valid
+                    if (isNaN(regDate.getTime())) {
+                        return false;
+                    }
+
+                    const filterDate = new Date(dateValue);
+
+                    // Compare dates (year, month, day only - ignore time)
+                    return regDate.getFullYear() === filterDate.getFullYear() &&
+                        regDate.getMonth() === filterDate.getMonth() &&
+                        regDate.getDate() === filterDate.getDate();
+                } catch (error) {
+                    console.error('Date filter error:', error, r.submittedAt);
+                    return false;
+                }
             });
         }
 

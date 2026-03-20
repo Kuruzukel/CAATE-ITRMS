@@ -765,6 +765,47 @@
             return;
         }
 
+        // Store original data for change detection
+        window.originalRegistrationData = {
+            uliNumber: registration.uliNumber || '',
+            entryDate: registration.entryDate || '',
+            firstName: registration.firstName || '',
+            middleName: registration.middleName || '',
+            lastName: registration.lastName || '',
+            numberStreet: registration.numberStreet || '',
+            barangay: registration.barangay || '',
+            district: registration.district || '',
+            cityMunicipality: registration.cityMunicipality || '',
+            province: registration.province || '',
+            region: registration.region || '',
+            emailFacebook: registration.emailFacebook || '',
+            contactNo: registration.contactNo || '',
+            nationality: registration.nationality || '',
+            sex: registration.sex || '',
+            civilStatus: registration.civilStatus || '',
+            age: registration.age || '',
+            employmentStatus: registration.employmentStatus || '',
+            employmentType: registration.employmentType || '',
+            birthMonth: registration.birthMonth || '',
+            birthDay: registration.birthDay || '',
+            birthYear: registration.birthYear || '',
+            birthCity: registration.birthCity || '',
+            birthProvince: registration.birthProvince || '',
+            birthRegion: registration.birthRegion || '',
+            education: registration.education || '',
+            parentName: registration.parentName || '',
+            parentAddress: registration.parentAddress || '',
+            clientClassificationArray: (registration.clientClassificationArray || []).join(', '),
+            disabilityTypeArray: (registration.disabilityTypeArray || []).join(', '),
+            disabilityCauseArray: (registration.disabilityCauseArray || []).join(', '),
+            courseQualification: registration.courseQualification || '',
+            selectedCourse: registration.selectedCourse || '',
+            scholarshipType: registration.scholarshipType || '',
+            privacyConsent: registration.privacyConsent || '',
+            traineeId: registration.traineeId || '',
+            status: registration.status || ''
+        };
+
         // Populate edit modal with registration data
         document.getElementById('editRegistrationId').value = id;
 
@@ -932,6 +973,63 @@
         const disabilityCauseText = document.getElementById('editDisabilityCause').value.trim();
         const disabilityCauseArray = disabilityCauseText ? disabilityCauseText.split(',').map(item => item.trim()).filter(item => item) : [];
 
+        // Check for changes
+        if (window.originalRegistrationData) {
+            const currentData = {
+                uliNumber: document.getElementById('editUliNumber').value.trim(),
+                entryDate: document.getElementById('editEntryDate').value,
+                firstName: document.getElementById('editFirstName').value.trim(),
+                middleName: document.getElementById('editMiddleName').value.trim(),
+                lastName: document.getElementById('editLastName').value.trim(),
+                numberStreet: document.getElementById('editStreet').value.trim(),
+                barangay: document.getElementById('editBarangay').value.trim(),
+                district: document.getElementById('editDistrict').value.trim(),
+                cityMunicipality: document.getElementById('editCity').value.trim(),
+                province: document.getElementById('editProvince').value.trim(),
+                region: document.getElementById('editRegion').value.trim(),
+                emailFacebook: document.getElementById('editEmail').value.trim(),
+                contactNo: document.getElementById('editContactNo').value.trim(),
+                nationality: document.getElementById('editNationality').value.trim(),
+                sex: document.getElementById('editSex').value,
+                civilStatus: document.getElementById('editCivilStatus').value,
+                age: document.getElementById('editAge').value,
+                employmentStatus: document.getElementById('editEmploymentStatus').value,
+                employmentType: document.getElementById('editEmploymentType').value,
+                birthMonth: document.getElementById('editBirthMonth').value,
+                birthDay: document.getElementById('editBirthDay').value,
+                birthYear: document.getElementById('editBirthYear').value,
+                birthCity: document.getElementById('editBirthCity').value.trim(),
+                birthProvince: document.getElementById('editBirthProvince').value.trim(),
+                birthRegion: document.getElementById('editBirthRegion').value.trim(),
+                education: document.getElementById('editEducation').value,
+                parentName: document.getElementById('editParentName').value.trim(),
+                parentAddress: document.getElementById('editParentAddress').value.trim(),
+                clientClassificationArray: clientClassArray.join(', '),
+                disabilityTypeArray: disabilityTypeArray.join(', '),
+                disabilityCauseArray: disabilityCauseArray.join(', '),
+                courseQualification: document.getElementById('editCourseQualification').value.trim(),
+                selectedCourse: courseSelect.value,
+                scholarshipType: document.getElementById('editScholarshipType').value,
+                privacyConsent: document.getElementById('editPrivacyConsent').value,
+                traineeId: document.getElementById('editTraineeId').value.trim(),
+                status: document.getElementById('editStatus').value
+            };
+
+            // Compare with original data
+            let hasChanges = false;
+            for (const key in currentData) {
+                if (String(currentData[key]) !== String(window.originalRegistrationData[key])) {
+                    hasChanges = true;
+                    break;
+                }
+            }
+
+            if (!hasChanges) {
+                showToast('No changes were made to the registration', 'info');
+                return;
+            }
+        }
+
         const updatedData = {
             // T2MIS Auto Generated
             uliNumber: document.getElementById('editUliNumber').value.trim(),
@@ -960,7 +1058,7 @@
             civilStatus: document.getElementById('editCivilStatus').value,
             age: parseInt(document.getElementById('editAge').value),
             employmentStatus: document.getElementById('editEmploymentStatus').value,
-            employmentType: document.getElementById('editEmploymentType').value.trim(),
+            employmentType: document.getElementById('editEmploymentType').value,
 
             // Birth Info
             birthMonth: document.getElementById('editBirthMonth').value,
@@ -1073,18 +1171,57 @@
      * Show success message
      */
     function showSuccess(message) {
-        // TODO: Implement toast notification
-        console.log('Success:', message);
-        alert(message);
+        showToast(message, 'success');
     }
 
     /**
      * Show error message
      */
     function showError(message) {
-        // TODO: Implement toast notification
-        console.error('Error:', message);
-        alert(message);
+        showToast(message, 'error');
+    }
+
+    /**
+     * Show toast notification
+     */
+    function showToast(message, type = 'success') {
+        const container = document.getElementById('toastContainer');
+        if (!container) return;
+
+        const toast = document.createElement('div');
+        toast.className = `toast-notification ${type}`;
+
+        const icon = type === 'success' ? 'bx-check' :
+            type === 'error' ? 'bx-x' :
+                type === 'warning' ? 'bx-error-alt' : 'bxs-info-circle';
+
+        toast.innerHTML = `
+            <i class="bx ${icon} toast-icon"></i>
+            <div class="toast-content">
+                <div class="toast-message">${message}</div>
+            </div>
+        `;
+
+        container.appendChild(toast);
+
+        // Auto remove after 5 seconds
+        setTimeout(() => {
+            toast.classList.add('hiding');
+            setTimeout(() => toast.remove(), 300);
+        }, 5000);
+    }
+
+    /**
+     * Close toast notification
+     */
+    function closeToast(button) {
+        const toast = button.closest('.toast-notification');
+        if (toast) {
+            toast.classList.add('hiding');
+            setTimeout(() => {
+                toast.remove();
+            }, 300);
+        }
     }
 
     /**

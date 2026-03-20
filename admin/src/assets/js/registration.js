@@ -813,25 +813,46 @@
         document.getElementById('editParentAddress').value = registration.parentAddress || '';
 
         // Client Classification - handle array
+        let clientClassValue = '';
         if (registration.clientClassificationArray && Array.isArray(registration.clientClassificationArray)) {
-            document.getElementById('editClientClassification').value = registration.clientClassificationArray.join(', ');
-        } else {
-            document.getElementById('editClientClassification').value = '';
+            clientClassValue = registration.clientClassificationArray.join(', ');
+        } else if (registration.clientClassification) {
+            // Fallback for non-array format
+            if (Array.isArray(registration.clientClassification)) {
+                clientClassValue = registration.clientClassification.join(', ');
+            } else if (typeof registration.clientClassification === 'string') {
+                clientClassValue = registration.clientClassification;
+            }
         }
+        document.getElementById('editClientClassification').value = clientClassValue;
 
         // Disability Type - handle array
+        let disabilityTypeValue = '';
         if (registration.disabilityTypeArray && Array.isArray(registration.disabilityTypeArray)) {
-            document.getElementById('editDisabilityType').value = registration.disabilityTypeArray.join(', ');
-        } else {
-            document.getElementById('editDisabilityType').value = '';
+            disabilityTypeValue = registration.disabilityTypeArray.join(', ');
+        } else if (registration.disabilityType) {
+            // Fallback for non-array format
+            if (Array.isArray(registration.disabilityType)) {
+                disabilityTypeValue = registration.disabilityType.join(', ');
+            } else if (typeof registration.disabilityType === 'string') {
+                disabilityTypeValue = registration.disabilityType;
+            }
         }
+        document.getElementById('editDisabilityType').value = disabilityTypeValue;
 
         // Disability Cause - handle array
+        let disabilityCauseValue = '';
         if (registration.disabilityCauseArray && Array.isArray(registration.disabilityCauseArray)) {
-            document.getElementById('editDisabilityCause').value = registration.disabilityCauseArray.join(', ');
-        } else {
-            document.getElementById('editDisabilityCause').value = '';
+            disabilityCauseValue = registration.disabilityCauseArray.join(', ');
+        } else if (registration.disabilityCause) {
+            // Fallback for non-array format
+            if (Array.isArray(registration.disabilityCause)) {
+                disabilityCauseValue = registration.disabilityCause.join(', ');
+            } else if (typeof registration.disabilityCause === 'string') {
+                disabilityCauseValue = registration.disabilityCause;
+            }
         }
+        document.getElementById('editDisabilityCause').value = disabilityCauseValue;
 
         // Course Info
         document.getElementById('editCourseQualification').value = registration.courseQualification || '';

@@ -434,6 +434,51 @@ class Trainee {
             error_log("Statistics - Total Trainees: $totalTrainees, Registrations: $totalRegistrations, Applications: $totalApplications, Admissions: $totalAdmissions");
             error_log("Today's Enrollments: $todayEnrollments, Approved: $approvedEnrollments, Pending: $pendingEnrollments, Cancelled: $cancelledEnrollments");
             
+            // Get top enrolled courses
+            $coursesCollection = $db->courses;
+            $topCourses = [];
+            
+            // Get all courses
+            $allCourses = $coursesCollection->find();
+            foreach ($allCourses as $course) {
+                $courseArray = (array)$course;
+                $courseName = $courseArray['title'] ?? $courseArray['name'] ?? 'Unknown Course';
+                
+                // Count enrollments for this course from all three collections
+                $courseEnrollments = 0;
+                
+                // Count from registrations
+                $courseEnrollments += $registrationCollection->countDocuments([
+                    'course' => $courseName,
+                    'status' => 'approved'
+                ]);
+                
+                // Count from applications
+                $courseEnrollments += $applicationCollection->countDocuments([
+                    'course' => $courseName,
+                    'status' => 'approved'
+                ]);
+                
+                // Count from admissions
+                $courseEnrollments += $admissionCollection->countDocuments([
+                    'course' => $courseName,
+                    'status' => 'approved'
+                ]);
+                
+                $topCourses[] = [
+                    'name' => $courseName,
+                    'image' => $courseArray['image'] ?? '',
+                    'hours' => $courseArray['hours'] ?? $courseArray['duration'] ?? 'N/A',
+                    'enrollmentCount' => $courseEnrollments
+                ];
+            }
+            
+            // Sort by enrollment count descending and take top 5
+            usort($topCourses, function($a, $b) {
+                return $b['enrollmentCount'] - $a['enrollmentCount'];
+            });
+            $topCourses = array_slice($topCourses, 0, 5);
+            
             return [
                 'total' => $totalTrainees,
                 'totalEnrollment' => $totalRegistrations + $totalApplications + $totalAdmissions,
@@ -456,6 +501,8 @@ class Trainee {
                 'graduates' => $graduates,
                 'monthly_enrollments' => $monthlyEnrollments,
                 'previous_year_monthly_enrollments' => $previousYearMonthlyEnrollments,
+                'topCourses' => $topCourses,
+                'totalEnrollments' => $totalRegistrations + $totalApplications + $totalAdmissions,
                 'year' => $year
             ];
         } catch (Exception $e) {

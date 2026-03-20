@@ -61,11 +61,10 @@ async function fetchDashboardStatistics(year = selectedYear) {
         const result = JSON.parse(text);
 
         if (result.success) {
-            console.log('Dashboard statistics received:', result.data);
             updateDashboardUI(result.data);
         }
     } catch (error) {
-        console.error('Error fetching dashboard statistics:', error);
+        // Silently fail
     }
 }
 
@@ -210,13 +209,11 @@ function updateDashboardUI(data) {
     const updateGrowthChart = () => {
         if (window.growthChartInstance && data.yearGrowthPercentage !== undefined && data.yearGrowthPercentage !== null) {
             const growthValue = isNaN(data.yearGrowthPercentage) ? 0 : Math.max(0, Math.min(100, data.yearGrowthPercentage));
-            console.log('Updating growth chart with value:', growthValue);
             window.growthChartInstance.updateSeries([growthValue]);
             pendingGrowthData = null; // Clear pending data
         } else if (data.yearGrowthPercentage !== undefined) {
             // Store data for later and retry
             pendingGrowthData = data.yearGrowthPercentage;
-            console.log('Growth chart not ready, stored pending data:', pendingGrowthData);
             setTimeout(updateGrowthChart, 100);
         }
     };
@@ -313,7 +310,6 @@ async function fetchAndPopulateYears() {
             populateYearDropdown([new Date().getFullYear()]);
         }
     } catch (error) {
-        console.error('Error fetching available years:', error);
         // Fallback to current year if fetch fails
         populateYearDropdown([new Date().getFullYear()]);
     }

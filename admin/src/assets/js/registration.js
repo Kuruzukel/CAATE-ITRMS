@@ -1325,114 +1325,162 @@
         }
     }
 
-})();
+    /**
+     * Open add registration modal
+     */
+    async function openAddRegistrationModal() {
+        // Load courses for the dropdown
+        await loadCoursesForModal();
 
-/**
- * Open add registration modal
- */
-async function openAddRegistrationModal() {
-    // Load courses for the dropdown
-    await loadCoursesForModal();
-
-    // Show modal
-    const modal = new bootstrap.Modal(document.getElementById('addRegistrationModal'));
-    modal.show();
-}
-
-/**
- * Load courses for modal dropdown
- */
-async function loadCoursesForModal() {
-    const dropdown = document.getElementById('addCourse');
-    if (!dropdown) return;
-
-    try {
-        const response = await fetch(`${config.api.baseUrl}/api/v1/courses`);
-        const result = await response.json();
-
-        if (result.success && result.data && result.data.length > 0) {
-            dropdown.innerHTML = '<option value="">Select a course...</option>';
-
-            result.data.forEach(course => {
-                const option = document.createElement('option');
-                option.value = course.title || 'Untitled Course';
-                option.dataset.courseId = course._id?.$oid || course._id || '';
-                option.textContent = `${course.title || 'Untitled Course'} (${course.badge || course.course_code || ''})`;
-                dropdown.appendChild(option);
-            });
-        } else {
-            dropdown.innerHTML = '<option value="">No courses available</option>';
-        }
-    } catch (error) {
-        console.error('Error loading courses:', error);
-        dropdown.innerHTML = '<option value="">Error loading courses</option>';
-    }
-}
-
-/**
- * Save new registration
- */
-async function saveNewRegistration() {
-    const form = document.getElementById('addRegistrationForm');
-
-    if (!form.checkValidity()) {
-        form.reportValidity();
-        return;
+        // Show modal
+        const modal = new bootstrap.Modal(document.getElementById('addRegistrationModal'));
+        modal.show();
     }
 
-    const courseSelect = document.getElementById('addCourse');
-    const selectedOption = courseSelect.options[courseSelect.selectedIndex];
+    /**
+     * Load courses for modal dropdown
+     */
+    async function loadCoursesForModal() {
+        const dropdown = document.getElementById('addCourse');
+        if (!dropdown) return;
 
-    const registrationData = {
-        firstName: document.getElementById('addFirstName').value.trim(),
-        middleName: document.getElementById('addMiddleName').value.trim(),
-        lastName: document.getElementById('addLastName').value.trim(),
-        emailFacebook: document.getElementById('addEmail').value.trim(),
-        contactNo: document.getElementById('addContactNo').value.trim(),
-        numberStreet: document.getElementById('addStreet').value.trim(),
-        barangay: document.getElementById('addBarangay').value.trim(),
-        cityMunicipality: document.getElementById('addCity').value.trim(),
-        province: document.getElementById('addProvince').value.trim(),
-        region: document.getElementById('addRegion').value.trim(),
-        sex: document.getElementById('addSex').value,
-        civilStatus: document.getElementById('addCivilStatus').value,
-        age: parseInt(document.getElementById('addAge').value),
-        selectedCourse: courseSelect.value,
-        selectedCourseId: selectedOption.dataset.courseId || '',
-        status: document.getElementById('addStatus').value,
-        submittedAt: new Date().toISOString()
-    };
+        try {
+            const response = await fetch(`${config.api.baseUrl}/api/v1/courses`);
+            const result = await response.json();
 
-    try {
-        const response = await fetch(`${config.api.baseUrl}/api/v1/registrations`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(registrationData)
-        });
+            if (result.success && result.data && result.data.length > 0) {
+                dropdown.innerHTML = '<option value="">Select a course...</option>';
 
-        const result = await response.json();
-
-        if (result.success) {
-            showSuccess('Registration added successfully');
-
-            // Close modal
-            const modal = bootstrap.Modal.getInstance(document.getElementById('addRegistrationModal'));
-            if (modal) {
-                modal.hide();
+                result.data.forEach(course => {
+                    const option = document.createElement('option');
+                    option.value = course.title || 'Untitled Course';
+                    option.dataset.courseId = course._id?.$oid || course._id || '';
+                    option.textContent = `${course.title || 'Untitled Course'} (${course.badge || course.course_code || ''})`;
+                    dropdown.appendChild(option);
+                });
+            } else {
+                dropdown.innerHTML = '<option value="">No courses available</option>';
             }
-
-            // Reset form
-            form.reset();
-
-            // Reload registrations
-            loadRegistrations();
-        } else {
-            throw new Error(result.message || 'Failed to add registration');
+        } catch (error) {
+            console.error('Error loading courses:', error);
+            dropdown.innerHTML = '<option value="">Error loading courses</option>';
         }
-    } catch (error) {
-        console.error('Error adding registration:', error);
-        showError('Failed to add registration: ' + error.message);
     }
-}
+
+    /**
+     * Save new registration
+     */
+    async function saveNewRegistration() {
+        const form = document.getElementById('addRegistrationForm');
+
+        // Custom validation with toast notifications
+        const requiredFields = [
+            { id: 'addFirstName', label: 'First Name' },
+            { id: 'addStreet', label: 'Number, Street' },
+            { id: 'addBarangay', label: 'Barangay' },
+            { id: 'addDistrict', label: 'District' },
+            { id: 'addCity', label: 'City/Municipality' },
+            { id: 'addProvince', label: 'Province' },
+            { id: 'addRegion', label: 'Region' },
+            { id: 'addEmail', label: 'Email/Facebook' },
+            { id: 'addContactNo', label: 'Contact Number' },
+            { id: 'addNationality', label: 'Nationality' },
+            { id: 'addSex', label: 'Sex' },
+            { id: 'addCivilStatus', label: 'Civil Status' },
+            { id: 'addBirthMonth', label: 'Birth Month' },
+            { id: 'addBirthDay', label: 'Birth Day' },
+            { id: 'addBirthYear', label: 'Birth Year' },
+            { id: 'addEducation', label: 'Educational Attainment' },
+            { id: 'addCourse', label: 'Course' }
+        ];
+
+        // Validate required fields
+        for (const field of requiredFields) {
+            const element = document.getElementById(field.id);
+            if (!element.value || element.value.trim() === '') {
+                showError(`Please fill out the ${field.label} field`);
+                element.focus();
+                return;
+            }
+        }
+
+        const courseSelect = document.getElementById('addCourse');
+        const selectedOption = courseSelect.options[courseSelect.selectedIndex];
+
+        const registrationData = {
+            uliNumber: document.getElementById('addUliNumber')?.value.trim() || '',
+            entryDate: document.getElementById('addEntryDate')?.value || '',
+            firstName: document.getElementById('addFirstName').value.trim(),
+            middleName: document.getElementById('addMiddleName').value.trim(),
+            lastName: document.getElementById('addLastName').value.trim(),
+            emailFacebook: document.getElementById('addEmail').value.trim(),
+            contactNo: document.getElementById('addContactNo').value.trim(),
+            nationality: document.getElementById('addNationality').value.trim(),
+            numberStreet: document.getElementById('addStreet').value.trim(),
+            barangay: document.getElementById('addBarangay').value.trim(),
+            district: document.getElementById('addDistrict').value.trim(),
+            cityMunicipality: document.getElementById('addCity').value.trim(),
+            province: document.getElementById('addProvince').value.trim(),
+            region: document.getElementById('addRegion').value.trim(),
+            sex: document.getElementById('addSex').value,
+            age: parseInt(document.getElementById('addAge')?.value || 0),
+            civilStatus: document.getElementById('addCivilStatus').value,
+            employmentType: document.getElementById('addEmploymentType')?.value || '',
+            employmentStatus: document.getElementById('addEmploymentStatus')?.value || '',
+            birthMonth: document.getElementById('addBirthMonth').value,
+            birthDay: document.getElementById('addBirthDay').value,
+            birthYear: document.getElementById('addBirthYear').value,
+            birthCity: document.getElementById('addBirthCity')?.value || '',
+            birthProvince: document.getElementById('addBirthProvince')?.value || '',
+            birthRegion: document.getElementById('addBirthRegion')?.value || '',
+            education: document.getElementById('addEducation').value,
+            parentName: document.getElementById('addParentName')?.value.trim() || '',
+            parentAddress: document.getElementById('addParentAddress')?.value.trim() || '',
+            clientClassification: document.getElementById('addClientClassification')?.value.trim() || '',
+            disabilityType: document.getElementById('addDisabilityType')?.value.trim() || '',
+            disabilityCause: document.getElementById('addDisabilityCause')?.value.trim() || '',
+            courseQualification: document.getElementById('addCourseQualification')?.value.trim() || '',
+            selectedCourse: courseSelect.value,
+            selectedCourseId: selectedOption.dataset.courseId || '',
+            scholarshipType: document.getElementById('addScholarshipType')?.value || '',
+            privacyConsent: document.getElementById('addPrivacyConsent')?.value || '',
+            traineeId: document.getElementById('addTraineeId')?.value.trim() || '',
+            status: document.getElementById('addStatus').value,
+            submittedAt: new Date().toISOString()
+        };
+
+        try {
+            const response = await fetch(`${config.api.baseUrl}/api/v1/registrations`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(registrationData)
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                showSuccess('Registration added successfully');
+
+                // Close modal
+                const modal = bootstrap.Modal.getInstance(document.getElementById('addRegistrationModal'));
+                if (modal) {
+                    modal.hide();
+                }
+
+                // Reset form
+                form.reset();
+
+                // Reload registrations
+                loadRegistrations();
+            } else {
+                throw new Error(result.message || 'Failed to add registration');
+            }
+        } catch (error) {
+            console.error('Error adding registration:', error);
+            showError('Failed to add registration: ' + error.message);
+        }
+    }
+
+})();

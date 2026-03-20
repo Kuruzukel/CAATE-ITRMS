@@ -450,8 +450,6 @@ function updateCourseEnrollmentUI(data) {
         return;
     }
 
-    console.log('Updating course enrollment UI with data:', data);
-
     if (!data.topCourses || data.topCourses.length === 0) {
         coursesList.innerHTML = `
             <li class="d-flex justify-content-center align-items-center py-3">
@@ -464,8 +462,6 @@ function updateCourseEnrollmentUI(data) {
     coursesList.innerHTML = '';
 
     data.topCourses.forEach((course, index) => {
-        console.log(`Course ${index + 1}:`, course.name, 'Image:', course.image);
-
         const isLast = index === data.topCourses.length - 1;
         const li = document.createElement('li');
         li.className = isLast ? 'd-flex' : 'd-flex mb-4 pb-1';
@@ -476,26 +472,18 @@ function updateCourseEnrollmentUI(data) {
 
         const img = document.createElement('img');
         img.alt = course.name;
-        img.className = 'rounded course-image'; // Add course-image class to distinguish from profile avatars
+        img.className = 'rounded course-image';
         img.style.cssText = 'width: 40px; height: 40px; object-fit: cover;';
-        img.crossOrigin = 'anonymous'; // Add CORS support
-        img.setAttribute('data-course-id', course.id); // Add data attribute to identify course images
+        img.crossOrigin = 'anonymous';
+        img.setAttribute('data-course-id', course.id);
 
         // Set image source with fallback
         if (course.image && course.image.trim() !== '') {
             img.src = course.image;
-            console.log(`Setting image src for ${course.name}:`, course.image);
-
-            img.onload = function () {
-                console.log(`Image loaded successfully for ${course.name}`);
-            };
-
             img.onerror = function () {
-                console.log(`Image failed to load for ${course.name}, using fallback`);
                 this.src = '../assets/images/DEFAULT_AVATAR.png';
             };
         } else {
-            console.log(`No image URL for ${course.name}, using default`);
             img.src = '../assets/images/DEFAULT_AVATAR.png';
         }
 

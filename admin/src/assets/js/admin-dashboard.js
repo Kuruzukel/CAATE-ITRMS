@@ -460,6 +460,105 @@ function updateWelcomeChart(approvedPercentage, pendingPercentage, cancelledPerc
 
 
 // Function to fetch course enrollment statistics
+async function fetchCourseEnrollmentStatistics() {
+    try {
+        const response = await fetch(`${API_BASE_URL_DASHBOARD}/api/v1/courses/enrollment-statistics`);
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+
+        if (result.success) {
+            updateCourseEnrollmentUI(result.data);
+        }
+    } catch (error) {
+        console.error('Error fetching course enrollment statistics:', error);
+    }
+}
+
+// Function to update Course Enrollment Statistics UI
+function updateCourseEnrollmentUI(data) {
+    const coursesList = document.getElementById('topEnrolledCoursesList');
+    if (!coursesList) {
+        console.log('topEnrolledCoursesList element not found');
+        return;
+    }
+
+    console.log('Updating course enrollment UI with data:', data);
+
+    if (!data.topCourses || data.topCourses.length === 0) {
+        coursesList.innerHTML = `
+            <li class="d-flex justify-content-center align-items-center py-3">
+                <p class="text-muted small">No enrollment data available</p>
+            </li>
+        `;
+        return;
+    }
+
+    coursesList.innerHTML = '';
+
+    data.topCourses.forEach((course, index) => {
+        console.log(`Course ${index + 1}:`, course.name, 'Image:', course.image);
+
+        const isLast = index === data.topCourses.length - 1;
+        const li = document.createElement('li');
+        li.className = isLast ? 'd-flex' : 'd-flex mb-4 pb-1';
+
+        // Create image element
+        const avatarDiv = document.createElement('div');
+        avatarDiv.className = 'avatar flex-shrink-0 me-3';
+
+        const img = document.createElement('img');
+        img.alt = course.name;
+        img.className = 'rounded course-image'; // Add course-image class to distinguish from profile avatars
+        img.style.cssText = 'width: 40px; height: 40px; object-fit: cover;';
+        img.crossOrigin = 'anonymous'; // Add CORS support
+        img.setAttribute('data-course-id', course.id); // Add data attribute to identify course images
+
+        // Set image source with fallback
+        if (course.image && course.image.trim() !== '') {
+            img.src = course.image;
+            console.log(`Setting image src for ${course.name}:`, course.image);
+
+            img.onload = function () {
+                console.log(`Image loaded successfully for ${course.name}`);
+            };
+
+            img.onerror = function () {
+                console.log(`Image failed to load for ${course.name}, using fallback`);
+                this.src = '../assets/images/DEFAULT_AVATAR.png';
+            };
+        } else {
+            console.log(`No image URL for ${course.name}, using default`);
+            img.src = '../assets/images/DEFAULT_AVATAR.png';
+        }
+
+        avatarDiv.appendChild(img);
+
+        // Create content div
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'd-flex w-100 flex-wrap align-items-center justify-content-between gap-2';
+
+        contentDiv.innerHTML = `
+            <div class="me-2">
+                <h6 class="mb-0">${course.name}</h6>
+                <small class="text-muted d-block">${course.hours}</small>
+            </div>
+            <div class="user-progress d-flex align-items-center">
+                <h6 class="mb-0">${course.enrollmentCount}</h6>
+            </div>
+        `;
+
+        li.appendChild(avatarDiv);
+        li.appendChild(contentDiv);
+        coursesList.appendChild(li);
+    });
+
+    console.log('Course enrollment UI updated successfully');
+}
+
 // Function to fetch recent enrollment activity
 async function fetchRecentEnrollmentActivity() {
     try {
@@ -612,6 +711,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Fetch and display real dashboard statistics
     fetchDashboardStatistics();
     fetchRecentEnrollmentActivity();
+    fetchCourseEnrollmentStatistics();
 
     stylePresentBadges();
     stylePresentTodayElements();
@@ -637,5 +737,6 @@ document.addEventListener('DOMContentLoaded', function () {
     setInterval(() => {
         fetchDashboardStatistics(selectedYear);
         fetchRecentEnrollmentActivity();
+        fetchCourseEnrollmentStatistics();
     }, 30000);
 });

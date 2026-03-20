@@ -117,6 +117,11 @@ function updateNavbarUserInfo(data) {
     profileImageSelectors.forEach(selector => {
         const images = document.querySelectorAll(selector);
         images.forEach(img => {
+            // Skip course images
+            if (img.classList.contains('course-image') || img.hasAttribute('data-course-id')) {
+                return;
+            }
+
             if (data.profileImage && data.profileImage !== '../assets/images/DEFAULT_AVATAR.png') {
                 // Handle both relative and absolute paths
                 if (data.profileImage.startsWith('/CAATE-ITRMS/')) {
@@ -143,10 +148,16 @@ function updateNavbarUserInfo(data) {
 
 
     // Force update any remaining avatar images that might have been missed
+    // BUT EXCLUDE COURSE IMAGES
     setTimeout(() => {
         const allImages = document.querySelectorAll('img');
         let forceUpdated = 0;
         allImages.forEach(img => {
+            // Skip course images - CRITICAL CHECK
+            if (img.classList.contains('course-image') || img.hasAttribute('data-course-id')) {
+                return;
+            }
+
             if ((img.src.includes('DEFAULT_AVATAR') ||
                 img.classList.contains('rounded-circle') ||
                 img.classList.contains('w-px-40') ||
@@ -193,9 +204,15 @@ function initializeAdminNavbar() {
     // Listen for custom profile image update events
     window.addEventListener('profileImageUpdated', function (e) {
         if (e.detail && e.detail.imagePath) {
-            // Force update all avatars with the new image
-            const allAvatarImages = document.querySelectorAll('img[src*="DEFAULT_AVATAR"], .navbar img, .dropdown-menu img, .avatar img');
+            // Force update only user profile avatars (not course images)
+            // Exclude images with course-image class or data-course-id attribute
+            const allAvatarImages = document.querySelectorAll('.navbar .avatar img, .dropdown-menu .avatar img, .layout-navbar .avatar img');
             allAvatarImages.forEach((img) => {
+                // Skip course images
+                if (img.classList.contains('course-image') || img.hasAttribute('data-course-id')) {
+                    return;
+                }
+
                 if (e.detail.imagePath.startsWith('/CAATE-ITRMS/')) {
                     img.src = window.location.origin + e.detail.imagePath;
                 } else if (e.detail.imagePath.startsWith('/')) {
@@ -217,8 +234,15 @@ window.refreshAdminNavbar = function () {
 
 // Function to force update all avatar images with a specific image path
 window.forceUpdateAvatars = function (imagePath) {
-    const allAvatarImages = document.querySelectorAll('img[src*="DEFAULT_AVATAR"], .navbar img, .dropdown-menu img, .avatar img');
+    // Only update user profile avatars in navbar and dropdown (not course images)
+    // Exclude images with course-image class or data-course-id attribute
+    const allAvatarImages = document.querySelectorAll('.navbar .avatar img, .dropdown-menu .avatar img, .layout-navbar .avatar img');
     allAvatarImages.forEach((img) => {
+        // Skip course images
+        if (img.classList.contains('course-image') || img.hasAttribute('data-course-id')) {
+            return;
+        }
+
         if (imagePath.startsWith('/CAATE-ITRMS/')) {
             img.src = window.location.origin + imagePath;
         } else if (imagePath.startsWith('/')) {

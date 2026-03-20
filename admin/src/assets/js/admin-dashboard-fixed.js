@@ -289,10 +289,7 @@ function updateCourseEnrollmentUI(data) {
                 <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
                     <div class="me-2">
                         <h6 class="mb-0">${course.name}</h6>
-                        <small class="text-muted">${course.hours} hours</small>
-                    </div>
-                    <div class="user-progress">
-                        <small class="fw-semibold">${course.enrollmentCount}</small>
+                        <small class="text-muted">${course.hours}</small>
                     </div>
                 </div>
             `;

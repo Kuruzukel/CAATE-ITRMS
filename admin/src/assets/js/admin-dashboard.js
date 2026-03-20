@@ -478,48 +478,6 @@ async function fetchCourseEnrollmentStatistics() {
     }
 }
 
-// Function to update Course Enrollment Statistics UI
-function updateCourseEnrollmentUI(data) {
-    // Update total enrollments count
-    const totalEnrollmentsElement = document.getElementById('totalEnrollmentsCount');
-    if (totalEnrollmentsElement && data.totalEnrollments !== undefined) {
-        totalEnrollmentsElement.textContent = data.totalEnrollments.toLocaleString();
-    }
-
-    // Update top enrolled courses list
-    const coursesList = document.getElementById('topEnrolledCoursesList');
-    if (coursesList && data.topCourses && data.topCourses.length > 0) {
-        coursesList.innerHTML = '';
-
-        data.topCourses.forEach((course, index) => {
-            const isLast = index === data.topCourses.length - 1;
-            const li = document.createElement('li');
-            li.className = isLast ? 'd-flex' : 'd-flex mb-4 pb-1';
-
-            // Use course image from database
-            const courseImage = course.image || 'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&h=250&fit=crop';
-
-            li.innerHTML = `
-                <div class="avatar flex-shrink-0 me-3">
-                    <img src="${courseImage}" 
-                         alt="${course.name}" 
-                         class="rounded" 
-                         style="width: 38px; height: 38px; object-fit: cover;" 
-                         onerror="this.src='https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&h=250&fit=crop'" />
-                </div>
-                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                    <div class="me-2">
-                        <h6 class="mb-0">${course.name}</h6>
-                        <small class="text-muted">${course.hours}</small>
-                    </div>
-                </div>
-            `;
-
-            coursesList.appendChild(li);
-        });
-    }
-}
-
 // Function to fetch recent enrollment activity
 async function fetchRecentEnrollmentActivity() {
     try {
@@ -639,27 +597,46 @@ function updateCourseEnrollmentUI(data) {
         const listElement = document.getElementById('topEnrolledCoursesList');
         if (listElement) {
             if (data.topCourses.length > 0) {
-                listElement.innerHTML = data.topCourses.map((course, index) => {
+                // Clear existing content first
+                listElement.innerHTML = '';
+
+                // Force a reflow to ensure the clear takes effect
+                void listElement.offsetHeight;
+
+                // Build the new HTML
+                const html = data.topCourses.map((course, index) => {
                     const isLast = index === data.topCourses.length - 1;
-                    const imageUrl = course.image || 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400&h=250&fit=crop';
+                    // Use the image from the course data, with fallback to default
+                    let imageUrl = course.image && course.image.trim() !== ''
+                        ? course.image
+                        : 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400&h=250&fit=crop';
+
+                    // Add cache buster for external images
+                    if (imageUrl.includes('unsplash.com') || imageUrl.includes('bing.net') || imageUrl.includes('omyguard.com') || imageUrl.includes('northshoremedicalclinic.ca')) {
+                        imageUrl += (imageUrl.includes('?') ? '&' : '?') + 'cache=' + Date.now();
+                    }
 
                     return `
                         <li class="d-flex ${isLast ? '' : 'mb-4 pb-1'}">
                             <div class="avatar flex-shrink-0 me-3">
-                                <img src="${imageUrl}" alt="${course.name}" class="rounded" style="width: 38px; height: 38px; object-fit: cover;" />
+                                <img src="${imageUrl}" 
+                                     alt="${course.name}" 
+                                     class="rounded" 
+                                     style="width: 38px; height: 38px; object-fit: cover; display: block;" 
+                                     onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400&h=250&fit=crop';" />
                             </div>
                             <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
                                 <div class="me-2">
                                     <h6 class="mb-0">${course.name}</h6>
-                                    <small class="text-muted">${course.hours} hours</small>
-                                </div>
-                                <div class="user-progress">
-                                    <small class="fw-semibold">${course.enrollmentCount}</small>
+                                    <small class="text-muted">${course.hours}</small>
                                 </div>
                             </div>
                         </li>
                     `;
                 }).join('');
+
+                // Set the new HTML
+                listElement.innerHTML = html;
 
                 // Update the donut chart with real data
                 updateCourseDonutChart(data.topCourses);

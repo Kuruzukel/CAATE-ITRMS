@@ -405,7 +405,7 @@
 
     const profileReportChartConfig = {
       chart: {
-        height: 80,
+        height: 100,
         type: 'line',
         toolbar: {
           show: false

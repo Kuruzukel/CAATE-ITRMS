@@ -373,42 +373,6 @@ function populateYearDropdown(years) {
     });
 }
 
-// Initialize styling when DOM is loaded
-document.addEventListener('DOMContentLoaded', function () {
-    // Initialize year labels with current year
-    updateYearLabels(selectedYear);
-
-    // Initialize year filter
-    initYearFilter();
-
-    // Fetch and display real dashboard statistics
-    fetchDashboardStatistics();
-
-    stylePresentBadges();
-    stylePresentTodayElements();
-    ensureSuccessBadgeStyling();
-
-    // Re-apply styling after any dynamic content updates
-    const observer = new MutationObserver(function (mutations) {
-        mutations.forEach(function (mutation) {
-            if (mutation.type === 'childList') {
-                stylePresentBadges();
-                ensureSuccessBadgeStyling();
-            }
-        });
-    });
-
-    // Start observing
-    observer.observe(document.body, {
-        childList: true,
-        subtree: true
-    });
-
-    // Refresh statistics every 30 seconds
-    setInterval(() => fetchDashboardStatistics(selectedYear), 30000);
-});
-
-
 // Function to update the welcome chart with real data
 function updateWelcomeChart(approvedPercentage, pendingPercentage, cancelledPercentage) {
     // Check if ApexCharts is available

@@ -496,20 +496,21 @@ function updateCourseEnrollmentUI(data) {
             const li = document.createElement('li');
             li.className = isLast ? 'd-flex' : 'd-flex mb-4 pb-1';
 
+            // Use course image from database
+            const courseImage = course.image || 'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&h=250&fit=crop';
+
             li.innerHTML = `
                 <div class="avatar flex-shrink-0 me-3">
-                    <img src="${course.image || 'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&h=250&fit=crop'}" 
+                    <img src="${courseImage}" 
                          alt="${course.name}" 
                          class="rounded" 
-                         style="width: 38px; height: 38px; object-fit: cover;" />
+                         style="width: 38px; height: 38px; object-fit: cover;" 
+                         onerror="this.src='https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&h=250&fit=crop'" />
                 </div>
                 <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
                     <div class="me-2">
                         <h6 class="mb-0">${course.name}</h6>
-                        <small class="text-muted">${course.hours} hours</small>
-                    </div>
-                    <div class="user-progress">
-                        <small class="fw-semibold">${course.enrollmentCount}</small>
+                        <small class="text-muted">${course.hours}</small>
                     </div>
                 </div>
             `;
@@ -790,12 +791,6 @@ function updateCourseDonutChart(courses) {
     const totalEnrollments = courses.reduce((sum, course) => sum + (course.enrollmentCount || 0), 0);
 
     if (totalEnrollments === 0) {
-        // Hide the chart and show a message
-        chartElement.innerHTML = `
-            <div style="display: flex; align-items: center; justify-content: center; height: 165px; width: 130px;">
-                <p style="text-align: center; color: #8592a3; font-size: 12px; margin: 0;">No enrollments yet</p>
-            </div>
-        `;
         // Destroy existing chart instance if it exists
         if (window.orderStatisticsChartInstance) {
             window.orderStatisticsChartInstance.destroy();

@@ -84,17 +84,20 @@ function updateDashboardUI(data) {
         totalTraineesElement.textContent = data.total.toLocaleString();
     }
 
-    // Calculate percentage for the chart
-    const totalEnrollments = data.approvedEnrollments + data.pendingEnrollments;
-    const enrolledPercentage = totalEnrollments > 0
+    // Calculate percentage for the chart based on overall enrollments
+    const totalEnrollments = data.approvedEnrollments + data.pendingEnrollments + data.cancelledEnrollments;
+    const approvedPercentage = totalEnrollments > 0
         ? Math.round((data.approvedEnrollments / totalEnrollments) * 100)
         : 0;
     const pendingPercentage = totalEnrollments > 0
         ? Math.round((data.pendingEnrollments / totalEnrollments) * 100)
         : 0;
+    const cancelledPercentage = totalEnrollments > 0
+        ? Math.round((data.cancelledEnrollments / totalEnrollments) * 100)
+        : 0;
 
     // Update the welcome card chart
-    updateWelcomeChart(enrolledPercentage, pendingPercentage, Math.abs(data.todayPercentageIncrease));
+    updateWelcomeChart(approvedPercentage, pendingPercentage, cancelledPercentage);
 
     // Update percentage in welcome card text
     const percentageTextElement = document.querySelector('.col-sm-7 .fw-bold');
@@ -289,10 +292,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 // Function to update the welcome chart with real data
-function updateWelcomeChart(enrolledPercentage, pendingPercentage, completedPercentage) {
+function updateWelcomeChart(approvedPercentage, pendingPercentage, cancelledPercentage) {
     // Check if ApexCharts is available
     if (typeof ApexCharts === 'undefined') {
-        setTimeout(() => updateWelcomeChart(enrolledPercentage, pendingPercentage, completedPercentage), 500);
+        setTimeout(() => updateWelcomeChart(approvedPercentage, pendingPercentage, cancelledPercentage), 500);
         return;
     }
 
@@ -300,31 +303,34 @@ function updateWelcomeChart(enrolledPercentage, pendingPercentage, completedPerc
     if (!chartElement) return;
 
     // Ensure all values are valid numbers, default to 0 if not
-    const enrolled = isNaN(enrolledPercentage) || enrolledPercentage === null || enrolledPercentage === undefined ? 0 : enrolledPercentage;
+    const approved = isNaN(approvedPercentage) || approvedPercentage === null || approvedPercentage === undefined ? 0 : approvedPercentage;
     const pending = isNaN(pendingPercentage) || pendingPercentage === null || pendingPercentage === undefined ? 0 : pendingPercentage;
-    const completed = isNaN(completedPercentage) || completedPercentage === null || completedPercentage === undefined ? 0 : completedPercentage;
+    const cancelled = isNaN(cancelledPercentage) || cancelledPercentage === null || cancelledPercentage === undefined ? 0 : cancelledPercentage;
 
     // Store the chart instance globally so we can update it
     if (!window.welcomeChartInstance) {
         // Store the data for when the chart is initialized
         window.welcomeChartData = {
-            enrolled: enrolled,
+            enrolled: approved,
             pending: pending,
-            completed: completed
+            completed: cancelled
         };
         return;
     }
 
     // Update the chart data
     window.welcomeChartInstance.updateOptions({
-        series: [enrolled, pending, completed],
+        series: [approved, pending, cancelled],
+        labels: ['Approved', 'Pending', 'Cancelled'],
+        colors: [config.colors.success, config.colors.warning, config.colors.danger],
         plotOptions: {
             pie: {
                 donut: {
                     labels: {
                         total: {
+                            label: 'Approved',
                             formatter: function (w) {
-                                return enrolled + '%';
+                                return approved + '%';
                             }
                         }
                     }

@@ -480,9 +480,9 @@
 
     // Check if we have real data stored
     const hasRealData = window.welcomeChartData;
-    const enrolledValue = hasRealData ? window.welcomeChartData.enrolled : 72;
+    const approvedValue = hasRealData ? window.welcomeChartData.enrolled : 72;
     const pendingValue = hasRealData ? window.welcomeChartData.pending : 18;
-    const completedValue = hasRealData ? window.welcomeChartData.completed : 10;
+    const cancelledValue = hasRealData ? window.welcomeChartData.completed : 10;
 
     const welcomeChartConfig = {
       chart: {
@@ -494,9 +494,9 @@
           speed: 400
         }
       },
-      labels: ['Enrolled', 'Pending', 'Completed'],
-      series: [enrolledValue, pendingValue, completedValue],
-      colors: [config.colors.success, config.colors.warning, config.colors.primary],
+      labels: ['Approved', 'Pending', 'Cancelled'],
+      series: [approvedValue, pendingValue, cancelledValue],
+      colors: [config.colors.success, config.colors.warning, config.colors.danger],
       stroke: {
         width: 5,
         colors: cardColor
@@ -540,9 +540,9 @@
                 show: true,
                 fontSize: '0.8125rem',
                 color: axisColor,
-                label: 'Today',
+                label: 'Approved',
                 formatter: function (w) {
-                  return enrolledValue + '%';
+                  return approvedValue + '%';
                 }
               }
             }

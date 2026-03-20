@@ -233,16 +233,48 @@
 
             if (data.success) {
                 const all = data.data;
+
+                // Current counts
                 const total = all.length;
                 const approved = all.filter(r => r.status === 'approved').length;
                 const pending = all.filter(r => r.status === 'pending').length;
                 const cancelled = all.filter(r => r.status === 'cancelled').length;
 
+                // Calculate previous month counts for percentage change
+                const now = new Date();
+                const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+                const thisMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
+                const lastMonthData = all.filter(r => {
+                    const date = new Date(r.submittedAt.$date || r.submittedAt);
+                    return date >= lastMonth && date < thisMonth;
+                });
+
+                const thisMonthData = all.filter(r => {
+                    const date = new Date(r.submittedAt.$date || r.submittedAt);
+                    return date >= thisMonth;
+                });
+
+                // Calculate percentages
+                const totalPercentage = calculatePercentage(thisMonthData.length, lastMonthData.length);
+                const approvedPercentage = calculatePercentage(
+                    thisMonthData.filter(r => r.status === 'approved').length,
+                    lastMonthData.filter(r => r.status === 'approved').length
+                );
+                const pendingPercentage = calculatePercentage(
+                    thisMonthData.filter(r => r.status === 'pending').length,
+                    lastMonthData.filter(r => r.status === 'pending').length
+                );
+                const cancelledPercentage = calculatePercentage(
+                    thisMonthData.filter(r => r.status === 'cancelled').length,
+                    lastMonthData.filter(r => r.status === 'cancelled').length
+                );
+
                 // Update cards (if they exist)
-                updateStatCard(0, total);
-                updateStatCard(2, approved);
-                updateStatCard(3, pending);
-                updateStatCard(4, cancelled);
+                updateStatCard(0, total, totalPercentage);
+                updateStatCard(1, approved, approvedPercentage);
+                updateStatCard(2, pending, pendingPercentage);
+                updateStatCard(3, cancelled, cancelledPercentage);
             }
         } catch (error) {
             console.error('Error updating statistics:', error);
@@ -250,12 +282,48 @@
     }
 
     /**
+     * Calculate percentage change
+     */
+    function calculatePercentage(current, previous) {
+        if (previous === 0) {
+            return current > 0 ? 100 : 0;
+        }
+        return ((current - previous) / previous * 100).toFixed(1);
+    }
+
+    /**
      * Update individual stat card
      */
-    function updateStatCard(index, value) {
+    function updateStatCard(index, value, percentage) {
         const cards = document.querySelectorAll('.card-body h3');
         if (cards[index]) {
             cards[index].textContent = value.toLocaleString();
+        }
+
+        // Update percentage if provided
+        if (percentage !== undefined) {
+            const percentageElements = document.querySelectorAll('.card-body small');
+            if (percentageElements[index]) {
+                const percentageValue = parseFloat(percentage);
+                let icon, colorClass, sign;
+
+                if (percentageValue > 0) {
+                    icon = 'bx-up-arrow-alt';
+                    colorClass = 'text-success';
+                    sign = '+';
+                } else if (percentageValue < 0) {
+                    icon = 'bx-down-arrow-alt';
+                    colorClass = 'text-danger';
+                    sign = '';
+                } else {
+                    icon = 'bx-minus';
+                    colorClass = 'text-muted';
+                    sign = '';
+                }
+
+                percentageElements[index].className = `${colorClass} fw-semibold`;
+                percentageElements[index].innerHTML = `<i class="bx ${icon}"></i> ${sign}${Math.abs(percentageValue)}%`;
+            }
         }
     }
 

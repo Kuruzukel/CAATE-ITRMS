@@ -294,7 +294,9 @@ class CourseController {
 
             try {
                 $db = getMongoConnection();
-                $enrollmentsCollection = $db->enrollments;
+                $registrationCollection = $db->registrations;
+                $applicationCollection = $db->applications;
+                $admissionCollection = $db->admissions;
                 $coursesCollection = $db->courses;
 
                 // Get all courses with error handling
@@ -306,7 +308,7 @@ class CourseController {
                     $courses = [];
                 }
 
-                // Count enrollments per course
+                // Count approved enrollments per course from registrations, applications, and admissions
                 $allCourses = [];
                 $totalEnrollmentsCount = 0;
 
@@ -318,27 +320,41 @@ class CourseController {
                         $courseImage = $course['image'] ?? '';
                         $courseDescription = $course['description'] ?? '';
 
-                        // Count enrolled trainees for this course (accept multiple status values)
-                        $enrollmentCount = 0;
+                        // Count approved enrollments from registrations (uses selectedCourseId field)
+                        $approvedRegistrations = 0;
                         try {
-                            $enrollmentCount = $enrollmentsCollection->countDocuments([
+                            $approvedRegistrations = $registrationCollection->countDocuments([
+                                'selectedCourseId' => $courseId,
+                                'status' => 'approved'
+                            ]);
+                        } catch (Exception $e) {
+                            error_log("CourseController::getEnrollmentStatistics - Error counting registrations for course $courseId: " . $e->getMessage());
+                        }
+
+                        // Count approved enrollments from applications (uses course_id field)
+                        $approvedApplications = 0;
+                        try {
+                            $approvedApplications = $applicationCollection->countDocuments([
                                 'course_id' => $courseId,
-                                'status' => ['$in' => ['enrolled', 'active', 'approved', 'ongoing', 'Enrolled', 'Active', 'Approved', 'Ongoing']]
+                                'status' => 'approved'
                             ]);
                         } catch (Exception $e) {
-                            error_log("CourseController::getEnrollmentStatistics - Error counting enrollments for course $courseId: " . $e->getMessage());
+                            error_log("CourseController::getEnrollmentStatistics - Error counting applications for course $courseId: " . $e->getMessage());
                         }
 
-                        // Also try without status filter to see if course_id matches
-                        $totalForCourse = 0;
+                        // Count approved enrollments from admissions (uses course_id field)
+                        $approvedAdmissions = 0;
                         try {
-                            $totalForCourse = $enrollmentsCollection->countDocuments([
-                                'course_id' => $courseId
+                            $approvedAdmissions = $admissionCollection->countDocuments([
+                                'course_id' => $courseId,
+                                'status' => 'approved'
                             ]);
                         } catch (Exception $e) {
-                            error_log("CourseController::getEnrollmentStatistics - Error counting total enrollments for course $courseId: " . $e->getMessage());
+                            error_log("CourseController::getEnrollmentStatistics - Error counting admissions for course $courseId: " . $e->getMessage());
                         }
 
+                        // Total approved enrollments for this course
+                        $enrollmentCount = $approvedRegistrations + $approvedApplications + $approvedAdmissions;
                         $totalEnrollmentsCount += $enrollmentCount;
 
                         $allCourses[] = [
@@ -346,9 +362,13 @@ class CourseController {
                             'name' => $courseName,
                             'hours' => $courseHours,
                             'enrollmentCount' => $enrollmentCount,
-                            'totalForCourse' => $totalForCourse,
                             'image' => $courseImage,
-                            'description' => $courseDescription
+                            'description' => $courseDescription,
+                            'breakdown' => [
+                                'registrations' => $approvedRegistrations,
+                                'applications' => $approvedApplications,
+                                'admissions' => $approvedAdmissions
+                            ]
                         ];
                     } catch (Exception $e) {
                         error_log("CourseController::getEnrollmentStatistics - Error processing course: " . $e->getMessage());
@@ -361,35 +381,49 @@ class CourseController {
                     return $b['enrollmentCount'] - $a['enrollmentCount'];
                 });
 
-                // Return all courses instead of just top 5
+                // Return all courses
                 $topCourses = $allCourses;
 
-                // Calculate total enrollments (accept multiple status values)
-                $totalEnrollments = 0;
+                // Calculate total approved enrollments from all three collections
+                $totalApprovedRegistrations = 0;
+                $totalApprovedApplications = 0;
+                $totalApprovedAdmissions = 0;
+                
                 try {
-                    $totalEnrollments = $enrollmentsCollection->countDocuments([
-                        'status' => ['$in' => ['enrolled', 'active', 'approved', 'ongoing', 'Enrolled', 'Active', 'Approved', 'Ongoing']]
+                    $totalApprovedRegistrations = $registrationCollection->countDocuments([
+                        'status' => 'approved'
                     ]);
                 } catch (Exception $e) {
-                    error_log("CourseController::getEnrollmentStatistics - Error counting total enrollments: " . $e->getMessage());
+                    error_log("CourseController::getEnrollmentStatistics - Error counting total registrations: " . $e->getMessage());
                 }
 
-                // Debug: Get total count of all enrollments
-                $allEnrollmentsCount = 0;
                 try {
-                    $allEnrollmentsCount = $enrollmentsCollection->countDocuments([]);
+                    $totalApprovedApplications = $applicationCollection->countDocuments([
+                        'status' => 'approved'
+                    ]);
                 } catch (Exception $e) {
-                    error_log("CourseController::getEnrollmentStatistics - Error counting all enrollments: " . $e->getMessage());
+                    error_log("CourseController::getEnrollmentStatistics - Error counting total applications: " . $e->getMessage());
                 }
+
+                try {
+                    $totalApprovedAdmissions = $admissionCollection->countDocuments([
+                        'status' => 'approved'
+                    ]);
+                } catch (Exception $e) {
+                    error_log("CourseController::getEnrollmentStatistics - Error counting total admissions: " . $e->getMessage());
+                }
+
+                $totalEnrollments = $totalApprovedRegistrations + $totalApprovedApplications + $totalApprovedAdmissions;
 
                 echo json_encode([
                     'success' => true,
                     'data' => [
                         'totalEnrollments' => $totalEnrollments,
                         'topCourses' => $topCourses,
-                        'debug' => [
-                            'allEnrollmentsInDb' => $allEnrollmentsCount,
-                            'totalCounted' => $totalEnrollmentsCount
+                        'breakdown' => [
+                            'registrations' => $totalApprovedRegistrations,
+                            'applications' => $totalApprovedApplications,
+                            'admissions' => $totalApprovedAdmissions
                         ]
                     ]
                 ]);

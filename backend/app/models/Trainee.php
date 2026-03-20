@@ -190,17 +190,15 @@ class Trainee {
                 error_log("Error counting trainees: " . $e->getMessage());
             }
             
-            // Get enrollment data from registrations, applications, and admissions collections
+            // Get enrollment data from registrations and applications collections only (exclude admissions)
             $registrationCollection = $db->registrations;
             $applicationCollection = $db->applications;
-            $admissionCollection = $db->admissions;
             
-            // Count total enrollments from all three collections
+            // Count total enrollments from registrations and applications only
             $totalRegistrations = $registrationCollection->countDocuments();
             $totalApplications = $applicationCollection->countDocuments();
-            $totalAdmissions = $admissionCollection->countDocuments();
             
-            // Calculate today's enrollments (from all three collections)
+            // Calculate today's enrollments (from registrations and applications only)
             $todayStart = new MongoDB\BSON\UTCDateTime(strtotime('today') * 1000);
             $todayEnd = new MongoDB\BSON\UTCDateTime(strtotime('tomorrow') * 1000);
             
@@ -210,10 +208,7 @@ class Trainee {
             $todayApplications = $applicationCollection->countDocuments([
                 'created_at' => ['$gte' => $todayStart, '$lt' => $todayEnd]
             ]);
-            $todayAdmissions = $admissionCollection->countDocuments([
-                'created_at' => ['$gte' => $todayStart, '$lt' => $todayEnd]
-            ]);
-            $todayEnrollments = $todayRegistrations + $todayApplications + $todayAdmissions;
+            $todayEnrollments = $todayRegistrations + $todayApplications;
             
             // Calculate yesterday's enrollments for percentage comparison
             $yesterdayStart = new MongoDB\BSON\UTCDateTime(strtotime('yesterday') * 1000);
@@ -225,10 +220,7 @@ class Trainee {
             $yesterdayApplications = $applicationCollection->countDocuments([
                 'created_at' => ['$gte' => $yesterdayStart, '$lt' => $yesterdayEnd]
             ]);
-            $yesterdayAdmissions = $admissionCollection->countDocuments([
-                'created_at' => ['$gte' => $yesterdayStart, '$lt' => $yesterdayEnd]
-            ]);
-            $yesterdayEnrollments = $yesterdayRegistrations + $yesterdayApplications + $yesterdayAdmissions;
+            $yesterdayEnrollments = $yesterdayRegistrations + $yesterdayApplications;
             
             // Calculate percentage increase
             $todayPercentageIncrease = 0;
@@ -245,16 +237,12 @@ class Trainee {
             $approvedApplications = $applicationCollection->countDocuments([
                 'status' => ['$in' => ['approved', 'enrolled']]
             ]);
-            $approvedAdmissions = $admissionCollection->countDocuments([
-                'status' => ['$in' => ['approved', 'enrolled']]
-            ]);
-            $approvedEnrollments = $approvedRegistrations + $approvedApplications + $approvedAdmissions;
+            $approvedEnrollments = $approvedRegistrations + $approvedApplications;
             
             // Count pending enrollments
             $pendingRegistrations = $registrationCollection->countDocuments(['status' => 'pending']);
             $pendingApplications = $applicationCollection->countDocuments(['status' => 'pending']);
-            $pendingAdmissions = $admissionCollection->countDocuments(['status' => 'pending']);
-            $pendingEnrollments = $pendingRegistrations + $pendingApplications + $pendingAdmissions;
+            $pendingEnrollments = $pendingRegistrations + $pendingApplications;
             
             // Count cancelled enrollments
             $cancelledRegistrations = $registrationCollection->countDocuments([
@@ -263,10 +251,7 @@ class Trainee {
             $cancelledApplications = $applicationCollection->countDocuments([
                 'status' => ['$in' => ['cancelled', 'rejected']]
             ]);
-            $cancelledAdmissions = $admissionCollection->countDocuments([
-                'status' => ['$in' => ['cancelled', 'rejected']]
-            ]);
-            $cancelledEnrollments = $cancelledRegistrations + $cancelledApplications + $cancelledAdmissions;
+            $cancelledEnrollments = $cancelledRegistrations + $cancelledApplications;
             
             // Calculate this month's enrollments
             $monthStart = new MongoDB\BSON\UTCDateTime(strtotime('first day of this month') * 1000);
@@ -278,10 +263,7 @@ class Trainee {
             $monthApplications = $applicationCollection->countDocuments([
                 'created_at' => ['$gte' => $monthStart, '$lt' => $monthEnd]
             ]);
-            $monthAdmissions = $admissionCollection->countDocuments([
-                'created_at' => ['$gte' => $monthStart, '$lt' => $monthEnd]
-            ]);
-            $monthEnrollments = $monthRegistrations + $monthApplications + $monthAdmissions;
+            $monthEnrollments = $monthRegistrations + $monthApplications;
             
             // Calculate last month's enrollments for percentage comparison
             $lastMonthStart = new MongoDB\BSON\UTCDateTime(strtotime('first day of last month') * 1000);
@@ -293,10 +275,7 @@ class Trainee {
             $lastMonthApplications = $applicationCollection->countDocuments([
                 'created_at' => ['$gte' => $lastMonthStart, '$lt' => $lastMonthEnd]
             ]);
-            $lastMonthAdmissions = $admissionCollection->countDocuments([
-                'created_at' => ['$gte' => $lastMonthStart, '$lt' => $lastMonthEnd]
-            ]);
-            $lastMonthEnrollments = $lastMonthRegistrations + $lastMonthApplications + $lastMonthAdmissions;
+            $lastMonthEnrollments = $lastMonthRegistrations + $lastMonthApplications;
             
             // Calculate month percentage increase
             $monthPercentageIncrease = 0;
@@ -315,11 +294,7 @@ class Trainee {
                 'status' => 'pending',
                 'created_at' => ['$gte' => $lastMonthStart, '$lt' => $lastMonthEnd]
             ]);
-            $lastMonthPendingAdms = $admissionCollection->countDocuments([
-                'status' => 'pending',
-                'created_at' => ['$gte' => $lastMonthStart, '$lt' => $lastMonthEnd]
-            ]);
-            $lastMonthPending = $lastMonthPendingRegs + $lastMonthPendingApps + $lastMonthPendingAdms;
+            $lastMonthPending = $lastMonthPendingRegs + $lastMonthPendingApps;
             
             $pendingPercentageChange = 0;
             if ($lastMonthPending > 0) {
@@ -337,11 +312,7 @@ class Trainee {
                 'status' => ['$in' => ['cancelled', 'rejected']],
                 'created_at' => ['$gte' => $lastMonthStart, '$lt' => $lastMonthEnd]
             ]);
-            $lastMonthCancelledAdms = $admissionCollection->countDocuments([
-                'status' => ['$in' => ['cancelled', 'rejected']],
-                'created_at' => ['$gte' => $lastMonthStart, '$lt' => $lastMonthEnd]
-            ]);
-            $lastMonthCancelled = $lastMonthCancelledRegs + $lastMonthCancelledApps + $lastMonthCancelledAdms;
+            $lastMonthCancelled = $lastMonthCancelledRegs + $lastMonthCancelledApps;
             
             $cancelledPercentageChange = 0;
             if ($lastMonthCancelled > 0) {
@@ -360,10 +331,7 @@ class Trainee {
             $currentYearApplications = $applicationCollection->countDocuments([
                 'created_at' => ['$gte' => $yearStart, '$lt' => $yearEnd]
             ]);
-            $currentYearAdmissions = $admissionCollection->countDocuments([
-                'created_at' => ['$gte' => $yearStart, '$lt' => $yearEnd]
-            ]);
-            $currentYearEnrollments = $currentYearRegistrations + $currentYearApplications + $currentYearAdmissions;
+            $currentYearEnrollments = $currentYearRegistrations + $currentYearApplications;
             
             // Previous year enrollments
             $prevYearStart = new MongoDB\BSON\UTCDateTime(strtotime(($year - 1) . "-01-01") * 1000);
@@ -375,10 +343,7 @@ class Trainee {
             $prevYearApplications = $applicationCollection->countDocuments([
                 'created_at' => ['$gte' => $prevYearStart, '$lt' => $prevYearEnd]
             ]);
-            $prevYearAdmissions = $admissionCollection->countDocuments([
-                'created_at' => ['$gte' => $prevYearStart, '$lt' => $prevYearEnd]
-            ]);
-            $previousYearEnrollments = $prevYearRegistrations + $prevYearApplications + $prevYearAdmissions;
+            $previousYearEnrollments = $prevYearRegistrations + $prevYearApplications;
             
             // Calculate year growth percentage
             $yearGrowthPercentage = 0;
@@ -402,11 +367,8 @@ class Trainee {
                 $monthApps = $applicationCollection->countDocuments([
                     'created_at' => ['$gte' => $monthStartDate, '$lt' => $monthEndDate]
                 ]);
-                $monthAdms = $admissionCollection->countDocuments([
-                    'created_at' => ['$gte' => $monthStartDate, '$lt' => $monthEndDate]
-                ]);
                 
-                $monthlyEnrollments[$month - 1] = $monthRegs + $monthApps + $monthAdms;
+                $monthlyEnrollments[$month - 1] = $monthRegs + $monthApps;
             }
             
             // Monthly enrollments for the previous year
@@ -423,15 +385,12 @@ class Trainee {
                 $monthApps = $applicationCollection->countDocuments([
                     'created_at' => ['$gte' => $monthStartDate, '$lt' => $monthEndDate]
                 ]);
-                $monthAdms = $admissionCollection->countDocuments([
-                    'created_at' => ['$gte' => $monthStartDate, '$lt' => $monthEndDate]
-                ]);
                 
-                $previousYearMonthlyEnrollments[$month - 1] = $monthRegs + $monthApps + $monthAdms;
+                $previousYearMonthlyEnrollments[$month - 1] = $monthRegs + $monthApps;
             }
             
             // Log statistics for debugging
-            error_log("Statistics - Total Trainees: $totalTrainees, Registrations: $totalRegistrations, Applications: $totalApplications, Admissions: $totalAdmissions");
+            error_log("Statistics - Total Trainees: $totalTrainees, Registrations: $totalRegistrations, Applications: $totalApplications");
             error_log("Today's Enrollments: $todayEnrollments, Approved: $approvedEnrollments, Pending: $pendingEnrollments, Cancelled: $cancelledEnrollments");
             
             // Get top enrolled courses
@@ -444,7 +403,7 @@ class Trainee {
                 $courseArray = (array)$course;
                 $courseName = $courseArray['title'] ?? $courseArray['name'] ?? 'Unknown Course';
                 
-                // Count enrollments for this course from all three collections
+                // Count enrollments for this course from registrations and applications only
                 $courseEnrollments = 0;
                 
                 // Count from registrations
@@ -455,12 +414,6 @@ class Trainee {
                 
                 // Count from applications
                 $courseEnrollments += $applicationCollection->countDocuments([
-                    'course' => $courseName,
-                    'status' => 'approved'
-                ]);
-                
-                // Count from admissions
-                $courseEnrollments += $admissionCollection->countDocuments([
                     'course' => $courseName,
                     'status' => 'approved'
                 ]);
@@ -481,10 +434,9 @@ class Trainee {
             
             return [
                 'total' => $totalTrainees,
-                'totalEnrollment' => $totalRegistrations + $totalApplications + $totalAdmissions,
+                'totalEnrollment' => $totalRegistrations + $totalApplications,
                 'totalRegistrations' => $totalRegistrations,
                 'totalApplications' => $totalApplications,
-                'totalAdmissions' => $totalAdmissions,
                 'todayEnrollments' => $todayEnrollments,
                 'todayPercentageIncrease' => $todayPercentageIncrease,
                 'approvedEnrollments' => $approvedEnrollments,
@@ -502,7 +454,7 @@ class Trainee {
                 'monthly_enrollments' => $monthlyEnrollments,
                 'previous_year_monthly_enrollments' => $previousYearMonthlyEnrollments,
                 'topCourses' => $topCourses,
-                'totalEnrollments' => $totalRegistrations + $totalApplications + $totalAdmissions,
+                'totalEnrollments' => $totalRegistrations + $totalApplications,
                 'year' => $year
             ];
         } catch (Exception $e) {
@@ -513,7 +465,6 @@ class Trainee {
                 'totalEnrollment' => 0,
                 'totalRegistrations' => 0,
                 'totalApplications' => 0,
-                'totalAdmissions' => 0,
                 'todayEnrollments' => 0,
                 'todayPercentageIncrease' => 0,
                 'approvedEnrollments' => 0,

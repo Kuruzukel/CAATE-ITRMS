@@ -1,12 +1,8 @@
-/* Admin Dashboard specific styles */
-
-/* Present status styling - ensure green background with white text */
 .badge.bg-success {
     background-color: #10b981 !important;
     color: #ffffff !important;
 }
 
-/* Alternative Present status class if needed */
 .badge-present,
 .status-present {
     background-color: #10b981 !important;
@@ -17,20 +13,17 @@
     font-weight: 500;
 }
 
-/* Specific styling for attendance table Present status */
 .table .badge.bg-success {
     background-color: #28a745 !important;
     color: #ffffff !important;
 }
 
-/* Target any badge containing "Present" text */
 .badge:has-text("Present"),
 .badge[data-status="present"] {
     background-color: #10b981 !important;
     color: #ffffff !important;
 }
 
-/* Additional Present status variations */
 .present-status {
     background-color: #28a745 !important;
     color: #ffffff !important;
@@ -41,7 +34,6 @@
     display: inline-block;
 }
 
-/* Hover effect for Present status */
 .badge.bg-success:hover,
 .badge-present:hover,
 .present-status:hover {
@@ -49,17 +41,14 @@
     color: #ffffff !important;
 }
 
-/* Ensure Present Today card styling */
 .card-body .fw-semibold:contains("Present Today")+.card-title {
     color: #28a745;
 }
 
-/* Dashboard statistics styling for better visibility */
 .text-success {
     color: #28a745 !important;
 }
 
-/* Make sure all success badges have consistent green styling */
 .bg-success {
     background-color: #10b981 !important;
 }
@@ -68,68 +57,55 @@
     color: #ffffff !important;
 }
 
-/* Course Enrollment Statistics - Make text white */
 .card-header .card-title h5,
 .card-header .card-title small {
     color: #ffffff !important;
 }
 
-/* Total enrollments number */
 .card-body h2 {
     color: #ffffff !important;
 }
 
-/* "Total Trainees Enrolled" text */
 .card-body span {
     color: #ffffff !important;
 }
 
-/* "Top Enrolled Courses" heading */
 .card-body h6.mb-3.text-center {
     color: #ffffff !important;
 }
 
-/* Course names in the list */
 .card-body ul li .me-2 h6 {
     color: #ffffff !important;
 }
 
-/* Course hours text */
 .card-body ul li .me-2 small.text-muted {
     color: #ffffff !important;
 }
 
-/* Enrollment numbers */
 .card-body ul li .user-progress small {
     color: #ffffff !important;
 }
 
-/* Recent Enrollment Activity section */
 .card-header h5.card-title {
     color: #ffffff !important;
 }
 
-/* "Live Enrollment Feed" text */
 .card-body p.text-muted.small {
     color: #ffffff !important;
 }
 
-/* Student names in enrollment activity */
 .card-body ul li .me-2 h6.mb-0 {
     color: #ffffff !important;
 }
 
-/* Course names under student names */
 .card-body ul li .me-2 small.text-muted {
     color: #ffffff !important;
 }
 
-/* Tab navigation text */
 .nav-tabs .nav-link {
     color: #ffffff !important;
 }
 
-/* Active Trainees section */
 .tab-pane .d-flex small.text-muted {
     color: #ffffff !important;
 }
@@ -138,46 +114,38 @@
     color: #ffffff !important;
 }
 
-/* "this semester" text */
 .tab-pane .d-flex small.text-muted:last-child {
     color: #ffffff !important;
 }
 
-/* "New Enrollments This Week" text */
 .d-flex.justify-content-center p {
     color: #ffffff !important;
 }
 
-/* Weekly comparison text */
 .d-flex.justify-content-center small {
     color: #ffffff !important;
 }
 
-/* Monthly Trainee Enrollment section title */
 .card-header h5,
 h5.card-header {
     color: #ffffff !important;
 }
 
-/* Specific targeting for Monthly Trainee Enrollment */
 .card .row .col-md-8 h5.card-header {
     color: #ffffff !important;
 }
 
-/* Specific styling for Enrolled status badges */
 .badge:contains("Enrolled"),
 .badge[data-status="enrolled"] {
     background-color: #10b981 !important;
     color: #ffffff !important;
 }
 
-/* Ensure all bg-success badges use the new green color */
 span.badge.bg-success {
     background-color: #10b981 !important;
     color: #ffffff !important;
 }
 
-/* Target badges with "Present" or "Enrolled" text specifically */
 .badge {
 
     &:contains("Present"),
@@ -187,36 +155,30 @@ span.badge.bg-success {
     }
 }
 
-/* Table row spacing to prevent border clipping */
 .table-responsive .table tbody tr {
     position: relative;
     margin: 8px 0;
 }
 
-/* Add spacing between table rows to prevent border overlap */
 .table tbody tr td {
     padding: 16px 12px !important;
     vertical-align: middle;
 }
 
-/* Ensure table container has proper overflow handling */
 .table-responsive {
     padding: 4px;
     margin: -4px;
 }
 
-/* Smooth transitions for table rows */
 .table tbody tr {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Prevent border clipping on highlighted rows */
 .table tbody tr[style*="outline"] {
     margin: 12px 0;
 }
 
 
-/* Remove padding/margin at bottom of welcome card on larger screens */
 @media (min-width: 992px) {
     .col-lg-8.mb-4.order-0 .card {
         margin-bottom: 0 !important;
@@ -236,14 +198,12 @@ span.badge.bg-success {
         display: none !important;
     }
 
-    /* Remove bottom spacing from the column itself */
     .col-lg-8.mb-4.order-0 {
         margin-bottom: 1.5rem !important;
     }
 }
 
 
-/* Dashboard Card Dropdown Menu Styling - Match accounts.html style */
 .card .dropdown-menu {
     background-color: #1a2942 !important;
     background: linear-gradient(135deg, #1a2942 0%, #0f1f33 100%) !important;
@@ -259,7 +219,6 @@ span.badge.bg-success {
     min-width: 200px !important;
 }
 
-/* Dropdown items styling */
 .card .dropdown-menu .dropdown-item {
     color: rgba(255, 255, 255, 0.9) !important;
     padding: 0.65rem 1rem !important;
@@ -270,7 +229,6 @@ span.badge.bg-success {
     background-color: transparent !important;
 }
 
-/* Dropdown item hover effect */
 .card .dropdown-menu .dropdown-item:hover,
 .card .dropdown-menu .dropdown-item:focus {
     background: rgba(54, 145, 191, 0.25) !important;
@@ -283,13 +241,11 @@ span.badge.bg-success {
     transform: translateX(4px) !important;
 }
 
-/* Dropdown item active state */
 .card .dropdown-menu .dropdown-item:active {
     background: rgba(54, 145, 191, 0.4) !important;
     color: #ffffff !important;
 }
 
-/* Dropdown item icons */
 .card .dropdown-menu .dropdown-item i {
     color: rgba(54, 145, 191, 0.9) !important;
     transition: color 0.2s ease !important;
@@ -300,7 +256,6 @@ span.badge.bg-success {
     color: #ffffff !important;
 }
 
-/* Delete/Danger item styling - Red text by default, red border on hover */
 .card .dropdown-menu .dropdown-item.text-danger {
     color: #ef4444 !important;
 }
@@ -312,7 +267,6 @@ span.badge.bg-success {
     color: #ef4444 !important;
 }
 
-/* Delete item icon styling */
 .card .dropdown-menu .dropdown-item.text-danger i {
     color: #ef4444 !important;
 }
@@ -322,7 +276,6 @@ span.badge.bg-success {
     color: #ef4444 !important;
 }
 
-/* Dropdown divider styling */
 .card .dropdown-menu .dropdown-divider {
     border-top: 1px solid rgba(54, 145, 191, 0.3) !important;
     margin: 0.5rem 0 !important;
@@ -330,7 +283,6 @@ span.badge.bg-success {
 }
 
 
-/* Responsive dropdown adjustments for smaller cards */
 @media (max-width: 1399px) {
     .card .dropdown-menu {
         min-width: 180px !important;
@@ -396,14 +348,12 @@ span.badge.bg-success {
     }
 }
 
-/* Adjust dropdown positioning for small cards */
 .col-6 .card .dropdown-menu,
 .col-lg-6 .card .dropdown-menu,
 .col-md-6 .card .dropdown-menu {
     min-width: 150px !important;
 }
 
-/* Ensure dropdown doesn't overflow card boundaries on small screens */
 @media (max-width: 575px) {
     .card .dropdown {
         position: static !important;
@@ -416,7 +366,6 @@ span.badge.bg-success {
     }
 }
 
-/* Compact dropdown for very small cards (col-6 on mobile) */
 @media (max-width: 767px) {
     .col-6 .card .dropdown-menu {
         min-width: 120px !important;
@@ -430,14 +379,12 @@ span.badge.bg-success {
 }
 
 
-/* Add horizontal scrollbar to Monthly Trainee Enrollment chart */
 #totalRevenueChart {
     overflow-x: auto !important;
     overflow-y: hidden !important;
     width: 100% !important;
 }
 
-/* Style the scrollbar for the chart */
 #totalRevenueChart::-webkit-scrollbar {
     height: 8px !important;
 }
@@ -456,12 +403,10 @@ span.badge.bg-success {
     background: rgba(54, 145, 191, 0.7) !important;
 }
 
-/* Ensure chart container has proper width */
 .col-md-8 #totalRevenueChart {
     min-width: 100% !important;
 }
 
-/* Make the chart responsive but scrollable */
 @media (max-width: 991px) {
     #totalRevenueChart {
         overflow-x: auto !important;
@@ -469,14 +414,12 @@ span.badge.bg-success {
 }
 
 
-/* Add horizontal scrollbar to Monthly Trainee Enrollment chart */
 #totalRevenueChart {
     overflow-x: auto !important;
     overflow-y: hidden !important;
     width: 100% !important;
 }
 
-/* Style the scrollbar for the chart */
 #totalRevenueChart::-webkit-scrollbar {
     height: 8px !important;
 }
@@ -495,12 +438,10 @@ span.badge.bg-success {
     background: rgba(54, 145, 191, 0.7) !important;
 }
 
-/* Ensure chart container has proper width */
 .col-md-8 #totalRevenueChart {
     min-width: 100% !important;
 }
 
-/* Make the chart responsive but scrollable */
 @media (max-width: 991px) {
     #totalRevenueChart {
         overflow-x: auto !important;
@@ -508,7 +449,6 @@ span.badge.bg-success {
 }
 
 
-/* ApexCharts tooltip styling - Match dropdown color palette */
 .apexcharts-tooltip {
     background: linear-gradient(135deg, #1a2942 0%, #0f1f33 100%) !important;
     backdrop-filter: blur(20px) saturate(180%) !important;
@@ -536,7 +476,6 @@ span.badge.bg-success {
     background: transparent !important;
 }
 
-/* ApexCharts xaxis tooltip */
 .apexcharts-xaxistooltip {
     background: linear-gradient(135deg, #1a2942 0%, #0f1f33 100%) !important;
     border: 1px solid rgba(54, 145, 191, 0.4) !important;
@@ -553,23 +492,19 @@ span.badge.bg-success {
     color: rgba(255, 255, 255, 0.95) !important;
 }
 
-/* ApexCharts legend */
 .apexcharts-legend-text {
     color: rgba(255, 255, 255, 0.9) !important;
 }
 
-/* Chart grid lines - make them more subtle */
 .apexcharts-gridline {
     stroke: rgba(54, 145, 191, 0.2) !important;
 }
 
-/* Chart axis labels */
 .apexcharts-xaxis-label,
 .apexcharts-yaxis-label {
     fill: rgba(255, 255, 255, 0.7) !important;
 }
 
-/* Monthly Enrollment Activity - Chart specific styling */
 #incomeChart .apexcharts-tooltip,
 #expensesOfWeek .apexcharts-tooltip {
     background: linear-gradient(135deg, #1a2942 0%, #0f1f33 100%) !important;
@@ -577,7 +512,6 @@ span.badge.bg-success {
 }
 
 
-/* ApexCharts tooltip styling for Monthly Enrollment Activity - Match dropdown palette */
 .col-md-6.col-lg-4.order-1 .apexcharts-tooltip {
     background: linear-gradient(135deg, #1a2942 0%, #0f1f33 100%) !important;
     backdrop-filter: blur(20px) saturate(180%) !important;
@@ -605,7 +539,6 @@ span.badge.bg-success {
     background-color: rgba(54, 145, 191, 0.8) !important;
 }
 
-/* ApexCharts xaxis tooltip (month labels) */
 .col-md-6.col-lg-4.order-1 .apexcharts-xaxistooltip {
     background: linear-gradient(135deg, #1a2942 0%, #0f1f33 100%) !important;
     backdrop-filter: blur(20px) saturate(180%) !important;
@@ -624,25 +557,21 @@ span.badge.bg-success {
     border-bottom-color: rgba(54, 145, 191, 0.4) !important;
 }
 
-/* Chart grid lines */
 .col-md-6.col-lg-4.order-1 .apexcharts-gridline {
     stroke: rgba(54, 145, 191, 0.2) !important;
 }
 
-/* Chart axis labels */
 .col-md-6.col-lg-4.order-1 .apexcharts-xaxis-label,
 .col-md-6.col-lg-4.order-1 .apexcharts-yaxis-label {
     fill: rgba(255, 255, 255, 0.7) !important;
 }
 
-/* Active data point marker */
 .col-md-6.col-lg-4.order-1 .apexcharts-marker {
     stroke: rgba(54, 145, 191, 0.9) !important;
     fill: #ffffff !important;
 }
 
 
-/* Course Tooltip Styling */
 .course-tooltip {
     background: linear-gradient(135deg, #1a2942 0%, #0f1f33 100%) !important;
     backdrop-filter: blur(20px) saturate(180%) !important;
@@ -688,7 +617,6 @@ span.badge.bg-success {
     }
 }
 
-/* Course item hover effect */
 .course-item {
     position: relative;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
@@ -698,7 +626,6 @@ span.badge.bg-success {
     transform: translateX(4px);
 }
 
-/* Bulk Upload & Export Button Styling */
 .card-header .d-flex.gap-2 {
     gap: 0.5rem !important;
 }
@@ -721,7 +648,6 @@ span.badge.bg-success {
     background-color: rgba(54, 145, 191, 0.1);
 }
 
-/* Bulk Upload Modal Styling */
 #bulkUploadModal .alert-info {
     background-color: rgba(54, 145, 191, 0.1);
     border-color: rgba(54, 145, 191, 0.3);
@@ -773,7 +699,6 @@ span.badge.bg-success {
     background-color: rgba(54, 145, 191, 0.05);
 }
 
-/* Ensure table cells don't wrap */
 #uploadPreview .table th,
 #uploadPreview .table td {
     white-space: nowrap;
@@ -781,7 +706,6 @@ span.badge.bg-success {
     text-overflow: ellipsis;
 }
 
-/* Scrollbar styling for preview table */
 #uploadPreview .table-responsive::-webkit-scrollbar {
     width: 8px;
     height: 8px;
@@ -801,7 +725,6 @@ span.badge.bg-success {
     background: #4a5f7f;
 }
 
-/* Responsive adjustments */
 @media (max-width: 1400px) {
     #bulkUploadModal .modal-dialog {
         max-width: 95% !important;
@@ -822,7 +745,6 @@ span.badge.bg-success {
     }
 }
 
-/* Responsive button layout for mobile */
 @media (max-width: 768px) {
     .card-header .d-flex.gap-2 {
         flex-direction: column;
@@ -835,7 +757,6 @@ span.badge.bg-success {
     }
 }
 
-/* Export button loading state */
 .dropdown-item:disabled {
     opacity: 0.6;
     cursor: not-allowed;
@@ -848,7 +769,6 @@ span.badge.bg-success {
     border-width: 0.15em;
 }
 
-/* Export dropdown animation */
 .dropdown-menu {
     animation: slideDown 0.2s ease-out;
 }
@@ -865,7 +785,6 @@ span.badge.bg-success {
     }
 }
 
-/* Responsive adjustments for bulk upload modal */
 @media (max-width: 1400px) {
     #bulkUploadModal .modal-dialog {
         max-width: 95%;
@@ -903,14 +822,12 @@ span.badge.bg-success {
     }
 }
 
-/* Course Enrollment List Scrollbar */
 #topEnrolledCoursesList {
     overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: rgba(54, 145, 191, 0.8) rgba(197, 227, 245, 0.3);
 }
 
-/* Webkit browsers (Chrome, Safari, Edge) */
 #topEnrolledCoursesList::-webkit-scrollbar {
     width: 8px;
 }
@@ -930,7 +847,6 @@ span.badge.bg-success {
 }
 
 
-/* Course Enrollment List - Responsive Fixes */
 #topEnrolledCoursesList li {
     transition: all 0.2s ease;
 }
@@ -939,7 +855,6 @@ span.badge.bg-success {
     gap: 0.75rem;
 }
 
-/* Fix alignment on smaller screens - remove center alignment when content wraps */
 @media (max-width: 1399px) {
     #topEnrolledCoursesList li .d-flex.align-items-center {
         align-items: flex-start !important;
@@ -1012,7 +927,6 @@ span.badge.bg-success {
     }
 }
 
-/* Recent Enrollment Activity - Responsive Fixes */
 #recentEnrollmentActivityList li .d-flex {
     gap: 0.75rem;
 }

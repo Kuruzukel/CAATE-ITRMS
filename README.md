@@ -11,7 +11,7 @@
 ### Integrated Training & Resource Management System
 
 <p align="center">
-  <i>An institutional-level training management platform delivering comprehensive course administration, trainee lifecycle management, and integrated inventory control across multiple organizational roles.</i>
+  <i>An institutional-level platform for comprehensive training management, course administration, and integrated inventory control.</i>
 </p>
 
 <p align="center">

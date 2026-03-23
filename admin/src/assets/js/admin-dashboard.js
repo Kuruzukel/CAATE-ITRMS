@@ -579,14 +579,14 @@ async function fetchRecentEnrollmentActivity() {
             }
         }
 
-        // Sort by date (most recent first) and take top 6
+        // Sort by date (most recent first) and take top 11
         combinedData.sort((a, b) => {
             const dateA = new Date(a.createdAt);
             const dateB = new Date(b.createdAt);
             return dateB - dateA;
         });
 
-        const recentActivities = combinedData.slice(0, 6);
+        const recentActivities = combinedData.slice(0, 11);
 
         updateRecentEnrollmentActivityUI(recentActivities);
     } catch (error) {

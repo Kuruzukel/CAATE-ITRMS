@@ -507,11 +507,13 @@
 
 .data-table input[type="number"] {
     -moz-appearance: textfield;
+    appearance: textfield;
 }
 
 .data-table input[type="number"]::-webkit-outer-spin-button,
 .data-table input[type="number"]::-webkit-inner-spin-button {
     -webkit-appearance: none;
+    appearance: none;
     margin: 0;
 }
 
@@ -871,16 +873,19 @@ input[type="number"]::-webkit-inner-spin-button {
 
 input[type="number"] {
     -moz-appearance: textfield;
+    appearance: textfield;
 }
 
 .no-spinner::-webkit-outer-spin-button,
 .no-spinner::-webkit-inner-spin-button {
     -webkit-appearance: none;
+    appearance: none;
     margin: 0;
 }
 
 .no-spinner[type=number] {
     -moz-appearance: textfield;
+    appearance: textfield;
 }
 
 /* Registration Form Specific Styles */

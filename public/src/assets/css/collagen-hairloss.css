@@ -250,9 +250,10 @@ body::-webkit-scrollbar {
     animation: fadeInUp 1.4s ease-out 0.8s both;
 }
 
-color: var(--text-dark);
-margin-bottom: 1.5rem;
-line-height: 1.2;
+.course-hero-title {
+    color: var(--text-dark);
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
 }
 
 .course-hero-description {

@@ -1,5 +1,4 @@
 :root {
-    /* Primary Colors - Matching Admin Dashboard */
     --primary-blue: #3691bf;
     --primary-blue-dark: #325596;
     --primary-blue-light: #3a6385;
@@ -8,51 +7,36 @@
     --darker-azure: #12395a;
     --light-blue: #e8f4fc;
     --lighter-blue: #f0f7fb;
-
-    /* Text Colors */
     --white: #ffffff;
     --text-dark: #1e293b;
     --text-medium: #475569;
     --text-light: #64748b;
     --text-white: #ffffff;
-
-    /* Glass Effects */
     --glass-bg: rgba(255, 255, 255, 0.7);
     --glass-bg-dark: rgba(22, 56, 86, 0.85);
     --glass-border: rgba(255, 255, 255, 0.5);
     --glass-border-dark: rgba(54, 145, 191, 0.3);
-
-    /* Shadows */
     --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
     --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
     --shadow-glass: 0 8px 32px rgba(22, 56, 86, 0.2);
-
-    /* Border Radius */
     --border-radius-sm: 12px;
     --border-radius-md: 20px;
     --border-radius-lg: 30px;
     --border-radius-pill: 50px;
-
-    /* Transitions */
     --transition-fast: 0.2s ease;
     --transition-normal: 0.3s ease;
     --transition-slow: 0.5s ease;
 }
-
-/* Universal scrollbar hiding - applies to all elements */
 * {
     -ms-overflow-style: none !important;
     scrollbar-width: none !important;
 }
-
 *::-webkit-scrollbar {
     display: none !important;
     width: 0 !important;
     height: 0 !important;
 }
-
-/* Body Background - Light Blue like Admin Dashboard */
 body {
     background-image: url('../../assets/images/CAATEBGEDITED.png') !important;
     background-size: cover !important;
@@ -66,28 +50,22 @@ body {
     -ms-overflow-style: none !important;
     scrollbar-width: none !important;
 }
-
 body::-webkit-scrollbar {
     display: none !important;
     width: 0 !important;
     height: 0 !important;
 }
-
-/* Hide scrollbar for HTML element */
 html {
     -ms-overflow-style: none !important;
     scrollbar-width: none !important;
     overflow-x: hidden !important;
     overflow-y: auto !important;
 }
-
 html::-webkit-scrollbar {
     display: none !important;
     width: 0 !important;
     height: 0 !important;
 }
-
-/* Blur the background image */
 body::before {
     content: '';
     position: fixed;
@@ -102,8 +80,6 @@ body::before {
     filter: blur(0px);
     z-index: 0;
 }
-
-/* Dark overlay for better contrast */
 .dark-overlay {
     content: '';
     position: fixed;
@@ -114,8 +90,6 @@ body::before {
     background: rgba(10, 31, 51, 0.3);
     z-index: 1;
 }
-
-/* Grid Pattern Overlay - Lower Opacity */
 body::after {
     content: '';
     position: fixed;
@@ -130,8 +104,6 @@ body::after {
     z-index: 2;
     pointer-events: none;
 }
-
-/* Container Background */
 .container-xxl {
     background-color: transparent !important;
     position: relative;
@@ -140,13 +112,11 @@ body::after {
     scrollbar-width: none !important;
     overflow-x: hidden !important;
 }
-
 .container-xxl::-webkit-scrollbar {
     display: none !important;
     width: 0 !important;
     height: 0 !important;
 }
-
 .authentication-wrapper {
     background-color: transparent !important;
     position: relative;
@@ -155,14 +125,11 @@ body::after {
     scrollbar-width: none !important;
     overflow-x: hidden !important;
 }
-
 .authentication-wrapper::-webkit-scrollbar {
     display: none !important;
     width: 0 !important;
     height: 0 !important;
 }
-
-/* Card Styles with Glassmorphism - Matching Admin Dashboard Navbar */
 .card {
     border-radius: var(--border-radius-md) !important;
     box-shadow: 0 10px 40px rgba(22, 56, 86, 0.5),
@@ -171,7 +138,6 @@ body::after {
         0 0 0 1px rgba(54, 145, 191, 0.1) !important;
     border: 1px solid rgba(54, 145, 191, 0.3) !important;
     transition: all var(--transition-normal);
-    /* Glassmorphism effect with navbar gradient */
     background: linear-gradient(90deg, rgba(15, 41, 66, 0.95) 0%, rgba(10, 31, 51, 0.95) 100%) !important;
     backdrop-filter: blur(20px) saturate(180%) !important;
     -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
@@ -181,8 +147,6 @@ body::after {
     position: relative;
     overflow: hidden;
 }
-
-/* Add subtle shine effect like navbar */
 .card::before {
     content: '';
     position: absolute;
@@ -195,7 +159,6 @@ body::after {
             rgba(54, 145, 191, 0.5) 50%,
             transparent 100%);
 }
-
 .card:hover {
     box-shadow: 0 15px 50px rgba(22, 56, 86, 0.6),
         0 6px 20px rgba(54, 145, 191, 0.4),
@@ -205,7 +168,6 @@ body::after {
     transform: translateY(-4px);
     border: 1px solid rgba(54, 145, 191, 0.5) !important;
 }
-
 .card-body {
     color: var(--white) !important;
     padding: 2rem !important;
@@ -222,7 +184,6 @@ body::after {
     position: relative;
     overflow: hidden;
 }
-
 .card-body::before {
     content: '';
     position: absolute;
@@ -235,45 +196,34 @@ body::after {
             rgba(255, 255, 255, 0.2) 50%,
             transparent 100%);
 }
-
-/* App Brand Logo */
 .app-brand {
     margin-bottom: 1.5rem !important;
 }
-
 .app-brand-logo img {
     width: 60px !important;
     height: 60px !important;
     border-radius: 50%;
     object-fit: cover;
 }
-
 .app-brand-text {
     color: var(--white) !important;
     font-size: 1.5rem !important;
     font-weight: 700 !important;
     text-transform: uppercase !important;
 }
-
-/* Headings and Text */
 h4,
 h5,
 h6 {
     color: var(--white) !important;
 }
-
 p {
     color: rgba(255, 255, 255, 0.85) !important;
 }
-
-/* Form Labels */
 .form-label {
     color: var(--white) !important;
     font-weight: 500 !important;
     font-family: "Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif !important;
 }
-
-/* Form Controls */
 .form-control {
     background-color: rgba(255, 255, 255, 0.08) !important;
     border: 1px solid rgba(54, 145, 191, 0.25) !important;
@@ -286,15 +236,12 @@ p {
     -webkit-backdrop-filter: blur(5px) !important;
     font-family: "Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif !important;
 }
-
 .form-control::placeholder {
     color: rgba(255, 255, 255, 0.4) !important;
     font-family: "Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif !important;
     font-weight: 400 !important;
     opacity: 1 !important;
 }
-
-/* Ensure password input placeholders match other inputs */
 input[type="password"]::placeholder {
     color: rgba(255, 255, 255, 0.4) !important;
     font-family: "Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif !important;
@@ -302,12 +249,9 @@ input[type="password"]::placeholder {
     opacity: 1 !important;
     letter-spacing: normal !important;
 }
-
-/* Ensure password input itself uses the same font */
 input[type="password"] {
     font-family: "Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif !important;
 }
-
 .form-control:focus {
     background-color: rgba(255, 255, 255, 0.12) !important;
     border-color: var(--primary-blue) !important;
@@ -316,8 +260,6 @@ input[type="password"] {
     color: var(--white) !important;
     transform: translateY(-1px);
 }
-
-/* Input Group */
 .input-group-text {
     background-color: rgba(255, 255, 255, 0.1) !important;
     border: 1px solid rgba(54, 145, 191, 0.3) !important;
@@ -325,34 +267,26 @@ input[type="password"] {
     cursor: pointer;
     transition: all var(--transition-fast);
 }
-
 .input-group-text:hover {
     background-color: rgba(255, 255, 255, 0.15) !important;
     border-color: var(--primary-blue) !important;
 }
-
-/* Checkbox */
 .form-check-input {
     background-color: rgba(255, 255, 255, 0.1) !important;
     border: 1px solid rgba(54, 145, 191, 0.3) !important;
 }
-
 .form-check-input:checked {
     background-color: var(--primary-blue) !important;
     border-color: var(--primary-blue) !important;
 }
-
 .form-check-input:focus {
     border-color: var(--primary-blue) !important;
     box-shadow: 0 0 0 0.2rem rgba(54, 145, 191, 0.25) !important;
 }
-
 .form-check-label {
     color: var(--white) !important;
     font-weight: normal !important;
 }
-
-/* Primary Button - Glassmorphism Effect */
 .btn-primary {
     background: linear-gradient(135deg,
             rgba(54, 145, 191, 0.35) 0%,
@@ -375,7 +309,6 @@ input[type="password"] {
         0 0 0 1px rgba(54, 145, 191, 0.25) !important;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
 }
-
 .btn-primary::before {
     content: '';
     position: absolute;
@@ -386,11 +319,9 @@ input[type="password"] {
     background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
     transition: left 0.5s ease;
 }
-
 .btn-primary:hover::before {
     left: 100%;
 }
-
 .btn-primary:hover,
 .btn-primary:focus,
 .btn-primary:active {
@@ -406,7 +337,6 @@ input[type="password"] {
         0 0 0 1px rgba(54, 145, 191, 0.4) !important;
     transform: translateY(-2px) scale(1.02);
 }
-
 .btn-primary:active {
     transform: translateY(0) scale(0.98);
     background: linear-gradient(135deg,
@@ -415,42 +345,31 @@ input[type="password"] {
     backdrop-filter: blur(25px) saturate(180%) !important;
     -webkit-backdrop-filter: blur(25px) saturate(180%) !important;
 }
-
-/* Links */
 a {
     color: var(--primary-blue) !important;
     transition: color var(--transition-fast);
     text-decoration: none;
     font-family: "Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif !important;
 }
-
 a:hover {
     color: var(--lighter-blue) !important;
 }
-
-/* Text Center */
 .text-center span {
     color: rgba(255, 255, 255, 0.85) !important;
 }
-
-/* Small Text */
 small {
     color: rgba(255, 255, 255, 0.7) !important;
     font-family: "Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif !important;
 }
-
 small:hover {
     color: var(--lighter-blue) !important;
 }
-
-/* Password Toggle Icon */
 .bx-hide,
 .bx-show {
     color: rgba(255, 255, 255, 0.7) !important;
     transition: color 0.2s ease, transform 0.2s ease;
     cursor: pointer;
 }
-
 #togglePassword:hover .bx-hide,
 #togglePassword:hover .bx-show,
 .bx-hide:hover,
@@ -458,75 +377,57 @@ small:hover {
     color: var(--primary-blue) !important;
     transform: scale(1.1);
 }
-
-/* Responsive Design */
 @media (max-width: 768px) {
-
-    /* Remove shadow completely on mobile */
     .card {
         box-shadow: none !important;
     }
-
     .card:hover {
         box-shadow: none !important;
     }
 }
-
 @media (max-width: 576px) {
     .card {
         margin: 1rem;
         max-width: 95% !important;
     }
-
     .card-body {
         padding: 1.5rem !important;
     }
-
     .app-brand-logo img {
         width: 50px !important;
         height: 50px !important;
     }
-
     .app-brand-text {
         font-size: 1.25rem !important;
     }
 }
-
 @media (min-width: 577px) and (max-width: 768px) {
     .card {
         max-width: 600px !important;
     }
 }
-
 @media (min-width: 769px) {
     .card {
         max-width: 700px !important;
     }
 }
-
-/* Animation for Card */
 @keyframes fadeInUp {
     from {
         opacity: 0;
         transform: translateY(30px);
     }
-
     to {
         opacity: 1;
         transform: translateY(0);
     }
 }
-
 .card {
     animation: fadeInUp 0.6s ease-out;
 }
-
-/* Scrollbar Customization */
 ::-webkit-scrollbar {
     width: 12px;
     height: 12px;
 }
-
 ::-webkit-scrollbar-track {
     background: rgba(197, 227, 245, 0.3);
     backdrop-filter: blur(10px);
@@ -534,7 +435,6 @@ small:hover {
     border-radius: 10px;
     margin: 4px;
 }
-
 ::-webkit-scrollbar-thumb {
     background: linear-gradient(135deg, rgba(54, 145, 191, 0.8) 0%, rgba(50, 85, 150, 0.8) 100%);
     backdrop-filter: blur(10px) saturate(180%);
@@ -545,7 +445,6 @@ small:hover {
         inset 0 1px 0 rgba(255, 255, 255, 0.3);
     transition: all 0.3s ease;
 }
-
 ::-webkit-scrollbar-thumb:hover {
     background: linear-gradient(135deg, rgba(54, 145, 191, 1) 0%, rgba(50, 85, 150, 1) 100%);
     border: 2px solid rgba(255, 255, 255, 0.4);
@@ -553,18 +452,12 @@ small:hover {
         inset 0 1px 0 rgba(255, 255, 255, 0.4),
         0 0 15px rgba(54, 145, 191, 0.3);
 }
-
-
-/* Password Input with Icon Inside */
 .position-relative {
     position: relative;
 }
-
 .password-input-with-icon {
     padding-right: 45px !important;
 }
-
-/* New class for visible password - no security masking */
 .password-visible {
     padding-right: 45px !important;
     -webkit-text-security: none !important;
@@ -572,20 +465,15 @@ small:hover {
     font-family: 'Public Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
     letter-spacing: normal !important;
 }
-
-/* Force normal text display when input type is text */
 input.password-input-with-icon[type="text"] {
     -webkit-text-security: none !important;
     -moz-text-security: none !important;
     font-family: 'Public Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
     letter-spacing: normal !important;
 }
-
-/* Ensure password dots when input type is password */
 input.password-input-with-icon[type="password"] {
     font-family: 'Public Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
 }
-
 .password-toggle-icon {
     position: absolute;
     right: 12px;
@@ -601,52 +489,36 @@ input.password-input-with-icon[type="password"] {
     border-radius: 50%;
     transition: all var(--transition-fast);
 }
-
 .password-toggle-icon:hover {
     background-color: rgba(54, 145, 191, 0.2);
 }
-
 .password-toggle-icon i {
     color: rgba(255, 255, 255, 0.7) !important;
     font-size: 1.25rem;
     transition: color var(--transition-fast);
 }
-
 .password-toggle-icon:hover i {
     color: var(--primary-blue) !important;
 }
-
-
-/* Override Authentication Inner Width */
 .authentication-wrapper.authentication-basic .authentication-inner {
     max-width: 600px !important;
     position: relative;
 }
-
-
-/* Override Authentication Wrapper Width */
 .authentication-wrapper {
     max-width: 650px !important;
     margin: 0 auto !important;
     width: 100% !important;
 }
-
 .authentication-wrapper.authentication-basic .authentication-inner {
     max-width: 100% !important;
     width: 100% !important;
 }
-
-/* Register Card - Wider Layout */
 .register-card {
     max-width: 900px !important;
 }
-
 .register-card .card-body {
     padding: 2rem !important;
 }
-
-
-/* Animated Orbs Container */
 .orbs-container {
     position: fixed;
     top: 0;
@@ -657,8 +529,6 @@ input.password-input-with-icon[type="password"] {
     z-index: 3;
     pointer-events: none;
 }
-
-/* Orb Styles - More Visible and Animated */
 .orb {
     position: absolute;
     border-radius: 50%;
@@ -667,7 +537,6 @@ input.password-input-with-icon[type="password"] {
     animation: float 20s infinite ease-in-out;
     will-change: transform;
 }
-
 .orb-1 {
     width: 700px;
     height: 700px;
@@ -677,7 +546,6 @@ input.password-input-with-icon[type="password"] {
     animation-delay: 0s;
     animation-duration: 20s;
 }
-
 .orb-2 {
     width: 600px;
     height: 600px;
@@ -687,7 +555,6 @@ input.password-input-with-icon[type="password"] {
     animation-delay: 3s;
     animation-duration: 25s;
 }
-
 .orb-3 {
     width: 550px;
     height: 550px;
@@ -697,7 +564,6 @@ input.password-input-with-icon[type="password"] {
     animation-delay: 7s;
     animation-duration: 30s;
 }
-
 .orb-4 {
     width: 500px;
     height: 500px;
@@ -707,7 +573,6 @@ input.password-input-with-icon[type="password"] {
     animation-delay: 12s;
     animation-duration: 22s;
 }
-
 .orb-5 {
     width: 450px;
     height: 450px;
@@ -717,30 +582,21 @@ input.password-input-with-icon[type="password"] {
     animation-delay: 5s;
     animation-duration: 28s;
 }
-
-/* Floating Animation - More Dynamic Movement */
 @keyframes float {
-
     0%,
     100% {
         transform: translate(0, 0) scale(1) rotate(0deg);
     }
-
     25% {
         transform: translate(80px, -80px) scale(1.15) rotate(90deg);
     }
-
     50% {
         transform: translate(-60px, 60px) scale(0.85) rotate(180deg);
     }
-
     75% {
         transform: translate(70px, 90px) scale(1.1) rotate(270deg);
     }
 }
-
-
-/* Highlight Create an Account Link */
 .highlight-link {
     color: var(--white) !important;
     font-weight: 700 !important;
@@ -749,17 +605,13 @@ input.password-input-with-icon[type="password"] {
     transition: all var(--transition-fast);
     position: relative;
 }
-
 .highlight-link:hover {
     color: var(--primary-blue) !important;
     text-shadow: 0 0 10px rgba(54, 145, 191, 0.5);
 }
-
 .highlight-link strong {
     color: inherit !important;
 }
-
-/* Back to Home Page Link */
 .back-home-link {
     display: inline-flex;
     align-items: center;
@@ -773,26 +625,20 @@ input.password-input-with-icon[type="password"] {
     border-radius: var(--border-radius-sm);
     text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
 }
-
 .back-home-link:hover {
     color: var(--primary-blue) !important;
     text-shadow: 0 0 12px rgba(54, 145, 191, 0.6);
 }
-
 .back-home-link i {
     font-size: 1.1rem;
     transition: color var(--transition-fast);
     color: var(--white) !important;
     filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.4));
 }
-
 .back-home-link:hover i {
     color: var(--primary-blue) !important;
     filter: drop-shadow(0 0 10px rgba(54, 145, 191, 0.6));
 }
-
-
-/* Hero Logos Styling - Copied from Public Index */
 .hero-logos {
     position: relative;
     display: flex;
@@ -808,7 +654,6 @@ input.password-input-with-icon[type="password"] {
     margin-right: auto;
     margin-bottom: 1.5rem;
 }
-
 .hero-logo {
     width: 120px;
     height: auto;
@@ -830,7 +675,6 @@ input.password-input-with-icon[type="password"] {
     cursor: pointer;
     filter: brightness(1.05) contrast(1.1);
 }
-
 .hero-logo::before {
     content: "";
     position: absolute;
@@ -843,7 +687,6 @@ input.password-input-with-icon[type="password"] {
     opacity: 0;
     transition: opacity 0.4s ease;
 }
-
 .hero-logo::after {
     content: "";
     position: absolute;
@@ -857,7 +700,6 @@ input.password-input-with-icon[type="password"] {
     opacity: 0;
     transition: opacity 0.4s ease;
 }
-
 .hero-logo:hover {
     transform: translateY(-12px) translateZ(50px) rotateX(8deg) rotateY(-2deg);
     background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.75));
@@ -869,55 +711,39 @@ input.password-input-with-icon[type="password"] {
         inset 0 2px 0 rgba(255, 255, 255, 0.8),
         inset 0 -2px 0 rgba(0, 0, 0, 0.15);
 }
-
 .hero-logo:hover::before {
     opacity: 1;
 }
-
 .hero-logo:hover::after {
     opacity: 1;
 }
-
-/* Responsive adjustments for hero logos */
 @media (max-width: 768px) {
     .hero-logos {
         gap: 1.5rem;
         padding: 1rem 1.5rem;
     }
-
     .hero-logo.caate-logo {
         width: 120px;
     }
 }
-
 @media (max-width: 576px) {
     .hero-logos {
         gap: 1rem;
         padding: 0.75rem 1rem;
     }
-
     .hero-logo.caate-logo {
         width: 100px;
     }
 }
-
-
-/* Logo Floating Animation */
 @keyframes logoFloat {
-
     0%,
     100% {
         transform: translateY(0px) scale(1);
     }
-
     50% {
         transform: translateY(-10px) scale(1.02);
     }
 }
-
-
-
-/* Enhanced hover effect for logo */
 .hero-logo:hover {
     border-color: rgba(54, 145, 191, 0.8);
     box-shadow:
@@ -929,103 +755,74 @@ input.password-input-with-icon[type="password"] {
         0 0 30px rgba(54, 145, 191, 0.4);
     filter: brightness(1.15) contrast(1.15);
 }
-
-/* Glow effect on hover */
 .hero-logo:hover::after {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1.2);
 }
-
-
-/* Hidden Scrollbar for Container on Mobile */
 @media (max-width: 768px) {
     html {
         -ms-overflow-style: none !important;
         scrollbar-width: none !important;
     }
-
     html::-webkit-scrollbar {
         display: none !important;
     }
-
     body {
         overflow-y: auto !important;
         overflow-x: hidden !important;
         -ms-overflow-style: none !important;
         scrollbar-width: none !important;
     }
-
     body::-webkit-scrollbar {
         display: none !important;
     }
-
     .container-xxl {
         overflow-y: visible !important;
         overflow-x: hidden;
         -ms-overflow-style: none !important;
         scrollbar-width: none !important;
     }
-
     .container-xxl::-webkit-scrollbar {
         display: none !important;
     }
-
     .authentication-wrapper {
         overflow-x: hidden;
         overflow-y: visible;
         -ms-overflow-style: none !important;
         scrollbar-width: none !important;
     }
-
     .authentication-wrapper::-webkit-scrollbar {
         display: none !important;
     }
-
-    /* Hide all scrollbars on mobile */
     * {
         -ms-overflow-style: none !important;
         scrollbar-width: none !important;
     }
-
     *::-webkit-scrollbar {
         display: none !important;
     }
 }
-
-
-/* Reorder form fields on mobile - Move terms checkbox below confirm password */
 @media (max-width: 768px) {
     .register-card .row {
         display: flex;
         flex-direction: column;
     }
-
     .register-card .col-md-6 {
         width: 100%;
         display: contents;
     }
-
-    /* Username - order 1 */
     .register-card .col-md-6:first-child>.mb-3:nth-child(1) {
         order: 1;
     }
-
-    /* Email - order 2 */
     .register-card .col-md-6:first-child>.mb-3:nth-child(2) {
         order: 2;
     }
-
-    /* Password - order 3 */
     .register-card .col-md-6:last-child>.mb-3:nth-child(1) {
         order: 3;
     }
-
-    /* Confirm Password - order 4 */
     .register-card .col-md-6:last-child>.mb-3:nth-child(2) {
         order: 4;
     }
-
-    /* Terms checkbox - order 5 (below confirm password) */
     .register-card .col-md-6:first-child>.mb-3:nth-child(3) {
         order: 5;
     }

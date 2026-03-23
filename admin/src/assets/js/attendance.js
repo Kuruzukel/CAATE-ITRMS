@@ -1,10 +1,6 @@
-/* Attendance Page Script */
 document.addEventListener('DOMContentLoaded', function () {
-    // Menu toggle is handled by main.js - no need to duplicate here
 
-    // Image Upload Handlers for Edit Modal
 
-    // Time In Image Upload
     const editTimeInInput = document.getElementById('editTimeInImage');
     const editTimeInPreview = document.getElementById('editTimeInImagePreview');
     const editTimeInActions = document.getElementById('editTimeInActions');
@@ -13,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
         editTimeInInput.addEventListener('change', function (e) {
             const file = e.target.files[0];
             if (file && file.type.startsWith('image/')) {
-                // Validate file size (5MB max)
+
                 if (file.size > 5 * 1024 * 1024) {
                     alert('File size must be less than 5MB');
                     return;
@@ -28,7 +24,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Time Out Image Upload
     const editTimeOutInput = document.getElementById('editTimeOutImage');
     const editTimeOutPreview = document.getElementById('editTimeOutImagePreview');
     const editTimeOutActions = document.getElementById('editTimeOutActions');
@@ -37,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function () {
         editTimeOutInput.addEventListener('change', function (e) {
             const file = e.target.files[0];
             if (file && file.type.startsWith('image/')) {
-                // Validate file size (5MB max)
+
                 if (file.size > 5 * 1024 * 1024) {
                     alert('File size must be less than 5MB');
                     return;
@@ -52,13 +47,11 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // View and Delete button handlers
     setupImageActionButtons();
 });
 
-// Setup action buttons for view and delete
 function setupImageActionButtons() {
-    // Time In - View button
+
     const timeInViewBtn = document.querySelector('#editTimeInActions .btn-primary');
     if (timeInViewBtn) {
         timeInViewBtn.addEventListener('click', function (e) {
@@ -67,7 +60,6 @@ function setupImageActionButtons() {
         });
     }
 
-    // Time In - Delete button
     const timeInDeleteBtn = document.querySelector('#editTimeInActions .btn-danger');
     if (timeInDeleteBtn) {
         timeInDeleteBtn.addEventListener('click', function (e) {
@@ -76,7 +68,6 @@ function setupImageActionButtons() {
         });
     }
 
-    // Time Out - View button
     const timeOutViewBtn = document.querySelector('#editTimeOutActions .btn-primary');
     if (timeOutViewBtn) {
         timeOutViewBtn.addEventListener('click', function (e) {
@@ -85,7 +76,6 @@ function setupImageActionButtons() {
         });
     }
 
-    // Time Out - Delete button
     const timeOutDeleteBtn = document.querySelector('#editTimeOutActions .btn-danger');
     if (timeOutDeleteBtn) {
         timeOutDeleteBtn.addEventListener('click', function (e) {
@@ -95,7 +85,6 @@ function setupImageActionButtons() {
     }
 }
 
-// Show image in modal
 function showImageModal(type) {
     const previewDiv = type === 'timeIn'
         ? document.getElementById('editTimeInImagePreview')
@@ -118,7 +107,6 @@ function showImageModal(type) {
     }
 }
 
-// Remove image preview
 function removeImagePreview(type) {
     const previewDiv = type === 'timeIn'
         ? document.getElementById('editTimeInImagePreview')
@@ -128,7 +116,6 @@ function removeImagePreview(type) {
         ? document.getElementById('editTimeInImage')
         : document.getElementById('editTimeOutImage');
 
-    // Clear the preview and show placeholder
     previewDiv.innerHTML = `
         <div class="text-center">
             <i class="bx bx-image-alt" style="font-size: 3rem; color: #64748b; opacity: 0.5;"></i>
@@ -137,11 +124,9 @@ function removeImagePreview(type) {
         </div>
     `;
 
-    // Reset input
     inputField.value = '';
 }
 
-// Delete Confirmation Handler
 const deleteConfirmInput = document.getElementById('deleteConfirmInput');
 const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
 
@@ -157,7 +142,6 @@ if (deleteConfirmInput && confirmDeleteBtn) {
         }
     });
 
-    // Reset input when modal is closed
     const deleteModal = document.getElementById('deleteModal');
     if (deleteModal) {
         deleteModal.addEventListener('hidden.bs.modal', function () {

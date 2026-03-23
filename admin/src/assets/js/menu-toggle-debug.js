@@ -1,12 +1,6 @@
-/**
- * Debug Menu Toggle - Ensures toggle works on all screens
- * This file adds additional event listeners to guarantee functionality
- */
-
 (function () {
     'use strict';
 
-    // Wait for DOM to be fully ready
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', initToggle);
     } else {
@@ -14,11 +8,11 @@
     }
 
     function initToggle() {
-        // Find all toggle buttons
+
         const toggleButtons = document.querySelectorAll('.layout-menu-toggle, .menu-toggle-btn');
 
         toggleButtons.forEach((btn, index) => {
-            // Add click handler with high priority
+
             btn.addEventListener('click', function (e) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -45,7 +39,7 @@
                         html.classList.add('layout-menu-collapsed');
                     }
                 }
-            }, true); // Use capture phase
+            }, true);
         });
     }
 })();

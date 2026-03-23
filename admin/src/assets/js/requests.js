@@ -1,9 +1,5 @@
-/* Requests Page Script */
-
-// Global appointments data storage
 let appointmentsData = [];
 
-// Service Category and Type Mapping (Global scope)
 const serviceCategories = {
     'skincare': [
         { value: 'facial-treatment', text: 'Facial Treatment' },
@@ -49,7 +45,7 @@ const serviceCategories = {
 };
 
 document.addEventListener('DOMContentLoaded', function () {
-    // Fix passive event listeners for better performance
+
     if (typeof EventTarget !== 'undefined') {
         const originalAddEventListener = EventTarget.prototype.addEventListener;
         EventTarget.prototype.addEventListener = function (type, listener, options) {
@@ -67,22 +63,19 @@ document.addEventListener('DOMContentLoaded', function () {
         };
     }
 
-    // Update copyright year
     const currentYearElement = document.getElementById('currentYear');
     if (currentYearElement) {
         currentYearElement.textContent = new Date().getFullYear();
     }
 
-    // Load appointments from database
     loadAppointments();
     loadStatistics();
 
-    // Service Category and Type Filtering
     const filterServiceCategory = document.getElementById('filterServiceCategory');
     const filterServiceType = document.getElementById('filterServiceType');
 
     if (filterServiceCategory && filterServiceType) {
-        // Initialize with all service types on page load
+
         Object.values(serviceCategories).flat().forEach(service => {
             const option = document.createElement('option');
             option.value = service.value;
@@ -90,15 +83,13 @@ document.addEventListener('DOMContentLoaded', function () {
             filterServiceType.appendChild(option);
         });
 
-        // Listen for category changes
         filterServiceCategory.addEventListener('change', function () {
             const selectedCategory = this.value;
 
-            // Clear current service type options
             filterServiceType.innerHTML = '<option value="">All Service Types</option>';
 
             if (selectedCategory && serviceCategories[selectedCategory]) {
-                // Add service types for selected category
+
                 serviceCategories[selectedCategory].forEach(service => {
                     const option = document.createElement('option');
                     option.value = service.value;
@@ -106,7 +97,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     filterServiceType.appendChild(option);
                 });
             } else {
-                // Show all service types if no category selected
+
                 Object.values(serviceCategories).flat().forEach(service => {
                     const option = document.createElement('option');
                     option.value = service.value;
@@ -115,42 +106,36 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
             }
 
-            // Apply filters after category change
             applyFilters();
         });
 
-        // Listen for service type changes
         filterServiceType.addEventListener('change', applyFilters);
     }
 
-    // Handle Search Input
     const filterSearchInput = document.getElementById('filterSearchInput');
     if (filterSearchInput) {
         filterSearchInput.addEventListener('input', applyFilters);
     }
 
-    // Handle Status Filter
     const filterStatus = document.getElementById('filterStatus');
     if (filterStatus) {
         filterStatus.addEventListener('change', applyFilters);
     }
 
-    // Handle Date Filter
     const filterDate = document.getElementById('filterDate');
     if (filterDate) {
         filterDate.addEventListener('change', applyFilters);
     }
 
-    // Handle Reset Button
     const resetFiltersBtn = document.getElementById('resetFiltersBtn');
     if (resetFiltersBtn) {
         resetFiltersBtn.addEventListener('click', function () {
-            // Reset all filters
+
             if (filterSearchInput) filterSearchInput.value = '';
             if (filterServiceCategory) filterServiceCategory.value = '';
             if (filterServiceType) {
                 filterServiceType.innerHTML = '<option value="">All Service Types</option>';
-                // Repopulate with all service types
+
                 Object.values(serviceCategories).flat().forEach(service => {
                     const option = document.createElement('option');
                     option.value = service.value;
@@ -161,25 +146,22 @@ document.addEventListener('DOMContentLoaded', function () {
             if (filterStatus) filterStatus.value = '';
             if (filterDate) filterDate.value = '';
 
-            // Reapply filters (which will show all data)
             applyFilters();
         });
     }
 
-    // Edit Service Category and Type Dynamic Population
     const editServiceCategory = document.getElementById('editServiceCategory');
     const editServiceType = document.getElementById('editServiceType');
 
     if (editServiceCategory && editServiceType) {
-        // Listen for category changes in edit modal
+
         editServiceCategory.addEventListener('change', function () {
             const selectedCategory = this.value;
 
-            // Clear current service type options
             editServiceType.innerHTML = '<option value="">Select a service type</option>';
 
             if (selectedCategory && serviceCategories[selectedCategory]) {
-                // Add service types for selected category
+
                 serviceCategories[selectedCategory].forEach(service => {
                     const option = document.createElement('option');
                     option.value = service.value;
@@ -190,20 +172,18 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Add New Appointment Modal - Service Category and Type Dynamic Population
     const addServiceCategory = document.getElementById('addAppointmentServiceCategory');
     const addServiceType = document.getElementById('addAppointmentServiceType');
 
     if (addServiceCategory && addServiceType) {
-        // Listen for category changes in add modal
+
         addServiceCategory.addEventListener('change', function () {
             const selectedCategory = this.value;
 
-            // Clear current service type options
             addServiceType.innerHTML = '<option value="">Select a service type</option>';
 
             if (selectedCategory && serviceCategories[selectedCategory]) {
-                // Add service types for selected category
+
                 serviceCategories[selectedCategory].forEach(service => {
                     const option = document.createElement('option');
                     option.value = service.value;
@@ -214,38 +194,34 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Save New Appointment Button
     const saveNewAppointmentBtn = document.getElementById('saveNewAppointmentBtn');
     if (saveNewAppointmentBtn) {
         saveNewAppointmentBtn.addEventListener('click', handleSaveNewAppointment);
     }
 
-    // Add event listener for date change in Add Appointment modal
     const addAppointmentDate = document.getElementById('addAppointmentDate');
     if (addAppointmentDate) {
         addAppointmentDate.addEventListener('change', updateAvailableTimeSlotsForAdd);
     }
 
-    // Add event listener for date change in Edit Appointment modal
     const editPreferredDate = document.getElementById('editPreferredDate');
     if (editPreferredDate) {
         editPreferredDate.addEventListener('change', updateAvailableTimeSlotsForEdit);
     }
 
-    // Initialize time slots when Add New Appointment modal is shown
     const calendarModal = document.getElementById('calendarModal');
     if (calendarModal) {
         calendarModal.addEventListener('shown.bs.modal', function () {
-            // Reset and initialize time slots when modal opens
+
             const dateInput = document.getElementById('addAppointmentDate');
             const timeSelect = document.getElementById('addAppointmentTime');
 
             if (dateInput && timeSelect) {
-                // If a date is already selected, update time slots
+
                 if (dateInput.value) {
                     updateAvailableTimeSlotsForAdd();
                 } else {
-                    // Initialize with all time slots
+
                     timeSelect.innerHTML = '<option value="">Select a time</option>';
                     allTimeSlots.forEach(slot => {
                         const option = document.createElement('option');
@@ -258,11 +234,10 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Initialize time slots when Edit Appointment modal is shown
     const editAppointmentModal = document.getElementById('editAppointmentModal');
     if (editAppointmentModal) {
         editAppointmentModal.addEventListener('shown.bs.modal', function () {
-            // Update time slots based on selected date when modal opens
+
             const dateInput = document.getElementById('editPreferredDate');
             if (dateInput && dateInput.value) {
                 updateAvailableTimeSlotsForEdit();
@@ -270,44 +245,40 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Menu toggle is handled by main.js
 });
 
-// Load appointments from database
 async function loadAppointments() {
-    // Show loader before fetching data
+
     showTableLoader();
 
-    // Add a timeout fallback
     const timeoutId = setTimeout(() => {
         appointmentsData = [];
         displayAppointments([]);
-    }, 10000); // 10 second timeout
+    }, 10000);
 
     try {
         const apiUrl = '/CAATE-ITRMS/backend/public/api/v1/appointments';
 
         const response = await fetch(apiUrl);
-        clearTimeout(timeoutId); // Clear timeout if request completes
+        clearTimeout(timeoutId);
 
         const result = await response.json();
 
         if (result.success && result.data) {
-            appointmentsData = result.data; // Store data globally
+            appointmentsData = result.data;
             displayAppointments(result.data);
         } else {
             appointmentsData = [];
             displayAppointments([]);
         }
     } catch (error) {
-        clearTimeout(timeoutId); // Clear timeout on error
+        clearTimeout(timeoutId);
         console.error('Error loading appointments:', error);
         appointmentsData = [];
         displayAppointments([]);
     }
 }
 
-// Show loader in table
 function showTableLoader() {
     const tbody = document.querySelector('.table-border-bottom-0');
     if (!tbody) return;
@@ -324,7 +295,6 @@ function showTableLoader() {
     `;
 }
 
-// Load statistics
 async function loadStatistics() {
     try {
         const response = await fetch('/CAATE-ITRMS/backend/public/api/v1/appointments/statistics');
@@ -338,7 +308,6 @@ async function loadStatistics() {
     }
 }
 
-// Update statistics cards
 function updateStatistics(stats) {
     const statsCards = document.querySelectorAll('.card-body h3');
     if (statsCards.length >= 4) {
@@ -349,18 +318,15 @@ function updateStatistics(stats) {
     }
 }
 
-// Display appointments in table
 function displayAppointments(appointments) {
     const tbody = document.querySelector('.table-border-bottom-0');
     if (!tbody) return;
 
-    // Hide loader
     const loader = document.getElementById('tableLoader');
     if (loader) {
         loader.remove();
     }
 
-    // Clear existing rows
     tbody.innerHTML = '';
 
     if (!appointments || appointments.length === 0) {
@@ -385,20 +351,16 @@ function displayAppointments(appointments) {
     });
 }
 
-// Create appointment row
 function createAppointmentRow(appointment) {
     const tr = document.createElement('tr');
 
-    // Store appointment data in the row for quick access
     tr.setAttribute('data-appointment', JSON.stringify(appointment));
     tr.setAttribute('data-id', appointment._id);
 
-    // Get initials for avatar
     const firstName = appointment.firstName || '';
     const lastName = appointment.lastName || '';
     const initials = (firstName.charAt(0) + lastName.charAt(0)).toUpperCase() || 'NA';
 
-    // Full name
     const fullName = [
         appointment.firstName,
         appointment.secondName,
@@ -407,14 +369,11 @@ function createAppointmentRow(appointment) {
         appointment.suffix
     ].filter(Boolean).join(' ');
 
-    // Format service category
     const serviceCategory = formatServiceCategory(appointment.serviceCategory);
     const serviceType = formatServiceType(appointment.serviceType);
 
-    // Format date and time
     const dateTime = formatDateTime(appointment.preferredDate, appointment.preferredTime);
 
-    // Status badge
     const statusBadge = getStatusBadge(appointment.status);
 
     tr.innerHTML = `
@@ -484,7 +443,6 @@ function createAppointmentRow(appointment) {
     return tr;
 }
 
-// Helper functions
 function formatServiceCategory(category) {
     const categories = {
         'skincare': 'Skin Care',
@@ -509,7 +467,6 @@ function formatDateTime(date, time) {
     const dateObj = new Date(date);
     const formattedDate = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
-    // Convert 24h to 12h format
     const [hours, minutes] = time.split(':');
     const hour = parseInt(hours);
     const ampm = hour >= 12 ? 'PM' : 'AM';
@@ -528,7 +485,6 @@ function getStatusBadge(status) {
     return badges[status] || '<span class="badge bg-secondary">Unknown</span>';
 }
 
-// Update appointment status
 async function updateStatus(element, status) {
     const row = element.closest('tr');
     if (!row) {
@@ -542,7 +498,6 @@ async function updateStatus(element, status) {
         return;
     }
 
-    // OPTIMISTIC UPDATE: Update UI immediately before API call
     const statusCell = row.querySelector('.status-cell');
     const originalStatusHTML = statusCell ? statusCell.innerHTML : '';
 
@@ -550,13 +505,11 @@ async function updateStatus(element, status) {
         statusCell.innerHTML = getStatusBadge(status);
     }
 
-    // Update the stored appointment data immediately
     const appointmentData = JSON.parse(row.getAttribute('data-appointment'));
     const originalStatus = appointmentData.status;
     appointmentData.status = status;
     row.setAttribute('data-appointment', JSON.stringify(appointmentData));
 
-    // Show success toast immediately
     const statusMessages = {
         'Approved': 'Appointment approved successfully!',
         'Pending': 'Appointment status changed to pending',
@@ -577,10 +530,10 @@ async function updateStatus(element, status) {
         const result = await response.json();
 
         if (result.success) {
-            // Update statistics in background
+
             loadStatistics();
         } else {
-            // ROLLBACK: Revert UI changes if API call failed
+
             if (statusCell) {
                 statusCell.innerHTML = originalStatusHTML;
             }
@@ -590,7 +543,7 @@ async function updateStatus(element, status) {
             showToast('Failed to update status: ' + (result.error || 'Unknown error'), 'error');
         }
     } catch (error) {
-        // ROLLBACK: Revert UI changes if API call failed
+
         if (statusCell) {
             statusCell.innerHTML = originalStatusHTML;
         }
@@ -602,11 +555,10 @@ async function updateStatus(element, status) {
     }
 }
 
-// Delete appointment
 let currentDeletingAppointmentRow = null;
 
 function deleteAppointment(element) {
-    // Get the row from the element
+
     const row = element.closest('tr');
     if (!row) {
         console.error('Could not find row for delete');
@@ -614,7 +566,6 @@ function deleteAppointment(element) {
         return;
     }
 
-    // Get appointment data from row
     const appointmentData = row.getAttribute('data-appointment');
     if (!appointmentData) {
         console.error('No appointment data found in row');
@@ -625,10 +576,8 @@ function deleteAppointment(element) {
     try {
         const appointment = JSON.parse(appointmentData);
 
-        // Store the row for later use
         currentDeletingAppointmentRow = row;
 
-        // Build full name for display
         const fullName = [
             appointment.firstName,
             appointment.secondName,
@@ -639,7 +588,6 @@ function deleteAppointment(element) {
 
         document.getElementById('deleteAppointmentName').textContent = fullName;
 
-        // Show delete confirmation modal
         const modal = new bootstrap.Modal(document.getElementById('deleteAppointmentModal'));
         modal.show();
     } catch (error) {
@@ -648,7 +596,6 @@ function deleteAppointment(element) {
     }
 }
 
-// Confirm delete appointment
 async function confirmDeleteAppointment() {
     if (!currentDeletingAppointmentRow) {
         showToast('No appointment selected for deletion', 'error');
@@ -671,15 +618,12 @@ async function confirmDeleteAppointment() {
         if (result.success) {
             showToast('Appointment deleted successfully', 'success');
 
-            // Remove the row from the table (no full reload)
             currentDeletingAppointmentRow.remove();
             currentDeletingAppointmentRow = null;
 
-            // Close modal
             const modal = bootstrap.Modal.getInstance(document.getElementById('deleteAppointmentModal'));
             modal.hide();
 
-            // Reload statistics only
             loadStatistics();
         } else {
             showToast('Failed to delete appointment: ' + (result.error || 'Unknown error'), 'error');
@@ -690,7 +634,6 @@ async function confirmDeleteAppointment() {
     }
 }
 
-// View details
 async function viewDetails(element) {
     const row = element.closest('tr');
     if (!row) {
@@ -714,7 +657,6 @@ async function viewDetails(element) {
     }
 }
 
-// Edit details
 async function editDetails(element) {
     const row = element.closest('tr');
     if (!row) {
@@ -738,9 +680,8 @@ async function editDetails(element) {
     }
 }
 
-// Display appointment details in modal (helper function)
 function displayAppointmentDetails(appointment) {
-    // Populate view modal fields
+
     document.getElementById('viewFirstName').value = appointment.firstName || '';
     document.getElementById('viewSecondName').value = appointment.secondName || '';
     document.getElementById('viewMiddleName').value = appointment.middleName || '';
@@ -749,7 +690,6 @@ function displayAppointmentDetails(appointment) {
     document.getElementById('viewEmail').value = appointment.email || '';
     document.getElementById('viewContactNumber').value = appointment.contactNumber || '';
 
-    // Format service category and type
     const categoryMap = {
         'skincare': 'Skin Care',
         'haircare': 'Hair Care',
@@ -760,7 +700,6 @@ function displayAppointmentDetails(appointment) {
     document.getElementById('viewServiceCategory').value = categoryMap[appointment.serviceCategory] || appointment.serviceCategory || '';
     document.getElementById('viewServiceType').value = formatServiceType(appointment.serviceType) || '';
 
-    // Format date
     if (appointment.preferredDate) {
         const dateObj = new Date(appointment.preferredDate);
         document.getElementById('viewPreferredDate').value = dateObj.toLocaleDateString('en-US', {
@@ -773,7 +712,6 @@ function displayAppointmentDetails(appointment) {
         document.getElementById('viewPreferredDate').value = 'Not set';
     }
 
-    // Format time
     if (appointment.preferredTime) {
         const [hours, minutes] = appointment.preferredTime.split(':');
         const hour = parseInt(hours);
@@ -788,22 +726,18 @@ function displayAppointmentDetails(appointment) {
     document.getElementById('viewSpecialNotes').value = appointment.specialNotes || 'No special notes';
     document.getElementById('viewAdminNotes').value = appointment.adminNotes || 'No admin notes';
 
-    // Show modal
     const modal = new bootstrap.Modal(document.getElementById('viewAppointmentModal'));
     modal.show();
 }
 
-// Display edit form in modal (helper function)
 let currentEditingAppointmentRow = null;
 let originalAppointmentData = null;
 
 function displayEditForm(appointment, row) {
     currentEditingAppointmentRow = row;
 
-    // Store original data for comparison
     originalAppointmentData = JSON.parse(JSON.stringify(appointment));
 
-    // Populate edit modal fields
     document.getElementById('editFirstName').value = appointment.firstName || '';
     document.getElementById('editSecondName').value = appointment.secondName || '';
     document.getElementById('editMiddleName').value = appointment.middleName || '';
@@ -812,13 +746,11 @@ function displayEditForm(appointment, row) {
     document.getElementById('editEmail').value = appointment.email || '';
     document.getElementById('editContactNumber').value = appointment.contactNumber || '';
 
-    // Set service category first
     const editServiceCategory = document.getElementById('editServiceCategory');
     const editServiceType = document.getElementById('editServiceType');
 
     editServiceCategory.value = appointment.serviceCategory || '';
 
-    // Clear and populate service types based on category
     editServiceType.innerHTML = '<option value="">Select a service type</option>';
 
     if (appointment.serviceCategory && serviceCategories[appointment.serviceCategory]) {
@@ -831,13 +763,11 @@ function displayEditForm(appointment, row) {
             editServiceType.appendChild(option);
         });
 
-        // Set the service type value AFTER populating all options
         if (appointment.serviceType) {
             editServiceType.value = appointment.serviceType;
 
-            // If value didn't set, the service type might not exist in our list
             if (!editServiceType.value || editServiceType.value === '') {
-                // Add the missing option dynamically
+
                 const option = document.createElement('option');
                 option.value = appointment.serviceType;
                 option.textContent = formatServiceType(appointment.serviceType);
@@ -853,16 +783,14 @@ function displayEditForm(appointment, row) {
     document.getElementById('editSpecialNotes').value = appointment.specialNotes || '';
     document.getElementById('editAdminNotes').value = appointment.adminNotes || '';
 
-    // Show modal
     const modal = new bootstrap.Modal(document.getElementById('editAppointmentModal'));
     modal.show();
 
-    // Update available time slots after modal is shown and set the preferred time
     modal._element.addEventListener('shown.bs.modal', async function () {
         const dateInput = document.getElementById('editPreferredDate');
         if (dateInput && dateInput.value) {
             await updateAvailableTimeSlotsForEdit();
-            // Set the preferred time after updating available slots
+
             const timeSelect = document.getElementById('editPreferredTime');
             if (timeSelect && appointment.preferredTime) {
                 timeSelect.value = appointment.preferredTime;
@@ -871,9 +799,6 @@ function displayEditForm(appointment, row) {
     }, { once: true });
 }
 
-
-
-// Delete confirmation functionality
 const deleteConfirmInput = document.getElementById('deleteConfirmInput');
 const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
 
@@ -886,7 +811,6 @@ if (deleteConfirmInput && confirmDeleteBtn) {
         }
     });
 
-    // Reset input when modal is closed
     const deleteModal = document.getElementById('deleteModal');
     if (deleteModal) {
         deleteModal.addEventListener('hidden.bs.modal', function () {
@@ -895,17 +819,15 @@ if (deleteConfirmInput && confirmDeleteBtn) {
         });
     }
 
-    // Handle delete confirmation
     confirmDeleteBtn.addEventListener('click', function () {
-        // Add your delete logic here
+
         alert('Record deleted successfully!');
-        // Close modal
+
         const modal = bootstrap.Modal.getInstance(deleteModal);
         modal.hide();
     });
 }
 
-// Save appointment changes
 async function saveAppointmentChanges() {
     if (!currentEditingAppointmentRow) {
         showToast('No appointment selected for editing', 'error');
@@ -914,7 +836,6 @@ async function saveAppointmentChanges() {
 
     const id = currentEditingAppointmentRow.getAttribute('data-id');
 
-    // Get form data
     const updatedData = {
         firstName: document.getElementById('editFirstName').value.trim(),
         secondName: document.getElementById('editSecondName').value.trim(),
@@ -933,13 +854,11 @@ async function saveAppointmentChanges() {
         adminNotes: document.getElementById('editAdminNotes').value.trim()
     };
 
-    // Check if any changes were made FIRST
     let hasChanges = false;
     for (const key in updatedData) {
         const originalValue = originalAppointmentData[key] || '';
         const updatedValue = updatedData[key] || '';
 
-        // Normalize values for comparison (trim and convert to string)
         const normalizedOriginal = String(originalValue).trim();
         const normalizedUpdated = String(updatedValue).trim();
 
@@ -954,9 +873,6 @@ async function saveAppointmentChanges() {
         return;
     }
 
-    // Validate ONLY truly required fields (marked with red asterisk *)
-    // Required: First Name, Phone Number, Email, Service Category, Service Type, Preferred Date, Preferred Time
-    // Optional/If Applicable: Second Name, Middle Name, Last Name, Suffix, Registration Type, Special Notes, Admin Notes
 
     const missingFields = [];
     if (!updatedData.firstName) missingFields.push('First Name');
@@ -973,11 +889,10 @@ async function saveAppointmentChanges() {
         return;
     }
 
-    // Check if time slot is available (exclude current appointment from check)
     const availability = await checkTimeSlotAvailability(
         updatedData.preferredDate,
         updatedData.preferredTime,
-        id // Exclude current appointment ID
+        id
     );
 
     if (!availability.available) {
@@ -1000,18 +915,14 @@ async function saveAppointmentChanges() {
         if (result.success) {
             showToast('Appointment updated successfully!', 'success');
 
-            // Close modal
             const modal = bootstrap.Modal.getInstance(document.getElementById('editAppointmentModal'));
             modal.hide();
 
-            // Update only the specific row instead of reloading all data
             updateRowWithNewData(currentEditingAppointmentRow, updatedData);
 
-            // Reset variables
             currentEditingAppointmentRow = null;
             originalAppointmentData = null;
 
-            // Update statistics
             loadStatistics();
         } else {
             showToast('Failed to update appointment: ' + (result.error || 'Unknown error'), 'error');
@@ -1022,7 +933,6 @@ async function saveAppointmentChanges() {
     }
 }
 
-// Toast notification function
 function showToast(message, type = 'success') {
     const container = document.getElementById('toastContainer');
     if (!container) return;
@@ -1043,14 +953,12 @@ function showToast(message, type = 'success') {
 
     container.appendChild(toast);
 
-    // Auto remove after 2.5 seconds
     setTimeout(() => {
         toast.classList.add('hiding');
         setTimeout(() => toast.remove(), 300);
     }, 2500);
 }
 
-// Close toast notification
 function closeToast(button) {
     const toast = button.closest('.toast-notification');
     if (toast) {
@@ -1061,26 +969,23 @@ function closeToast(button) {
     }
 }
 
-// Update a specific appointment row without reloading the entire table
 function updateAppointmentRow(appointmentId, updatedData) {
-    // Find the row with this appointment ID
+
     const rows = document.querySelectorAll('.table-border-bottom-0 tr');
 
     for (const row of rows) {
-        // Check if this row contains the appointment ID in any onclick attribute
+
         const buttons = row.querySelectorAll('[onclick*="' + appointmentId + '"]');
 
         if (buttons.length > 0) {
             const cells = row.cells;
 
-            // If status was updated, update the status badge (column 5)
             if (updatedData.status) {
                 cells[5].innerHTML = getStatusBadge(updatedData.status);
             }
 
-            // If full data was provided, update all cells
             if (updatedData.firstName) {
-                // Update name (column 0)
+
                 const firstName = updatedData.firstName || '';
                 const lastName = updatedData.lastName || '';
                 const initials = (firstName.charAt(0) + lastName.charAt(0)).toUpperCase() || 'NA';
@@ -1103,13 +1008,10 @@ function updateAppointmentRow(appointmentId, updatedData) {
                     </div>
                 `;
 
-                // Update email (column 1)
                 cells[1].textContent = updatedData.email || 'N/A';
 
-                // Update contact number (column 2)
                 cells[2].textContent = updatedData.contactNumber || 'N/A';
 
-                // Update service (column 3)
                 const serviceCategory = formatServiceCategory(updatedData.serviceCategory);
                 const serviceType = formatServiceType(updatedData.serviceType);
                 cells[3].innerHTML = `
@@ -1117,11 +1019,9 @@ function updateAppointmentRow(appointmentId, updatedData) {
                     <small class="text-muted">${serviceType}</small>
                 `;
 
-                // Update date & time (column 4)
                 const dateTime = formatDateTime(updatedData.preferredDate, updatedData.preferredTime);
                 cells[4].innerHTML = dateTime;
 
-                // Update status (column 5)
                 cells[5].innerHTML = getStatusBadge(updatedData.status);
             }
 
@@ -1130,11 +1030,9 @@ function updateAppointmentRow(appointmentId, updatedData) {
     }
 }
 
-// Update row with new data
 function updateRowWithNewData(row, data) {
     const cells = row.cells;
 
-    // Update name cell (column 0)
     const fullName = [data.firstName, data.secondName, data.middleName, data.lastName, data.suffix].filter(Boolean).join(' ');
     const initials = ((data.firstName || '').charAt(0) + (data.lastName || '').charAt(0)).toUpperCase() || 'NA';
     cells[0].innerHTML = `
@@ -1147,32 +1045,24 @@ function updateRowWithNewData(row, data) {
         </div>
     `;
 
-    // Update email (column 1)
     cells[1].textContent = data.email || 'N/A';
 
-    // Update contact number (column 2)
     cells[2].textContent = data.contactNumber || 'N/A';
 
-    // Update service (column 3)
     const serviceCategory = formatServiceCategory(data.serviceCategory);
     const serviceType = formatServiceType(data.serviceType);
     cells[3].innerHTML = `<strong>${serviceCategory}</strong><br><small class="text-muted">${serviceType}</small>`;
 
-    // Update date & time (column 4)
     cells[4].innerHTML = formatDateTime(data.preferredDate, data.preferredTime);
 
-    // Update status (column 5)
     cells[5].innerHTML = getStatusBadge(data.status);
 
-    // Update stored data
     const appointmentData = JSON.parse(row.getAttribute('data-appointment'));
     Object.assign(appointmentData, data);
     row.setAttribute('data-appointment', JSON.stringify(appointmentData));
 }
 
 
-// Handle Save New Appointment
-// All available time slots
 const allTimeSlots = [
     { value: '09:00', text: '09:00 AM' },
     { value: '10:00', text: '10:00 AM' },
@@ -1183,25 +1073,23 @@ const allTimeSlots = [
     { value: '16:00', text: '04:00 PM' }
 ];
 
-// Check if time slot is already booked for a specific date
 async function checkTimeSlotAvailability(date, time, excludeAppointmentId = null) {
     try {
-        // Fetch all appointments for the selected date
+
         const response = await fetch('/CAATE-ITRMS/backend/public/api/v1/appointments');
         const result = await response.json();
 
         if (result.success && result.data) {
-            // Filter appointments for the selected date and time
+
             const conflictingAppointments = result.data.filter(appointment => {
-                // Skip the current appointment when editing
+
                 if (excludeAppointmentId && appointment._id === excludeAppointmentId) {
                     return false;
                 }
 
-                // Check if date and time match
                 return appointment.preferredDate === date &&
                     appointment.preferredTime === time &&
-                    appointment.status !== 'Cancelled'; // Don't count cancelled appointments
+                    appointment.status !== 'Cancelled';
             });
 
             return {
@@ -1213,21 +1101,20 @@ async function checkTimeSlotAvailability(date, time, excludeAppointmentId = null
         return { available: true, conflictCount: 0 };
     } catch (error) {
         console.error('Error checking time slot availability:', error);
-        return { available: true, conflictCount: 0 }; // Allow booking if check fails
+        return { available: true, conflictCount: 0 };
     }
 }
 
-// Function to get booked time slots for a specific date
 async function getBookedTimeSlots(date, excludeAppointmentId = null) {
     try {
         const response = await fetch('/CAATE-ITRMS/backend/public/api/v1/appointments');
         const result = await response.json();
 
         if (result.success && result.data) {
-            // Get all booked time slots for the selected date (excluding cancelled)
+
             const bookedSlots = result.data
                 .filter(appointment => {
-                    // Skip the current appointment when editing
+
                     if (excludeAppointmentId && appointment._id === excludeAppointmentId) {
                         return false;
                     }
@@ -1246,8 +1133,6 @@ async function getBookedTimeSlots(date, excludeAppointmentId = null) {
     }
 }
 
-
-// Function to update available time slots for Add Appointment modal
 async function updateAvailableTimeSlotsForAdd() {
     const dateInput = document.getElementById('addAppointmentDate');
     const timeSelect = document.getElementById('addAppointmentTime');
@@ -1257,7 +1142,7 @@ async function updateAvailableTimeSlotsForAdd() {
     const selectedDate = dateInput.value;
 
     if (!selectedDate) {
-        // Reset to all time slots if no date selected
+
         timeSelect.innerHTML = '<option value="">Select a time</option>';
         allTimeSlots.forEach(slot => {
             const option = document.createElement('option');
@@ -1268,19 +1153,16 @@ async function updateAvailableTimeSlotsForAdd() {
         return;
     }
 
-    // Show loading state
     timeSelect.innerHTML = '<option value="">Loading available times...</option>';
     timeSelect.disabled = true;
 
-    // Get booked time slots for the selected date
     const bookedSlots = await getBookedTimeSlots(selectedDate);
 
-    // Clear and rebuild time slot options
     timeSelect.innerHTML = '<option value="">Select a time</option>';
 
     let availableCount = 0;
     allTimeSlots.forEach(slot => {
-        // Only show available time slots (skip booked ones entirely)
+
         if (!bookedSlots.includes(slot.value)) {
             const option = document.createElement('option');
             option.value = slot.value;
@@ -1290,17 +1172,14 @@ async function updateAvailableTimeSlotsForAdd() {
         }
     });
 
-    // Re-enable the select
     timeSelect.disabled = false;
 
-    // Show message if no slots available
     if (availableCount === 0) {
         showToast('All time slots are booked for this date. Please select another date.', 'warning');
         timeSelect.innerHTML = '<option value="">No available time slots</option>';
     }
 }
 
-// Function to update available time slots for Edit Appointment modal
 async function updateAvailableTimeSlotsForEdit() {
     const dateInput = document.getElementById('editPreferredDate');
     const timeSelect = document.getElementById('editPreferredTime');
@@ -1313,7 +1192,7 @@ async function updateAvailableTimeSlotsForEdit() {
     const currentAppointmentId = currentEditingAppointmentRow.getAttribute('data-id');
 
     if (!selectedDate) {
-        // Reset to all time slots if no date selected
+
         timeSelect.innerHTML = '<option value="">Select a time</option>';
         allTimeSlots.forEach(slot => {
             const option = document.createElement('option');
@@ -1324,23 +1203,20 @@ async function updateAvailableTimeSlotsForEdit() {
         return;
     }
 
-    // Store current selection
     const currentSelection = timeSelect.value;
 
-    // Show loading state
     timeSelect.innerHTML = '<option value="">Loading available times...</option>';
     timeSelect.disabled = true;
 
     try {
-        // Get booked time slots for the selected date (excluding current appointment)
+
         const bookedSlots = await getBookedTimeSlots(selectedDate, currentAppointmentId);
 
-        // Clear and rebuild time slot options - ONLY show available slots
         timeSelect.innerHTML = '<option value="">Select a time</option>';
 
         let availableCount = 0;
         allTimeSlots.forEach(slot => {
-            // COMPLETELY HIDE booked time slots - don't show them at all
+
             if (!bookedSlots.includes(slot.value)) {
                 const option = document.createElement('option');
                 option.value = slot.value;
@@ -1350,15 +1226,12 @@ async function updateAvailableTimeSlotsForEdit() {
             }
         });
 
-        // Restore previous selection if it's still available
         if (currentSelection && !bookedSlots.includes(currentSelection)) {
             timeSelect.value = currentSelection;
         }
 
-        // Re-enable the select
         timeSelect.disabled = false;
 
-        // Show message if no slots available
         if (availableCount === 0) {
             showToast('All time slots are booked for this date. Please select another date.', 'warning');
             timeSelect.innerHTML = '<option value="">No available time slots</option>';
@@ -1377,7 +1250,6 @@ async function handleSaveNewAppointment() {
     const btn = document.getElementById('saveNewAppointmentBtn');
     const originalText = btn.innerHTML;
 
-    // Get form values
     const firstName = document.getElementById('addAppointmentFirstName').value.trim();
     const secondName = document.getElementById('addAppointmentSecondName').value.trim();
     const middleName = document.getElementById('addAppointmentMiddleName').value.trim();
@@ -1394,7 +1266,6 @@ async function handleSaveNewAppointment() {
     const specialNotes = document.getElementById('addAppointmentSpecialNotes').value.trim();
     const adminNotes = document.getElementById('addAppointmentNotes').value.trim();
 
-    // Validate required fields
     if (!firstName) {
         showToast('First Name is required', 'error');
         document.getElementById('addAppointmentFirstName').focus();
@@ -1413,7 +1284,6 @@ async function handleSaveNewAppointment() {
         return;
     }
 
-    // Validate email format
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailPattern.test(email)) {
         showToast('Please enter a valid email address', 'error');
@@ -1445,7 +1315,6 @@ async function handleSaveNewAppointment() {
         return;
     }
 
-    // Check if time slot is available
     const availability = await checkTimeSlotAvailability(preferredDate, preferredTime);
     if (!availability.available) {
         showToast(`This time slot is already booked. Please select a different time.`, 'error');
@@ -1453,7 +1322,6 @@ async function handleSaveNewAppointment() {
         return;
     }
 
-    // Prepare appointment data
     const appointmentData = {
         firstName,
         secondName,
@@ -1472,7 +1340,6 @@ async function handleSaveNewAppointment() {
         adminNotes
     };
 
-    // Disable button and show loading
     btn.disabled = true;
     btn.innerHTML = '<i class="bx bx-loader-alt bx-spin me-2"></i>Saving...';
 
@@ -1490,14 +1357,11 @@ async function handleSaveNewAppointment() {
         if (result.success) {
             showToast('Appointment created successfully!', 'success');
 
-            // Close modal
             const modal = bootstrap.Modal.getInstance(document.getElementById('calendarModal'));
             modal.hide();
 
-            // Reset form
             resetAddAppointmentForm();
 
-            // Reload appointments and statistics
             loadAppointments();
             loadStatistics();
         } else {
@@ -1507,13 +1371,12 @@ async function handleSaveNewAppointment() {
         console.error('Error creating appointment:', error);
         showToast('Failed to create appointment. Please try again.', 'error');
     } finally {
-        // Re-enable button
+
         btn.disabled = false;
         btn.innerHTML = originalText;
     }
 }
 
-// Reset Add Appointment Form
 function resetAddAppointmentForm() {
     document.getElementById('addAppointmentFirstName').value = '';
     document.getElementById('addAppointmentSecondName').value = '';
@@ -1532,19 +1395,15 @@ function resetAddAppointmentForm() {
     document.getElementById('addAppointmentNotes').value = '';
 }
 
-
-// Phone number formatting for Add New Appointment modal
 const addAppointmentPhone = document.getElementById('addAppointmentPhone');
 if (addAppointmentPhone) {
     addAppointmentPhone.addEventListener('input', function (e) {
         let value = e.target.value.replace(/\D/g, '');
 
-        // Limit to 11 digits for Philippine numbers
         if (value.length > 11) {
             value = value.slice(0, 11);
         }
 
-        // Format: 09XX XXX XXXX
         if (value.length > 4 && value.length <= 7) {
             value = value.slice(0, 4) + ' ' + value.slice(4);
         } else if (value.length > 7) {
@@ -1555,18 +1414,15 @@ if (addAppointmentPhone) {
     });
 }
 
-// Phone number formatting for Edit Appointment modal
 const editContactNumber = document.getElementById('editContactNumber');
 if (editContactNumber) {
     editContactNumber.addEventListener('input', function (e) {
         let value = e.target.value.replace(/\D/g, '');
 
-        // Limit to 11 digits for Philippine numbers
         if (value.length > 11) {
             value = value.slice(0, 11);
         }
 
-        // Format: 09XX XXX XXXX
         if (value.length > 4 && value.length <= 7) {
             value = value.slice(0, 4) + ' ' + value.slice(4);
         } else if (value.length > 7) {
@@ -1577,8 +1433,6 @@ if (editContactNumber) {
     });
 }
 
-
-// Apply all filters together
 function applyFilters() {
     const filterSearchInput = document.getElementById('filterSearchInput');
     const filterServiceCategory = document.getElementById('filterServiceCategory');
@@ -1586,31 +1440,26 @@ function applyFilters() {
     const filterStatus = document.getElementById('filterStatus');
     const filterDate = document.getElementById('filterDate');
 
-    // Get filter values
     const searchTerm = filterSearchInput ? filterSearchInput.value.toLowerCase().trim() : '';
     const selectedCategory = filterServiceCategory ? filterServiceCategory.value : '';
     const selectedServiceType = filterServiceType ? filterServiceType.value : '';
     const selectedStatus = filterStatus ? filterStatus.value : '';
     const selectedDate = filterDate ? filterDate.value : '';
 
-    // Filter the data
     let filteredData = appointmentsData.filter(appointment => {
-        // Filter by service category
+
         if (selectedCategory && appointment.serviceCategory !== selectedCategory) {
             return false;
         }
 
-        // Filter by service type
         if (selectedServiceType && appointment.serviceType !== selectedServiceType) {
             return false;
         }
 
-        // Filter by status
         if (selectedStatus && appointment.status !== selectedStatus) {
             return false;
         }
 
-        // Filter by date
         if (selectedDate && appointment.preferredDate !== selectedDate) {
             return false;
         }
@@ -1618,10 +1467,8 @@ function applyFilters() {
         return true;
     });
 
-    // Render filtered data
     displayAppointments(filteredData);
 
-    // Apply search highlighting if search term exists
     if (searchTerm) {
         setTimeout(() => {
             clearAllHighlights();
@@ -1632,7 +1479,6 @@ function applyFilters() {
     }
 }
 
-// Helper function to clear all row highlights
 function clearAllHighlights() {
     const tbody = document.querySelector('.table-border-bottom-0');
     if (tbody) {
@@ -1653,7 +1499,6 @@ function clearAllHighlights() {
     }
 }
 
-// Highlight search results without hiding other rows
 function highlightSearchResults(searchTerm) {
     const tbody = document.querySelector('.table-border-bottom-0');
     if (!tbody) return;
@@ -1662,12 +1507,11 @@ function highlightSearchResults(searchTerm) {
     let firstMatch = null;
 
     rows.forEach(row => {
-        // Get row text content
+
         const rowText = row.textContent.toLowerCase();
 
-        // Check if row matches search term
         if (rowText.includes(searchTerm)) {
-            // Apply card hover design with proper spacing
+
             row.style.position = 'relative';
             row.style.boxShadow = '0 8px 24px rgba(22, 56, 86, 0.5), 0 4px 12px rgba(54, 145, 191, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15)';
             row.style.outline = '2px solid rgba(54, 145, 191, 0.6)';
@@ -1678,14 +1522,12 @@ function highlightSearchResults(searchTerm) {
             row.style.transform = 'scale(1.01)';
             row.style.zIndex = '10';
 
-            // Store first match for scrolling
             if (!firstMatch) {
                 firstMatch = row;
             }
         }
     });
 
-    // Scroll to first match if exists
     if (firstMatch) {
         firstMatch.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }

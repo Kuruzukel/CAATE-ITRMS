@@ -1,11 +1,7 @@
-/* Change Password Functionality */
-
-// API Configuration
 const API_BASE_URL = (typeof config !== 'undefined' && config.api)
     ? config.api.baseUrl
     : '/CAATE-ITRMS/backend/public';
 
-// Toggle password visibility
 function togglePassword(fieldId) {
     const field = document.getElementById(fieldId);
     const icon = field.nextElementSibling;
@@ -21,7 +17,6 @@ function togglePassword(fieldId) {
     }
 }
 
-// Check password strength
 function checkPasswordStrength(password) {
     let strength = 0;
     const requirements = {
@@ -32,14 +27,12 @@ function checkPasswordStrength(password) {
         special: /[!@#$%^&*(),.?":{}|<>]/.test(password)
     };
 
-    // Update requirement indicators
     updateRequirement('req-length', requirements.length);
     updateRequirement('req-uppercase', requirements.uppercase);
     updateRequirement('req-lowercase', requirements.lowercase);
     updateRequirement('req-number', requirements.number);
     updateRequirement('req-special', requirements.special);
 
-    // Calculate strength
     Object.values(requirements).forEach(met => {
         if (met) strength++;
     });
@@ -47,7 +40,6 @@ function checkPasswordStrength(password) {
     return { strength, requirements };
 }
 
-// Update requirement indicator
 function updateRequirement(id, met) {
     const element = document.getElementById(id);
     const icon = element.querySelector('i');
@@ -65,7 +57,6 @@ function updateRequirement(id, met) {
     }
 }
 
-// Update strength bar
 function updateStrengthBar(strength) {
     const strengthBar = document.getElementById('strengthBar');
     const strengthText = document.getElementById('strengthText');
@@ -87,7 +78,6 @@ function updateStrengthBar(strength) {
     }
 }
 
-// Validate form
 function validateForm() {
     const currentPassword = document.getElementById('currentPassword').value;
     const newPassword = document.getElementById('newPassword').value;
@@ -100,13 +90,11 @@ function validateForm() {
     const currentPasswordFilled = currentPassword !== '';
     const passwordsDifferent = currentPassword !== newPassword;
 
-    // Enable submit button only if all conditions are met
     submitBtn.disabled = !(currentPasswordFilled && allRequirementsMet && passwordsMatch && passwordsDifferent);
 
     return { allRequirementsMet, passwordsMatch };
 }
 
-// Show toast notification
 function showToast(message, type = 'success') {
     const container = document.getElementById('toastContainer');
     if (!container) return;
@@ -127,16 +115,14 @@ function showToast(message, type = 'success') {
 
     container.appendChild(toast);
 
-    // Auto remove after 5 seconds
     setTimeout(() => {
         toast.classList.add('hiding');
         setTimeout(() => toast.remove(), 300);
     }, 5000);
 }
 
-// Initialize event listeners when DOM is loaded
 document.addEventListener('DOMContentLoaded', function () {
-    // Populate hidden username field for accessibility
+
     const usernameField = document.getElementById('username');
     if (usernameField) {
         const userData = localStorage.getItem('userData');
@@ -145,12 +131,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 const user = JSON.parse(userData);
                 usernameField.value = user.username || '';
             } catch (e) {
-                // Silently handle parse errors
+
             }
         }
     }
 
-    // Password strength checking
     document.getElementById('newPassword').addEventListener('input', function () {
         const password = this.value;
         if (password) {
@@ -166,7 +151,6 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('confirmPassword').addEventListener('input', validateForm);
     document.getElementById('currentPassword').addEventListener('input', validateForm);
 
-    // Form submission - show confirmation modal
     document.getElementById('changePasswordForm').addEventListener('submit', function (e) {
         e.preventDefault();
 
@@ -174,43 +158,36 @@ document.addEventListener('DOMContentLoaded', function () {
         const newPassword = document.getElementById('newPassword').value;
         const confirmPassword = document.getElementById('confirmPassword').value;
 
-        // Validate passwords match
         if (newPassword !== confirmPassword) {
             showToast('Passwords do not match', 'error');
             return;
         }
 
-        // Validate new password is different from current password
         if (currentPassword === newPassword) {
             showToast('New password must be different from current password', 'error');
             return;
         }
 
-        // Show confirmation modal
         const confirmModal = new bootstrap.Modal(document.getElementById('confirmChangePasswordModal'));
         confirmModal.show();
     });
 
-    // Handle confirmation button click
     document.getElementById('confirmPasswordChangeBtn').addEventListener('click', async function () {
         const currentPassword = document.getElementById('currentPassword').value;
         const newPassword = document.getElementById('newPassword').value;
         const submitBtn = document.getElementById('submitBtn');
         const confirmBtn = this;
 
-        // Close the modal
         const confirmModal = bootstrap.Modal.getInstance(document.getElementById('confirmChangePasswordModal'));
         confirmModal.hide();
 
-        // Disable submit button and show loading
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<i class="bx bx-loader-alt bx-spin me-1"></i> Changing Password...';
 
-        // Disable confirm button
         confirmBtn.disabled = true;
 
         try {
-            // Get user info for admin-specific API call
+
             const token = localStorage.getItem('authToken');
             const userId = localStorage.getItem('userId');
             const userRole = localStorage.getItem('userRole');
@@ -219,9 +196,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 throw new Error('Authentication required. Please log in again.');
             }
 
-
-
-            // Call auth change-password endpoint
             const response = await fetch(`${API_BASE_URL}/api/v1/auth/change-password`, {
                 method: 'POST',
                 headers: {
@@ -242,29 +216,25 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             if (response.ok && data.success) {
-                // Show success toast
+
                 showToast('Your password has been changed successfully', 'success');
 
-                // Reset form
                 document.getElementById('changePasswordForm').reset();
                 document.getElementById('strengthBar').className = 'password-strength-bar';
                 document.getElementById('strengthText').textContent = '';
 
-                // Reset requirements
                 ['req-length', 'req-uppercase', 'req-lowercase', 'req-number', 'req-special'].forEach(id => {
                     updateRequirement(id, false);
                 });
 
-                // Redirect after 2 seconds
                 setTimeout(() => {
                     window.location.href = '../../../auth/src/pages/login.html';
                 }, 2000);
             } else {
-                // Show specific error message from server
+
                 const errorMessage = data.error || `Server error (${response.status})`;
                 showToast(errorMessage, 'error');
 
-                // Re-enable submit button
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = '<i class="bx bx-check me-1"></i> Change Password';
                 confirmBtn.disabled = false;
@@ -272,12 +242,9 @@ document.addEventListener('DOMContentLoaded', function () {
         } catch (error) {
             showToast(`Network error: ${error.message}`, 'error');
 
-            // Re-enable submit button
             submitBtn.disabled = false;
             submitBtn.innerHTML = '<i class="bx bx-check me-1"></i> Change Password';
         }
     });
 
-    // Menu toggle is handled by main.js - no need to duplicate here
 });
-

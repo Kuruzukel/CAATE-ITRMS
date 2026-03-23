@@ -1,6 +1,3 @@
-/**
- * Perfect Scrollbar
- */
 'use strict';
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -9,16 +6,14 @@ document.addEventListener('DOMContentLoaded', function () {
       horizontalExample = document.getElementById('horizontal-example'),
       horizVertExample = document.getElementById('both-scrollbars-example');
 
-    // Vertical Example
-    // --------------------------------------------------------------------
+
     if (verticalExample) {
       new PerfectScrollbar(verticalExample, {
         wheelPropagation: false
       });
     }
 
-    // Horizontal Example
-    // --------------------------------------------------------------------
+
     if (horizontalExample) {
       new PerfectScrollbar(horizontalExample, {
         wheelPropagation: false,
@@ -26,8 +21,7 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     }
 
-    // Both vertical and Horizontal Example
-    // --------------------------------------------------------------------
+
     if (horizVertExample) {
       new PerfectScrollbar(horizVertExample, {
         wheelPropagation: false

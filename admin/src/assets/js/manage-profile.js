@@ -1,9 +1,5 @@
-/* Manage Profile Page Script - Admin - v2.0 - Cache Bust 2024 */
-
-// API Configuration
 const API_BASE_URL = config.api.baseUrl;
 
-// Authentication check
 function checkAuthentication() {
     const token = localStorage.getItem('authToken');
     const userRole = localStorage.getItem('userRole');
@@ -28,15 +24,13 @@ function checkAuthentication() {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    // Check authentication first
+
     if (!checkAuthentication()) {
         return;
     }
 
-    // Set flag to prevent admin-navbar.js from double-initializing
     window.adminNavbarInitialized = true;
 
-    // Initialize navbar functionality manually since we're preventing auto-init
     if (typeof initializeAdminNavbar === 'function') {
         initializeAdminNavbar();
     }
@@ -46,7 +40,6 @@ document.addEventListener('DOMContentLoaded', function () {
     initializeEditForm();
 });
 
-// Load admin profile data from database
 async function loadAdminProfile() {
     try {
         const token = localStorage.getItem('authToken');
@@ -57,7 +50,6 @@ async function loadAdminProfile() {
             return;
         }
 
-        // Fetch admin data from the admins collection
         try {
             const response = await fetch(`${config.api.baseUrl}/api/v1/admins/${userId}`, {
                 method: 'GET',
@@ -72,18 +64,17 @@ async function loadAdminProfile() {
 
                 let adminData = result.data || result.admin || result;
 
-                // The AdminController already maps database fields to frontend format
                 const mappedData = {
                     _id: adminData._id,
                     name: adminData.name,
                     email: adminData.email,
                     username: adminData.username,
                     role: adminData.role,
-                    firstName: adminData.firstName,        // AdminController maps first_name to firstName
-                    secondName: adminData.secondName,      // AdminController maps second_name to secondName
-                    middleName: adminData.middleName,      // AdminController maps middle_name to middleName
-                    lastName: adminData.lastName,          // AdminController maps last_name to lastName
-                    suffix: adminData.suffix,              // AdminController maps suffix to suffix
+                    firstName: adminData.firstName,
+                    secondName: adminData.secondName,
+                    middleName: adminData.middleName,
+                    lastName: adminData.lastName,
+                    suffix: adminData.suffix,
                     phone: adminData.phone,
                     phoneNumber: adminData.phone,
                     address: adminData.address,
@@ -92,16 +83,12 @@ async function loadAdminProfile() {
                     profileImage: adminData.profileImage || '../assets/images/DEFAULT_AVATAR.png'
                 };
 
-                // Update profile overview
                 updateProfileOverview(mappedData);
 
-                // Update personal information
                 updatePersonalInformation(mappedData);
 
-                // Update navbar user info
                 updateNavbarUserInfo(mappedData);
 
-                // Store the mapped data in localStorage for future use
                 localStorage.setItem('userData', JSON.stringify(mappedData));
 
             } else {
@@ -111,7 +98,7 @@ async function loadAdminProfile() {
                     const errorData = await response.json();
                     errorMessage = errorData.error || errorMessage;
                 } catch (e) {
-                    // If response is not JSON, use status text
+
                     errorMessage = response.statusText || errorMessage;
                 }
 
@@ -119,7 +106,7 @@ async function loadAdminProfile() {
             }
 
         } catch (apiError) {
-            // Fallback: try to use data from localStorage
+
             const userData = localStorage.getItem('userData');
             if (userData) {
                 try {
@@ -141,17 +128,13 @@ async function loadAdminProfile() {
     }
 }
 
-
-
-// Update profile overview section
 function updateProfileOverview(data) {
-    // Full name - use name field from database
+
     const fullNameElement = document.getElementById('profileFullName');
     if (fullNameElement) {
         fullNameElement.textContent = data.name || 'N/A';
     }
 
-    // Role badge - fetch from database but default to Administrator for admin
     const roleBadge = document.getElementById('profileRole');
     if (roleBadge) {
         const role = data.role === 'admin' ? 'Administrator' : (data.role || 'Administrator');
@@ -159,40 +142,35 @@ function updateProfileOverview(data) {
         roleBadge.className = 'badge bg-primary';
     }
 
-    // Username - use username field from database
     const usernameElement = document.getElementById('profileUsername');
     if (usernameElement) {
         usernameElement.textContent = data.username || 'N/A';
     }
 
-    // Email - fetch from database
     const emailElement = document.getElementById('profileEmail');
     if (emailElement) {
         emailElement.textContent = data.email || 'N/A';
     }
 
-    // Phone number
     const phoneElement = document.getElementById('profilePhone');
     if (phoneElement) {
         let phoneValue = data.phone || data.phoneNumber || 'N/A';
-        // Format phone number for display: 09XX XXX XXXX
+
         if (phoneValue && phoneValue !== 'N/A' && phoneValue.length === 11) {
             phoneValue = phoneValue.slice(0, 4) + ' ' + phoneValue.slice(4, 7) + ' ' + phoneValue.slice(7);
         }
         phoneElement.textContent = phoneValue;
     }
 
-    // Address
     const addressElement = document.getElementById('profileAddress');
     if (addressElement) {
         addressElement.textContent = data.address || 'N/A';
     }
 
-    // Profile image - use uploaded image if available, otherwise default avatar
     const profileImage = document.getElementById('profileImage');
     if (profileImage) {
         if (data.profileImage && data.profileImage !== '../assets/images/DEFAULT_AVATAR.png') {
-            // Handle both relative and absolute paths
+
             if (data.profileImage.startsWith('/CAATE-ITRMS/')) {
                 profileImage.src = window.location.origin + data.profileImage;
             } else if (data.profileImage.startsWith('http')) {
@@ -204,78 +182,66 @@ function updateProfileOverview(data) {
             profileImage.src = '../assets/images/DEFAULT_AVATAR.png';
         }
 
-        // Add error handling
         profileImage.onerror = function () {
             this.src = '../assets/images/DEFAULT_AVATAR.png';
         };
     }
 
-    // Update navbar user info
     updateNavbarUserInfo(data);
 }
 
-// Update personal information section
 function updatePersonalInformation(data) {
-    // Username
+
     const usernameInput = document.getElementById('personalUsername');
     if (usernameInput) {
         usernameInput.value = data.username || '';
     }
 
-    // First name
     const firstNameInput = document.getElementById('personalFirstName');
     if (firstNameInput) {
         firstNameInput.value = data.firstName || '';
     }
 
-    // Second name
     const secondNameInput = document.getElementById('personalSecondName');
     if (secondNameInput) {
         secondNameInput.value = data.secondName || '';
     }
 
-    // Middle name
     const middleNameInput = document.getElementById('personalMiddleName');
     if (middleNameInput) {
         middleNameInput.value = data.middleName || '';
     }
 
-    // Last name
     const lastNameInput = document.getElementById('personalLastName');
     if (lastNameInput) {
         lastNameInput.value = data.lastName || '';
     }
 
-    // Suffix
     const suffixInput = document.getElementById('personalSuffix');
     if (suffixInput) {
         suffixInput.value = data.suffix || '';
     }
 
-    // Phone number
     const phoneInput = document.getElementById('personalPhone');
     if (phoneInput) {
         let phoneValue = data.phoneNumber || data.phone || '';
-        // Format phone number for display: 09XX XXX XXXX
+
         if (phoneValue && phoneValue.length === 11) {
             phoneValue = phoneValue.slice(0, 4) + ' ' + phoneValue.slice(4, 7) + ' ' + phoneValue.slice(7);
         }
         phoneInput.value = phoneValue;
     }
 
-    // Email address
     const emailInput = document.getElementById('personalEmail');
     if (emailInput) {
         emailInput.value = data.email || '';
     }
 
-    // Address
     const addressTextarea = document.getElementById('personalAddress');
     if (addressTextarea) {
         addressTextarea.value = data.address || '';
     }
 
-    // Update edit modal fields
     const editUsername = document.getElementById('editUsername');
     const editFirstName = document.getElementById('editFirstName');
     const editSecondName = document.getElementById('editSecondName');
@@ -294,7 +260,7 @@ function updatePersonalInformation(data) {
     if (editSuffix) editSuffix.value = data.suffix || '';
     if (editPhone) {
         let phoneValue = data.phoneNumber || data.phone || '';
-        // Format phone number for display: 09XX XXX XXXX
+
         if (phoneValue && phoneValue.length === 11) {
             phoneValue = phoneValue.slice(0, 4) + ' ' + phoneValue.slice(4, 7) + ' ' + phoneValue.slice(7);
         }
@@ -304,19 +270,14 @@ function updatePersonalInformation(data) {
     if (editAddress) editAddress.value = data.address || '';
 }
 
-
-
-
-// Update navbar user info
 function updateNavbarUserInfo(data) {
     const userName = document.querySelector('.dropdown-menu .flex-grow-1 .fw-semibold');
     if (userName) {
-        // Use name field from database first
+
         let displayName = data.name || 'Admin';
         userName.textContent = displayName;
     }
 
-    // Update profile images in navbar - target all avatar images more comprehensively
     const profileImageSelectors = [
         '.navbar .avatar img',
         '.dropdown-menu .avatar img',
@@ -334,7 +295,7 @@ function updateNavbarUserInfo(data) {
         const images = document.querySelectorAll(selector);
         images.forEach(img => {
             if (data.profileImage && data.profileImage !== '../assets/images/DEFAULT_AVATAR.png') {
-                // Handle both relative and absolute paths
+
                 if (data.profileImage.startsWith('/CAATE-ITRMS/')) {
                     img.src = window.location.origin + data.profileImage;
                 } else if (data.profileImage.startsWith('http')) {
@@ -349,16 +310,12 @@ function updateNavbarUserInfo(data) {
                 img.src = '../assets/images/DEFAULT_AVATAR.png';
             }
 
-            // Add error handling to fallback to default avatar
             img.onerror = function () {
                 this.src = '../assets/images/DEFAULT_AVATAR.png';
             };
         });
     });
 
-
-
-    // Force update any remaining avatar images that might have been missed
     setTimeout(() => {
         const allImages = document.querySelectorAll('img');
         let forceUpdated = 0;
@@ -385,13 +342,12 @@ function updateNavbarUserInfo(data) {
     }, 100);
 }
 
-// Initialize edit form
 function initializeEditForm() {
     const saveButton = document.querySelector('#editInformationModal .btn-primary');
     if (!saveButton) return;
 
     saveButton.addEventListener('click', async function () {
-        // Show loading state
+
         const originalText = saveButton.innerHTML;
         saveButton.disabled = true;
         saveButton.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i> Saving...';
@@ -399,25 +355,22 @@ function initializeEditForm() {
         try {
             await saveProfileChangesNew();
         } finally {
-            // Reset button state
+
             saveButton.disabled = false;
             saveButton.innerHTML = originalText;
         }
     });
 
-    // Add phone number validation and formatting
     const phoneInput = document.getElementById('editPhone');
     if (phoneInput) {
         phoneInput.addEventListener('input', function (e) {
-            // Remove all non-numeric characters
+
             let value = e.target.value.replace(/\D/g, '');
 
-            // Limit to 11 digits
             if (value.length > 11) {
                 value = value.slice(0, 11);
             }
 
-            // Format with spacing like placeholder: 09XX XXX XXXX
             if (value.length >= 4) {
                 if (value.length >= 7) {
                     value = value.slice(0, 4) + ' ' + value.slice(4, 7) + ' ' + value.slice(7);
@@ -430,7 +383,7 @@ function initializeEditForm() {
         });
 
         phoneInput.addEventListener('keypress', function (e) {
-            // Only allow numeric characters and space
+
             if (!/[0-9\s]/.test(e.key) && !['Backspace', 'Delete', 'Tab', 'Escape', 'Enter'].includes(e.key)) {
                 e.preventDefault();
             }
@@ -438,7 +391,6 @@ function initializeEditForm() {
     }
 }
 
-// Save profile changes
 async function saveProfileChanges() {
     const token = localStorage.getItem('authToken');
     const userId = localStorage.getItem('userId');
@@ -471,7 +423,6 @@ async function saveProfileChanges() {
         address: editAddress ? editAddress.value.trim() : ''
     };
 
-    // Specific field validation with individual messages - Updated 2024
     console.log('Validating fields:', updatedData);
 
     if (!updatedData.username || updatedData.username.trim() === '') {
@@ -492,14 +443,12 @@ async function saveProfileChanges() {
         return;
     }
 
-    // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(updatedData.email)) {
         showToast('Please enter a valid email address.', 'error');
         return;
     }
 
-    // Phone number validation (optional but if provided, should be valid)
     if (updatedData.phone && updatedData.phone.length > 0) {
         const phoneRegex = /^[\+]?[0-9\s\-\(\)]{10,15}$/;
         if (!phoneRegex.test(updatedData.phone)) {
@@ -508,7 +457,6 @@ async function saveProfileChanges() {
         }
     }
 
-    // Check if there are any changes by comparing with current displayed values
     const currentUsername = document.getElementById('personalUsername')?.value || '';
     const currentFirstName = document.getElementById('personalFirstName')?.value || '';
     const currentSecondName = document.getElementById('personalSecondName')?.value || '';
@@ -532,12 +480,11 @@ async function saveProfileChanges() {
 
     if (!hasChanges) {
         showToast('No changes detected. Your profile is already up to date.', 'info');
-        // Close modal
+
         const modal = bootstrap.Modal.getInstance(document.getElementById('editInformationModal'));
         if (modal) modal.hide();
         return;
     }
-
 
 
     try {
@@ -555,24 +502,19 @@ async function saveProfileChanges() {
         console.log('Response headers:', response.headers);
 
 
-
         if (response.ok) {
             const result = await response.json();
 
-            // Close modal
             const modal = bootstrap.Modal.getInstance(document.getElementById('editInformationModal'));
             if (modal) modal.hide();
 
-            // Reload profile data to reflect changes
             await loadAdminProfile();
 
-            // Show success toast
             showToast('Profile updated successfully!', 'success');
         } else {
             const errorData = await response.json();
             let errorMessage = 'Failed to update profile';
 
-            // Handle specific error cases
             if (response.status === 404) {
                 errorMessage = 'Admin account not found. Please contact support.';
             } else if (response.status === 401) {
@@ -598,7 +540,6 @@ async function saveProfileChanges() {
         }
     } catch (error) {
 
-        // Handle network errors
         if (error.name === 'TypeError' && error.message.includes('fetch')) {
             showToast('Network error. Please check your connection and try again.', 'error');
         } else if (error.message.includes('Authentication expired')) {
@@ -609,7 +550,6 @@ async function saveProfileChanges() {
     }
 }
 
-// Photo upload functionality
 function initializePhotoUpload() {
     const changePhotoBtn = document.getElementById('changePhotoBtn');
     const profileImageInput = document.getElementById('profileImageInput');
@@ -625,33 +565,28 @@ function initializePhotoUpload() {
         const file = e.target.files[0];
         if (!file) return;
 
-        // Validate file type
         const validTypes = ['image/jpeg', 'image/jpg', 'image/png'];
         if (!validTypes.includes(file.type)) {
             showToast('Please select a valid image file (JPG or PNG)', 'error');
             return;
         }
 
-        // Validate file size (2MB max)
         const maxSize = 2 * 1024 * 1024;
         if (file.size > maxSize) {
             showToast('File size must be less than 2MB', 'error');
             return;
         }
 
-        // Preview the uploaded image
         const reader = new FileReader();
         reader.onload = function (event) {
             profileImage.src = event.target.result;
         };
         reader.readAsDataURL(file);
 
-        // Upload to server
         await uploadProfileImage(file);
     });
 }
 
-// Upload profile image
 async function uploadProfileImage(file) {
     try {
         const token = localStorage.getItem('authToken');
@@ -662,7 +597,6 @@ async function uploadProfileImage(file) {
             return;
         }
 
-        // Show loading state
         const changePhotoBtn = document.getElementById('changePhotoBtn');
         const originalText = changePhotoBtn.innerHTML;
         changePhotoBtn.disabled = true;
@@ -682,13 +616,11 @@ async function uploadProfileImage(file) {
         if (response.ok) {
             const result = await response.json();
 
-            // Update the profile image immediately
             const profileImage = document.getElementById('profileImage');
             if (profileImage && result.image_path) {
                 profileImage.src = result.image_path;
             }
 
-            // Update navbar avatars immediately - target all avatar images with more specific selectors
             const navbarAvatarSelectors = [
                 '.navbar .avatar img',
                 '.dropdown-menu .avatar img',
@@ -706,7 +638,7 @@ async function uploadProfileImage(file) {
                 const images = document.querySelectorAll(selector);
                 images.forEach((img) => {
                     if (result.image_path) {
-                        // Handle both relative and absolute paths
+
                         if (result.image_path.startsWith('/CAATE-ITRMS/')) {
                             img.src = window.location.origin + result.image_path;
                         } else if (result.image_path.startsWith('http')) {
@@ -721,56 +653,48 @@ async function uploadProfileImage(file) {
                 });
             });
 
-            // Update cached user data with new profile image
             const userData = localStorage.getItem('userData');
             if (userData) {
                 try {
                     const userDataObj = JSON.parse(userData);
                     userDataObj.profileImage = result.image_path;
 
-                    // Call the local updateNavbarUserInfo function immediately
                     updateNavbarUserInfo(userDataObj);
 
                     localStorage.setItem('userData', JSON.stringify(userDataObj));
                 } catch (e) {
-                    // Silently handle errors
+
                 }
             }
 
-            // Dispatch custom event to notify other pages/tabs
             window.dispatchEvent(new CustomEvent('profileImageUpdated', {
                 detail: { imagePath: result.image_path }
             }));
 
-            // Immediately update navbar avatars on current page
             const currentUserData = localStorage.getItem('userData');
             if (currentUserData) {
                 try {
                     const userDataObj = JSON.parse(currentUserData);
                     userDataObj.profileImage = result.image_path;
 
-                    // Call the local updateNavbarUserInfo function immediately
                     updateNavbarUserInfo(userDataObj);
 
                     localStorage.setItem('userData', JSON.stringify(userDataObj));
                 } catch (e) {
-                    // Silently handle errors
+
                 }
             }
 
-            // Force reload admin profile data to get fresh data from database
             setTimeout(async () => {
-                // First, reload the current page profile data
+
                 await loadAdminProfile();
 
-                // Then, reload navbar data using the navbar function if available
                 if (typeof loadAdminProfileForNavbar === 'function') {
                     await loadAdminProfileForNavbar();
                 } else if (typeof window.refreshAdminNavbar === 'function') {
                     window.refreshAdminNavbar();
                 }
 
-                // Trigger storage event to update other admin pages
                 window.dispatchEvent(new StorageEvent('storage', {
                     key: 'userData',
                     newValue: localStorage.getItem('userData')
@@ -786,7 +710,6 @@ async function uploadProfileImage(file) {
     } catch (error) {
         showToast(error.message || 'Failed to upload photo', 'error');
 
-        // Reset the image to previous state on error
         const profileImage = document.getElementById('profileImage');
         const userData = localStorage.getItem('userData');
         if (profileImage && userData) {
@@ -798,20 +721,18 @@ async function uploadProfileImage(file) {
             }
         }
     } finally {
-        // Reset button state
+
         const changePhotoBtn = document.getElementById('changePhotoBtn');
         changePhotoBtn.disabled = false;
         changePhotoBtn.innerHTML = '<i class="bx bx-upload"></i> Change Photo';
     }
 }
 
-// Utility functions
 function formatDateTime(dateString) {
     if (!dateString) return 'N/A';
 
     let date;
 
-    // Handle MongoDB BSON date objects
     if (typeof dateString === 'object' && dateString.$date) {
         date = new Date(dateString.$date);
     } else if (typeof dateString === 'string') {
@@ -822,7 +743,6 @@ function formatDateTime(dateString) {
         return 'N/A';
     }
 
-    // Check if date is valid
     if (isNaN(date.getTime())) {
         return 'N/A';
     }
@@ -839,7 +759,6 @@ function formatDateTime(dateString) {
     return date.toLocaleDateString('en-US', options);
 }
 
-// Toast notification functions
 function showToast(message, type = 'success') {
     const container = document.getElementById('toastContainer');
     if (!container) return;
@@ -861,7 +780,6 @@ function showToast(message, type = 'success') {
 
     container.appendChild(toast);
 
-    // Auto remove after 5 seconds (or 3 seconds for info messages)
     const timeout = type === 'info' ? 3000 : 5000;
     setTimeout(() => {
         toast.classList.add('hiding');
@@ -869,22 +787,18 @@ function showToast(message, type = 'success') {
     }, timeout);
 }
 
-// Show success message
 function showSuccess(message) {
     showToast(message, 'success');
 }
 
-// Show error message
 function showError(message) {
     showToast(message, 'error');
 }
 
-// Show info message
 function showInfo(message) {
     showToast(message, 'info');
 }
 
-// Show warning message
 function showWarning(message) {
     showToast(message, 'warning');
 }
@@ -893,8 +807,6 @@ function showNotification(message, type = 'info') {
     showToast(message, type);
 }
 
-
-// NEW Save profile changes function - 2024
 async function saveProfileChangesNew() {
     const token = localStorage.getItem('authToken');
     const userId = localStorage.getItem('userId');
@@ -942,14 +854,12 @@ async function saveProfileChangesNew() {
         return;
     }
 
-    // Email format validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(updatedData.email)) {
         showToast('Please enter a valid email address format.', 'error');
         return;
     }
 
-    // Phone number validation (optional but if provided, should be valid)
     if (updatedData.phone && updatedData.phone.length > 0) {
         const phoneRegex = /^[\+]?[0-9\s\-\(\)]{10,15}$/;
         if (!phoneRegex.test(updatedData.phone)) {
@@ -958,7 +868,6 @@ async function saveProfileChangesNew() {
         }
     }
 
-    // Check if there are any changes by comparing with current displayed values
     const currentUsername = document.getElementById('personalUsername')?.value || '';
     const currentFirstName = document.getElementById('personalFirstName')?.value || '';
     const currentSecondName = document.getElementById('personalSecondName')?.value || '';
@@ -982,7 +891,7 @@ async function saveProfileChangesNew() {
 
     if (!hasChanges) {
         showToast('No changes detected. Your profile is already up to date.', 'info');
-        // Close modal
+
         const modal = bootstrap.Modal.getInstance(document.getElementById('editInformationModal'));
         if (modal) modal.hide();
         return;
@@ -1001,20 +910,16 @@ async function saveProfileChangesNew() {
         if (response.ok) {
             const result = await response.json();
 
-            // Close modal
             const modal = bootstrap.Modal.getInstance(document.getElementById('editInformationModal'));
             if (modal) modal.hide();
 
-            // Reload profile data to reflect changes
             await loadAdminProfile();
 
-            // Show success toast
             showToast('Profile updated successfully!', 'success');
         } else {
             const errorData = await response.json();
             let errorMessage = 'Failed to update profile';
 
-            // Handle specific error cases
             if (response.status === 404) {
                 errorMessage = 'Admin account not found. Please contact support.';
             } else if (response.status === 401) {
@@ -1039,7 +944,7 @@ async function saveProfileChangesNew() {
             throw new Error(errorMessage);
         }
     } catch (error) {
-        // Handle network errors
+
         if (error.name === 'TypeError' && error.message.includes('fetch')) {
             showToast('Network error. Please check your connection and try again.', 'error');
         } else if (error.message.includes('Authentication expired')) {
@@ -1078,5 +983,3 @@ async function testDatabaseUpdate() {
         showToast('Database test error - check console', 'error');
     }
 }
-
-// Test functionality removed - main save function should work now

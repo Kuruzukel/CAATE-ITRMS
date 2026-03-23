@@ -1,19 +1,15 @@
-/* Schedule Page Script */
 document.addEventListener('DOMContentLoaded', function () {
-    // Menu toggle is handled by main.js - no need to duplicate here
 
-    // Declare calendar at module level so it's accessible to all functions
+
     let calendar = null;
 
-    // Function to update status counts for each day
     function updateStatusCounts(calendarInstance) {
-        if (!calendarInstance) return; // Exit if calendar not initialized yet
+        if (!calendarInstance) return;
         const dayCells = document.querySelectorAll('.fc-daygrid-day');
         dayCells.forEach(cell => {
             const dateStr = cell.getAttribute('data-date');
             if (!dateStr) return;
 
-            // Get all events for this date
             const events = calendarInstance.getEvents().filter(event => {
                 const eventDate = event.start.toISOString().split('T')[0];
                 return eventDate === dateStr;
@@ -21,7 +17,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (events.length === 0) return;
 
-            // Count by status
             let pendingCount = 0;
             let approvedCount = 0;
             let cancelledCount = 0;
@@ -37,14 +32,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
 
-            // Find the day events container
             const eventsContainer = cell.querySelector('.fc-daygrid-day-events');
             if (!eventsContainer) return;
 
-            // Clear existing content
             eventsContainer.innerHTML = '';
 
-            // Create status indicators with click handlers
             const statusHTML = [];
 
             if (pendingCount > 0) {
@@ -77,7 +69,6 @@ document.addEventListener('DOMContentLoaded', function () {
             eventsContainer.innerHTML = statusHTML.join('');
         });
 
-        // Attach click handlers to status indicators
         document.querySelectorAll('.status-indicator').forEach(indicator => {
             indicator.addEventListener('click', function (e) {
                 e.stopPropagation();
@@ -88,12 +79,11 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Function to update avatar alignment based on count
     function updateAvatarAlignment() {
         const dayCells = document.querySelectorAll('.fc-daygrid-day-events');
         dayCells.forEach(cell => {
             const eventCount = cell.querySelectorAll('.fc-daygrid-event-harness').length;
-            // Center align if 1-2 avatars, left align if 3 or more
+
             if (eventCount > 0 && eventCount <= 2) {
                 cell.classList.add('center-avatars');
             } else {
@@ -102,23 +92,20 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Initialize Calendar with fallback
     const calendarEl = document.getElementById('calendar');
     if (calendarEl) {
-        // Add a loading message
+
         calendarEl.innerHTML = '<div class="text-center p-4"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div><p class="mt-2">Loading calendar...</p></div>';
 
-        // Wait a bit for FullCalendar to load
         setTimeout(async function () {
             try {
-                // Check if FullCalendar is loaded or failed to load
+
                 if (typeof FullCalendar === 'undefined' || window.FullCalendarLoadFailed) {
                     console.error('FullCalendar library not loaded or failed to load');
                     createFallbackCalendar(calendarEl);
                     return;
                 }
 
-                // Fetch appointments from API
                 const appointments = await fetchAppointments();
 
                 calendar = new FullCalendar.Calendar(calendarEl, {
@@ -129,11 +116,11 @@ document.addEventListener('DOMContentLoaded', function () {
                         right: 'next'
                     },
                     height: 'auto',
-                    dayMaxEvents: false, // Show all events, no limit
-                    displayEventTime: true, // Show event times in week/day view
+                    dayMaxEvents: false,
+                    displayEventTime: true,
                     displayEventEnd: false,
                     events: function (info, successCallback, failureCallback) {
-                        // Fetch appointments dynamically when calendar changes
+
                         fetchAppointments().then(appointments => {
                             const events = convertToCalendarEvents(appointments);
                             successCallback(events);
@@ -146,32 +133,32 @@ document.addEventListener('DOMContentLoaded', function () {
                         showAppointmentDetails(info.event);
                     },
                     dateClick: function (info) {
-                        // Date clicked
+
                     },
                     eventDidMount: function (info) {
-                        // Only hide events in month view - show them in week/day views
+
                         const view = calendar.view.type;
                         if (view === 'dayGridMonth') {
                             info.el.style.display = 'none';
                         }
-                        // Events will show automatically in week/day views with their assigned colors
+
                     },
                     viewDidMount: function () {
-                        // After calendar renders, show status counts only in month view
+
                         const view = calendar.view.type;
                         if (view === 'dayGridMonth') {
                             setTimeout(() => updateStatusCounts(calendar), 100);
                         }
                     },
                     datesSet: function () {
-                        // When dates change (month/week/day navigation), update status counts only in month view
+
                         const view = calendar.view.type;
                         if (view === 'dayGridMonth') {
                             setTimeout(() => updateStatusCounts(calendar), 100);
                         }
                     },
                     eventsSet: function () {
-                        // When events are loaded, update status counts only in month view
+
                         const view = calendar.view.type;
                         if (view === 'dayGridMonth') {
                             setTimeout(() => updateStatusCounts(calendar), 100);
@@ -181,7 +168,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 calendar.render();
 
-                // Update statistics
                 updateStatistics(appointments);
             } catch (error) {
                 console.error('Error initializing calendar:', error);
@@ -190,7 +176,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 1000);
     }
 
-    // Fetch appointments from API
     async function fetchAppointments() {
         try {
             const response = await fetch('/CAATE-ITRMS/backend/public/api/v1/appointments');
@@ -206,10 +191,9 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Convert appointments to calendar events
     function convertToCalendarEvents(appointments) {
         return appointments.map(appointment => {
-            // Build full name
+
             const fullName = [
                 appointment.firstName,
                 appointment.secondName,
@@ -218,12 +202,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 appointment.suffix
             ].filter(Boolean).join(' ');
 
-            // Get initials for avatar
             const firstName = appointment.firstName || '';
             const lastName = appointment.lastName || '';
             const initials = (firstName.charAt(0) + lastName.charAt(0)).toUpperCase() || 'NA';
 
-            // Format service category
             const categoryMap = {
                 'skincare': 'Skin Care',
                 'haircare': 'Hair Care',
@@ -233,25 +215,21 @@ document.addEventListener('DOMContentLoaded', function () {
             };
             const serviceCategory = categoryMap[appointment.serviceCategory] || appointment.serviceCategory || '';
 
-            // Format service type
             const serviceType = appointment.serviceType
                 ? appointment.serviceType.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
                 : '';
 
-            // Combine date and time for start
             const startDateTime = appointment.preferredDate && appointment.preferredTime
                 ? `${appointment.preferredDate}T${appointment.preferredTime}:00`
                 : null;
 
-            // Calculate end time (add 1 hour by default)
             let endDateTime = null;
             if (startDateTime) {
                 const start = new Date(startDateTime);
-                const end = new Date(start.getTime() + 60 * 60 * 1000); // Add 1 hour
+                const end = new Date(start.getTime() + 60 * 60 * 1000);
                 endDateTime = end.toISOString().slice(0, 19);
             }
 
-            // Determine status color
             let backgroundColor, borderColor;
             const status = appointment.status ? appointment.status.toLowerCase() : 'pending';
 
@@ -271,7 +249,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             return {
                 id: appointment._id,
-                title: fullName, // Show client name in week/day views
+                title: fullName,
                 start: startDateTime,
                 end: endDateTime,
                 backgroundColor: backgroundColor,
@@ -287,10 +265,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     adminNotes: appointment.adminNotes || 'No admin notes'
                 }
             };
-        }).filter(event => event.start); // Only include events with valid dates
+        }).filter(event => event.start);
     }
 
-    // Update statistics cards
     function updateStatistics(appointments) {
         const total = appointments.length;
         const confirmed = appointments.filter(a => a.status && (a.status.toLowerCase() === 'approved' || a.status.toLowerCase() === 'confirmed')).length;
@@ -306,7 +283,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Fallback calendar function
     function createFallbackCalendar(calendarEl) {
         const currentDate = new Date();
         const currentMonth = currentDate.getMonth();
@@ -352,7 +328,6 @@ document.addEventListener('DOMContentLoaded', function () {
         `;
     }
 
-    // Helper function to generate calendar days
     function generateCalendarDays(year, month) {
         const firstDay = new Date(year, month, 1).getDay();
         const daysInMonth = new Date(year, month + 1, 0).getDate();
@@ -381,23 +356,19 @@ document.addEventListener('DOMContentLoaded', function () {
         return html;
     }
 
-    // Helper function to get month name
     function getMonthName(month) {
         const months = ['January', 'February', 'March', 'April', 'May', 'June',
             'July', 'August', 'September', 'October', 'November', 'December'];
         return months[month];
     }
 
-    // Function to show appointments by date and status
     function showAppointmentsByDateAndStatus(calendarInstance, date, status) {
         if (!calendarInstance) return;
 
-        // Get all events for this date with matching status
         const events = calendarInstance.getEvents().filter(event => {
             const eventDate = event.start.toISOString().split('T')[0];
             const eventStatus = event.extendedProps.status ? event.extendedProps.status.toLowerCase() : '';
 
-            // Match status (handle both 'approved' and 'confirmed' as approved)
             let statusMatch = false;
             if (status === 'approved') {
                 statusMatch = eventStatus === 'approved' || eventStatus === 'confirmed';
@@ -415,7 +386,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const modalBody = document.getElementById('appointmentModalBody');
 
         if (modal && modalTitle && modalBody) {
-            // Format date for title
+
             const dateObj = new Date(date + 'T00:00:00');
             const formattedDate = dateObj.toLocaleDateString('en-US', {
                 weekday: 'long',
@@ -427,7 +398,6 @@ document.addEventListener('DOMContentLoaded', function () {
             const statusLabel = status.charAt(0).toUpperCase() + status.slice(1);
             modalTitle.textContent = `${statusLabel} Appointments - ${formattedDate}`;
 
-            // Build list of appointments
             let appointmentsHTML = '<div class="list-group">';
 
             events.forEach(event => {
@@ -480,14 +450,13 @@ document.addEventListener('DOMContentLoaded', function () {
             appointmentsHTML += '</div>';
             modalBody.innerHTML = appointmentsHTML;
 
-            // Add click handlers to each appointment item
             setTimeout(() => {
                 document.querySelectorAll('[data-event-id]').forEach(item => {
                     item.addEventListener('click', function () {
                         const eventId = this.getAttribute('data-event-id');
                         const event = calendarInstance.getEventById(eventId);
                         if (event) {
-                            // Close current modal and show details
+
                             const currentModal = bootstrap.Modal.getInstance(modal);
                             if (currentModal) {
                                 currentModal.hide();
@@ -498,7 +467,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
             }, 100);
 
-            // Show the modal
             try {
                 const bootstrapModal = new bootstrap.Modal(modal);
                 bootstrapModal.show();
@@ -510,19 +478,15 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Function to show appointments filtered by status for a specific date
     function showAppointmentsByStatus(calendarInstance, date, status) {
         if (!calendarInstance) return;
 
-        // Get all events for this date with the specified status
         const events = calendarInstance.getEvents().filter(event => {
             const eventDate = event.start.toISOString().split('T')[0];
             const eventStatus = event.extendedProps.status ? event.extendedProps.status.toLowerCase() : '';
 
-            // Match the date
             if (eventDate !== date) return false;
 
-            // Match the status
             if (status === 'pending' && eventStatus === 'pending') return true;
             if (status === 'approved' && (eventStatus === 'approved' || eventStatus === 'confirmed')) return true;
             if (status === 'cancelled' && eventStatus === 'cancelled') return true;
@@ -537,7 +501,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const modalBody = document.getElementById('appointmentModalBody');
 
         if (modal && modalTitle && modalBody) {
-            // Format the date for display
+
             const dateObj = new Date(date + 'T00:00:00');
             const formattedDate = dateObj.toLocaleDateString('en-US', {
                 weekday: 'long',
@@ -546,12 +510,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 day: 'numeric'
             });
 
-            // Capitalize status
             const statusDisplay = status.charAt(0).toUpperCase() + status.slice(1);
 
             modalTitle.textContent = `${statusDisplay} Appointments - ${formattedDate}`;
 
-            // Build the list of appointments
             let appointmentsHTML = '<div class="list-group">';
 
             events.forEach((event, index) => {
@@ -605,7 +567,6 @@ document.addEventListener('DOMContentLoaded', function () {
             appointmentsHTML += '</div>';
             modalBody.innerHTML = appointmentsHTML;
 
-            // Add click handlers to each appointment item
             setTimeout(() => {
                 document.querySelectorAll('.appointment-item').forEach((item, index) => {
                     item.addEventListener('click', function () {
@@ -614,7 +575,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
             }, 100);
 
-            // Show the modal
             try {
                 const bootstrapModal = new bootstrap.Modal(modal);
                 bootstrapModal.show();
@@ -626,7 +586,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Function to show appointment details in modal
     function showAppointmentDetails(event) {
         const modal = document.getElementById('appointmentModal');
         const modalTitle = document.getElementById('appointmentModalTitle');
@@ -725,20 +684,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 </div>
             `;
 
-            // Show the modal
             try {
                 const bootstrapModal = new bootstrap.Modal(modal);
                 bootstrapModal.show();
             } catch (error) {
                 console.error('Error showing modal:', error);
-                // Fallback: show modal without Bootstrap
+
                 modal.style.display = 'block';
                 modal.classList.add('show');
             }
         }
     }
 
-    // Helper function to get status color
     function getStatusColor(status) {
         const statusLower = status ? status.toLowerCase() : '';
         switch (statusLower) {
@@ -754,7 +711,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Helper function to get status color hex
     function getStatusColorHex(status) {
         const statusLower = status ? status.toLowerCase() : '';
         switch (statusLower) {
@@ -770,16 +726,14 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Search functionality
     const searchInput = document.getElementById('scheduleSearch');
     if (searchInput) {
         searchInput.addEventListener('input', function (e) {
             const searchTerm = e.target.value.toLowerCase();
-            // TODO: Implement search filtering
+
         });
     }
 
-    // Update copyright year
     const currentYearElement = document.getElementById('currentYear');
     if (currentYearElement) {
         currentYearElement.textContent = new Date().getFullYear();

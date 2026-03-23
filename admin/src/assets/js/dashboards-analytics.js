@@ -1,7 +1,3 @@
-/**
- * Dashboard Analytics
- */
-
 'use strict';
 
 (function () {
@@ -12,9 +8,8 @@
   axisColor = config.colors.axisColor;
   borderColor = config.colors.borderColor;
 
-  // Defer chart initialization to improve initial page load
   function initializeCharts() {
-    // Initialize charts one at a time with delays to prevent blocking
+
     const charts = [
       initTotalRevenueChart,
       initGrowthChart,
@@ -25,15 +20,13 @@
       initWeeklyExpensesChart
     ];
 
-    // Stagger chart initialization with longer delays to prevent performance violations
     charts.forEach((chartInit, index) => {
       setTimeout(() => {
         requestAnimationFrame(chartInit);
-      }, index * 150); // Increased from 50ms to 150ms
+      }, index * 150);
     });
   }
 
-  // Total Revenue Report Chart - Bar Chart
   function initTotalRevenueChart() {
     const totalRevenueChartEl = document.querySelector('#totalRevenueChart');
     if (!totalRevenueChartEl) return;
@@ -304,11 +297,9 @@
     const totalRevenueChart = new ApexCharts(totalRevenueChartEl, totalRevenueChartOptions);
     totalRevenueChart.render();
 
-    // Store chart instance globally
     window.totalRevenueChartInstance = totalRevenueChart;
   }
 
-  // Growth Chart - Radial Bar Chart
   function initGrowthChart() {
     const growthChartEl = document.querySelector('#growthChart');
     if (!growthChartEl) return;
@@ -394,10 +385,8 @@
     const growthChart = new ApexCharts(growthChartEl, growthChartOptions);
     growthChart.render();
 
-    // Store chart instance globally
     window.growthChartInstance = growthChart;
 
-    // Check if there's pending growth data to update
     if (window.pendingGrowthData !== null && window.pendingGrowthData !== undefined) {
       const growthValue = isNaN(window.pendingGrowthData) ? 0 : Math.max(0, Math.min(100, window.pendingGrowthData));
       setTimeout(() => {
@@ -407,7 +396,6 @@
     }
   }
 
-  // Profit Report Line Chart
   function initProfileReportChart() {
     const profileReportChartEl = document.querySelector('#profileReportChart');
     if (!profileReportChartEl) return;
@@ -475,19 +463,16 @@
     profileReportChart.render();
   }
 
-  // Order Statistics Chart - Now handled dynamically by admin-dashboard.js
   function initOrderStatisticsChart() {
-    // Chart is now populated with real data from the enrollment statistics API
-    // See admin-dashboard.js -> updateCourseDonutChart()
+
+
     return;
   }
 
-  // Welcome Statistics Chart
   function initWelcomeStatisticsChart() {
     const chartWelcomeStatistics = document.querySelector('#welcomeStatisticsChart');
     if (!chartWelcomeStatistics) return;
 
-    // Check if we have real data stored
     const hasRealData = window.welcomeChartData;
     const approvedValue = hasRealData ? window.welcomeChartData.enrolled : 72;
     const pendingValue = hasRealData ? window.welcomeChartData.pending : 18;
@@ -563,11 +548,9 @@
     const welcomeChart = new ApexCharts(chartWelcomeStatistics, welcomeChartConfig);
     welcomeChart.render();
 
-    // Store the chart instance globally so it can be updated
     window.welcomeChartInstance = welcomeChart;
   }
 
-  // Income Chart - Area chart
   function initIncomeChart() {
     const incomeChartEl = document.querySelector('#incomeChart');
     if (!incomeChartEl) return;
@@ -672,7 +655,6 @@
     incomeChart.render();
   }
 
-  // Expenses Mini Chart - Radial Chart
   function initWeeklyExpensesChart() {
     const weeklyExpensesEl = document.querySelector('#expensesOfWeek');
     if (!weeklyExpensesEl) return;
@@ -751,11 +733,10 @@
     weeklyExpenses.render();
   }
 
-  // Initialize all charts after DOM is ready
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initializeCharts);
   } else {
-    // DOM is already ready, defer initialization slightly
+
     setTimeout(initializeCharts, 100);
   }
 })();

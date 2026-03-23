@@ -1,6 +1,3 @@
-// OPTIMIZED FUNCTIONS - Replace in requests.js
-
-// View details - NO API CALL, instant display
 async function viewDetails(element) {
     const row = element.closest('tr');
     if (!row) {
@@ -12,7 +9,6 @@ async function viewDetails(element) {
     displayAppointmentDetails(appointment);
 }
 
-// Edit details - NO API CALL, instant display
 async function editDetails(element) {
     const row = element.closest('tr');
     if (!row) {
@@ -24,17 +20,14 @@ async function editDetails(element) {
     displayEditForm(appointment, row);
 }
 
-// Display edit form with row reference
 let currentEditingAppointmentRow = null;
 let originalAppointmentData = null;
 
 function displayEditForm(appointment, row) {
     currentEditingAppointmentRow = row;
 
-    // Store original data for comparison
     originalAppointmentData = JSON.parse(JSON.stringify(appointment));
 
-    // Populate edit modal fields
     document.getElementById('editFirstName').value = appointment.firstName || '';
     document.getElementById('editSecondName').value = appointment.secondName || '';
     document.getElementById('editMiddleName').value = appointment.middleName || '';
@@ -44,7 +37,6 @@ function displayEditForm(appointment, row) {
     document.getElementById('editContactNumber').value = appointment.contactNumber || '';
     document.getElementById('editServiceCategory').value = appointment.serviceCategory || '';
 
-    // Populate service types based on category
     const editServiceCategory = document.getElementById('editServiceCategory');
     const editServiceType = document.getElementById('editServiceType');
 
@@ -66,7 +58,6 @@ function displayEditForm(appointment, row) {
     document.getElementById('editStatus').value = appointment.status || 'Pending';
     document.getElementById('editSpecialNotes').value = appointment.specialNotes || '';
 
-    // Setup service category change handler for edit modal
     editServiceCategory.addEventListener('change', function () {
         const selectedCategory = this.value;
         editServiceType.innerHTML = '<option value="">Select service type</option>';
@@ -81,12 +72,10 @@ function displayEditForm(appointment, row) {
         }
     });
 
-    // Show modal
     const modal = new bootstrap.Modal(document.getElementById('editAppointmentModal'));
     modal.show();
 }
 
-// Save appointment changes - UPDATE ONLY THE ROW
 async function saveAppointmentChanges() {
     if (!currentEditingAppointmentRow) {
         showToast('No appointment selected for editing', 'error');
@@ -95,7 +84,6 @@ async function saveAppointmentChanges() {
 
     const id = currentEditingAppointmentRow.getAttribute('data-id');
 
-    // Get form data
     const updatedData = {
         firstName: document.getElementById('editFirstName').value.trim(),
         secondName: document.getElementById('editSecondName').value.trim(),
@@ -112,7 +100,6 @@ async function saveAppointmentChanges() {
         specialNotes: document.getElementById('editSpecialNotes').value.trim()
     };
 
-    // Check if any changes were made FIRST
     let hasChanges = false;
     for (const key in updatedData) {
         const originalValue = originalAppointmentData[key] || '';
@@ -128,7 +115,6 @@ async function saveAppointmentChanges() {
         return;
     }
 
-    // Validate required fields
     if (!updatedData.firstName || !updatedData.lastName || !updatedData.email ||
         !updatedData.contactNumber || !updatedData.serviceCategory || !updatedData.serviceType ||
         !updatedData.preferredDate || !updatedData.preferredTime) {
@@ -150,18 +136,14 @@ async function saveAppointmentChanges() {
         if (result.success) {
             showToast('Appointment updated successfully!', 'success');
 
-            // Close modal
             const modal = bootstrap.Modal.getInstance(document.getElementById('editAppointmentModal'));
             modal.hide();
 
-            // Update the row with new data
             updateRowWithNewData(currentEditingAppointmentRow, updatedData);
 
-            // Reset variables
             currentEditingAppointmentRow = null;
             originalAppointmentData = null;
 
-            // Update statistics
             loadStatistics();
         } else {
             showToast('Failed to update appointment: ' + (result.error || 'Unknown error'), 'error');
@@ -172,11 +154,9 @@ async function saveAppointmentChanges() {
     }
 }
 
-// Update row with new data
 function updateRowWithNewData(row, data) {
     const cells = row.cells;
 
-    // Update name cell (column 0)
     const fullName = [data.firstName, data.secondName, data.middleName, data.lastName, data.suffix].filter(Boolean).join(' ');
     const initials = ((data.firstName || '').charAt(0) + (data.lastName || '').charAt(0)).toUpperCase() || 'NA';
     cells[0].innerHTML = `
@@ -189,24 +169,18 @@ function updateRowWithNewData(row, data) {
         </div>
     `;
 
-    // Update email (column 1)
     cells[1].textContent = data.email || 'N/A';
 
-    // Update contact number (column 2)
     cells[2].textContent = data.contactNumber || 'N/A';
 
-    // Update service (column 3)
     const serviceCategory = formatServiceCategory(data.serviceCategory);
     const serviceType = formatServiceType(data.serviceType);
     cells[3].innerHTML = `<strong>${serviceCategory}</strong><br><small class="text-muted">${serviceType}</small>`;
 
-    // Update date & time (column 4)
     cells[4].innerHTML = formatDateTime(data.preferredDate, data.preferredTime);
 
-    // Update status (column 5)
     cells[5].innerHTML = getStatusBadge(data.status);
 
-    // Update stored data
     const appointmentData = JSON.parse(row.getAttribute('data-appointment'));
     Object.assign(appointmentData, data);
     row.setAttribute('data-appointment', JSON.stringify(appointmentData));

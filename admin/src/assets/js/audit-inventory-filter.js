@@ -1,4 +1,3 @@
-/* Audit Inventory Filter - Dynamic Search Placeholder */
 document.addEventListener('DOMContentLoaded', function () {
     const inventoryTypeFilter = document.getElementById('inventoryTypeFilter');
     const filterSearchInput = document.getElementById('filterSearchInput');

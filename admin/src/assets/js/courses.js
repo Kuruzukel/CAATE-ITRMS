@@ -1,55 +1,43 @@
-/* Courses Page Functionality */
-
-// API Configuration - Works for both localhost and network access
 var API_BASE_URL = window.location.origin + '/CAATE-ITRMS/backend/public/api/v1';
 
-// State
 let courses = [];
 let currentCourseId = null;
 let currentCourseCard = null;
 let editImageFile = null;
-let originalCourseData = {}; // Store original course data for comparison
-let pendingStatusChange = null; // Store pending status change data
+let originalCourseData = {};
+let pendingStatusChange = null;
 
 document.addEventListener('DOMContentLoaded', function () {
-    // Set current year in footer
+
     const yearElement = document.getElementById('currentYear');
     if (yearElement) {
         yearElement.textContent = new Date().getFullYear();
     }
 
-    // Load courses from database
     loadCourses();
 
-    // Initialize image upload functionality for edit modal
     initializeEditImageUpload();
 
-    // Reset modal when closed
     const editModal = document.getElementById('editCourseModal');
     editModal.addEventListener('hidden.bs.modal', function () {
-        // Reset form
+
         document.getElementById('editCourseForm').reset();
 
-        // Reset image state
         editImageFile = null;
         resetEditImagePreview();
 
-        // Clear file input
         document.getElementById('editImageInput').value = '';
 
-        // Reset current course tracking
         currentCourseId = null;
         currentCourseCard = null;
     });
 
-    // When edit button is clicked, populate modal with course data
     document.addEventListener('click', function (e) {
         if (e.target.closest('.edit-course-btn')) {
             const btn = e.target.closest('.edit-course-btn');
             currentCourseCard = btn.closest('.card');
             currentCourseId = btn.dataset.id;
 
-            // Store original values for comparison
             originalCourseData = {
                 badge: btn.dataset.badge,
                 title: btn.dataset.title,
@@ -63,7 +51,6 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('editCourseDescription').value = originalCourseData.description;
             document.getElementById('editCourseHours').value = originalCourseData.hours;
 
-            // Load existing image if available
             const imageUrl = originalCourseData.image;
             if (imageUrl && imageUrl !== '') {
                 loadExistingImage(imageUrl);
@@ -73,24 +60,19 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-
-    // Handle confirmation button click
     document.getElementById('confirmStatusChangeBtn').addEventListener('click', async function () {
         if (!pendingStatusChange) return;
 
-        // Get current enrollment status from the button
         const currentStatus = pendingStatusChange.buttonElement.dataset.status;
         const newStatus = pendingStatusChange.newStatus;
 
-        // Check if status is actually changing
         if (currentStatus === newStatus) {
-            // Close modal
+
             const modal = bootstrap.Modal.getInstance(document.getElementById('enrollmentStatusModal'));
             if (modal) {
                 modal.hide();
             }
 
-            // Clean up any leftover backdrops
             setTimeout(() => {
                 const backdrops = document.querySelectorAll('.modal-backdrop');
                 backdrops.forEach(backdrop => backdrop.remove());
@@ -99,23 +81,19 @@ document.addEventListener('DOMContentLoaded', function () {
                 document.body.style.paddingRight = '';
             }, 300);
 
-            // Show info toast
             showToast('Enrollment status is already set to "' + newStatus + '"', 'info');
             pendingStatusChange = null;
             return;
         }
 
-        // Move focus to body BEFORE hiding modal to prevent aria-hidden warning
         document.body.focus();
         this.blur();
 
-        // Close confirmation modal properly
         const modal = bootstrap.Modal.getInstance(document.getElementById('enrollmentStatusModal'));
         if (modal) {
             modal.hide();
         }
 
-        // Clean up any leftover backdrops
         setTimeout(() => {
             const backdrops = document.querySelectorAll('.modal-backdrop');
             backdrops.forEach(backdrop => backdrop.remove());
@@ -124,23 +102,18 @@ document.addEventListener('DOMContentLoaded', function () {
             document.body.style.paddingRight = '';
         }, 300);
 
-        // Update enrollment status (moved outside setTimeout)
         await updateEnrollmentStatus(
             pendingStatusChange.courseId,
             pendingStatusChange.newStatus,
             pendingStatusChange.buttonElement
         );
 
-        // Clear pending change
         pendingStatusChange = null;
     });
 
-
-    // Save changes
     document.getElementById('saveCourseBtn').addEventListener('click', async function () {
         if (!currentCourseId) return;
 
-        // Validate required fields
         const badge = document.getElementById('editCourseBadge').value.trim();
         const title = document.getElementById('editCourseTitle').value.trim();
         const description = document.getElementById('editCourseDescription').value.trim();
@@ -151,7 +124,6 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        // Check if anything has changed (convert to strings for comparison)
         const hasTextChanges =
             badge !== String(originalCourseData.badge) ||
             title !== String(originalCourseData.title) ||
@@ -172,7 +144,6 @@ document.addEventListener('DOMContentLoaded', function () {
             hours: hours
         };
 
-        // If a new image file was uploaded, convert to base64
         if (editImageFile) {
             const reader = new FileReader();
             reader.onload = async function (e) {
@@ -181,13 +152,12 @@ document.addEventListener('DOMContentLoaded', function () {
             };
             reader.readAsDataURL(editImageFile);
         } else {
-            // Keep the original image value (don't send if unchanged)
+
             courseData.image = originalCourseData.image;
             await updateCourse(courseData);
         }
     });
 
-    // Handle enrollment status change - show confirmation modal
     document.addEventListener('click', function (e) {
         if (e.target.closest('.status-option')) {
             e.preventDefault();
@@ -196,18 +166,15 @@ document.addEventListener('DOMContentLoaded', function () {
             const dropdownBtn = statusOption.closest('.dropdown').querySelector('.enrollment-status-btn');
             const courseId = dropdownBtn.dataset.id;
 
-            // Store pending change data
             pendingStatusChange = {
                 courseId: courseId,
                 newStatus: newStatus,
                 buttonElement: dropdownBtn
             };
 
-            // Update confirmation modal badge
             const confirmBadge = document.getElementById('confirmStatusBadge');
             confirmBadge.textContent = newStatus;
 
-            // Set badge color based on status
             confirmBadge.className = 'badge fs-6 px-3 py-2';
             if (newStatus === 'Open Enrollment') {
                 confirmBadge.classList.add('bg-success');
@@ -217,22 +184,19 @@ document.addEventListener('DOMContentLoaded', function () {
                 confirmBadge.classList.add('bg-secondary');
             }
 
-            // Show confirmation modal
             const modal = new bootstrap.Modal(document.getElementById('enrollmentStatusModal'));
             modal.show();
         }
     });
 
-    // Handle cancel button click on enrollment status modal
     const enrollmentModal = document.getElementById('enrollmentStatusModal');
     if (enrollmentModal) {
-        // Clean up when modal is hidden
+
         enrollmentModal.addEventListener('hidden.bs.modal', function () {
             cleanupModalBackdrop();
             pendingStatusChange = null;
         });
 
-        // Also clean up when cancel button is clicked
         const cancelButtons = enrollmentModal.querySelectorAll('[data-bs-dismiss="modal"]');
         cancelButtons.forEach(btn => {
             btn.addEventListener('click', function () {
@@ -242,31 +206,27 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Cleanup function for modal backdrop
     function cleanupModalBackdrop() {
-        // First, move focus away from modal elements to prevent aria-hidden warning
+
         const activeElement = document.activeElement;
         if (activeElement && activeElement.closest('.modal')) {
-            // Move focus to body or a safe element
+
             document.body.focus();
             activeElement.blur();
         }
 
         setTimeout(() => {
-            // Remove all modal backdrops
+
             const backdrops = document.querySelectorAll('.modal-backdrop');
             backdrops.forEach(backdrop => backdrop.remove());
 
-            // Remove modal-open class from body
             document.body.classList.remove('modal-open');
 
-            // Reset body styles
             document.body.style.overflow = '';
             document.body.style.paddingRight = '';
             document.body.style.removeProperty('overflow');
             document.body.style.removeProperty('padding-right');
 
-            // Ensure no lingering modal states
             document.querySelectorAll('.modal').forEach(modal => {
                 modal.classList.remove('show');
                 modal.style.display = 'none';
@@ -277,16 +237,14 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 100);
     }
 
-    // Menu toggle is handled by main.js - no need to duplicate here
 });
 
-// Update course function
 async function updateCourse(courseData) {
     const saveBtn = document.getElementById('saveCourseBtn');
     const originalText = saveBtn.innerHTML;
 
     try {
-        // Show loading state
+
         saveBtn.disabled = true;
         saveBtn.innerHTML = '<i class="bx bx-loader-alt bx-spin me-2"></i>Saving...';
 
@@ -301,19 +259,17 @@ async function updateCourse(courseData) {
         const result = await response.json();
 
         if (result.success) {
-            // Close modal
+
             const modal = bootstrap.Modal.getInstance(document.getElementById('editCourseModal'));
             modal.hide();
 
-            // Reset image state
             editImageFile = null;
             resetEditImagePreview();
 
-            // Show appropriate toast notification based on whether changes were made
             if (result.modified === false) {
                 showToast('No changes were made to the course', 'info');
             } else {
-                // Only reload courses if changes were actually made
+
                 await loadCourses();
                 showToast('Course updated successfully!', 'success');
             }
@@ -324,18 +280,17 @@ async function updateCourse(courseData) {
         console.error('Error updating course:', error);
         showToast('Error updating course. Please try again.', 'error');
     } finally {
-        // Restore button state
+
         saveBtn.disabled = false;
         saveBtn.innerHTML = originalText;
     }
 }
 
-// Update enrollment status
 async function updateEnrollmentStatus(courseId, newStatus, buttonElement) {
     const originalText = buttonElement.innerHTML;
 
     try {
-        // Show loading state
+
         buttonElement.disabled = true;
         buttonElement.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i>';
 
@@ -352,7 +307,7 @@ async function updateEnrollmentStatus(courseId, newStatus, buttonElement) {
         const result = await response.json();
 
         if (result.success) {
-            // Update button with new status
+
             let statusBadgeClass = 'bg-secondary';
             if (newStatus === 'Open Enrollment') {
                 statusBadgeClass = 'bg-success';
@@ -373,12 +328,11 @@ async function updateEnrollmentStatus(courseId, newStatus, buttonElement) {
         showToast('Error updating enrollment status. Please try again.', 'error');
         buttonElement.innerHTML = originalText;
     } finally {
-        // Restore button state
+
         buttonElement.disabled = false;
     }
 }
 
-// Load courses from database
 async function loadCourses() {
     const loadingSpinner = document.getElementById('loadingSpinner');
     const coursesGrid = document.getElementById('coursesGrid');
@@ -393,7 +347,6 @@ async function loadCourses() {
 
             renderCourses(courses);
 
-            // Hide loading, show grid
             if (loadingSpinner) loadingSpinner.style.display = 'none';
             if (coursesGrid) coursesGrid.style.display = 'flex';
         } else {
@@ -416,8 +369,7 @@ async function loadCourses() {
     }
 }
 
-// Render courses to the page
-// Render courses to the page
+
 function renderCourses(coursesData) {
     const container = document.getElementById('coursesGrid');
     if (!container) return;
@@ -429,11 +381,9 @@ function renderCourses(coursesData) {
         const col = document.createElement('div');
         col.className = 'col';
 
-        // Use badge/hours if available, fallback to course_code/duration
         const badge = course.badge || course.course_code || 'N/A';
         const hours = course.hours || course.duration || 'N/A';
 
-        // Determine badge color based on badge text
         let badgeClass = 'bg-primary';
         if (badge.includes('Level III')) {
             badgeClass = 'bg-info';
@@ -445,15 +395,12 @@ function renderCourses(coursesData) {
             badgeClass = 'bg-primary';
         }
 
-        // Handle image display - use stored image or default placeholder
         const imageUrl = course.image && course.image.trim() !== ''
             ? course.image
             : '../assets/images/CAATE_META_LOGO.png';
 
-        // Get enrollment status or default to 'Unpublished'
         const enrollmentStatus = course.enrollment_status || 'Unpublished';
 
-        // Determine status badge color
         let statusBadgeClass = 'bg-secondary';
         if (enrollmentStatus === 'Open Enrollment') {
             statusBadgeClass = 'bg-success';
@@ -518,8 +465,6 @@ function renderCourses(coursesData) {
     });
 }
 
-
-// Toast notification function
 function showToast(message, type = 'success') {
     const container = document.getElementById('toastContainer');
     if (!container) return;
@@ -540,14 +485,12 @@ function showToast(message, type = 'success') {
 
     container.appendChild(toast);
 
-    // Auto remove after 5 seconds
     setTimeout(() => {
         toast.classList.add('hiding');
         setTimeout(() => toast.remove(), 300);
     }, 5000);
 }
 
-// Close toast notification
 function closeToast(button) {
     const toast = button.closest('.toast-notification');
     if (toast) {
@@ -558,8 +501,6 @@ function closeToast(button) {
     }
 }
 
-
-// Initialize image upload functionality for edit modal
 function initializeEditImageUpload() {
     const uploadArea = document.getElementById('editUploadArea');
     const imageInput = document.getElementById('editImageInput');
@@ -569,12 +510,10 @@ function initializeEditImageUpload() {
     const viewImageBtn = document.getElementById('editViewImageBtn');
     const removeImageBtn = document.getElementById('editRemoveImageBtn');
 
-    // Click to upload
     uploadArea.addEventListener('click', () => {
         imageInput.click();
     });
 
-    // File input change
     imageInput.addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -582,7 +521,6 @@ function initializeEditImageUpload() {
         }
     });
 
-    // Drag and drop
     uploadArea.addEventListener('dragover', (e) => {
         e.preventDefault();
         uploadArea.classList.add('dragover');
@@ -601,26 +539,22 @@ function initializeEditImageUpload() {
         }
     });
 
-    // View image button
     viewImageBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         const imgSrc = imagePreview.src;
         if (imgSrc) {
-            // Set the modal image source
+
             const modalImagePreview = document.getElementById('editModalImagePreview');
             modalImagePreview.src = imgSrc;
 
-            // Show the modal
             const imagePreviewModalElement = document.getElementById('editImagePreviewModal');
             const imagePreviewModal = new bootstrap.Modal(imagePreviewModalElement);
             imagePreviewModal.show();
 
-            // Handle modal close to restore edit modal state
             imagePreviewModalElement.addEventListener('hidden.bs.modal', function handleModalClose() {
-                // Ensure body has modal-open class
+
                 document.body.classList.add('modal-open');
 
-                // Check if backdrop exists, if not create one
                 setTimeout(() => {
                     const backdrops = document.querySelectorAll('.modal-backdrop');
                     if (backdrops.length === 0) {
@@ -628,7 +562,7 @@ function initializeEditImageUpload() {
                         backdrop.className = 'modal-backdrop fade show';
                         document.body.appendChild(backdrop);
                     } else if (backdrops.length > 1) {
-                        // Remove extra backdrops to prevent glitching
+
                         for (let i = 1; i < backdrops.length; i++) {
                             backdrops[i].remove();
                         }
@@ -638,7 +572,6 @@ function initializeEditImageUpload() {
         }
     });
 
-    // Remove image button
     removeImageBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         resetEditImagePreview();
@@ -647,15 +580,13 @@ function initializeEditImageUpload() {
     });
 }
 
-// Handle image file for edit modal
 function handleEditImageFile(file) {
-    // Validate file size (5MB max)
+
     if (file.size > 5 * 1024 * 1024) {
         showToast('Image size must be less than 5MB', 'error');
         return;
     }
 
-    // Validate file type
     if (!file.type.startsWith('image/')) {
         showToast('Please select a valid image file', 'error');
         return;
@@ -663,12 +594,10 @@ function handleEditImageFile(file) {
 
     editImageFile = file;
 
-    // Show file info
     const fileSizeKB = (file.size / 1024).toFixed(2);
     const fileSizeMB = (file.size / (1024 * 1024)).toFixed(2);
     const sizeText = file.size > 1024 * 1024 ? `${fileSizeMB} MB` : `${fileSizeKB} KB`;
 
-    // Preview image
     const reader = new FileReader();
     reader.onload = (e) => {
         const imagePreview = document.getElementById('editImagePreview');
@@ -685,7 +614,6 @@ function handleEditImageFile(file) {
     reader.readAsDataURL(file);
 }
 
-// Load existing image in edit modal
 function loadExistingImage(imageUrl) {
     const imagePreview = document.getElementById('editImagePreview');
     const noImageText = document.getElementById('editNoImageText');
@@ -701,7 +629,6 @@ function loadExistingImage(imageUrl) {
     }
 }
 
-// Reset image preview in edit modal
 function resetEditImagePreview() {
     const imagePreview = document.getElementById('editImagePreview');
     const noImageText = document.getElementById('editNoImageText');

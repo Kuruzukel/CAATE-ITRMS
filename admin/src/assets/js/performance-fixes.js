@@ -1,10 +1,6 @@
-/* Performance Fixes for Schedule Page */
-
-// Fix for non-passive event listeners
 (function () {
     'use strict';
 
-    // Override addEventListener to make touch events passive by default
     const originalAddEventListener = EventTarget.prototype.addEventListener;
     const passiveEvents = ['touchstart', 'touchmove', 'wheel', 'mousewheel'];
 
@@ -29,7 +25,6 @@
         return originalAddEventListener.call(this, type, listener, options);
     };
 
-    // Polyfill for passive event listener support detection
     let supportsPassive = false;
     try {
         const opts = Object.defineProperty({}, 'passive', {
@@ -41,13 +36,11 @@
         window.addEventListener('testPassive', null, opts);
         window.removeEventListener('testPassive', null, opts);
     } catch (e) {
-        // Passive not supported
+
     }
 
-    // Store the support flag globally
     window.supportsPassiveEvents = supportsPassive;
 
-    // Batch DOM reads and writes to prevent forced reflows
     const rafScheduler = {
         reads: [],
         writes: [],
@@ -68,12 +61,11 @@
             this.scheduled = true;
 
             requestAnimationFrame(() => {
-                // Execute all reads first
+
                 const reads = this.reads.slice();
                 this.reads = [];
                 reads.forEach(fn => fn());
 
-                // Then execute all writes
                 const writes = this.writes.slice();
                 this.writes = [];
                 writes.forEach(fn => fn());
@@ -83,12 +75,10 @@
         }
     };
 
-    // Make scheduler available globally
     window.rafScheduler = rafScheduler;
 
-    // Optimize scroll performance
     if (supportsPassive) {
-        // Add passive listeners for common scroll events
+
         const scrollElements = document.querySelectorAll('.layout-menu, .perfect-scrollbar');
         scrollElements.forEach(element => {
             if (element) {
@@ -99,7 +89,6 @@
         });
     }
 
-    // Debounce function for performance
     function debounce(func, wait, immediate) {
         let timeout;
         return function executedFunction() {
@@ -116,7 +105,6 @@
         };
     }
 
-    // Throttle function for performance
     function throttle(func, limit) {
         let inThrottle;
         return function () {
@@ -130,41 +118,36 @@
         };
     }
 
-    // Make utilities available globally
     window.debounce = debounce;
     window.throttle = throttle;
 
-    // Optimize resize events
     let resizeTimer;
     window.addEventListener('resize', throttle(function () {
-        // Trigger any resize-dependent code here
+
         const event = new Event('optimizedResize');
         window.dispatchEvent(event);
     }, 250), { passive: true });
 
-    // Optimize scroll events
     window.addEventListener('scroll', throttle(function () {
-        // Trigger any scroll-dependent code here
+
         const event = new Event('optimizedScroll');
         window.dispatchEvent(event);
     }, 100), { passive: true });
 
 })();
 
-// Additional performance optimizations
 document.addEventListener('DOMContentLoaded', function () {
-    // Use requestAnimationFrame for layout-dependent operations
+
     requestAnimationFrame(() => {
-        // Batch any initial layout calculations here
+
         const layoutMenu = document.getElementById('layout-menu');
         if (layoutMenu) {
-            // Cache layout properties to avoid repeated reflows
+
             layoutMenu.dataset.cachedHeight = layoutMenu.offsetHeight;
             layoutMenu.dataset.cachedWidth = layoutMenu.offsetWidth;
         }
     });
 
-    // Lazy load images if any
     const images = document.querySelectorAll('img[data-src]');
     if ('IntersectionObserver' in window) {
         const imageObserver = new IntersectionObserver((entries, observer) => {
@@ -180,20 +163,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
         images.forEach(img => imageObserver.observe(img));
     } else {
-        // Fallback for browsers without IntersectionObserver
+
         images.forEach(img => {
             img.src = img.dataset.src;
             img.classList.remove('lazy');
         });
     }
 
-    // Optimize animations
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     if (prefersReducedMotion.matches) {
         document.body.classList.add('reduce-motion');
     }
 
-    // Add CSS for reduced motion
     if (!document.getElementById('reduce-motion-styles')) {
         const style = document.createElement('style');
         style.id = 'reduce-motion-styles';
@@ -210,27 +191,24 @@ document.addEventListener('DOMContentLoaded', function () {
         document.head.appendChild(style);
     }
 
-    // Optimize font loading
     if ('fonts' in document) {
         document.fonts.ready.then(() => {
             document.body.classList.add('fonts-loaded');
         });
     }
 
-    // Use CSS containment for better performance
     const cards = document.querySelectorAll('.card');
     cards.forEach(card => {
         card.style.contain = 'layout style paint';
     });
 });
 
-// Prevent layout thrashing during animations
 if (window.requestIdleCallback) {
     requestIdleCallback(() => {
-        // Perform non-critical work during idle time
+
         const nonCriticalElements = document.querySelectorAll('[data-lazy-init]');
         nonCriticalElements.forEach(el => {
-            // Initialize non-critical components
+
             if (el.dataset.lazyInit) {
                 const initFn = window[el.dataset.lazyInit];
                 if (typeof initFn === 'function') {

@@ -1,17 +1,12 @@
-/**
- * UI Toasts
- */
-
 'use strict';
 
 (function () {
-  // Bootstrap toasts example
-  // --------------------------------------------------------------------
+
+
   const toastPlacementExample = document.querySelector('.toast-placement-ex'),
     toastPlacementBtn = document.querySelector('#showToastPlacement');
   let selectedType, selectedPlacement, toastPlacement;
 
-  // Dispose toast when open another
   function toastDispose(toast) {
     if (toast && toast._element !== null) {
       if (toastPlacementExample) {
@@ -21,7 +16,7 @@
       toast.dispose();
     }
   }
-  // Placement Button click
+
   if (toastPlacementBtn) {
     toastPlacementBtn.onclick = function () {
       if (toastPlacement) {

@@ -1,7 +1,3 @@
-/**
- * Registration Records Management
- */
-
 'use strict';
 
 (function () {
@@ -9,16 +5,13 @@
     let currentPage = 1;
     const limit = 10;
 
-    // Initialize on page load
     document.addEventListener('DOMContentLoaded', function () {
         loadRegistrations();
         loadCoursesForFilter();
         setupEventListeners();
     });
 
-    /**
-     * Load registrations from API
-     */
+    
     async function loadRegistrations(filters = {}) {
         try {
             const queryParams = new URLSearchParams({
@@ -44,9 +37,7 @@
         }
     }
 
-    /**
-     * Load courses for filter dropdown
-     */
+    
     async function loadCoursesForFilter() {
         const courseSelect = document.querySelectorAll('select')[1];
         if (!courseSelect) return;
@@ -56,10 +47,9 @@
             const result = await response.json();
 
             if (result.success && result.data && result.data.length > 0) {
-                // Keep the "All Courses" option
+
                 courseSelect.innerHTML = '<option value="">All Courses</option>';
 
-                // Add courses from API
                 result.data.forEach(course => {
                     const option = document.createElement('option');
                     const courseTitle = course.title || 'Untitled Course';
@@ -75,9 +65,7 @@
         }
     }
 
-    /**
-     * Render registrations table
-     */
+    
     function renderRegistrations(data) {
         const tbody = document.querySelector('.table tbody');
 
@@ -94,7 +82,7 @@
         }
 
         tbody.innerHTML = data.map(registration => {
-            // Use traineeFullName if available, otherwise construct from form data
+
             const fullName = registration.traineeFullName ||
                 `${registration.firstName} ${registration.middleName || ''} ${registration.lastName}`.trim();
             const initials = getInitials(fullName);
@@ -182,13 +170,10 @@
             `;
         }).join('');
 
-        // Attach event listeners to action buttons
         attachActionListeners();
     }
 
-    /**
-     * Get initials from full name
-     */
+    
     function getInitials(name) {
         return name
             .split(' ')
@@ -199,16 +184,13 @@
             .substring(0, 2);
     }
 
-    /**
-     * Format date
-     */
+    
     function formatDate(dateString) {
         if (!dateString) return 'N/A';
 
         try {
             let date;
 
-            // Handle MongoDB BSON date format
             if (dateString.$date) {
                 if (typeof dateString.$date === 'number') {
                     date = new Date(dateString.$date);
@@ -227,7 +209,6 @@
                 return 'N/A';
             }
 
-            // Check if date is valid
             if (isNaN(date.getTime())) {
                 return 'N/A';
             }
@@ -243,9 +224,7 @@
         }
     }
 
-    /**
-     * Get status badge HTML
-     */
+    
     function getStatusBadge(status) {
         const statusMap = {
             'approved': '<span class="badge bg-success">Approved</span>',
@@ -255,9 +234,7 @@
         return statusMap[status] || '<span class="badge bg-secondary">Unknown</span>';
     }
 
-    /**
-     * Update statistics cards
-     */
+    
     async function updateStatistics() {
         try {
             const response = await fetch(`${config.api.baseUrl}/api/v1/registrations?limit=1000`);
@@ -266,13 +243,11 @@
             if (data.success) {
                 const all = data.data;
 
-                // Current counts
                 const total = all.length;
                 const approved = all.filter(r => r.status === 'approved').length;
                 const pending = all.filter(r => r.status === 'pending').length;
                 const cancelled = all.filter(r => r.status === 'cancelled').length;
 
-                // Calculate previous month counts for percentage change
                 const now = new Date();
                 const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
                 const thisMonth = new Date(now.getFullYear(), now.getMonth(), 1);
@@ -293,7 +268,6 @@
                     return date >= thisMonth;
                 });
 
-                // Calculate percentages
                 const totalPercentage = calculatePercentage(thisMonthData.length, lastMonthData.length);
                 const approvedPercentage = calculatePercentage(
                     thisMonthData.filter(r => r.status === 'approved').length,
@@ -308,7 +282,6 @@
                     lastMonthData.filter(r => r.status === 'cancelled').length
                 );
 
-                // Update cards (if they exist)
                 updateStatCard(0, total, totalPercentage);
                 updateStatCard(1, approved, approvedPercentage);
                 updateStatCard(2, pending, pendingPercentage);
@@ -319,9 +292,7 @@
         }
     }
 
-    /**
-     * Calculate percentage change
-     */
+    
     function calculatePercentage(current, previous) {
         if (previous === 0) {
             return current > 0 ? 100 : 0;
@@ -329,16 +300,13 @@
         return ((current - previous) / previous * 100).toFixed(1);
     }
 
-    /**
-     * Update individual stat card
-     */
+    
     function updateStatCard(index, value, percentage) {
         const cards = document.querySelectorAll('.card-body h3');
         if (cards[index]) {
             cards[index].textContent = value.toLocaleString();
         }
 
-        // Update percentage if provided
         if (percentage !== undefined) {
             const percentageElements = document.querySelectorAll('.card-body small');
             if (percentageElements[index]) {
@@ -365,11 +333,9 @@
         }
     }
 
-    /**
-     * Setup event listeners
-     */
+    
     function setupEventListeners() {
-        // Filter inputs
+
         const searchInput = document.querySelector('input[placeholder="Name or Trainee ID"]');
         const statusSelect = document.querySelector('select');
         const courseSelect = document.querySelectorAll('select')[1];
@@ -396,7 +362,6 @@
             resetBtn.addEventListener('click', resetFilters);
         }
 
-        // Export buttons
         const exportCsvBtn = document.getElementById('exportCsvBtn');
         const exportJsonBtn = document.getElementById('exportJsonBtn');
         const addRegistrationBtn = document.getElementById('addRegistrationBtn');
@@ -415,22 +380,18 @@
             });
         }
 
-        // Save registration button
         const saveRegistrationBtn = document.getElementById('saveRegistrationBtn');
         if (saveRegistrationBtn) {
             saveRegistrationBtn.addEventListener('click', saveNewRegistration);
         }
 
-        // Save edit button
         const saveEditBtn = document.getElementById('saveEditBtn');
         if (saveEditBtn) {
             saveEditBtn.addEventListener('click', saveEditedRegistration);
         }
     }
 
-    /**
-     * Apply filters
-     */
+    
     function applyFilters() {
         const searchValue = document.querySelector('input[placeholder="Name or Trainee ID"]')?.value.toLowerCase().trim();
         const statusValue = document.querySelector('select')?.value;
@@ -439,7 +400,6 @@
 
         let filtered = [...registrations];
 
-        // Only filter (hide rows) for non-search filters
         if (statusValue) {
             filtered = filtered.filter(r => r.status === statusValue);
         }
@@ -447,7 +407,7 @@
         if (courseValue) {
             filtered = filtered.filter(r => {
                 const course = (r.selectedCourse || r.courseQualification || '').trim();
-                // Exact match with the selected course
+
                 return course === courseValue;
             });
         }
@@ -457,7 +417,6 @@
                 try {
                     let regDate;
 
-                    // Handle MongoDB BSON date format
                     if (r.submittedAt && r.submittedAt.$date) {
                         if (typeof r.submittedAt.$date === 'number') {
                             regDate = new Date(r.submittedAt.$date);
@@ -474,14 +433,12 @@
                         return false;
                     }
 
-                    // Check if date is valid
                     if (isNaN(regDate.getTime())) {
                         return false;
                     }
 
                     const filterDate = new Date(dateValue);
 
-                    // Compare dates (year, month, day only - ignore time)
                     return regDate.getFullYear() === filterDate.getFullYear() &&
                         regDate.getMonth() === filterDate.getMonth() &&
                         regDate.getDate() === filterDate.getDate();
@@ -492,10 +449,8 @@
             });
         }
 
-        // Render filtered data (this shows/hides rows based on dropdown filters)
         renderRegistrations(filtered);
 
-        // Apply search highlighting without filtering
         if (searchValue) {
             setTimeout(() => {
                 clearAllHighlights();
@@ -506,9 +461,7 @@
         }
     }
 
-    /**
-     * Clear all row highlights
-     */
+    
     function clearAllHighlights() {
         const tbody = document.querySelector('.table tbody');
         if (tbody) {
@@ -529,9 +482,7 @@
         }
     }
 
-    /**
-     * Highlight search results
-     */
+    
     function highlightSearchResults(searchTerm) {
         const tbody = document.querySelector('.table tbody');
         if (!tbody) return;
@@ -540,12 +491,11 @@
         let firstMatch = null;
 
         rows.forEach(row => {
-            // Get row text content
+
             const rowText = row.textContent.toLowerCase();
 
-            // Check if row matches search term
             if (rowText.includes(searchTerm)) {
-                // Apply card hover design with proper spacing
+
                 row.style.position = 'relative';
                 row.style.boxShadow = '0 8px 24px rgba(22, 56, 86, 0.5), 0 4px 12px rgba(54, 145, 191, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15)';
                 row.style.outline = '2px solid rgba(54, 145, 191, 0.6)';
@@ -555,22 +505,18 @@
                 row.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
                 row.style.zIndex = '10';
 
-                // Store first match for scrolling
                 if (!firstMatch) {
                     firstMatch = row;
                 }
             }
         });
 
-        // Scroll to first match
         if (firstMatch) {
             firstMatch.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
     }
 
-    /**
-     * Reset filters
-     */
+    
     function resetFilters() {
         document.querySelector('input[placeholder="Name or Trainee ID"]').value = '';
         document.querySelector('select').value = '';
@@ -580,11 +526,9 @@
         renderRegistrations(registrations);
     }
 
-    /**
-     * Attach action listeners
-     */
+    
     function attachActionListeners() {
-        // Status change
+
         document.querySelectorAll('.status-change').forEach(btn => {
             btn.addEventListener('click', async function () {
                 const id = this.dataset.id;
@@ -593,7 +537,6 @@
             });
         });
 
-        // View details
         document.querySelectorAll('.view-details').forEach(btn => {
             btn.addEventListener('click', function () {
                 const id = this.dataset.id;
@@ -601,7 +544,6 @@
             });
         });
 
-        // Edit details
         document.querySelectorAll('.edit-details').forEach(btn => {
             btn.addEventListener('click', function () {
                 const id = this.dataset.id;
@@ -609,7 +551,6 @@
             });
         });
 
-        // Delete record
         document.querySelectorAll('.delete-record').forEach(btn => {
             btn.addEventListener('click', function () {
                 const id = this.dataset.id;
@@ -618,9 +559,7 @@
         });
     }
 
-    /**
-     * Update registration status
-     */
+    
     async function updateStatus(id, status) {
         try {
             const response = await fetch(`${config.api.baseUrl}/api/v1/registrations/${id}`, {
@@ -645,9 +584,7 @@
         }
     }
 
-    /**
-     * View registration details
-     */
+    
     function viewDetails(id) {
         const registration = registrations.find(r => r._id.$oid === id);
         if (!registration) {
@@ -655,18 +592,15 @@
             return;
         }
 
-        console.log('Registration data:', registration); // Debug log
+        console.log('Registration data:', registration);
 
-        // T2MIS Auto Generated
         document.getElementById('viewUliNumber').textContent = registration.uliNumber || '-';
         document.getElementById('viewEntryDate').textContent = registration.entryDate || '-';
 
-        // Populate view modal - Name
         document.getElementById('viewLastName').textContent = registration.lastName || '-';
         document.getElementById('viewFirstName').textContent = registration.firstName || '-';
         document.getElementById('viewMiddleName').textContent = registration.middleName || '-';
 
-        // Address
         document.getElementById('viewStreet').textContent = registration.numberStreet || '-';
         document.getElementById('viewBarangay').textContent = registration.barangay || '-';
         document.getElementById('viewDistrict').textContent = registration.district || '-';
@@ -674,19 +608,16 @@
         document.getElementById('viewProvince').textContent = registration.province || '-';
         document.getElementById('viewRegion').textContent = registration.region || '-';
 
-        // Contact
         document.getElementById('viewNationality').textContent = registration.nationality || '-';
         document.getElementById('viewEmail').textContent = registration.emailFacebook || '-';
         document.getElementById('viewContactNo').textContent = registration.contactNo || '-';
 
-        // Personal Info
         document.getElementById('viewSex').textContent = registration.sex ? registration.sex.charAt(0).toUpperCase() + registration.sex.slice(1) : '-';
         document.getElementById('viewAge').textContent = registration.age || '-';
         document.getElementById('viewCivilStatus').textContent = registration.civilStatus ? registration.civilStatus.charAt(0).toUpperCase() + registration.civilStatus.slice(1) : '-';
         document.getElementById('viewEmploymentStatus').textContent = registration.employmentStatus || '-';
         document.getElementById('viewEmploymentType').textContent = registration.employmentType || '-';
 
-        // Birth Info
         document.getElementById('viewBirthMonth').textContent = registration.birthMonth || '-';
         document.getElementById('viewBirthDay').textContent = registration.birthDay || '-';
         document.getElementById('viewBirthYear').textContent = registration.birthYear || '-';
@@ -694,76 +625,65 @@
         document.getElementById('viewBirthProvince').textContent = registration.birthProvince || '-';
         document.getElementById('viewBirthRegion').textContent = registration.birthRegion || '-';
 
-        // Education
         document.getElementById('viewEducation').textContent = registration.education || '-';
 
-        // Parent/Guardian
         document.getElementById('viewParentName').textContent = registration.parentName || '-';
         document.getElementById('viewParentAddress').textContent = registration.parentAddress || '-';
 
-        // Client Classification - handle array properly (support both field names)
         let clientClass = '-';
         const clientClassData = registration.clientClassificationArray || registration.clientClassification;
         if (clientClassData && Array.isArray(clientClassData) && clientClassData.length > 0) {
             clientClass = clientClassData.map(item => {
-                // Capitalize first letter and handle different formats
+
                 const str = String(item).trim();
                 return str.charAt(0).toUpperCase() + str.slice(1);
             }).join(', ');
         }
-        console.log('Client Classification:', clientClass); // Debug log
+        console.log('Client Classification:', clientClass);
         document.getElementById('viewClientClassification').textContent = clientClass;
 
-        // Disability Type - handle array properly (support both field names)
         let disabilityType = '-';
         const disabilityTypeData = registration.disabilityTypeArray || registration.disabilityType;
         if (disabilityTypeData && Array.isArray(disabilityTypeData) && disabilityTypeData.length > 0) {
             disabilityType = disabilityTypeData.map(item => {
-                // Capitalize first letter and handle different formats
+
                 const str = String(item).trim();
                 return str.charAt(0).toUpperCase() + str.slice(1);
             }).join(', ');
         }
-        console.log('Disability Type:', disabilityType); // Debug log
+        console.log('Disability Type:', disabilityType);
         document.getElementById('viewDisabilityType').textContent = disabilityType;
 
-        // Disability Cause - handle array properly (support both field names)
         let disabilityCause = '-';
         const disabilityCauseData = registration.disabilityCauseArray || registration.disabilityCause;
         if (disabilityCauseData && Array.isArray(disabilityCauseData) && disabilityCauseData.length > 0) {
             disabilityCause = disabilityCauseData.map(item => {
-                // Capitalize first letter and handle different formats
+
                 const str = String(item).trim();
                 return str.charAt(0).toUpperCase() + str.slice(1);
             }).join(', ');
         }
-        console.log('Disability Cause:', disabilityCause); // Debug log
+        console.log('Disability Cause:', disabilityCause);
         document.getElementById('viewDisabilityCause').textContent = disabilityCause;
 
-        // Course Info
         document.getElementById('viewCourseQualification').textContent = registration.courseQualification || '-';
         document.getElementById('viewCourse').textContent = registration.selectedCourse || registration.courseQualification || '-';
         document.getElementById('viewScholarshipType').textContent = registration.scholarshipType || '-';
         document.getElementById('viewPrivacyConsent').textContent = registration.privacyConsent || '-';
 
-        // Registration Info
         document.getElementById('viewTraineeId').textContent = registration.traineeId || '-';
 
-        // Format status with badge
         const statusElement = document.getElementById('viewStatus');
         const statusBadge = getStatusBadge(registration.status);
         statusElement.innerHTML = statusBadge;
 
         document.getElementById('viewSubmittedAt').textContent = formatDate(registration.submittedAt) || '-';
 
-        // Show modal
         const modal = new bootstrap.Modal(document.getElementById('viewDetailsModal'));
         modal.show();
     }
 
-    /**
-     * Edit registration details
-     */
+    
     async function editDetails(id) {
         const registration = registrations.find(r => r._id.$oid === id);
         if (!registration) {
@@ -771,7 +691,6 @@
             return;
         }
 
-        // Store original data for change detection
         window.originalRegistrationData = {
             uliNumber: registration.uliNumber || '',
             entryDate: registration.entryDate || '',
@@ -812,19 +731,15 @@
             status: registration.status || ''
         };
 
-        // Populate edit modal with registration data
         document.getElementById('editRegistrationId').value = id;
 
-        // T2MIS Auto Generated
         document.getElementById('editUliNumber').value = registration.uliNumber || '';
         document.getElementById('editEntryDate').value = registration.entryDate || '';
 
-        // Name
         document.getElementById('editFirstName').value = registration.firstName || '';
         document.getElementById('editMiddleName').value = registration.middleName || '';
         document.getElementById('editLastName').value = registration.lastName || '';
 
-        // Address
         document.getElementById('editStreet').value = registration.numberStreet || '';
         document.getElementById('editBarangay').value = registration.barangay || '';
         document.getElementById('editDistrict').value = registration.district || '';
@@ -832,19 +747,16 @@
         document.getElementById('editProvince').value = registration.province || '';
         document.getElementById('editRegion').value = registration.region || '';
 
-        // Contact
         document.getElementById('editEmail').value = registration.emailFacebook || '';
         document.getElementById('editContactNo').value = registration.contactNo || '';
         document.getElementById('editNationality').value = registration.nationality || '';
 
-        // Personal Info
         document.getElementById('editSex').value = registration.sex || '';
         document.getElementById('editCivilStatus').value = registration.civilStatus || '';
         document.getElementById('editAge').value = registration.age || '';
         document.getElementById('editEmploymentStatus').value = registration.employmentStatus || '';
         document.getElementById('editEmploymentType').value = registration.employmentType || '';
 
-        // Birth Info
         document.getElementById('editBirthMonth').value = registration.birthMonth || '';
         document.getElementById('editBirthDay').value = registration.birthDay || '';
         document.getElementById('editBirthYear').value = registration.birthYear || '';
@@ -852,19 +764,16 @@
         document.getElementById('editBirthProvince').value = registration.birthProvince || '';
         document.getElementById('editBirthRegion').value = registration.birthRegion || '';
 
-        // Education
         document.getElementById('editEducation').value = registration.education || '';
 
-        // Parent/Guardian
         document.getElementById('editParentName').value = registration.parentName || '';
         document.getElementById('editParentAddress').value = registration.parentAddress || '';
 
-        // Client Classification - handle array
         let clientClassValue = '';
         if (registration.clientClassificationArray && Array.isArray(registration.clientClassificationArray)) {
             clientClassValue = registration.clientClassificationArray.join(', ');
         } else if (registration.clientClassification) {
-            // Fallback for non-array format
+
             if (Array.isArray(registration.clientClassification)) {
                 clientClassValue = registration.clientClassification.join(', ');
             } else if (typeof registration.clientClassification === 'string') {
@@ -873,12 +782,11 @@
         }
         document.getElementById('editClientClassification').value = clientClassValue;
 
-        // Disability Type - handle array and set select value
         let disabilityTypeValue = '';
         if (registration.disabilityTypeArray && Array.isArray(registration.disabilityTypeArray) && registration.disabilityTypeArray.length > 0) {
             disabilityTypeValue = registration.disabilityTypeArray[0];
         } else if (registration.disabilityType) {
-            // Fallback for non-array format
+
             if (Array.isArray(registration.disabilityType) && registration.disabilityType.length > 0) {
                 disabilityTypeValue = registration.disabilityType[0];
             } else if (typeof registration.disabilityType === 'string') {
@@ -887,12 +795,11 @@
         }
         document.getElementById('editDisabilityType').value = disabilityTypeValue;
 
-        // Disability Cause - handle array and set select value
         let disabilityCauseValue = '';
         if (registration.disabilityCauseArray && Array.isArray(registration.disabilityCauseArray) && registration.disabilityCauseArray.length > 0) {
             disabilityCauseValue = registration.disabilityCauseArray[0];
         } else if (registration.disabilityCause) {
-            // Fallback for non-array format
+
             if (Array.isArray(registration.disabilityCause) && registration.disabilityCause.length > 0) {
                 disabilityCauseValue = registration.disabilityCause[0];
             } else if (typeof registration.disabilityCause === 'string') {
@@ -901,30 +808,24 @@
         }
         document.getElementById('editDisabilityCause').value = disabilityCauseValue;
 
-        // Course Info
         document.getElementById('editCourseQualification').value = registration.courseQualification || '';
         document.getElementById('editScholarshipType').value = registration.scholarshipType || '';
         document.getElementById('editPrivacyConsent').value = registration.privacyConsent || '';
 
-        // Registration Info
         document.getElementById('editTraineeId').value = registration.traineeId || '';
         document.getElementById('editStatus').value = registration.status || '';
 
-        // Load courses and set selected course
         await loadCoursesForEditModal();
         const editCourseSelect = document.getElementById('editCourse');
         if (editCourseSelect) {
             editCourseSelect.value = registration.selectedCourse || registration.courseQualification || '';
         }
 
-        // Show modal
         const modal = new bootstrap.Modal(document.getElementById('editRegistrationModal'));
         modal.show();
     }
 
-    /**
-     * Load courses for edit modal dropdown
-     */
+    
     async function loadCoursesForEditModal() {
         const dropdown = document.getElementById('editCourse');
         if (!dropdown) return;
@@ -952,14 +853,11 @@
         }
     }
 
-    /**
-     * Save edited registration
-     */
+    
     async function saveEditedRegistration() {
         const form = document.getElementById('editRegistrationForm');
 
-        // Custom validation with toast notifications
-        // Validate age field
+
         const ageElement = document.getElementById('editAge');
         const ageValue = parseInt(ageElement.value);
         if (ageValue && (ageValue < 1 || ageValue > 120)) {
@@ -968,7 +866,6 @@
             return;
         }
 
-        // Validate birth month
         const birthMonth = parseInt(document.getElementById('editBirthMonth').value);
         if (birthMonth && (birthMonth < 1 || birthMonth > 12)) {
             showError('Birth month must be between 1 and 12');
@@ -976,7 +873,6 @@
             return;
         }
 
-        // Validate birth day
         const birthDay = parseInt(document.getElementById('editBirthDay').value);
         if (birthDay && (birthDay < 1 || birthDay > 31)) {
             showError('Birth day must be between 1 and 31');
@@ -988,19 +884,15 @@
         const courseSelect = document.getElementById('editCourse');
         const selectedOption = courseSelect.options[courseSelect.selectedIndex];
 
-        // Parse client classification array
         const clientClassText = document.getElementById('editClientClassification').value.trim();
         const clientClassArray = clientClassText ? clientClassText.split(',').map(item => item.trim()).filter(item => item) : [];
 
-        // Get disability type value from select dropdown
         const disabilityTypeValue = document.getElementById('editDisabilityType').value.trim();
         const disabilityTypeArray = disabilityTypeValue ? [disabilityTypeValue] : [];
 
-        // Get disability cause value from select dropdown
         const disabilityCauseValue = document.getElementById('editDisabilityCause').value.trim();
         const disabilityCauseArray = disabilityCauseValue ? [disabilityCauseValue] : [];
 
-        // Check for changes
         if (window.originalRegistrationData) {
             const currentData = {
                 uliNumber: document.getElementById('editUliNumber').value.trim(),
@@ -1042,7 +934,6 @@
                 status: document.getElementById('editStatus').value
             };
 
-            // Compare with original data
             let hasChanges = false;
             for (const key in currentData) {
                 if (String(currentData[key]) !== String(window.originalRegistrationData[key])) {
@@ -1058,16 +949,14 @@
         }
 
         const updatedData = {
-            // T2MIS Auto Generated
+
             uliNumber: document.getElementById('editUliNumber').value.trim(),
             entryDate: document.getElementById('editEntryDate').value,
 
-            // Name
             firstName: document.getElementById('editFirstName').value.trim(),
             middleName: document.getElementById('editMiddleName').value.trim(),
             lastName: document.getElementById('editLastName').value.trim(),
 
-            // Address
             numberStreet: document.getElementById('editStreet').value.trim(),
             barangay: document.getElementById('editBarangay').value.trim(),
             district: document.getElementById('editDistrict').value.trim(),
@@ -1075,19 +964,16 @@
             province: document.getElementById('editProvince').value.trim(),
             region: document.getElementById('editRegion').value.trim(),
 
-            // Contact
             emailFacebook: document.getElementById('editEmail').value.trim(),
             contactNo: document.getElementById('editContactNo').value.trim(),
             nationality: document.getElementById('editNationality').value.trim(),
 
-            // Personal Info
             sex: document.getElementById('editSex').value,
             civilStatus: document.getElementById('editCivilStatus').value,
             age: parseInt(document.getElementById('editAge').value),
             employmentStatus: document.getElementById('editEmploymentStatus').value,
             employmentType: document.getElementById('editEmploymentType').value,
 
-            // Birth Info
             birthMonth: document.getElementById('editBirthMonth').value,
             birthDay: document.getElementById('editBirthDay').value,
             birthYear: document.getElementById('editBirthYear').value,
@@ -1095,28 +981,22 @@
             birthProvince: document.getElementById('editBirthProvince').value.trim(),
             birthRegion: document.getElementById('editBirthRegion').value.trim(),
 
-            // Education
             education: document.getElementById('editEducation').value,
 
-            // Parent/Guardian
             parentName: document.getElementById('editParentName').value.trim(),
             parentAddress: document.getElementById('editParentAddress').value.trim(),
 
-            // Client Classification
             clientClassificationArray: clientClassArray,
 
-            // Disability Info
             disabilityTypeArray: disabilityTypeArray,
             disabilityCauseArray: disabilityCauseArray,
 
-            // Course Info
             courseQualification: document.getElementById('editCourseQualification').value.trim(),
             selectedCourse: courseSelect.value,
             selectedCourseId: selectedOption.dataset.courseId || '',
             scholarshipType: document.getElementById('editScholarshipType').value,
             privacyConsent: document.getElementById('editPrivacyConsent').value,
 
-            // Registration Info
             traineeId: document.getElementById('editTraineeId').value.trim(),
             status: document.getElementById('editStatus').value
         };
@@ -1135,13 +1015,11 @@
             if (result.success) {
                 showSuccess('Registration updated successfully');
 
-                // Close modal
                 const modal = bootstrap.Modal.getInstance(document.getElementById('editRegistrationModal'));
                 if (modal) {
                     modal.hide();
                 }
 
-                // Reload registrations
                 loadRegistrations();
             } else {
                 throw new Error(result.message || 'Failed to update registration');
@@ -1152,9 +1030,7 @@
         }
     }
 
-    /**
-     * Delete registration record
-     */
+    
     async function deleteRecord(id) {
         if (!confirm('Are you sure you want to delete this registration record?')) {
             return;
@@ -1179,9 +1055,7 @@
         }
     }
 
-    /**
-     * Utility: Debounce function
-     */
+    
     function debounce(func, wait) {
         let timeout;
         return function executedFunction(...args) {
@@ -1194,23 +1068,17 @@
         };
     }
 
-    /**
-     * Show success message
-     */
+    
     function showSuccess(message) {
         showToast(message, 'success');
     }
 
-    /**
-     * Show error message
-     */
+    
     function showError(message) {
         showToast(message, 'error');
     }
 
-    /**
-     * Show toast notification
-     */
+    
     function showToast(message, type = 'success') {
         const container = document.getElementById('toastContainer');
         if (!container) return;
@@ -1231,16 +1099,13 @@
 
         container.appendChild(toast);
 
-        // Auto remove after 5 seconds
         setTimeout(() => {
             toast.classList.add('hiding');
             setTimeout(() => toast.remove(), 300);
         }, 5000);
     }
 
-    /**
-     * Close toast notification
-     */
+    
     function closeToast(button) {
         const toast = button.closest('.toast-notification');
         if (toast) {
@@ -1251,9 +1116,7 @@
         }
     }
 
-    /**
-     * Export to CSV
-     */
+    
     function exportToCSV() {
         try {
             if (!registrations || registrations.length === 0) {
@@ -1261,10 +1124,8 @@
                 return;
             }
 
-            // Prepare CSV headers
             const headers = ['Name', 'Trainee ID', 'Course', 'Date', 'Status', 'Contact', 'Email'];
 
-            // Prepare CSV rows
             const rows = registrations.map(registration => {
                 const fullName = registration.traineeFullName ||
                     `${registration.firstName} ${registration.middleName || ''} ${registration.lastName}`.trim();
@@ -1286,10 +1147,8 @@
                 ].join(',');
             });
 
-            // Combine headers and rows
             const csv = [headers.join(','), ...rows].join('\n');
 
-            // Create blob and download
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement('a');
             const url = URL.createObjectURL(blob);
@@ -1309,9 +1168,7 @@
         }
     }
 
-    /**
-     * Export to JSON
-     */
+    
     function exportToJSON() {
         try {
             if (!registrations || registrations.length === 0) {
@@ -1319,7 +1176,6 @@
                 return;
             }
 
-            // Prepare JSON data
             const jsonData = registrations.map(registration => ({
                 name: registration.traineeFullName ||
                     `${registration.firstName} ${registration.middleName || ''} ${registration.lastName}`.trim(),
@@ -1332,7 +1188,6 @@
                 fullData: registration
             }));
 
-            // Create blob and download
             const blob = new Blob([JSON.stringify(jsonData, null, 2)], { type: 'application/json' });
             const link = document.createElement('a');
             const url = URL.createObjectURL(blob);
@@ -1352,21 +1207,16 @@
         }
     }
 
-    /**
-     * Open add registration modal
-     */
+    
     async function openAddRegistrationModal() {
-        // Load courses for the dropdown
+
         await loadCoursesForModal();
 
-        // Show modal
         const modal = new bootstrap.Modal(document.getElementById('addRegistrationModal'));
         modal.show();
     }
 
-    /**
-     * Load courses for modal dropdown
-     */
+    
     async function loadCoursesForModal() {
         const dropdown = document.getElementById('addCourse');
         if (!dropdown) return;
@@ -1394,13 +1244,10 @@
         }
     }
 
-    /**
-     * Save new registration
-     */
+    
     async function saveNewRegistration() {
         const form = document.getElementById('addRegistrationForm');
 
-        // Custom validation with toast notifications
         const requiredFields = [
             { id: 'addFirstName', label: 'First Name' },
             { id: 'addStreet', label: 'Number, Street' },
@@ -1421,7 +1268,6 @@
             { id: 'addCourse', label: 'Course' }
         ];
 
-        // Validate required fields
         for (const field of requiredFields) {
             const element = document.getElementById(field.id);
             if (!element.value || element.value.trim() === '') {
@@ -1431,7 +1277,6 @@
             }
         }
 
-        // Validate age field
         const ageElement = document.getElementById('addAge');
         const ageValue = parseInt(ageElement.value);
         if (ageValue && (ageValue < 1 || ageValue > 120)) {
@@ -1440,7 +1285,6 @@
             return;
         }
 
-        // Validate birth month
         const birthMonth = parseInt(document.getElementById('addBirthMonth').value);
         if (birthMonth && (birthMonth < 1 || birthMonth > 12)) {
             showError('Birth month must be between 1 and 12');
@@ -1448,7 +1292,6 @@
             return;
         }
 
-        // Validate birth day
         const birthDay = parseInt(document.getElementById('addBirthDay').value);
         if (birthDay && (birthDay < 1 || birthDay > 31)) {
             showError('Birth day must be between 1 and 31');
@@ -1515,16 +1358,13 @@
             if (result.success) {
                 showSuccess('Registration added successfully');
 
-                // Close modal
                 const modal = bootstrap.Modal.getInstance(document.getElementById('addRegistrationModal'));
                 if (modal) {
                     modal.hide();
                 }
 
-                // Reset form
                 form.reset();
 
-                // Reload registrations
                 loadRegistrations();
             } else {
                 throw new Error(result.message || 'Failed to add registration');

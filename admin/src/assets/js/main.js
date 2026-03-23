@@ -1,15 +1,10 @@
-/**
- * Main
- */
-
 'use strict';
 
-// Suppress Popper.js margin warnings (they're harmless and we've fixed them in CSS)
 (function () {
   const originalWarn = console.warn;
   console.warn = function (...args) {
     if (args[0] && typeof args[0] === 'string' && args[0].includes('Popper: CSS "margin"')) {
-      return; // Suppress Popper margin warnings
+      return;
     }
     originalWarn.apply(console, args);
   };
@@ -18,8 +13,7 @@
 let menu, animate;
 
 (function () {
-  // Initialize menu
-  //-----------------
+
 
   let layoutMenuEl = document.querySelectorAll('#layout-menu');
   layoutMenuEl.forEach(function (element) {
@@ -27,36 +21,33 @@ let menu, animate;
       orientation: 'vertical',
       closeChildren: false
     });
-    // Change parameter to true if you want scroll animation
+
     window.Helpers.scrollToActive((animate = false));
     window.Helpers.mainMenu = menu;
   });
 
-  // Initialize menu togglers and bind click on each
   let menuToggler = document.querySelectorAll('.layout-menu-toggle');
   menuToggler.forEach(item => {
     item.addEventListener('click', event => {
       event.preventDefault();
       event.stopPropagation();
 
-      // Custom toggle logic for all screen sizes
       const isSmallScreen = window.innerWidth < 1200;
 
       if (isSmallScreen) {
-        // On small screens (< 1200px), toggle expanded class
+
         document.documentElement.classList.toggle('layout-menu-expanded');
       } else {
-        // On large screens (>= 1200px), toggle collapsed class
+
         document.documentElement.classList.toggle('layout-menu-collapsed');
       }
     });
   });
 
-  // Display menu toggle (layout-menu-toggle) on hover with delay
   let delay = function (elem, callback) {
     let timeout = null;
     elem.onmouseenter = function () {
-      // Set timeout to be a timer which will invoke callback after 300ms (not for small screen)
+
       if (!Helpers.isSmallScreen()) {
         timeout = setTimeout(callback, 300);
       } else {
@@ -65,21 +56,20 @@ let menu, animate;
     };
 
     elem.onmouseleave = function () {
-      // Clear any timers set to timeout
+
       document.querySelector('.layout-menu-toggle').classList.remove('d-block');
       clearTimeout(timeout);
     };
   };
   if (document.getElementById('layout-menu')) {
     delay(document.getElementById('layout-menu'), function () {
-      // not for small screen
+
       if (!Helpers.isSmallScreen()) {
         document.querySelector('.layout-menu-toggle').classList.add('d-block');
       }
     });
   }
 
-  // Display in main menu when menu scrolls
   let menuInnerContainer = document.getElementsByClassName('menu-inner'),
     menuInnerShadow = document.getElementsByClassName('menu-inner-shadow')[0];
   if (menuInnerContainer.length > 0 && menuInnerShadow) {
@@ -92,16 +82,12 @@ let menu, animate;
     });
   }
 
-  // Init helpers & misc
-  // --------------------
 
-  // Init BS Tooltip
   const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
   tooltipTriggerList.map(function (tooltipTriggerEl) {
     return new bootstrap.Tooltip(tooltipTriggerEl);
   });
 
-  // Accordion active class
   const accordionActiveFunction = function (e) {
     if (e.type == 'show.bs.collapse' || e.type == 'show.bs.collapse') {
       e.target.closest('.accordion-item').classList.add('active');
@@ -116,34 +102,22 @@ let menu, animate;
     accordionTriggerEl.addEventListener('hide.bs.collapse', accordionActiveFunction);
   });
 
-  // Auto update layout based on screen size
   window.Helpers.setAutoUpdate(true);
 
-  // Toggle Password Visibility
   window.Helpers.initPasswordToggle();
 
-  // Speech To Text
   window.Helpers.initSpeechToText();
 
-  // Manage menu expanded/collapsed with templateCustomizer & local storage
-  //------------------------------------------------------------------
 
-  // If current layout is horizontal OR current window screen is small (overlay menu) than return from here
   if (window.Helpers.isSmallScreen()) {
     return;
   }
 
-  // If current layout is vertical and current window screen is > small
 
-  // Keep menu expanded by default (changed from true to false)
   window.Helpers.setCollapsed(false, false);
 })();
 
 
-/**
- * Menu Close Button Handler
- * Handles the close button functionality for mobile sidebar
- */
 (function () {
   'use strict';
 
@@ -151,18 +125,15 @@ let menu, animate;
     const menuCloseBtn = document.querySelector('.menu-close-btn');
     const layoutOverlay = document.querySelector('.layout-overlay');
 
-    // Function to check if we're on a small screen
     function isSmallScreen() {
       return window.innerWidth < 1200;
     }
 
-    // Function to close menu
     function closeMenu() {
       document.documentElement.classList.remove('layout-menu-expanded');
       document.documentElement.classList.remove('layout-menu-collapsed');
     }
 
-    // Close button functionality
     if (menuCloseBtn) {
       menuCloseBtn.addEventListener('click', function (e) {
         e.preventDefault();
@@ -171,7 +142,6 @@ let menu, animate;
       });
     }
 
-    // Enhanced overlay click handler
     if (layoutOverlay) {
       layoutOverlay.addEventListener('click', function (e) {
         e.preventDefault();
@@ -180,21 +150,18 @@ let menu, animate;
       });
     }
 
-    // Handle window resize - adjust classes appropriately
     function handleResize() {
       if (isSmallScreen()) {
-        // On small screens, remove collapsed class
+
         document.documentElement.classList.remove('layout-menu-collapsed');
       } else {
-        // On large screens, remove expanded class
+
         document.documentElement.classList.remove('layout-menu-expanded');
       }
     }
 
-    // Listen for window resize
     window.addEventListener('resize', handleResize);
 
-    // Initial check
     handleResize();
   });
 })();

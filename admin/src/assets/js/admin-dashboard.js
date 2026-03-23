@@ -1,25 +1,18 @@
-/* Admin Dashboard specific JavaScript */
-
-// API Base URL - Always use the base path for dashboard
 var API_BASE_URL_DASHBOARD = window.location.origin.includes('localhost')
     ? 'http://localhost/CAATE-ITRMS/backend/public'
     : '/CAATE-ITRMS/backend/public';
 
-// Global variable to store selected year - defaults to current year
 let selectedYear = new Date().getFullYear();
 
-// Store pending growth chart data
 let pendingGrowthData = null;
 
-// Function to update all year labels on the dashboard
 function updateYearLabels(year) {
-    // Update chart title
+
     const chartTitle = document.querySelector('#chartYearTitle');
     if (chartTitle) {
         chartTitle.textContent = year;
     }
 
-    // Update year statistics labels (current year and previous year)
     const currentYearLabel = document.getElementById('currentYearLabel');
     const previousYearLabel = document.getElementById('previousYearLabel');
 
@@ -31,7 +24,6 @@ function updateYearLabels(year) {
         previousYearLabel.textContent = year - 1;
     }
 
-    // Update chart series names if chart exists
     if (window.totalRevenueChartInstance) {
         window.totalRevenueChartInstance.updateOptions({
             series: [
@@ -48,7 +40,6 @@ function updateYearLabels(year) {
     }
 }
 
-// Function to fetch dashboard statistics
 async function fetchDashboardStatistics(year = selectedYear) {
     try {
         const response = await fetch(`${API_BASE_URL_DASHBOARD}/api/v1/trainees/statistics?year=${year}`);
@@ -64,24 +55,21 @@ async function fetchDashboardStatistics(year = selectedYear) {
             updateDashboardUI(result.data);
         }
     } catch (error) {
-        // Silently fail
+
     }
 }
 
-// Function to show error message
 function showErrorMessage(message) {
-    // You can implement a toast notification here
+
 }
 
-// Function to update dashboard UI with real data
 function updateDashboardUI(data) {
-    // Update total trainees count in welcome card
+
     const totalTraineesElement = document.querySelector('.col-sm-5 h2.mb-2');
     if (totalTraineesElement) {
         totalTraineesElement.textContent = data.total.toLocaleString();
     }
 
-    // Calculate percentage for the chart based on overall enrollments
     const totalEnrollments = data.approvedEnrollments + data.pendingEnrollments + data.cancelledEnrollments;
     const approvedPercentage = totalEnrollments > 0
         ? Math.round((data.approvedEnrollments / totalEnrollments) * 100)
@@ -93,16 +81,13 @@ function updateDashboardUI(data) {
         ? Math.round((data.cancelledEnrollments / totalEnrollments) * 100)
         : 0;
 
-    // Update the welcome card chart
     updateWelcomeChart(approvedPercentage, pendingPercentage, cancelledPercentage);
 
-    // Update percentage in welcome card text
     const percentageTextElement = document.querySelector('.col-sm-7 .fw-bold');
     if (percentageTextElement && data.todayPercentageIncrease !== undefined) {
         percentageTextElement.textContent = Math.abs(data.todayPercentageIncrease) + '%';
     }
 
-    // Update today's enrollments card
     const todayEnrollmentsCard = document.querySelector('.profit-card-gradient');
     if (todayEnrollmentsCard) {
         const todayCountElement = todayEnrollmentsCard.querySelector('h3.card-title');
@@ -122,7 +107,6 @@ function updateDashboardUI(data) {
         }
     }
 
-    // Update this month's enrollments card (Approved Enrollments)
     const approvedCard = document.querySelector('.bx-check-circle');
     if (approvedCard) {
         const approvedCountElement = approvedCard.closest('.card-body').querySelector('h3.card-title');
@@ -142,7 +126,6 @@ function updateDashboardUI(data) {
         }
     }
 
-    // Update pending enrollments card
     const pendingCard = document.querySelector('.bx-time-five');
     if (pendingCard) {
         const pendingCountElement = pendingCard.closest('.card-body').querySelector('h3.card-title');
@@ -155,14 +138,13 @@ function updateDashboardUI(data) {
         if (pendingPercentageElement && data.pendingPercentageChange !== undefined) {
             const isPositive = data.pendingPercentageChange >= 0;
             const icon = isPositive ? 'bx-up-arrow-alt' : 'bx-down-arrow-alt';
-            const colorClass = isPositive ? 'text-danger' : 'text-success'; // Reversed: more pending is bad
+            const colorClass = isPositive ? 'text-danger' : 'text-success';
 
             pendingPercentageElement.className = `fw-semibold ${colorClass}`;
             pendingPercentageElement.innerHTML = `<i class="bx ${icon}"></i> ${isPositive ? '+' : ''}${data.pendingPercentageChange}%`;
         }
     }
 
-    // Update cancelled enrollments card
     const cancelledCard = document.querySelector('.bx-x-circle');
     if (cancelledCard) {
         const cancelledCountElement = cancelledCard.closest('.card-body').querySelector('h3.card-title');
@@ -175,14 +157,13 @@ function updateDashboardUI(data) {
         if (cancelledPercentageElement && data.cancelledPercentageChange !== undefined) {
             const isPositive = data.cancelledPercentageChange >= 0;
             const icon = isPositive ? 'bx-up-arrow-alt' : 'bx-down-arrow-alt';
-            const colorClass = isPositive ? 'text-danger' : 'text-success'; // Reversed: more cancelled is bad
+            const colorClass = isPositive ? 'text-danger' : 'text-success';
 
             cancelledPercentageElement.className = `fw-semibold ${colorClass}`;
             cancelledPercentageElement.innerHTML = `<i class="bx ${icon}"></i> ${isPositive ? '+' : ''}${data.cancelledPercentageChange}%`;
         }
     }
 
-    // Update enrollment activity trend card
     const activityTrendCount = document.getElementById('activityTrendCount');
     const activityTrendPercentage = document.getElementById('activityTrendPercentage');
 
@@ -199,27 +180,24 @@ function updateDashboardUI(data) {
         activityTrendPercentage.innerHTML = `<i class="bx ${icon}"></i> ${Math.abs(data.monthPercentageIncrease)}%`;
     }
 
-    // Update growth chart percentage
     const growthTextElement = document.querySelector('.text-center.fw-semibold.pt-3.mb-2');
     if (growthTextElement && data.yearGrowthPercentage !== undefined) {
         growthTextElement.textContent = `${data.yearGrowthPercentage}% Enrollment Growth`;
     }
 
-    // Update growth chart - wait for it to be ready if needed
     const updateGrowthChart = () => {
         if (window.growthChartInstance && data.yearGrowthPercentage !== undefined && data.yearGrowthPercentage !== null) {
             const growthValue = isNaN(data.yearGrowthPercentage) ? 0 : Math.max(0, Math.min(100, data.yearGrowthPercentage));
             window.growthChartInstance.updateSeries([growthValue]);
-            pendingGrowthData = null; // Clear pending data
+            pendingGrowthData = null;
         } else if (data.yearGrowthPercentage !== undefined) {
-            // Store data for later and retry
+
             pendingGrowthData = data.yearGrowthPercentage;
             setTimeout(updateGrowthChart, 100);
         }
     };
     updateGrowthChart();
 
-    // Update year statistics counts
     const currentYearCount = document.getElementById('currentYearCount');
     const previousYearCount = document.getElementById('previousYearCount');
 
@@ -231,9 +209,8 @@ function updateDashboardUI(data) {
         previousYearCount.textContent = data.previousYearEnrollments || 0;
     }
 
-    // Update the monthly enrollment chart with real data
     if (window.totalRevenueChartInstance && data.monthly_enrollments) {
-        // Get previous year data (all zeros for now, can be enhanced later)
+
         const previousYearData = Array(12).fill(0);
 
         window.totalRevenueChartInstance.updateOptions({
@@ -251,7 +228,6 @@ function updateDashboardUI(data) {
     }
 }
 
-// Function to style Present status badges
 function stylePresentBadges() {
     const badges = document.querySelectorAll('.badge');
 
@@ -264,7 +240,6 @@ function stylePresentBadges() {
     });
 }
 
-// Function to style any element containing "Present Today" text
 function stylePresentTodayElements() {
     const elements = document.querySelectorAll('*');
 
@@ -276,7 +251,6 @@ function stylePresentTodayElements() {
     });
 }
 
-// Function to ensure all success badges have proper green styling
 function ensureSuccessBadgeStyling() {
     const successBadges = document.querySelectorAll('.badge.bg-success');
 
@@ -286,13 +260,11 @@ function ensureSuccessBadgeStyling() {
     });
 }
 
-// Initialize year filter functionality
 function initYearFilter() {
-    // Fetch and populate year dropdown with years from database
+
     fetchAndPopulateYears();
 }
 
-// Function to fetch available years from database and populate dropdown
 async function fetchAndPopulateYears() {
     try {
         const response = await fetch(`${API_BASE_URL_DASHBOARD}/get-available-years.php`);
@@ -306,16 +278,15 @@ async function fetchAndPopulateYears() {
         if (result.success && result.years && result.years.length > 0) {
             populateYearDropdown(result.years);
         } else {
-            // Fallback to current year if no data
+
             populateYearDropdown([new Date().getFullYear()]);
         }
     } catch (error) {
-        // Fallback to current year if fetch fails
+
         populateYearDropdown([new Date().getFullYear()]);
     }
 }
 
-// Function to populate year dropdown with available years from database
 function populateYearDropdown(years) {
     const yearMenu = document.getElementById('growthReportYearMenu');
     const yearTextElement = document.getElementById('selectedYearText');
@@ -323,13 +294,11 @@ function populateYearDropdown(years) {
 
     const currentYear = new Date().getFullYear();
 
-    // Check if current year is in the list, if not add it
     if (!years.includes(currentYear)) {
         years.unshift(currentYear);
-        years.sort((a, b) => b - a); // Sort descending
+        years.sort((a, b) => b - a);
     }
 
-    // Set button text to current year on initial load
     if (yearTextElement) {
         yearTextElement.textContent = currentYear;
     }
@@ -343,7 +312,6 @@ function populateYearDropdown(years) {
         item.setAttribute('data-year', year);
         item.textContent = year;
 
-        // Highlight current year
         if (year === currentYear) {
             item.classList.add('active');
         }
@@ -355,7 +323,6 @@ function populateYearDropdown(years) {
             if (!isNaN(selectedYear)) {
                 window.selectedYear = selectedYear;
 
-                // Update button text
                 if (yearTextElement) {
                     yearTextElement.textContent = selectedYear;
                 }
@@ -363,7 +330,6 @@ function populateYearDropdown(years) {
                 updateYearLabels(selectedYear);
                 fetchDashboardStatistics(selectedYear);
 
-                // Update active state
                 yearMenu.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('active'));
                 this.classList.add('active');
             }
@@ -373,9 +339,8 @@ function populateYearDropdown(years) {
     });
 }
 
-// Function to update the welcome chart with real data
 function updateWelcomeChart(approvedPercentage, pendingPercentage, cancelledPercentage) {
-    // Check if ApexCharts is available
+
     if (typeof ApexCharts === 'undefined') {
         setTimeout(() => updateWelcomeChart(approvedPercentage, pendingPercentage, cancelledPercentage), 500);
         return;
@@ -384,14 +349,12 @@ function updateWelcomeChart(approvedPercentage, pendingPercentage, cancelledPerc
     const chartElement = document.querySelector('#welcomeStatisticsChart');
     if (!chartElement) return;
 
-    // Ensure all values are valid numbers, default to 0 if not
     const approved = isNaN(approvedPercentage) || approvedPercentage === null || approvedPercentage === undefined ? 0 : approvedPercentage;
     const pending = isNaN(pendingPercentage) || pendingPercentage === null || pendingPercentage === undefined ? 0 : pendingPercentage;
     const cancelled = isNaN(cancelledPercentage) || cancelledPercentage === null || cancelledPercentage === undefined ? 0 : cancelledPercentage;
 
-    // Store the chart instance globally so we can update it
     if (!window.welcomeChartInstance) {
-        // Store the data for when the chart is initialized
+
         window.welcomeChartData = {
             enrolled: approved,
             pending: pending,
@@ -400,7 +363,6 @@ function updateWelcomeChart(approvedPercentage, pendingPercentage, cancelledPerc
         return;
     }
 
-    // Update the chart data
     window.welcomeChartInstance.updateOptions({
         series: [approved, pending, cancelled],
         labels: ['Approved', 'Pending', 'Cancelled'],
@@ -422,8 +384,6 @@ function updateWelcomeChart(approvedPercentage, pendingPercentage, cancelledPerc
     });
 }
 
-
-// Function to fetch course enrollment statistics
 async function fetchCourseEnrollmentStatistics() {
     try {
         const response = await fetch(`${API_BASE_URL_DASHBOARD}/api/v1/courses/enrollment-statistics`);
@@ -442,7 +402,6 @@ async function fetchCourseEnrollmentStatistics() {
     }
 }
 
-// Function to update Course Enrollment Statistics UI
 function updateCourseEnrollmentUI(data) {
     const coursesList = document.getElementById('topEnrolledCoursesList');
     if (!coursesList) {
@@ -466,7 +425,6 @@ function updateCourseEnrollmentUI(data) {
         const li = document.createElement('li');
         li.className = isLast ? 'd-flex' : 'd-flex mb-4 pb-1';
 
-        // Create image element
         const avatarDiv = document.createElement('div');
         avatarDiv.className = 'avatar flex-shrink-0 me-3';
 
@@ -476,7 +434,6 @@ function updateCourseEnrollmentUI(data) {
         img.style.cssText = 'width: 40px; height: 40px; object-fit: cover;';
         img.setAttribute('data-course-id', course.id);
 
-        // Set image source with fallback
         if (course.image && course.image.trim() !== '') {
             img.src = course.image;
             img.onerror = function () {
@@ -488,7 +445,6 @@ function updateCourseEnrollmentUI(data) {
 
         avatarDiv.appendChild(img);
 
-        // Create content div
         const contentDiv = document.createElement('div');
         contentDiv.className = 'd-flex w-100 flex-wrap align-items-center justify-content-between gap-2';
 
@@ -508,11 +464,9 @@ function updateCourseEnrollmentUI(data) {
     });
 }
 
-
-// Function to fetch recent enrollment activity
 async function fetchRecentEnrollmentActivity() {
     try {
-        // Fetch from available endpoints: enrollments and registrations
+
         const fetchPromises = [
             fetch(`${config.api.baseUrl}/api/v1/enrollments/recent?limit=10`).then(res => res.json()),
             fetch(`${config.api.baseUrl}/api/v1/registrations?limit=10&sort=createdAt&order=desc`).then(res => res.json())
@@ -520,13 +474,11 @@ async function fetchRecentEnrollmentActivity() {
 
         const [enrollmentsData, registrationsData] = await Promise.all(fetchPromises);
 
-        // Combine data from all sources
         const combinedData = [];
 
-        // Add enrollments
         if (enrollmentsData.success && enrollmentsData.data) {
             for (const enrollment of enrollmentsData.data) {
-                // Fetch trainee profile if userId is available
+
                 let profileImage = null;
                 if (enrollment.traineeId) {
                     try {
@@ -551,10 +503,9 @@ async function fetchRecentEnrollmentActivity() {
             }
         }
 
-        // Add registrations
         if (registrationsData.success && registrationsData.data) {
             for (const reg of registrationsData.data) {
-                // Fetch trainee profile if userId is available
+
                 let profileImage = null;
                 if (reg.userId) {
                     try {
@@ -579,7 +530,6 @@ async function fetchRecentEnrollmentActivity() {
             }
         }
 
-        // Sort by date (most recent first) and take top 11
         combinedData.sort((a, b) => {
             const dateA = new Date(a.createdAt);
             const dateB = new Date(b.createdAt);
@@ -591,7 +541,7 @@ async function fetchRecentEnrollmentActivity() {
         updateRecentEnrollmentActivityUI(recentActivities);
     } catch (error) {
         console.error('Error fetching recent enrollment activity:', error);
-        // Show error state in UI
+
         const activityList = document.getElementById('recentEnrollmentActivityList');
         if (activityList) {
             activityList.innerHTML = `
@@ -603,7 +553,6 @@ async function fetchRecentEnrollmentActivity() {
     }
 }
 
-// Function to update Recent Enrollment Activity UI
 function updateRecentEnrollmentActivityUI(activities) {
     const activityList = document.getElementById('recentEnrollmentActivityList');
     if (!activityList) return;
@@ -624,7 +573,6 @@ function updateRecentEnrollmentActivityUI(activities) {
         const li = document.createElement('li');
         li.className = isLast ? 'd-flex' : 'd-flex mb-4 pb-1';
 
-        // Determine badge class, icon color, and text based on status
         let badgeClass = 'bg-secondary';
         let badgeText = 'Unknown';
         let iconColor = 'label-secondary';
@@ -657,22 +605,19 @@ function updateRecentEnrollmentActivityUI(activities) {
                 break;
         }
 
-        // Use traineeName from API response
         const traineeName = activity.traineeName || 'Unknown';
 
-        // Build avatar HTML - use profile image if available, otherwise use default avatar
         let avatarHTML = '';
         const defaultAvatar = '../assets/images/DEFAULT_AVATAR.png';
 
         if (activity.profileImage) {
-            // Handle different path formats
+
             let imageUrl = activity.profileImage;
 
-            // If it's a full path starting with /CAATE-ITRMS, use it as is
             if (imageUrl.startsWith('/CAATE-ITRMS/')) {
                 imageUrl = window.location.origin + imageUrl;
             }
-            // If it starts with http, use as is
+
             else if (!imageUrl.startsWith('http')) {
                 imageUrl = `${config.api.baseUrl}/${imageUrl}`;
             }
@@ -706,11 +651,7 @@ function updateRecentEnrollmentActivityUI(activities) {
     });
 }
 
-// Initialize dashboard data fetching
-// Removed duplicate function - consolidated below
 
-
-// Function to update recent enrollment activity UI
 function updateRecentEnrollmentUI(enrollments) {
     const listElement = document.getElementById('recentEnrollmentActivityList');
     if (!listElement) return;
@@ -749,7 +690,6 @@ function updateRecentEnrollmentUI(enrollments) {
     }).join('');
 }
 
-// Function to get status configuration
 function getStatusConfig(status) {
     const statusLower = (status || '').toLowerCase();
     const statusMap = {
@@ -765,15 +705,12 @@ function getStatusConfig(status) {
     return statusMap[statusLower] || { color: 'secondary', label: status || 'Unknown' };
 }
 
-// Single DOMContentLoaded event listener
 document.addEventListener('DOMContentLoaded', function () {
-    // Initialize year labels with current year
+
     updateYearLabels(selectedYear);
 
-    // Initialize year filter
     initYearFilter();
 
-    // Fetch and display real dashboard statistics
     fetchDashboardStatistics();
     fetchRecentEnrollmentActivity();
     fetchCourseEnrollmentStatistics();
@@ -782,7 +719,6 @@ document.addEventListener('DOMContentLoaded', function () {
     stylePresentTodayElements();
     ensureSuccessBadgeStyling();
 
-    // Re-apply styling after any dynamic content updates
     const observer = new MutationObserver(function (mutations) {
         mutations.forEach(function (mutation) {
             if (mutation.type === 'childList') {
@@ -792,13 +728,11 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Start observing
     observer.observe(document.body, {
         childList: true,
         subtree: true
     });
 
-    // Refresh statistics every 30 seconds
     setInterval(() => {
         fetchDashboardStatistics(selectedYear);
         fetchRecentEnrollmentActivity();

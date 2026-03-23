@@ -1,25 +1,17 @@
-/* Audit Inventory Page Script */
-
-// API Configuration
 if (typeof API_BASE_URL === 'undefined') {
     var API_BASE_URL = window.location.origin.includes('localhost')
         ? 'http://localhost/CAATE-ITRMS/backend/public'
         : '/CAATE-ITRMS/backend/public';
 }
 
-// Store current row for modal operations
 let currentRow = null;
 let inventoryData = [];
 
-// Prevent aria-hidden focus warnings by managing modal focus properly
 document.addEventListener('DOMContentLoaded', function () {
-    // Load filter options first
-    // loadFilterOptions(); // Commented out - using static HTML options instead
 
-    // Load inventory data
+
     loadInventoryData();
 
-    // Handle modal shown events to prevent aria-hidden warnings
     const modals = ['addInventoryModal', 'editEquipmentModal', 'viewEquipmentModal', 'deleteEquipmentModal'];
     modals.forEach(modalId => {
         const modalEl = document.getElementById(modalId);
@@ -28,24 +20,22 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.removeAttribute('aria-hidden');
             });
             modalEl.addEventListener('hidden.bs.modal', function () {
-                // Don't add aria-hidden back - let Bootstrap handle it naturally
+
             });
         }
     });
 
-    // Handle Add Inventory Button Click
     const addInventoryBtn = document.getElementById('addInventoryBtn');
     if (addInventoryBtn) {
         addInventoryBtn.addEventListener('click', function () {
-            // Reset form
+
             document.getElementById('addInventoryForm').reset();
-            // Open modal
+
             const modal = new bootstrap.Modal(document.getElementById('addInventoryModal'));
             modal.show();
         });
     }
 
-    // Handle Save Inventory Button Click
     const saveInventoryBtn = document.getElementById('saveInventoryBtn');
     if (saveInventoryBtn) {
         saveInventoryBtn.addEventListener('click', function () {
@@ -53,7 +43,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Handle Inventory Type Filter Change
     const inventoryTypeFilter = document.getElementById('inventoryTypeFilter');
     const inventoryListTitle = document.getElementById('inventoryListTitle');
     const addInventoryText = document.getElementById('addInventoryText');
@@ -85,7 +74,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Handle Programs Filter Change
     const programsFilter = document.getElementById('programsFilter');
     if (programsFilter) {
         programsFilter.addEventListener('change', function () {
@@ -93,7 +81,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Handle Stock Status Filter Change
     const stockStatusFilter = document.getElementById('stockStatusFilter');
     if (stockStatusFilter) {
         stockStatusFilter.addEventListener('change', function () {
@@ -101,7 +88,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Handle search input with highlighting
     const searchInput = document.getElementById('filterSearchInput');
     if (searchInput) {
         searchInput.addEventListener('input', function () {
@@ -109,53 +95,45 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Handle Reset Button
     const resetButton = document.getElementById('resetFiltersBtn');
     if (resetButton) {
         resetButton.addEventListener('click', function () {
-            // Reset all filters
+
             if (inventoryTypeFilter) inventoryTypeFilter.value = '';
             if (programsFilter) programsFilter.value = '';
             if (stockStatusFilter) stockStatusFilter.value = '';
             if (searchInput) searchInput.value = '';
 
-            // Reset title
             if (inventoryListTitle) inventoryListTitle.textContent = 'List of Equipments';
             if (addInventoryText) addInventoryText.textContent = 'Add Item';
 
-            // Clear highlights and reload data
             clearAllHighlights();
             loadInventoryData();
         });
     }
 });
 
-// Apply all filters together
 function applyFilters() {
     const inventoryTypeFilter = document.getElementById('inventoryTypeFilter');
     const programsFilter = document.getElementById('programsFilter');
     const stockStatusFilter = document.getElementById('stockStatusFilter');
     const searchInput = document.getElementById('filterSearchInput');
 
-    // Get filter values
     const selectedType = inventoryTypeFilter ? inventoryTypeFilter.value : '';
     const selectedProgram = programsFilter ? programsFilter.value : '';
     const selectedStatus = stockStatusFilter ? stockStatusFilter.value : '';
     const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
 
-    // Filter the data
     let filteredData = inventoryData.filter(item => {
-        // Filter by inventory type
+
         if (selectedType && item.inventory_type !== selectedType) {
             return false;
         }
 
-        // Filter by program
         if (selectedProgram && item.program !== selectedProgram) {
             return false;
         }
 
-        // Filter by stock status
         if (selectedStatus && item.stock_status !== selectedStatus) {
             return false;
         }
@@ -163,10 +141,8 @@ function applyFilters() {
         return true;
     });
 
-    // Render filtered data
     renderInventoryTable(filteredData);
 
-    // Apply search highlighting if search term exists
     if (searchTerm) {
         setTimeout(() => {
             clearAllHighlights();
@@ -177,7 +153,6 @@ function applyFilters() {
     }
 }
 
-// Helper function to clear all row highlights
 function clearAllHighlights() {
     const tbody = document.querySelector('.table tbody');
     if (tbody) {
@@ -198,7 +173,6 @@ function clearAllHighlights() {
     }
 }
 
-// Highlight search results without hiding other rows
 function highlightSearchResults(searchTerm) {
     const tbody = document.querySelector('.table tbody');
     if (!tbody) return;
@@ -207,12 +181,11 @@ function highlightSearchResults(searchTerm) {
     let firstMatch = null;
 
     rows.forEach(row => {
-        // Get row text content
+
         const rowText = row.textContent.toLowerCase();
 
-        // Check if row matches search term
         if (rowText.includes(searchTerm)) {
-            // Apply card hover design with proper spacing
+
             row.style.position = 'relative';
             row.style.boxShadow = '0 8px 24px rgba(22, 56, 86, 0.5), 0 4px 12px rgba(54, 145, 191, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15)';
             row.style.outline = '2px solid rgba(54, 145, 191, 0.6)';
@@ -222,36 +195,20 @@ function highlightSearchResults(searchTerm) {
             row.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
             row.style.zIndex = '10';
 
-            // Store first match for scrolling
             if (!firstMatch) {
                 firstMatch = row;
             }
         }
     });
 
-    // Scroll to first match
     if (firstMatch) {
         firstMatch.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 }
 
-// Load filter options from API - DISABLED: Using static HTML options instead
-// async function loadFilterOptions() {
-//     try {
-//         const response = await fetch(`${API_BASE_URL}/api/v1/inventory/filter-options?collection=audit-inventory`);
-//         const result = await response.json();
-//         if (result.success) {
-//             const { programs, stock_statuses } = result.data;
-//             // Populate filters dynamically
-//         }
-//     } catch (error) {
-//         console.error('Error loading filter options:', error);
-//     }
-// }
 
-// Load inventory data from API
 async function loadInventoryData() {
-    // Show loader before fetching data
+
     showTableLoader();
 
     try {
@@ -272,7 +229,6 @@ async function loadInventoryData() {
     }
 }
 
-// Show loader in table
 function showTableLoader() {
     const tbody = document.querySelector('.table tbody');
     if (!tbody) return;
@@ -289,12 +245,10 @@ function showTableLoader() {
     `;
 }
 
-// Render inventory table
 function renderInventoryTable(data) {
     const tbody = document.querySelector('.table tbody');
     if (!tbody) return;
 
-    // Hide loader
     const loader = document.getElementById('tableLoader');
     if (loader) {
         loader.remove();
@@ -358,8 +312,6 @@ function renderInventoryTable(data) {
     }).join('');
 }
 
-
-// Update statistics
 async function updateStatistics() {
     try {
         const response = await fetch(`${API_BASE_URL}/api/v1/inventory/statistics?collection=audit-inventory`);
@@ -377,16 +329,14 @@ async function updateStatistics() {
             }
         }
     } catch (error) {
-        // Silently fail - statistics are not critical
+
     }
 }
 
-// Show error message
 function showError(message) {
     showToast(message, 'error');
 }
 
-// Toast notification function
 function showToast(message, type = 'success') {
     const container = document.getElementById('toastContainer');
     if (!container) return;
@@ -407,14 +357,12 @@ function showToast(message, type = 'success') {
 
     container.appendChild(toast);
 
-    // Auto remove after 2.5 seconds (faster)
     setTimeout(() => {
         toast.classList.add('hiding');
         setTimeout(() => toast.remove(), 300);
     }, 2500);
 }
 
-// Close toast notification
 function closeToast(button) {
     const toast = button.closest('.toast-notification');
     if (toast) {
@@ -425,7 +373,6 @@ function closeToast(button) {
     }
 }
 
-// Edit Equipment Function
 function editEquipment(element) {
     currentRow = element.closest('tr');
     const cells = currentRow.cells;
@@ -441,7 +388,7 @@ function editEquipment(element) {
 
     const remarksBadge = cells[6].querySelector('.badge');
     const remarksText = remarksBadge ? remarksBadge.textContent.trim() : '';
-    // Convert 'N/A' back to empty string
+
     document.getElementById('editRemarks').value = remarksText === 'N/A' ? '' : remarksText;
 
     const modal = new bootstrap.Modal(document.getElementById('editEquipmentModal'));
@@ -451,7 +398,6 @@ function editEquipment(element) {
     document.getElementById('editQuantityOnSite').addEventListener('input', calculateDifference);
 }
 
-// Calculate Difference
 function calculateDifference() {
     const qtyRequired = parseInt(document.getElementById('editQuantityRequired').value) || 0;
     const qtyOnSite = parseInt(document.getElementById('editQuantityOnSite').value) || 0;
@@ -459,7 +405,6 @@ function calculateDifference() {
     document.getElementById('editDifference').value = difference;
 }
 
-// Save Equipment Changes
 async function saveEquipmentChanges() {
     if (!currentRow) return;
 
@@ -491,32 +436,24 @@ async function saveEquipmentChanges() {
             const modal = bootstrap.Modal.getInstance(document.getElementById('editEquipmentModal'));
             modal.hide();
 
-            // Show appropriate message based on whether changes were made
             if (result.modified === false) {
                 showToast('No changes were made to the item', 'info');
             } else {
                 showToast('Inventory item updated successfully!', 'success');
 
-                // Update the row immediately without reloading all data
                 const cells = currentRow.cells;
 
-                // Update item name (column 0)
                 cells[0].innerHTML = `<strong>${itemName}</strong>`;
 
-                // Update specification (column 1)
                 cells[1].textContent = specification;
 
-                // Update quantity required (column 2)
                 cells[2].textContent = `${qtyRequired} Units`;
 
-                // Update quantity on site (column 3)
                 cells[3].textContent = `${qtyOnSite} Units`;
 
-                // Calculate and update difference (column 4)
                 const difference = qtyRequired - qtyOnSite;
                 cells[4].textContent = `${qtyOnSite}/${difference}`;
 
-                // Update stock status badge (column 5)
                 let stockStatus = 'In Stock';
                 let badgeClass = 'bg-success';
                 if (qtyOnSite == 0) {
@@ -533,7 +470,6 @@ async function saveEquipmentChanges() {
                     statusBadge.textContent = stockStatus;
                 }
 
-                // Update inspector remarks (column 6)
                 const remarksBadge = cells[6].querySelector('.badge');
                 if (remarksBadge) {
                     const remarksClass = inspectorRemarks === 'Compliant' ? 'bg-success' : 'bg-danger';
@@ -541,7 +477,6 @@ async function saveEquipmentChanges() {
                     remarksBadge.textContent = inspectorRemarks || 'N/A';
                 }
 
-                // Update statistics in background
                 updateStatistics();
             }
 
@@ -554,7 +489,6 @@ async function saveEquipmentChanges() {
     }
 }
 
-// View Equipment Details
 function viewDetails(element) {
     const row = element.closest('tr');
     const cells = row.cells;
@@ -579,7 +513,6 @@ function viewDetails(element) {
     modal.show();
 }
 
-// Delete Equipment Function
 function deleteEquipment(element) {
     currentRow = element.closest('tr');
     const equipmentName = currentRow.cells[0].textContent.trim();
@@ -590,7 +523,6 @@ function deleteEquipment(element) {
     modal.show();
 }
 
-// Confirm Delete Equipment
 async function confirmDeleteEquipment() {
     if (!currentRow) return;
 
@@ -598,15 +530,13 @@ async function confirmDeleteEquipment() {
     const rowToDelete = currentRow;
 
     try {
-        // Close modal immediately
+
         const modal = bootstrap.Modal.getInstance(document.getElementById('deleteEquipmentModal'));
         modal.hide();
 
-        // Remove row immediately with fade animation
         rowToDelete.style.transition = 'opacity 0.3s ease-out';
         rowToDelete.style.opacity = '0';
 
-        // Delete from server
         const response = await fetch(`${API_BASE_URL}/api/v1/inventory/${itemId}?collection=audit-inventory`, {
             method: 'DELETE'
         });
@@ -614,43 +544,38 @@ async function confirmDeleteEquipment() {
         const result = await response.json();
 
         if (result.success) {
-            // Remove row from DOM after fade
+
             setTimeout(() => {
                 rowToDelete.remove();
             }, 300);
 
             showToast('Inventory item deleted successfully!', 'success');
 
-            // Update statistics in background
             updateStatistics();
             currentRow = null;
         } else {
-            // Restore row if delete failed
+
             rowToDelete.style.opacity = '1';
             showToast('Failed to delete item: ' + result.error, 'error');
         }
     } catch (error) {
-        // Restore row if error occurred
+
         rowToDelete.style.opacity = '1';
         showToast('Error connecting to server', 'error');
     }
 }
 
-// Change Status Function
 async function changeStatus(element, newStatus) {
     const row = element.closest('tr');
     const itemId = row.getAttribute('data-id');
     const statusCell = row.cells[5];
     const statusBadge = statusCell.querySelector('.badge');
 
-    // Store old status for rollback if needed
     const oldStatus = statusBadge ? statusBadge.textContent.trim() : '';
     const oldBadgeClass = statusBadge ? statusBadge.className : '';
 
-    // Show success toast immediately for instant feedback
     showToast('Status updated to ' + newStatus + ' successfully!', 'success');
 
-    // Update UI immediately using requestAnimationFrame to avoid forced reflow
     requestAnimationFrame(() => {
         if (statusBadge) {
             statusBadge.classList.remove('bg-success', 'bg-warning', 'bg-danger');
@@ -682,7 +607,7 @@ async function changeStatus(element, newStatus) {
 
         if (result.success) {
             if (result.modified === false) {
-                // Rollback to old status if nothing changed
+
                 requestAnimationFrame(() => {
                     if (statusBadge) {
                         statusBadge.className = oldBadgeClass;
@@ -691,11 +616,11 @@ async function changeStatus(element, newStatus) {
                 });
                 showToast('Status is already set to ' + newStatus, 'info');
             } else {
-                // Update statistics in background
+
                 updateStatistics();
             }
         } else {
-            // Rollback on error
+
             requestAnimationFrame(() => {
                 if (statusBadge) {
                     statusBadge.className = oldBadgeClass;
@@ -705,7 +630,7 @@ async function changeStatus(element, newStatus) {
             showToast('Failed to update status: ' + result.error, 'error');
         }
     } catch (error) {
-        // Rollback on error
+
         requestAnimationFrame(() => {
             if (statusBadge) {
                 statusBadge.className = oldBadgeClass;
@@ -716,7 +641,6 @@ async function changeStatus(element, newStatus) {
     }
 }
 
-// Helper function to clear all row highlights
 function clearAllHighlights() {
     const tbody = document.querySelector('.table tbody');
     if (tbody) {
@@ -737,7 +661,6 @@ function clearAllHighlights() {
     }
 }
 
-// Highlight search results without hiding other rows
 function highlightSearchResults(searchTerm) {
     const tbody = document.querySelector('.table tbody');
     if (!tbody) return;
@@ -746,7 +669,7 @@ function highlightSearchResults(searchTerm) {
     let firstMatch = null;
 
     rows.forEach(row => {
-        // Remove any existing highlight
+
         row.style.boxShadow = '';
         row.style.border = '';
         row.style.borderLeft = '';
@@ -758,12 +681,10 @@ function highlightSearchResults(searchTerm) {
         row.style.outlineOffset = '';
         row.style.zIndex = '';
 
-        // Get row text content
         const rowText = row.textContent.toLowerCase();
 
-        // Check if row matches search term
         if (rowText.includes(searchTerm)) {
-            // Apply card hover design with proper spacing
+
             row.style.position = 'relative';
             row.style.boxShadow = '0 8px 24px rgba(22, 56, 86, 0.5), 0 4px 12px rgba(54, 145, 191, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15)';
             row.style.outline = '2px solid rgba(54, 145, 191, 0.6)';
@@ -773,25 +694,20 @@ function highlightSearchResults(searchTerm) {
             row.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
             row.style.zIndex = '10';
 
-            // Store first match for scrolling
             if (!firstMatch) {
                 firstMatch = row;
             }
         }
     });
 
-    // Scroll to first match
     if (firstMatch) {
         firstMatch.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 }
 
-
-// Save new inventory item
 async function saveNewInventoryItem() {
     const form = document.getElementById('addInventoryForm');
 
-    // Get form values
     const program = document.getElementById('addProgram').value;
     const inventoryType = document.getElementById('addInventoryType').value;
     const itemName = document.getElementById('addItemName').value;
@@ -800,21 +716,17 @@ async function saveNewInventoryItem() {
     const quantityOnSite = document.getElementById('addQuantityOnSite').value;
     const remarks = document.getElementById('addRemarks').value;
 
-    // Validate required fields manually and show toast
     if (!program || !inventoryType || !itemName || !specification || !quantityRequired || !quantityOnSite) {
         showToast('Please fill in all required fields before adding the item', 'warning');
 
-        // Don't trigger browser validation tooltip
         return;
     }
 
-    // Validate form
     if (!form.checkValidity()) {
         showToast('Please fill in all required fields correctly', 'warning');
         return;
     }
 
-    // Prepare data
     const data = {
         program: program,
         inventory_type: inventoryType,
@@ -826,7 +738,7 @@ async function saveNewInventoryItem() {
     };
 
     try {
-        // Disable button and show loading
+
         const saveBtn = document.getElementById('saveInventoryBtn');
         saveBtn.disabled = true;
         saveBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Saving...';
@@ -842,14 +754,12 @@ async function saveNewInventoryItem() {
         const result = await response.json();
 
         if (result.success) {
-            // Close modal
+
             const modal = bootstrap.Modal.getInstance(document.getElementById('addInventoryModal'));
             modal.hide();
 
-            // Show success toast
             showToast('Inventory item added successfully!', 'success');
 
-            // Reload data
             await loadInventoryData();
         } else {
             showToast('Error: ' + (result.error || 'Failed to add inventory item'), 'error');
@@ -857,11 +767,9 @@ async function saveNewInventoryItem() {
     } catch (error) {
         showToast('Error adding inventory item. Please try again.', 'error');
     } finally {
-        // Re-enable button
+
         const saveBtn = document.getElementById('saveInventoryBtn');
         saveBtn.disabled = false;
         saveBtn.innerHTML = 'Add Item';
     }
 }
-
-

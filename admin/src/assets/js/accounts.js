@@ -1,12 +1,7 @@
-/* Accounts Page Script - Updated Avatar Styling */
-
-// API Configuration - Works for both localhost and network access
 const API_BASE_URL = window.location.origin + '/CAATE-ITRMS/backend/public/api/v1';
 
-// State
 let traineesData = [];
 
-// Authentication check - simplified since admin-navbar.js handles the navbar updates
 function checkAuthentication() {
     const token = localStorage.getItem('authToken');
     const userRole = localStorage.getItem('userRole');
@@ -30,13 +25,11 @@ function checkAuthentication() {
     return true;
 }
 
-// Password generation characters
 const upper = 'ABCDEFGHIJKLMNPQRSTUVWXYZ';
 const lower = 'abcdefghijkmnopqrstuvwxyz';
 const digits = '123456789';
 const special = '!@#_$';
 
-// Generate random password function
 function generateRandomPassword(length = 12) {
     const characters = upper + lower + digits + special;
     let password = '';
@@ -50,24 +43,19 @@ function generateRandomPassword(length = 12) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    // Mark that page-specific initialization is being done
+
     window.adminNavbarInitialized = true;
 
-    // Check authentication (navbar updates are handled by admin-navbar.js)
     if (!checkAuthentication()) {
         return;
     }
 
-    // Load trainees data
     loadTrainees();
     loadStatistics();
 
-    // Setup filter event listeners
     setupFilters();
 
-    // Menu toggle is handled by main.js - no need to duplicate here
 
-    // Password Toggle for View Modal
     const toggleViewPassword = document.getElementById('toggleViewPassword');
     const viewPasswordInput = document.getElementById('viewTraineePassword');
     const viewPasswordIcon = document.getElementById('viewPasswordIcon');
@@ -77,7 +65,6 @@ document.addEventListener('DOMContentLoaded', function () {
             e.preventDefault();
             e.stopPropagation();
 
-            // Toggle password visibility
             const isPassword = viewPasswordInput.getAttribute('type') === 'password';
             viewPasswordInput.setAttribute('type', isPassword ? 'text' : 'password');
 
@@ -91,14 +78,13 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Password Toggle for Add Modal
     const toggleAddPassword = document.getElementById('toggleAddPassword');
     const addPasswordInput = document.getElementById('addTraineePassword');
     const addPasswordIcon = document.getElementById('addPasswordIcon');
 
     if (toggleAddPassword && addPasswordInput && addPasswordIcon) {
         toggleAddPassword.addEventListener('click', function () {
-            // Toggle password visibility
+
             if (addPasswordInput.type === 'password') {
                 addPasswordInput.type = 'text';
                 addPasswordIcon.classList.remove('bx-hide');
@@ -111,7 +97,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Auto-generate password function
     function generateRandomPassword(length = 12) {
         const upper = 'ABCDEFGHIJKLMNPQRSTUVWXYZ';
         const lower = 'abcdefghijkmnopqrstuvwxyz';
@@ -129,26 +114,24 @@ document.addEventListener('DOMContentLoaded', function () {
         return password;
     }
 
-    // Auto-generate password button for Add Modal
     const generateAddPassword = document.getElementById('generateAddPassword');
     if (generateAddPassword && addPasswordInput) {
         generateAddPassword.addEventListener('click', function () {
             const newPassword = generateRandomPassword(12);
             addPasswordInput.value = newPassword;
-            addPasswordInput.type = 'text'; // Show the generated password
+            addPasswordInput.type = 'text';
             addPasswordIcon.classList.remove('bx-hide');
             addPasswordIcon.classList.add('bx-show');
         });
     }
 
-    // Password Toggle for Edit Modal
     const toggleEditPassword = document.getElementById('toggleEditPassword');
     const editPasswordInput = document.getElementById('editTraineePassword');
     const editPasswordIcon = document.getElementById('editPasswordIcon');
 
     if (toggleEditPassword && editPasswordInput && editPasswordIcon) {
         toggleEditPassword.addEventListener('click', function () {
-            // Toggle password visibility
+
             if (editPasswordInput.type === 'password') {
                 editPasswordInput.type = 'text';
                 editPasswordIcon.classList.remove('bx-hide');
@@ -161,7 +144,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Reset button state when Add Trainee modal is hidden
     const addTraineeModal = document.getElementById('addTraineeModal');
     if (addTraineeModal) {
         addTraineeModal.addEventListener('hidden.bs.modal', function () {
@@ -171,40 +153,35 @@ document.addEventListener('DOMContentLoaded', function () {
                 addButton.innerHTML = 'Add Trainee';
                 addButton.blur();
                 addButton.classList.remove('active', 'focus');
-                // Force remove focus styles with a slight delay
+
                 setTimeout(() => {
                     addButton.blur();
                 }, 100);
             }
 
-            // Reset the form
             const form = document.getElementById('addTraineeForm');
             if (form) {
                 form.reset();
             }
 
-            // Clear the trainee ID field
             const traineeIdInput = document.getElementById('addTraineeId');
             if (traineeIdInput) {
                 traineeIdInput.value = '';
             }
         });
 
-        // Generate trainee ID when modal is shown
         addTraineeModal.addEventListener('show.bs.modal', async function () {
             const traineeIdInput = document.getElementById('addTraineeId');
             if (traineeIdInput) {
-                // Show loading state
+
                 traineeIdInput.value = 'Generating...';
 
-                // Generate and set the new trainee ID
                 const newId = await generateTraineeId();
                 traineeIdInput.value = newId;
             }
         });
     }
 
-    // Reset button state when Edit Trainee modal is hidden
     const editTraineeModal = document.getElementById('editTraineeModal');
     if (editTraineeModal) {
         editTraineeModal.addEventListener('hidden.bs.modal', function () {
@@ -214,7 +191,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 saveButton.innerHTML = 'Save Changes';
                 saveButton.blur();
                 saveButton.classList.remove('active', 'focus');
-                // Force remove focus styles with a slight delay
+
                 setTimeout(() => {
                     saveButton.blur();
                 }, 100);
@@ -223,8 +200,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
-
-// Show loader in table
 function showTableLoader() {
     const tbody = document.querySelector('.table tbody');
     if (!tbody) return;
@@ -241,9 +216,8 @@ function showTableLoader() {
     `;
 }
 
-// Load trainees from API
 async function loadTrainees() {
-    // Show loader before fetching data
+
     showTableLoader();
 
     try {
@@ -263,7 +237,6 @@ async function loadTrainees() {
     }
 }
 
-// Show empty state with custom message
 function showEmptyState(message) {
     const tbody = document.querySelector('.table tbody');
     if (!tbody) return;
@@ -281,10 +254,9 @@ function showEmptyState(message) {
     `;
 }
 
-// Load statistics from API
 async function loadStatistics() {
     try {
-        // Fetch trainee statistics
+
         const response = await fetch(`${API_BASE_URL}/trainees/statistics`);
 
         if (!response.ok) {
@@ -293,7 +265,6 @@ async function loadStatistics() {
 
         const result = await response.json();
 
-        // Fetch registration count
         let registrationCount = 0;
         try {
             const regResponse = await fetch(`${API_BASE_URL}/registrations`);
@@ -308,7 +279,7 @@ async function loadStatistics() {
         }
 
         if (result.success) {
-            // Add registration count to statistics
+
             const statsWithRegistration = {
                 ...result.data,
                 totalRegistration: registrationCount
@@ -320,7 +291,6 @@ async function loadStatistics() {
     }
 }
 
-// Helper function to clear all row highlights
 function clearAllHighlights() {
     const tbody = document.querySelector('.table tbody');
     if (tbody) {
@@ -340,12 +310,10 @@ function clearAllHighlights() {
     }
 }
 
-// Render trainees table
 function renderTrainees(trainees) {
     const tbody = document.querySelector('.table tbody');
     if (!tbody) return;
 
-    // Hide loader
     const loader = document.getElementById('tableLoader');
     if (loader) {
         loader.remove();
@@ -375,11 +343,9 @@ function renderTrainees(trainees) {
     });
 }
 
-// Create trainee table row
 function createTraineeRow(trainee, index) {
     const tr = document.createElement('tr');
 
-    // Build full name with all name parts - only if first_name or last_name exists
     let fullName = '';
     let hasName = false;
 
@@ -401,17 +367,14 @@ function createTraineeRow(trainee, index) {
         fullName = fullName.trim();
     }
 
-    // Safely get initials with fallback
     const firstInitial = (trainee.first_name && trainee.first_name.charAt(0)) || (trainee.username && trainee.username.charAt(0)) || '?';
     const lastInitial = (trainee.last_name && trainee.last_name.charAt(0)) || (trainee.username && trainee.username.charAt(1)) || '?';
     const initials = `${firstInitial}${lastInitial}`;
-    // Display trainee ID or show format example
+
     const displayId = trainee.trainee_id || `TRN-${new Date().getFullYear()}-${String(index + 1).padStart(3, '0')}`;
 
-    // Display username or show N/A
     const displayUsername = trainee.username || '<span class="text-muted">N/A</span>';
 
-    // Display name or show N/A if no name exists
     const displayName = hasName ? fullName : '<span class="text-muted">N/A</span>';
 
     tr.innerHTML = `
@@ -452,9 +415,6 @@ function createTraineeRow(trainee, index) {
     return tr;
 }
 
-
-
-// Get avatar color based on index
 function getAvatarColor(index) {
     const colors = [
         'bg-label-primary',
@@ -467,30 +427,26 @@ function getAvatarColor(index) {
     return colors[index % colors.length];
 }
 
-// Update statistics
 function updateStatistics(stats) {
-    // Update Total Trainees
+
     const totalElement = document.getElementById('totalTraineesCount');
     if (totalElement) {
         const totalValue = stats.total || 0;
         totalElement.textContent = totalValue.toLocaleString();
     }
 
-    // Update Total Registration
     const registrationElement = document.getElementById('totalRegistrationCount');
     if (registrationElement) {
         const registrationValue = stats.totalRegistration || 0;
         registrationElement.textContent = registrationValue.toLocaleString();
     }
 
-    // Update Total Application
     const applicationElement = document.getElementById('totalApplicationCount');
     if (applicationElement) {
         const applicationValue = stats.totalApplication || 0;
         applicationElement.textContent = applicationValue.toLocaleString();
     }
 
-    // Update Total Admission
     const admissionElement = document.getElementById('totalAdmissionCount');
     if (admissionElement) {
         const admissionValue = stats.totalAdmission || 0;
@@ -498,9 +454,8 @@ function updateStatistics(stats) {
     }
 }
 
-// View trainee details
 window.viewTrainee = function viewTrainee(id) {
-    // Convert id to string if it's an object
+
     const traineeId = String(id);
 
     const trainee = traineesData.find(t => String(t._id) === traineeId || String(t.id) === traineeId);
@@ -510,7 +465,6 @@ window.viewTrainee = function viewTrainee(id) {
         return;
     }
 
-    // Populate view modal with separate name fields
     document.getElementById('viewTraineeId').value = trainee.trainee_id || trainee._id || '';
     document.getElementById('viewTraineeFirstName').value = trainee.first_name || '';
     document.getElementById('viewTraineeSecondName').value = trainee.second_name || '';
@@ -521,11 +475,10 @@ window.viewTrainee = function viewTrainee(id) {
     document.getElementById('viewTraineeUsername').value = trainee.username || '';
     document.getElementById('viewTraineePhone').value = trainee.phone || '';
 
-    // Set password field (show actual password from database)
     const passwordField = document.getElementById('viewTraineePassword');
     if (passwordField) {
         passwordField.value = trainee.password || '';
-        // Reset to password type when modal opens
+
         passwordField.setAttribute('type', 'password');
         const viewPasswordIcon = document.getElementById('viewPasswordIcon');
         if (viewPasswordIcon) {
@@ -534,14 +487,12 @@ window.viewTrainee = function viewTrainee(id) {
         }
     }
 
-    // Show modal
     const modal = new bootstrap.Modal(document.getElementById('viewTraineeModal'));
     modal.show();
 }
 
-// Edit trainee
 window.editTrainee = function editTrainee(id) {
-    // Convert id to string if it's an object
+
     const traineeId = String(id);
 
     const trainee = traineesData.find(t => String(t._id) === traineeId || String(t.id) === traineeId);
@@ -551,7 +502,6 @@ window.editTrainee = function editTrainee(id) {
         return;
     }
 
-    // Store original trainee data for change detection
     window.originalTraineeData = {
         trainee_id: trainee.trainee_id || '',
         first_name: trainee.first_name || '',
@@ -564,7 +514,6 @@ window.editTrainee = function editTrainee(id) {
         phone: trainee.phone || ''
     };
 
-    // Populate edit modal with separate name fields
     document.getElementById('editTraineeId').value = trainee.trainee_id || '';
     document.getElementById('editTraineeFirstName').value = trainee.first_name || '';
     document.getElementById('editTraineeSecondName').value = trainee.second_name || '';
@@ -574,19 +523,16 @@ window.editTrainee = function editTrainee(id) {
     document.getElementById('editTraineeEmail').value = trainee.email;
     document.getElementById('editTraineeUsername').value = trainee.username || '';
     document.getElementById('editTraineePhone').value = trainee.phone;
-    document.getElementById('editTraineePassword').value = ''; // Clear password field
+    document.getElementById('editTraineePassword').value = '';
 
-    // Store the MongoDB _id in a hidden field or data attribute
     document.getElementById('editTraineeForm').setAttribute('data-trainee-id', trainee._id);
 
-    // Show modal
     const modal = new bootstrap.Modal(document.getElementById('editTraineeModal'));
     modal.show();
 }
 
-// Delete trainee
 window.deleteTrainee = async function deleteTrainee(id) {
-    // Convert id to string if it's an object
+
     const traineeId = String(id);
 
     const trainee = traineesData.find(t => String(t._id) === traineeId || String(t.id) === traineeId);
@@ -596,16 +542,13 @@ window.deleteTrainee = async function deleteTrainee(id) {
         return;
     }
 
-    // Populate delete modal with trainee info
     document.getElementById('deleteTraineeName').textContent = `${trainee.first_name} ${trainee.last_name}`;
     document.getElementById('deleteTraineeId').value = traineeId;
 
-    // Show the Bootstrap modal
     const modal = new bootstrap.Modal(document.getElementById('deleteTraineeModal'));
     modal.show();
 }
 
-// Confirm delete trainee
 window.confirmDeleteTrainee = async function confirmDeleteTrainee() {
     const id = document.getElementById('deleteTraineeId').value;
 
@@ -617,7 +560,7 @@ window.confirmDeleteTrainee = async function confirmDeleteTrainee() {
         const result = await response.json();
 
         if (result.success) {
-            // Close modal
+
             const modal = bootstrap.Modal.getInstance(document.getElementById('deleteTraineeModal'));
             modal.hide();
 
@@ -633,17 +576,14 @@ window.confirmDeleteTrainee = async function confirmDeleteTrainee() {
     }
 }
 
-// Show success message
 function showSuccess(message) {
     showToast(message, 'success');
 }
 
-// Show error message
 function showError(message) {
     showToast(message, 'error');
 }
 
-// Show toast notification
 function showToast(message, type = 'success') {
     const container = document.getElementById('toastContainer');
     if (!container) return;
@@ -664,14 +604,12 @@ function showToast(message, type = 'success') {
 
     container.appendChild(toast);
 
-    // Auto remove after 5 seconds
     setTimeout(() => {
         toast.classList.add('hiding');
         setTimeout(() => toast.remove(), 300);
     }, 5000);
 }
 
-// Close toast notification
 function closeToast(button) {
     const toast = button.closest('.toast-notification');
     if (toast) {
@@ -682,17 +620,13 @@ function closeToast(button) {
     }
 }
 
-
-// Save edited trainee
 window.saveEditTrainee = async function saveEditTrainee() {
     const submitBtn = document.querySelector('#editTraineeModal .btn-primary');
     const originalBtnText = submitBtn.innerHTML;
 
-    // Disable button and show loading state
     submitBtn.disabled = true;
     submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Saving...';
 
-    // Get MongoDB _id from data attribute
     const mongoId = document.getElementById('editTraineeForm').getAttribute('data-trainee-id');
     const studentId = document.getElementById('editTraineeId').value.trim();
     const firstName = document.getElementById('editTraineeFirstName').value.trim();
@@ -705,7 +639,6 @@ window.saveEditTrainee = async function saveEditTrainee() {
     const phone = document.getElementById('editTraineePhone').value.trim();
     const password = document.getElementById('editTraineePassword').value;
 
-    // Check if any changes were made
     if (window.originalTraineeData) {
         const hasChanges =
             studentId !== window.originalTraineeData.trainee_id ||
@@ -717,7 +650,7 @@ window.saveEditTrainee = async function saveEditTrainee() {
             email !== window.originalTraineeData.email ||
             username !== window.originalTraineeData.username ||
             phone !== window.originalTraineeData.phone ||
-            password !== ''; // Password field has value means it was changed
+            password !== '';
 
         if (!hasChanges) {
             showToast('No changes were made to the trainee', 'info');
@@ -727,7 +660,6 @@ window.saveEditTrainee = async function saveEditTrainee() {
         }
     }
 
-    // Validate required fields
     if (!studentId || !firstName || !lastName || !email || !phone) {
         showError('Please fill in all required fields');
         submitBtn.disabled = false;
@@ -735,7 +667,6 @@ window.saveEditTrainee = async function saveEditTrainee() {
         return;
     }
 
-    // Validate name fields (only letters and spaces)
     const namePattern = /^[A-Za-z\s\-']+$/;
     if (!namePattern.test(firstName)) {
         showError('First name should only contain letters, spaces, hyphens, and apostrophes');
@@ -762,7 +693,6 @@ window.saveEditTrainee = async function saveEditTrainee() {
         return;
     }
 
-    // Validate phone (only numbers)
     const phonePattern = /^[0-9]+$/;
     if (!phonePattern.test(phone)) {
         showError('Mobile number should only contain numbers');
@@ -771,7 +701,6 @@ window.saveEditTrainee = async function saveEditTrainee() {
         return;
     }
 
-    // Validate email format
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailPattern.test(email)) {
         showError('Please enter a valid email address');
@@ -780,7 +709,6 @@ window.saveEditTrainee = async function saveEditTrainee() {
         return;
     }
 
-    // Validate password length if provided
     if (password && password.length < 6) {
         showError('Password must be at least 6 characters long');
         submitBtn.disabled = false;
@@ -788,7 +716,6 @@ window.saveEditTrainee = async function saveEditTrainee() {
         return;
     }
 
-    // Check if any changes were made (compare with original data)
     const hasChanges =
         window.originalTraineeData.trainee_id !== studentId ||
         window.originalTraineeData.first_name !== firstName ||
@@ -799,7 +726,7 @@ window.saveEditTrainee = async function saveEditTrainee() {
         window.originalTraineeData.email !== email ||
         window.originalTraineeData.username !== username ||
         window.originalTraineeData.phone !== phone ||
-        password !== ''; // Password change counts as a change
+        password !== '';
 
     if (!hasChanges) {
         showToast('No changes were made to the trainee', 'info');
@@ -820,7 +747,6 @@ window.saveEditTrainee = async function saveEditTrainee() {
         phone: phone
     };
 
-    // Only include password if it was changed
     if (password) {
         updateData.password = password;
     }
@@ -839,17 +765,15 @@ window.saveEditTrainee = async function saveEditTrainee() {
         if (result.success) {
             showSuccess('Trainee updated successfully');
 
-            // Update the trainee in local data
             const traineeIndex = traineesData.findIndex(t => String(t._id) === mongoId);
             if (traineeIndex !== -1) {
-                // Update the trainee object with new data
+
                 traineesData[traineeIndex] = {
                     ...traineesData[traineeIndex],
                     ...updateData,
                     _id: mongoId
                 };
 
-                // Update only the specific row in the table
                 const tbody = document.querySelector('.table tbody');
                 if (tbody) {
                     const rows = tbody.querySelectorAll('tr');
@@ -860,14 +784,11 @@ window.saveEditTrainee = async function saveEditTrainee() {
                 }
             }
 
-            // Close modal
             const modal = bootstrap.Modal.getInstance(document.getElementById('editTraineeModal'));
             modal.hide();
 
-            // Reload statistics only
             loadStatistics();
 
-            // Reset button state
             submitBtn.disabled = false;
             submitBtn.innerHTML = originalBtnText;
         } else {
@@ -883,16 +804,11 @@ window.saveEditTrainee = async function saveEditTrainee() {
     }
 }
 
-
-
-
-// Generate trainee ID in format TRN-YYYY-XXX
 async function generateTraineeId() {
     try {
-        // Get current year
+
         const currentYear = new Date().getFullYear();
 
-        // Fetch existing trainees to find the highest number
         const response = await fetch(`${API_BASE_URL}/trainees`);
         const result = await response.json();
 
@@ -900,7 +816,6 @@ async function generateTraineeId() {
             const trainees = result.data;
             console.log('Total trainees found:', trainees.length);
 
-            // Find the highest trainee number across all years
             let maxNumber = 0;
             const traineePattern = /^TRN-\d{4}-(\d+)$/;
 
@@ -919,7 +834,6 @@ async function generateTraineeId() {
 
             console.log('Highest number found:', maxNumber);
 
-            // Generate next sequential number based on total count
             const nextNumber = maxNumber + 1;
             const paddedNumber = String(nextNumber).padStart(3, '0');
             const newId = `TRN-${currentYear}-${paddedNumber}`;
@@ -927,30 +841,26 @@ async function generateTraineeId() {
             console.log('Generated new trainee ID:', newId);
             return newId;
         } else {
-            // If API fails, start with 001
+
             console.log('API call failed, using default ID');
             return `TRN-${currentYear}-001`;
         }
     } catch (error) {
         console.error('Error generating trainee ID:', error);
-        // Fallback to default
+
         const currentYear = new Date().getFullYear();
         return `TRN-${currentYear}-001`;
     }
 }
 
-
-// Save new trainee
 window.saveNewTrainee = async function saveNewTrainee() {
-    // Get the button element
+
     const addButton = document.querySelector('#addTraineeModal .btn-primary');
     const originalText = addButton.innerHTML;
 
-    // Disable button and show loading state
     addButton.disabled = true;
     addButton.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Adding...';
 
-    // Auto-generate trainee ID if not provided
     let id = document.getElementById('addTraineeId').value.trim();
     if (!id) {
         id = await generateTraineeId();
@@ -967,7 +877,6 @@ window.saveNewTrainee = async function saveNewTrainee() {
     const phone = document.getElementById('addTraineePhone').value.trim();
     const password = document.getElementById('addTraineePassword').value;
 
-    // Validate required fields
     if (!id || !firstName || !lastName || !email || !phone) {
         showError('Please fill in all required fields');
         addButton.disabled = false;
@@ -975,7 +884,6 @@ window.saveNewTrainee = async function saveNewTrainee() {
         return;
     }
 
-    // Validate trainee ID format (TRN-YYYY-XXX)
     const idPattern = /^TRN-\d{4}-\d{3}$/;
     if (!idPattern.test(id)) {
         showError('Invalid trainee ID format. Expected format: TRN-YYYY-XXX');
@@ -984,7 +892,6 @@ window.saveNewTrainee = async function saveNewTrainee() {
         return;
     }
 
-    // Validate name fields (only letters and spaces)
     const namePattern = /^[A-Za-z\s]+$/;
     if (!namePattern.test(firstName)) {
         showError('First name should only contain letters and spaces');
@@ -1011,7 +918,6 @@ window.saveNewTrainee = async function saveNewTrainee() {
         return;
     }
 
-    // Validate phone (only numbers)
     const phonePattern = /^[0-9]+$/;
     if (!phonePattern.test(phone)) {
         showError('Mobile number should only contain numbers');
@@ -1020,7 +926,6 @@ window.saveNewTrainee = async function saveNewTrainee() {
         return;
     }
 
-    // Validate email format
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailPattern.test(email)) {
         showError('Please enter a valid email address');
@@ -1029,7 +934,6 @@ window.saveNewTrainee = async function saveNewTrainee() {
         return;
     }
 
-    // Validate password length if provided
     if (password && password.length < 6) {
         showError('Password must be at least 6 characters long');
         addButton.disabled = false;
@@ -1048,12 +952,10 @@ window.saveNewTrainee = async function saveNewTrainee() {
         phone: phone
     };
 
-    // Only include username if provided
     if (username) {
         newTraineeData.username = username;
     }
 
-    // Only include password if provided
     if (password) {
         newTraineeData.password = password;
     }
@@ -1067,13 +969,11 @@ window.saveNewTrainee = async function saveNewTrainee() {
             body: JSON.stringify(newTraineeData)
         });
 
-        // Check if response is JSON
         const contentType = response.headers.get('content-type');
         if (!contentType || !contentType.includes('application/json')) {
             const text = await response.text();
             console.error('Non-JSON response:', text);
 
-            // Try to extract error message from HTML
             const parser = new DOMParser();
             const doc = parser.parseFromString(text, 'text/html');
             const errorText = doc.body.textContent || text;
@@ -1089,18 +989,14 @@ window.saveNewTrainee = async function saveNewTrainee() {
         if (result.success) {
             showSuccess('Trainee added successfully');
 
-            // Close modal
             const modal = bootstrap.Modal.getInstance(document.getElementById('addTraineeModal'));
             modal.hide();
 
-            // Clear form
             document.getElementById('addTraineeForm').reset();
 
-            // Reload trainees and statistics
             loadTrainees();
             loadStatistics();
 
-            // Reset button state
             addButton.disabled = false;
             addButton.innerHTML = originalText;
         } else {
@@ -1116,8 +1012,6 @@ window.saveNewTrainee = async function saveNewTrainee() {
     }
 }
 
-
-// Toast notification function
 function showToast(message, type = 'success') {
     const toastContainer = document.getElementById('toastContainer');
     if (!toastContainer) return;
@@ -1138,15 +1032,12 @@ function showToast(message, type = 'success') {
 
     toastContainer.appendChild(toast);
 
-    // Auto remove after 5 seconds
     setTimeout(() => {
         toast.classList.add('hiding');
         setTimeout(() => toast.remove(), 300);
     }, 5000);
 }
 
-
-// Setup filter event listeners
 function setupFilters() {
     const searchInput = document.getElementById('searchInput');
     const enrollmentFilter = document.getElementById('enrollmentFilter');
@@ -1156,7 +1047,7 @@ function setupFilters() {
 
     if (searchInput) {
         searchInput.addEventListener('input', function () {
-            // Auto-reset when search input is cleared
+
             if (searchInput.value.trim() === '') {
                 resetFilters();
             } else {
@@ -1182,25 +1073,22 @@ function setupFilters() {
     }
 }
 
-// Apply filters to trainee list
 function applyFilters() {
     const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
     const enrollmentYear = document.getElementById('enrollmentFilter')?.value || '';
     const applicationYear = document.getElementById('applicationFilter')?.value || '';
     const admissionYear = document.getElementById('admissionFilter')?.value || '';
 
-    // If search is cleared and no year filters, clear highlights and show all
     if (!searchTerm && !enrollmentYear && !applicationYear && !admissionYear) {
         clearAllHighlights();
         renderTrainees(traineesData);
         return;
     }
 
-    // If only search term is provided (no year filters), highlight instead of filter
     if (searchTerm && !enrollmentYear && !applicationYear && !admissionYear) {
-        // Show all trainees but highlight matches
+
         renderTrainees(traineesData);
-        // Wait for render to complete, then highlight
+
         setTimeout(() => {
             clearAllHighlights();
             highlightSearchResults(searchTerm);
@@ -1208,13 +1096,11 @@ function applyFilters() {
         return;
     }
 
-    // Otherwise, apply normal filtering for year filters
     let filteredTrainees = traineesData;
 
-    // Apply search filter only when year filters are active
     if (searchTerm) {
         filteredTrainees = filteredTrainees.filter(trainee => {
-            // Build full name
+
             let fullName = trainee.first_name || '';
             if (trainee.second_name) fullName += ' ' + trainee.second_name;
             if (trainee.middle_name) fullName += ' ' + trainee.middle_name;
@@ -1231,7 +1117,6 @@ function applyFilters() {
         });
     }
 
-    // Apply enrollment year filter
     if (enrollmentYear) {
         filteredTrainees = filteredTrainees.filter(trainee => {
             return trainee.enrollments && trainee.enrollments.some(e =>
@@ -1240,7 +1125,6 @@ function applyFilters() {
         });
     }
 
-    // Apply application year filter
     if (applicationYear) {
         filteredTrainees = filteredTrainees.filter(trainee => {
             return trainee.applications && trainee.applications.some(a =>
@@ -1249,7 +1133,6 @@ function applyFilters() {
         });
     }
 
-    // Apply admission year filter
     if (admissionYear) {
         filteredTrainees = filteredTrainees.filter(trainee => {
             return trainee.admissions && trainee.admissions.some(a =>
@@ -1258,11 +1141,9 @@ function applyFilters() {
         });
     }
 
-    // Render filtered results
     renderTrainees(filteredTrainees);
 }
 
-// Highlight search results without hiding other rows
 function highlightSearchResults(searchTerm) {
     const tbody = document.querySelector('.table tbody');
     if (!tbody) return;
@@ -1271,7 +1152,7 @@ function highlightSearchResults(searchTerm) {
     let firstMatch = null;
 
     rows.forEach(row => {
-        // Remove any existing highlight
+
         row.style.boxShadow = '';
         row.style.border = '';
         row.style.borderLeft = '';
@@ -1283,12 +1164,10 @@ function highlightSearchResults(searchTerm) {
         row.style.outlineOffset = '';
         row.style.zIndex = '';
 
-        // Get row text content
         const rowText = row.textContent.toLowerCase();
 
-        // Check if row matches search term
         if (rowText.includes(searchTerm)) {
-            // Apply card hover design with proper spacing
+
             row.style.position = 'relative';
             row.style.boxShadow = '0 8px 24px rgba(22, 56, 86, 0.5), 0 4px 12px rgba(54, 145, 191, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15)';
             row.style.outline = '2px solid rgba(54, 145, 191, 0.6)';
@@ -1298,20 +1177,17 @@ function highlightSearchResults(searchTerm) {
             row.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
             row.style.zIndex = '10';
 
-            // Store first match for scrolling
             if (!firstMatch) {
                 firstMatch = row;
             }
         }
     });
 
-    // Scroll to first match
     if (firstMatch) {
         firstMatch.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 }
 
-// Reset all filters
 function resetFilters() {
     document.getElementById('searchInput').value = '';
     const enrollmentFilter = document.getElementById('enrollmentFilter');
@@ -1322,15 +1198,12 @@ function resetFilters() {
     if (applicationFilter) applicationFilter.value = '';
     if (admissionFilter) admissionFilter.value = '';
 
-    // Clear all highlights using helper function
     clearAllHighlights();
 
     renderTrainees(traineesData);
 }
 
-// ==================== BULK UPLOAD & EXPORT FUNCTIONALITY ====================
 
-// Bulk Upload Button Event Listener
 document.addEventListener('DOMContentLoaded', function () {
     const bulkUploadBtn = document.getElementById('bulkUploadBtn');
     const bulkUploadModal = new bootstrap.Modal(document.getElementById('bulkUploadModal'));
@@ -1342,14 +1215,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     let uploadedData = [];
 
-    // Open bulk upload modal
     if (bulkUploadBtn) {
         bulkUploadBtn.addEventListener('click', function () {
             bulkUploadModal.show();
         });
     }
 
-    // Handle file selection
     if (bulkUploadFile) {
         bulkUploadFile.addEventListener('change', function (e) {
             const file = e.target.files[0];
@@ -1367,7 +1238,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Parse CSV file
     function parseCSVFile(file) {
         const reader = new FileReader();
         reader.onload = function (e) {
@@ -1381,14 +1251,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     return;
                 }
 
-                // Parse header
                 const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
 
-                // Required fields for CSV (trainee_id is optional, will be auto-generated)
                 const requiredFields = ['first_name', 'last_name', 'email', 'phone'];
                 const validFields = ['trainee_id', 'username', 'first_name', 'second_name', 'middle_name', 'last_name', 'suffix', 'email', 'phone', 'password'];
 
-                // Check if all required fields are present
                 const missingFields = requiredFields.filter(field => !headers.includes(field));
                 if (missingFields.length > 0) {
                     showToast(`CSV file is missing required fields: ${missingFields.join(', ')}. Expected format: trainee_id, username, first_name, second_name, middle_name, last_name, suffix, email, phone, password`, 'error');
@@ -1396,7 +1263,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     return;
                 }
 
-                // Check if there are any invalid fields
                 const invalidFields = headers.filter(header => !validFields.includes(header));
                 if (invalidFields.length > 0) {
                     showToast(`CSV file contains invalid fields: ${invalidFields.join(', ')}. Valid fields are: ${validFields.join(', ')}`, 'error');
@@ -1404,7 +1270,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     return;
                 }
 
-                // Parse data rows
                 uploadedData = [];
                 for (let i = 1; i < lines.length; i++) {
                     const values = lines[i].split(',').map(v => v.trim());
@@ -1414,7 +1279,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         trainee[header] = values[index] || '';
                     });
 
-                    // Validate required fields in each row (trainee_id is optional)
                     const rowMissingFields = requiredFields.filter(field => !trainee[field] || trainee[field].trim() === '');
                     if (rowMissingFields.length > 0) {
                         showToast(`Row ${i + 1} is missing required fields: ${rowMissingFields.join(', ')}`, 'error');
@@ -1434,7 +1298,6 @@ document.addEventListener('DOMContentLoaded', function () {
         reader.readAsText(file);
     }
 
-    // Parse JSON file
     function parseJSONFile(file) {
         const reader = new FileReader();
         reader.onload = function (e) {
@@ -1453,22 +1316,18 @@ document.addEventListener('DOMContentLoaded', function () {
                     return;
                 }
 
-                // Required fields for JSON (trainee_id is optional, will be auto-generated)
                 const requiredFields = ['first_name', 'last_name', 'email', 'phone'];
                 const validFields = ['trainee_id', 'username', 'first_name', 'second_name', 'middle_name', 'last_name', 'suffix', 'email', 'phone', 'password'];
 
-                // Validate each object in the array
                 for (let i = 0; i < data.length; i++) {
                     const trainee = data[i];
 
-                    // Check if it's an object
                     if (typeof trainee !== 'object' || trainee === null) {
                         showToast(`Item ${i + 1} in JSON file is not a valid object.`, 'error');
                         resetBulkUploadForm();
                         return;
                     }
 
-                    // Check for required fields
                     const missingFields = requiredFields.filter(field => !trainee[field] || trainee[field].toString().trim() === '');
                     if (missingFields.length > 0) {
                         showToast(`Item ${i + 1} is missing required fields: ${missingFields.join(', ')}. Expected format: Array of objects with fields: trainee_id, username, first_name, second_name, middle_name, last_name, suffix, email, phone, password`, 'error');
@@ -1476,7 +1335,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         return;
                     }
 
-                    // Check for invalid fields
                     const objectFields = Object.keys(trainee);
                     const invalidFields = objectFields.filter(field => !validFields.includes(field));
                     if (invalidFields.length > 0) {
@@ -1496,7 +1354,6 @@ document.addEventListener('DOMContentLoaded', function () {
         reader.readAsText(file);
     }
 
-    // Display upload preview
     function displayUploadPreview() {
         if (uploadedData.length === 0) {
             uploadPreview.style.display = 'none';
@@ -1506,7 +1363,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         uploadPreviewBody.innerHTML = '';
 
-        // Get current year for trainee ID format
         const currentYear = new Date().getFullYear();
 
         uploadedData.forEach((trainee, index) => {
@@ -1518,7 +1374,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 trainee.suffix
             ].filter(Boolean).join(' ');
 
-            // Generate preview trainee ID in format TRN-YYYY-XXX
             const previewId = trainee.trainee_id || `TRN-${currentYear}-${String(index + 1).padStart(3, '0')}`;
 
             const row = document.createElement('tr');
@@ -1536,7 +1391,6 @@ document.addEventListener('DOMContentLoaded', function () {
         confirmBulkUpload.disabled = false;
     }
 
-    // Confirm bulk upload
     if (confirmBulkUpload) {
         confirmBulkUpload.addEventListener('click', async function () {
             if (uploadedData.length === 0) return;
@@ -1590,7 +1444,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Reset bulk upload form
     function resetBulkUploadForm() {
         bulkUploadFile.value = '';
         uploadedData = [];
@@ -1598,17 +1451,16 @@ document.addEventListener('DOMContentLoaded', function () {
         confirmBulkUpload.disabled = true;
     }
 
-    // Export to CSV
     const exportCsvBtn = document.getElementById('exportCsvBtn');
     if (exportCsvBtn) {
         exportCsvBtn.addEventListener('click', async function () {
-            // Disable button and show loading state
+
             exportCsvBtn.disabled = true;
             const originalText = exportCsvBtn.innerHTML;
             exportCsvBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Fetching data...';
 
             try {
-                // Fetch all trainees from API
+
                 const response = await fetch(`${API_BASE_URL}/trainees`);
 
                 if (!response.ok) {
@@ -1623,14 +1475,13 @@ document.addEventListener('DOMContentLoaded', function () {
                     return;
                 }
 
-                // Prepare CSV content
                 const headers = ['trainee_id', 'username', 'first_name', 'second_name', 'middle_name', 'last_name', 'suffix', 'email', 'phone'];
                 const csvContent = [
                     headers.join(','),
                     ...allTrainees.map(trainee =>
                         headers.map(header => {
                             const value = trainee[header] || '';
-                            // Escape commas and quotes in values
+
                             const stringValue = value.toString();
                             if (stringValue.includes(',') || stringValue.includes('"') || stringValue.includes('\n')) {
                                 return `"${stringValue.replace(/"/g, '""')}"`;
@@ -1640,7 +1491,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     )
                 ].join('\n');
 
-                // Generate filename with timestamp
                 const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
                 const filename = `trainees_export_${timestamp}.csv`;
 
@@ -1650,24 +1500,23 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.error('Error exporting CSV:', error);
                 showToast('Error exporting data. Please try again.', 'error');
             } finally {
-                // Re-enable button
+
                 exportCsvBtn.disabled = false;
                 exportCsvBtn.innerHTML = originalText;
             }
         });
     }
 
-    // Export to JSON
     const exportJsonBtn = document.getElementById('exportJsonBtn');
     if (exportJsonBtn) {
         exportJsonBtn.addEventListener('click', async function () {
-            // Disable button and show loading state
+
             exportJsonBtn.disabled = true;
             const originalText = exportJsonBtn.innerHTML;
             exportJsonBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Fetching data...';
 
             try {
-                // Fetch all trainees from API
+
                 const response = await fetch(`${API_BASE_URL}/trainees`);
 
                 if (!response.ok) {
@@ -1682,10 +1531,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     return;
                 }
 
-                // Prepare JSON content with proper formatting
                 const jsonContent = JSON.stringify(allTrainees, null, 2);
 
-                // Generate filename with timestamp
                 const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
                 const filename = `trainees_export_${timestamp}.json`;
 
@@ -1695,14 +1542,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.error('Error exporting JSON:', error);
                 showToast('Error exporting data. Please try again.', 'error');
             } finally {
-                // Re-enable button
+
                 exportJsonBtn.disabled = false;
                 exportJsonBtn.innerHTML = originalText;
             }
         });
     }
 
-    // Download file helper function
     function downloadFile(content, filename, mimeType) {
         const blob = new Blob([content], { type: mimeType });
         const url = URL.createObjectURL(blob);

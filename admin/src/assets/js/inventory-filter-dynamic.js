@@ -1,4 +1,3 @@
-/* Dynamic Search Placeholder and Header Update Script */
 document.addEventListener('DOMContentLoaded', function () {
     const inventoryTypeFilter = document.getElementById('inventoryTypeFilter');
     const filterSearchInput = document.getElementById('filterSearchInput');

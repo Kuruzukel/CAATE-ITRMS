@@ -278,12 +278,16 @@
                 const thisMonth = new Date(now.getFullYear(), now.getMonth(), 1);
 
                 const lastMonthData = all.filter(r => {
-                    const date = new Date(r.submittedAt.$date || r.submittedAt);
+                    if (!r.submittedAt && !r.createdAt) return false;
+                    const dateValue = r.submittedAt || r.createdAt;
+                    const date = new Date(dateValue.$date || dateValue);
                     return date >= lastMonth && date < thisMonth;
                 });
 
                 const thisMonthData = all.filter(r => {
-                    const date = new Date(r.submittedAt.$date || r.submittedAt);
+                    if (!r.submittedAt && !r.createdAt) return false;
+                    const dateValue = r.submittedAt || r.createdAt;
+                    const date = new Date(dateValue.$date || dateValue);
                     return date >= thisMonth;
                 });
 

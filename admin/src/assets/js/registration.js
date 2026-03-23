@@ -280,6 +280,7 @@
                 const lastMonthData = all.filter(r => {
                     if (!r.submittedAt && !r.createdAt) return false;
                     const dateValue = r.submittedAt || r.createdAt;
+                    if (!dateValue) return false;
                     const date = new Date(dateValue.$date || dateValue);
                     return date >= lastMonth && date < thisMonth;
                 });
@@ -287,6 +288,7 @@
                 const thisMonthData = all.filter(r => {
                     if (!r.submittedAt && !r.createdAt) return false;
                     const dateValue = r.submittedAt || r.createdAt;
+                    if (!dateValue) return false;
                     const date = new Date(dateValue.$date || dateValue);
                     return date >= thisMonth;
                 });

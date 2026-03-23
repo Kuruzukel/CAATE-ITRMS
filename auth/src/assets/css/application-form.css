@@ -1132,7 +1132,6 @@ textarea {
 .appointment-form-container {
     padding: 1rem;
 }
-}
 
 
 /* Application Form Specific Styles */
@@ -1689,7 +1688,4 @@ header {
     font-weight: 700;
     color: #2c3e50;
     padding: 0 5px;
-}
-
-
 }

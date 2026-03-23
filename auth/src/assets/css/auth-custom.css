@@ -569,7 +569,6 @@ small:hover {
     padding-right: 45px !important;
     -webkit-text-security: none !important;
     -moz-text-security: none !important;
-    text-security: none !important;
     font-family: 'Public Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
     letter-spacing: normal !important;
 }
@@ -578,7 +577,6 @@ small:hover {
 input.password-input-with-icon[type="text"] {
     -webkit-text-security: none !important;
     -moz-text-security: none !important;
-    text-security: none !important;
     font-family: 'Public Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
     letter-spacing: normal !important;
 }

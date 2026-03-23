@@ -32,9 +32,7 @@
 
 // API Base URL - Use global API_BASE_URL if available
 if (typeof window.API_BASE_URL === 'undefined') {
-    window.API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-        ? 'http://localhost/CAATE-ITRMS/backend/public'
-        : '/backend/public';
+    window.API_BASE_URL = window.location.origin + '/CAATE-ITRMS/backend/public';
 }
 // Use window.API_BASE_URL directly to avoid redeclaration conflicts
 

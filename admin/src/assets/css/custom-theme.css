@@ -1,6 +1,4 @@
-/* ESCAATE Custom Color Palette */
 :root {
-    /* Primary Colors */
     --primary-blue: #3691bf;
     --primary-blue-dark: #325596;
     --primary-blue-light: #3a6385;
@@ -9,38 +7,26 @@
     --darker-azure: #12395a;
     --light-blue: #e8f4fc;
     --lighter-blue: #f0f7fb;
-
-    /* Text Colors */
     --white: #ffffff;
     --text-dark: #1e293b;
     --text-medium: #475569;
     --text-light: #64748b;
     --text-white: #ffffff;
-
-    /* Glass Effects */
     --glass-bg: rgba(255, 255, 255, 0.7);
     --glass-bg-dark: rgba(22, 56, 86, 0.85);
     --glass-border: rgba(255, 255, 255, 0.5);
     --glass-border-dark: rgba(54, 145, 191, 0.3);
-
-    /* Shadows */
     --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
     --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
     --shadow-glass: 0 8px 32px rgba(22, 56, 86, 0.2);
-
-    /* Border Radius */
     --border-radius-sm: 12px;
     --border-radius-md: 20px;
     --border-radius-lg: 30px;
     --border-radius-pill: 50px;
-
-    /* Transitions */
     --transition-fast: 0.2s ease;
     --transition-normal: 0.3s ease;
     --transition-slow: 0.5s ease;
-
-    /* Override Bootstrap/Sneat Variables */
     --bs-primary: #3691bf;
     --bs-primary-rgb: 54, 145, 191;
     --bs-secondary: #325596;
@@ -52,48 +38,34 @@
     --bs-light: #e8f4fc;
     --bs-light-rgb: 232, 244, 252;
 }
-
-/* Performance Optimizations */
-/* Use CSS containment to prevent layout thrashing */
 .card,
 .layout-menu,
 .layout-navbar,
 .content-wrapper {
     contain: layout style paint;
 }
-
-/* Allow navbar contents (like dropdowns) to overflow and render fully */
 .layout-navbar {
     contain: none !important;
 }
-
-/* Use will-change for animated elements */
 .layout-menu,
 .layout-overlay {
     will-change: transform, opacity;
 }
-
-/* Optimize rendering with GPU acceleration */
 .layout-menu,
 .layout-overlay,
 .menu-inner {
     transform: translateZ(0);
     backface-visibility: hidden;
 }
-
-/* Reduce paint areas */
 .card {
     isolation: isolate;
 }
-
-/* Primary Button Styles */
 .btn-primary {
     background-color: var(--primary-blue) !important;
     border-color: var(--primary-blue) !important;
     color: var(--white) !important;
     transition: all var(--transition-normal);
 }
-
 .btn-primary:hover,
 .btn-primary:focus,
 .btn-primary:active {
@@ -102,13 +74,11 @@
     box-shadow: var(--shadow-md);
     transform: translateY(-2px);
 }
-
 .btn-outline-primary {
     color: var(--primary-blue) !important;
     border-color: var(--primary-blue) !important;
     background-color: transparent !important;
 }
-
 .btn-outline-primary:hover,
 .btn-outline-primary:focus,
 .btn-outline-primary:active {
@@ -116,8 +86,6 @@
     border-color: var(--primary-blue) !important;
     color: var(--white) !important;
 }
-
-/* Card Styles with Glassmorphism */
 .card {
     border-radius: var(--border-radius-md) !important;
     box-shadow: 0 10px 40px rgba(22, 56, 86, 0.5),
@@ -131,18 +99,15 @@
     -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
     color: var(--white) !important;
 }
-
 .card-img,
 .card-img-top {
     border-top-left-radius: 1.3rem !important;
     border-top-right-radius: 1.3rem !important;
 }
-
 .card-img-bottom {
     border-bottom-left-radius: 1.3rem !important;
     border-bottom-right-radius: 1.3rem !important;
 }
-
 .card:hover {
     box-shadow: 0 15px 50px rgba(22, 56, 86, 0.6),
         0 6px 20px rgba(54, 145, 191, 0.4),
@@ -152,35 +117,27 @@
     transform: translateY(-4px);
     border: 1px solid rgba(54, 145, 191, 0.5) !important;
 }
-
 .card-title {
     color: var(--white) !important;
 }
-
 .card-title.text-primary {
     color: var(--white) !important;
 }
-
 .card-body {
     color: var(--white) !important;
 }
-
 .card-body span,
 .card-body h3,
 .card-body h5,
 .card-body p {
     color: var(--white) !important;
 }
-
 .card-body .fw-bold {
     color: var(--white) !important;
 }
-
 .card .btn {
     color: var(--white) !important;
 }
-
-/* Sidebar Menu Styles with Glassmorphism */
 .layout-menu {
     background: rgba(15, 41, 66, 0.75) !important;
     backdrop-filter: blur(20px) saturate(180%) !important;
@@ -189,21 +146,16 @@
     box-shadow: 0 8px 32px rgba(22, 56, 86, 0.3),
         inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
 }
-
-/* Menu Item Divider Lines */
 .menu-inner>.menu-item {
     position: relative;
     padding-bottom: 0.5rem;
     margin-bottom: 0.5rem;
 }
-
-/* Remove default margin from menu items */
 .layout-menu.menu-vertical .menu-inner>.menu-item {
     margin: 0 !important;
     margin-top: 0 !important;
     margin-bottom: 0 !important;
 }
-
 .menu-inner>.menu-item::after {
     content: '';
     position: absolute;
@@ -219,31 +171,21 @@
             transparent 100%);
     box-shadow: 0 1px 2px rgba(54, 145, 191, 0.2);
 }
-
-/* Remove divider from last menu item */
 .menu-inner>.menu-item:last-child::after {
     display: none;
 }
-
-/* Hide scrollbar for menu-inner */
 .menu-inner {
     scrollbar-width: none !important;
-    /* Firefox */
     -ms-overflow-style: none !important;
-    /* IE and Edge */
 }
-
 .menu-inner::-webkit-scrollbar {
     display: none !important;
-    /* Chrome, Safari, Opera */
 }
-
 .menu-inner .menu-item .menu-link {
     color: var(--lighter-blue) !important;
     transition: all var(--transition-fast);
     border-radius: var(--border-radius-sm);
 }
-
 .menu-inner .menu-item .menu-link:hover {
     background: rgba(54, 145, 191, 0.15) !important;
     backdrop-filter: blur(10px) !important;
@@ -252,7 +194,6 @@
     color: var(--white) !important;
     box-shadow: 0 4px 12px rgba(54, 145, 191, 0.15) !important;
 }
-
 .menu-inner>.menu-item.active>.menu-link {
     background: rgba(54, 145, 191, 0.3) !important;
     backdrop-filter: blur(15px) saturate(180%) !important;
@@ -263,32 +204,25 @@
     box-shadow: 0 4px 16px rgba(54, 145, 191, 0.25),
         inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
 }
-
 .menu-inner>.menu-item.active:before {
     background: var(--accent-blue) !important;
 }
-
 .menu-sub>.menu-item.active>.menu-link:not(.menu-toggle):before {
     background-color: var(--primary-blue) !important;
     border: 3px solid rgba(54, 145, 191, 0.3) !important;
 }
-
 .menu-icon {
     color: var(--light-blue) !important;
 }
-
 .menu-item.active .menu-icon {
     color: var(--white) !important;
 }
-
 .menu-header-text {
     color: var(--text-light) !important;
     text-transform: uppercase;
     font-size: 0.75rem;
     font-weight: 600;
 }
-
-/* App Brand */
 .app-brand {
     display: flex !important;
     flex-direction: column !important;
@@ -300,7 +234,6 @@
     min-height: auto !important;
     background: transparent !important;
 }
-
 .app-brand-link {
     display: flex !important;
     flex-direction: column !important;
@@ -309,8 +242,6 @@
     pointer-events: none !important;
     cursor: default !important;
 }
-
-/* App Brand Text Wrapper with Border */
 .app-brand-text-wrapper {
     display: flex !important;
     align-items: center !important;
@@ -321,7 +252,6 @@
     border-bottom: 1px solid rgba(54, 145, 191, 0.3) !important;
     box-shadow: 0 1px 2px rgba(54, 145, 191, 0.2) !important;
 }
-
 .app-brand-text {
     color: var(--white) !important;
     text-transform: uppercase !important;
@@ -330,30 +260,23 @@
     font-size: 1.25rem !important;
     font-weight: 700 !important;
 }
-
 .app-brand-text.demo {
     font-size: 1.25rem !important;
 }
-
 .app-brand-logo {
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
 }
-
 .app-brand-logo img {
     width: 150px !important;
     height: 150px !important;
     border-radius: 50%;
     object-fit: cover;
 }
-
-/* Menu Inner Adjustment */
 .menu-inner {
     padding-top: 0 !important;
 }
-
-/* Navbar Styles with Glassmorphism */
 .navbar {
     background-color: #0f2942 !important;
     background: linear-gradient(90deg, #0f2942 0%, #0a1f33 100%) !important;
@@ -367,7 +290,6 @@
     border-radius: var(--border-radius-md) !important;
     margin-bottom: 1.5rem;
 }
-
 .layout-navbar {
     background-color: #0f2942 !important;
     background: linear-gradient(90deg, #0f2942 0%, #0a1f33 100%) !important;
@@ -388,7 +310,6 @@
     padding-left: 1.625rem !important;
     padding-right: 1.625rem !important;
 }
-
 .bg-navbar-theme {
     background-color: #0f2942 !important;
     background: linear-gradient(90deg, #0f2942 0%, #0a1f33 100%) !important;
@@ -396,16 +317,12 @@
     -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
     border-radius: var(--border-radius-md) !important;
 }
-
-/* Navbar Collapse and Container */
 .navbar-nav-right,
 #navbar-collapse,
 .navbar .container-xxl,
 .navbar .container-fluid {
     background-color: transparent !important;
 }
-
-/* Override core.css navbar-nav-right flex-basis */
 .layout-navbar .navbar-nav-right {
     flex-basis: auto !important;
     display: flex !important;
@@ -415,33 +332,23 @@
     gap: 1rem !important;
     flex-wrap: nowrap !important;
 }
-
-/* Ensure navbar container doesn't overflow */
 .layout-navbar.navbar-detached {
     overflow: visible !important;
 }
-
 .layout-navbar .navbar {
     overflow: visible !important;
 }
-
-/* Fix navbar container max-width issue */
 .layout-navbar.navbar-detached.container-xxl {
     max-width: 100% !important;
 }
-
-/* Ensure navbar has proper padding and doesn't constrain content */
 .layout-navbar .container-xxl {
     max-width: 100% !important;
     padding-left: 1.625rem !important;
     padding-right: 1.625rem !important;
 }
-
-/* Layout Page Background */
 .layout-page {
     background-color: #c5e3f5 !important;
 }
-
 .navbar .form-control {
     border-radius: var(--border-radius-pill) !important;
     background-color: rgba(255, 255, 255, 0.1) !important;
@@ -449,46 +356,36 @@
     transition: all var(--transition-fast);
     color: var(--white) !important;
 }
-
 .navbar .form-control::placeholder {
     color: rgba(255, 255, 255, 0.6) !important;
 }
-
 .navbar .form-control:focus {
     background-color: rgba(255, 255, 255, 0.15) !important;
     border-color: var(--primary-blue) !important;
     box-shadow: 0 0 0 0.2rem rgba(54, 145, 191, 0.25) !important;
 }
-
-/* Dropdown Styles */
 .dropdown-menu {
     border-radius: var(--border-radius-md) !important;
     box-shadow: var(--shadow-lg) !important;
     border: 1px solid var(--glass-border) !important;
 }
-
 .dropdown-item:hover,
 .dropdown-item:focus {
     background-color: var(--light-blue) !important;
     color: var(--primary-blue) !important;
 }
-
-/* Badge Styles */
 .badge {
     border-radius: var(--border-radius-pill) !important;
 }
-
 .bg-danger {
     background-color: #ef4444 !important;
 }
-
 .bg-label-warning {
     background-color: rgba(255, 193, 7, 0.2) !important;
     color: #ffc107 !important;
     border: 1px solid rgba(255, 193, 7, 0.3) !important;
     font-weight: 600 !important;
 }
-
 .badge.bg-label-warning {
     background-color: rgba(255, 193, 7, 0.25) !important;
     color: #ffc107 !important;
@@ -496,8 +393,6 @@
     padding: 0.35rem 0.75rem !important;
     font-weight: 600 !important;
 }
-
-/* Avatar Styles */
 .avatar {
     border-radius: 50%;
     border: 2px solid var(--primary-blue);
@@ -510,7 +405,6 @@
     transition: all var(--transition-normal);
     color: var(--white) !important;
 }
-
 .avatar:hover,
 .avatar:focus {
     background: linear-gradient(135deg, rgba(54, 145, 191, 0.3) 0%, rgba(50, 85, 150, 0.3) 100%) !important;
@@ -521,145 +415,106 @@
     transform: scale(1.08);
     color: var(--white) !important;
 }
-
 .avatar:active {
     transform: scale(0.95);
     background: linear-gradient(135deg, rgba(54, 145, 191, 0.4) 0%, rgba(50, 85, 150, 0.4) 100%) !important;
 }
-
 .avatar img {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
-
 .avatar.avatar-online::before {
     background-color: #10b981 !important;
     border: 2px solid var(--white);
 }
-
-/* Navbar Avatar Specific */
 .navbar .avatar img {
     width: 40px !important;
     height: 40px !important;
     object-fit: cover !important;
 }
-
-/* Dropdown Avatar */
 .dropdown-menu .avatar img {
     width: 40px !important;
     height: 40px !important;
     object-fit: cover !important;
 }
-
-/* Text Colors */
 .text-primary {
     color: var(--primary-blue) !important;
 }
-
 .text-secondary {
     color: var(--primary-blue-dark) !important;
 }
-
 .text-muted {
     color: var(--text-light) !important;
 }
-
 .text-success {
     color: #10b981 !important;
 }
-
-/* Background Colors */
 .bg-primary {
     background-color: var(--primary-blue) !important;
 }
-
 .bg-menu-theme {
     background-color: #0f2942 !important;
 }
-
 .bg-navbar-theme {
     background-color: #d4ebf7 !important;
 }
-
-/* Menu Inner Shadow - Hidden */
 .menu-inner-shadow {
     display: none !important;
 }
-
-/* Links */
 a {
     color: var(--primary-blue);
     transition: color var(--transition-fast);
 }
-
 a:hover {
     color: var(--primary-blue-dark);
 }
-
-/* Form Controls */
 .form-control:focus,
 .form-select:focus {
     border-color: var(--primary-blue) !important;
     box-shadow: 0 0 0 0.2rem rgba(54, 145, 191, 0.25) !important;
 }
-
-/* Progress Bars */
 .progress-bar {
     background-color: var(--primary-blue) !important;
 }
-
-/* Alerts */
 .alert-primary {
     background-color: var(--light-blue) !important;
     border-color: var(--primary-blue) !important;
     color: var(--primary-blue-dark) !important;
 }
-
-/* Tables */
 .table-hover tbody tr:hover {
     background-color: rgba(54, 145, 191, 0.15) !important;
     backdrop-filter: blur(10px) !important;
     -webkit-backdrop-filter: blur(10px) !important;
     transition: all var(--transition-fast);
 }
-
 .table-hover tbody tr {
     transition: all var(--transition-fast);
 }
-
 .table thead th {
     color: var(--white) !important;
     border-bottom: 2px solid rgba(54, 145, 191, 0.3) !important;
 }
-
 .table tbody td {
     color: var(--white) !important;
     border-bottom: 1px solid rgba(54, 145, 191, 0.1) !important;
 }
-
-/* Pagination */
 .page-link {
     color: var(--primary-blue) !important;
     border-radius: var(--border-radius-sm) !important;
 }
-
 .page-link:hover {
     background-color: var(--light-blue) !important;
     color: var(--primary-blue-dark) !important;
 }
-
 .page-item.active .page-link {
     background-color: var(--primary-blue) !important;
     border-color: var(--primary-blue) !important;
 }
-
-/* Scrollbar Customization with Glassmorphism */
 ::-webkit-scrollbar {
     width: 12px;
     height: 12px;
 }
-
 ::-webkit-scrollbar-track {
     background: rgba(197, 227, 245, 0.3);
     backdrop-filter: blur(10px);
@@ -667,7 +522,6 @@ a:hover {
     border-radius: 10px;
     margin: 4px;
 }
-
 ::-webkit-scrollbar-thumb {
     background: linear-gradient(135deg, rgba(54, 145, 191, 0.8) 0%, rgba(50, 85, 150, 0.8) 100%);
     backdrop-filter: blur(10px) saturate(180%);
@@ -678,7 +532,6 @@ a:hover {
         inset 0 1px 0 rgba(255, 255, 255, 0.3);
     transition: all 0.3s ease;
 }
-
 ::-webkit-scrollbar-thumb:hover {
     background: linear-gradient(135deg, rgba(54, 145, 191, 1) 0%, rgba(50, 85, 150, 1) 100%);
     border: 2px solid rgba(255, 255, 255, 0.4);
@@ -686,113 +539,83 @@ a:hover {
         inset 0 1px 0 rgba(255, 255, 255, 0.4),
         0 0 15px rgba(54, 145, 191, 0.3);
 }
-
 ::-webkit-scrollbar-thumb:active {
     background: linear-gradient(135deg, rgba(50, 85, 150, 1) 0%, rgba(22, 56, 86, 1) 100%);
     box-shadow: 0 2px 6px rgba(22, 56, 86, 0.6),
         inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
-
-/* Scrollbar Corner */
 ::-webkit-scrollbar-corner {
     background: rgba(197, 227, 245, 0.3);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
 }
-
-/* Firefox Scrollbar */
 * {
     scrollbar-width: thin;
     scrollbar-color: rgba(54, 145, 191, 0.8) rgba(197, 227, 245, 0.3);
 }
-
-/* SVG Logo Colors */
 .app-brand-logo svg [fill="#696cff"] {
     fill: var(--primary-blue) !important;
 }
-
-/* Chart Colors Override */
 .apexcharts-theme-light .apexcharts-series path {
     stroke: var(--primary-blue) !important;
 }
-
-/* ApexCharts Responsive */
 .apexcharts-canvas {
     width: 100% !important;
 }
-
 .apexcharts-canvas svg {
     width: 100% !important;
     height: auto !important;
 }
-
 #profileReportChart {
     width: 100% !important;
     max-width: 200px !important;
 }
-
 #profileReportChart .apexcharts-canvas {
     width: 100% !important;
 }
-
 #profileReportChart svg {
     width: 100% !important;
     height: auto !important;
     min-height: 80px !important;
 }
-
-/* Welcome Card Statistics Responsive */
 #welcomeStatisticsChart {
     min-width: 130px !important;
     flex-shrink: 0 !important;
 }
-
 .card-body .d-flex.justify-content-between.align-items-center {
     flex-wrap: nowrap !important;
     gap: 1rem !important;
 }
-
 @media (max-width: 576px) {
     .card-body .d-flex.justify-content-between.align-items-center {
         flex-direction: column !important;
         gap: 1.5rem !important;
     }
-
     #welcomeStatisticsChart {
         order: 1 !important;
     }
-
     .d-flex.flex-column.align-items-center.gap-1 {
         order: 2 !important;
     }
 }
-
-/* Glass Effect Cards */
 .card.glass-effect {
     background: var(--glass-bg) !important;
     backdrop-filter: blur(10px);
     border: 1px solid var(--glass-border) !important;
 }
-
-/* Smooth Transitions */
 * {
     transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
     transition-duration: var(--transition-fast);
     transition-timing-function: ease;
 }
-
 button,
 a,
 .btn {
     transition-duration: var(--transition-normal);
 }
-
-/* Hide Buy Now Button */
 .buy-now {
     display: none !important;
 }
-
-/* Hamburger Menu Icon (Bars) in Navbar */
 .layout-menu-toggle.navbar-nav .nav-link i.fa-bars {
     color: var(--primary-blue) !important;
     font-size: 1.5rem !important;
@@ -800,8 +623,6 @@ a,
     visibility: visible !important;
     opacity: 1 !important;
 }
-
-/* Navbar Toggle Styling for Hamburger */
 .layout-menu-toggle.navbar-nav .nav-link {
     padding: 0.5rem !important;
     transition: all var(--transition-fast);
@@ -809,151 +630,112 @@ a,
     align-items: center !important;
     justify-content: center !important;
 }
-
 .layout-menu-toggle.navbar-nav .nav-link:hover i {
     color: var(--primary-blue-dark) !important;
 }
-
-/* Force Font Awesome to load */
 .fas.fa-bars {
     font-family: "Font Awesome 6 Free" !important;
     font-weight: 900 !important;
     font-style: normal !important;
 }
-
 .fas.fa-bars:before {
     content: "\f0c9" !important;
 }
-
-/* Make hamburger visible on all screens if needed */
 .layout-menu-toggle.navbar-nav {
     display: flex !important;
 }
-
-/* Ensure the icon is not hidden */
 .navbar .layout-menu-toggle i {
     display: inline-block !important;
     visibility: visible !important;
     opacity: 1 !important;
 }
-
-/* Search Bar with Icon Inside */
 .navbar .navbar-nav.align-items-center {
     flex: 0 0 auto !important;
     width: auto !important;
     max-width: 300px !important;
     min-width: 0 !important;
 }
-
 .navbar .nav-item.position-relative {
     width: 250px !important;
     max-width: 250px !important;
 }
-
 .navbar .nav-item.position-relative .bx-search {
     color: rgba(255, 255, 255, 0.7) !important;
     pointer-events: none;
 }
-
 .navbar .nav-item.position-relative .form-control {
     padding-left: 40px !important;
     width: 250px !important;
     max-width: 250px !important;
     min-width: 150px !important;
 }
-
 .navbar .nav-item.position-relative .form-control:focus+.bx-search,
 .navbar .nav-item.position-relative:focus-within .bx-search {
     color: var(--primary-blue) !important;
 }
-
-/* Navbar Layout Fix */
 .navbar-nav-right {
     width: 100% !important;
     justify-content: space-between !important;
     flex-wrap: nowrap !important;
 }
-
 .navbar-nav-right>.navbar-nav {
     flex-shrink: 0 !important;
 }
-
 .navbar-nav-right>ul.navbar-nav {
     flex-shrink: 0 !important;
     margin-left: auto !important;
 }
-
-/* User dropdown should not shrink */
 .navbar-nav-right .navbar-nav.ms-auto {
     flex-shrink: 0 !important;
     flex-grow: 0 !important;
 }
-
-/* Responsive search bar for small screens */
 @media (max-width: 500px) {
     .navbar .navbar-nav.align-items-center {
         max-width: 120px !important;
     }
-
     .navbar .nav-item.position-relative {
         width: 120px !important;
         max-width: 120px !important;
     }
-
     .navbar .nav-item.position-relative .form-control {
         width: 120px !important;
         max-width: 120px !important;
         font-size: 0.75rem !important;
         padding-left: 35px !important;
     }
-
     .navbar .nav-item.position-relative .form-control::placeholder {
         font-size: 0.7rem !important;
     }
-
     .navbar .nav-item.position-relative .bx-search {
         font-size: 1rem !important;
         left: 10px !important;
     }
-
-    /* Adjust hamburger menu to the left */
     .layout-menu-toggle.navbar-nav,
     .layout-menu-toggle {
         margin-left: -8px !important;
     }
-
-    /* Adjust user dropdown to the right */
     .navbar-dropdown.dropdown-user {
         margin-right: -16px !important;
     }
 }
-
-/* Remove Avatar Online Status Indicator */
 .avatar.avatar-online:after,
 .avatar.avatar-online::after,
 .avatar.avatar-online:before,
 .avatar.avatar-online::before {
     display: none !important;
 }
-
-/* Main Content Container Background */
 .content-wrapper {
     background-color: #c5e3f5 !important;
 }
-
 .container-xxl.flex-grow-1.container-p-y {
     background-color: #c5e3f5 !important;
     max-width: none !important;
     width: 100% !important;
 }
-
-/* Ensure all container-xxl elements use full width */
 .layout-page .container-xxl {
     max-width: none !important;
     width: 100% !important;
 }
-
-/* Footer Background */
 footer,
 .footer,
 .content-footer {
@@ -977,7 +759,6 @@ footer,
     position: relative !important;
     z-index: 10 !important;
 }
-
 footer .container-xxl,
 .footer .container-xxl {
     background-color: transparent !important;
@@ -986,17 +767,13 @@ footer .container-xxl,
     padding-left: 1.625rem !important;
     padding-right: 1.625rem !important;
 }
-
 .footer-link {
     color: var(--lighter-blue) !important;
     transition: color var(--transition-fast);
 }
-
 .footer-link:hover {
     color: var(--white) !important;
 }
-
-/* Footer Text Color */
 footer,
 footer div,
 footer span,
@@ -1005,38 +782,28 @@ footer span,
 .content-footer span {
     color: var(--white) !important;
 }
-
-/* Navbar Search Icon Color */
 .navbar .nav-item.position-relative .bx-search {
     color: rgba(255, 255, 255, 0.7) !important;
     pointer-events: none;
 }
-
 .navbar .nav-item.position-relative:focus-within .bx-search {
     color: var(--primary-blue) !important;
 }
-
-/* Navbar Text and Icons */
 .navbar .navbar-nav .nav-link {
     color: var(--white) !important;
 }
-
 .navbar .navbar-nav .nav-link:hover {
     color: var(--primary-blue) !important;
 }
-
-/* Dropdown in Navbar */
 .navbar .dropdown-menu {
     background-color: #0f2942 !important;
     border: 1px solid rgba(54, 145, 191, 0.3) !important;
     padding: 0.5rem !important;
     margin: 0 !important;
 }
-
 .navbar .dropdown-menu.dropdown-menu-end {
     margin: 0 !important;
 }
-
 .navbar .dropdown-item {
     color: var(--lighter-blue) !important;
     transition: all var(--transition-fast);
@@ -1044,7 +811,6 @@ footer span,
     margin: 0.25rem 0;
     padding: 0.5rem 1rem;
 }
-
 .navbar .dropdown-item:hover,
 .navbar .dropdown-item:focus {
     background: rgba(54, 145, 191, 0.3) !important;
@@ -1055,62 +821,45 @@ footer span,
     box-shadow: 0 4px 16px rgba(54, 145, 191, 0.25),
         inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
 }
-
-/* Log Out Item - Red Color */
 .navbar .dropdown-item[href*="login"] {
     color: rgba(var(--bs-danger-rgb), 1) !important;
 }
-
 .navbar .dropdown-item[href*="login"] .bx-power-off {
     color: rgba(var(--bs-danger-rgb), 1) !important;
 }
-
 .navbar .dropdown-item[href*="login"]:hover,
 .navbar .dropdown-item[href*="login"]:focus {
     background: rgba(var(--bs-danger-rgb), 0.2) !important;
     border: 1px solid rgba(var(--bs-danger-rgb), 0.4) !important;
     color: rgba(var(--bs-danger-rgb), 1) !important;
 }
-
 .navbar .dropdown-item[href*="login"]:hover .bx-power-off,
 .navbar .dropdown-item[href*="login"]:focus .bx-power-off {
     color: rgba(var(--bs-danger-rgb), 1) !important;
 }
-
-/* Layout Page Padding Top for Desktop */
 @media (min-width: 1200px) {
-
     .layout-menu-fixed:not(.layout-menu-collapsed) .layout-page,
     .layout-menu-fixed-offcanvas:not(.layout-menu-collapsed) .layout-page {
         padding-top: 0.7rem !important;
     }
 }
-
-/* Fix navbar overlap with content */
 .layout-navbar-fixed .layout-page {
     padding-top: 100px !important;
 }
-
 .layout-page .content-wrapper {
     padding-top: 0 !important;
 }
-
 .container-xxl.flex-grow-1.container-p-y {
     padding-top: 1.5rem !important;
 }
-
-/* Manage Profile Icon Styling */
 .form-label .bx {
     color: var(--primary-blue) !important;
     margin-right: 0.5rem !important;
     transition: all var(--transition-fast) !important;
 }
-
 .form-label .bx:hover {
     color: var(--primary-blue-dark) !important;
 }
-
-/* Submenu Active State Styling */
 .menu-sub>.menu-item.active>.menu-link {
     background: rgba(54, 145, 191, 0.25) !important;
     backdrop-filter: blur(10px) saturate(180%) !important;
@@ -1122,15 +871,12 @@ footer span,
         inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
     font-weight: 600 !important;
 }
-
 .menu-sub>.menu-item.active>.menu-link:hover {
     background: rgba(54, 145, 191, 0.35) !important;
     border: 1px solid rgba(54, 145, 191, 0.45) !important;
     box-shadow: 0 6px 16px rgba(54, 145, 191, 0.3),
         inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
 }
-
-/* Submenu Item Hover (Non-Active) */
 .menu-sub>.menu-item:not(.active)>.menu-link:hover {
     background: rgba(54, 145, 191, 0.12) !important;
     backdrop-filter: blur(8px) !important;
@@ -1139,18 +885,13 @@ footer span,
     color: var(--white) !important;
     box-shadow: 0 2px 8px rgba(54, 145, 191, 0.15) !important;
 }
-
-/* Submenu Text Color */
 .menu-sub .menu-link {
     color: rgba(255, 255, 255, 0.85) !important;
     transition: all var(--transition-fast);
 }
-
 .menu-sub>.menu-item.active .menu-link {
     color: var(--white) !important;
 }
-
-/* Remove active state from parent menu when submenu is active */
 .menu-inner>.menu-item.active.open>.menu-link.menu-toggle {
     background: transparent !important;
     backdrop-filter: none !important;
@@ -1159,7 +900,6 @@ footer span,
     box-shadow: none !important;
     color: var(--lighter-blue) !important;
 }
-
 .menu-inner>.menu-item.active.open>.menu-link.menu-toggle:hover {
     background: rgba(54, 145, 191, 0.15) !important;
     backdrop-filter: blur(10px) !important;
@@ -1168,17 +908,12 @@ footer span,
     color: var(--white) !important;
     box-shadow: 0 4px 12px rgba(54, 145, 191, 0.15) !important;
 }
-
-/* Keep the icon color normal for parent menu toggle */
 .menu-inner>.menu-item.active.open>.menu-link.menu-toggle .menu-icon {
     color: var(--light-blue) !important;
 }
-
 .menu-inner>.menu-item.active.open>.menu-link.menu-toggle:hover .menu-icon {
     color: var(--white) !important;
 }
-
-/* Only apply active state to parent if no submenu item is active */
 .menu-inner>.menu-item.active:not(.open)>.menu-link:not(.menu-toggle) {
     background: rgba(54, 145, 191, 0.3) !important;
     backdrop-filter: blur(15px) saturate(180%) !important;
@@ -1189,29 +924,20 @@ footer span,
     box-shadow: 0 4px 16px rgba(54, 145, 191, 0.25),
         inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
 }
-
-/* Change submenu active indicator color from white to blue */
 .bg-menu-theme .menu-inner>.menu-item.open .menu-item.open>.menu-toggle::before,
 .bg-menu-theme .menu-inner>.menu-item.open .menu-item.active>.menu-link::before {
     box-shadow: 0 0 0 2px #3691bf !important;
     background-color: #3691bf !important;
 }
-
-/* Additional styling for the active indicator dot */
 .menu-sub>.menu-item.active>.menu-link:not(.menu-toggle)::before {
     background-color: var(--primary-blue) !important;
     border: 3px solid rgba(54, 145, 191, 0.4) !important;
     box-shadow: 0 0 0 2px rgba(54, 145, 191, 0.6) !important;
 }
-
-/* Hover state for submenu indicator */
 .menu-sub>.menu-item:hover>.menu-link::before {
     background-color: rgba(54, 145, 191, 0.5) !important;
     border: 3px solid rgba(54, 145, 191, 0.3) !important;
 }
-
-
-/* Hide unwanted sidebar menu items - keep only custom CAATE menu items */
 .menu-inner>.menu-item:has(.menu-link[href*="layouts"]),
 .menu-inner>.menu-header:has(.menu-header-text:contains("Pages")),
 .menu-inner>.menu-item:has(.menu-link[data-i18n="Account Settings"]),
@@ -1231,22 +957,13 @@ footer span,
 .menu-inner>.menu-item:has(.menu-link[href*="themeselection"]) {
     display: none !important;
 }
-
-
-/* Hide My Profile and Settings from user dropdown menu */
 .navbar .dropdown-menu .dropdown-item:has(.bx-user),
 .navbar .dropdown-menu .dropdown-item:has(.bx-cog) {
     display: none !important;
 }
-
-
-/* Hide dropdown dividers in user menu */
 .navbar .dropdown-menu li:has(.dropdown-divider) {
     display: none !important;
 }
-
-
-/* Add border line before Log Out button in dropdown */
 .navbar .dropdown-menu .dropdown-item[href*="login"]::before,
 .navbar .dropdown-menu .dropdown-item[href*="auth-login"]::before {
     content: '';
@@ -1263,15 +980,12 @@ footer span,
             transparent 100%);
     box-shadow: 0 1px 2px rgba(54, 145, 191, 0.2);
 }
-
 .navbar .dropdown-menu .dropdown-item[href*="login"],
 .navbar .dropdown-menu .dropdown-item[href*="auth-login"] {
     position: relative;
     margin-top: 0.5rem;
     padding-top: 0.75rem;
 }
-
-/* Adjust app-brand to use flexbox for proper alignment */
 .app-brand.demo {
     display: flex !important;
     flex-direction: row !important;
@@ -1279,7 +993,6 @@ footer span,
     justify-content: center !important;
     padding: 1.5rem 1rem 0.75rem 1rem !important;
 }
-
 .app-brand-link {
     flex: 1 !important;
     display: flex !important;
@@ -1287,13 +1000,6 @@ footer span,
     align-items: center !important;
     justify-content: center !important;
 }
-
-
-/* ========================================
-   HAMBURGER MENU TOGGLE FUNCTIONALITY
-   ======================================== */
-
-/* Menu Toggle Styles */
 .layout-menu {
     transition: transform 0.3s ease, opacity 0.3s ease;
     transform: translateX(0);
@@ -1301,33 +1007,24 @@ footer span,
     position: fixed;
     z-index: 1100;
 }
-
 .layout-menu.menu-hidden {
     transform: translateX(-100%);
     opacity: 0;
     pointer-events: none;
 }
-
-/* Show hamburger menu on all screen sizes */
 .layout-menu-toggle.navbar-nav {
     display: flex !important;
 }
-
-/* Hamburger icon styling */
 .layout-menu-toggle {
     cursor: pointer;
     transition: all var(--transition-fast);
 }
-
 .layout-menu-toggle:hover {
     transform: scale(1.1);
 }
-
 .layout-menu-toggle:active {
     transform: scale(0.95);
 }
-
-/* Overlay styling when menu is visible */
 .layout-overlay {
     position: fixed;
     top: 0;
@@ -1344,8 +1041,6 @@ footer span,
     display: none;
     cursor: pointer;
 }
-
-/* Show overlay when menu is expanded on small screens */
 @media (max-width: 1199.98px) {
     .layout-menu-expanded .layout-overlay {
         display: block;
@@ -1353,57 +1048,36 @@ footer span,
         pointer-events: auto;
     }
 }
-
-/* Remove this rule that was causing issues */
-/* .layout-menu:not(.menu-hidden)~.layout-overlay {
-    opacity: 1;
-    pointer-events: auto;
-} */
-
-/* Adjust layout page when menu is hidden */
 .layout-menu.menu-hidden~.layout-page {
     margin-left: 0 !important;
 }
-
-/* Make layout container expand when menu is hidden */
 .layout-container {
     transition: padding-left 0.3s ease;
 }
-
 .layout-container.menu-collapsed {
     padding-left: 0 !important;
 }
-
 .layout-container.menu-collapsed .layout-page {
     margin-left: 0 !important;
 }
-
-/* Expand layout page to full width when menu is hidden */
 .layout-page {
     transition: margin-left 0.3s ease;
 }
-
-
-/* Additional layout expansion rules for menu toggle */
 .layout-container.menu-collapsed .layout-page {
     width: 100% !important;
     max-width: 100% !important;
 }
-
 .layout-container.menu-collapsed .content-wrapper {
     width: 100% !important;
     max-width: 100% !important;
     padding-left: 0 !important;
     padding-right: 0 !important;
 }
-
 .layout-container.menu-collapsed .layout-navbar {
     left: 0 !important;
     width: auto !important;
     max-width: none !important;
 }
-
-/* Ensure footer maintains proper spacing when menu is collapsed */
 .layout-container.menu-collapsed .content-footer,
 .layout-container.menu-collapsed footer {
     margin-left: 1.625rem !important;
@@ -1411,83 +1085,56 @@ footer span,
     width: auto !important;
     max-width: none !important;
 }
-
-
-/* Ensure navbar maintains proper spacing on all screen sizes */
 @media (max-width: 1199.98px) {
     .layout-navbar {
         margin-left: 1.625rem !important;
         margin-right: 1.625rem !important;
     }
 }
-
-/* When menu is hidden on mobile, ensure navbar has proper margins */
 @media (max-width: 991.98px) {
     .layout-menu.menu-hidden~.layout-page .layout-navbar {
         margin-left: 1.625rem !important;
         margin-right: 1.625rem !important;
     }
 }
-
-
-/* Ensure content container maintains proper padding when menu is collapsed */
 .layout-container.menu-collapsed .container-xxl {
     padding-left: 1.625rem !important;
     padding-right: 1.625rem !important;
     max-width: 100% !important;
 }
-
-/* Override any conflicting width settings */
 .layout-container.menu-collapsed .layout-navbar {
     max-width: none !important;
 }
-
 .layout-container.menu-collapsed .layout-navbar .container-xxl {
     max-width: 100% !important;
     padding-left: 1.625rem !important;
     padding-right: 1.625rem !important;
 }
-
 .layout-container.menu-collapsed .content-footer .container-xxl {
     max-width: 100% !important;
     padding-left: 1.625rem !important;
     padding-right: 1.625rem !important;
 }
-
-
-/* ========================================
-   AUTO-HIDE SIDEBAR ON SCREENS BELOW 1200px
-   ======================================== */
 @media (max-width: 1199.98px) {
-
-    /* Automatically hide/close the sidebar menu by default */
     .layout-menu {
         transform: translateX(-100%) !important;
         opacity: 0 !important;
         pointer-events: none !important;
         transition: transform 0.3s ease, opacity 0.3s ease !important;
     }
-
-    /* Show menu when expanded */
     .layout-menu-expanded .layout-menu {
         transform: translateX(0) !important;
         opacity: 1 !important;
         pointer-events: auto !important;
     }
-
-    /* Expand layout page to full width when sidebar is hidden */
     .layout-page {
         margin-left: 0 !important;
         padding-left: 0 !important;
         width: 100% !important;
     }
-
-    /* Adjust layout container */
     .layout-container {
         padding-left: 0 !important;
     }
-
-    /* Fix navbar positioning - remove extra left margin */
     .layout-navbar {
         margin-left: 1rem !important;
         margin-right: 1rem !important;
@@ -1495,30 +1142,22 @@ footer span,
         width: calc(100% - 2rem) !important;
         max-width: none !important;
     }
-
-    /* Ensure navbar container spans properly */
     .layout-navbar .container-xxl {
         max-width: 100% !important;
         padding-left: 1rem !important;
         padding-right: 1rem !important;
     }
-
-    /* Ensure content wrapper uses full width */
     .content-wrapper {
         width: 100% !important;
         max-width: 100% !important;
         padding-left: 0 !important;
         padding-right: 0 !important;
     }
-
-    /* Fix content container */
     .container-xxl.flex-grow-1.container-p-y {
         padding-left: 1rem !important;
         padding-right: 1rem !important;
         max-width: 100% !important;
     }
-
-    /* Fix footer positioning */
     .content-footer,
     footer {
         margin-left: 1rem !important;
@@ -1526,17 +1165,11 @@ footer span,
         width: calc(100% - 2rem) !important;
         max-width: none !important;
     }
-
-    /* Keep hamburger menu visible so users can toggle sidebar */
     .layout-menu-toggle {
         display: flex !important;
     }
 }
-
-/* On screens 1200px and above, menu is visible by default but can be toggled */
 @media (min-width: 1200px) {
-
-    /* Menu visible by default */
     .layout-menu {
         transform: translateX(0) !important;
         opacity: 1 !important;
@@ -1544,8 +1177,6 @@ footer span,
         position: fixed !important;
         left: 0 !important;
     }
-
-    /* When collapsed on large screens - hide the menu */
     html.layout-menu-collapsed .layout-menu,
     .layout-menu-collapsed .layout-menu {
         transform: translateX(-100%) !important;
@@ -1553,27 +1184,20 @@ footer span,
         pointer-events: none !important;
         transition: transform 0.3s ease, opacity 0.3s ease !important;
     }
-
-    /* Adjust layout page when menu is collapsed on large screens */
     html.layout-menu-collapsed .layout-page,
     .layout-menu-collapsed .layout-page {
         margin-left: 0 !important;
         padding-left: 0 !important;
     }
-
     html.layout-menu-collapsed .layout-navbar,
     .layout-menu-collapsed .layout-navbar {
         left: 0 !important;
         margin-left: 1.625rem !important;
     }
-
-    /* Adjust content wrapper when menu is collapsed */
     html.layout-menu-collapsed .content-wrapper,
     .layout-menu-collapsed .content-wrapper {
         padding-left: 0 !important;
     }
-
-    /* Adjust footer when menu is collapsed */
     html.layout-menu-collapsed .content-footer,
     html.layout-menu-collapsed footer,
     .layout-menu-collapsed .content-footer,
@@ -1581,22 +1205,11 @@ footer span,
         margin-left: 1.625rem !important;
     }
 }
-
-
-/* ========================================
-   PREVENT MENU AUTO-COLLAPSE
-   ======================================== */
-
-/* Override the theme's auto-collapse behavior - always show menu text */
 @media (min-width: 1200px) {
-
-    /* Force menu to stay expanded */
     html.layout-menu-collapsed .layout-menu,
     .layout-menu-collapsed .layout-menu {
         width: 15rem !important;
     }
-
-    /* Always show menu text - override collapsed state */
     html.layout-menu-collapsed:not(.layout-menu-hover) .layout-menu .menu-item .menu-link>div,
     html.layout-menu-collapsed:not(.layout-menu-hover) .layout-menu .menu-item .menu-link>span,
     .layout-menu-collapsed:not(.layout-menu-hover) .layout-menu .menu-item .menu-link>div,
@@ -1607,8 +1220,6 @@ footer span,
         width: auto !important;
         overflow: visible !important;
     }
-
-    /* Keep app brand text visible */
     html.layout-menu-collapsed .layout-menu .app-brand-text,
     .layout-menu-collapsed .layout-menu .app-brand-text {
         opacity: 1 !important;
@@ -1617,35 +1228,25 @@ footer span,
         width: auto !important;
         overflow: visible !important;
     }
-
-    /* Prevent menu from shrinking */
     html.layout-menu-collapsed .layout-menu .app-brand,
     .layout-menu-collapsed .layout-menu .app-brand {
         width: 100% !important;
     }
-
-    /* Force menu links to show full content */
     html.layout-menu-collapsed .layout-menu .menu-link,
     .layout-menu-collapsed .layout-menu .menu-link {
         width: 100% !important;
         padding-left: 1rem !important;
         padding-right: 1rem !important;
     }
-
-    /* Ensure menu inner container stays full width */
     html.layout-menu-collapsed .layout-menu .menu-inner,
     .layout-menu-collapsed .layout-menu .menu-inner {
         width: 100% !important;
     }
-
-    /* Keep submenu text visible */
     html.layout-menu-collapsed .layout-menu .menu-sub .menu-link,
     .layout-menu-collapsed .layout-menu .menu-sub .menu-link {
         opacity: 1 !important;
         visibility: visible !important;
     }
-
-    /* Prevent text from being hidden */
     html.layout-menu-collapsed .layout-menu .menu-item>.menu-link>div,
     .layout-menu-collapsed .layout-menu .menu-item>.menu-link>div {
         opacity: 1 !important;
@@ -1653,12 +1254,6 @@ footer span,
         display: inline-block !important;
     }
 }
-
-/* ========================================
-   CUSTOM MENU TOGGLE STYLES
-   ======================================== */
-
-/* Mobile Menu Close Button */
 .menu-close-btn {
     position: absolute;
     top: 0.75rem;
@@ -1681,13 +1276,11 @@ footer span,
         0 4px 12px rgba(54, 145, 191, 0.25),
         inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
 }
-
 .menu-close-btn i {
     color: var(--white) !important;
     font-size: 1rem;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
-
 .menu-close-btn:hover {
     background: rgba(54, 145, 191, 0.5) !important;
     border: 1px solid rgba(54, 145, 191, 0.6) !important;
@@ -1697,26 +1290,20 @@ footer span,
         0 0 20px rgba(54, 145, 191, 0.2) !important;
     transform: scale(1.05);
 }
-
 .menu-close-btn:active {
     transform: scale(0.95);
     box-shadow: 0 4px 16px rgba(22, 56, 86, 0.4),
         0 2px 8px rgba(54, 145, 191, 0.3),
         inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
 }
-
-/* Show close button only on small screens when menu is expanded */
 @media (max-width: 1199.98px) {
     .layout-menu-expanded .menu-close-btn {
         display: flex !important;
     }
 }
-
-/* Show hamburger menu on ALL screen sizes */
 .layout-menu-toggle.d-xl-none {
     display: flex !important;
 }
-
 .layout-menu-toggle.navbar-nav {
     display: flex !important;
     visibility: visible !important;
@@ -1725,7 +1312,6 @@ footer span,
     z-index: 1090 !important;
     position: relative !important;
 }
-
 .layout-menu-toggle .nav-link {
     display: flex !important;
     visibility: visible !important;
@@ -1733,37 +1319,27 @@ footer span,
     pointer-events: auto !important;
     cursor: pointer !important;
 }
-
 .layout-menu-toggle .nav-link i {
     display: inline-block !important;
     visibility: visible !important;
     opacity: 1 !important;
     pointer-events: auto !important;
 }
-
 .layout-menu-toggle {
     cursor: pointer !important;
     pointer-events: auto !important;
     z-index: 1090 !important;
 }
-
-/* Layout page expansion when menu is hidden */
 .layout-page {
     transition: margin-left 0.3s ease, padding-left 0.3s ease;
 }
-
-/* When menu is hidden, expand layout page to the left */
 body:has(.layout-menu.menu-hidden) .layout-page {
     margin-left: 0 !important;
     padding-left: 0 !important;
 }
-
-/* Adjust layout container when menu is hidden */
 body:has(.layout-menu.menu-hidden) .layout-container {
     padding-left: 0 !important;
 }
-
-/* Adjust container height */
 .container-xxl.flex-grow-1.container-p-y {
     min-height: 85vh;
     padding-top: 1.5rem;
@@ -1771,113 +1347,74 @@ body:has(.layout-menu.menu-hidden) .layout-container {
     max-width: none !important;
     width: 100% !important;
 }
-
-/* Fix Popper.js CSS transition warning - only transition opacity and background */
 .dropdown-menu {
     transition: opacity 0.15s ease, visibility 0.15s ease, background-color 0.15s ease !important;
-    /* Remove transform, top, right, bottom, left from transitions */
 }
-
 .dropdown-menu.show {
     opacity: 1;
     visibility: visible;
 }
-
-/* Remove margin from dropdown menus to fix Popper.js margin warning */
 .dropdown-menu {
     margin: 0 !important;
 }
-
-
-/* Fix dropdown menu z-index and visibility issues */
 .table .dropdown-menu {
     z-index: 9999 !important;
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
     position: absolute !important;
 }
-
-/* Ensure table rows don't interfere with dropdowns */
 .table tbody tr {
     position: relative;
     z-index: 1;
 }
-
-/* When dropdown is open, increase z-index of parent row */
 .table tbody tr:has(.dropdown-menu.show) {
     z-index: 9998 !important;
     position: relative;
 }
-
-/* Keep the row with open dropdown fully visible */
 .table tbody tr:has(.dropdown-menu.show) .btn-group {
     z-index: 9998 !important;
     position: relative;
 }
-
-/* Allow overflow to be visible so dropdown doesn't get cut off */
 .table-responsive {
     overflow: visible !important;
 }
-
-/* Ensure card body doesn't clip dropdown */
 .card-body {
     overflow: visible !important;
 }
-
-/* Ensure card doesn't clip dropdown */
 .card {
     overflow: visible !important;
 }
-
-/* Ensure dropdown toggle button stays visible */
 .btn-group .dropdown-toggle {
     position: relative;
     z-index: 2;
 }
-
-/* Dropdown menu positioning fix */
 .dropdown-menu.show {
     display: block;
     position: absolute !important;
     z-index: 9999 !important;
 }
-
-/* Ensure content wrapper doesn't interfere */
 .content-wrapper {
     position: relative;
     z-index: auto !important;
 }
-
-/* Ensure layout page doesn't interfere */
 .layout-page {
     position: relative;
     z-index: auto !important;
 }
-
-
-/* Remove transform scale on hover for table action buttons */
 .table .btn-group .btn:hover,
 .table .btn-group .btn:focus,
 .table .btn-group .btn:active {
     transform: none !important;
 }
-
-/* Remove transform from primary buttons in tables */
 .table .btn-primary:hover,
 .table .btn-primary:focus,
 .table .btn-primary:active {
     transform: none !important;
 }
-
-/* Remove transform from dropdown toggle buttons in tables */
 .table .dropdown-toggle:hover,
 .table .dropdown-toggle:focus,
 .table .dropdown-toggle:active {
     transform: none !important;
 }
-
-
-/* Force last 2 rows to open dropdown upward (dropup) */
 .table tbody tr:nth-last-child(1) .dropdown-menu,
 .table tbody tr:nth-last-child(2) .dropdown-menu {
     bottom: 100% !important;
@@ -1885,9 +1422,6 @@ body:has(.layout-menu.menu-hidden) .layout-container {
     margin-bottom: 0.125rem !important;
     margin-top: 0 !important;
 }
-
-
-/* Redesign dropdown menu for table actions with color palette */
 .table .dropdown-menu {
     background-color: #0f2942 !important;
     background: linear-gradient(135deg, #0f2942 0%, #0a1f33 100%) !important;
@@ -1902,8 +1436,6 @@ body:has(.layout-menu.menu-hidden) .layout-container {
     padding: 0.5rem !important;
     min-width: 200px !important;
 }
-
-/* Dropdown items styling */
 .table .dropdown-menu .dropdown-item {
     color: rgba(255, 255, 255, 0.9) !important;
     padding: 0.65rem 1rem !important;
@@ -1912,8 +1444,6 @@ body:has(.layout-menu.menu-hidden) .layout-container {
     margin: 0.15rem 0 !important;
     font-weight: 500 !important;
 }
-
-/* Dropdown item hover effect */
 .table .dropdown-menu .dropdown-item:hover,
 .table .dropdown-menu .dropdown-item:focus {
     background: rgba(54, 145, 191, 0.3) !important;
@@ -1925,54 +1455,39 @@ body:has(.layout-menu.menu-hidden) .layout-container {
         inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
     transform: translateX(4px) !important;
 }
-
-/* Dropdown item active state */
 .table .dropdown-menu .dropdown-item:active {
     background: rgba(54, 145, 191, 0.4) !important;
     color: var(--white) !important;
 }
-
-/* Dropdown item icons */
 .table .dropdown-menu .dropdown-item i {
     color: rgba(54, 145, 191, 0.9) !important;
     transition: color var(--transition-fast) !important;
 }
-
 .table .dropdown-menu .dropdown-item:hover i,
 .table .dropdown-menu .dropdown-item:focus i {
     color: var(--white) !important;
 }
-
-/* Archive item (danger) styling */
 .table .dropdown-menu .dropdown-item.text-danger {
     color: rgba(239, 68, 68, 0.9) !important;
 }
-
 .table .dropdown-menu .dropdown-item.text-danger:hover,
 .table .dropdown-menu .dropdown-item.text-danger:focus {
     background: rgba(239, 68, 68, 0.2) !important;
     border: 1px solid rgba(239, 68, 68, 0.4) !important;
     color: rgba(239, 68, 68, 1) !important;
 }
-
 .table .dropdown-menu .dropdown-item.text-danger i {
     color: rgba(239, 68, 68, 0.9) !important;
 }
-
 .table .dropdown-menu .dropdown-item.text-danger:hover i,
 .table .dropdown-menu .dropdown-item.text-danger:focus i {
     color: rgba(239, 68, 68, 1) !important;
 }
-
-/* Dropdown divider styling */
 .table .dropdown-menu .dropdown-divider {
     border-top: 1px solid rgba(54, 145, 191, 0.3) !important;
     margin: 0.5rem 0 !important;
     box-shadow: 0 1px 2px rgba(54, 145, 191, 0.2) !important;
 }
-
-
-/* Redesign form controls in cards to match color palette */
 .card .form-control,
 .card .form-select {
     background-color: rgba(15, 41, 66, 0.6) !important;
@@ -1985,13 +1500,10 @@ body:has(.layout-menu.menu-hidden) .layout-container {
     padding: 0.5rem 0.875rem !important;
     transition: all var(--transition-fast) !important;
 }
-
 .card .form-control::placeholder,
 .card .form-select::placeholder {
     color: rgba(255, 255, 255, 0.5) !important;
 }
-
-/* Form control focus state */
 .card .form-control:focus,
 .card .form-select:focus {
     background-color: rgba(15, 41, 66, 0.8) !important;
@@ -2002,15 +1514,11 @@ body:has(.layout-menu.menu-hidden) .layout-container {
         inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
     color: var(--white) !important;
 }
-
-/* Form control hover state */
 .card .form-control:hover,
 .card .form-select:hover {
     border: 1px solid rgba(54, 145, 191, 0.4) !important;
     box-shadow: 0 2px 8px rgba(54, 145, 191, 0.15) !important;
 }
-
-/* Form select dropdown arrow */
 .card .form-select {
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%233691bf' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e") !important;
     background-repeat: no-repeat !important;
@@ -2021,15 +1529,11 @@ body:has(.layout-menu.menu-hidden) .layout-container {
     -moz-appearance: none !important;
     appearance: none !important;
 }
-
-/* Form labels in cards */
 .card .form-label {
     color: rgba(255, 255, 255, 0.9) !important;
     font-weight: 600 !important;
     margin-bottom: 0.5rem !important;
 }
-
-/* Input group styling */
 .card .input-group-text {
     background-color: rgba(15, 41, 66, 0.6) !important;
     background: linear-gradient(135deg, rgba(15, 41, 66, 0.6) 0%, rgba(10, 31, 51, 0.6) 100%) !important;
@@ -2038,19 +1542,12 @@ body:has(.layout-menu.menu-hidden) .layout-container {
     border: 1px solid rgba(54, 145, 191, 0.3) !important;
     color: rgba(54, 145, 191, 0.9) !important;
 }
-
-/* Search input specific styling */
 .card input[type="search"],
 .card input[type="text"].form-control {
-    /* padding-left: 2.5rem !important; */
 }
-
-/* Date input styling */
 .card input[type="date"] {
     color-scheme: light !important;
 }
-
-/* Disabled form controls */
 .card .form-control:disabled,
 .card .form-select:disabled {
     background-color: rgba(15, 41, 66, 0.4) !important;
@@ -2058,43 +1555,30 @@ body:has(.layout-menu.menu-hidden) .layout-container {
     color: rgba(255, 255, 255, 0.5) !important;
     opacity: 0.6 !important;
 }
-
-/* Readonly form controls */
 .card .form-control[readonly] {
     background-color: rgba(15, 41, 66, 0.4) !important;
     border: 1px solid rgba(54, 145, 191, 0.2) !important;
     color: rgba(255, 255, 255, 0.7) !important;
 }
-
-
-/* Style select dropdown options */
 .card .form-select option {
     background-color: #0f2942 !important;
     color: rgba(255, 255, 255, 0.9) !important;
     padding: 0.5rem !important;
 }
-
 .card .form-select option:hover,
 .card .form-select option:focus,
 .card .form-select option:checked {
     background-color: rgba(54, 145, 191, 0.3) !important;
     color: var(--white) !important;
 }
-
-/* Style the select dropdown list container */
 .card select.form-select {
     color-scheme: dark !important;
 }
-
-/* Additional styling for better appearance */
 .card .form-select optgroup {
     background-color: #0a1f33 !important;
     color: rgba(54, 145, 191, 0.9) !important;
     font-weight: 600 !important;
 }
-
-
-/* Redesign outline-secondary buttons (like Reset button) */
 .card .btn-outline-secondary {
     background-color: transparent !important;
     background: linear-gradient(135deg, rgba(54, 145, 191, 0.1) 0%, rgba(50, 85, 150, 0.1) 100%) !important;
@@ -2106,7 +1590,6 @@ body:has(.layout-menu.menu-hidden) .layout-container {
     transition: all var(--transition-normal) !important;
     font-weight: 600 !important;
 }
-
 .card .btn-outline-secondary:hover,
 .card .btn-outline-secondary:focus {
     background: linear-gradient(135deg, rgba(54, 145, 191, 0.25) 0%, rgba(50, 85, 150, 0.25) 100%) !important;
@@ -2117,50 +1600,39 @@ body:has(.layout-menu.menu-hidden) .layout-container {
     box-shadow: 0 4px 16px rgba(54, 145, 191, 0.25),
         inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
 }
-
 .card .btn-outline-secondary:active {
     background: linear-gradient(135deg, rgba(54, 145, 191, 0.35) 0%, rgba(50, 85, 150, 0.35) 100%) !important;
     border: 1px solid rgba(54, 145, 191, 0.7) !important;
     color: var(--white) !important;
 }
-
 .card .btn-outline-secondary i {
     color: rgba(54, 145, 191, 0.9) !important;
     transition: color var(--transition-fast) !important;
 }
-
 .card .btn-outline-secondary:hover i,
 .card .btn-outline-secondary:focus i {
     color: var(--white) !important;
 }
-
-
-/* Fix button alignment and icon centering */
 .card .btn {
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
     gap: 0.5rem !important;
 }
-
 .card .btn i {
     display: inline-flex !important;
     align-items: center !important;
     font-size: 1.1rem !important;
 }
-
-/* Special styling for Filter button to make it more visible */
 .card .btn-outline-secondary[data-bs-toggle="collapse"] {
     background: linear-gradient(135deg, rgba(54, 145, 191, 0.3) 0%, rgba(50, 85, 150, 0.3) 100%) !important;
     border: 1px solid rgba(54, 145, 191, 0.6) !important;
     color: var(--white) !important;
     font-weight: 600 !important;
 }
-
 .card .btn-outline-secondary[data-bs-toggle="collapse"] i {
     color: var(--white) !important;
 }
-
 .card .btn-outline-secondary[data-bs-toggle="collapse"]:hover,
 .card .btn-outline-secondary[data-bs-toggle="collapse"]:focus {
     background: linear-gradient(135deg, rgba(54, 145, 191, 0.5) 0%, rgba(50, 85, 150, 0.5) 100%) !important;
@@ -2169,50 +1641,30 @@ body:has(.layout-menu.menu-hidden) .layout-container {
     box-shadow: 0 4px 16px rgba(54, 145, 191, 0.35),
         inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
 }
-
 .card .btn-outline-secondary[data-bs-toggle="collapse"]:active {
     background: linear-gradient(135deg, rgba(54, 145, 191, 0.6) 0%, rgba(50, 85, 150, 0.6) 100%) !important;
     border: 1px solid rgba(54, 145, 191, 0.9) !important;
 }
-
-/* When filter panel is expanded, make button more prominent */
 .card .btn-outline-secondary[data-bs-toggle="collapse"][aria-expanded="true"] {
     background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%) !important;
     border: 1px solid var(--primary-blue) !important;
     color: var(--white) !important;
     box-shadow: 0 4px 12px rgba(54, 145, 191, 0.4) !important;
 }
-
-
-/* Search icon styles removed */
-
-
-/* Fix reset button height to match form controls */
 .card .btn-outline-secondary:not([data-bs-toggle="collapse"]) {
     min-height: calc(1.5em + 1rem + 2px) !important;
     padding: 0.5rem 0.875rem !important;
 }
-
-/* Ensure all form controls have consistent height */
 .card .form-control,
 .card .form-select,
 .card .btn {
     height: auto !important;
     min-height: calc(1.5em + 1rem + 2px) !important;
 }
-
-
-/* ========================================
-   MODAL STYLING WITH COLOR PALETTE
-   ======================================== */
-
-/* Modal backdrop */
 .modal-backdrop {
     background-color: rgba(22, 56, 86, 0.8) !important;
     backdrop-filter: blur(4px) !important;
 }
-
-/* Modal content */
 .modal-content {
     background-color: #0f2942 !important;
     background: linear-gradient(135deg, #0f2942 0%, #0a1f33 100%) !important;
@@ -2225,37 +1677,27 @@ body:has(.layout-menu.menu-hidden) .layout-container {
         inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
     color: var(--white) !important;
 }
-
-/* Modal header */
 .modal-header {
     background: linear-gradient(135deg, rgba(54, 145, 191, 0.2) 0%, rgba(50, 85, 150, 0.2) 100%) !important;
     border-bottom: 1px solid rgba(54, 145, 191, 0.3) !important;
     padding: 1.25rem 1.5rem !important;
 }
-
 .modal-title {
     color: var(--white) !important;
     font-weight: 700 !important;
     font-size: 1.25rem !important;
 }
-
-/* Modal close button */
 .modal-header .btn-close {
     filter: invert(1) brightness(2) !important;
     opacity: 0.8 !important;
 }
-
 .modal-header .btn-close:hover {
     opacity: 1 !important;
 }
-
-/* Modal body */
 .modal-body {
     padding: 1.5rem !important;
     color: rgba(255, 255, 255, 0.9) !important;
 }
-
-/* Modal body headings */
 .modal-body h6 {
     color: rgba(255, 255, 255, 0.95) !important;
     font-weight: 700 !important;
@@ -2264,25 +1706,18 @@ body:has(.layout-menu.menu-hidden) .layout-container {
     padding-bottom: 0.5rem !important;
     border-bottom: 1px solid rgba(54, 145, 191, 0.2) !important;
 }
-
-/* Modal body text */
 .modal-body .row {
     color: rgba(255, 255, 255, 0.9) !important;
 }
-
 .modal-body strong {
     color: rgba(255, 255, 255, 0.95) !important;
     font-weight: 600 !important;
 }
-
-/* Modal body all text elements */
 .modal-body .col-sm-4,
 .modal-body .col-sm-8,
 .modal-body div {
     color: rgba(255, 255, 255, 0.9) !important;
 }
-
-/* Modal form controls */
 .modal .form-control,
 .modal .form-select {
     background-color: rgba(15, 41, 66, 0.6) !important;
@@ -2294,11 +1729,9 @@ body:has(.layout-menu.menu-hidden) .layout-container {
     color: rgba(255, 255, 255, 0.9) !important;
     padding: 0.5rem 0.875rem !important;
 }
-
 .modal .form-control::placeholder {
     color: rgba(255, 255, 255, 0.5) !important;
 }
-
 .modal .form-control:focus,
 .modal .form-select:focus {
     background-color: rgba(15, 41, 66, 0.8) !important;
@@ -2306,15 +1739,11 @@ body:has(.layout-menu.menu-hidden) .layout-container {
     box-shadow: 0 0 0 0.2rem rgba(54, 145, 191, 0.25) !important;
     color: var(--white) !important;
 }
-
-/* Modal form labels */
 .modal .form-label {
     color: rgba(255, 255, 255, 0.9) !important;
     font-weight: 600 !important;
     margin-bottom: 0.5rem !important;
 }
-
-/* Modal form select dropdown arrow */
 .modal .form-select {
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%233691bf' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e") !important;
     background-repeat: no-repeat !important;
@@ -2325,80 +1754,57 @@ body:has(.layout-menu.menu-hidden) .layout-container {
     -moz-appearance: none !important;
     appearance: none !important;
 }
-
-/* Modal checkboxes and radio buttons */
 .modal .form-check-input {
     background-color: rgba(15, 41, 66, 0.6) !important;
     border: 1px solid rgba(54, 145, 191, 0.4) !important;
 }
-
 .modal .form-check-input:checked {
     background-color: var(--primary-blue) !important;
     border-color: var(--primary-blue) !important;
 }
-
 .modal .form-check-label {
     color: rgba(255, 255, 255, 0.9) !important;
 }
-
-/* Modal alerts */
 .modal .alert {
     background: linear-gradient(135deg, rgba(54, 145, 191, 0.15) 0%, rgba(50, 85, 150, 0.15) 100%) !important;
     border: 1px solid rgba(54, 145, 191, 0.3) !important;
     color: rgba(255, 255, 255, 0.9) !important;
     border-radius: var(--border-radius-sm) !important;
 }
-
 .modal .alert-secondary {
     background: linear-gradient(135deg, rgba(100, 116, 139, 0.15) 0%, rgba(71, 85, 105, 0.15) 100%) !important;
     border: 1px solid rgba(100, 116, 139, 0.3) !important;
 }
-
-/* Modal footer */
 .modal-footer {
     background: linear-gradient(135deg, rgba(54, 145, 191, 0.1) 0%, rgba(50, 85, 150, 0.1) 100%) !important;
     border-top: 1px solid rgba(54, 145, 191, 0.3) !important;
     padding: 1rem 1.5rem !important;
 }
-
-/* Modal buttons */
 .modal .btn-outline-secondary {
     background: transparent !important;
     border: 1px solid rgba(54, 145, 191, 0.4) !important;
     color: rgba(54, 145, 191, 0.9) !important;
 }
-
 .modal .btn-outline-secondary:hover {
     background: rgba(54, 145, 191, 0.2) !important;
     border: 1px solid rgba(54, 145, 191, 0.6) !important;
     color: var(--white) !important;
 }
-
-/* Modal readonly inputs */
 .modal .form-control[readonly] {
     background-color: rgba(15, 41, 66, 0.4) !important;
     border: 1px solid rgba(54, 145, 191, 0.2) !important;
     color: rgba(255, 255, 255, 0.7) !important;
 }
-
-/* Modal text muted */
 .modal .text-muted {
     color: rgba(255, 255, 255, 0.6) !important;
 }
-
-/* Modal small text */
 .modal small {
     color: rgba(255, 255, 255, 0.7) !important;
 }
-
-/* Modal hr divider */
 .modal hr {
     border-top: 1px solid rgba(54, 145, 191, 0.3) !important;
     opacity: 1 !important;
 }
-
-
-/* Trainee Modals Styling */
 #editTraineeModal .modal-content,
 #viewTraineeModal .modal-content,
 #deleteTraineeModal .modal-content {
@@ -2407,25 +1813,21 @@ body:has(.layout-menu.menu-hidden) .layout-container {
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
 }
-
 #editTraineeModal .modal-header,
 #viewTraineeModal .modal-header,
 #deleteTraineeModal .modal-header {
     border-bottom: 1px solid rgba(99, 179, 237, 0.2);
 }
-
 #editTraineeModal .modal-footer,
 #viewTraineeModal .modal-footer,
 #deleteTraineeModal .modal-footer {
     border-top: 1px solid rgba(99, 179, 237, 0.2);
 }
-
 #editTraineeModal .form-label,
 #viewTraineeModal h6,
 #viewTraineeModal p strong {
     color: #ffffff !important;
 }
-
 #editTraineeModal .form-control,
 #editTraineeModal .form-select {
     background: rgba(15, 41, 66, 0.6);
@@ -2434,7 +1836,6 @@ body:has(.layout-menu.menu-hidden) .layout-container {
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
 }
-
 #editTraineeModal .form-control:focus,
 #editTraineeModal .form-select:focus {
     background: rgba(15, 41, 66, 0.8);
@@ -2442,188 +1843,127 @@ body:has(.layout-menu.menu-hidden) .layout-container {
     box-shadow: 0 0 0 0.2rem rgba(99, 179, 237, 0.25);
     color: #ffffff;
 }
-
 #editTraineeModal .form-select option {
     background: #0f2942;
     color: #ffffff;
 }
-
 #viewTraineeModal .alert-info {
     background: rgba(99, 179, 237, 0.1);
     border: 1px solid rgba(99, 179, 237, 0.3);
     color: #ffffff;
 }
-
 #deleteTraineeModal .alert-danger {
     background: rgba(220, 53, 69, 0.1);
     border: 1px solid rgba(220, 53, 69, 0.3);
     color: #ffffff;
 }
-
-
-/* ========================================
-   NAVBAR FIX - Override all container constraints
-   ======================================== */
-
-/* Remove max-width constraint from navbar container */
 nav.layout-navbar.container-xxl,
 nav.layout-navbar.navbar-detached.container-xxl,
 .layout-navbar.container-xxl {
     max-width: none !important;
     width: auto !important;
 }
-
-/* Ensure navbar content area uses full available width */
 #layout-navbar,
 #layout-navbar.container-xxl {
     max-width: none !important;
 }
-
-/* Fix navbar at all breakpoints */
 @media (min-width: 1200px) {
     .layout-navbar.navbar-detached.container-xxl {
         max-width: none !important;
     }
 }
-
 @media (min-width: 1400px) {
     .layout-navbar.navbar-detached.container-xxl {
         max-width: none !important;
     }
 }
-
-/* Ensure navbar-nav-right doesn't overflow */
 .layout-navbar .navbar-nav-right,
 #navbar-collapse {
     max-width: 100% !important;
     overflow: visible !important;
 }
-
-/* ========================================
-   CONTENT WRAPPER FIX - Override all container constraints
-   ======================================== */
-
-/* Remove max-width from all container-xxl in content area */
 .content-wrapper .container-xxl,
 .layout-page .content-wrapper .container-xxl {
     max-width: none !important;
     width: 100% !important;
 }
-
-/* Override Bootstrap container-xxl max-width at all breakpoints */
 @media (min-width: 1400px) {
     .container-xxl {
         max-width: none !important;
     }
-
     .layout-page .container-xxl {
         max-width: none !important;
     }
 }
-
-/* Ensure content uses full width */
 .layout-page {
     width: 100% !important;
 }
-
 .content-wrapper {
     width: 100% !important;
     max-width: none !important;
 }
-
-
-/* Date and Time Input Icons - White Color */
 input[type="date"]::-webkit-calendar-picker-indicator,
 input[type="time"]::-webkit-calendar-picker-indicator {
     filter: invert(1) brightness(100%) !important;
     cursor: pointer;
 }
-
-/* For Firefox and text color */
 input[type="date"],
 input[type="time"] {
     color-scheme: white;
 }
-
-/* Ensure placeholder text is also visible */
 input[type="date"]::placeholder,
 input[type="time"]::placeholder {
     color: rgba(255, 255, 255, 0.6) !important;
 }
-
-/* Prevent button focus state from persisting after modal closes */
 .modal .btn-primary:focus,
 .modal .btn-primary.focus {
     outline: none !important;
     box-shadow: none !important;
 }
-
 .modal .btn-primary:not(:hover):not(:active) {
     background-color: var(--primary-blue) !important;
     border-color: var(--primary-blue) !important;
     transform: none !important;
 }
-
-/* Remove focus ring from buttons after click */
 .btn:focus:not(:focus-visible) {
     outline: none !important;
     box-shadow: none !important;
 }
-
-
-/* ========================================
-   ACCOUNTS PAGE - MODAL CUSTOM STYLES
-   ======================================== */
-
-/* Delete Modal Styling */
 #deleteTraineeModal .modal-content {
     background-color: #2b3544;
     border: 1px solid #3d4f63;
 }
-
 #deleteTraineeModal .modal-header {
     border-bottom: 1px solid #3d4f63;
 }
-
 #deleteTraineeModal .modal-footer {
     border-top: 1px solid #3d4f63;
 }
-
 #deleteTraineeModal .modal-title {
     color: #fff;
 }
-
 #deleteTraineeModal .alert-danger {
     background-color: rgba(220, 53, 69, 0.1);
     border-color: #dc3545;
     color: #ff6b6b;
 }
-
 #deleteTraineeModal p {
     color: #b8c5d6;
 }
-
 #deleteTraineeModal strong {
     color: #fff;
 }
-
-/* Ensure modal appears above everything */
 .modal-backdrop {
     z-index: 1040;
 }
-
 .modal {
     z-index: 1050;
 }
-
-/* Modal Width Adjustments */
 #addTraineeModal .modal-dialog,
 #editTraineeModal .modal-dialog,
 #viewTraineeModal .modal-dialog {
     max-width: 650px;
 }
-
-/* Input field spacing for modals */
 #addTraineeModal .form-control,
 #editTraineeModal .form-control,
 #viewTraineeModal .form-control,
@@ -2632,8 +1972,6 @@ input[type="time"]::placeholder {
 #viewTraineeModal .form-select {
     padding: 0.625rem 1rem;
 }
-
-/* Toast Notification Styles - Glassmorphism Design */
 .toast-container {
     position: fixed;
     top: 20px;
@@ -2643,7 +1981,6 @@ input[type="time"]::placeholder {
     flex-direction: column;
     gap: 12px;
 }
-
 .toast-notification {
     min-width: 320px;
     max-width: 400px;
@@ -2665,58 +2002,42 @@ input[type="time"]::placeholder {
     position: relative;
     overflow: hidden;
 }
-
-/* Removed glow effect for cleaner appearance */
-
-/* Success Toast */
 .toast-notification.success {
     border-color: rgba(16, 185, 129, 0.5);
     box-shadow: 0 10px 40px rgba(16, 185, 129, 0.3),
         0 4px 12px rgba(16, 185, 129, 0.4),
         inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
-
 .toast-notification.success::after {
     display: none;
 }
-
-/* Error Toast */
 .toast-notification.error {
     border-color: rgba(239, 68, 68, 0.5);
     box-shadow: 0 10px 40px rgba(239, 68, 68, 0.3),
         0 4px 12px rgba(239, 68, 68, 0.4),
         inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
-
 .toast-notification.error::after {
     display: none;
 }
-
-/* Info Toast */
 .toast-notification.info {
     border-color: rgba(54, 145, 191, 0.5);
     box-shadow: 0 10px 40px rgba(54, 145, 191, 0.3),
         0 4px 12px rgba(54, 145, 191, 0.4),
         inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
-
 .toast-notification.info::after {
     display: none;
 }
-
-/* Warning Toast */
 .toast-notification.warning {
     border-color: rgba(245, 158, 11, 0.5);
     box-shadow: 0 10px 40px rgba(245, 158, 11, 0.3),
         0 4px 12px rgba(245, 158, 11, 0.4),
         inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
-
 .toast-notification.warning::after {
     display: none;
 }
-
-/* Toast Icon */
 .toast-icon {
     width: 40px;
     height: 40px;
@@ -2733,33 +2054,28 @@ input[type="time"]::placeholder {
     position: relative;
     z-index: 1;
 }
-
 .toast-icon::before {
     font-size: 20px !important;
     line-height: 1 !important;
 }
-
 .toast-notification.success .toast-icon {
     border: 2px solid rgba(16, 185, 129, 0.6);
     color: #10b981;
     box-shadow: 0 0 20px rgba(16, 185, 129, 0.3),
         inset 0 0 10px rgba(16, 185, 129, 0.1);
 }
-
 .toast-notification.error .toast-icon {
     border: 2px solid rgba(239, 68, 68, 0.6);
     color: #ef4444;
     box-shadow: 0 0 20px rgba(239, 68, 68, 0.3),
         inset 0 0 10px rgba(239, 68, 68, 0.1);
 }
-
 .toast-notification.info .toast-icon {
     border: 2px solid rgba(54, 145, 191, 0.6);
     color: #3691bf !important;
     box-shadow: 0 0 20px rgba(54, 145, 191, 0.3),
         inset 0 0 10px rgba(54, 145, 191, 0.1);
 }
-
 .toast-notification.info .toast-icon.bxs-info-circle::before {
     content: "i" !important;
     font-family: Arial, sans-serif !important;
@@ -2767,14 +2083,12 @@ input[type="time"]::placeholder {
     font-weight: bold !important;
     font-size: 20px !important;
 }
-
 .toast-notification.warning .toast-icon {
     border: 2px solid rgba(245, 158, 11, 0.6);
     color: #f59e0b;
     box-shadow: 0 0 20px rgba(245, 158, 11, 0.3),
         inset 0 0 10px rgba(245, 158, 11, 0.1);
 }
-
 .toast-notification.warning .toast-icon.bx-error-circle::before {
     content: "!" !important;
     font-family: Arial, sans-serif !important;
@@ -2783,8 +2097,6 @@ input[type="time"]::placeholder {
     font-size: 20px !important;
     line-height: 1 !important;
 }
-
-/* Toast Content */
 .toast-content {
     flex: 1;
     padding-top: 0;
@@ -2796,7 +2108,6 @@ input[type="time"]::placeholder {
     align-items: center;
     text-align: center;
 }
-
 .toast-title {
     font-weight: 600;
     margin-bottom: 4px;
@@ -2804,15 +2115,12 @@ input[type="time"]::placeholder {
     letter-spacing: 0.3px;
     color: rgba(255, 255, 255, 0.95);
 }
-
 .toast-message {
     font-size: 13px;
     font-weight: 400;
     line-height: 1.5;
     color: rgba(255, 255, 255, 0.75);
 }
-
-/* Toast Close Button */
 .toast-close {
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
@@ -2832,7 +2140,6 @@ input[type="time"]::placeholder {
     position: relative;
     z-index: 1;
 }
-
 .toast-close:hover {
     background: rgba(255, 255, 255, 0.2);
     border-color: rgba(255, 255, 255, 0.3);
@@ -2840,63 +2147,45 @@ input[type="time"]::placeholder {
     transform: scale(1.05);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
-
 .toast-close:active {
     transform: scale(0.95);
 }
-
-/* Animation */
 @keyframes slideInGlass {
     from {
         transform: translateX(450px) scale(0.9);
         opacity: 0;
     }
-
     to {
         transform: translateX(0) scale(1);
         opacity: 1;
     }
 }
-
-/* Fade out animation */
 .toast-notification.fade-out {
     animation: fadeOutGlass 0.3s ease forwards;
 }
-
 @keyframes fadeOutGlass {
     from {
         transform: translateX(0) scale(1);
         opacity: 1;
     }
-
     to {
         transform: translateX(450px) scale(0.9);
         opacity: 0;
     }
 }
-
 @keyframes slideOut {
     from {
         transform: translateX(0);
         opacity: 1;
     }
-
     to {
         transform: translateX(450px);
         opacity: 0;
     }
 }
-
 .toast-notification.hiding {
     animation: slideOut 0.3s cubic-bezier(0.4, 0, 1, 1) forwards;
 }
-
-
-/* ========================================
-   Image Upload Styles for Edit Course Modal
-   ======================================== */
-
-/* Upload Area Styles for Edit Modal - Dark Theme */
 #editUploadArea.upload-area {
     border: 2px dashed #3d4f63 !important;
     border-radius: 8px !important;
@@ -2911,19 +2200,15 @@ input[type="time"]::placeholder {
     justify-content: center !important;
     align-items: center !important;
 }
-
 #editUploadArea.upload-area:hover {
     background-color: #243447 !important;
     border-color: #3b82f6 !important;
 }
-
 #editUploadArea.upload-area.dragover {
     background-color: #243447 !important;
     border-color: #3b82f6 !important;
     transform: scale(1.02) !important;
 }
-
-/* Image Preview Styles - Dark Theme */
 #editImagePreviewSection.image-preview-section {
     padding: 1rem !important;
     border: 2px solid #3d4f63 !important;
@@ -2932,7 +2217,6 @@ input[type="time"]::placeholder {
     height: 200px !important;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3) !important;
 }
-
 #editImagePreviewSection .image-preview-container {
     display: flex !important;
     justify-content: center !important;
@@ -2945,14 +2229,11 @@ input[type="time"]::placeholder {
     position: relative !important;
     transition: all 0.3s ease !important;
 }
-
 #editImagePreviewSection .image-preview-container:hover {
     border-color: #3b82f6 !important;
     background-color: #2d3e52 !important;
     transform: scale(1.02) !important;
 }
-
-/* Image action buttons - Dark Theme */
 #editImageActionButtons.image-action-buttons {
     position: absolute !important;
     bottom: 12px !important;
@@ -2967,7 +2248,6 @@ input[type="time"]::placeholder {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5) !important;
     border: 1px solid #3d4f63 !important;
 }
-
 #editViewImageBtn.image-view-btn,
 #editRemoveImageBtn.image-remove-btn {
     border-radius: 50% !important;
@@ -2982,66 +2262,53 @@ input[type="time"]::placeholder {
     transition: all 0.3s ease !important;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
 }
-
 #editViewImageBtn.image-view-btn {
     background-color: #3b82f6 !important;
     color: #ffffff !important;
 }
-
 #editViewImageBtn.image-view-btn:hover {
     background-color: #2563eb !important;
     color: #ffffff !important;
     transform: scale(1.1) !important;
     box-shadow: 0 4px 8px rgba(59, 130, 246, 0.5) !important;
 }
-
 #editRemoveImageBtn.image-remove-btn {
     background-color: #ef4444 !important;
     color: #ffffff !important;
 }
-
 #editRemoveImageBtn.image-remove-btn:hover {
     background-color: #dc2626 !important;
     color: #ffffff !important;
     transform: scale(1.1) !important;
     box-shadow: 0 4px 8px rgba(239, 68, 68, 0.5) !important;
 }
-
-/* No image text styling - Dark Theme */
 #editNoImageText {
     color: #8b9bb0 !important;
 }
-
 #editNoImageText i {
     color: #5a6b7f !important;
     opacity: 0.5 !important;
 }
-
 #editNoImageText p {
     color: #b8c5d6 !important;
     font-weight: 500 !important;
     margin-top: 0.75rem !important;
     margin-bottom: 0.25rem !important;
 }
-
 #editNoImageText small {
     color: #8b9bb0 !important;
     font-weight: 400 !important;
 }
-
-/* Responsive adjustments for Edit Modal */
 @media (max-width: 768px) {
     #editUploadArea.upload-area {
         height: 150px !important;
         padding: 1rem !important;
     }
-
     #editImagePreviewSection.image-preview-section {
         margin-top: 1rem !important;
         min-height: 150px !important;
     }
 }
-
 .image-preview {
     max-width: 100%;
     max-height: 100%;
@@ -3049,7 +2316,6 @@ input[type="time"]::placeholder {
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     object-fit: contain;
 }
-
 .upload-area {
     border: 2px dashed #3d4f63;
     border-radius: 8px;
@@ -3064,37 +2330,25 @@ input[type="time"]::placeholder {
     justify-content: center;
     align-items: center;
 }
-
 .upload-area:hover {
     background-color: #243447;
     border-color: #3b82f6;
 }
-
 .upload-area.dragover {
     background-color: #243447;
     border-color: #3b82f6;
     transform: scale(1.02);
 }
-
-/* Responsive adjustments */
 @media (max-width: 768px) {
     .upload-area {
         height: 150px;
         padding: 1rem;
     }
-
     .image-preview-section {
         margin-top: 1rem;
         min-height: 150px;
     }
 }
-
-
-/* ========================================
-   Image Upload Styles for Edit Course Modal
-   ======================================== */
-
-/* Upload Area Styles */
 .upload-area {
     border: 2px dashed #3d4f63;
     border-radius: 8px;
@@ -3109,19 +2363,15 @@ input[type="time"]::placeholder {
     justify-content: center;
     align-items: center;
 }
-
 .upload-area:hover {
     background-color: #243447;
     border-color: #3b82f6;
 }
-
 .upload-area.dragover {
     background-color: #243447;
     border-color: #3b82f6;
     transform: scale(1.02);
 }
-
-/* Image Preview Section - Match System Dark Theme */
 .image-preview-section {
     padding: 1rem !important;
     border: 2px solid #334155 !important;
@@ -3130,7 +2380,6 @@ input[type="time"]::placeholder {
     height: 200px !important;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3) !important;
 }
-
 .image-preview-container {
     display: flex !important;
     justify-content: center !important;
@@ -3143,13 +2392,10 @@ input[type="time"]::placeholder {
     position: relative !important;
     transition: all 0.3s ease !important;
 }
-
 .image-preview-container:hover {
     border-color: #64748b !important;
     background-color: #1e293b !important;
 }
-
-/* Image Preview */
 .image-preview {
     max-width: 100%;
     max-height: 100%;
@@ -3157,8 +2403,6 @@ input[type="time"]::placeholder {
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     object-fit: contain;
 }
-
-/* Image Action Buttons - Match System Dark Theme */
 .image-action-buttons {
     position: absolute !important;
     bottom: 12px !important;
@@ -3173,7 +2417,6 @@ input[type="time"]::placeholder {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
     border: 1px solid #475569 !important;
 }
-
 .image-view-btn,
 .image-remove-btn {
     border-radius: 50% !important;
@@ -3188,43 +2431,35 @@ input[type="time"]::placeholder {
     transition: all 0.3s ease !important;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
 }
-
 .image-view-btn {
     background-color: #3b82f6 !important;
     color: #ffffff !important;
 }
-
 .image-view-btn:hover {
     background-color: #2563eb !important;
     color: #ffffff !important;
     transform: scale(1.1) !important;
     box-shadow: 0 4px 8px rgba(59, 130, 246, 0.5) !important;
 }
-
 .image-remove-btn {
     background-color: #ef4444 !important;
     color: #ffffff !important;
 }
-
 .image-remove-btn:hover {
     background-color: #dc2626 !important;
     color: #ffffff !important;
     transform: scale(1.1) !important;
     box-shadow: 0 4px 8px rgba(239, 68, 68, 0.5) !important;
 }
-
-/* No Image Text Styling - Match System Dark Theme */
 #noImageText,
 #editNoImageText {
     color: #94a3b8 !important;
 }
-
 #noImageText i,
 #editNoImageText i {
     color: #64748b !important;
     opacity: 0.7 !important;
 }
-
 #noImageText p,
 #editNoImageText p {
     color: #e2e8f0 !important;
@@ -3232,61 +2467,46 @@ input[type="time"]::placeholder {
     margin-top: 0.75rem !important;
     margin-bottom: 0.25rem !important;
 }
-
 #noImageText small,
 #editNoImageText small {
     color: #94a3b8 !important;
     font-weight: 400 !important;
 }
-
-/* Responsive adjustments */
 @media (max-width: 768px) {
     .upload-area {
         height: 150px;
         padding: 1rem;
     }
-
     .image-preview-section {
         margin-top: 1rem;
         min-height: 150px;
     }
 }
-
-
-/* Image Preview Modal Styles */
 #editImagePreviewModal .modal-content {
     background-color: #1a2332 !important;
     border: 1px solid #3d4f63 !important;
 }
-
 #editImagePreviewModal .modal-header {
     background-color: #243447 !important;
     border-bottom: 1px solid #3d4f63 !important;
 }
-
 #editImagePreviewModal .modal-title {
     color: #b8c5d6 !important;
 }
-
 #editImagePreviewModal .modal-body {
     background-color: #1a2332 !important;
     padding: 2rem !important;
 }
-
 #editImagePreviewModal .modal-footer {
     background-color: #243447 !important;
     border-top: 1px solid #3d4f63 !important;
 }
-
 #editModalImagePreview {
     max-height: 70vh !important;
     object-fit: contain !important;
     border-radius: 8px !important;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5) !important;
 }
-
-
-/* Professional Loading Spinner Styles - Glassmorphism Card */
 .loading-container {
     display: flex;
     align-items: center;
@@ -3296,14 +2516,12 @@ input[type="time"]::placeholder {
     padding: 0;
     position: relative;
 }
-
 .loading-content {
     text-align: center;
     width: 100%;
     min-height: 80vh;
     position: relative;
     z-index: 1;
-    /* Glassmorphism Card Effect - Same as card body */
     background: linear-gradient(135deg, #0f2942 0%, #0a1f33 100%) !important;
     backdrop-filter: blur(20px) saturate(180%) !important;
     -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
@@ -3320,7 +2538,6 @@ input[type="time"]::placeholder {
     align-items: center;
     justify-content: center;
 }
-
 .loading-content::before {
     content: '';
     position: absolute;
@@ -3332,21 +2549,17 @@ input[type="time"]::placeholder {
     animation: pulseGlow 4s ease-in-out infinite;
     pointer-events: none;
 }
-
 @keyframes pulseGlow {
-
     0%,
     100% {
         opacity: 0.5;
         transform: scale(1);
     }
-
     50% {
         opacity: 1;
         transform: scale(1.1);
     }
 }
-
 .loading-spinner-wrapper {
     display: flex;
     justify-content: center;
@@ -3354,14 +2567,12 @@ input[type="time"]::placeholder {
     position: relative;
     z-index: 2;
 }
-
 .loading-spinner {
     position: relative;
     width: 140px;
     height: 140px;
     filter: drop-shadow(0 0 20px rgba(54, 145, 191, 0.4));
 }
-
 .spinner-ring {
     position: absolute;
     width: 100%;
@@ -3370,50 +2581,42 @@ input[type="time"]::placeholder {
     border-radius: 50%;
     animation: spin 2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
 }
-
 .spinner-ring:nth-child(1) {
     border-top-color: #3691bf;
     border-right-color: rgba(54, 145, 191, 0.3);
     animation-delay: -0.45s;
     box-shadow: 0 0 15px rgba(54, 145, 191, 0.5);
 }
-
 .spinner-ring:nth-child(2) {
     border-top-color: #325596;
     border-right-color: rgba(50, 85, 150, 0.3);
     animation-delay: -0.3s;
     box-shadow: 0 0 12px rgba(50, 85, 150, 0.4);
 }
-
 .spinner-ring:nth-child(3) {
     border-top-color: #3a6385;
     border-right-color: rgba(58, 99, 133, 0.3);
     animation-delay: -0.15s;
     box-shadow: 0 0 10px rgba(58, 99, 133, 0.3);
 }
-
 .spinner-ring:nth-child(4) {
     border-top-color: #e8f4fc;
     border-right-color: rgba(232, 244, 252, 0.2);
     box-shadow: 0 0 8px rgba(232, 244, 252, 0.3);
 }
-
 @keyframes spin {
     0% {
         transform: rotate(0deg);
     }
-
     100% {
         transform: rotate(360deg);
     }
 }
-
 .loading-text {
     margin-bottom: 2rem;
     position: relative;
     z-index: 2;
 }
-
 .loading-title {
     color: #ffffff !important;
     font-size: 1.75rem;
@@ -3422,7 +2625,6 @@ input[type="time"]::placeholder {
     letter-spacing: 0.5px;
     text-shadow: 0 2px 10px rgba(54, 145, 191, 0.3);
 }
-
 .loading-subtitle {
     color: rgba(255, 255, 255, 0.8) !important;
     font-size: 1rem;
@@ -3430,7 +2632,6 @@ input[type="time"]::placeholder {
     line-height: 1.6;
     font-weight: 400;
 }
-
 .loading-dots {
     display: flex;
     justify-content: center;
@@ -3439,7 +2640,6 @@ input[type="time"]::placeholder {
     position: relative;
     z-index: 2;
 }
-
 .loading-dots .dot {
     width: 12px;
     height: 12px;
@@ -3449,81 +2649,63 @@ input[type="time"]::placeholder {
     box-shadow: 0 0 10px rgba(54, 145, 191, 0.5),
         inset 0 1px 2px rgba(255, 255, 255, 0.3);
 }
-
 .loading-dots .dot:nth-child(1) {
     animation-delay: -0.32s;
 }
-
 .loading-dots .dot:nth-child(2) {
     animation-delay: -0.16s;
     background: linear-gradient(135deg, #325596 0%, #3a6385 100%);
 }
-
 .loading-dots .dot:nth-child(3) {
     background: linear-gradient(135deg, #3a6385 0%, #3691bf 100%);
 }
-
 @keyframes bounce {
-
     0%,
     80%,
     100% {
         transform: scale(0) translateY(0);
         opacity: 0.3;
     }
-
     40% {
         transform: scale(1.2) translateY(-10px);
         opacity: 1;
     }
 }
-
-/* Responsive adjustments for loading spinner */
 @media (max-width: 768px) {
     .loading-container {
         min-height: calc(100vh - 150px);
         padding: 1.5rem;
     }
-
     .loading-content {
         padding: 3rem 2rem;
     }
-
     .loading-spinner {
         width: 100px;
         height: 100px;
     }
-
     .loading-title {
         font-size: 1.4rem;
     }
-
     .loading-subtitle {
         font-size: 0.9rem;
     }
-
     .loading-dots .dot {
         width: 10px;
         height: 10px;
     }
 }
-
-
-/* Enrollment Status Button Styling - Upper Right Corner */
 .enrollment-status-btn {
     border: none !important;
     background: transparent !important;
     padding: 0.25rem 0.5rem !important;
     box-shadow: none !important;
 }
-
 .enrollment-status-btn:hover,
 .enrollment-status-btn:focus {
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
 }
-
 .enrollment-status-btn .badge {
     font-size: 0.75rem !important;
     padding: 0.35rem 0.65rem !important;
@@ -3531,46 +2713,34 @@ input[type="time"]::placeholder {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
     transition: all var(--transition-fast) !important;
 }
-
 .enrollment-status-btn:hover .badge {
     transform: scale(1.05) !important;
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5) !important;
 }
-
-/* Badge Colors for Enrollment Status */
 .badge.bg-success {
     background-color: #10b981 !important;
     color: var(--white) !important;
 }
-
 .badge.bg-danger {
     background-color: #ef4444 !important;
     color: var(--white) !important;
 }
-
 .badge.bg-secondary {
     background-color: #6b7280 !important;
     color: var(--white) !important;
 }
-
-/* Dropdown Menu for Enrollment Status */
 .position-absolute .dropdown-menu {
     min-width: 180px !important;
 }
-
 .position-absolute .dropdown-menu .dropdown-item {
     display: flex !important;
     align-items: center !important;
     padding: 0.5rem 1rem !important;
 }
-
 .position-absolute .dropdown-menu .badge {
     font-size: 0.75rem !important;
     padding: 0.25rem 0.5rem !important;
 }
-
-
-/* Enrollment Status Dropdown - Upper Right Corner with Glassmorphism */
 .enrollment-status-btn {
     position: relative;
     z-index: 10;
@@ -3585,7 +2755,6 @@ input[type="time"]::placeholder {
     border-radius: var(--border-radius-sm) !important;
     transition: all var(--transition-normal) !important;
 }
-
 .enrollment-status-btn:hover {
     transform: translateY(-2px) scale(1.02);
     background: rgba(15, 41, 66, 0.95) !important;
@@ -3595,7 +2764,6 @@ input[type="time"]::placeholder {
         0 0 0 1px rgba(54, 145, 191, 0.2),
         0 0 30px rgba(54, 145, 191, 0.2) !important;
 }
-
 .enrollment-status-btn:focus,
 .enrollment-status-btn:active {
     background: rgba(15, 41, 66, 0.95) !important;
@@ -3603,7 +2771,6 @@ input[type="time"]::placeholder {
         0 4px 12px rgba(54, 145, 191, 0.3),
         inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
 }
-
 .enrollment-status-btn .badge {
     font-size: 0.75rem;
     padding: 0.35rem 0.65rem;
@@ -3611,13 +2778,10 @@ input[type="time"]::placeholder {
     border-radius: var(--border-radius-pill) !important;
     transition: all var(--transition-fast) !important;
 }
-
-/* Dropdown positioning for upper right corner */
 .position-relative .dropdown {
     position: relative;
     z-index: 1000;
 }
-
 .position-relative .dropdown-menu {
     position: absolute;
     z-index: 1050;
@@ -3634,7 +2798,6 @@ input[type="time"]::placeholder {
     margin-top: 0.5rem !important;
     min-width: 180px !important;
 }
-
 .position-relative .dropdown-menu .dropdown-item {
     color: var(--lighter-blue) !important;
     transition: all var(--transition-fast);
@@ -3644,7 +2807,6 @@ input[type="time"]::placeholder {
     display: flex;
     align-items: center;
 }
-
 .position-relative .dropdown-menu .dropdown-item:hover,
 .position-relative .dropdown-menu .dropdown-item:focus {
     background: rgba(54, 145, 191, 0.3) !important;
@@ -3655,33 +2817,24 @@ input[type="time"]::placeholder {
     box-shadow: 0 4px 16px rgba(54, 145, 191, 0.25),
         inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
 }
-
-/* Status badge colors with system palette */
 .badge.bg-success {
     background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
     color: var(--white) !important;
     box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3) !important;
 }
-
 .badge.bg-danger {
     background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
     color: var(--white) !important;
     box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3) !important;
 }
-
 .badge.bg-secondary {
     background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%) !important;
     color: var(--white) !important;
     box-shadow: 0 2px 8px rgba(107, 114, 128, 0.3) !important;
 }
-
-/* Ensure card image container allows overflow */
 .card .position-relative {
     overflow: visible !important;
 }
-
-
-/* Enhanced Enrollment Status Button with System Color Palette */
 .enrollment-status-btn {
     background: rgba(15, 41, 66, 0.85) !important;
     backdrop-filter: blur(20px) saturate(180%) !important;
@@ -3692,7 +2845,6 @@ input[type="time"]::placeholder {
         0 0 0 1px rgba(54, 145, 191, 0.1) !important;
     border-radius: var(--border-radius-sm) !important;
 }
-
 .enrollment-status-btn:hover {
     background: rgba(15, 41, 66, 0.95) !important;
     transform: translateY(-2px) scale(1.02) !important;
@@ -3702,34 +2854,24 @@ input[type="time"]::placeholder {
         0 0 0 1px rgba(54, 145, 191, 0.2),
         0 0 30px rgba(54, 145, 191, 0.2) !important;
 }
-
-/* Enhanced badge colors with gradients */
 .enrollment-status-btn .badge.bg-success {
     background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
     border: 1px solid rgba(16, 185, 129, 0.3) !important;
     box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3) !important;
 }
-
 .enrollment-status-btn .badge.bg-danger {
     background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
     border: 1px solid rgba(239, 68, 68, 0.3) !important;
     box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3) !important;
 }
-
 .enrollment-status-btn .badge.bg-secondary {
     background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%) !important;
     border: 1px solid rgba(107, 114, 128, 0.3) !important;
     box-shadow: 0 2px 8px rgba(107, 114, 128, 0.3) !important;
 }
-
-/* Enhanced dropdown menu */
 .position-relative .dropdown-menu {
     background: linear-gradient(135deg, #0f2942 0%, #0a1f33 100%) !important;
 }
-
-
-/* Fix Popper.js margin warning - remove ALL margins from popper elements */
-/* Bootstrap dropdowns, tooltips, and popovers should use offset modifier instead */
 .dropdown-menu,
 .dropdown-menu-end,
 .dropdown-menu-start,
@@ -3756,8 +2898,6 @@ input[type="time"]::placeholder {
     margin-bottom: 0 !important;
     margin-left: 0 !important;
 }
-
-/* Remove margin from pseudo-elements as well */
 .dropdown-menu::before,
 .dropdown-menu::after,
 .tooltip::before,
@@ -3766,9 +2906,6 @@ input[type="time"]::placeholder {
 .popover::after {
     margin: 0 !important;
 }
-
-
-/* Course Info Banner in Modal */
 .course-info-banner {
     background: linear-gradient(135deg, #0f2942 0%, #163856 100%);
     border-radius: 12px;
@@ -3779,7 +2916,6 @@ input[type="time"]::placeholder {
     position: relative;
     overflow: hidden;
 }
-
 .course-info-banner::before {
     content: '';
     position: absolute;
@@ -3790,7 +2926,6 @@ input[type="time"]::placeholder {
     background: radial-gradient(circle, rgba(54, 145, 191, 0.15) 0%, transparent 70%);
     border-radius: 50%;
 }
-
 .course-info-banner .badge {
     padding: 0.5rem 1rem;
     font-weight: 600;
@@ -3799,7 +2934,6 @@ input[type="time"]::placeholder {
     box-shadow: 0 2px 8px rgba(54, 145, 191, 0.3);
     white-space: nowrap;
 }
-
 .course-info-banner h6 {
     font-weight: 600;
     font-size: 1.1rem;
@@ -3808,7 +2942,6 @@ input[type="time"]::placeholder {
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
     white-space: nowrap;
 }
-
 .course-info-banner small {
     font-size: 0.9rem;
     display: flex;
@@ -3816,142 +2949,100 @@ input[type="time"]::placeholder {
     color: rgba(255, 255, 255, 0.85) !important;
     white-space: nowrap;
 }
-
 .course-info-banner .text-white-50 {
     opacity: 0.85;
 }
-
-/* Responsive adjustments */
 @media (max-width: 768px) {
     .course-info-banner h6 {
         white-space: normal;
         font-size: 1rem;
     }
-
     .course-info-banner .d-flex.justify-content-between {
         flex-direction: column;
         align-items: flex-start !important;
         gap: 0.75rem !important;
     }
 }
-
-/* Force select dropdowns to open downward */
 select.form-select {
     appearance: auto;
     -webkit-appearance: menulist;
     -moz-appearance: menulist;
 }
-
-/* Ensure dropdown opens below the select element */
 #filterServiceType {
     position: relative;
 }
-
-
-/* Force dropdown menus to always open downwards */
 .form-select {
     position: relative !important;
 }
-
 select.form-select option {
     direction: ltr !important;
 }
-
-/* Ensure select dropdowns open downwards */
 select.form-select {
     appearance: auto !important;
     -webkit-appearance: menulist !important;
     -moz-appearance: menulist !important;
 }
-
-
-/* Date Picker Icon White Color - Force White */
 input[type="date"]::-webkit-calendar-picker-indicator {
     filter: invert(1) brightness(100) !important;
     cursor: pointer !important;
     opacity: 1 !important;
     background-color: transparent !important;
 }
-
 input[type="date"]::-webkit-calendar-picker-indicator:hover {
     filter: invert(1) brightness(1.3) !important;
 }
-
-/* Date picker text color white */
 input[type="date"] {
     color: white !important;
 }
-
 input[type="date"]::-webkit-datetime-edit {
     color: white !important;
 }
-
 input[type="date"]::-webkit-datetime-edit-fields-wrapper {
     color: white !important;
 }
-
 input[type="date"]::-webkit-datetime-edit-text {
     color: white !important;
 }
-
 input[type="date"]::-webkit-datetime-edit-month-field {
     color: white !important;
 }
-
 input[type="date"]::-webkit-datetime-edit-day-field {
     color: white !important;
 }
-
 input[type="date"]::-webkit-datetime-edit-year-field {
     color: white !important;
 }
-
-/* Date Picker Calendar Icon - Make it White */
 input[type="date"]::-webkit-calendar-picker-indicator {
     filter: invert(1) brightness(100) !important;
     cursor: pointer !important;
     opacity: 1 !important;
 }
-
 input[type="date"]::-webkit-calendar-picker-indicator:hover {
     filter: invert(1) brightness(120) !important;
 }
-
-
-/* Input field padding and text alignment */
 .form-control {
     padding: 0.625rem 0.875rem !important;
     font-size: 0.9375rem !important;
     line-height: 1.5 !important;
     text-indent: 0 !important;
 }
-
 .form-control[readonly] {
     padding: 0.625rem 0.875rem !important;
     text-indent: 0 !important;
 }
-
 .form-control:focus {
     padding: 0.625rem 0.875rem !important;
 }
-
-/* Textarea padding */
 textarea.form-control {
     padding: 0.625rem 0.875rem !important;
     line-height: 1.5 !important;
 }
-
-/* Input field spacing in modals */
 .modal-body .form-control {
     padding: 0.625rem 0.875rem !important;
 }
-
-/* Row spacing in forms */
 .row.mb-3 {
     margin-bottom: 1rem !important;
 }
-
-/* Ensure Address row has spacing */
 .card-body .row:last-child {
     margin-bottom: 0 !important;
 }

@@ -2,7 +2,6 @@
     overflow: visible;
     padding-right: 0 !important;
 }
-
 .card-body:has(#topEnrolledCoursesList) {
     overflow-y: auto;
     overflow-x: hidden;
@@ -10,26 +9,21 @@
     scrollbar-color: rgba(54, 145, 191, 0.8) rgba(197, 227, 245, 0.3);
     direction: ltr !important;
 }
-
 .card-body:has(#topEnrolledCoursesList)::-webkit-scrollbar {
     width: 8px;
 }
-
 .card-body:has(#topEnrolledCoursesList)::-webkit-scrollbar-track {
     background: rgba(197, 227, 245, 0.3);
     border-radius: 10px;
     margin: 4px 0;
 }
-
 .card-body:has(#topEnrolledCoursesList)::-webkit-scrollbar-thumb {
     background: rgba(54, 145, 191, 0.8);
     border-radius: 10px;
 }
-
 .card-body:has(#topEnrolledCoursesList)::-webkit-scrollbar-thumb:hover {
     background: rgba(54, 145, 191, 1);
 }
-
 #topEnrolledCoursesList li {
     padding-right: 8px;
 }

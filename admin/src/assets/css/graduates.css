@@ -1,19 +1,12 @@
-/* Graduates Page Styles */
-
-/* Ensure View and Edit buttons have the same border radius */
 .view-graduate-btn,
 .edit-graduate-btn {
     border-radius: var(--border-radius-sm) !important;
 }
-
-/* Certification badge styling - primary blue with white text */
 .card-body .badge.bg-primary {
     background-color: var(--primary-blue) !important;
     color: #ffffff !important;
     font-weight: 500;
 }
-
-/* Pagination hover effects */
 .pagination .page-link {
     transition: all 0.3s ease !important;
 }

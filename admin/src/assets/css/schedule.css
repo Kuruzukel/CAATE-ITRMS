@@ -1,5 +1,3 @@
-/* Schedule Page Styles with Glassmorphism Effects */
-/* Enhanced Glassmorphism Calendar Container */
 #calendar {
     border-radius: var(--border-radius-md) !important;
     box-shadow: 0 10px 40px rgba(22, 56, 86, 0.5), 0 4px 12px rgba(54, 145, 191, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 0 0 1px rgba(54, 145, 191, 0.1) !important;
@@ -13,8 +11,6 @@
     min-height: 500px;
     padding: 20px;
 }
-
-/* Ensure all calendar text is white */
 .fc *,
 .fc-toolbar-title,
 .fc-button,
@@ -27,23 +23,16 @@
 .fc-list-event-time {
     color: white !important;
 }
-
-/* Performance optimizations */
 * {
     box-sizing: border-box;
 }
-
 .fc-event {
     will-change: transform, opacity;
 }
-
 .card {
     will-change: transform, box-shadow;
 }
-
-/* Reduce motion for accessibility */
 @media (prefers-reduced-motion: reduce) {
-
     .fc-event,
     .card,
     * {
@@ -52,8 +41,6 @@
         transition-duration: 0.01ms !important;
     }
 }
-
-/* Enhanced Glassmorphism Calendar Styles */
 .fc {
     border-radius: var(--border-radius-md) !important;
     box-shadow: 0 10px 40px rgba(22, 56, 86, 0.5), 0 4px 12px rgba(54, 145, 191, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 0 0 1px rgba(54, 145, 191, 0.1) !important;
@@ -70,14 +57,10 @@
     overflow: hidden;
     position: relative;
 }
-
-/* Remove default FullCalendar scrollgrid border */
 .fc-theme-standard .fc-scrollgrid {
     border: none !important;
     border-radius: var(--border-radius-md) !important;
 }
-
-/* Apply header toolbar styling to scrollgrid elements */
 .fc .fc-scrollgrid,
 .fc .fc-scrollgrid table {
     table-layout: fixed;
@@ -92,14 +75,10 @@
     color: white !important;
     background-clip: padding-box;
 }
-
-/* Add border radius to scrollgrid table */
 .fc-scrollgrid-sync-table {
     border-radius: var(--border-radius-md) !important;
     overflow: hidden;
 }
-
-/* Apply dark gradient styling to calendar tables */
 .fc-col-header,
 .fc-scrollgrid,
 .fc-scrollgrid-sync-table {
@@ -113,16 +92,12 @@
     color: white !important;
     background-clip: padding-box;
 }
-
-/* Apply styling to calendar body sections */
 .fc-daygrid-body,
 .fc-scroller-harness,
 .fc-scroller {
     border-radius: var(--border-radius-md) !important;
     background: linear-gradient(135deg, #0f2942 0%, #0a1f33 100%) !important;
 }
-
-/* Remove backdrop-filter from all calendar table elements */
 .fc-scrollgrid,
 .fc-scrollgrid-sync-table,
 .fc-col-header,
@@ -143,14 +118,12 @@
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
 }
-
 .fc table {
     border-collapse: separate !important;
     border-spacing: 2px !important;
     font-size: 1em;
     background: transparent !important;
 }
-
 .fc th,
 .fc td {
     border: 1px solid rgba(54, 145, 191, 0.3) !important;
@@ -159,8 +132,6 @@
     background: rgba(255, 255, 255, 0.08) !important;
     border-radius: 8px !important;
 }
-
-/* Enhanced Glassmorphism Header Toolbar */
 .fc-header-toolbar {
     display: flex;
     justify-content: center;
@@ -177,14 +148,11 @@
     background-clip: padding-box;
     padding: 15px 20px !important;
 }
-
 .fc-toolbar-chunk {
     display: flex;
     align-items: center;
     gap: 8px;
 }
-
-/* Enhanced Glassmorphism Buttons */
 .fc-button {
     position: relative;
     display: inline-block;
@@ -207,7 +175,6 @@
     box-shadow: 0 4px 16px rgba(54, 145, 191, 0.1) !important;
     overflow: hidden;
 }
-
 .fc-button:hover {
     background: linear-gradient(135deg, rgba(54, 145, 191, 0.2) 0%, rgba(50, 85, 150, 0.2) 100%) !important;
     border-color: rgba(54, 145, 191, 0.6) !important;
@@ -215,25 +182,20 @@
     transform: translateY(-2px) !important;
     box-shadow: 0 8px 25px rgba(54, 145, 191, 0.25) !important;
 }
-
 .fc-button:focus {
     box-shadow: 0 0 0 3px rgba(54, 145, 191, 0.3) !important;
     outline: none !important;
 }
-
 .fc-button:active {
     transform: translateY(0) !important;
     box-shadow: 0 4px 16px rgba(54, 145, 191, 0.2) !important;
 }
-
 .fc-button-active {
     background: linear-gradient(135deg, rgba(54, 145, 191, 0.3) 0%, rgba(50, 85, 150, 0.3) 100%) !important;
     border-color: rgba(54, 145, 191, 0.7) !important;
     color: white !important;
     box-shadow: 0 6px 20px rgba(54, 145, 191, 0.3) !important;
 }
-
-/* Enhanced Glassmorphism Title */
 .fc-toolbar-title {
     font-size: 1.8rem !important;
     font-weight: 700 !important;
@@ -241,20 +203,16 @@
     margin: 0;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
 }
-
-/* Enhanced Glassmorphism Calendar Grid */
 .fc-daygrid {
     position: relative;
     background: rgba(255, 255, 255, 0.05) !important;
     border-radius: var(--border-radius-md) !important;
     overflow: hidden;
 }
-
 .fc-daygrid-body {
     position: relative;
     z-index: 1;
 }
-
 .fc-daygrid-day {
     position: relative;
     background: rgba(255, 255, 255, 0.05) !important;
@@ -263,14 +221,11 @@
     border-radius: 8px !important;
     margin: 1px !important;
 }
-
-/* Ensure all day states have consistent background */
 .fc-daygrid-day.fc-day-past,
 .fc-daygrid-day.fc-day-future,
 .fc-daygrid-day.fc-day-other {
     background: rgba(255, 255, 255, 0.05) !important;
 }
-
 .fc-daygrid-day-number {
     position: relative;
     z-index: 4;
@@ -279,19 +234,15 @@
     font-weight: 600;
     font-size: 0.95rem;
 }
-
 .fc-daygrid-day.fc-day-today {
     background: rgba(54, 145, 191, 0.15) !important;
     border: 2px solid rgba(54, 145, 191, 0.5) !important;
     box-shadow: 0 4px 16px rgba(54, 145, 191, 0.3) !important;
 }
-
 .fc-daygrid-day.fc-day-today .fc-daygrid-day-number {
     color: white !important;
     font-weight: 700;
 }
-
-/* Enhanced Glassmorphism Column Headers */
 .fc-col-header-cell {
     background: rgba(54, 145, 191, 0.2) !important;
     backdrop-filter: blur(10px) saturate(180%) !important;
@@ -304,14 +255,11 @@
     font-size: 0.85rem;
     letter-spacing: 1px;
 }
-
 .fc-daygrid-day:hover {
     background: rgba(54, 145, 191, 0.15) !important;
     transform: translateY(-2px) !important;
     box-shadow: 0 6px 20px rgba(54, 145, 191, 0.2) !important;
 }
-
-/* Glassmorphism Events */
 .fc-event {
     position: relative;
     display: block;
@@ -332,87 +280,67 @@
     box-shadow: none !important;
     overflow: visible;
 }
-
-/* Hide the time and dot - only show avatar */
 .fc-event-time,
 .fc-daygrid-event-dot {
     display: none !important;
 }
-
-/* Remove event pseudo-elements */
-
 .fc-event:hover {
     transform: translateY(-3px) scale(1.02) !important;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2) !important;
     border-color: rgba(255, 255, 255, 0.5) !important;
 }
-
 .fc-event-title {
     font-weight: 600;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
-
 .fc-event-time {
     font-weight: 700;
     opacity: 0.9;
 }
-
-/* Event status colors with glassmorphism */
 .fc-event.status-pending {
     background: rgba(245, 158, 11, 0.25) !important;
     border-color: rgba(245, 158, 11, 0.4) !important;
     color: rgba(245, 158, 11, 1) !important;
 }
-
 .fc-event.status-confirmed {
     background: rgba(16, 185, 129, 0.25) !important;
     border-color: rgba(16, 185, 129, 0.4) !important;
     color: rgba(16, 185, 129, 1) !important;
 }
-
 .fc-event.status-cancelled {
     background: rgba(239, 68, 68, 0.25) !important;
     border-color: rgba(239, 68, 68, 0.4) !important;
     color: rgba(239, 68, 68, 1) !important;
     opacity: 0.8;
 }
-
-/* Responsive adjustments */
 @media (max-width: 768px) {
     .fc-header-toolbar {
         flex-direction: column;
         gap: 1rem;
         padding: 12px 15px !important;
     }
-
     .fc-toolbar-chunk {
         display: flex;
         justify-content: center;
         flex-wrap: wrap;
     }
-
     .fc-button {
         padding: 8px 12px !important;
         font-size: 0.8rem;
         margin: 2px !important;
     }
-
     .fc-toolbar-title {
         font-size: 1.4rem !important;
         text-align: center;
     }
-
     .fc-daygrid-day {
         min-height: 80px;
     }
-
     .fc {
         padding: 15px !important;
         border-radius: 15px !important;
     }
 }
-
-/* Enhanced Glassmorphism Statistics Cards */
 .card.calendar-card {
     border-radius: var(--border-radius-md) !important;
     box-shadow: 0 10px 40px rgba(22, 56, 86, 0.5), 0 4px 12px rgba(54, 145, 191, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 0 0 1px rgba(54, 145, 191, 0.1) !important;
@@ -426,7 +354,6 @@
     overflow: hidden;
     position: relative;
 }
-
 .card.calendar-card .card-body {
     border-radius: var(--border-radius-md) !important;
     box-shadow: 0 10px 40px rgba(22, 56, 86, 0.5), 0 4px 12px rgba(54, 145, 191, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 0 0 1px rgba(54, 145, 191, 0.1) !important;
@@ -440,14 +367,6 @@
     position: relative;
     z-index: 2;
 }
-
-/* Remove card pseudo-elements */
-
-
-
-/* Statistics cards hover effects - removed to match requests.html */
-
-/* Glassmorphism Search Input */
 #scheduleSearch {
     background: rgba(255, 255, 255, 0.1) !important;
     backdrop-filter: blur(10px) !important;
@@ -456,44 +375,31 @@
     color: rgba(54, 145, 191, 1) !important;
     transition: all 0.3s ease !important;
 }
-
 #scheduleSearch:focus {
     background: rgba(255, 255, 255, 0.15) !important;
     border-color: rgba(54, 145, 191, 0.4) !important;
     box-shadow: 0 0 0 3px rgba(54, 145, 191, 0.1) !important;
     outline: none !important;
 }
-
-/* Fix Popper.js transition warning - Remove transform transitions from popper elements */
 .dropdown-menu,
 .popover,
 .tooltip,
 [data-popper-placement] {
     transition: opacity 0.15s linear, background-color 0.15s ease !important;
 }
-
-/* Ensure modal transitions don't conflict */
 .modal.fade .modal-dialog {
     transition: transform 0.3s ease-out !important;
 }
-
 .modal.show .modal-dialog {
     transform: none !important;
 }
-
 #scheduleSearch::placeholder {
     color: rgba(255, 255, 255, 0.6) !important;
 }
-
-/* Loading spinner glassmorphism */
 .spinner-border {
     border-color: rgba(54, 145, 191, 0.3) !important;
     border-top-color: rgba(54, 145, 191, 1) !important;
 }
-
-/* Remove background pattern */
-
-/* Additional glassmorphism enhancements */
 .fc-button-group {
     position: relative;
     display: inline-flex;
@@ -502,161 +408,116 @@
     border-radius: 15px !important;
     padding: 2px !important;
 }
-
-/* Glassmorphism for navigation buttons */
 .fc-prev-button,
 .fc-next-button,
 .fc-today-button {
     background: rgba(54, 145, 191, 0.15) !important;
     border: 1px solid rgba(54, 145, 191, 0.25) !important;
 }
-
 .fc-prev-button:hover,
 .fc-next-button:hover,
 .fc-today-button:hover {
     background: rgba(54, 145, 191, 0.25) !important;
     border-color: rgba(54, 145, 191, 0.4) !important;
 }
-
-/* Enhanced glassmorphism for view buttons */
 .fc-dayGridMonth-button,
 .fc-timeGridWeek-button,
 .fc-timeGridDay-button {
     background: rgba(54, 145, 191, 0.1) !important;
     border: 1px solid rgba(54, 145, 191, 0.2) !important;
 }
-
 .fc-dayGridMonth-button:hover,
 .fc-timeGridWeek-button:hover,
 .fc-timeGridDay-button:hover {
     background: rgba(54, 145, 191, 0.2) !important;
     border-color: rgba(54, 145, 191, 0.35) !important;
 }
-
-/* Remove problematic pseudo-elements and animations */
-
-/* Remove floating animations */
-
-/* Remove pulse animations */
-
-/* Enhanced Event Hover Effects */
 .fc-event {
     position: relative;
     overflow: hidden;
 }
-
-/* Remove event after pseudo-elements */
-
-/* Glassmorphism Scrollbar */
 .fc::-webkit-scrollbar {
     width: 8px;
 }
-
 .fc::-webkit-scrollbar-track {
     background: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
 }
-
 .fc::-webkit-scrollbar-thumb {
     background: rgba(54, 145, 191, 0.3);
     border-radius: 10px;
     backdrop-filter: blur(10px);
 }
-
 .fc::-webkit-scrollbar-thumb:hover {
     background: rgba(54, 145, 191, 0.5);
 }
-
-/* Enhanced Modal Glassmorphism */
 .modal-backdrop {
     background: rgba(0, 0, 0, 0.3) !important;
     backdrop-filter: blur(5px) !important;
 }
-
-/* Modal Animation */
 .modal.fade .modal-dialog {
     transition: transform 0.3s ease-out !important;
     transform: translate(0, -50px) !important;
 }
-
 .modal.show .modal-dialog {
     transform: none !important;
 }
-
-/* Modal Button Styling */
 .modal-footer .btn {
     border-radius: var(--border-radius-sm) !important;
     font-weight: 600 !important;
     padding: 12px 20px !important;
     transition: all var(--transition-normal) !important;
 }
-
 .modal-footer .btn-outline-secondary {
     background: rgba(54, 145, 191, 0.1) !important;
     border: 1px solid rgba(54, 145, 191, 0.4) !important;
     color: white !important;
 }
-
 .modal-footer .btn-outline-secondary:hover {
     background: rgba(54, 145, 191, 0.2) !important;
     border-color: rgba(54, 145, 191, 0.6) !important;
     color: white !important;
     transform: translateY(-2px) !important;
 }
-
 .modal-footer .btn-primary {
     background: rgba(54, 145, 191, 0.3) !important;
     border: 1px solid rgba(54, 145, 191, 0.5) !important;
     color: white !important;
 }
-
 .modal-footer .btn-primary:hover {
     background: rgba(54, 145, 191, 0.4) !important;
     border-color: rgba(54, 145, 191, 0.7) !important;
     color: white !important;
     transform: translateY(-2px) !important;
 }
-
-/* Glassmorphism Badge Effects */
 .badge {
     background: rgba(54, 145, 191, 0.2) !important;
     backdrop-filter: blur(10px) !important;
     border: 1px solid rgba(54, 145, 191, 0.3) !important;
     color: rgba(54, 145, 191, 1) !important;
 }
-
 .bg-success {
     background: rgba(16, 185, 129, 0.2) !important;
     border-color: rgba(16, 185, 129, 0.3) !important;
     color: rgba(16, 185, 129, 1) !important;
 }
-
 .bg-warning {
     background: rgba(245, 158, 11, 0.2) !important;
     border-color: rgba(245, 158, 11, 0.3) !important;
     color: rgba(245, 158, 11, 1) !important;
 }
-
 .bg-danger {
     background: rgba(239, 68, 68, 0.2) !important;
     border-color: rgba(239, 68, 68, 0.3) !important;
     color: rgba(239, 68, 68, 1) !important;
 }
-
-/* Glassmorphism Text Enhancements */
 .card-title,
 .fc-toolbar-title {
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
 }
-
-/* Enhanced Glassmorphism for Today's Date */
 .fc-day-today {
     position: relative;
 }
-
-/* Remove today highlight pseudo-element */
-
-/* Glassmorphism Loading State */
 .text-center.p-4 {
     background: rgba(255, 255, 255, 0.1) !important;
     backdrop-filter: blur(15px) !important;
@@ -664,42 +525,28 @@
     border-radius: 15px !important;
     color: rgba(54, 145, 191, 1) !important;
 }
-
-/* Enhanced Glassmorphism for Fallback Calendar */
 .fc table {
     backdrop-filter: blur(15px) !important;
 }
-
 .fc-daygrid-day {
     backdrop-filter: blur(8px) !important;
 }
-
-/* Remove shine animations */
-
-
-/* Hide time and dot - only show avatar icon */
 .fc-event-time,
 .fc-daygrid-event-dot {
     display: none !important;
 }
-
-/* Make event background transparent to only show avatar */
 .fc-event {
     background: transparent !important;
     border: none !important;
     padding: 2px !important;
     box-shadow: none !important;
 }
-
 .fc-event:hover {
     background: transparent !important;
     border: none !important;
     transform: none !important;
     box-shadow: none !important;
 }
-
-
-/* Display avatars horizontally - left-align by default, center for 1-2 avatars */
 .fc-daygrid-day-events {
     display: flex !important;
     flex-direction: row !important;
@@ -712,36 +559,27 @@
     height: auto !important;
     flex: 1 !important;
 }
-
-/* Center avatars when there are 1-2 only */
 .fc-daygrid-day-events.center-avatars {
     justify-content: center !important;
 }
-
 .fc-daygrid-event-harness {
     position: relative !important;
     display: inline-flex !important;
     margin: 0 !important;
 }
-
-/* Ensure events display inline horizontally */
 .fc-event {
     display: inline-flex !important;
     width: auto !important;
     margin: 0 !important;
 }
-
-/* Ensure all calendar rows have the same height */
 .fc-daygrid-body tr {
     height: 60px !important;
 }
-
 .fc-daygrid-day {
     height: 60px !important;
     min-height: 60px !important;
     max-height: 60px !important;
 }
-
 .fc-daygrid-day-frame {
     height: 60px !important;
     min-height: 60px !important;
@@ -750,23 +588,18 @@
     flex-direction: column !important;
     overflow: hidden !important;
 }
-
-/* Make sure all cells in a row have equal height */
 .fc-scrollgrid-sync-table {
     table-layout: fixed !important;
 }
-
 .fc-scrollgrid-sync-table tbody tr {
     height: 60px !important;
     max-height: 60px !important;
 }
-
 .fc-scrollgrid-sync-table tbody td {
     height: 60px !important;
     max-height: 60px !important;
     vertical-align: top !important;
 }
-
 .fc-scrollgrid-sync-inner {
     height: 60px !important;
     min-height: 60px !important;

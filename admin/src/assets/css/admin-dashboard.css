@@ -2,7 +2,6 @@
     background-color: #10b981 !important;
     color: #ffffff !important;
 }
-
 .badge-present,
 .status-present {
     background-color: #10b981 !important;
@@ -12,18 +11,15 @@
     font-size: 0.75rem;
     font-weight: 500;
 }
-
 .table .badge.bg-success {
     background-color: #28a745 !important;
     color: #ffffff !important;
 }
-
 .badge:has-text("Present"),
 .badge[data-status="present"] {
     background-color: #10b981 !important;
     color: #ffffff !important;
 }
-
 .present-status {
     background-color: #28a745 !important;
     color: #ffffff !important;
@@ -33,177 +29,136 @@
     font-weight: 500;
     display: inline-block;
 }
-
 .badge.bg-success:hover,
 .badge-present:hover,
 .present-status:hover {
     background-color: #059669 !important;
     color: #ffffff !important;
 }
-
 .card-body .fw-semibold:contains("Present Today")+.card-title {
     color: #28a745;
 }
-
 .text-success {
     color: #28a745 !important;
 }
-
 .bg-success {
     background-color: #10b981 !important;
 }
-
 .text-white {
     color: #ffffff !important;
 }
-
 .card-header .card-title h5,
 .card-header .card-title small {
     color: #ffffff !important;
 }
-
 .card-body h2 {
     color: #ffffff !important;
 }
-
 .card-body span {
     color: #ffffff !important;
 }
-
 .card-body h6.mb-3.text-center {
     color: #ffffff !important;
 }
-
 .card-body ul li .me-2 h6 {
     color: #ffffff !important;
 }
-
 .card-body ul li .me-2 small.text-muted {
     color: #ffffff !important;
 }
-
 .card-body ul li .user-progress small {
     color: #ffffff !important;
 }
-
 .card-header h5.card-title {
     color: #ffffff !important;
 }
-
 .card-body p.text-muted.small {
     color: #ffffff !important;
 }
-
 .card-body ul li .me-2 h6.mb-0 {
     color: #ffffff !important;
 }
-
 .card-body ul li .me-2 small.text-muted {
     color: #ffffff !important;
 }
-
 .nav-tabs .nav-link {
     color: #ffffff !important;
 }
-
 .tab-pane .d-flex small.text-muted {
     color: #ffffff !important;
 }
-
 .tab-pane .d-flex h6 {
     color: #ffffff !important;
 }
-
 .tab-pane .d-flex small.text-muted:last-child {
     color: #ffffff !important;
 }
-
 .d-flex.justify-content-center p {
     color: #ffffff !important;
 }
-
 .d-flex.justify-content-center small {
     color: #ffffff !important;
 }
-
 .card-header h5,
 h5.card-header {
     color: #ffffff !important;
 }
-
 .card .row .col-md-8 h5.card-header {
     color: #ffffff !important;
 }
-
 .badge:contains("Enrolled"),
 .badge[data-status="enrolled"] {
     background-color: #10b981 !important;
     color: #ffffff !important;
 }
-
 span.badge.bg-success {
     background-color: #10b981 !important;
     color: #ffffff !important;
 }
-
 .badge {
-
     &:contains("Present"),
     &:contains("Enrolled") {
         background-color: #10b981 !important;
         color: #ffffff !important;
     }
 }
-
 .table-responsive .table tbody tr {
     position: relative;
     margin: 8px 0;
 }
-
 .table tbody tr td {
     padding: 16px 12px !important;
     vertical-align: middle;
 }
-
 .table-responsive {
     padding: 4px;
     margin: -4px;
 }
-
 .table tbody tr {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
-
 .table tbody tr[style*="outline"] {
     margin: 12px 0;
 }
-
-
 @media (min-width: 992px) {
     .col-lg-8.mb-4.order-0 .card {
         margin-bottom: 0 !important;
         padding-bottom: 0 !important;
     }
-
     .col-lg-8.mb-4.order-0 .card .row {
         margin-bottom: 0 !important;
     }
-
     .col-lg-8.mb-4.order-0 .card .card-body {
         padding-bottom: 1.5rem !important;
     }
-
     .col-lg-8.mb-4.order-0 .card::after,
     .col-lg-8.mb-4.order-0 .card::before {
         display: none !important;
     }
-
     .col-lg-8.mb-4.order-0 {
         margin-bottom: 1.5rem !important;
     }
 }
-
-
 .card .dropdown-menu {
     background-color: #1a2942 !important;
     background: linear-gradient(135deg, #1a2942 0%, #0f1f33 100%) !important;
@@ -218,7 +173,6 @@ span.badge.bg-success {
     padding: 0.5rem !important;
     min-width: 200px !important;
 }
-
 .card .dropdown-menu .dropdown-item {
     color: rgba(255, 255, 255, 0.9) !important;
     padding: 0.65rem 1rem !important;
@@ -228,7 +182,6 @@ span.badge.bg-success {
     font-weight: 500 !important;
     background-color: transparent !important;
 }
-
 .card .dropdown-menu .dropdown-item:hover,
 .card .dropdown-menu .dropdown-item:focus {
     background: rgba(54, 145, 191, 0.25) !important;
@@ -240,215 +193,172 @@ span.badge.bg-success {
         inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
     transform: translateX(4px) !important;
 }
-
 .card .dropdown-menu .dropdown-item:active {
     background: rgba(54, 145, 191, 0.4) !important;
     color: #ffffff !important;
 }
-
 .card .dropdown-menu .dropdown-item i {
     color: rgba(54, 145, 191, 0.9) !important;
     transition: color 0.2s ease !important;
 }
-
 .card .dropdown-menu .dropdown-item:hover i,
 .card .dropdown-menu .dropdown-item:focus i {
     color: #ffffff !important;
 }
-
 .card .dropdown-menu .dropdown-item.text-danger {
     color: #ef4444 !important;
 }
-
 .card .dropdown-menu .dropdown-item.text-danger:hover,
 .card .dropdown-menu .dropdown-item.text-danger:focus {
     background: rgba(239, 68, 68, 0.15) !important;
     border: 1px solid #ef4444 !important;
     color: #ef4444 !important;
 }
-
 .card .dropdown-menu .dropdown-item.text-danger i {
     color: #ef4444 !important;
 }
-
 .card .dropdown-menu .dropdown-item.text-danger:hover i,
 .card .dropdown-menu .dropdown-item.text-danger:focus i {
     color: #ef4444 !important;
 }
-
 .card .dropdown-menu .dropdown-divider {
     border-top: 1px solid rgba(54, 145, 191, 0.3) !important;
     margin: 0.5rem 0 !important;
     box-shadow: 0 1px 2px rgba(54, 145, 191, 0.2) !important;
 }
-
-
 @media (max-width: 1399px) {
     .card .dropdown-menu {
         min-width: 180px !important;
         padding: 0.4rem !important;
     }
-
     .card .dropdown-menu .dropdown-item {
         padding: 0.55rem 0.85rem !important;
         font-size: 0.875rem !important;
     }
 }
-
 @media (max-width: 1199px) {
     .card .dropdown-menu {
         min-width: 160px !important;
         padding: 0.35rem !important;
     }
-
     .card .dropdown-menu .dropdown-item {
         padding: 0.5rem 0.75rem !important;
         font-size: 0.8125rem !important;
     }
 }
-
 @media (max-width: 991px) {
     .card .dropdown-menu {
         min-width: 150px !important;
         padding: 0.3rem !important;
     }
-
     .card .dropdown-menu .dropdown-item {
         padding: 0.45rem 0.65rem !important;
         font-size: 0.8125rem !important;
     }
 }
-
 @media (max-width: 767px) {
     .card .dropdown-menu {
         min-width: 140px !important;
         padding: 0.25rem !important;
     }
-
     .card .dropdown-menu .dropdown-item {
         padding: 0.4rem 0.6rem !important;
         font-size: 0.75rem !important;
     }
 }
-
 @media (max-width: 575px) {
     .card .dropdown-menu {
         min-width: 130px !important;
         padding: 0.25rem !important;
     }
-
     .card .dropdown-menu .dropdown-item {
         padding: 0.35rem 0.5rem !important;
         font-size: 0.75rem !important;
     }
-
     .card .dropdown-menu .dropdown-item:hover,
     .card .dropdown-menu .dropdown-item:focus {
         transform: translateX(2px) !important;
     }
 }
-
 .col-6 .card .dropdown-menu,
 .col-lg-6 .card .dropdown-menu,
 .col-md-6 .card .dropdown-menu {
     min-width: 150px !important;
 }
-
 @media (max-width: 575px) {
     .card .dropdown {
         position: static !important;
     }
-
     .card .dropdown-menu {
         position: absolute !important;
         right: 0.5rem !important;
         left: auto !important;
     }
 }
-
 @media (max-width: 767px) {
     .col-6 .card .dropdown-menu {
         min-width: 120px !important;
         font-size: 0.7rem !important;
     }
-
     .col-6 .card .dropdown-menu .dropdown-item {
         padding: 0.3rem 0.5rem !important;
         white-space: nowrap !important;
     }
 }
-
-
 #totalRevenueChart {
     overflow-x: auto !important;
     overflow-y: hidden !important;
     width: 100% !important;
 }
-
 #totalRevenueChart::-webkit-scrollbar {
     height: 8px !important;
 }
-
 #totalRevenueChart::-webkit-scrollbar-track {
     background: rgba(54, 145, 191, 0.1) !important;
     border-radius: 4px !important;
 }
-
 #totalRevenueChart::-webkit-scrollbar-thumb {
     background: rgba(54, 145, 191, 0.5) !important;
     border-radius: 4px !important;
 }
-
 #totalRevenueChart::-webkit-scrollbar-thumb:hover {
     background: rgba(54, 145, 191, 0.7) !important;
 }
-
 .col-md-8 #totalRevenueChart {
     min-width: 100% !important;
 }
-
 @media (max-width: 991px) {
     #totalRevenueChart {
         overflow-x: auto !important;
     }
 }
-
-
 #totalRevenueChart {
     overflow-x: auto !important;
     overflow-y: hidden !important;
     width: 100% !important;
 }
-
 #totalRevenueChart::-webkit-scrollbar {
     height: 8px !important;
 }
-
 #totalRevenueChart::-webkit-scrollbar-track {
     background: rgba(54, 145, 191, 0.1) !important;
     border-radius: 4px !important;
 }
-
 #totalRevenueChart::-webkit-scrollbar-thumb {
     background: rgba(54, 145, 191, 0.5) !important;
     border-radius: 4px !important;
 }
-
 #totalRevenueChart::-webkit-scrollbar-thumb:hover {
     background: rgba(54, 145, 191, 0.7) !important;
 }
-
 .col-md-8 #totalRevenueChart {
     min-width: 100% !important;
 }
-
 @media (max-width: 991px) {
     #totalRevenueChart {
         overflow-x: auto !important;
     }
 }
-
-
 .apexcharts-tooltip {
     background: linear-gradient(135deg, #1a2942 0%, #0f1f33 100%) !important;
     backdrop-filter: blur(20px) saturate(180%) !important;
@@ -459,59 +369,47 @@ span.badge.bg-success {
         inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
     color: rgba(255, 255, 255, 0.95) !important;
 }
-
 .apexcharts-tooltip-title {
     background: rgba(54, 145, 191, 0.2) !important;
     border-bottom: 1px solid rgba(54, 145, 191, 0.3) !important;
     color: rgba(255, 255, 255, 0.95) !important;
 }
-
 .apexcharts-tooltip-text,
 .apexcharts-tooltip-text-y-label,
 .apexcharts-tooltip-text-y-value {
     color: rgba(255, 255, 255, 0.9) !important;
 }
-
 .apexcharts-tooltip-series-group {
     background: transparent !important;
 }
-
 .apexcharts-xaxistooltip {
     background: linear-gradient(135deg, #1a2942 0%, #0f1f33 100%) !important;
     border: 1px solid rgba(54, 145, 191, 0.4) !important;
     color: rgba(255, 255, 255, 0.95) !important;
     box-shadow: 0 4px 12px rgba(54, 145, 191, 0.4) !important;
 }
-
 .apexcharts-xaxistooltip:before,
 .apexcharts-xaxistooltip:after {
     border-bottom-color: rgba(54, 145, 191, 0.4) !important;
 }
-
 .apexcharts-xaxistooltip-text {
     color: rgba(255, 255, 255, 0.95) !important;
 }
-
 .apexcharts-legend-text {
     color: rgba(255, 255, 255, 0.9) !important;
 }
-
 .apexcharts-gridline {
     stroke: rgba(54, 145, 191, 0.2) !important;
 }
-
 .apexcharts-xaxis-label,
 .apexcharts-yaxis-label {
     fill: rgba(255, 255, 255, 0.7) !important;
 }
-
 #incomeChart .apexcharts-tooltip,
 #expensesOfWeek .apexcharts-tooltip {
     background: linear-gradient(135deg, #1a2942 0%, #0f1f33 100%) !important;
     border: 1px solid rgba(54, 145, 191, 0.4) !important;
 }
-
-
 .col-md-6.col-lg-4.order-1 .apexcharts-tooltip {
     background: linear-gradient(135deg, #1a2942 0%, #0f1f33 100%) !important;
     backdrop-filter: blur(20px) saturate(180%) !important;
@@ -522,23 +420,19 @@ span.badge.bg-success {
         inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
     color: rgba(255, 255, 255, 0.95) !important;
 }
-
 .col-md-6.col-lg-4.order-1 .apexcharts-tooltip-title {
     background: rgba(54, 145, 191, 0.2) !important;
     border-bottom: 1px solid rgba(54, 145, 191, 0.3) !important;
     color: rgba(255, 255, 255, 0.95) !important;
 }
-
 .col-md-6.col-lg-4.order-1 .apexcharts-tooltip-text,
 .col-md-6.col-lg-4.order-1 .apexcharts-tooltip-text-y-label,
 .col-md-6.col-lg-4.order-1 .apexcharts-tooltip-text-y-value {
     color: rgba(255, 255, 255, 0.9) !important;
 }
-
 .col-md-6.col-lg-4.order-1 .apexcharts-tooltip-marker {
     background-color: rgba(54, 145, 191, 0.8) !important;
 }
-
 .col-md-6.col-lg-4.order-1 .apexcharts-xaxistooltip {
     background: linear-gradient(135deg, #1a2942 0%, #0f1f33 100%) !important;
     backdrop-filter: blur(20px) saturate(180%) !important;
@@ -547,31 +441,24 @@ span.badge.bg-success {
     box-shadow: 0 4px 12px rgba(54, 145, 191, 0.4) !important;
     color: rgba(255, 255, 255, 0.95) !important;
 }
-
 .col-md-6.col-lg-4.order-1 .apexcharts-xaxistooltip-text {
     color: rgba(255, 255, 255, 0.95) !important;
 }
-
 .col-md-6.col-lg-4.order-1 .apexcharts-xaxistooltip:before,
 .col-md-6.col-lg-4.order-1 .apexcharts-xaxistooltip:after {
     border-bottom-color: rgba(54, 145, 191, 0.4) !important;
 }
-
 .col-md-6.col-lg-4.order-1 .apexcharts-gridline {
     stroke: rgba(54, 145, 191, 0.2) !important;
 }
-
 .col-md-6.col-lg-4.order-1 .apexcharts-xaxis-label,
 .col-md-6.col-lg-4.order-1 .apexcharts-yaxis-label {
     fill: rgba(255, 255, 255, 0.7) !important;
 }
-
 .col-md-6.col-lg-4.order-1 .apexcharts-marker {
     stroke: rgba(54, 145, 191, 0.9) !important;
     fill: #ffffff !important;
 }
-
-
 .course-tooltip {
     background: linear-gradient(135deg, #1a2942 0%, #0f1f33 100%) !important;
     backdrop-filter: blur(20px) saturate(180%) !important;
@@ -586,7 +473,6 @@ span.badge.bg-success {
     max-width: 350px !important;
     animation: fadeIn 0.2s ease-in-out;
 }
-
 .course-tooltip .tooltip-header h6 {
     color: rgba(255, 255, 255, 0.95) !important;
     font-weight: 600 !important;
@@ -594,92 +480,74 @@ span.badge.bg-success {
     padding-bottom: 0.5rem !important;
     border-bottom: 1px solid rgba(54, 145, 191, 0.3) !important;
 }
-
 .course-tooltip .tooltip-body p {
     color: rgba(255, 255, 255, 0.85) !important;
     font-size: 0.875rem !important;
     line-height: 1.5 !important;
 }
-
 .course-tooltip .tooltip-body strong {
     color: rgba(54, 145, 191, 0.95) !important;
 }
-
 @keyframes fadeIn {
     from {
         opacity: 0;
         transform: translateX(-10px);
     }
-
     to {
         opacity: 1;
         transform: translateX(0);
     }
 }
-
 .course-item {
     position: relative;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
-
 .course-item:hover {
     transform: translateX(4px);
 }
-
 .card-header .d-flex.gap-2 {
     gap: 0.5rem !important;
 }
-
 .card-header .btn-group .dropdown-menu {
     min-width: 180px;
 }
-
 .card-header .btn-group .dropdown-item {
     padding: 0.5rem 1rem;
     display: flex;
     align-items: center;
 }
-
 .card-header .btn-group .dropdown-item i {
     font-size: 1.1rem;
 }
-
 .card-header .btn-group .dropdown-item:hover {
     background-color: rgba(54, 145, 191, 0.1);
 }
-
 #bulkUploadModal .alert-info {
     background-color: rgba(54, 145, 191, 0.1);
     border-color: rgba(54, 145, 191, 0.3);
     color: #b8c5d6;
 }
-
 #bulkUploadModal .modal-dialog {
     max-height: 90vh;
     max-width: 1200px !important;
     width: 90%;
 }
-
 #bulkUploadModal .modal-content {
     max-height: 90vh;
     display: flex;
     flex-direction: column;
 }
-
 #bulkUploadModal .modal-body {
     overflow-y: auto;
     flex: 1;
 }
-
 #uploadPreview .table-responsive {
     background-color: #0f1419;
 }
-
 #uploadPreview .table {
     font-size: 0.875rem;
     margin-bottom: 0;
 }
-
 #uploadPreview .table th {
     background-color: #1a2332;
     color: #b8c5d6;
@@ -687,311 +555,252 @@ span.badge.bg-success {
     border-color: #3d4f63;
     padding: 0.75rem 0.5rem;
 }
-
 #uploadPreview .table td {
     color: #b8c5d6;
     border-color: #3d4f63;
     padding: 0.5rem;
     vertical-align: middle;
 }
-
 #uploadPreview .table tbody tr:hover {
     background-color: rgba(54, 145, 191, 0.05);
 }
-
 #uploadPreview .table th,
 #uploadPreview .table td {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
-
 #uploadPreview .table-responsive::-webkit-scrollbar {
     width: 8px;
     height: 8px;
 }
-
 #uploadPreview .table-responsive::-webkit-scrollbar-track {
     background: #1a2332;
     border-radius: 4px;
 }
-
 #uploadPreview .table-responsive::-webkit-scrollbar-thumb {
     background: #3d4f63;
     border-radius: 4px;
 }
-
 #uploadPreview .table-responsive::-webkit-scrollbar-thumb:hover {
     background: #4a5f7f;
 }
-
 @media (max-width: 1400px) {
     #bulkUploadModal .modal-dialog {
         max-width: 95% !important;
     }
 }
-
 @media (max-width: 768px) {
     #bulkUploadModal .modal-dialog {
         max-width: 98% !important;
         width: 98%;
         margin: 0.5rem;
     }
-
     #uploadPreview .table th,
     #uploadPreview .table td {
         font-size: 0.75rem;
         padding: 0.4rem;
     }
 }
-
 @media (max-width: 768px) {
     .card-header .d-flex.gap-2 {
         flex-direction: column;
         width: 100%;
     }
-
     .card-header .d-flex.gap-2 .btn,
     .card-header .d-flex.gap-2 .btn-group {
         width: 100%;
     }
 }
-
 .dropdown-item:disabled {
     opacity: 0.6;
     cursor: not-allowed;
     pointer-events: none;
 }
-
 .dropdown-item .spinner-border-sm {
     width: 0.875rem;
     height: 0.875rem;
     border-width: 0.15em;
 }
-
 .dropdown-menu {
     animation: slideDown 0.2s ease-out;
 }
-
 @keyframes slideDown {
     from {
         opacity: 0;
         transform: translateY(-10px);
     }
-
     to {
         opacity: 1;
         transform: translateY(0);
     }
 }
-
 @media (max-width: 1400px) {
     #bulkUploadModal .modal-dialog {
         max-width: 95%;
         width: auto;
     }
 }
-
 @media (max-width: 992px) {
     #bulkUploadModal .modal-dialog {
         max-width: 98%;
         margin: 0.5rem;
     }
-
     #uploadPreview .table th,
     #uploadPreview .table td {
         font-size: 0.8rem;
         padding: 0.4rem;
     }
 }
-
 @media (max-width: 576px) {
     #bulkUploadModal .modal-dialog {
         max-width: 100%;
         margin: 0;
     }
-
     #uploadPreview .table-responsive {
         max-height: 300px;
     }
-
     #uploadPreview .table th,
     #uploadPreview .table td {
         font-size: 0.75rem;
         padding: 0.3rem;
     }
 }
-
 #topEnrolledCoursesList {
     overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: rgba(54, 145, 191, 0.8) rgba(197, 227, 245, 0.3);
 }
-
 #topEnrolledCoursesList::-webkit-scrollbar {
     width: 8px;
 }
-
 #topEnrolledCoursesList::-webkit-scrollbar-track {
     background: rgba(197, 227, 245, 0.3);
     border-radius: 10px;
 }
-
 #topEnrolledCoursesList::-webkit-scrollbar-thumb {
     background: rgba(54, 145, 191, 0.8);
     border-radius: 10px;
 }
-
 #topEnrolledCoursesList::-webkit-scrollbar-thumb:hover {
     background: rgba(54, 145, 191, 1);
 }
-
-
 #topEnrolledCoursesList li {
     transition: all 0.2s ease;
 }
-
 #topEnrolledCoursesList li .d-flex {
     gap: 0.75rem;
 }
-
 @media (max-width: 1399px) {
     #topEnrolledCoursesList li .d-flex.align-items-center {
         align-items: flex-start !important;
     }
-
     #topEnrolledCoursesList li .avatar {
         margin-top: 0.25rem;
     }
 }
-
 @media (max-width: 1199px) {
     #topEnrolledCoursesList li .d-flex.w-100 {
         flex-direction: column !important;
         gap: 0.5rem !important;
     }
-
     #topEnrolledCoursesList li .user-progress {
         align-self: flex-start !important;
         margin-left: 0 !important;
     }
 }
-
 @media (max-width: 991px) {
     #topEnrolledCoursesList li h6 {
         font-size: 0.9rem;
     }
-
     #topEnrolledCoursesList li small {
         font-size: 0.75rem;
     }
 }
-
 @media (max-width: 767px) {
     #topEnrolledCoursesList li .avatar img {
         width: 35px !important;
         height: 35px !important;
     }
-
     #topEnrolledCoursesList li h6 {
         font-size: 0.85rem;
     }
-
     #topEnrolledCoursesList li small {
         font-size: 0.7rem;
     }
 }
-
 @media (max-width: 575px) {
     #topEnrolledCoursesList li {
         margin-bottom: 1rem !important;
         padding-bottom: 0.75rem !important;
     }
-
     #topEnrolledCoursesList li .avatar img {
         width: 32px !important;
         height: 32px !important;
     }
-
     #topEnrolledCoursesList li h6 {
         font-size: 0.8rem;
         line-height: 1.3;
     }
-
     #topEnrolledCoursesList li small {
         font-size: 0.65rem;
     }
-
     #topEnrolledCoursesList li .user-progress h6 {
         font-size: 0.9rem;
     }
 }
-
 #recentEnrollmentActivityList li .d-flex {
     gap: 0.75rem;
 }
-
 @media (max-width: 1399px) {
     #recentEnrollmentActivityList li .d-flex.align-items-center {
         align-items: flex-start !important;
     }
-
     #recentEnrollmentActivityList li .avatar {
         margin-top: 0.25rem;
     }
 }
-
 @media (max-width: 1199px) {
     #recentEnrollmentActivityList li .d-flex.w-100 {
         flex-direction: column !important;
         gap: 0.5rem !important;
     }
-
     #recentEnrollmentActivityList li .user-progress {
         align-self: flex-start !important;
     }
 }
-
 @media (max-width: 991px) {
     #recentEnrollmentActivityList li h6 {
         font-size: 0.9rem;
     }
-
     #recentEnrollmentActivityList li small {
         font-size: 0.75rem;
     }
 }
-
 @media (max-width: 767px) {
     #recentEnrollmentActivityList li h6 {
         font-size: 0.85rem;
     }
-
     #recentEnrollmentActivityList li small {
         font-size: 0.7rem;
     }
-
     #recentEnrollmentActivityList li .badge {
         font-size: 0.7rem;
         padding: 0.25rem 0.5rem;
     }
 }
-
 @media (max-width: 575px) {
     #recentEnrollmentActivityList li {
         margin-bottom: 1rem !important;
         padding-bottom: 0.75rem !important;
     }
-
     #recentEnrollmentActivityList li h6 {
         font-size: 0.8rem;
         line-height: 1.3;
     }
-
     #recentEnrollmentActivityList li small {
         font-size: 0.65rem;
     }
-
     #recentEnrollmentActivityList li .badge {
         font-size: 0.65rem;
         padding: 0.2rem 0.4rem;

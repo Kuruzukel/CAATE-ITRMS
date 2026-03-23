@@ -665,9 +665,18 @@ function updateRecentEnrollmentActivityUI(activities) {
         const defaultAvatar = '../assets/images/DEFAULT_AVATAR.png';
 
         if (activity.profileImage) {
-            const imageUrl = activity.profileImage.startsWith('http')
-                ? activity.profileImage
-                : `${config.api.baseUrl}/${activity.profileImage}`;
+            // Handle different path formats
+            let imageUrl = activity.profileImage;
+
+            // If it's a full path starting with /CAATE-ITRMS, use it as is
+            if (imageUrl.startsWith('/CAATE-ITRMS/')) {
+                imageUrl = window.location.origin + imageUrl;
+            }
+            // If it starts with http, use as is
+            else if (!imageUrl.startsWith('http')) {
+                imageUrl = `${config.api.baseUrl}/${imageUrl}`;
+            }
+
             avatarHTML = `
                 <img src="${imageUrl}" alt="${traineeName}" class="rounded-circle" style="width: 38px; height: 38px; object-fit: cover;" 
                      onerror="this.src='${defaultAvatar}';">

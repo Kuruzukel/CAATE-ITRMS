@@ -512,26 +512,80 @@ function updateCourseEnrollmentUI(data) {
 // Function to fetch recent enrollment activity
 async function fetchRecentEnrollmentActivity() {
     try {
-        const response = await fetch(`${API_BASE_URL_DASHBOARD}/api/v1/enrollments/recent`);
+        // Fetch from available endpoints: enrollments and registrations
+        const fetchPromises = [
+            fetch(`${config.api.baseUrl}/api/v1/enrollments/recent?limit=10`).then(res => res.json()),
+            fetch(`${config.api.baseUrl}/api/v1/registrations?limit=10&sort=createdAt&order=desc`).then(res => res.json())
+        ];
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+        const [enrollmentsData, registrationsData] = await Promise.all(fetchPromises);
+
+        // Combine data from all sources
+        const combinedData = [];
+
+        // Add enrollments
+        if (enrollmentsData.success && enrollmentsData.data) {
+            enrollmentsData.data.forEach(enrollment => {
+                combinedData.push({
+                    traineeName: enrollment.traineeName || 'Unknown',
+                    courseName: enrollment.courseName || 'No Course Selected',
+                    status: enrollment.status || 'pending',
+                    createdAt: enrollment.enrollmentDate || enrollment.enrollment_date || new Date().toISOString(),
+                    type: 'enrollment'
+                });
+            });
         }
 
-        const result = await response.json();
-
-        if (result.success) {
-            updateRecentEnrollmentActivityUI(result.data);
+        // Add registrations
+        if (registrationsData.success && registrationsData.data) {
+            registrationsData.data.forEach(reg => {
+                combinedData.push({
+                    traineeName: reg.traineeFullName || `${reg.firstName || ''} ${reg.lastName || ''}`.trim() || 'Unknown',
+                    courseName: reg.selectedCourse || reg.courseTitle || reg.course || 'No Course Selected',
+                    status: reg.status || 'pending',
+                    createdAt: reg.createdAt || reg.created_at || new Date().toISOString(),
+                    type: 'registration'
+                });
+            });
         }
+
+        // Sort by date (most recent first) and take top 6
+        combinedData.sort((a, b) => {
+            const dateA = new Date(a.createdAt);
+            const dateB = new Date(b.createdAt);
+            return dateB - dateA;
+        });
+
+        const recentActivities = combinedData.slice(0, 6);
+
+        updateRecentEnrollmentActivityUI(recentActivities);
     } catch (error) {
         console.error('Error fetching recent enrollment activity:', error);
+        // Show error state in UI
+        const activityList = document.getElementById('recentEnrollmentActivityList');
+        if (activityList) {
+            activityList.innerHTML = `
+                <li class="d-flex justify-content-center align-items-center py-5">
+                    <p class="text-muted">Unable to load enrollment activity</p>
+                </li>
+            `;
+        }
     }
 }
 
 // Function to update Recent Enrollment Activity UI
 function updateRecentEnrollmentActivityUI(activities) {
     const activityList = document.getElementById('recentEnrollmentActivityList');
-    if (!activityList || !activities || activities.length === 0) return;
+    if (!activityList) return;
+
+    if (!activities || activities.length === 0) {
+        activityList.innerHTML = `
+            <li class="d-flex justify-content-center align-items-center py-5">
+                <p class="text-muted">No recent enrollment activity</p>
+            </li>
+        `;
+        return;
+    }
 
     activityList.innerHTML = '';
 
@@ -540,44 +594,47 @@ function updateRecentEnrollmentActivityUI(activities) {
         const li = document.createElement('li');
         li.className = isLast ? 'd-flex' : 'd-flex mb-4 pb-1';
 
-        // Determine badge class and text based on status
-        let badgeClass = 'bg-label-primary';
-        let badgeText = activity.status;
+        // Determine badge class, icon color, and text based on status
+        let badgeClass = 'bg-secondary';
+        let badgeText = 'Unknown';
+        let iconColor = 'label-secondary';
 
-        switch (activity.status.toLowerCase()) {
+        const status = (activity.status || '').toLowerCase();
+
+        switch (status) {
+            case 'approved':
             case 'enrolled':
                 badgeClass = 'bg-success';
-                badgeText = 'Enrolled';
+                badgeText = 'Approved';
+                iconColor = 'label-success';
                 break;
             case 'pending':
                 badgeClass = 'bg-warning';
                 badgeText = 'Pending';
+                iconColor = 'label-warning';
                 break;
             case 'cancelled':
+            case 'rejected':
             case 'withdrawn':
                 badgeClass = 'bg-danger';
                 badgeText = 'Cancelled';
+                iconColor = 'label-danger';
                 break;
             case 'completed':
-                badgeClass = 'bg-info';
+                badgeClass = 'bg-primary';
                 badgeText = 'Completed';
+                iconColor = 'label-primary';
                 break;
         }
 
         // Use traineeName from API response
-        const traineeName = activity.traineeName || activity.name || 'Unknown';
-
-        // Determine avatar (use image if available, otherwise use icon)
-        let avatarHTML = '';
-        if (activity.avatar) {
-            avatarHTML = `<img src="${activity.avatar}" alt="${traineeName}" class="rounded-circle" />`;
-        } else {
-            avatarHTML = `<span class="avatar-initial rounded-circle bg-label-primary"><i class="bx bx-user"></i></span>`;
-        }
+        const traineeName = activity.traineeName || 'Unknown';
 
         li.innerHTML = `
             <div class="avatar flex-shrink-0 me-3">
-                ${avatarHTML}
+                <span class="avatar-initial rounded-circle bg-${iconColor}">
+                    <i class="bx bx-user"></i>
+                </span>
             </div>
             <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
                 <div class="me-2">
@@ -639,15 +696,18 @@ function updateRecentEnrollmentUI(enrollments) {
 
 // Function to get status configuration
 function getStatusConfig(status) {
+    const statusLower = (status || '').toLowerCase();
     const statusMap = {
-        'enrolled': { color: 'success', label: 'Enrolled' },
+        'approved': { color: 'success', label: 'Approved' },
+        'enrolled': { color: 'success', label: 'Approved' },
         'pending': { color: 'warning', label: 'Pending' },
         'cancelled': { color: 'danger', label: 'Cancelled' },
+        'rejected': { color: 'danger', label: 'Cancelled' },
         'withdrawn': { color: 'danger', label: 'Cancelled' },
         'completed': { color: 'primary', label: 'Completed' }
     };
 
-    return statusMap[status?.toLowerCase()] || { color: 'secondary', label: status || 'Unknown' };
+    return statusMap[statusLower] || { color: 'secondary', label: status || 'Unknown' };
 }
 
 // Single DOMContentLoaded event listener

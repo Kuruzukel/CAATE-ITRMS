@@ -107,7 +107,7 @@ function updateDashboardUI(data) {
         }
     }
 
-    const approvedCard = document.querySelector('.bx-check-circle');
+    const approvedCard = document.querySelector('.avatar .bx-check-circle');
     if (approvedCard) {
         const approvedCountElement = approvedCard.closest('.card-body').querySelector('h3.card-title');
         const approvedPercentageElement = approvedCard.closest('.card-body').querySelector('small.fw-semibold');

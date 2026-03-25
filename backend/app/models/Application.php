@@ -32,8 +32,14 @@ class Application {
     }
     
     public function create($data) {
+        // Add timestamps
         $data['created_at'] = new MongoDB\BSON\UTCDateTime();
+        $data['updated_at'] = new MongoDB\BSON\UTCDateTime();
+        
+        // Set default status
         $data['status'] = $data['status'] ?? 'pending';
+        
+        // Insert the document
         $result = $this->collection->insertOne($data);
         return (string)$result->getInsertedId();
     }

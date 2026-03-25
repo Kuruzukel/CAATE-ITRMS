@@ -19,62 +19,112 @@ class ApplicationController {
                 http_response_code(400);
                 echo json_encode([
                     'success' => false,
-                    'message' => 'Invalid JSON input',
-                    'raw_input' => substr($rawInput, 0, 100) // First 100 chars for debugging
+                    'message' => 'Invalid JSON input'
                 ]);
                 return;
             }
             
-            // Get database connection
-            $db = getMongoConnection();
-            if (!$db) {
-                throw new Exception('Database connection failed');
-            }
-            
-            // Get applications collection directly
-            $collection = $db->applications;
-            
-            // Prepare application data with all form fields
+            // Prepare application data structure
             $applicationData = [
+                // User reference
                 'user_id' => $input['userId'] ?? null,
-                'first_name' => $input['firstName'] ?? '',
-                'middle_name' => $input['middleName'] ?? '',
-                'last_name' => $input['lastName'] ?? '',
-                'email' => $input['email'] ?? '',
-                'contact_no' => $input['contactNo'] ?? '',
-                'address' => [
-                    'street' => $input['numberStreet'] ?? '',
+                
+                // Reference Number (concatenated from individual fields)
+                'reference_number' => $this->buildReferenceNumber($input),
+                
+                // ULI (concatenated from individual fields)
+                'uli' => $this->buildULI($input),
+                
+                // Picture and Signature
+                'picture' => $input['picture'] ?? null,
+                'signature' => $input['signature'] ?? null,
+                
+                // School Information
+                'school_name' => $input['schoolName'] ?? '',
+                'assessment_title' => $input['assessmentTitle'] ?? '',
+                'school_address' => $input['schoolAddress'] ?? '',
+                'application_date' => $input['applicationDate'] ?? '',
+                
+                // Assessment Type
+                'assessment_type' => $input['assessmentType'] ?? '',
+                
+                // Client Type
+                'client_type' => $input['clientType'] ?? '',
+                
+                // Profile - Name
+                'name' => [
+                    'surname' => $input['surname'] ?? '',
+                    'first_name' => $input['firstname'] ?? '',
+                    'second_name' => $input['secondname'] ?? '',
+                    'middle_name' => $input['middleName'] ?? '',
+                    'middle_initial' => $input['middleInitial'] ?? '',
+                    'name_extension' => $input['nameExtension'] ?? ''
+                ],
+                
+                // Mailing Address
+                'mailing_address' => [
+                    'number_street' => $input['mailingNumber'] ?? '',
                     'barangay' => $input['barangay'] ?? '',
+                    'district' => $input['district'] ?? '',
                     'city' => $input['city'] ?? '',
                     'province' => $input['province'] ?? '',
                     'region' => $input['region'] ?? '',
-                    'zip_code' => $input['zipCode'] ?? ''
+                    'zip' => $input['zip'] ?? ''
                 ],
-                'birth_date' => $input['birthDate'] ?? '',
-                'age' => isset($input['age']) ? (int)$input['age'] : null,
+                
+                // Parent Information
+                'mothers_name' => $input['mothersName'] ?? '',
+                'fathers_name' => $input['fathersName'] ?? '',
+                
+                // Personal Information
                 'sex' => $input['sex'] ?? '',
                 'civil_status' => $input['civilStatus'] ?? '',
-                'nationality' => $input['nationality'] ?? '',
-                'assessment_title' => $input['assessmentTitle'] ?? '',
-                'assessment_type' => $input['assessmentType'] ?? '',
-                'signature' => $input['signature'] ?? '',
-                'picture' => $input['picture'] ?? '',
+                'employment_status' => $input['employmentStatus'] ?? '',
+                'birth_date' => $input['birthDate'] ?? '',
+                'birth_place' => $input['birthPlace'] ?? '',
+                'education' => $input['education'] ?? '',
+                'parent_guardian_name' => $input['parentGuardianName'] ?? '',
+                'parent_guardian_address' => $input['parentGuardianAddress'] ?? '',
+                
+                // Contact Information
+                'contact' => [
+                    'tel' => $input['tel'] ?? '',
+                    'mobile' => $input['mobile'] ?? '',
+                    'fax' => $input['fax'] ?? '',
+                    'email' => $input['email'] ?? '',
+                    'others' => $input['others'] ?? ''
+                ],
+                
+                // Work Experience (array of objects)
+                'work_experience' => $this->buildWorkExperience($input),
+                
+                // Training/Seminars (array of objects)
+                'training_seminars' => $this->buildTrainingSeminars($input),
+                
+                // Licensure Examinations (array of objects)
+                'licensure_exams' => $this->buildLicensureExams($input),
+                
+                // Competency Assessments (array of objects)
+                'competency_assessments' => $this->buildCompetencyAssessments($input),
+                
+                // Status and timestamps
                 'status' => $input['status'] ?? 'pending',
                 'submitted_at' => $input['submittedAt'] ?? date('Y-m-d H:i:s'),
                 'created_at' => new MongoDB\BSON\UTCDateTime(),
-                'form_data' => $input // Store all form data for reference
+                'updated_at' => new MongoDB\BSON\UTCDateTime()
             ];
             
-            // Insert directly into collection
-            $result = $collection->insertOne($applicationData);
+            // Use the Application model to create
+            $applicationModel = new Application();
+            $insertedId = $applicationModel->create($applicationData);
             
-            if ($result && $result->getInsertedId()) {
+            if ($insertedId) {
                 http_response_code(201);
                 echo json_encode([
                     'success' => true,
                     'message' => 'Application submitted successfully',
                     'data' => [
-                        'id' => (string)$result->getInsertedId()
+                        'id' => $insertedId
                     ]
                 ]);
             } else {
@@ -86,10 +136,124 @@ class ApplicationController {
             http_response_code(500);
             echo json_encode([
                 'success' => false,
-                'message' => 'Error creating application: ' . $e->getMessage(),
-                'trace' => $e->getTraceAsString()
+                'message' => 'Error creating application: ' . $e->getMessage()
             ]);
         }
+    }
+    
+    // Helper function to build reference number from individual fields
+    private function buildReferenceNumber($input) {
+        $parts = [
+            $input['referenceQualifiable'] ?? '',
+            $input['referenceYY1'] ?? '',
+            $input['referenceYY2'] ?? '',
+            $input['referenceRegion1'] ?? '',
+            $input['referenceRegion2'] ?? '',
+            $input['referenceProvince1'] ?? '',
+            $input['referenceProvince2'] ?? '',
+            $input['referenceAC1'] ?? '',
+            $input['referenceAC2'] ?? '',
+            $input['referenceAC3'] ?? '',
+            $input['referenceSeries1'] ?? '',
+            $input['referenceSeries2'] ?? '',
+            $input['referenceSeries3'] ?? '',
+            $input['referenceSeries4'] ?? '',
+            $input['referenceSeries5'] ?? '',
+            $input['referenceSeries6'] ?? ''
+        ];
+        return implode('', $parts);
+    }
+    
+    // Helper function to build ULI from individual fields
+    private function buildULI($input) {
+        $parts = [];
+        for ($i = 1; $i <= 16; $i++) {
+            $parts[] = $input["uli{$i}"] ?? '';
+        }
+        return implode('', $parts);
+    }
+    
+    // Helper function to build work experience array
+    private function buildWorkExperience($input) {
+        $workExperience = [];
+        
+        if (isset($input['workCompany']) && is_array($input['workCompany'])) {
+            $count = count($input['workCompany']);
+            for ($i = 0; $i < $count; $i++) {
+                $workExperience[] = [
+                    'company' => $input['workCompany'][$i] ?? '',
+                    'position' => $input['workPosition'][$i] ?? '',
+                    'inclusive_dates' => $input['workDates'][$i] ?? '',
+                    'monthly_salary' => $input['workSalary'][$i] ?? '',
+                    'status_of_appointment' => $input['workStatus'][$i] ?? '',
+                    'years_of_experience' => isset($input['workYears'][$i]) ? (float)$input['workYears'][$i] : 0
+                ];
+            }
+        }
+        
+        return $workExperience;
+    }
+    
+    // Helper function to build training/seminars array
+    private function buildTrainingSeminars($input) {
+        $trainingSeminars = [];
+        
+        if (isset($input['trainingTitle']) && is_array($input['trainingTitle'])) {
+            $count = count($input['trainingTitle']);
+            for ($i = 0; $i < $count; $i++) {
+                $trainingSeminars[] = [
+                    'title' => $input['trainingTitle'][$i] ?? '',
+                    'venue' => $input['trainingVenue'][$i] ?? '',
+                    'inclusive_dates' => $input['trainingDates'][$i] ?? '',
+                    'number_of_hours' => isset($input['trainingHours'][$i]) ? (int)$input['trainingHours'][$i] : 0,
+                    'conducted_by' => $input['trainingConductedBy'][$i] ?? ''
+                ];
+            }
+        }
+        
+        return $trainingSeminars;
+    }
+    
+    // Helper function to build licensure exams array
+    private function buildLicensureExams($input) {
+        $licensureExams = [];
+        
+        if (isset($input['licensureTitle']) && is_array($input['licensureTitle'])) {
+            $count = count($input['licensureTitle']);
+            for ($i = 0; $i < $count; $i++) {
+                $licensureExams[] = [
+                    'title' => $input['licensureTitle'][$i] ?? '',
+                    'year_taken' => isset($input['licensureYear'][$i]) ? (int)$input['licensureYear'][$i] : null,
+                    'examination_venue' => $input['licensureVenue'][$i] ?? '',
+                    'rating' => $input['licensureRating'][$i] ?? '',
+                    'remarks' => $input['licensureRemarks'][$i] ?? '',
+                    'expiry_date' => $input['licensureExpiry'][$i] ?? ''
+                ];
+            }
+        }
+        
+        return $licensureExams;
+    }
+    
+    // Helper function to build competency assessments array
+    private function buildCompetencyAssessments($input) {
+        $competencyAssessments = [];
+        
+        if (isset($input['competencyTitle']) && is_array($input['competencyTitle'])) {
+            $count = count($input['competencyTitle']);
+            for ($i = 0; $i < $count; $i++) {
+                $competencyAssessments[] = [
+                    'title' => $input['competencyTitle'][$i] ?? '',
+                    'qualification_level' => $input['competencyLevel'][$i] ?? '',
+                    'industry_sector' => $input['competencySector'][$i] ?? '',
+                    'certificate_number' => $input['competencyCert'][$i] ?? '',
+                    'date_of_issuance' => $input['competencyIssuance'][$i] ?? '',
+                    'expiration_date' => $input['competencyExpiry'][$i] ?? ''
+                ];
+            }
+        }
+        
+        return $competencyAssessments;
     }
     
     public function index() {

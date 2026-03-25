@@ -54,7 +54,7 @@ class ApplicationController {
                 // Profile - Name
                 'name' => [
                     'surname' => $input['surname'] ?? '',
-                    'first_name' => $input['firstname'] ?? '',
+                    'first_name' => $input['firstName'] ?? '',
                     'second_name' => $input['secondname'] ?? '',
                     'middle_name' => $input['middleName'] ?? '',
                     'middle_initial' => $input['middleInitial'] ?? '',
@@ -63,7 +63,7 @@ class ApplicationController {
                 
                 // Mailing Address
                 'mailing_address' => [
-                    'number_street' => $input['mailingNumber'] ?? '',
+                    'number_street' => $input['numberStreet'] ?? '',
                     'barangay' => $input['barangay'] ?? '',
                     'district' => $input['district'] ?? '',
                     'city' => $input['city'] ?? '',
@@ -73,8 +73,8 @@ class ApplicationController {
                 ],
                 
                 // Parent Information
-                'mothers_name' => $input['mothersName'] ?? '',
-                'fathers_name' => $input['fathersName'] ?? '',
+                'mothers_name' => $input['motherName'] ?? '',
+                'fathers_name' => $input['fatherName'] ?? '',
                 
                 // Personal Information
                 'sex' => $input['sex'] ?? '',
@@ -82,6 +82,7 @@ class ApplicationController {
                 'employment_status' => $input['employmentStatus'] ?? '',
                 'birth_date' => $input['birthDate'] ?? '',
                 'birth_place' => $input['birthPlace'] ?? '',
+                'age' => isset($input['age']) ? (int)$input['age'] : null,
                 'education' => $input['education'] ?? '',
                 'parent_guardian_name' => $input['parentGuardianName'] ?? '',
                 'parent_guardian_address' => $input['parentGuardianAddress'] ?? '',
@@ -92,7 +93,7 @@ class ApplicationController {
                     'mobile' => $input['mobile'] ?? '',
                     'fax' => $input['fax'] ?? '',
                     'email' => $input['email'] ?? '',
-                    'others' => $input['others'] ?? ''
+                    'other_contact' => $input['otherContact'] ?? ''
                 ],
                 
                 // Work Experience (array of objects)
@@ -179,15 +180,27 @@ class ApplicationController {
         
         if (isset($input['workCompany']) && is_array($input['workCompany'])) {
             $count = count($input['workCompany']);
+            
             for ($i = 0; $i < $count; $i++) {
-                $workExperience[] = [
-                    'company' => $input['workCompany'][$i] ?? '',
-                    'position' => $input['workPosition'][$i] ?? '',
-                    'inclusive_dates' => $input['workDates'][$i] ?? '',
-                    'monthly_salary' => $input['workSalary'][$i] ?? '',
-                    'status_of_appointment' => $input['workStatus'][$i] ?? '',
-                    'years_of_experience' => isset($input['workYears'][$i]) ? (float)$input['workYears'][$i] : 0
-                ];
+                // Get all field values
+                $company = trim($input['workCompany'][$i] ?? '');
+                $position = trim($input['workPosition'][$i] ?? '');
+                $dates = trim($input['workDates'][$i] ?? '');
+                $salary = trim($input['workSalary'][$i] ?? '');
+                $status = trim($input['workStatus'][$i] ?? '');
+                $years = isset($input['workYears'][$i]) && $input['workYears'][$i] !== '' ? (float)$input['workYears'][$i] : 0;
+                
+                // Only add if at least one field has a non-empty value
+                if ($company !== '' || $position !== '' || $dates !== '' || $salary !== '' || $status !== '' || $years > 0) {
+                    $workExperience[] = [
+                        'company' => $company,
+                        'position' => $position,
+                        'inclusive_dates' => $dates,
+                        'monthly_salary' => $salary,
+                        'status_of_appointment' => $status,
+                        'years_of_experience' => $years
+                    ];
+                }
             }
         }
         
@@ -201,13 +214,23 @@ class ApplicationController {
         if (isset($input['trainingTitle']) && is_array($input['trainingTitle'])) {
             $count = count($input['trainingTitle']);
             for ($i = 0; $i < $count; $i++) {
-                $trainingSeminars[] = [
-                    'title' => $input['trainingTitle'][$i] ?? '',
-                    'venue' => $input['trainingVenue'][$i] ?? '',
-                    'inclusive_dates' => $input['trainingDates'][$i] ?? '',
-                    'number_of_hours' => isset($input['trainingHours'][$i]) ? (int)$input['trainingHours'][$i] : 0,
-                    'conducted_by' => $input['trainingConductedBy'][$i] ?? ''
-                ];
+                // Get all field values
+                $title = trim($input['trainingTitle'][$i] ?? '');
+                $venue = trim($input['trainingVenue'][$i] ?? '');
+                $dates = trim($input['trainingDates'][$i] ?? '');
+                $hours = isset($input['trainingHours'][$i]) && $input['trainingHours'][$i] !== '' ? (int)$input['trainingHours'][$i] : 0;
+                $conductedBy = trim($input['trainingConductedBy'][$i] ?? '');
+                
+                // Only add if at least one field has a non-empty value
+                if ($title !== '' || $venue !== '' || $dates !== '' || $hours > 0 || $conductedBy !== '') {
+                    $trainingSeminars[] = [
+                        'title' => $title,
+                        'venue' => $venue,
+                        'inclusive_dates' => $dates,
+                        'number_of_hours' => $hours,
+                        'conducted_by' => $conductedBy
+                    ];
+                }
             }
         }
         
@@ -221,14 +244,25 @@ class ApplicationController {
         if (isset($input['licensureTitle']) && is_array($input['licensureTitle'])) {
             $count = count($input['licensureTitle']);
             for ($i = 0; $i < $count; $i++) {
-                $licensureExams[] = [
-                    'title' => $input['licensureTitle'][$i] ?? '',
-                    'year_taken' => isset($input['licensureYear'][$i]) ? (int)$input['licensureYear'][$i] : null,
-                    'examination_venue' => $input['licensureVenue'][$i] ?? '',
-                    'rating' => $input['licensureRating'][$i] ?? '',
-                    'remarks' => $input['licensureRemarks'][$i] ?? '',
-                    'expiry_date' => $input['licensureExpiry'][$i] ?? ''
-                ];
+                // Get all field values
+                $title = trim($input['licensureTitle'][$i] ?? '');
+                $year = isset($input['licensureYear'][$i]) && $input['licensureYear'][$i] !== '' ? (int)$input['licensureYear'][$i] : null;
+                $venue = trim($input['licensureVenue'][$i] ?? '');
+                $rating = trim($input['licensureRating'][$i] ?? '');
+                $remarks = trim($input['licensureRemarks'][$i] ?? '');
+                $expiry = trim($input['licensureExpiry'][$i] ?? '');
+                
+                // Only add if at least one field has a non-empty value
+                if ($title !== '' || $year !== null || $venue !== '' || $rating !== '' || $remarks !== '' || $expiry !== '') {
+                    $licensureExams[] = [
+                        'title' => $title,
+                        'year_taken' => $year,
+                        'examination_venue' => $venue,
+                        'rating' => $rating,
+                        'remarks' => $remarks,
+                        'expiry_date' => $expiry
+                    ];
+                }
             }
         }
         
@@ -242,14 +276,25 @@ class ApplicationController {
         if (isset($input['competencyTitle']) && is_array($input['competencyTitle'])) {
             $count = count($input['competencyTitle']);
             for ($i = 0; $i < $count; $i++) {
-                $competencyAssessments[] = [
-                    'title' => $input['competencyTitle'][$i] ?? '',
-                    'qualification_level' => $input['competencyLevel'][$i] ?? '',
-                    'industry_sector' => $input['competencySector'][$i] ?? '',
-                    'certificate_number' => $input['competencyCert'][$i] ?? '',
-                    'date_of_issuance' => $input['competencyIssuance'][$i] ?? '',
-                    'expiration_date' => $input['competencyExpiry'][$i] ?? ''
-                ];
+                // Get all field values
+                $title = trim($input['competencyTitle'][$i] ?? '');
+                $level = trim($input['competencyLevel'][$i] ?? '');
+                $sector = trim($input['competencySector'][$i] ?? '');
+                $cert = trim($input['competencyCert'][$i] ?? '');
+                $issuance = trim($input['competencyIssuance'][$i] ?? '');
+                $expiry = trim($input['competencyExpiry'][$i] ?? '');
+                
+                // Only add if at least one field has a non-empty value
+                if ($title !== '' || $level !== '' || $sector !== '' || $cert !== '' || $issuance !== '' || $expiry !== '') {
+                    $competencyAssessments[] = [
+                        'title' => $title,
+                        'qualification_level' => $level,
+                        'industry_sector' => $sector,
+                        'certificate_number' => $cert,
+                        'date_of_issuance' => $issuance,
+                        'expiration_date' => $expiry
+                    ];
+                }
             }
         }
         

@@ -573,17 +573,32 @@ function handleConfirmedSubmit() {
     const formData = new FormData(form);
     const data = {};
 
-    // Convert FormData to regular object
+    // Convert FormData to regular object, handling arrays properly
     for (let [key, value] of formData.entries()) {
-        if (data[key]) {
-            // Handle multiple values (like checkboxes)
-            if (Array.isArray(data[key])) {
-                data[key].push(value);
-            } else {
-                data[key] = [data[key], value];
+        // Skip file inputs - we'll handle them separately
+        if (value instanceof File) {
+            continue;
+        }
+
+        // Handle array fields (fields with [] notation)
+        if (key.endsWith('[]')) {
+            const arrayKey = key.slice(0, -2); // Remove the []
+            if (!data[arrayKey]) {
+                data[arrayKey] = [];
             }
+            data[arrayKey].push(value);
         } else {
-            data[key] = value;
+            // Handle regular fields
+            if (data[key]) {
+                // If key already exists, convert to array
+                if (Array.isArray(data[key])) {
+                    data[key].push(value);
+                } else {
+                    data[key] = [data[key], value];
+                }
+            } else {
+                data[key] = value;
+            }
         }
     }
 
@@ -591,6 +606,12 @@ function handleConfirmedSubmit() {
     const userId = localStorage.getItem('userId');
     if (userId) {
         data.userId = userId;
+    }
+
+    // Add picture as base64 if uploaded
+    const picturePreview = document.getElementById('picturePreview');
+    if (picturePreview && picturePreview.src && picturePreview.src.startsWith('data:')) {
+        data.picture = picturePreview.src;
     }
 
     // Add signature as base64
@@ -602,6 +623,32 @@ function handleConfirmedSubmit() {
     // Add timestamp and status
     data.submittedAt = new Date().toISOString();
     data.status = 'pending';
+
+    // Debug: Log the data being sent
+    console.log('=== Application Submission Debug ===');
+    console.log('Full data object:', data);
+    console.log('\n--- Array Fields ---');
+    console.log('Work Company:', data.workCompany);
+    console.log('Work Position:', data.workPosition);
+    console.log('Work Dates:', data.workDates);
+    console.log('Work Salary:', data.workSalary);
+    console.log('Work Status:', data.workStatus);
+    console.log('Work Years:', data.workYears);
+    console.log('\nTraining Title:', data.trainingTitle);
+    console.log('Training Venue:', data.trainingVenue);
+    console.log('\nLicensure Title:', data.licensureTitle);
+    console.log('Licensure Year:', data.licensureYear);
+    console.log('\nCompetency Title:', data.competencyTitle);
+    console.log('Competency Level:', data.competencyLevel);
+    console.log('\n--- Other Fields ---');
+    console.log('Picture:', data.picture ? `Present (${String(data.picture).substring(0, 50)}...)` : 'Not present');
+    console.log('Signature:', data.signature ? 'Present' : 'Not present');
+
+    // Log the JSON that will be sent
+    console.log('\n--- JSON to be sent ---');
+    const jsonString = JSON.stringify(data);
+    console.log('JSON length:', jsonString.length);
+    console.log('JSON preview:', jsonString.substring(0, 500));
 
     // Submit to database
     fetch(`${window.API_BASE_URL}/api/v1/applications`, {
@@ -625,8 +672,10 @@ function handleConfirmedSubmit() {
             return response.json();
         })
         .then(result => {
+            console.log('Server response:', result);
+
             // Show success toast
-            showToast('Application submitted successfully! You will receive a confirmation email shortly.', 'success');
+            showToast('Application submitted successfully!', 'success');
 
             // Reset form
             form.reset();

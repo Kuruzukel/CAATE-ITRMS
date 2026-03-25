@@ -1,7 +1,5 @@
 // Application Form JavaScript
 
-console.log('Application Form JS loaded - Version: 2026-03-16 - District removed, Province input, Zip number');
-
 // API Configuration - Use global API_BASE_URL if available
 if (typeof window.API_BASE_URL === 'undefined') {
     window.API_BASE_URL = (typeof config !== 'undefined' && config.api)
@@ -154,7 +152,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // Signature canvas functionality
 const canvas = document.getElementById('signatureCanvas');
-const ctx = canvas.getContext('2d');
+const ctx = canvas.getContext('2d', { willReadFrequently: true });
 let isDrawing = false;
 let lastX = 0;
 let lastY = 0;
@@ -361,7 +359,7 @@ function removeCompetencyRow(btn) {
 // Check if signature canvas has content
 function hasSignature() {
     const canvas = document.getElementById('signatureCanvas');
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     return imageData.data.some(channel => channel !== 0);
 }
@@ -370,9 +368,91 @@ function hasSignature() {
 document.getElementById('applicationForm').addEventListener('submit', function (e) {
     e.preventDefault();
 
+    // Validate form before showing confirmation modal
+    if (!validateApplicationForm()) {
+        return;
+    }
+
     // Show confirmation modal
     showConfirmationModal();
 });
+
+function validateApplicationForm() {
+    const form = document.getElementById('applicationForm');
+    let isValid = true;
+    const missingFields = [];
+
+    // Clear previous validation states
+    form.querySelectorAll('.is-invalid').forEach(field => {
+        field.classList.remove('is-invalid');
+    });
+
+    // Define required fields with their labels
+    const requiredFields = [
+        { id: 'schoolName', label: 'School/Training Center/Company' },
+        { id: 'assessmentTitle', label: 'Assessment Title' },
+        { id: 'schoolAddress', label: 'School Address' },
+        { id: 'applicationDate', label: 'Date of Application' },
+        { id: 'mobile', label: 'Mobile Number' },
+        { id: 'email', label: 'Email Address' },
+        { id: 'birthDate', label: 'Birth Date' }
+    ];
+
+    // Check text/select/date inputs
+    requiredFields.forEach(field => {
+        const element = document.getElementById(field.id);
+        if (element && (!element.value || element.value.trim() === '')) {
+            element.classList.add('is-invalid');
+            missingFields.push(field.label);
+            isValid = false;
+        }
+    });
+
+    // Check radio button groups
+    const radioGroups = [
+        { name: 'assessmentType', label: 'Assessment Type' },
+        { name: 'clientType', label: 'Client Type' },
+        { name: 'sex', label: 'Sex' },
+        { name: 'civilStatus', label: 'Civil Status' },
+        { name: 'education', label: 'Educational Attainment' },
+        { name: 'employmentStatus', label: 'Employment Status' }
+    ];
+
+    radioGroups.forEach(group => {
+        const checked = document.querySelector(`input[name="${group.name}"]:checked`);
+        if (!checked) {
+            // Add visual indicator to radio group
+            document.querySelectorAll(`input[name="${group.name}"]`).forEach(radio => {
+                radio.classList.add('is-invalid');
+            });
+            missingFields.push(group.label);
+            isValid = false;
+        }
+    });
+
+    // Check signature
+    if (!hasSignature()) {
+        missingFields.push('Signature');
+        isValid = false;
+        const signatureCanvas = document.getElementById('signatureCanvas');
+        if (signatureCanvas) {
+            signatureCanvas.style.border = '2px solid #dc3545';
+        }
+    } else {
+        const signatureCanvas = document.getElementById('signatureCanvas');
+        if (signatureCanvas) {
+            signatureCanvas.style.border = '1px solid #d9dee3';
+        }
+    }
+
+    // Show toast notification if validation fails
+    if (!isValid) {
+        showToast('Please complete all required fields.', 'error');
+        return false;
+    }
+
+    return true;
+}
 
 function showConfirmationModal() {
     // Show layout overlay
@@ -385,19 +465,12 @@ function showConfirmationModal() {
     const modalElement = document.getElementById('confirmationModal');
     const modal = new bootstrap.Modal(modalElement);
 
-    // Remove aria-hidden when modal is shown to fix accessibility warning
-    modalElement.addEventListener('shown.bs.modal', () => {
-        modalElement.removeAttribute('aria-hidden');
-    }, { once: true });
-
     // Add event listener for modal dismissal
     modalElement.addEventListener('hidden.bs.modal', () => {
         // Hide layout overlay
         if (layoutOverlay) {
             layoutOverlay.classList.remove('active');
         }
-        // Restore aria-hidden
-        modalElement.setAttribute('aria-hidden', 'true');
     }, { once: true });
 
     // Add click event to overlay to close modal
@@ -505,7 +578,7 @@ function handleConfirmedSubmit() {
 
             // Clear signature
             if (canvas) {
-                const ctx = canvas.getContext('2d');
+                const ctx = canvas.getContext('2d', { willReadFrequently: true });
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
             }
 
@@ -542,7 +615,7 @@ function handleConfirmedSubmit() {
             // Reset form anyway
             form.reset();
             if (canvas) {
-                const ctx = canvas.getContext('2d');
+                const ctx = canvas.getContext('2d', { willReadFrequently: true });
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
             }
 
@@ -565,14 +638,9 @@ function handleConfirmedSubmit() {
 
 // Form reset handler
 document.getElementById('applicationForm').addEventListener('reset', function (e) {
-    if (!confirm('Are you sure you want to reset the form? All data will be lost.')) {
-        e.preventDefault();
-        return;
-    }
-
     // Clear signature
     const canvas = document.getElementById('signatureCanvas');
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Clear picture preview
@@ -585,6 +653,16 @@ document.getElementById('applicationForm').addEventListener('reset', function (e
 
     // Clear age field
     document.getElementById('age').value = '';
+
+    // Clear validation states
+    document.querySelectorAll('.is-invalid').forEach(field => {
+        field.classList.remove('is-invalid');
+    });
+
+    // Reset signature canvas border
+    if (canvas) {
+        canvas.style.border = '1px solid #d9dee3';
+    }
 });
 
 // Auto-save to localStorage (optional feature)
@@ -722,7 +800,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // Philippine Address Dropdowns - DISABLED: All fields are now input fields
 function initializePhilippineAddressDropdowns() {
-    console.log('Philippine address dropdowns disabled - all fields are now input fields');
     // All address fields (region, province, city, barangay, district) are now input fields
     // No dropdown functionality needed
 

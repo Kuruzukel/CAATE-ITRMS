@@ -15,12 +15,20 @@ class Application {
         return iterator_to_array($cursor);
     }
     
+    public function getAll() {
+        return $this->all();
+    }
+    
     public function findById($id) {
         try {
             return $this->collection->findOne(['_id' => new MongoDB\BSON\ObjectId($id)]);
         } catch (Exception $e) {
             return null;
         }
+    }
+    
+    public function getById($id) {
+        return $this->findById($id);
     }
     
     public function create($data) {

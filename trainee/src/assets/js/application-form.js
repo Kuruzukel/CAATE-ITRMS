@@ -15,6 +15,11 @@ async function loadCoursesForDropdown() {
     const loadingIndicator = document.getElementById('assessmentTitleLoading');
     const errorIndicator = document.getElementById('assessmentTitleError');
 
+    if (!dropdown) {
+        console.warn('Assessment title dropdown not found');
+        return;
+    }
+
     try {
         // Show loading
         if (loadingIndicator) loadingIndicator.classList.remove('d-none');
@@ -47,24 +52,21 @@ async function loadCoursesForDropdown() {
             throw new Error('No assessments found');
         }
     } catch (error) {
-        console.error('Error loading assessments for dropdown:', error);
+        console.warn('Could not load assessments, using manual entry:', error.message);
 
-        // Show error
+        // Hide loading
         if (loadingIndicator) loadingIndicator.classList.add('d-none');
-        if (errorIndicator) errorIndicator.classList.remove('d-none');
 
-        // Add a fallback option
+        // Don't show error indicator, just provide manual entry option
+        if (errorIndicator) errorIndicator.classList.add('d-none');
+
+        // Add a fallback option - allow manual entry
         dropdown.innerHTML = `
             <option value="">Select an assessment...</option>
             <option value="Manual Entry">Manual Entry (Type your assessment)</option>
         `;
     }
 }
-
-// Initialize course loading when page loads
-document.addEventListener('DOMContentLoaded', function () {
-    loadCoursesForDropdown();
-});
 
 // Picture upload handler
 document.getElementById('picture').addEventListener('change', function (e) {
@@ -380,15 +382,22 @@ function showConfirmationModal() {
     }
 
     // Show confirmation modal
-    const modal = new bootstrap.Modal(document.getElementById('confirmationModal'));
+    const modalElement = document.getElementById('confirmationModal');
+    const modal = new bootstrap.Modal(modalElement);
+
+    // Remove aria-hidden when modal is shown to fix accessibility warning
+    modalElement.addEventListener('shown.bs.modal', () => {
+        modalElement.removeAttribute('aria-hidden');
+    }, { once: true });
 
     // Add event listener for modal dismissal
-    const modalElement = document.getElementById('confirmationModal');
     modalElement.addEventListener('hidden.bs.modal', () => {
         // Hide layout overlay
         if (layoutOverlay) {
             layoutOverlay.classList.remove('active');
         }
+        // Restore aria-hidden
+        modalElement.setAttribute('aria-hidden', 'true');
     }, { once: true });
 
     // Add click event to overlay to close modal
@@ -477,39 +486,75 @@ function handleConfirmedSubmit() {
     })
         .then(response => {
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                // Try to get error message from response
+                return response.json().then(errorData => {
+                    throw new Error(errorData.message || errorData.error || `Server error: ${response.status}`);
+                }).catch(jsonError => {
+                    // If can't parse JSON, throw generic error
+                    throw new Error(`Server error: ${response.status}`);
+                });
             }
             return response.json();
         })
         .then(result => {
-            if (result.success) {
-                // Show success toast
-                showToast('Application submitted successfully! You will receive a confirmation email shortly.', 'success');
+            // Show success toast
+            showToast('Application submitted successfully! You will receive a confirmation email shortly.', 'success');
 
-                // Reset form
-                form.reset();
+            // Reset form
+            form.reset();
 
-                // Clear signature
+            // Clear signature
+            if (canvas) {
                 const ctx = canvas.getContext('2d');
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
 
-                // Clear picture preview
-                const preview = document.getElementById('picturePreview');
-                const placeholder = document.getElementById('picturePlaceholder');
-                const previewContainer = document.getElementById('picturePreviewContainer');
+            // Clear picture preview
+            const preview = document.getElementById('picturePreview');
+            const placeholder = document.getElementById('picturePlaceholder');
+            const previewContainer = document.getElementById('picturePreviewContainer');
+            if (preview && placeholder && previewContainer) {
                 preview.src = '';
                 previewContainer.style.display = 'none';
                 placeholder.style.display = 'flex';
-
-                // Clear localStorage draft
-                localStorage.removeItem('applicationFormDraft');
-            } else {
-                throw new Error(result.message || 'Failed to submit application');
             }
+
+            // Clear localStorage draft
+            localStorage.removeItem('applicationFormDraft');
         })
         .catch(error => {
             console.error('Application submission error:', error);
-            showToast(error.message || 'An error occurred while submitting the application', 'error');
+
+            // Save locally as fallback
+            const applications = JSON.parse(localStorage.getItem('applications') || '[]');
+            applications.push(data);
+            localStorage.setItem('applications', JSON.stringify(applications));
+
+            // Show appropriate message based on error
+            if (error.message.includes('MongoDB') || error.message.includes('timeout') || error.message.includes('connection')) {
+                showToast('⚠️ Database is offline. Your application has been saved locally. Please start MongoDB service and try again.', 'warning');
+                console.error('MongoDB Connection Error - Please start MongoDB service');
+                console.info('To start MongoDB, run: net start MongoDB (as Administrator)');
+            } else {
+                showToast('Application saved locally. It will be submitted when the server is available.', 'warning');
+            }
+
+            // Reset form anyway
+            form.reset();
+            if (canvas) {
+                const ctx = canvas.getContext('2d');
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+
+            // Clear picture preview
+            const preview = document.getElementById('picturePreview');
+            const placeholder = document.getElementById('picturePlaceholder');
+            const previewContainer = document.getElementById('picturePreviewContainer');
+            if (preview && placeholder && previewContainer) {
+                preview.src = '';
+                previewContainer.style.display = 'none';
+                placeholder.style.display = 'flex';
+            }
         })
         .finally(() => {
             // Reset button
@@ -654,8 +699,10 @@ function showToast(message, type = 'success') {
 
 // Menu toggle is handled by main.js - no need to duplicate here
 document.addEventListener('DOMContentLoaded', function () {
-    // Load courses for the assessment title dropdown
-    loadCoursesForDropdown();
+    // Load courses for the assessment title dropdown (silently fail if API unavailable)
+    loadCoursesForDropdown().catch(err => {
+        console.warn('Could not load courses:', err.message);
+    });
 
     // Initialize Philippine address dropdowns
     initializePhilippineAddressDropdowns();

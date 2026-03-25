@@ -377,6 +377,62 @@ document.getElementById('applicationForm').addEventListener('submit', function (
     showConfirmationModal();
 });
 
+// Setup error removal listeners for form inputs
+function setupErrorRemovalListeners() {
+    const form = document.getElementById('applicationForm');
+    if (!form) return;
+
+    // Remove error state on input for text, select, date, and number fields
+    const inputFields = form.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], input[type="date"], input[type="number"], select, textarea');
+    inputFields.forEach(field => {
+        field.addEventListener('input', function () {
+            if (this.classList.contains('is-invalid')) {
+                this.classList.remove('is-invalid');
+            }
+        });
+
+        field.addEventListener('change', function () {
+            if (this.classList.contains('is-invalid')) {
+                this.classList.remove('is-invalid');
+            }
+        });
+    });
+
+    // Remove error state on radio button selection
+    const radioButtons = form.querySelectorAll('input[type="radio"]');
+    radioButtons.forEach(radio => {
+        radio.addEventListener('change', function () {
+            // Remove is-invalid from all radios with the same name
+            const radioGroup = form.querySelectorAll(`input[name="${this.name}"]`);
+            radioGroup.forEach(r => {
+                if (r.classList.contains('is-invalid')) {
+                    r.classList.remove('is-invalid');
+                }
+            });
+        });
+    });
+
+    // Remove error state on checkbox selection
+    const checkboxes = form.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function () {
+            if (this.classList.contains('is-invalid')) {
+                this.classList.remove('is-invalid');
+            }
+        });
+    });
+
+    // Remove error state on file input
+    const fileInputs = form.querySelectorAll('input[type="file"]');
+    fileInputs.forEach(fileInput => {
+        fileInput.addEventListener('change', function () {
+            if (this.classList.contains('is-invalid')) {
+                this.classList.remove('is-invalid');
+            }
+        });
+    });
+}
+
 function validateApplicationForm() {
     const form = document.getElementById('applicationForm');
     let isValid = true;
@@ -395,7 +451,23 @@ function validateApplicationForm() {
         { id: 'applicationDate', label: 'Date of Application' },
         { id: 'mobile', label: 'Mobile Number' },
         { id: 'email', label: 'Email Address' },
-        { id: 'birthDate', label: 'Birth Date' }
+        { id: 'birthDate', label: 'Birth Date' },
+        // Profile section - Name fields
+        { id: 'firstName', label: 'First Name' },
+        // Mailing Address fields
+        { id: 'numberStreet', label: 'Number Street' },
+        { id: 'barangay', label: 'Barangay' },
+        { id: 'district', label: 'District' },
+        { id: 'city', label: 'City' },
+        { id: 'province', label: 'Province' },
+        { id: 'region', label: 'Region' },
+        { id: 'zip', label: 'Zip' },
+        // Parent names
+        { id: 'motherName', label: "Mother's Name" },
+        { id: 'fatherName', label: "Father's Name" },
+        // Birth place and age
+        { id: 'birthPlace', label: 'Birth Place' },
+        { id: 'age', label: 'Age' }
     ];
 
     // Check text/select/date inputs
@@ -410,8 +482,6 @@ function validateApplicationForm() {
 
     // Check radio button groups
     const radioGroups = [
-        { name: 'assessmentType', label: 'Assessment Type' },
-        { name: 'clientType', label: 'Client Type' },
         { name: 'sex', label: 'Sex' },
         { name: 'civilStatus', label: 'Civil Status' },
         { name: 'education', label: 'Educational Attainment' },
@@ -429,21 +499,6 @@ function validateApplicationForm() {
             isValid = false;
         }
     });
-
-    // Check signature
-    if (!hasSignature()) {
-        missingFields.push('Signature');
-        isValid = false;
-        const signatureCanvas = document.getElementById('signatureCanvas');
-        if (signatureCanvas) {
-            signatureCanvas.style.border = '2px solid #dc3545';
-        }
-    } else {
-        const signatureCanvas = document.getElementById('signatureCanvas');
-        if (signatureCanvas) {
-            signatureCanvas.style.border = '1px solid #d9dee3';
-        }
-    }
 
     // Show toast notification if validation fails
     if (!isValid) {
@@ -791,6 +846,9 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // Application form specific initialization can go here
+
+    // Add error removal listeners for all form inputs
+    setupErrorRemovalListeners();
 });
 
 // Philippine Address Dropdowns - DISABLED: All fields are now input fields

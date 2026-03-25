@@ -1550,3 +1550,127 @@ input.uli-input.form-control:focus,
         opacity: 0;
     }
 }
+
+/* ========================================
+   ERROR VALIDATION STYLES
+   ======================================== */
+
+/* Error validation styles for required fields - Enhanced */
+.form-control.is-invalid,
+input.is-invalid,
+textarea.is-invalid,
+select.is-invalid {
+    border-color: #dc3545 !important;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+    background-color: rgba(220, 53, 69, 0.05) !important;
+}
+
+.invalid-feedback {
+    display: block !important;
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    color: #dc3545;
+    font-weight: 500;
+}
+
+/* Error state for number inputs */
+input[type="number"].is-invalid {
+    border-color: #dc3545 !important;
+    background-image: none !important;
+}
+
+input[type="number"].is-invalid:focus {
+    border-color: #dc3545 !important;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+}
+
+/* Error state for date inputs */
+input[type="date"].is-invalid {
+    border-color: #dc3545 !important;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+}
+
+input[type="date"].is-invalid:focus {
+    border-color: #dc3545 !important;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+}
+
+/* Radio button error state */
+input[type="radio"].is-invalid,
+input[type="checkbox"].is-invalid {
+    border-color: #dc3545 !important;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+}
+
+/* Radio label error state */
+.radio-label:has(input.is-invalid) {
+    color: #dc3545 !important;
+    font-weight: 600;
+}
+
+/* Radio group error styling */
+.radio-group-error {
+    display: block !important;
+    width: 100%;
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: #dc3545;
+    font-weight: 500;
+    background-color: rgba(220, 53, 69, 0.1);
+    border: 1px solid rgba(220, 53, 69, 0.3);
+    border-radius: 0.25rem;
+    padding: 0.5rem;
+}
+
+/* Success state for validated fields */
+.form-control.is-valid {
+    border-color: #28a745 !important;
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25) !important;
+}
+
+.valid-feedback {
+    display: block !important;
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    color: #28a745;
+    font-weight: 500;
+}
+
+/* Required field indicator */
+.text-danger {
+    color: #dc3545 !important;
+    font-weight: bold;
+}
+
+/* Enhanced required field styling */
+input[required],
+textarea[required],
+select[required] {
+    border-left: 3px solid #ffc107;
+}
+
+input[required]:focus,
+textarea[required]:focus,
+select[required]:focus {
+    border-left: 3px solid #3691bf;
+    box-shadow: 0 0 0 0.2rem rgba(54, 145, 191, 0.25);
+}
+
+/* Override required styling when field has error */
+input[required].is-invalid,
+textarea[required].is-invalid,
+select[required].is-invalid {
+    border-left: 3px solid #dc3545 !important;
+}
+
+/* File input error state */
+input[type="file"].is-invalid {
+    border-color: #dc3545 !important;
+}
+
+input[type="file"].is-invalid+label {
+    color: #dc3545 !important;
+    border-color: #dc3545 !important;
+}

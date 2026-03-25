@@ -56,6 +56,9 @@
 </head>
 
 <body>
+    <!-- Layout Overlay for Modal -->
+    <div class="layout-overlay" id="layoutOverlay"></div>
+
     <!-- Layout wrapper -->
     <div class="layout-wrapper layout-content-navbar">
         <div class="layout-container">
@@ -1308,6 +1311,43 @@
     <!-- Toast Container -->
     <div id="toastContainer" style="position: fixed; top: 20px; right: 20px; z-index: 9999;"></div>
 
+    <!-- Confirmation Modal -->
+    <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel"
+        aria-hidden="true" data-bs-backdrop="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmationModalLabel">
+                        Confirm Application Submission
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h4 class="mb-3 text-center">Review Your Application</h4>
+                    <p class="text-center mb-4">Please review your application details before submitting. Make sure all
+                        information is correct.</p>
+
+                    <div class="alert alert-info"
+                        style="background: linear-gradient(135deg, rgba(54, 145, 191, 0.1) 0%, rgba(50, 85, 150, 0.1) 100%); border: 1px solid rgba(54, 145, 191, 0.4); color: #3691bf;">
+                        <div class="d-flex align-items-start">
+                            <i class="bx bx-info-circle me-2" style="font-size: 1.2rem; margin-top: 2px;"></i>
+                            <span>Once submitted, your application will be reviewed by our team. You will receive a
+                                confirmation email shortly.</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        <i class="bx bx-x me-2"></i>No, Cancel
+                    </button>
+                    <button type="button" class="btn btn-primary" id="confirmSubmitBtn">
+                        <i class="bx bx-check me-2"></i>Yes, Submit
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <style>
         @keyframes slideIn {
             from {
@@ -1331,6 +1371,159 @@
                 transform: translateX(400px);
                 opacity: 0;
             }
+        }
+
+        /* Toast notification styles */
+        .toast-notification {
+            background: #28a745;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 300px;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .toast-notification.error {
+            background: #dc3545;
+        }
+
+        .toast-notification.warning {
+            background: #ffc107;
+            color: #000;
+        }
+
+        .toast-notification.info {
+            background: #17a2b8;
+        }
+
+        .toast-notification .bx {
+            font-size: 24px;
+        }
+
+        .toast-notification.hiding {
+            animation: slideOut 0.3s ease-out;
+        }
+
+        /* Layout Overlay for Modal */
+        .layout-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(1px);
+            -webkit-backdrop-filter: blur(1px);
+            z-index: 1099;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            display: none;
+            cursor: pointer;
+        }
+
+        .layout-overlay.active {
+            display: block;
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Ensure modal appears above overlay */
+        .modal {
+            z-index: 1100 !important;
+        }
+
+        .modal-dialog {
+            z-index: 1101 !important;
+        }
+
+        /* Remove Bootstrap modal backdrop */
+        .modal-backdrop {
+            display: none !important;
+        }
+
+        /* Confirmation Modal Styling */
+        #confirmationModal .modal-content {
+            background-color: #0f2942 !important;
+            background: linear-gradient(135deg, #0f2942 0%, #0a1f33 100%) !important;
+            backdrop-filter: blur(20px) saturate(180%) !important;
+            -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+            border: 1px solid rgba(54, 145, 191, 0.4) !important;
+            border-radius: 20px !important;
+            box-shadow: 0 10px 40px rgba(22, 56, 86, 0.6),
+                0 4px 12px rgba(54, 145, 191, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+            color: #fff !important;
+        }
+
+        #confirmationModal .modal-header {
+            background: linear-gradient(135deg, rgba(54, 145, 191, 0.2) 0%, rgba(50, 85, 150, 0.2) 100%) !important;
+            border-bottom: 1px solid rgba(54, 145, 191, 0.3) !important;
+            padding: 1.25rem 1.5rem !important;
+        }
+
+        #confirmationModal .modal-title {
+            color: #fff !important;
+            font-weight: 700 !important;
+            font-size: 1.25rem !important;
+        }
+
+        #confirmationModal .modal-header .btn-close {
+            filter: invert(1) brightness(2) !important;
+            opacity: 0.8 !important;
+        }
+
+        #confirmationModal .modal-header .btn-close:hover {
+            opacity: 1 !important;
+        }
+
+        #confirmationModal .modal-body {
+            padding: 1.5rem !important;
+            color: rgba(255, 255, 255, 0.9) !important;
+        }
+
+        #confirmationModal .modal-body h4 {
+            color: rgba(255, 255, 255, 0.95) !important;
+            font-weight: 700 !important;
+        }
+
+        #confirmationModal .modal-body p {
+            color: rgba(255, 255, 255, 0.9) !important;
+        }
+
+        #confirmationModal .modal-footer {
+            background: linear-gradient(135deg, rgba(54, 145, 191, 0.1) 0%, rgba(50, 85, 150, 0.1) 100%) !important;
+            border-top: 1px solid rgba(54, 145, 191, 0.3) !important;
+            padding: 1rem 1.5rem !important;
+        }
+
+        #confirmationModal .btn-outline-secondary {
+            background: transparent !important;
+            border: 1px solid rgba(54, 145, 191, 0.4) !important;
+            color: rgba(54, 145, 191, 0.9) !important;
+        }
+
+        #confirmationModal .btn-outline-secondary:hover {
+            background: rgba(54, 145, 191, 0.2) !important;
+            border: 1px solid rgba(54, 145, 191, 0.6) !important;
+            color: #fff !important;
+        }
+
+        #confirmationModal .btn-primary {
+            background: linear-gradient(135deg, #3691bf 0%, #2a7ba8 100%) !important;
+            border: 1px solid rgba(54, 145, 191, 0.5) !important;
+            color: #fff !important;
+        }
+
+        #confirmationModal .btn-primary:hover {
+            background: linear-gradient(135deg, #2a7ba8 0%, #1f5a7a 100%) !important;
+            border-color: rgba(54, 145, 191, 0.7) !important;
+            box-shadow: 0 4px 12px rgba(54, 145, 191, 0.4) !important;
         }
     </style>
 

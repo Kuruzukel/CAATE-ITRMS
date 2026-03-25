@@ -368,14 +368,72 @@ function hasSignature() {
 document.getElementById('applicationForm').addEventListener('submit', function (e) {
     e.preventDefault();
 
+    // Show confirmation modal
+    showConfirmationModal();
+});
+
+function showConfirmationModal() {
+    // Show layout overlay
+    const layoutOverlay = document.getElementById('layoutOverlay');
+    if (layoutOverlay) {
+        layoutOverlay.classList.add('active');
+    }
+
+    // Show confirmation modal
+    const modal = new bootstrap.Modal(document.getElementById('confirmationModal'));
+
+    // Add event listener for modal dismissal
+    const modalElement = document.getElementById('confirmationModal');
+    modalElement.addEventListener('hidden.bs.modal', () => {
+        // Hide layout overlay
+        if (layoutOverlay) {
+            layoutOverlay.classList.remove('active');
+        }
+    }, { once: true });
+
+    // Add click event to overlay to close modal
+    if (layoutOverlay) {
+        layoutOverlay.addEventListener('click', () => {
+            modal.hide();
+        }, { once: true });
+    }
+
+    modal.show();
+}
+
+// Handle confirmed submission
+document.addEventListener('DOMContentLoaded', function () {
+    const confirmBtn = document.getElementById('confirmSubmitBtn');
+    if (confirmBtn) {
+        confirmBtn.addEventListener('click', function () {
+            handleConfirmedSubmit();
+        });
+    }
+});
+
+function handleConfirmedSubmit() {
+    const form = document.getElementById('applicationForm');
+
+    // Hide confirmation modal
+    const confirmationModal = bootstrap.Modal.getInstance(document.getElementById('confirmationModal'));
+    if (confirmationModal) {
+        confirmationModal.hide();
+    }
+
+    // Hide layout overlay
+    const layoutOverlay = document.getElementById('layoutOverlay');
+    if (layoutOverlay) {
+        layoutOverlay.classList.remove('active');
+    }
+
     // Show loading state
-    const submitBtn = this.querySelector('button[type="submit"]');
+    const submitBtn = form.querySelector('button[type="submit"]');
     const originalText = submitBtn.innerHTML;
     submitBtn.disabled = true;
     submitBtn.innerHTML = '<i class="bx bx-loader-alt bx-spin me-2"></i>Submitting...';
 
     // Collect form data
-    const formData = new FormData(this);
+    const formData = new FormData(form);
     const data = {};
 
     // Convert FormData to regular object
@@ -429,7 +487,7 @@ document.getElementById('applicationForm').addEventListener('submit', function (
                 showToast('Application submitted successfully! You will receive a confirmation email shortly.', 'success');
 
                 // Reset form
-                this.reset();
+                form.reset();
 
                 // Clear signature
                 const ctx = canvas.getContext('2d');
@@ -458,7 +516,7 @@ document.getElementById('applicationForm').addEventListener('submit', function (
             submitBtn.disabled = false;
             submitBtn.innerHTML = originalText;
         });
-});
+}
 
 // Form reset handler
 document.getElementById('applicationForm').addEventListener('reset', function (e) {
@@ -575,26 +633,13 @@ function showToast(message, type = 'success') {
 
     const toast = document.createElement('div');
     toast.className = `toast-notification ${type}`;
-    toast.style.cssText = `
-        background: ${type === 'success' ? '#28a745' : type === 'error' ? '#dc3545' : '#ffc107'};
-        color: white;
-        padding: 15px 20px;
-        border-radius: 8px;
-        margin-bottom: 10px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        min-width: 300px;
-        animation: slideIn 0.3s ease-out;
-    `;
 
     const icon = type === 'success' ? 'bx-check' :
         type === 'error' ? 'bx-x' :
             type === 'warning' ? 'bx-error-alt' : 'bxs-info-circle';
 
     toast.innerHTML = `
-        <i class="bx ${icon}" style="font-size: 24px;"></i>
+        <i class="bx ${icon}"></i>
         <div style="flex: 1;">${message}</div>
     `;
 
@@ -602,7 +647,7 @@ function showToast(message, type = 'success') {
 
     // Auto remove after 5 seconds
     setTimeout(() => {
-        toast.style.animation = 'slideOut 0.3s ease-out';
+        toast.classList.add('hiding');
         setTimeout(() => toast.remove(), 300);
     }, 5000);
 }

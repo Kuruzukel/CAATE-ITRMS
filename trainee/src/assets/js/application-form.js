@@ -745,14 +745,7 @@ function confirmPrintApplication() {
 // Toast notification function
 function showToast(message, type = 'success') {
     const container = document.getElementById('toastContainer');
-    if (!container) {
-        // Create toast container if it doesn't exist
-        const newContainer = document.createElement('div');
-        newContainer.id = 'toastContainer';
-        newContainer.style.cssText = 'position: fixed; top: 20px; right: 20px; z-index: 9999;';
-        document.body.appendChild(newContainer);
-        return showToast(message, type); // Retry with new container
-    }
+    if (!container) return;
 
     const toast = document.createElement('div');
     toast.className = `toast-notification ${type}`;
@@ -762,8 +755,10 @@ function showToast(message, type = 'success') {
             type === 'warning' ? 'bx-error-alt' : 'bxs-info-circle';
 
     toast.innerHTML = `
-        <i class="bx ${icon}"></i>
-        <div style="flex: 1;">${message}</div>
+        <i class="bx ${icon} toast-icon"></i>
+        <div class="toast-content">
+            <div class="toast-message">${message}</div>
+        </div>
     `;
 
     container.appendChild(toast);

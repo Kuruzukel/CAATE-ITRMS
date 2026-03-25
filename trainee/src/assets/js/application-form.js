@@ -624,32 +624,6 @@ function handleConfirmedSubmit() {
     data.submittedAt = new Date().toISOString();
     data.status = 'pending';
 
-    // Debug: Log the data being sent
-    console.log('=== Application Submission Debug ===');
-    console.log('Full data object:', data);
-    console.log('\n--- Array Fields ---');
-    console.log('Work Company:', data.workCompany);
-    console.log('Work Position:', data.workPosition);
-    console.log('Work Dates:', data.workDates);
-    console.log('Work Salary:', data.workSalary);
-    console.log('Work Status:', data.workStatus);
-    console.log('Work Years:', data.workYears);
-    console.log('\nTraining Title:', data.trainingTitle);
-    console.log('Training Venue:', data.trainingVenue);
-    console.log('\nLicensure Title:', data.licensureTitle);
-    console.log('Licensure Year:', data.licensureYear);
-    console.log('\nCompetency Title:', data.competencyTitle);
-    console.log('Competency Level:', data.competencyLevel);
-    console.log('\n--- Other Fields ---');
-    console.log('Picture:', data.picture ? `Present (${String(data.picture).substring(0, 50)}...)` : 'Not present');
-    console.log('Signature:', data.signature ? 'Present' : 'Not present');
-
-    // Log the JSON that will be sent
-    console.log('\n--- JSON to be sent ---');
-    const jsonString = JSON.stringify(data);
-    console.log('JSON length:', jsonString.length);
-    console.log('JSON preview:', jsonString.substring(0, 500));
-
     // Submit to database
     fetch(`${window.API_BASE_URL}/api/v1/applications`, {
         method: 'POST',
@@ -672,8 +646,6 @@ function handleConfirmedSubmit() {
             return response.json();
         })
         .then(result => {
-            console.log('Server response:', result);
-
             // Show success toast
             showToast('Application submitted successfully!', 'success');
 

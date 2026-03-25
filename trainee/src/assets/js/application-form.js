@@ -368,59 +368,96 @@ function hasSignature() {
 document.getElementById('applicationForm').addEventListener('submit', function (e) {
     e.preventDefault();
 
-    // Validate required fields
-    if (!this.checkValidity()) {
-        e.stopPropagation();
-        this.classList.add('was-validated');
+    // Show loading state
+    const submitBtn = this.querySelector('button[type="submit"]');
+    const originalText = submitBtn.innerHTML;
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="bx bx-loader-alt bx-spin me-2"></i>Submitting...';
 
-        // Scroll to first invalid field
-        const firstInvalid = this.querySelector(':invalid');
-        if (firstInvalid) {
-            firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            firstInvalid.focus();
+    // Collect form data
+    const formData = new FormData(this);
+    const data = {};
+
+    // Convert FormData to regular object
+    for (let [key, value] of formData.entries()) {
+        if (data[key]) {
+            // Handle multiple values (like checkboxes)
+            if (Array.isArray(data[key])) {
+                data[key].push(value);
+            } else {
+                data[key] = [data[key], value];
+            }
+        } else {
+            data[key] = value;
         }
-
-        alert('Please fill in all required fields');
-        return;
     }
 
-    // If all validations pass
-    if (confirm('Are you sure you want to submit this application?')) {
-        // Show loading state
-        const submitBtn = this.querySelector('button[type="submit"]');
-        const originalText = submitBtn.innerHTML;
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = '<i class="bx bx-loader-alt bx-spin me-2"></i>Submitting...';
+    // Add userId from localStorage
+    const userId = localStorage.getItem('userId');
+    if (userId) {
+        data.userId = userId;
+    }
 
-        // Simulate form submission (replace with actual API call)
-        setTimeout(() => {
-            alert('Application submitted successfully!');
+    // Add signature as base64
+    const canvas = document.getElementById('signatureCanvas');
+    if (canvas && hasSignature()) {
+        data.signature = canvas.toDataURL();
+    }
+
+    // Add timestamp and status
+    data.submittedAt = new Date().toISOString();
+    data.status = 'pending';
+
+    // Submit to database
+    fetch(`${window.API_BASE_URL}/api/v1/applications`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(result => {
+            if (result.success) {
+                // Show success toast
+                showToast('Application submitted successfully! You will receive a confirmation email shortly.', 'success');
+
+                // Reset form
+                this.reset();
+
+                // Clear signature
+                const ctx = canvas.getContext('2d');
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                // Clear picture preview
+                const preview = document.getElementById('picturePreview');
+                const placeholder = document.getElementById('picturePlaceholder');
+                const previewContainer = document.getElementById('picturePreviewContainer');
+                preview.src = '';
+                previewContainer.style.display = 'none';
+                placeholder.style.display = 'flex';
+
+                // Clear localStorage draft
+                localStorage.removeItem('applicationFormDraft');
+            } else {
+                throw new Error(result.message || 'Failed to submit application');
+            }
+        })
+        .catch(error => {
+            console.error('Application submission error:', error);
+            showToast(error.message || 'An error occurred while submitting the application', 'error');
+        })
+        .finally(() => {
             // Reset button
             submitBtn.disabled = false;
             submitBtn.innerHTML = originalText;
-
-            // Optionally reset form or redirect
-            // this.reset();
-            // window.location.href = 'dashboard.html';
-        }, 2000);
-
-        // Here you would typically send the data to your backend
-        // Example:
-        // const formData = new FormData(this);
-        // fetch('/api/submit-application', {
-        //     method: 'POST',
-        //     body: formData
-        // })
-        // .then(response => response.json())
-        // .then(data => {
-        //     alert('Application submitted successfully!');
-        //     window.location.href = 'dashboard.html';
-        // })
-        // .catch(error => {
-        //     alert('Error submitting application. Please try again.');
-        //     console.error('Error:', error);
-        // });
-    }
+        });
 });
 
 // Form reset handler
@@ -522,6 +559,52 @@ function confirmPrintApplication() {
     setTimeout(() => {
         window.print();
     }, 300);
+}
+
+// Toast notification function
+function showToast(message, type = 'success') {
+    const container = document.getElementById('toastContainer');
+    if (!container) {
+        // Create toast container if it doesn't exist
+        const newContainer = document.createElement('div');
+        newContainer.id = 'toastContainer';
+        newContainer.style.cssText = 'position: fixed; top: 20px; right: 20px; z-index: 9999;';
+        document.body.appendChild(newContainer);
+        return showToast(message, type); // Retry with new container
+    }
+
+    const toast = document.createElement('div');
+    toast.className = `toast-notification ${type}`;
+    toast.style.cssText = `
+        background: ${type === 'success' ? '#28a745' : type === 'error' ? '#dc3545' : '#ffc107'};
+        color: white;
+        padding: 15px 20px;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-width: 300px;
+        animation: slideIn 0.3s ease-out;
+    `;
+
+    const icon = type === 'success' ? 'bx-check' :
+        type === 'error' ? 'bx-x' :
+            type === 'warning' ? 'bx-error-alt' : 'bxs-info-circle';
+
+    toast.innerHTML = `
+        <i class="bx ${icon}" style="font-size: 24px;"></i>
+        <div style="flex: 1;">${message}</div>
+    `;
+
+    container.appendChild(toast);
+
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+        toast.style.animation = 'slideOut 0.3s ease-out';
+        setTimeout(() => toast.remove(), 300);
+    }, 5000);
 }
 
 // Menu toggle is handled by main.js - no need to duplicate here

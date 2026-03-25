@@ -1121,22 +1121,13 @@
                                 </div>
                             </div>
 
-                            <!-- Submit Button -->
+                            <!-- Form Actions -->
                             <div class="row mb-4">
                                 <div class="col-12">
                                     <div class="card">
                                         <div class="card-body text-center">
-                                            <button type="button" class="btn btn-secondary btn-lg ms-2"
-                                                data-bs-toggle="modal" data-bs-target="#resetModal">
-                                                <i class="bx bx-reset me-2"></i>Reset Form
-                                            </button>
-                                            <button type="button" class="btn btn-success btn-lg" data-bs-toggle="modal"
-                                                data-bs-target="#submitModal">
-                                                <i class="bx bx-check-circle me-2"></i>Submit Form
-                                            </button>
-                                            <button type="button" class="btn btn-primary btn-lg ms-2"
-                                                data-bs-toggle="modal" data-bs-target="#printModal">
-                                                <i class="bx bx-printer me-2"></i>Print Form
+                                            <button type="submit" class="btn btn-primary btn-lg">
+                                                <i class="bx bx-save me-2"></i>Submit Form
                                             </button>
                                         </div>
                                     </div>
@@ -1314,6 +1305,34 @@
         });
     </script>
 
+    <!-- Toast Container -->
+    <div id="toastContainer" style="position: fixed; top: 20px; right: 20px; z-index: 9999;"></div>
+
+    <style>
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+
+            to {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+        }
+    </style>
 
 </body>
 

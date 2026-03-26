@@ -37,6 +37,18 @@ document.addEventListener('DOMContentLoaded', function () {
             loadApplications();
         });
     }
+
+    // Edit modal save button
+    const saveEditBtn = document.getElementById('saveEditBtn');
+    if (saveEditBtn) {
+        saveEditBtn.addEventListener('click', saveEditedApplication);
+    }
+
+    // Delete modal confirm button
+    const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+    if (confirmDeleteBtn) {
+        confirmDeleteBtn.addEventListener('click', confirmDeleteApplication);
+    }
 });
 
 let allApplications = [];
@@ -309,24 +321,236 @@ async function changeStatus(appId, newStatus) {
 
 function viewDetails(appId) {
     const app = allApplications.find(a => (a._id?.$oid || a._id) === appId);
-    if (app) {
-        // TODO: Implement view details modal
-        alert('View details functionality - to be implemented');
+    if (!app) {
+        showError('Application not found');
+        return;
     }
+
+    // Personal Information
+    document.getElementById('viewFullName').textContent = getFullName(app);
+    document.getElementById('viewTraineeId').textContent = app.userData?.trainee_id || 'N/A';
+    document.getElementById('viewEmail').textContent = app.contact?.email || app.userData?.email || 'N/A';
+    document.getElementById('viewMobile').textContent = app.contact?.mobile || app.userData?.contact_no || 'N/A';
+    document.getElementById('viewTel').textContent = app.contact?.tel || 'N/A';
+
+    // Assessment Information
+    document.getElementById('viewAssessmentTitle').textContent = app.assessment_title || 'N/A';
+    document.getElementById('viewSchoolName').textContent = app.school_name || 'N/A';
+    document.getElementById('viewApplicationDate').textContent = formatDate(app.application_date || app.submitted_at);
+    document.getElementById('viewAssessmentType').textContent = app.assessment_type || 'N/A';
+    document.getElementById('viewClientType').textContent = app.client_type || 'N/A';
+
+    // Address
+    const address = app.mailing_address || {};
+    const fullAddress = [
+        address.number_street,
+        address.barangay,
+        address.city,
+        address.province,
+        address.region
+    ].filter(Boolean).join(', ') || 'N/A';
+    document.getElementById('viewAddress').textContent = fullAddress;
+
+    // Personal Details
+    document.getElementById('viewSex').textContent = app.sex ? app.sex.charAt(0).toUpperCase() + app.sex.slice(1) : 'N/A';
+    document.getElementById('viewAge').textContent = app.age || 'N/A';
+    document.getElementById('viewCivilStatus').textContent = app.civil_status ? app.civil_status.charAt(0).toUpperCase() + app.civil_status.slice(1) : 'N/A';
+    document.getElementById('viewBirthDate').textContent = app.birth_date || 'N/A';
+    document.getElementById('viewBirthPlace').textContent = app.birth_place || 'N/A';
+    document.getElementById('viewEducation').textContent = app.education || 'N/A';
+    document.getElementById('viewEmploymentStatus').textContent = app.employment_status || 'N/A';
+
+    // Parent Information
+    document.getElementById('viewMotherName').textContent = app.mothers_name || 'N/A';
+    document.getElementById('viewFatherName').textContent = app.fathers_name || 'N/A';
+
+    // Status
+    const statusBadge = getStatusBadge(app.status);
+    document.getElementById('viewStatus').innerHTML = statusBadge;
+
+    // Show modal
+    const modal = new bootstrap.Modal(document.getElementById('viewProfileModal'));
+    modal.show();
 }
 
 function editDetails(appId) {
     const app = allApplications.find(a => (a._id?.$oid || a._id) === appId);
-    if (app) {
-        // TODO: Implement edit details modal
-        alert('Edit details functionality - to be implemented');
+    if (!app) {
+        showError('Application not found');
+        return;
+    }
+
+    // Store original data for comparison
+    window.originalApplicationData = JSON.parse(JSON.stringify(app));
+
+    // Store application ID
+    document.getElementById('editApplicationId').value = appId;
+
+    // Personal Information
+    document.getElementById('editFirstName').value = app.name?.first_name || '';
+    document.getElementById('editMiddleName').value = app.name?.middle_name || '';
+    document.getElementById('editLastName').value = app.name?.surname || '';
+    document.getElementById('editEmail').value = app.contact?.email || '';
+    document.getElementById('editMobile').value = app.contact?.mobile || '';
+    document.getElementById('editTel').value = app.contact?.tel || '';
+
+    // Assessment Information
+    document.getElementById('editAssessmentTitle').value = app.assessment_title || '';
+    document.getElementById('editSchoolName').value = app.school_name || '';
+    document.getElementById('editApplicationDate').value = app.application_date || '';
+    document.getElementById('editAssessmentType').value = app.assessment_type || '';
+
+    // Address
+    const address = app.mailing_address || {};
+    document.getElementById('editStreet').value = address.number_street || '';
+    document.getElementById('editBarangay').value = address.barangay || '';
+    document.getElementById('editCity').value = address.city || '';
+    document.getElementById('editProvince').value = address.province || '';
+    document.getElementById('editRegion').value = address.region || '';
+
+    // Personal Details
+    document.getElementById('editSex').value = app.sex || '';
+    document.getElementById('editAge').value = app.age || '';
+    document.getElementById('editCivilStatus').value = app.civil_status || '';
+    document.getElementById('editBirthDate').value = app.birth_date || '';
+    document.getElementById('editEducation').value = app.education || '';
+    document.getElementById('editEmploymentStatus').value = app.employment_status || '';
+
+    // Status
+    document.getElementById('editStatus').value = app.status || 'pending';
+
+    // Show modal
+    const modal = new bootstrap.Modal(document.getElementById('editDetailsModal'));
+    modal.show();
+}
+
+async function saveEditedApplication() {
+    const appId = document.getElementById('editApplicationId').value;
+
+    if (!appId) {
+        showError('Application ID not found');
+        return;
+    }
+
+    // Collect updated data
+    const updatedData = {
+        name: {
+            first_name: document.getElementById('editFirstName').value,
+            middle_name: document.getElementById('editMiddleName').value,
+            surname: document.getElementById('editLastName').value
+        },
+        contact: {
+            email: document.getElementById('editEmail').value,
+            mobile: document.getElementById('editMobile').value,
+            tel: document.getElementById('editTel').value
+        },
+        assessment_title: document.getElementById('editAssessmentTitle').value,
+        school_name: document.getElementById('editSchoolName').value,
+        application_date: document.getElementById('editApplicationDate').value,
+        assessment_type: document.getElementById('editAssessmentType').value,
+        mailing_address: {
+            number_street: document.getElementById('editStreet').value,
+            barangay: document.getElementById('editBarangay').value,
+            city: document.getElementById('editCity').value,
+            province: document.getElementById('editProvince').value,
+            region: document.getElementById('editRegion').value
+        },
+        sex: document.getElementById('editSex').value,
+        age: parseInt(document.getElementById('editAge').value) || null,
+        civil_status: document.getElementById('editCivilStatus').value,
+        birth_date: document.getElementById('editBirthDate').value,
+        education: document.getElementById('editEducation').value,
+        employment_status: document.getElementById('editEmploymentStatus').value,
+        status: document.getElementById('editStatus').value
+    };
+
+    try {
+        const response = await fetch(`${config.api.baseUrl}/api/v1/applications/${appId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updatedData)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            showSuccess('Application updated successfully');
+
+            // Close modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('editDetailsModal'));
+            modal.hide();
+
+            // Reload applications
+            await loadApplications();
+        } else {
+            showError('Failed to update application: ' + result.message);
+        }
+    } catch (error) {
+        console.error('Error updating application:', error);
+        showError('Failed to update application: ' + error.message);
     }
 }
 
 function deleteApplication(appId) {
-    if (confirm('Are you sure you want to delete this application?')) {
-        // TODO: Implement delete functionality
-        alert('Delete functionality - to be implemented');
+    const app = allApplications.find(a => (a._id?.$oid || a._id) === appId);
+    if (!app) {
+        showError('Application not found');
+        return;
+    }
+
+    // Store application ID for deletion
+    document.getElementById('deleteApplicationId').value = appId;
+
+    // Show application details in delete modal
+    document.getElementById('deleteFullName').textContent = getFullName(app);
+    document.getElementById('deleteTraineeId').textContent = app.userData?.trainee_id || 'N/A';
+    document.getElementById('deleteCourse').textContent = app.assessment_title || 'N/A';
+    document.getElementById('deleteApplicationDate').textContent = formatDate(app.application_date || app.submitted_at);
+
+    // Show modal
+    const modal = new bootstrap.Modal(document.getElementById('deleteModal'));
+    modal.show();
+}
+
+async function confirmDeleteApplication() {
+    const appId = document.getElementById('deleteApplicationId').value;
+    const confirmText = document.getElementById('deleteConfirmText').value;
+
+    if (confirmText.toLowerCase() !== 'delete') {
+        showError('Please type "delete" to confirm');
+        return;
+    }
+
+    try {
+        const response = await fetch(`${config.api.baseUrl}/api/v1/applications/${appId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            showSuccess('Application deleted successfully');
+
+            // Close modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('deleteModal'));
+            modal.hide();
+
+            // Clear confirmation text
+            document.getElementById('deleteConfirmText').value = '';
+
+            // Reload applications
+            await loadApplications();
+        } else {
+            showError('Failed to delete application: ' + result.message);
+        }
+    } catch (error) {
+        console.error('Error deleting application:', error);
+        showError('Failed to delete application: ' + error.message);
     }
 }
 

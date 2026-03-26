@@ -275,23 +275,101 @@ function getStatusBadge(status) {
     return badges[status] || '<span class="badge bg-secondary">Unknown</span>';
 }
 
+function formatAssessmentType(type) {
+    const types = {
+        'full': 'Full Qualification',
+        'coc': 'COC',
+        'renewal': 'Renewal'
+    };
+    return types[type] || type || 'N/A';
+}
+
+function formatClientType(type) {
+    const types = {
+        'tvet-graduating': 'TVET Graduating Student',
+        'tvet-graduate': 'TVET Graduate',
+        'industry-worker': 'Industry Worker',
+        'k12': 'K-12',
+        'owf': 'OWF'
+    };
+    return types[type] || type || 'N/A';
+}
+
 function formatDate(dateValue) {
     if (!dateValue) return 'N/A';
 
     try {
         let date;
+        
+        // Handle different MongoDB date formats
         if (dateValue.$date) {
+            // MongoDB extended JSON format
             date = new Date(dateValue.$date);
-        } else {
+        } else if (dateValue.$numberLong) {
+            // MongoDB numberLong format
+            date = new Date(parseInt(dateValue.$numberLong));
+        } else if (typeof dateValue === 'string') {
+            // String format
             date = new Date(dateValue);
+        } else if (typeof dateValue === 'number') {
+            // Timestamp format
+            date = new Date(dateValue);
+        } else if (dateValue instanceof Date) {
+            // Already a Date object
+            date = dateValue;
+        } else {
+            // Try direct conversion
+            date = new Date(dateValue);
+        }
+
+        // Check if date is valid
+        if (isNaN(date.getTime())) {
+            return 'N/A';
         }
 
         const options = { year: 'numeric', month: 'short', day: '2-digit' };
         return date.toLocaleDateString('en-US', options);
     } catch (error) {
+        console.warn('Date formatting error:', error, 'for value:', dateValue);
         return 'N/A';
     }
 }
+
+// Test function to verify API connectivity - add this to browser console
+async function testAPI() {
+    try {
+        console.log('Testing API connection...');
+        const response = await fetch(`${config.api.baseUrl}/api/v1/applications`);
+        const result = await response.json();
+        console.log('API Test Result:', result);
+        
+        if (result.success && result.data) {
+            console.log('Applications count:', result.data.length);
+            console.log('Sample application:', result.data[0]);
+        }
+    } catch (error) {
+        console.error('API Test Error:', error);
+    }
+}
+
+// Test function to verify change detection - run in browser console
+function testChangeDetection() {
+    // Make a small change to test
+    const surnameField = document.getElementById('editSurname');
+    const originalValue = surnameField.value;
+    surnameField.value = originalValue + ' '; // Add a space
+    
+    console.log('Test: Added space to surname field');
+    console.log('Original:', originalValue);
+    console.log('New:', surnameField.value);
+    
+    // Now try to save
+    document.getElementById('saveEditBtn').click();
+}
+
+// Run this in browser console: testChangeDetection()
+
+// Run this in browser console: testAPI()
 
 function showEmptyState() {
     const tbody = document.querySelector('.table tbody');
@@ -381,8 +459,8 @@ function viewDetails(appId) {
     // Assessment Information
     document.getElementById('viewAssessmentTitle').textContent = app.assessment_title || 'N/A';
     document.getElementById('viewApplicationDate').textContent = formatDate(app.application_date || app.submitted_at);
-    document.getElementById('viewAssessmentType').textContent = app.assessment_type || 'N/A';
-    document.getElementById('viewClientType').textContent = app.client_type || 'N/A';
+    document.getElementById('viewAssessmentType').textContent = formatAssessmentType(app.assessment_type);
+    document.getElementById('viewClientType').textContent = formatClientType(app.client_type);
 
     // Personal Information
     document.getElementById('viewSurname').textContent = app.name?.surname || 'N/A';
@@ -414,8 +492,6 @@ function viewDetails(appId) {
     document.getElementById('viewBirthDate').textContent = app.birth_date || 'N/A';
     document.getElementById('viewBirthPlace').textContent = app.birth_place || 'N/A';
     document.getElementById('viewEducation').textContent = app.education || 'N/A';
-    document.getElementById('viewParentGuardianName').textContent = app.parent_guardian_name || 'N/A';
-    document.getElementById('viewParentGuardianAddress').textContent = app.parent_guardian_address || 'N/A';
 
     // Contact Information
     document.getElementById('viewTel').textContent = app.contact?.tel || 'N/A';
@@ -549,8 +625,6 @@ function editDetails(appId) {
         birth_date: app.birth_date || '',
         birth_place: app.birth_place || '',
         education: app.education || '',
-        parent_guardian_name: app.parent_guardian_name || '',
-        parent_guardian_address: app.parent_guardian_address || '',
         tel: app.contact?.tel || '',
         mobile: app.contact?.mobile || '',
         fax: app.contact?.fax || '',
@@ -566,6 +640,8 @@ function editDetails(appId) {
 
     // Store application ID
     document.getElementById('editApplicationId').value = appId;
+    console.log('Setting edit Application ID to:', appId);
+    console.log('Application ID type:', typeof appId);
 
     // Reference & ULI
     document.getElementById('editReferenceNumber').value = app.reference_number || '';
@@ -611,8 +687,6 @@ function editDetails(appId) {
     document.getElementById('editBirthDate').value = app.birth_date || '';
     document.getElementById('editBirthPlace').value = app.birth_place || '';
     document.getElementById('editEducation').value = app.education || '';
-    document.getElementById('editParentGuardianName').value = app.parent_guardian_name || '';
-    document.getElementById('editParentGuardianAddress').value = app.parent_guardian_address || '';
 
     // Contact Information
     document.getElementById('editTel').value = app.contact?.tel || '';
@@ -1057,6 +1131,8 @@ function addCompetencyAssessment() {
 
 async function saveEditedApplication() {
     const appId = document.getElementById('editApplicationId').value;
+    console.log('Edit Application ID from form:', appId);
+    console.log('Application ID type:', typeof appId);
 
     if (!appId) {
         showError('Application ID not found');
@@ -1064,13 +1140,18 @@ async function saveEditedApplication() {
     }
 
     // Validation - Check required fields
+    console.log('Starting validation...');
     const validationErrors = validateRequiredFields();
+    console.log('Validation errors:', validationErrors);
+    
     if (validationErrors.length > 0) {
         const errorMessage = `Please fill in the following required fields:<br>${validationErrors.join('<br>')}`;
+        console.log('Validation failed, showing error');
         showError(errorMessage);
         highlightInvalidFields(validationErrors);
         return;
     }
+    console.log('Validation passed');
 
     // Collect updated data
     const updatedData = {
@@ -1108,8 +1189,6 @@ async function saveEditedApplication() {
         birth_date: document.getElementById('editBirthDate').value,
         birth_place: document.getElementById('editBirthPlace').value,
         education: document.getElementById('editEducation').value,
-        parent_guardian_name: document.getElementById('editParentGuardianName').value,
-        parent_guardian_address: document.getElementById('editParentGuardianAddress').value,
         contact: {
             tel: document.getElementById('editTel').value,
             mobile: document.getElementById('editMobile').value,
@@ -1213,9 +1292,18 @@ async function saveEditedApplication() {
         }
     });
     updatedData.competency_assessments = competencyAssessments;
+    
+    console.log('Dynamic arrays collected:', {
+        workExperiences: workExperiences.length,
+        trainingSeminars: trainingSeminars.length,
+        licensureExams: licensureExams.length,
+        competencyAssessments: competencyAssessments.length
+    });
 
     // Check for changes using simple string comparison like registration.js
+    console.log('Starting change detection...');
     if (window.originalApplicationData) {
+        console.log('Original data exists, comparing...');
         const currentData = {
             reference_number: document.getElementById('editReferenceNumber').value.trim(),
             uli: document.getElementById('editUli').value.trim(),
@@ -1247,8 +1335,6 @@ async function saveEditedApplication() {
             birth_date: document.getElementById('editBirthDate').value.trim(),
             birth_place: document.getElementById('editBirthPlace').value.trim(),
             education: document.getElementById('editEducation').value.trim(),
-            parent_guardian_name: document.getElementById('editParentGuardianName').value.trim(),
-            parent_guardian_address: document.getElementById('editParentGuardianAddress').value.trim(),
             tel: document.getElementById('editTel').value.trim(),
             mobile: document.getElementById('editMobile').value.trim(),
             fax: document.getElementById('editFax').value.trim(),
@@ -1262,24 +1348,48 @@ async function saveEditedApplication() {
             competency_assessments: JSON.stringify(competencyAssessments)
         };
 
+        console.log('Current data collected, comparing...');
+        console.log('Original data sample:', {
+            work_experience: window.originalApplicationData.work_experience?.substring(0, 100) + '...',
+            competency_assessments: window.originalApplicationData.competency_assessments?.substring(0, 100) + '...'
+        });
+        console.log('Current data sample:', {
+            work_experience: currentData.work_experience?.substring(0, 100) + '...',
+            competency_assessments: currentData.competency_assessments?.substring(0, 100) + '...'
+        });
+        
         let hasChanges = false;
+        let changeCount = 0;
         for (const key in currentData) {
             const originalValue = String(window.originalApplicationData[key] || '');
             const currentValue = String(currentData[key] || '');
             
             if (originalValue !== currentValue) {
+                console.log(`Change detected in ${key}: "${originalValue}" -> "${currentValue}"`);
                 hasChanges = true;
-                break;
+                changeCount++;
+                if (changeCount >= 5) {
+                    console.log('... (more changes detected)');
+                    break;
+                }
             }
         }
 
+        console.log('Has changes:', hasChanges);
         if (!hasChanges) {
+            console.log('No changes detected, showing info message');
             showInfo('No changes were made to the application');
             return;
         }
+    } else {
+        console.log('No original data found, assuming changes');
     }
+    console.log('Change detection completed, proceeding to save...');
 
     try {
+        console.log('Saving application with ID:', appId);
+        console.log('Data being sent to server:', updatedData);
+        
         const response = await fetch(`${config.api.baseUrl}/api/v1/applications/${appId}`, {
             method: 'PUT',
             headers: {
@@ -1289,6 +1399,7 @@ async function saveEditedApplication() {
         });
 
         const result = await response.json();
+        console.log('Server response:', result);
 
         if (result.success) {
             showSuccess('Application updated successfully');
@@ -1304,6 +1415,7 @@ async function saveEditedApplication() {
             // Reload applications
             await loadApplications();
         } else {
+            console.error('Server error:', result);
             showError('Failed to update application: ' + result.message);
         }
     } catch (error) {

@@ -696,45 +696,35 @@
                     <!-- Personal Details -->
                     <h6 class="mb-3 mt-3"><i class="bx bx-info-circle me-2"></i>Personal Details</h6>
                     <div class="row">
-                        <div class="col-md-3 mb-3">
+                        <div class="col-md-4 mb-3">
                             <label class="form-label text-white">Sex</label>
                             <p class="form-control-plaintext text-white" id="viewSex">-</p>
                         </div>
-                        <div class="col-md-3 mb-3">
+                        <div class="col-md-4 mb-3">
                             <label class="form-label text-white">Civil Status</label>
                             <p class="form-control-plaintext text-white" id="viewCivilStatus">-</p>
                         </div>
-                        <div class="col-md-3 mb-3">
+                        <div class="col-md-4 mb-3">
                             <label class="form-label text-white">Employment Status</label>
                             <p class="form-control-plaintext text-white" id="viewEmploymentStatus">-</p>
                         </div>
+                    </div>
+                    <div class="row">
                         <div class="col-md-3 mb-3">
                             <label class="form-label text-white">Age</label>
                             <p class="form-control-plaintext text-white" id="viewAge">-</p>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
+                        <div class="col-md-3 mb-3">
                             <label class="form-label text-white">Birth Date</label>
                             <p class="form-control-plaintext text-white" id="viewBirthDate">-</p>
                         </div>
-                        <div class="col-md-4 mb-3">
+                        <div class="col-md-3 mb-3">
                             <label class="form-label text-white">Birth Place</label>
                             <p class="form-control-plaintext text-white" id="viewBirthPlace">-</p>
                         </div>
-                        <div class="col-md-4 mb-3">
+                        <div class="col-md-3 mb-3">
                             <label class="form-label text-white">Education</label>
                             <p class="form-control-plaintext text-white" id="viewEducation">-</p>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label text-white">Parent/Guardian Name</label>
-                            <p class="form-control-plaintext text-white" id="viewParentGuardianName">-</p>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label text-white">Parent/Guardian Address</label>
-                            <p class="form-control-plaintext text-white" id="viewParentGuardianAddress">-</p>
                         </div>
                     </div>
 
@@ -1007,7 +997,7 @@
                         <!-- Personal Details -->
                         <h6 class="mb-3 mt-3"><i class="bx bx-info-circle me-2"></i>Personal Details</h6>
                         <div class="row">
-                            <div class="col-md-3 mb-3">
+                            <div class="col-md-4 mb-3">
                                 <label for="editSex" class="form-label text-white">Sex</label>
                                 <select id="editSex" name="sex" class="form-select">
                                     <option value="">Select sex</option>
@@ -1015,7 +1005,7 @@
                                     <option value="female">Female</option>
                                 </select>
                             </div>
-                            <div class="col-md-3 mb-3">
+                            <div class="col-md-4 mb-3">
                                 <label for="editCivilStatus" class="form-label text-white">Civil Status</label>
                                 <select id="editCivilStatus" name="civilStatus" class="form-select">
                                     <option value="">Select status</option>
@@ -1025,33 +1015,33 @@
                                     <option value="separated">Separated</option>
                                 </select>
                             </div>
-                            <div class="col-md-3 mb-3">
+                            <div class="col-md-4 mb-3">
                                 <label for="editEmploymentStatus" class="form-label text-white">Employment Status</label>
                                 <select id="editEmploymentStatus" name="employmentStatus" class="form-select">
-                                    <option value="">Select status</option>
+                                    <option value="">Select employment status</option>
                                     <option value="employed">Employed</option>
                                     <option value="unemployed">Unemployed</option>
-                                    <option value="self-employed">Self-employed</option>
+                                    <option value="self-employed">Self-Employed</option>
                                     <option value="probationary">Probationary</option>
+                                    <option value="contractual">Contractual</option>
                                 </select>
-                            </div>
-                            <div class="col-md-3 mb-3">
-                                <label for="editAge" class="form-label text-white">Age</label>
-                                <input type="number" id="editAge" name="age" class="form-control"
-                                    placeholder="Enter age" min="0">
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-3 mb-3">
+                                <label for="editAge" class="form-label text-white">Age</label>
+                                <input type="number" id="editAge" name="age" class="form-control" placeholder="Enter age">
+                            </div>
+                            <div class="col-md-3 mb-3">
                                 <label for="editBirthDate" class="form-label text-white">Birth Date</label>
                                 <input type="date" id="editBirthDate" name="birthDate" class="form-control">
                             </div>
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-3 mb-3">
                                 <label for="editBirthPlace" class="form-label text-white">Birth Place</label>
                                 <input type="text" id="editBirthPlace" name="birthPlace" class="form-control"
                                     placeholder="Enter birth place">
                             </div>
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-3 mb-3">
                                 <label for="editEducation" class="form-label text-white">Education</label>
                                 <select id="editEducation" name="education" class="form-select">
                                     <option value="">Select education level</option>
@@ -1062,19 +1052,6 @@
                                     <option value="college">College</option>
                                     <option value="post-graduate">Post Graduate</option>
                                 </select>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="editParentGuardianName" class="form-label text-white">Parent/Guardian Name</label>
-                                <input type="text" id="editParentGuardianName" name="parentGuardianName"
-                                    class="form-control" placeholder="Enter parent/guardian name">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="editParentGuardianAddress" class="form-label text-white">Parent/Guardian Address</label>
-                                <textarea id="editParentGuardianAddress" name="parentGuardianAddress"
-                                    class="form-control" rows="2"
-                                    placeholder="Enter parent/guardian address"></textarea>
                             </div>
                         </div>
 

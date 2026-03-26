@@ -297,7 +297,7 @@ async function changeStatus(appId, newStatus) {
         if (result.success) {
             // Reload applications
             await loadApplications();
-            showSuccess(`Application status changed to ${newStatus}`);
+            showSuccess('Status updated successfully');
         } else {
             showError('Failed to update status: ' + result.message);
         }

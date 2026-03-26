@@ -2,10 +2,12 @@
     scrollbar-width: thin;
     scrollbar-color: rgba(54, 145, 191, 0.9) rgba(15, 41, 66, 0.2);
 }
+
 .table-responsive::-webkit-scrollbar {
     width: 14px;
     height: 14px;
 }
+
 .table-responsive::-webkit-scrollbar-track {
     background: linear-gradient(180deg, rgba(15, 41, 66, 0.15) 0%, rgba(15, 41, 66, 0.25) 100%);
     backdrop-filter: blur(15px) saturate(150%);
@@ -16,6 +18,7 @@
     box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.15),
         inset 0 -1px 2px rgba(255, 255, 255, 0.05);
 }
+
 .table-responsive::-webkit-scrollbar-thumb {
     background: linear-gradient(135deg,
             rgba(54, 145, 191, 0.95) 0%,
@@ -31,6 +34,7 @@
         0 0 20px rgba(54, 145, 191, 0.2);
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
 .table-responsive::-webkit-scrollbar-thumb:hover {
     background: linear-gradient(135deg,
             rgba(54, 145, 191, 1) 0%,
@@ -44,6 +48,7 @@
         0 0 50px rgba(54, 145, 191, 0.2);
     transform: scale(1.05);
 }
+
 .table-responsive::-webkit-scrollbar-thumb:active {
     background: linear-gradient(135deg,
             rgba(50, 85, 150, 1) 0%,
@@ -56,6 +61,7 @@
         0 0 15px rgba(54, 145, 191, 0.3);
     transform: scale(0.98);
 }
+
 .table-responsive::-webkit-scrollbar-corner {
     background: linear-gradient(135deg, rgba(15, 41, 66, 0.2) 0%, rgba(15, 41, 66, 0.3) 100%);
     backdrop-filter: blur(15px);
@@ -63,19 +69,38 @@
     border-radius: 12px;
     border: 1px solid rgba(54, 145, 191, 0.15);
 }
+
 .badge.bg-label-success {
     background-color: #10b981 !important;
     color: #ffffff !important;
 }
+
 .badge.bg-label-warning {
     background-color: #f59e0b !important;
     color: #ffffff !important;
 }
+
 .badge.bg-label-danger {
     background-color: #ef4444 !important;
     color: #ffffff !important;
 }
+
 .badge.bg-label-info {
     background-color: #3b82f6 !important;
     color: #ffffff !important;
+}
+
+/* Remove bold font-weight from table cells */
+.table td {
+    font-weight: normal !important;
+}
+
+/* Make trainee ID bold (second column) */
+.table td:nth-child(2) {
+    font-weight: bold !important;
+}
+
+/* Remove bold font-weight from menu items */
+.menu-inner .menu-item .menu-link div {
+    font-weight: normal !important;
 }

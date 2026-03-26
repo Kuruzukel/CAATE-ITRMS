@@ -46,11 +46,18 @@ async function loadApplications() {
         const response = await fetch(`${config.api.baseUrl}/api/v1/applications`);
         const result = await response.json();
 
+        console.log('API Response:', result);
+
         if (result.success && result.data) {
             allApplications = result.data;
 
-            // Fetch user data for each application to get profile images
-            await enrichApplicationsWithUserData();
+            console.log('Total applications loaded:', allApplications.length);
+            if (allApplications.length > 0) {
+                console.log('First application:', allApplications[0]);
+            }
+
+            // Data already includes userData from server-side join
+            // No need to fetch user data separately
 
             // Update statistics
             updateStatistics(allApplications);
@@ -65,24 +72,6 @@ async function loadApplications() {
         console.error('Error loading applications:', error);
         showEmptyState();
     }
-}
-
-async function enrichApplicationsWithUserData() {
-    const userPromises = allApplications.map(async (app) => {
-        if (app.user_id) {
-            try {
-                const response = await fetch(`${config.api.baseUrl}/api/v1/users/${app.user_id}`);
-                const result = await response.json();
-                if (result.success && result.data) {
-                    app.userData = result.data;
-                }
-            } catch (error) {
-                console.error(`Error fetching user data for ${app.user_id}:`, error);
-            }
-        }
-    });
-
-    await Promise.all(userPromises);
 }
 
 function updateStatistics(applications) {
@@ -115,6 +104,9 @@ function renderApplicationsTable(applications) {
         return;
     }
 
+    // Debug: Log first application to see structure
+    console.log('Sample application data:', applications[0]);
+
     tbody.innerHTML = applications.map(app => {
         const fullName = getFullName(app);
         const traineeId = app.userData?.trainee_id || 'N/A';
@@ -124,6 +116,9 @@ function renderApplicationsTable(applications) {
         const statusBadge = getStatusBadge(status);
         const avatar = getAvatarHtml(app);
         const appId = app._id?.$oid || app._id;
+
+        // Debug log for each row
+        console.log('Rendering row:', { fullName, traineeId, course, userData: app.userData });
 
         return `
             <tr data-app-id="${appId}">
@@ -201,19 +196,23 @@ function getAvatarHtml(app) {
     const profileImage = app.userData?.profile_image || app.picture;
 
     if (profileImage) {
-        // If it's a base64 image
-        if (profileImage.startsWith('data:image')) {
-            return `<img src="${profileImage}" alt="Avatar" class="avatar avatar-sm me-3 rounded-circle" 
-                style="width: 38px; height: 38px; object-fit: cover;">`;
+        let imageSrc = profileImage;
+
+        // If it's not a base64 image and not a full URL, construct the full URL
+        if (!profileImage.startsWith('data:image') && !profileImage.startsWith('http')) {
+            // Remove leading slash if present
+            const cleanPath = profileImage.startsWith('/') ? profileImage.substring(1) : profileImage;
+            imageSrc = `${window.location.origin}/${cleanPath}`;
         }
-        // If it's a URL
-        return `<img src="${profileImage}" alt="Avatar" class="avatar avatar-sm me-3 rounded-circle" 
-            style="width: 38px; height: 38px; object-fit: cover;">`;
+
+        const initials = getInitials(app);
+        return `<img src="${imageSrc}" alt="Avatar" class="avatar avatar-sm me-3 rounded-circle" 
+            style="width: 38px; height: 38px; object-fit: cover;" 
+            onerror="this.outerHTML='<div class=\\'avatar avatar-sm me-3\\' style=\\'background: linear-gradient(135deg, rgba(54, 145, 191, 0.1) 0%, rgba(50, 85, 150, 0.1) 100%); backdrop-filter: blur(10px) saturate(180%); -webkit-backdrop-filter: blur(10px) saturate(180%); border: 1px solid rgba(54, 145, 191, 0.4); box-shadow: 0 4px 12px rgba(22, 56, 86, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3); color: white; display: flex; align-items: center; justify-content: center; border-radius: 50%; width: 38px; height: 38px; font-weight: 600;\\'>${initials}</div>';">`;
     }
 
     // Fallback to initials
-    const fullName = getFullName(app);
-    const initials = fullName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+    const initials = getInitials(app);
 
     return `
         <div class="avatar avatar-sm me-3"
@@ -226,6 +225,11 @@ function getAvatarHtml(app) {
             ${initials}
         </div>
     `;
+}
+
+function getInitials(app) {
+    const fullName = getFullName(app);
+    return fullName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
 }
 
 function getStatusBadge(status) {

@@ -23,12 +23,26 @@ class Application {
         try {
             $db = getMongoConnection();
             
+            // First, try to convert string user_ids to ObjectIds
+            $this->convertUserIdsToObjectIds();
+            
             // Aggregate to join with users collection
             $pipeline = [
                 [
+                    '$addFields' => [
+                        'user_id_obj' => [
+                            '$cond' => [
+                                'if' => ['$eq' => [['$type' => '$user_id'], 'string']],
+                                'then' => ['$toObjectId' => '$user_id'],
+                                'else' => '$user_id'
+                            ]
+                        ]
+                    ]
+                ],
+                [
                     '$lookup' => [
                         'from' => 'users',
-                        'localField' => 'user_id',
+                        'localField' => 'user_id_obj',
                         'foreignField' => '_id',
                         'as' => 'user_data'
                     ]
@@ -50,7 +64,8 @@ class Application {
                 ],
                 [
                     '$project' => [
-                        'user_data' => 0
+                        'user_data' => 0,
+                        'user_id_obj' => 0
                     ]
                 ],
                 [
@@ -63,6 +78,31 @@ class Application {
         } catch (Exception $e) {
             error_log('Error in getAllWithUserData: ' . $e->getMessage());
             return $this->all();
+        }
+    }
+    
+    private function convertUserIdsToObjectIds() {
+        try {
+            // Find all applications with string user_ids and convert them
+            $applications = $this->collection->find([
+                'user_id' => ['$type' => 'string']
+            ]);
+            
+            foreach ($applications as $app) {
+                if (isset($app['user_id']) && is_string($app['user_id'])) {
+                    try {
+                        $objectId = new MongoDB\BSON\ObjectId($app['user_id']);
+                        $this->collection->updateOne(
+                            ['_id' => $app['_id']],
+                            ['$set' => ['user_id' => $objectId]]
+                        );
+                    } catch (Exception $e) {
+                        error_log('Could not convert user_id to ObjectId: ' . $e->getMessage());
+                    }
+                }
+            }
+        } catch (Exception $e) {
+            error_log('Error converting user_ids: ' . $e->getMessage());
         }
     }
     

@@ -26,8 +26,8 @@ class ApplicationController {
             
             // Prepare application data structure
             $applicationData = [
-                // User reference
-                'user_id' => $input['userId'] ?? null,
+                // User reference - convert to ObjectId if it's a string
+                'user_id' => $this->convertToObjectId($input['userId'] ?? null),
                 
                 // Reference Number (concatenated from individual fields)
                 'reference_number' => $this->buildReferenceNumber($input),
@@ -139,6 +139,21 @@ class ApplicationController {
                 'success' => false,
                 'message' => 'Error creating application: ' . $e->getMessage()
             ]);
+        }
+    }
+    
+    // Helper function to convert string to ObjectId
+    private function convertToObjectId($id) {
+        if (!$id) return null;
+        
+        try {
+            if (is_string($id)) {
+                return new MongoDB\BSON\ObjectId($id);
+            }
+            return $id;
+        } catch (Exception $e) {
+            error_log('Error converting to ObjectId: ' . $e->getMessage());
+            return $id;
         }
     }
     

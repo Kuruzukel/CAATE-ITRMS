@@ -465,6 +465,17 @@ function editDetails(appId) {
     document.getElementById('editFirstName').value = app.name?.first_name || '';
     document.getElementById('editMiddleName').value = app.name?.middle_name || '';
     document.getElementById('editLastName').value = app.name?.surname || '';
+
+    // Optional name fields (only set if elements exist)
+    const secondNameEl = document.getElementById('editSecondName');
+    if (secondNameEl) secondNameEl.value = app.name?.second_name || '';
+
+    const middleInitialEl = document.getElementById('editMiddleInitial');
+    if (middleInitialEl) middleInitialEl.value = app.name?.middle_initial || '';
+
+    const nameExtensionEl = document.getElementById('editNameExtension');
+    if (nameExtensionEl) nameExtensionEl.value = app.name?.name_extension || '';
+
     document.getElementById('editEmail').value = app.contact?.email || '';
     document.getElementById('editMobile').value = app.contact?.mobile || '';
     document.getElementById('editTel').value = app.contact?.tel || '';
@@ -560,6 +571,16 @@ async function saveEditedApplication() {
         school_address: document.getElementById('editSchoolAddress').value,
         status: document.getElementById('editStatus').value
     };
+
+    // Add optional name fields if they exist
+    const secondNameEl = document.getElementById('editSecondName');
+    if (secondNameEl) updatedData.name.second_name = secondNameEl.value;
+
+    const middleInitialEl = document.getElementById('editMiddleInitial');
+    if (middleInitialEl) updatedData.name.middle_initial = middleInitialEl.value;
+
+    const nameExtensionEl = document.getElementById('editNameExtension');
+    if (nameExtensionEl) updatedData.name.name_extension = nameExtensionEl.value;
 
     // Add fax and other_contact to contact object
     updatedData.contact.fax = document.getElementById('editFax').value;

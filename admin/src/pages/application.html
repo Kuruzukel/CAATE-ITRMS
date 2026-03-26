@@ -569,7 +569,7 @@
                             <label class="form-label text-white">Signature</label>
                             <div id="viewSignatureContainer">
                                 <img id="viewSignature" src="" alt="Applicant Signature"
-                                    style="max-width: 200px; max-height: 100px; display: none; background: white; padding: 10px;"
+                                    style="max-width: 200px; max-height: 100px; display: none; background-color: white !important; padding: 10px; border: 1px solid #dee2e6;"
                                     class="img-thumbnail">
                                 <p class="text-white-50" id="viewNoSignature">No signature uploaded</p>
                             </div>
@@ -826,261 +826,16 @@
                     <form id="editApplicationForm">
                         <input type="hidden" id="editApplicationId">
 
-                        <!-- 1. Reference & ULI -->
+                        <!-- Reference & Identification -->
                         <h6 class="mb-3"><i class="bx bx-id-card me-2"></i>Reference & Identification</h6>
                         <div class="row">
-                            <div class="col-md-4 mb-3">
-                                <label for="editFirstName" class="form-label">First Name <span
-                                        class="text-danger">*</span></label>
-                                <input type="text" id="editFirstName" name="firstName" class="form-control"
-                                    placeholder="Enter first name" required>
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <label for="editMiddleName" class="form-label">Middle Name <span
-                                        class="text-muted">(Optional)</span></label>
-                                <input type="text" id="editMiddleName" name="middleName" class="form-control"
-                                    placeholder="Enter middle name">
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <label for="editLastName" class="form-label">Last Name <span
-                                        class="text-muted">(Optional)</span></label>
-                                <input type="text" id="editLastName" name="lastName" class="form-control"
-                                    placeholder="Enter last name">
-                            </div>
-                        </div>
-
-                        <!-- Contact Information -->
-                        <h6 class="mb-3 mt-3"><i class="bx bx-phone me-2"></i>Contact Information</h6>
-                        <div class="row">
-                            <div class="col-md-4 mb-3">
-                                <label for="editEmail" class="form-label">Email <span
-                                        class="text-danger">*</span></label>
-                                <input type="email" id="editEmail" name="email" class="form-control"
-                                    placeholder="your.email@example.com" required>
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <label for="editMobile" class="form-label">Mobile <span
-                                        class="text-danger">*</span></label>
-                                <input type="text" id="editMobile" name="mobile" class="form-control"
-                                    placeholder="09XX XXX XXXX" required>
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <label for="editTel" class="form-label">Telephone <span
-                                        class="text-muted">(Optional)</span></label>
-                                <input type="text" id="editTel" name="tel" class="form-control"
-                                    placeholder="(02) 123-4567">
-                            </div>
-                        </div>
-
-                        <!-- Assessment Information -->
-                        <h6 class="mb-3 mt-3"><i class="bx bx-book-open me-2"></i>Assessment Information</h6>
-                        <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="editAssessmentTitle" class="form-label">Assessment Title <span
-                                        class="text-muted">(Optional)</span></label>
-                                <input type="text" id="editAssessmentTitle" name="assessmentTitle" class="form-control"
-                                    placeholder="Select an assessment...">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="editSchoolName" class="form-label">School Name <span
-                                        class="text-muted">(Optional)</span></label>
-                                <input type="text" id="editSchoolName" name="schoolName" class="form-control"
-                                    placeholder="Select school/training center...">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4 mb-3">
-                                <label for="editApplicationDate" class="form-label">Application Date <span
-                                        class="text-muted">(Optional)</span></label>
-                                <input type="date" id="editApplicationDate" name="applicationDate" class="form-control">
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <label for="editAssessmentType" class="form-label">Assessment Type <span
-                                        class="text-muted">(Optional)</span></label>
-                                <input type="text" id="editAssessmentType" name="assessmentType" class="form-control"
-                                    placeholder="Full Qualification, COC, or Renewal">
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <label for="editStatus" class="form-label">Status</label>
-                                <select id="editStatus" name="status" class="form-select">
-                                    <option value="approved">Approved</option>
-                                    <option value="pending">Pending</option>
-                                    <option value="cancelled">Cancelled</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <!-- Address -->
-                        <h6 class="mb-3 mt-3"><i class="bx bx-map me-2"></i>Address</h6>
-                        <div class="row">
-                            <div class="col-md-4 mb-3">
-                                <label for="editStreet" class="form-label">Number, Street <span
-                                        class="text-danger">*</span></label>
-                                <input type="text" id="editStreet" name="street" class="form-control"
-                                    placeholder="House/Building No. and Street" required>
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <label for="editBarangay" class="form-label">Barangay <span
-                                        class="text-danger">*</span></label>
-                                <input type="text" id="editBarangay" name="barangay" class="form-control"
-                                    placeholder="Enter barangay..." required>
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <label for="editCity" class="form-label">City/Municipality <span
-                                        class="text-danger">*</span></label>
-                                <input type="text" id="editCity" name="city" class="form-control"
-                                    placeholder="Enter city..." required>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="editProvince" class="form-label">Province <span
-                                        class="text-danger">*</span></label>
-                                <input type="text" id="editProvince" name="province" class="form-control"
-                                    placeholder="Enter province..." required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="editRegion" class="form-label">Region <span
-                                        class="text-danger">*</span></label>
-                                <input type="text" id="editRegion" name="region" class="form-control"
-                                    placeholder="Select region..." required>
-                            </div>
-                        </div>
-
-                        <!-- Personal Details -->
-                        <h6 class="mb-3 mt-3"><i class="bx bx-info-circle me-2"></i>Personal Details</h6>
-                        <div class="row">
-                            <div class="col-md-3 mb-3">
-                                <label for="editSex" class="form-label">Sex <span
-                                        class="text-muted">(Optional)</span></label>
-                                <select id="editSex" name="sex" class="form-select">
-                                    <option value="">Select sex</option>
-                                    <option value="male">Male</option>
-                                    <option value="female">Female</option>
-                                </select>
-                            </div>
-                            <div class="col-md-3 mb-3">
-                                <label for="editAge" class="form-label">Age <span
-                                        class="text-muted">(Optional)</span></label>
-                                <input type="number" id="editAge" name="age" class="form-control"
-                                    placeholder="Enter age">
-                            </div>
-                            <div class="col-md-3 mb-3">
-                                <label for="editCivilStatus" class="form-label">Civil Status <span
-                                        class="text-muted">(Optional)</span></label>
-                                <select id="editCivilStatus" name="civilStatus" class="form-select">
-                                    <option value="">Select status</option>
-                                    <option value="single">Single</option>
-                                    <option value="married">Married</option>
-                                    <option value="widowed">Widowed</option>
-                                    <option value="separated">Separated</option>
-                                </select>
-                            </div>
-                            <div class="col-md-3 mb-3">
-                                <label for="editBirthDate" class="form-label">Birth Date <span
-                                        class="text-muted">(Optional)</span></label>
-                                <input type="date" id="editBirthDate" name="birthDate" class="form-control">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="editEducation" class="form-label">Education <span
-                                        class="text-muted">(Optional)</span></label>
-                                <input type="text" id="editEducation" name="education" class="form-control"
-                                    placeholder="Enter highest educational attainment">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="editEmploymentStatus" class="form-label">Employment Status <span
-                                        class="text-muted">(Optional)</span></label>
-                                <input type="text" id="editEmploymentStatus" name="employmentStatus"
-                                    class="form-control" placeholder="Employed, Unemployed, Self-employed, etc.">
-                            </div>
-                        </div>
-
-                        <!-- Parent Information -->
-                        <h6 class="mb-3 mt-3"><i class="bx bx-group me-2"></i>Parent Information</h6>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="editMotherName" class="form-label">Mother's Name <span
-                                        class="text-danger">*</span></label>
-                                <input type="text" id="editMotherName" name="motherName" class="form-control"
-                                    placeholder="Enter mother's full name" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="editFatherName" class="form-label">Father's Name <span
-                                        class="text-danger">*</span></label>
-                                <input type="text" id="editFatherName" name="fatherName" class="form-control"
-                                    placeholder="Enter father's full name" required>
-                            </div>
-                        </div>
-
-                        <!-- Additional Personal Details -->
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="editBirthPlace" class="form-label">Birth Place <span
-                                        class="text-muted">(Optional)</span></label>
-                                <input type="text" id="editBirthPlace" name="birthPlace" class="form-control"
-                                    placeholder="Enter birth place">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="editClientType" class="form-label">Client Type <span
-                                        class="text-muted">(Optional)</span></label>
-                                <select id="editClientType" name="clientType" class="form-select">
-                                    <option value="">Select client type</option>
-                                    <option value="tvet-graduating">TVET Graduating Student</option>
-                                    <option value="tvet-graduate">TVET Graduate</option>
-                                    <option value="industry-worker">Industry Worker</option>
-                                    <option value="k12">K-12</option>
-                                    <option value="owf">OWF</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <!-- Additional Contact -->
-                        <h6 class="mb-3 mt-3"><i class="bx bx-phone-call me-2"></i>Additional Contact</h6>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="editFax" class="form-label">Fax <span
-                                        class="text-muted">(Optional)</span></label>
-                                <input type="text" id="editFax" name="fax" class="form-control"
-                                    placeholder="(02) 123-4567">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="editOtherContact" class="form-label">Other Contact <span
-                                        class="text-muted">(Optional)</span></label>
-                                <input type="text" id="editOtherContact" name="otherContact" class="form-control"
-                                    placeholder="Enter other contact information">
-                            </div>
-                        </div>
-
-                        <!-- Reference & ULI -->
-                        <h6 class="mb-3 mt-3"><i class="bx bx-id-card me-2"></i>Reference & Identification</h6>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="editReferenceNumber" class="form-label">Reference Number <span
-                                        class="text-muted">(Optional)</span></label>
+                                <label for="editReferenceNumber" class="form-label text-white">Reference Number</label>
                                 <input type="text" id="editReferenceNumber" name="referenceNumber" class="form-control"
                                     placeholder="Enter reference number">
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="editUli" class="form-label">ULI <span
-                                        class="text-muted">(Optional)</span></label>
-                                <input type="text" id="editUli" name="uli" class="form-control" placeholder="Enter ULI">
-                            </div>
-                        </div>
-
-                        <!-- Reference & ULI -->
-                        <h6 class="mb-3 mt-3"><i class="bx bx-id-card me-2"></i>Reference & Identification</h6>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="editReferenceNumber" class="form-label">Reference Number <span
-                                        class="text-muted">(Optional)</span></label>
-                                <input type="text" id="editReferenceNumber" name="referenceNumber" class="form-control"
-                                    placeholder="Enter reference number">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="editUli" class="form-label">ULI <span
-                                        class="text-muted">(Optional)</span></label>
+                                <label for="editUli" class="form-label text-white">ULI</label>
                                 <input type="text" id="editUli" name="uli" class="form-control" placeholder="Enter ULI">
                             </div>
                         </div>
@@ -1089,18 +844,16 @@
                         <h6 class="mb-3 mt-3"><i class="bx bx-image me-2"></i>Picture & Signature</h6>
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="editPicture" class="form-label">Picture <span
-                                        class="text-muted">(Optional)</span></label>
+                                <label for="editPicture" class="form-label text-white">Picture</label>
                                 <input type="file" id="editPicture" name="picture" class="form-control"
                                     accept="image/*">
-                                <small class="text-muted">Current picture will be displayed in view mode</small>
+                                <small class="text-white-50">Current picture will be displayed in view mode</small>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="editSignature" class="form-label">Signature <span
-                                        class="text-muted">(Optional)</span></label>
+                                <label for="editSignature" class="form-label text-white">Signature</label>
                                 <input type="file" id="editSignature" name="signature" class="form-control"
                                     accept="image/*">
-                                <small class="text-muted">Current signature will be displayed in view mode</small>
+                                <small class="text-white-50">Current signature will be displayed in view mode</small>
                             </div>
                         </div>
 
@@ -1108,14 +861,12 @@
                         <h6 class="mb-3 mt-3"><i class="bx bx-building me-2"></i>School Information</h6>
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="editSchoolName" class="form-label">School Name <span
-                                        class="text-muted">(Optional)</span></label>
+                                <label for="editSchoolName" class="form-label text-white">School Name</label>
                                 <input type="text" id="editSchoolName" name="schoolName" class="form-control"
                                     placeholder="Enter school/training center name">
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="editSchoolAddress" class="form-label">School Address <span
-                                        class="text-muted">(Optional)</span></label>
+                                <label for="editSchoolAddress" class="form-label text-white">School Address</label>
                                 <textarea id="editSchoolAddress" name="schoolAddress" class="form-control" rows="2"
                                     placeholder="Enter school address"></textarea>
                             </div>
@@ -1125,21 +876,18 @@
                         <h6 class="mb-3 mt-3"><i class="bx bx-book-open me-2"></i>Assessment Information</h6>
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="editAssessmentTitle" class="form-label">Assessment Title <span
-                                        class="text-muted">(Optional)</span></label>
+                                <label for="editAssessmentTitle" class="form-label text-white">Assessment Title</label>
                                 <input type="text" id="editAssessmentTitle" name="assessmentTitle" class="form-control"
                                     placeholder="Enter assessment title">
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="editApplicationDate" class="form-label">Application Date <span
-                                        class="text-muted">(Optional)</span></label>
+                                <label for="editApplicationDate" class="form-label text-white">Application Date</label>
                                 <input type="date" id="editApplicationDate" name="applicationDate" class="form-control">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="editAssessmentType" class="form-label">Assessment Type <span
-                                        class="text-muted">(Optional)</span></label>
+                                <label for="editAssessmentType" class="form-label text-white">Assessment Type</label>
                                 <select id="editAssessmentType" name="assessmentType" class="form-select">
                                     <option value="">Select assessment type</option>
                                     <option value="full">Full Qualification</option>
@@ -1148,8 +896,7 @@
                                 </select>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="editClientType" class="form-label">Client Type <span
-                                        class="text-muted">(Optional)</span></label>
+                                <label for="editClientType" class="form-label text-white">Client Type</label>
                                 <select id="editClientType" name="clientType" class="form-select">
                                     <option value="">Select client type</option>
                                     <option value="tvet-graduating">TVET Graduating Student</option>
@@ -1165,40 +912,34 @@
                         <h6 class="mb-3 mt-3"><i class="bx bx-user me-2"></i>Personal Information</h6>
                         <div class="row">
                             <div class="col-md-3 mb-3">
-                                <label for="editSurname" class="form-label">Surname <span
-                                        class="text-danger">*</span></label>
+                                <label for="editSurname" class="form-label text-white">Surname</label>
                                 <input type="text" id="editSurname" name="surname" class="form-control"
-                                    placeholder="Enter surname" required>
+                                    placeholder="Enter surname">
                             </div>
                             <div class="col-md-3 mb-3">
-                                <label for="editFirstName" class="form-label">First Name <span
-                                        class="text-danger">*</span></label>
+                                <label for="editFirstName" class="form-label text-white">First Name</label>
                                 <input type="text" id="editFirstName" name="firstName" class="form-control"
-                                    placeholder="Enter first name" required>
+                                    placeholder="Enter first name">
                             </div>
                             <div class="col-md-3 mb-3">
-                                <label for="editMiddleName" class="form-label">Middle Name <span
-                                        class="text-muted">(Optional)</span></label>
+                                <label for="editMiddleName" class="form-label text-white">Middle Name</label>
                                 <input type="text" id="editMiddleName" name="middleName" class="form-control"
                                     placeholder="Enter middle name">
                             </div>
                             <div class="col-md-3 mb-3">
-                                <label for="editMiddleInitial" class="form-label">Middle Initial <span
-                                        class="text-muted">(Optional)</span></label>
+                                <label for="editMiddleInitial" class="form-label text-white">Middle Initial</label>
                                 <input type="text" id="editMiddleInitial" name="middleInitial" class="form-control"
                                     placeholder="M.I." maxlength="1">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="editSecondName" class="form-label">Second Name <span
-                                        class="text-muted">(Optional)</span></label>
+                                <label for="editSecondName" class="form-label text-white">Second Name</label>
                                 <input type="text" id="editSecondName" name="secondName" class="form-control"
                                     placeholder="Enter second name">
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="editNameExtension" class="form-label">Name Extension <span
-                                        class="text-muted">(Optional)</span></label>
+                                <label for="editNameExtension" class="form-label text-white">Name Extension</label>
                                 <input type="text" id="editNameExtension" name="nameExtension" class="form-control"
                                     placeholder="Jr., Sr., III, etc.">
                             </div>
@@ -1208,48 +949,41 @@
                         <h6 class="mb-3 mt-3"><i class="bx bx-map me-2"></i>Mailing Address</h6>
                         <div class="row">
                             <div class="col-md-4 mb-3">
-                                <label for="editNumberStreet" class="form-label">Number & Street <span
-                                        class="text-danger">*</span></label>
+                                <label for="editNumberStreet" class="form-label text-white">Number & Street</label>
                                 <input type="text" id="editNumberStreet" name="numberStreet" class="form-control"
-                                    placeholder="House/Building No. and Street" required>
+                                    placeholder="House/Building No. and Street">
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label for="editBarangay" class="form-label">Barangay <span
-                                        class="text-danger">*</span></label>
+                                <label for="editBarangay" class="form-label text-white">Barangay</label>
                                 <input type="text" id="editBarangay" name="barangay" class="form-control"
-                                    placeholder="Enter barangay" required>
+                                    placeholder="Enter barangay">
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label for="editDistrict" class="form-label">District <span
-                                        class="text-muted">(Optional)</span></label>
+                                <label for="editDistrict" class="form-label text-white">District</label>
                                 <input type="text" id="editDistrict" name="district" class="form-control"
                                     placeholder="Enter district">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-4 mb-3">
-                                <label for="editCity" class="form-label">City/Municipality <span
-                                        class="text-danger">*</span></label>
+                                <label for="editCity" class="form-label text-white">City/Municipality</label>
                                 <input type="text" id="editCity" name="city" class="form-control"
-                                    placeholder="Enter city" required>
+                                    placeholder="Enter city">
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label for="editProvince" class="form-label">Province <span
-                                        class="text-danger">*</span></label>
+                                <label for="editProvince" class="form-label text-white">Province</label>
                                 <input type="text" id="editProvince" name="province" class="form-control"
-                                    placeholder="Enter province" required>
+                                    placeholder="Enter province">
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label for="editRegion" class="form-label">Region <span
-                                        class="text-danger">*</span></label>
+                                <label for="editRegion" class="form-label text-white">Region</label>
                                 <input type="text" id="editRegion" name="region" class="form-control"
-                                    placeholder="Enter region" required>
+                                    placeholder="Enter region">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="editZip" class="form-label">Zip Code <span
-                                        class="text-muted">(Optional)</span></label>
+                                <label for="editZip" class="form-label text-white">Zip Code</label>
                                 <input type="text" id="editZip" name="zip" class="form-control"
                                     placeholder="Enter zip code">
                             </div>
@@ -1259,14 +993,12 @@
                         <h6 class="mb-3 mt-3"><i class="bx bx-group me-2"></i>Parent Information</h6>
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="editMotherName" class="form-label">Mother's Name <span
-                                        class="text-muted">(Optional)</span></label>
+                                <label for="editMotherName" class="form-label text-white">Mother's Name</label>
                                 <input type="text" id="editMotherName" name="motherName" class="form-control"
                                     placeholder="Enter mother's full name">
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="editFatherName" class="form-label">Father's Name <span
-                                        class="text-muted">(Optional)</span></label>
+                                <label for="editFatherName" class="form-label text-white">Father's Name</label>
                                 <input type="text" id="editFatherName" name="fatherName" class="form-control"
                                     placeholder="Enter father's full name">
                             </div>
@@ -1276,8 +1008,7 @@
                         <h6 class="mb-3 mt-3"><i class="bx bx-info-circle me-2"></i>Personal Details</h6>
                         <div class="row">
                             <div class="col-md-3 mb-3">
-                                <label for="editSex" class="form-label">Sex <span
-                                        class="text-muted">(Optional)</span></label>
+                                <label for="editSex" class="form-label text-white">Sex</label>
                                 <select id="editSex" name="sex" class="form-select">
                                     <option value="">Select sex</option>
                                     <option value="male">Male</option>
@@ -1285,8 +1016,7 @@
                                 </select>
                             </div>
                             <div class="col-md-3 mb-3">
-                                <label for="editCivilStatus" class="form-label">Civil Status <span
-                                        class="text-muted">(Optional)</span></label>
+                                <label for="editCivilStatus" class="form-label text-white">Civil Status</label>
                                 <select id="editCivilStatus" name="civilStatus" class="form-select">
                                     <option value="">Select status</option>
                                     <option value="single">Single</option>
@@ -1296,8 +1026,7 @@
                                 </select>
                             </div>
                             <div class="col-md-3 mb-3">
-                                <label for="editEmploymentStatus" class="form-label">Employment Status <span
-                                        class="text-muted">(Optional)</span></label>
+                                <label for="editEmploymentStatus" class="form-label text-white">Employment Status</label>
                                 <select id="editEmploymentStatus" name="employmentStatus" class="form-select">
                                     <option value="">Select status</option>
                                     <option value="employed">Employed</option>
@@ -1307,27 +1036,23 @@
                                 </select>
                             </div>
                             <div class="col-md-3 mb-3">
-                                <label for="editAge" class="form-label">Age <span
-                                        class="text-muted">(Optional)</span></label>
+                                <label for="editAge" class="form-label text-white">Age</label>
                                 <input type="number" id="editAge" name="age" class="form-control"
                                     placeholder="Enter age" min="0">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-4 mb-3">
-                                <label for="editBirthDate" class="form-label">Birth Date <span
-                                        class="text-muted">(Optional)</span></label>
+                                <label for="editBirthDate" class="form-label text-white">Birth Date</label>
                                 <input type="date" id="editBirthDate" name="birthDate" class="form-control">
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label for="editBirthPlace" class="form-label">Birth Place <span
-                                        class="text-muted">(Optional)</span></label>
+                                <label for="editBirthPlace" class="form-label text-white">Birth Place</label>
                                 <input type="text" id="editBirthPlace" name="birthPlace" class="form-control"
                                     placeholder="Enter birth place">
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label for="editEducation" class="form-label">Education <span
-                                        class="text-muted">(Optional)</span></label>
+                                <label for="editEducation" class="form-label text-white">Education</label>
                                 <select id="editEducation" name="education" class="form-select">
                                     <option value="">Select education level</option>
                                     <option value="elementary">Elementary</option>
@@ -1341,14 +1066,12 @@
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="editParentGuardianName" class="form-label">Parent/Guardian Name <span
-                                        class="text-muted">(Optional)</span></label>
+                                <label for="editParentGuardianName" class="form-label text-white">Parent/Guardian Name</label>
                                 <input type="text" id="editParentGuardianName" name="parentGuardianName"
                                     class="form-control" placeholder="Enter parent/guardian name">
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="editParentGuardianAddress" class="form-label">Parent/Guardian Address <span
-                                        class="text-muted">(Optional)</span></label>
+                                <label for="editParentGuardianAddress" class="form-label text-white">Parent/Guardian Address</label>
                                 <textarea id="editParentGuardianAddress" name="parentGuardianAddress"
                                     class="form-control" rows="2"
                                     placeholder="Enter parent/guardian address"></textarea>
@@ -1359,34 +1082,29 @@
                         <h6 class="mb-3 mt-3"><i class="bx bx-phone me-2"></i>Contact Information</h6>
                         <div class="row">
                             <div class="col-md-3 mb-3">
-                                <label for="editTel" class="form-label">Telephone <span
-                                        class="text-muted">(Optional)</span></label>
+                                <label for="editTel" class="form-label text-white">Telephone</label>
                                 <input type="text" id="editTel" name="tel" class="form-control"
                                     placeholder="(02) 123-4567">
                             </div>
                             <div class="col-md-3 mb-3">
-                                <label for="editMobile" class="form-label">Mobile <span
-                                        class="text-danger">*</span></label>
+                                <label for="editMobile" class="form-label text-white">Mobile</label>
                                 <input type="text" id="editMobile" name="mobile" class="form-control"
-                                    placeholder="09XX XXX XXXX" required>
+                                    placeholder="09XX XXX XXXX">
                             </div>
                             <div class="col-md-3 mb-3">
-                                <label for="editFax" class="form-label">Fax <span
-                                        class="text-muted">(Optional)</span></label>
+                                <label for="editFax" class="form-label text-white">Fax</label>
                                 <input type="text" id="editFax" name="fax" class="form-control"
                                     placeholder="(02) 123-4567">
                             </div>
                             <div class="col-md-3 mb-3">
-                                <label for="editEmail" class="form-label">Email <span
-                                        class="text-danger">*</span></label>
+                                <label for="editEmail" class="form-label text-white">Email</label>
                                 <input type="email" id="editEmail" name="email" class="form-control"
-                                    placeholder="your.email@example.com" required>
+                                    placeholder="your.email@example.com">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12 mb-3">
-                                <label for="editOtherContact" class="form-label">Other Contact <span
-                                        class="text-muted">(Optional)</span></label>
+                                <label for="editOtherContact" class="form-label text-white">Other Contact</label>
                                 <textarea id="editOtherContact" name="otherContact" class="form-control" rows="2"
                                     placeholder="Enter other contact information"></textarea>
                             </div>
@@ -1429,16 +1147,26 @@
                             <i class="bx bx-plus me-1"></i>Add Competency Assessment
                         </button>
 
-                        <!-- Status -->
+                        <!-- Application Status -->
                         <h6 class="mb-3 mt-3"><i class="bx bx-receipt me-2"></i>Application Status</h6>
                         <div class="row">
-                            <div class="col-md-12 mb-3">
-                                <label for="editStatus" class="form-label">Status</label>
+                            <div class="col-md-6 mb-3">
+                                <label for="editStatus" class="form-label text-white">Status</label>
                                 <select id="editStatus" name="status" class="form-select">
                                     <option value="pending">Pending</option>
                                     <option value="approved">Approved</option>
                                     <option value="cancelled">Cancelled</option>
                                 </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="editSubmittedAt" class="form-label text-white">Submitted At</label>
+                                <input type="text" id="editSubmittedAt" name="submittedAt" class="form-control" readonly>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="editLastUpdated" class="form-label text-white">Last Updated</label>
+                                <input type="text" id="editLastUpdated" name="lastUpdated" class="form-control" readonly>
                             </div>
                         </div>
 

@@ -43,21 +43,11 @@ let allApplications = [];
 
 async function loadApplications() {
     try {
-        console.log('Fetching applications from:', `${config.api.baseUrl}/api/v1/applications`);
         const response = await fetch(`${config.api.baseUrl}/api/v1/applications`);
         const result = await response.json();
 
-        console.log('API Response:', result);
-
         if (result.success && result.data) {
             allApplications = result.data;
-
-            console.log('Total applications loaded:', allApplications.length);
-            if (allApplications.length > 0) {
-                console.log('First application full data:', JSON.stringify(allApplications[0], null, 2));
-                console.log('First application userData:', allApplications[0].userData);
-                console.log('First application user_id:', allApplications[0].user_id);
-            }
 
             // Data already includes userData from server-side join
             // No need to fetch user data separately
@@ -107,9 +97,6 @@ function renderApplicationsTable(applications) {
         return;
     }
 
-    // Debug: Log first application to see structure
-    console.log('Sample application data:', applications[0]);
-
     tbody.innerHTML = applications.map(app => {
         const fullName = getFullName(app);
         const traineeId = app.userData?.trainee_id || 'N/A';
@@ -119,9 +106,6 @@ function renderApplicationsTable(applications) {
         const statusBadge = getStatusBadge(status);
         const avatar = getAvatarHtml(app);
         const appId = app._id?.$oid || app._id;
-
-        // Debug log for each row
-        console.log('Rendering row:', { fullName, traineeId, course, userData: app.userData });
 
         return `
             <tr data-app-id="${appId}">
@@ -198,10 +182,6 @@ function getAvatarHtml(app) {
     // Priority: userData.profile_image (from trainees collection) > picture (from application form)
     const profileImage = app.userData?.profile_image || app.picture;
 
-    console.log('getAvatarHtml - userData.profile_image:', app.userData?.profile_image);
-    console.log('getAvatarHtml - app.picture:', app.picture ? 'base64 data' : 'none');
-    console.log('getAvatarHtml - selected profileImage:', profileImage);
-
     if (profileImage) {
         let imageSrc = profileImage;
 
@@ -210,7 +190,6 @@ function getAvatarHtml(app) {
             // Remove leading slash if present
             const cleanPath = profileImage.startsWith('/') ? profileImage.substring(1) : profileImage;
             imageSrc = `${window.location.origin}/${cleanPath}`;
-            console.log('getAvatarHtml - constructed imageSrc:', imageSrc);
         }
 
         const initials = getInitials(app);
@@ -309,7 +288,6 @@ async function changeStatus(appId, newStatus) {
 function viewDetails(appId) {
     const app = allApplications.find(a => (a._id?.$oid || a._id) === appId);
     if (app) {
-        console.log('View details for:', app);
         // TODO: Implement view details modal
         alert('View details functionality - to be implemented');
     }
@@ -318,7 +296,6 @@ function viewDetails(appId) {
 function editDetails(appId) {
     const app = allApplications.find(a => (a._id?.$oid || a._id) === appId);
     if (app) {
-        console.log('Edit details for:', app);
         // TODO: Implement edit details modal
         alert('Edit details functionality - to be implemented');
     }
@@ -326,7 +303,6 @@ function editDetails(appId) {
 
 function deleteApplication(appId) {
     if (confirm('Are you sure you want to delete this application?')) {
-        console.log('Delete application:', appId);
         // TODO: Implement delete functionality
         alert('Delete functionality - to be implemented');
     }

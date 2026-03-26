@@ -43,6 +43,7 @@ let allApplications = [];
 
 async function loadApplications() {
     try {
+        console.log('Fetching applications from:', `${config.api.baseUrl}/api/v1/applications`);
         const response = await fetch(`${config.api.baseUrl}/api/v1/applications`);
         const result = await response.json();
 
@@ -53,7 +54,9 @@ async function loadApplications() {
 
             console.log('Total applications loaded:', allApplications.length);
             if (allApplications.length > 0) {
-                console.log('First application:', allApplications[0]);
+                console.log('First application full data:', JSON.stringify(allApplications[0], null, 2));
+                console.log('First application userData:', allApplications[0].userData);
+                console.log('First application user_id:', allApplications[0].user_id);
             }
 
             // Data already includes userData from server-side join

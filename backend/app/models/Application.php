@@ -26,7 +26,7 @@ class Application {
             // First, try to convert string user_ids to ObjectIds
             $this->convertUserIdsToObjectIds();
             
-            // Aggregate to join with users collection
+            // Aggregate to join with trainees collection (not users)
             $pipeline = [
                 [
                     '$addFields' => [
@@ -41,30 +41,32 @@ class Application {
                 ],
                 [
                     '$lookup' => [
-                        'from' => 'users',
+                        'from' => 'trainees',  // Changed from 'users' to 'trainees'
                         'localField' => 'user_id_obj',
                         'foreignField' => '_id',
-                        'as' => 'user_data'
+                        'as' => 'trainee_data'
                     ]
                 ],
                 [
                     '$unwind' => [
-                        'path' => '$user_data',
+                        'path' => '$trainee_data',
                         'preserveNullAndEmptyArrays' => true
                     ]
                 ],
                 [
                     '$addFields' => [
                         'userData' => [
-                            'trainee_id' => '$user_data.trainee_id',
-                            'profile_image' => '$user_data.profile_image',
-                            'email' => '$user_data.email'
+                            'trainee_id' => '$trainee_data.trainee_id',
+                            'profile_image' => '$trainee_data.profile_image',
+                            'email' => '$trainee_data.email',
+                            'first_name' => '$trainee_data.first_name',
+                            'last_name' => '$trainee_data.last_name'
                         ]
                     ]
                 ],
                 [
                     '$project' => [
-                        'user_data' => 0,
+                        'trainee_data' => 0,
                         'user_id_obj' => 0
                     ]
                 ],

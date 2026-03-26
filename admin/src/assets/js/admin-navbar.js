@@ -109,6 +109,11 @@ function updateNavbarUserInfo(data) {
                 return;
             }
 
+            // Skip images inside tables (application/trainee data)
+            if (img.closest('table') || img.closest('tbody')) {
+                return;
+            }
+
             if (data.profileImage && data.profileImage !== '../assets/images/DEFAULT_AVATAR.png') {
 
                 if (data.profileImage.startsWith('/CAATE-ITRMS/')) {
@@ -133,11 +138,17 @@ function updateNavbarUserInfo(data) {
 
 
     setTimeout(() => {
-        const allImages = document.querySelectorAll('img');
+        // Only update navbar and dropdown images, not table content
+        const navbarImages = document.querySelectorAll('.navbar img, .dropdown-menu img, .layout-navbar img');
         let forceUpdated = 0;
-        allImages.forEach(img => {
+        navbarImages.forEach(img => {
 
             if (img.classList.contains('course-image') || img.hasAttribute('data-course-id')) {
+                return;
+            }
+
+            // Skip images inside tables (application/trainee data)
+            if (img.closest('table') || img.closest('tbody')) {
                 return;
             }
 

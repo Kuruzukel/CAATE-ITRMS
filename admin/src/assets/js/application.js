@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const courseFilter = document.querySelectorAll('select[class*="form-select"]')[1];
 
     if (searchInput) {
-        searchInput.addEventListener('input', applyFilters);
+        searchInput.addEventListener('input', debounce(applyFilters, 500));
     }
     if (statusFilter) {
         statusFilter.addEventListener('change', applyFilters);
@@ -91,7 +91,7 @@ function renderApplicationsTable(applications) {
                 <td colspan="6" class="text-center" style="padding: 60px 20px;">
                     <div style="color: #697a8d;">
                         <i class="bx bx-error-circle"
-                            style="font-size: 4rem; opacity: 0.3; display: block; margin-bottom: 15px; color: #ff3e1d;"></i>
+                            style="font-size: 4rem; opacity: 0.3; display: block; margin-bottom: 15px; color: #697a8d;"></i>
                         <h5 style="margin-bottom: 10px; color: #697a8d;">
                             No application records available
                         </h5>
@@ -268,7 +268,7 @@ function showEmptyState() {
                 <td colspan="6" class="text-center" style="padding: 60px 20px;">
                     <div style="color: #697a8d;">
                         <i class="bx bx-error-circle"
-                            style="font-size: 4rem; opacity: 0.3; display: block; margin-bottom: 15px; color: #ff3e1d;"></i>
+                            style="font-size: 4rem; opacity: 0.3; display: block; margin-bottom: 15px; color: #697a8d;"></i>
                         <h5 style="margin-bottom: 10px; color: #697a8d;">
                             No application records available
                         </h5>
@@ -336,12 +336,12 @@ function applyFilters() {
     const courseFilter = document.querySelectorAll('select[class*="form-select"]')[1];
     const dateFilter = document.getElementById('applicationDateFilter');
 
-    const searchTerm = searchInput?.value.toLowerCase() || '';
+    const searchTerm = searchInput?.value.toLowerCase().trim() || '';
     const statusValue = statusFilter?.value || '';
     const courseValue = courseFilter?.value || '';
     const dateValue = dateFilter?.value || '';
 
-    const filtered = allApplications.filter(app => {
+    let filtered = allApplications.filter(app => {
         const fullName = getFullName(app).toLowerCase();
         const traineeId = (app.userData?.trainee_id || '').toLowerCase();
         const matchesSearch = !searchTerm || fullName.includes(searchTerm) || traineeId.includes(searchTerm);
@@ -356,6 +356,79 @@ function applyFilters() {
     });
 
     renderApplicationsTable(filtered);
+
+    // Highlight search results if search term exists
+    if (searchTerm) {
+        setTimeout(() => {
+            clearAllHighlights();
+            highlightSearchResults(searchTerm);
+        }, 50);
+    } else {
+        clearAllHighlights();
+    }
+}
+
+function clearAllHighlights() {
+    const tbody = document.querySelector('.table tbody');
+    if (tbody) {
+        const rows = tbody.querySelectorAll('tr');
+        rows.forEach(row => {
+            row.style.boxShadow = '';
+            row.style.border = '';
+            row.style.borderLeft = '';
+            row.style.borderRadius = '';
+            row.style.background = '';
+            row.style.transition = '';
+            row.style.transform = '';
+            row.style.outline = '';
+            row.style.outlineOffset = '';
+            row.style.zIndex = '';
+            row.style.position = '';
+        });
+    }
+}
+
+function highlightSearchResults(searchTerm) {
+    const tbody = document.querySelector('.table tbody');
+    if (!tbody) return;
+
+    const rows = tbody.querySelectorAll('tr');
+    let firstMatch = null;
+
+    rows.forEach(row => {
+        const rowText = row.textContent.toLowerCase();
+
+        if (rowText.includes(searchTerm)) {
+            row.style.position = 'relative';
+            row.style.boxShadow = '0 8px 24px rgba(22, 56, 86, 0.5), 0 4px 12px rgba(54, 145, 191, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15)';
+            row.style.outline = '2px solid rgba(54, 145, 191, 0.6)';
+            row.style.outlineOffset = '2px';
+            row.style.borderRadius = '10px';
+            row.style.background = 'linear-gradient(135deg, rgba(54, 145, 191, 0.08) 0%, rgba(50, 85, 150, 0.08) 100%)';
+            row.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+            row.style.zIndex = '10';
+
+            if (!firstMatch) {
+                firstMatch = row;
+            }
+        }
+    });
+
+    if (firstMatch) {
+        firstMatch.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+}
+
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
 }
 
 function formatDateForFilter(dateValue) {

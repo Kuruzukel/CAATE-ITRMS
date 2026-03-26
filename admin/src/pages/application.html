@@ -533,7 +533,7 @@
 
     <!-- View Details Modal -->
     <div class="modal fade" id="viewProfileModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document" style="max-width: 95%;">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Application Details</h5>
@@ -541,57 +541,59 @@
                 </div>
                 <div class="modal-body" style="max-height: 75vh; overflow-y: auto;">
 
-                    <!-- Personal Information -->
-                    <h6 class="mb-3"><i class="bx bx-user me-2"></i>Personal Information</h6>
+                    <!-- Reference & ULI -->
+                    <h6 class="mb-3"><i class="bx bx-id-card me-2"></i>Reference & Identification</h6>
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label class="form-label text-white">Full Name</label>
-                            <p class="form-control-plaintext text-white" id="viewFullName">-</p>
+                            <label class="form-label text-white">Reference Number</label>
+                            <p class="form-control-plaintext text-white" id="viewReferenceNumber">-</p>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label text-white">Trainee ID</label>
-                            <p class="form-control-plaintext text-white" id="viewTraineeId">-</p>
+                            <label class="form-label text-white">ULI</label>
+                            <p class="form-control-plaintext text-white" id="viewUli">-</p>
                         </div>
                     </div>
 
-                    <!-- Contact Information -->
-                    <h6 class="mb-3 mt-3"><i class="bx bx-phone me-2"></i>Contact Information</h6>
+                    <!-- Picture & Signature -->
+                    <h6 class="mb-3 mt-3"><i class="bx bx-image me-2"></i>Picture & Signature</h6>
                     <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <label class="form-label text-white">Email</label>
-                            <p class="form-control-plaintext text-white" id="viewEmail">-</p>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-white">Picture</label>
+                            <div id="viewPictureContainer">
+                                <img id="viewPicture" src="" alt="Applicant Picture"
+                                    style="max-width: 200px; max-height: 200px; display: none;" class="img-thumbnail">
+                                <p class="text-white-50" id="viewNoPicture">No picture uploaded</p>
+                            </div>
                         </div>
-                        <div class="col-md-4 mb-3">
-                            <label class="form-label text-white">Mobile</label>
-                            <p class="form-control-plaintext text-white" id="viewMobile">-</p>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label class="form-label text-white">Telephone</label>
-                            <p class="form-control-plaintext text-white" id="viewTel">-</p>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-white">Signature</label>
+                            <div id="viewSignatureContainer">
+                                <img id="viewSignature" src="" alt="Applicant Signature"
+                                    style="max-width: 200px; max-height: 100px; display: none;" class="img-thumbnail">
+                                <p class="text-white-50" id="viewNoSignature">No signature uploaded</p>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Address -->
-                    <h6 class="mb-3 mt-3"><i class="bx bx-map me-2"></i>Address</h6>
+                    <!-- School Information -->
+                    <h6 class="mb-3 mt-3"><i class="bx bx-building me-2"></i>School Information</h6>
                     <div class="row">
-                        <div class="col-md-12 mb-3">
-                            <label class="form-label text-white">Complete Address</label>
-                            <p class="form-control-plaintext text-white" id="viewAddress">-</p>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-white">School Name</label>
+                            <p class="form-control-plaintext text-white" id="viewSchoolName">-</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-white">School Address</label>
+                            <p class="form-control-plaintext text-white" id="viewSchoolAddress">-</p>
                         </div>
                     </div>
 
                     <!-- Assessment Information -->
                     <h6 class="mb-3 mt-3"><i class="bx bx-book-open me-2"></i>Assessment Information</h6>
                     <div class="row">
-                        <div class="col-md-12 mb-3">
+                        <div class="col-md-6 mb-3">
                             <label class="form-label text-white">Assessment Title</label>
                             <p class="form-control-plaintext text-white" id="viewAssessmentTitle">-</p>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label text-white">School Name</label>
-                            <p class="form-control-plaintext text-white" id="viewSchoolName">-</p>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label text-white">Application Date</label>
@@ -609,40 +611,71 @@
                         </div>
                     </div>
 
-                    <!-- Personal Details -->
-                    <h6 class="mb-3 mt-3"><i class="bx bx-info-circle me-2"></i>Personal Details</h6>
+                    <!-- Personal Information -->
+                    <h6 class="mb-3 mt-3"><i class="bx bx-user me-2"></i>Personal Information</h6>
                     <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <label class="form-label text-white">Sex</label>
-                            <p class="form-control-plaintext text-white" id="viewSex">-</p>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label text-white">Surname</label>
+                            <p class="form-control-plaintext text-white" id="viewSurname">-</p>
                         </div>
-                        <div class="col-md-4 mb-3">
-                            <label class="form-label text-white">Age</label>
-                            <p class="form-control-plaintext text-white" id="viewAge">-</p>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label text-white">First Name</label>
+                            <p class="form-control-plaintext text-white" id="viewFirstName">-</p>
                         </div>
-                        <div class="col-md-4 mb-3">
-                            <label class="form-label text-white">Civil Status</label>
-                            <p class="form-control-plaintext text-white" id="viewCivilStatus">-</p>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label text-white">Middle Name</label>
+                            <p class="form-control-plaintext text-white" id="viewMiddleName">-</p>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label text-white">Middle Initial</label>
+                            <p class="form-control-plaintext text-white" id="viewMiddleInitial">-</p>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label class="form-label text-white">Birth Date</label>
-                            <p class="form-control-plaintext text-white" id="viewBirthDate">-</p>
+                            <label class="form-label text-white">Second Name</label>
+                            <p class="form-control-plaintext text-white" id="viewSecondName">-</p>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label text-white">Birth Place</label>
-                            <p class="form-control-plaintext text-white" id="viewBirthPlace">-</p>
+                            <label class="form-label text-white">Name Extension</label>
+                            <p class="form-control-plaintext text-white" id="viewNameExtension">-</p>
+                        </div>
+                    </div>
+
+                    <!-- Mailing Address -->
+                    <h6 class="mb-3 mt-3"><i class="bx bx-map me-2"></i>Mailing Address</h6>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label text-white">Number & Street</label>
+                            <p class="form-control-plaintext text-white" id="viewNumberStreet">-</p>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label text-white">Barangay</label>
+                            <p class="form-control-plaintext text-white" id="viewBarangay">-</p>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label text-white">District</label>
+                            <p class="form-control-plaintext text-white" id="viewDistrict">-</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label text-white">City/Municipality</label>
+                            <p class="form-control-plaintext text-white" id="viewCity">-</p>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label text-white">Province</label>
+                            <p class="form-control-plaintext text-white" id="viewProvince">-</p>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label text-white">Region</label>
+                            <p class="form-control-plaintext text-white" id="viewRegion">-</p>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label class="form-label text-white">Education</label>
-                            <p class="form-control-plaintext text-white" id="viewEducation">-</p>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label text-white">Employment Status</label>
-                            <p class="form-control-plaintext text-white" id="viewEmploymentStatus">-</p>
+                            <label class="form-label text-white">Zip Code</label>
+                            <p class="form-control-plaintext text-white" id="viewZip">-</p>
                         </div>
                     </div>
 
@@ -656,6 +689,78 @@
                         <div class="col-md-6 mb-3">
                             <label class="form-label text-white">Father's Name</label>
                             <p class="form-control-plaintext text-white" id="viewFatherName">-</p>
+                        </div>
+                    </div>
+
+                    <!-- Personal Details -->
+                    <h6 class="mb-3 mt-3"><i class="bx bx-info-circle me-2"></i>Personal Details</h6>
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label text-white">Sex</label>
+                            <p class="form-control-plaintext text-white" id="viewSex">-</p>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label text-white">Civil Status</label>
+                            <p class="form-control-plaintext text-white" id="viewCivilStatus">-</p>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label text-white">Employment Status</label>
+                            <p class="form-control-plaintext text-white" id="viewEmploymentStatus">-</p>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label text-white">Age</label>
+                            <p class="form-control-plaintext text-white" id="viewAge">-</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label text-white">Birth Date</label>
+                            <p class="form-control-plaintext text-white" id="viewBirthDate">-</p>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label text-white">Birth Place</label>
+                            <p class="form-control-plaintext text-white" id="viewBirthPlace">-</p>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label text-white">Education</label>
+                            <p class="form-control-plaintext text-white" id="viewEducation">-</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-white">Parent/Guardian Name</label>
+                            <p class="form-control-plaintext text-white" id="viewParentGuardianName">-</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-white">Parent/Guardian Address</label>
+                            <p class="form-control-plaintext text-white" id="viewParentGuardianAddress">-</p>
+                        </div>
+                    </div>
+
+                    <!-- Contact Information -->
+                    <h6 class="mb-3 mt-3"><i class="bx bx-phone me-2"></i>Contact Information</h6>
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label text-white">Telephone</label>
+                            <p class="form-control-plaintext text-white" id="viewTel">-</p>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label text-white">Mobile</label>
+                            <p class="form-control-plaintext text-white" id="viewMobile">-</p>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label text-white">Fax</label>
+                            <p class="form-control-plaintext text-white" id="viewFax">-</p>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label text-white">Email</label>
+                            <p class="form-control-plaintext text-white" id="viewEmail">-</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label text-white">Other Contact</label>
+                            <p class="form-control-plaintext text-white" id="viewOtherContact">-</p>
                         </div>
                     </div>
 
@@ -686,9 +791,17 @@
                     <!-- Status -->
                     <h6 class="mb-3 mt-3"><i class="bx bx-receipt me-2"></i>Application Status</h6>
                     <div class="row">
-                        <div class="col-md-12 mb-3">
+                        <div class="col-md-4 mb-3">
                             <label class="form-label text-white">Status</label>
                             <p class="form-control-plaintext text-white" id="viewStatus">-</p>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label text-white">Submitted At</label>
+                            <p class="form-control-plaintext text-white" id="viewSubmittedAt">-</p>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label text-white">Last Updated</label>
+                            <p class="form-control-plaintext text-white" id="viewUpdatedAt">-</p>
                         </div>
                     </div>
 
@@ -955,25 +1068,376 @@
                             </div>
                         </div>
 
-                        <!-- School Address & District/Zip -->
+                        <!-- Reference & ULI -->
+                        <h6 class="mb-3 mt-3"><i class="bx bx-id-card me-2"></i>Reference & Identification</h6>
                         <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="editReferenceNumber" class="form-label">Reference Number <span
+                                        class="text-muted">(Optional)</span></label>
+                                <input type="text" id="editReferenceNumber" name="referenceNumber" class="form-control"
+                                    placeholder="Enter reference number">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="editUli" class="form-label">ULI <span
+                                        class="text-muted">(Optional)</span></label>
+                                <input type="text" id="editUli" name="uli" class="form-control" placeholder="Enter ULI">
+                            </div>
+                        </div>
+
+                        <!-- Picture & Signature -->
+                        <h6 class="mb-3 mt-3"><i class="bx bx-image me-2"></i>Picture & Signature</h6>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="editPicture" class="form-label">Picture <span
+                                        class="text-muted">(Optional)</span></label>
+                                <input type="file" id="editPicture" name="picture" class="form-control"
+                                    accept="image/*">
+                                <small class="text-muted">Current picture will be displayed in view mode</small>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="editSignature" class="form-label">Signature <span
+                                        class="text-muted">(Optional)</span></label>
+                                <input type="file" id="editSignature" name="signature" class="form-control"
+                                    accept="image/*">
+                                <small class="text-muted">Current signature will be displayed in view mode</small>
+                            </div>
+                        </div>
+
+                        <!-- School Information -->
+                        <h6 class="mb-3 mt-3"><i class="bx bx-building me-2"></i>School Information</h6>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="editSchoolName" class="form-label">School Name <span
+                                        class="text-muted">(Optional)</span></label>
+                                <input type="text" id="editSchoolName" name="schoolName" class="form-control"
+                                    placeholder="Enter school/training center name">
+                            </div>
                             <div class="col-md-6 mb-3">
                                 <label for="editSchoolAddress" class="form-label">School Address <span
                                         class="text-muted">(Optional)</span></label>
                                 <textarea id="editSchoolAddress" name="schoolAddress" class="form-control" rows="2"
                                     placeholder="Enter school address"></textarea>
                             </div>
-                            <div class="col-md-3 mb-3">
-                                <label for="editDistrict" class="form-label">District <span
+                        </div>
+
+                        <!-- Assessment Information -->
+                        <h6 class="mb-3 mt-3"><i class="bx bx-book-open me-2"></i>Assessment Information</h6>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="editAssessmentTitle" class="form-label">Assessment Title <span
                                         class="text-muted">(Optional)</span></label>
-                                <input type="number" id="editDistrict" name="district" class="form-control"
-                                    placeholder="1-9" min="1" max="9">
+                                <input type="text" id="editAssessmentTitle" name="assessmentTitle" class="form-control"
+                                    placeholder="Enter assessment title">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="editApplicationDate" class="form-label">Application Date <span
+                                        class="text-muted">(Optional)</span></label>
+                                <input type="date" id="editApplicationDate" name="applicationDate" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="editAssessmentType" class="form-label">Assessment Type <span
+                                        class="text-muted">(Optional)</span></label>
+                                <select id="editAssessmentType" name="assessmentType" class="form-select">
+                                    <option value="">Select assessment type</option>
+                                    <option value="full">Full Qualification</option>
+                                    <option value="coc">COC</option>
+                                    <option value="renewal">Renewal</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="editClientType" class="form-label">Client Type <span
+                                        class="text-muted">(Optional)</span></label>
+                                <select id="editClientType" name="clientType" class="form-select">
+                                    <option value="">Select client type</option>
+                                    <option value="tvet-graduating">TVET Graduating Student</option>
+                                    <option value="tvet-graduate">TVET Graduate</option>
+                                    <option value="industry-worker">Industry Worker</option>
+                                    <option value="k12">K-12</option>
+                                    <option value="owf">OWF</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Personal Information -->
+                        <h6 class="mb-3 mt-3"><i class="bx bx-user me-2"></i>Personal Information</h6>
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label for="editSurname" class="form-label">Surname <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" id="editSurname" name="surname" class="form-control"
+                                    placeholder="Enter surname" required>
                             </div>
                             <div class="col-md-3 mb-3">
+                                <label for="editFirstName" class="form-label">First Name <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" id="editFirstName" name="firstName" class="form-control"
+                                    placeholder="Enter first name" required>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="editMiddleName" class="form-label">Middle Name <span
+                                        class="text-muted">(Optional)</span></label>
+                                <input type="text" id="editMiddleName" name="middleName" class="form-control"
+                                    placeholder="Enter middle name">
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="editMiddleInitial" class="form-label">Middle Initial <span
+                                        class="text-muted">(Optional)</span></label>
+                                <input type="text" id="editMiddleInitial" name="middleInitial" class="form-control"
+                                    placeholder="M.I." maxlength="1">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="editSecondName" class="form-label">Second Name <span
+                                        class="text-muted">(Optional)</span></label>
+                                <input type="text" id="editSecondName" name="secondName" class="form-control"
+                                    placeholder="Enter second name">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="editNameExtension" class="form-label">Name Extension <span
+                                        class="text-muted">(Optional)</span></label>
+                                <input type="text" id="editNameExtension" name="nameExtension" class="form-control"
+                                    placeholder="Jr., Sr., III, etc.">
+                            </div>
+                        </div>
+
+                        <!-- Mailing Address -->
+                        <h6 class="mb-3 mt-3"><i class="bx bx-map me-2"></i>Mailing Address</h6>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="editNumberStreet" class="form-label">Number & Street <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" id="editNumberStreet" name="numberStreet" class="form-control"
+                                    placeholder="House/Building No. and Street" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="editBarangay" class="form-label">Barangay <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" id="editBarangay" name="barangay" class="form-control"
+                                    placeholder="Enter barangay" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="editDistrict" class="form-label">District <span
+                                        class="text-muted">(Optional)</span></label>
+                                <input type="text" id="editDistrict" name="district" class="form-control"
+                                    placeholder="Enter district">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="editCity" class="form-label">City/Municipality <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" id="editCity" name="city" class="form-control"
+                                    placeholder="Enter city" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="editProvince" class="form-label">Province <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" id="editProvince" name="province" class="form-control"
+                                    placeholder="Enter province" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="editRegion" class="form-label">Region <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" id="editRegion" name="region" class="form-control"
+                                    placeholder="Enter region" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
                                 <label for="editZip" class="form-label">Zip Code <span
                                         class="text-muted">(Optional)</span></label>
                                 <input type="text" id="editZip" name="zip" class="form-control"
                                     placeholder="Enter zip code">
+                            </div>
+                        </div>
+
+                        <!-- Parent Information -->
+                        <h6 class="mb-3 mt-3"><i class="bx bx-group me-2"></i>Parent Information</h6>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="editMotherName" class="form-label">Mother's Name <span
+                                        class="text-muted">(Optional)</span></label>
+                                <input type="text" id="editMotherName" name="motherName" class="form-control"
+                                    placeholder="Enter mother's full name">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="editFatherName" class="form-label">Father's Name <span
+                                        class="text-muted">(Optional)</span></label>
+                                <input type="text" id="editFatherName" name="fatherName" class="form-control"
+                                    placeholder="Enter father's full name">
+                            </div>
+                        </div>
+
+                        <!-- Personal Details -->
+                        <h6 class="mb-3 mt-3"><i class="bx bx-info-circle me-2"></i>Personal Details</h6>
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label for="editSex" class="form-label">Sex <span
+                                        class="text-muted">(Optional)</span></label>
+                                <select id="editSex" name="sex" class="form-select">
+                                    <option value="">Select sex</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="editCivilStatus" class="form-label">Civil Status <span
+                                        class="text-muted">(Optional)</span></label>
+                                <select id="editCivilStatus" name="civilStatus" class="form-select">
+                                    <option value="">Select status</option>
+                                    <option value="single">Single</option>
+                                    <option value="married">Married</option>
+                                    <option value="widowed">Widowed</option>
+                                    <option value="separated">Separated</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="editEmploymentStatus" class="form-label">Employment Status <span
+                                        class="text-muted">(Optional)</span></label>
+                                <select id="editEmploymentStatus" name="employmentStatus" class="form-select">
+                                    <option value="">Select status</option>
+                                    <option value="employed">Employed</option>
+                                    <option value="unemployed">Unemployed</option>
+                                    <option value="self-employed">Self-employed</option>
+                                    <option value="probationary">Probationary</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="editAge" class="form-label">Age <span
+                                        class="text-muted">(Optional)</span></label>
+                                <input type="number" id="editAge" name="age" class="form-control"
+                                    placeholder="Enter age" min="0">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="editBirthDate" class="form-label">Birth Date <span
+                                        class="text-muted">(Optional)</span></label>
+                                <input type="date" id="editBirthDate" name="birthDate" class="form-control">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="editBirthPlace" class="form-label">Birth Place <span
+                                        class="text-muted">(Optional)</span></label>
+                                <input type="text" id="editBirthPlace" name="birthPlace" class="form-control"
+                                    placeholder="Enter birth place">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="editEducation" class="form-label">Education <span
+                                        class="text-muted">(Optional)</span></label>
+                                <select id="editEducation" name="education" class="form-select">
+                                    <option value="">Select education level</option>
+                                    <option value="elementary">Elementary</option>
+                                    <option value="high-school">High School</option>
+                                    <option value="vocational">Vocational</option>
+                                    <option value="tvet">TVET</option>
+                                    <option value="college">College</option>
+                                    <option value="post-graduate">Post Graduate</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="editParentGuardianName" class="form-label">Parent/Guardian Name <span
+                                        class="text-muted">(Optional)</span></label>
+                                <input type="text" id="editParentGuardianName" name="parentGuardianName"
+                                    class="form-control" placeholder="Enter parent/guardian name">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="editParentGuardianAddress" class="form-label">Parent/Guardian Address <span
+                                        class="text-muted">(Optional)</span></label>
+                                <textarea id="editParentGuardianAddress" name="parentGuardianAddress"
+                                    class="form-control" rows="2"
+                                    placeholder="Enter parent/guardian address"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Contact Information -->
+                        <h6 class="mb-3 mt-3"><i class="bx bx-phone me-2"></i>Contact Information</h6>
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label for="editTel" class="form-label">Telephone <span
+                                        class="text-muted">(Optional)</span></label>
+                                <input type="text" id="editTel" name="tel" class="form-control"
+                                    placeholder="(02) 123-4567">
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="editMobile" class="form-label">Mobile <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" id="editMobile" name="mobile" class="form-control"
+                                    placeholder="09XX XXX XXXX" required>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="editFax" class="form-label">Fax <span
+                                        class="text-muted">(Optional)</span></label>
+                                <input type="text" id="editFax" name="fax" class="form-control"
+                                    placeholder="(02) 123-4567">
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="editEmail" class="form-label">Email <span
+                                        class="text-danger">*</span></label>
+                                <input type="email" id="editEmail" name="email" class="form-control"
+                                    placeholder="your.email@example.com" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label for="editOtherContact" class="form-label">Other Contact <span
+                                        class="text-muted">(Optional)</span></label>
+                                <textarea id="editOtherContact" name="otherContact" class="form-control" rows="2"
+                                    placeholder="Enter other contact information"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Work Experience -->
+                        <h6 class="mb-3 mt-3"><i class="bx bx-briefcase me-2"></i>Work Experience</h6>
+                        <div id="editWorkExperienceContainer">
+                            <!-- Dynamic work experience fields will be added here -->
+                        </div>
+                        <button type="button" class="btn btn-sm btn-outline-primary mb-3" id="addWorkExperienceBtn">
+                            <i class="bx bx-plus me-1"></i>Add Work Experience
+                        </button>
+
+                        <!-- Training & Seminars -->
+                        <h6 class="mb-3 mt-3"><i class="bx bx-book-bookmark me-2"></i>Training & Seminars</h6>
+                        <div id="editTrainingSeminarsContainer">
+                            <!-- Dynamic training/seminar fields will be added here -->
+                        </div>
+                        <button type="button" class="btn btn-sm btn-outline-primary mb-3" id="addTrainingSeminarBtn">
+                            <i class="bx bx-plus me-1"></i>Add Training/Seminar
+                        </button>
+
+                        <!-- Licensure Examinations -->
+                        <h6 class="mb-3 mt-3"><i class="bx bx-certification me-2"></i>Licensure Examinations</h6>
+                        <div id="editLicensureExamsContainer">
+                            <!-- Dynamic licensure exam fields will be added here -->
+                        </div>
+                        <button type="button" class="btn btn-sm btn-outline-primary mb-3" id="addLicensureExamBtn">
+                            <i class="bx bx-plus me-1"></i>Add Licensure Examination
+                        </button>
+
+                        <!-- Competency Assessments -->
+                        <h6 class="mb-3 mt-3"><i class="bx bx-award me-2"></i>Competency Assessments</h6>
+                        <div id="editCompetencyAssessmentsContainer">
+                            <!-- Dynamic competency assessment fields will be added here -->
+                        </div>
+                        <button type="button" class="btn btn-sm btn-outline-primary mb-3"
+                            id="addCompetencyAssessmentBtn">
+                            <i class="bx bx-plus me-1"></i>Add Competency Assessment
+                        </button>
+
+                        <!-- Status -->
+                        <h6 class="mb-3 mt-3"><i class="bx bx-receipt me-2"></i>Application Status</h6>
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label for="editStatus" class="form-label">Status</label>
+                                <select id="editStatus" name="status" class="form-select">
+                                    <option value="pending">Pending</option>
+                                    <option value="approved">Approved</option>
+                                    <option value="cancelled">Cancelled</option>
+                                </select>
                             </div>
                         </div>
 

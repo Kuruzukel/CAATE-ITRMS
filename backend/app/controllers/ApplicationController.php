@@ -307,7 +307,7 @@ class ApplicationController {
         
         try {
             $applicationModel = new Application();
-            $applications = $applicationModel->getAll();
+            $applications = $applicationModel->getAllWithUserData();
             
             http_response_code(200);
             echo json_encode([

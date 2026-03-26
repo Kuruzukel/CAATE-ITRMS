@@ -49,6 +49,27 @@ document.addEventListener('DOMContentLoaded', function () {
     if (confirmDeleteBtn) {
         confirmDeleteBtn.addEventListener('click', confirmDeleteApplication);
     }
+
+    // Add buttons for dynamic arrays
+    const addWorkExpBtn = document.getElementById('addWorkExperienceBtn');
+    if (addWorkExpBtn) {
+        addWorkExpBtn.addEventListener('click', addWorkExperience);
+    }
+
+    const addTrainingBtn = document.getElementById('addTrainingSeminarBtn');
+    if (addTrainingBtn) {
+        addTrainingBtn.addEventListener('click', addTrainingSeminar);
+    }
+
+    const addLicensureBtn = document.getElementById('addLicensureExamBtn');
+    if (addLicensureBtn) {
+        addLicensureBtn.addEventListener('click', addLicensureExam);
+    }
+
+    const addCompetencyBtn = document.getElementById('addCompetencyAssessmentBtn');
+    if (addCompetencyBtn) {
+        addCompetencyBtn.addEventListener('click', addCompetencyAssessment);
+    }
 });
 
 let allApplications = [];
@@ -326,43 +347,82 @@ function viewDetails(appId) {
         return;
     }
 
-    // Personal Information
-    document.getElementById('viewFullName').textContent = getFullName(app);
-    document.getElementById('viewTraineeId').textContent = app.userData?.trainee_id || 'N/A';
-    document.getElementById('viewEmail').textContent = app.contact?.email || app.userData?.email || 'N/A';
-    document.getElementById('viewMobile').textContent = app.contact?.mobile || app.userData?.contact_no || 'N/A';
-    document.getElementById('viewTel').textContent = app.contact?.tel || 'N/A';
+    // Reference & ULI
+    document.getElementById('viewReferenceNumber').textContent = app.reference_number || 'N/A';
+    document.getElementById('viewUli').textContent = app.uli || 'N/A';
+
+    // Picture & Signature
+    const pictureImg = document.getElementById('viewPicture');
+    const noPictureText = document.getElementById('viewNoPicture');
+    if (app.picture) {
+        pictureImg.src = app.picture;
+        pictureImg.style.display = 'block';
+        noPictureText.style.display = 'none';
+    } else {
+        pictureImg.style.display = 'none';
+        noPictureText.style.display = 'block';
+    }
+
+    const signatureImg = document.getElementById('viewSignature');
+    const noSignatureText = document.getElementById('viewNoSignature');
+    if (app.signature) {
+        signatureImg.src = app.signature;
+        signatureImg.style.display = 'block';
+        noSignatureText.style.display = 'none';
+    } else {
+        signatureImg.style.display = 'none';
+        noSignatureText.style.display = 'block';
+    }
+
+    // School Information
+    document.getElementById('viewSchoolName').textContent = app.school_name || 'N/A';
+    document.getElementById('viewSchoolAddress').textContent = app.school_address || 'N/A';
 
     // Assessment Information
     document.getElementById('viewAssessmentTitle').textContent = app.assessment_title || 'N/A';
-    document.getElementById('viewSchoolName').textContent = app.school_name || 'N/A';
     document.getElementById('viewApplicationDate').textContent = formatDate(app.application_date || app.submitted_at);
     document.getElementById('viewAssessmentType').textContent = app.assessment_type || 'N/A';
     document.getElementById('viewClientType').textContent = app.client_type || 'N/A';
 
-    // Address
-    const address = app.mailing_address || {};
-    const fullAddress = [
-        address.number_street,
-        address.barangay,
-        address.city,
-        address.province,
-        address.region
-    ].filter(Boolean).join(', ') || 'N/A';
-    document.getElementById('viewAddress').textContent = fullAddress;
+    // Personal Information
+    document.getElementById('viewSurname').textContent = app.name?.surname || 'N/A';
+    document.getElementById('viewFirstName').textContent = app.name?.first_name || 'N/A';
+    document.getElementById('viewMiddleName').textContent = app.name?.middle_name || 'N/A';
+    document.getElementById('viewMiddleInitial').textContent = app.name?.middle_initial || 'N/A';
+    document.getElementById('viewSecondName').textContent = app.name?.second_name || 'N/A';
+    document.getElementById('viewNameExtension').textContent = app.name?.name_extension || 'N/A';
 
-    // Personal Details
-    document.getElementById('viewSex').textContent = app.sex ? app.sex.charAt(0).toUpperCase() + app.sex.slice(1) : 'N/A';
-    document.getElementById('viewAge').textContent = app.age || 'N/A';
-    document.getElementById('viewCivilStatus').textContent = app.civil_status ? app.civil_status.charAt(0).toUpperCase() + app.civil_status.slice(1) : 'N/A';
-    document.getElementById('viewBirthDate').textContent = app.birth_date || 'N/A';
-    document.getElementById('viewBirthPlace').textContent = app.birth_place || 'N/A';
-    document.getElementById('viewEducation').textContent = app.education || 'N/A';
-    document.getElementById('viewEmploymentStatus').textContent = app.employment_status || 'N/A';
+    // Mailing Address
+    const address = app.mailing_address || {};
+    document.getElementById('viewNumberStreet').textContent = address.number_street || 'N/A';
+    document.getElementById('viewBarangay').textContent = address.barangay || 'N/A';
+    document.getElementById('viewDistrict').textContent = address.district || 'N/A';
+    document.getElementById('viewCity').textContent = address.city || 'N/A';
+    document.getElementById('viewProvince').textContent = address.province || 'N/A';
+    document.getElementById('viewRegion').textContent = address.region || 'N/A';
+    document.getElementById('viewZip').textContent = address.zip || 'N/A';
 
     // Parent Information
     document.getElementById('viewMotherName').textContent = app.mothers_name || 'N/A';
     document.getElementById('viewFatherName').textContent = app.fathers_name || 'N/A';
+
+    // Personal Details
+    document.getElementById('viewSex').textContent = app.sex ? app.sex.charAt(0).toUpperCase() + app.sex.slice(1) : 'N/A';
+    document.getElementById('viewCivilStatus').textContent = app.civil_status ? app.civil_status.charAt(0).toUpperCase() + app.civil_status.slice(1) : 'N/A';
+    document.getElementById('viewEmploymentStatus').textContent = app.employment_status || 'N/A';
+    document.getElementById('viewAge').textContent = app.age || 'N/A';
+    document.getElementById('viewBirthDate').textContent = app.birth_date || 'N/A';
+    document.getElementById('viewBirthPlace').textContent = app.birth_place || 'N/A';
+    document.getElementById('viewEducation').textContent = app.education || 'N/A';
+    document.getElementById('viewParentGuardianName').textContent = app.parent_guardian_name || 'N/A';
+    document.getElementById('viewParentGuardianAddress').textContent = app.parent_guardian_address || 'N/A';
+
+    // Contact Information
+    document.getElementById('viewTel').textContent = app.contact?.tel || 'N/A';
+    document.getElementById('viewMobile').textContent = app.contact?.mobile || 'N/A';
+    document.getElementById('viewFax').textContent = app.contact?.fax || 'N/A';
+    document.getElementById('viewEmail').textContent = app.contact?.email || 'N/A';
+    document.getElementById('viewOtherContact').textContent = app.contact?.other_contact || 'N/A';
 
     // Work Experience
     const workExpContainer = document.getElementById('viewWorkExperience');
@@ -442,6 +502,8 @@ function viewDetails(appId) {
     // Status
     const statusBadge = getStatusBadge(app.status);
     document.getElementById('viewStatus').innerHTML = statusBadge;
+    document.getElementById('viewSubmittedAt').textContent = formatDate(app.submitted_at);
+    document.getElementById('viewUpdatedAt').textContent = formatDate(app.updated_at);
 
     // Show modal
     const modal = new bootstrap.Modal(document.getElementById('viewProfileModal'));
@@ -461,61 +523,71 @@ function editDetails(appId) {
     // Store application ID
     document.getElementById('editApplicationId').value = appId;
 
-    // Personal Information
-    document.getElementById('editFirstName').value = app.name?.first_name || '';
-    document.getElementById('editMiddleName').value = app.name?.middle_name || '';
-    document.getElementById('editLastName').value = app.name?.surname || '';
+    // Reference & ULI
+    document.getElementById('editReferenceNumber').value = app.reference_number || '';
+    document.getElementById('editUli').value = app.uli || '';
 
-    // Optional name fields (only set if elements exist)
-    const secondNameEl = document.getElementById('editSecondName');
-    if (secondNameEl) secondNameEl.value = app.name?.second_name || '';
-
-    const middleInitialEl = document.getElementById('editMiddleInitial');
-    if (middleInitialEl) middleInitialEl.value = app.name?.middle_initial || '';
-
-    const nameExtensionEl = document.getElementById('editNameExtension');
-    if (nameExtensionEl) nameExtensionEl.value = app.name?.name_extension || '';
-
-    document.getElementById('editEmail').value = app.contact?.email || '';
-    document.getElementById('editMobile').value = app.contact?.mobile || '';
-    document.getElementById('editTel').value = app.contact?.tel || '';
+    // School Information
+    document.getElementById('editSchoolName').value = app.school_name || '';
+    document.getElementById('editSchoolAddress').value = app.school_address || '';
 
     // Assessment Information
     document.getElementById('editAssessmentTitle').value = app.assessment_title || '';
-    document.getElementById('editSchoolName').value = app.school_name || '';
     document.getElementById('editApplicationDate').value = app.application_date || '';
     document.getElementById('editAssessmentType').value = app.assessment_type || '';
+    document.getElementById('editClientType').value = app.client_type || '';
 
-    // Address
+    // Personal Information - Name fields
+    document.getElementById('editSurname').value = app.name?.surname || '';
+    document.getElementById('editFirstName').value = app.name?.first_name || '';
+    document.getElementById('editMiddleName').value = app.name?.middle_name || '';
+    document.getElementById('editMiddleInitial').value = app.name?.middle_initial || '';
+    document.getElementById('editSecondName').value = app.name?.second_name || '';
+    document.getElementById('editNameExtension').value = app.name?.name_extension || '';
+
+    // Mailing Address
     const address = app.mailing_address || {};
-    document.getElementById('editStreet').value = address.number_street || '';
+    document.getElementById('editNumberStreet').value = address.number_street || '';
     document.getElementById('editBarangay').value = address.barangay || '';
+    document.getElementById('editDistrict').value = address.district || '';
     document.getElementById('editCity').value = address.city || '';
     document.getElementById('editProvince').value = address.province || '';
     document.getElementById('editRegion').value = address.region || '';
-
-    // Personal Details
-    document.getElementById('editSex').value = app.sex || '';
-    document.getElementById('editAge').value = app.age || '';
-    document.getElementById('editCivilStatus').value = app.civil_status || '';
-    document.getElementById('editBirthDate').value = app.birth_date || '';
-    document.getElementById('editEducation').value = app.education || '';
-    document.getElementById('editEmploymentStatus').value = app.employment_status || '';
+    document.getElementById('editZip').value = address.zip || '';
 
     // Parent Information
     document.getElementById('editMotherName').value = app.mothers_name || '';
     document.getElementById('editFatherName').value = app.fathers_name || '';
 
-    // Additional fields
+    // Personal Details
+    document.getElementById('editSex').value = app.sex || '';
+    document.getElementById('editCivilStatus').value = app.civil_status || '';
+    document.getElementById('editEmploymentStatus').value = app.employment_status || '';
+    document.getElementById('editAge').value = app.age || '';
+    document.getElementById('editBirthDate').value = app.birth_date || '';
     document.getElementById('editBirthPlace').value = app.birth_place || '';
-    document.getElementById('editClientType').value = app.client_type || '';
+    document.getElementById('editEducation').value = app.education || '';
+    document.getElementById('editParentGuardianName').value = app.parent_guardian_name || '';
+    document.getElementById('editParentGuardianAddress').value = app.parent_guardian_address || '';
+
+    // Contact Information
+    document.getElementById('editTel').value = app.contact?.tel || '';
+    document.getElementById('editMobile').value = app.contact?.mobile || '';
     document.getElementById('editFax').value = app.contact?.fax || '';
+    document.getElementById('editEmail').value = app.contact?.email || '';
     document.getElementById('editOtherContact').value = app.contact?.other_contact || '';
-    document.getElementById('editReferenceNumber').value = app.reference_number || '';
-    document.getElementById('editUli').value = app.uli || '';
-    document.getElementById('editSchoolAddress').value = app.school_address || '';
-    document.getElementById('editDistrict').value = address.district || '';
-    document.getElementById('editZip').value = address.zip || '';
+
+    // Work Experience
+    populateWorkExperience(app.work_experience || []);
+
+    // Training & Seminars
+    populateTrainingSeminars(app.training_seminars || []);
+
+    // Licensure Examinations
+    populateLicensureExams(app.licensure_exams || []);
+
+    // Competency Assessments
+    populateCompetencyAssessments(app.competency_assessments || []);
 
     // Status
     document.getElementById('editStatus').value = app.status || 'pending';
@@ -523,6 +595,420 @@ function editDetails(appId) {
     // Show modal
     const modal = new bootstrap.Modal(document.getElementById('editDetailsModal'));
     modal.show();
+}
+
+// Helper function to populate work experience
+function populateWorkExperience(workExperiences) {
+    const container = document.getElementById('editWorkExperienceContainer');
+    container.innerHTML = '';
+
+    workExperiences.forEach((exp, index) => {
+        const expHtml = `
+            <div class="work-experience-item card mb-3" style="background: rgba(255,255,255,0.05);" data-index="${index}">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h6 class="mb-0">Work Experience ${index + 1}</h6>
+                        <button type="button" class="btn btn-sm btn-danger" onclick="removeWorkExperience(${index})">
+                            <i class="bx bx-trash"></i>
+                        </button>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-2">
+                            <label class="form-label">Company</label>
+                            <input type="text" class="form-control" name="work_company_${index}" value="${exp.company || ''}" placeholder="Company name">
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <label class="form-label">Position</label>
+                            <input type="text" class="form-control" name="work_position_${index}" value="${exp.position || ''}" placeholder="Position">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 mb-2">
+                            <label class="form-label">Inclusive Dates</label>
+                            <input type="text" class="form-control" name="work_dates_${index}" value="${exp.inclusive_dates || ''}" placeholder="e.g., 2020-2022">
+                        </div>
+                        <div class="col-md-4 mb-2">
+                            <label class="form-label">Monthly Salary</label>
+                            <input type="text" class="form-control" name="work_salary_${index}" value="${exp.monthly_salary || ''}" placeholder="Salary">
+                        </div>
+                        <div class="col-md-4 mb-2">
+                            <label class="form-label">Status of Appointment</label>
+                            <input type="text" class="form-control" name="work_status_${index}" value="${exp.status_of_appointment || ''}" placeholder="Status">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 mb-2">
+                            <label class="form-label">Years of Experience</label>
+                            <input type="number" class="form-control" name="work_years_${index}" value="${exp.years_of_experience || ''}" placeholder="Years">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        container.insertAdjacentHTML('beforeend', expHtml);
+    });
+}
+
+// Helper function to populate training seminars
+function populateTrainingSeminars(trainings) {
+    const container = document.getElementById('editTrainingSeminarsContainer');
+    container.innerHTML = '';
+
+    trainings.forEach((training, index) => {
+        const trainingHtml = `
+            <div class="training-seminar-item card mb-3" style="background: rgba(255,255,255,0.05);" data-index="${index}">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h6 class="mb-0">Training/Seminar ${index + 1}</h6>
+                        <button type="button" class="btn btn-sm btn-danger" onclick="removeTrainingSeminar(${index})">
+                            <i class="bx bx-trash"></i>
+                        </button>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-2">
+                            <label class="form-label">Title</label>
+                            <input type="text" class="form-control" name="training_title_${index}" value="${training.title || ''}" placeholder="Training title">
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <label class="form-label">Venue</label>
+                            <input type="text" class="form-control" name="training_venue_${index}" value="${training.venue || ''}" placeholder="Venue">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 mb-2">
+                            <label class="form-label">Inclusive Dates</label>
+                            <input type="text" class="form-control" name="training_dates_${index}" value="${training.inclusive_dates || ''}" placeholder="e.g., Jan 2023">
+                        </div>
+                        <div class="col-md-4 mb-2">
+                            <label class="form-label">Number of Hours</label>
+                            <input type="number" class="form-control" name="training_hours_${index}" value="${training.number_of_hours || ''}" placeholder="Hours">
+                        </div>
+                        <div class="col-md-4 mb-2">
+                            <label class="form-label">Conducted By</label>
+                            <input type="text" class="form-control" name="training_conductor_${index}" value="${training.conducted_by || ''}" placeholder="Conducted by">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        container.insertAdjacentHTML('beforeend', trainingHtml);
+    });
+}
+
+// Helper function to populate licensure exams
+function populateLicensureExams(exams) {
+    const container = document.getElementById('editLicensureExamsContainer');
+    container.innerHTML = '';
+
+    exams.forEach((exam, index) => {
+        const examHtml = `
+            <div class="licensure-exam-item card mb-3" style="background: rgba(255,255,255,0.05);" data-index="${index}">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h6 class="mb-0">Licensure Examination ${index + 1}</h6>
+                        <button type="button" class="btn btn-sm btn-danger" onclick="removeLicensureExam(${index})">
+                            <i class="bx bx-trash"></i>
+                        </button>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-2">
+                            <label class="form-label">Title</label>
+                            <input type="text" class="form-control" name="exam_title_${index}" value="${exam.title || ''}" placeholder="Exam title">
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <label class="form-label">Year Taken</label>
+                            <input type="number" class="form-control" name="exam_year_${index}" value="${exam.year_taken || ''}" placeholder="Year">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 mb-2">
+                            <label class="form-label">Examination Venue</label>
+                            <input type="text" class="form-control" name="exam_venue_${index}" value="${exam.examination_venue || ''}" placeholder="Venue">
+                        </div>
+                        <div class="col-md-4 mb-2">
+                            <label class="form-label">Rating</label>
+                            <input type="text" class="form-control" name="exam_rating_${index}" value="${exam.rating || ''}" placeholder="Rating">
+                        </div>
+                        <div class="col-md-4 mb-2">
+                            <label class="form-label">Remarks</label>
+                            <input type="text" class="form-control" name="exam_remarks_${index}" value="${exam.remarks || ''}" placeholder="Remarks">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 mb-2">
+                            <label class="form-label">Expiry Date</label>
+                            <input type="date" class="form-control" name="exam_expiry_${index}" value="${exam.expiry_date || ''}" placeholder="Expiry date">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        container.insertAdjacentHTML('beforeend', examHtml);
+    });
+}
+
+// Helper function to populate competency assessments
+function populateCompetencyAssessments(assessments) {
+    const container = document.getElementById('editCompetencyAssessmentsContainer');
+    container.innerHTML = '';
+
+    assessments.forEach((assessment, index) => {
+        const assessmentHtml = `
+            <div class="competency-assessment-item card mb-3" style="background: rgba(255,255,255,0.05);" data-index="${index}">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h6 class="mb-0">Competency Assessment ${index + 1}</h6>
+                        <button type="button" class="btn btn-sm btn-danger" onclick="removeCompetencyAssessment(${index})">
+                            <i class="bx bx-trash"></i>
+                        </button>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-2">
+                            <label class="form-label">Title</label>
+                            <input type="text" class="form-control" name="comp_title_${index}" value="${assessment.title || ''}" placeholder="Assessment title">
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <label class="form-label">Qualification Level</label>
+                            <input type="text" class="form-control" name="comp_level_${index}" value="${assessment.qualification_level || ''}" placeholder="Level">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-2">
+                            <label class="form-label">Industry Sector</label>
+                            <input type="text" class="form-control" name="comp_sector_${index}" value="${assessment.industry_sector || ''}" placeholder="Sector">
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <label class="form-label">Certificate Number</label>
+                            <input type="text" class="form-control" name="comp_cert_${index}" value="${assessment.certificate_number || ''}" placeholder="Certificate #">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-2">
+                            <label class="form-label">Date of Issuance</label>
+                            <input type="date" class="form-control" name="comp_issue_${index}" value="${assessment.date_of_issuance || ''}" placeholder="Issue date">
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <label class="form-label">Expiration Date</label>
+                            <input type="date" class="form-control" name="comp_expiry_${index}" value="${assessment.expiration_date || ''}" placeholder="Expiry date">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        container.insertAdjacentHTML('beforeend', assessmentHtml);
+    });
+}
+
+// Functions to remove items
+function removeWorkExperience(index) {
+    const item = document.querySelector(`.work-experience-item[data-index="${index}"]`);
+    if (item) item.remove();
+}
+
+function removeTrainingSeminar(index) {
+    const item = document.querySelector(`.training-seminar-item[data-index="${index}"]`);
+    if (item) item.remove();
+}
+
+function removeLicensureExam(index) {
+    const item = document.querySelector(`.licensure-exam-item[data-index="${index}"]`);
+    if (item) item.remove();
+}
+
+function removeCompetencyAssessment(index) {
+    const item = document.querySelector(`.competency-assessment-item[data-index="${index}"]`);
+    if (item) item.remove();
+}
+
+// Functions to add new items
+function addWorkExperience() {
+    const container = document.getElementById('editWorkExperienceContainer');
+    const index = container.querySelectorAll('.work-experience-item').length;
+
+    const expHtml = `
+        <div class="work-experience-item card mb-3" style="background: rgba(255,255,255,0.05);" data-index="${index}">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h6 class="mb-0">Work Experience ${index + 1}</h6>
+                    <button type="button" class="btn btn-sm btn-danger" onclick="removeWorkExperience(${index})">
+                        <i class="bx bx-trash"></i>
+                    </button>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label">Company</label>
+                        <input type="text" class="form-control" name="work_company_${index}" placeholder="Company name">
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label">Position</label>
+                        <input type="text" class="form-control" name="work_position_${index}" placeholder="Position">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 mb-2">
+                        <label class="form-label">Inclusive Dates</label>
+                        <input type="text" class="form-control" name="work_dates_${index}" placeholder="e.g., 2020-2022">
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <label class="form-label">Monthly Salary</label>
+                        <input type="text" class="form-control" name="work_salary_${index}" placeholder="Salary">
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <label class="form-label">Status of Appointment</label>
+                        <input type="text" class="form-control" name="work_status_${index}" placeholder="Status">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 mb-2">
+                        <label class="form-label">Years of Experience</label>
+                        <input type="number" class="form-control" name="work_years_${index}" placeholder="Years">
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    container.insertAdjacentHTML('beforeend', expHtml);
+}
+
+function addTrainingSeminar() {
+    const container = document.getElementById('editTrainingSeminarsContainer');
+    const index = container.querySelectorAll('.training-seminar-item').length;
+
+    const trainingHtml = `
+        <div class="training-seminar-item card mb-3" style="background: rgba(255,255,255,0.05);" data-index="${index}">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h6 class="mb-0">Training/Seminar ${index + 1}</h6>
+                    <button type="button" class="btn btn-sm btn-danger" onclick="removeTrainingSeminar(${index})">
+                        <i class="bx bx-trash"></i>
+                    </button>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label">Title</label>
+                        <input type="text" class="form-control" name="training_title_${index}" placeholder="Training title">
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label">Venue</label>
+                        <input type="text" class="form-control" name="training_venue_${index}" placeholder="Venue">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 mb-2">
+                        <label class="form-label">Inclusive Dates</label>
+                        <input type="text" class="form-control" name="training_dates_${index}" placeholder="e.g., Jan 2023">
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <label class="form-label">Number of Hours</label>
+                        <input type="number" class="form-control" name="training_hours_${index}" placeholder="Hours">
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <label class="form-label">Conducted By</label>
+                        <input type="text" class="form-control" name="training_conductor_${index}" placeholder="Conducted by">
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    container.insertAdjacentHTML('beforeend', trainingHtml);
+}
+
+function addLicensureExam() {
+    const container = document.getElementById('editLicensureExamsContainer');
+    const index = container.querySelectorAll('.licensure-exam-item').length;
+
+    const examHtml = `
+        <div class="licensure-exam-item card mb-3" style="background: rgba(255,255,255,0.05);" data-index="${index}">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h6 class="mb-0">Licensure Examination ${index + 1}</h6>
+                    <button type="button" class="btn btn-sm btn-danger" onclick="removeLicensureExam(${index})">
+                        <i class="bx bx-trash"></i>
+                    </button>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label">Title</label>
+                        <input type="text" class="form-control" name="exam_title_${index}" placeholder="Exam title">
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label">Year Taken</label>
+                        <input type="number" class="form-control" name="exam_year_${index}" placeholder="Year">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 mb-2">
+                        <label class="form-label">Examination Venue</label>
+                        <input type="text" class="form-control" name="exam_venue_${index}" placeholder="Venue">
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <label class="form-label">Rating</label>
+                        <input type="text" class="form-control" name="exam_rating_${index}" placeholder="Rating">
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <label class="form-label">Remarks</label>
+                        <input type="text" class="form-control" name="exam_remarks_${index}" placeholder="Remarks">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 mb-2">
+                        <label class="form-label">Expiry Date</label>
+                        <input type="date" class="form-control" name="exam_expiry_${index}" placeholder="Expiry date">
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    container.insertAdjacentHTML('beforeend', examHtml);
+}
+
+function addCompetencyAssessment() {
+    const container = document.getElementById('editCompetencyAssessmentsContainer');
+    const index = container.querySelectorAll('.competency-assessment-item').length;
+
+    const assessmentHtml = `
+        <div class="competency-assessment-item card mb-3" style="background: rgba(255,255,255,0.05);" data-index="${index}">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h6 class="mb-0">Competency Assessment ${index + 1}</h6>
+                    <button type="button" class="btn btn-sm btn-danger" onclick="removeCompetencyAssessment(${index})">
+                        <i class="bx bx-trash"></i>
+                    </button>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label">Title</label>
+                        <input type="text" class="form-control" name="comp_title_${index}" placeholder="Assessment title">
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label">Qualification Level</label>
+                        <input type="text" class="form-control" name="comp_level_${index}" placeholder="Level">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label">Industry Sector</label>
+                        <input type="text" class="form-control" name="comp_sector_${index}" placeholder="Sector">
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label">Certificate Number</label>
+                        <input type="text" class="form-control" name="comp_cert_${index}" placeholder="Certificate #">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label">Date of Issuance</label>
+                        <input type="date" class="form-control" name="comp_issue_${index}" placeholder="Issue date">
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label">Expiration Date</label>
+                        <input type="date" class="form-control" name="comp_expiry_${index}" placeholder="Expiry date">
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    container.insertAdjacentHTML('beforeend', assessmentHtml);
 }
 
 async function saveEditedApplication() {
@@ -535,60 +1021,145 @@ async function saveEditedApplication() {
 
     // Collect updated data
     const updatedData = {
-        name: {
-            first_name: document.getElementById('editFirstName').value,
-            middle_name: document.getElementById('editMiddleName').value,
-            surname: document.getElementById('editLastName').value
-        },
-        contact: {
-            email: document.getElementById('editEmail').value,
-            mobile: document.getElementById('editMobile').value,
-            tel: document.getElementById('editTel').value
-        },
-        assessment_title: document.getElementById('editAssessmentTitle').value,
+        reference_number: document.getElementById('editReferenceNumber').value,
+        uli: document.getElementById('editUli').value,
         school_name: document.getElementById('editSchoolName').value,
+        school_address: document.getElementById('editSchoolAddress').value,
+        assessment_title: document.getElementById('editAssessmentTitle').value,
         application_date: document.getElementById('editApplicationDate').value,
         assessment_type: document.getElementById('editAssessmentType').value,
+        client_type: document.getElementById('editClientType').value,
+        name: {
+            surname: document.getElementById('editSurname').value,
+            first_name: document.getElementById('editFirstName').value,
+            middle_name: document.getElementById('editMiddleName').value,
+            middle_initial: document.getElementById('editMiddleInitial').value,
+            second_name: document.getElementById('editSecondName').value,
+            name_extension: document.getElementById('editNameExtension').value
+        },
         mailing_address: {
-            number_street: document.getElementById('editStreet').value,
+            number_street: document.getElementById('editNumberStreet').value,
             barangay: document.getElementById('editBarangay').value,
+            district: document.getElementById('editDistrict').value,
             city: document.getElementById('editCity').value,
             province: document.getElementById('editProvince').value,
-            region: document.getElementById('editRegion').value
+            region: document.getElementById('editRegion').value,
+            zip: document.getElementById('editZip').value
         },
+        mothers_name: document.getElementById('editMotherName').value,
+        fathers_name: document.getElementById('editFatherName').value,
         sex: document.getElementById('editSex').value,
-        age: parseInt(document.getElementById('editAge').value) || null,
         civil_status: document.getElementById('editCivilStatus').value,
+        employment_status: document.getElementById('editEmploymentStatus').value,
+        age: parseInt(document.getElementById('editAge').value) || 0,
         birth_date: document.getElementById('editBirthDate').value,
         birth_place: document.getElementById('editBirthPlace').value,
         education: document.getElementById('editEducation').value,
-        employment_status: document.getElementById('editEmploymentStatus').value,
-        mothers_name: document.getElementById('editMotherName').value,
-        fathers_name: document.getElementById('editFatherName').value,
-        client_type: document.getElementById('editClientType').value,
-        reference_number: document.getElementById('editReferenceNumber').value,
-        uli: document.getElementById('editUli').value,
-        school_address: document.getElementById('editSchoolAddress').value,
+        parent_guardian_name: document.getElementById('editParentGuardianName').value,
+        parent_guardian_address: document.getElementById('editParentGuardianAddress').value,
+        contact: {
+            tel: document.getElementById('editTel').value,
+            mobile: document.getElementById('editMobile').value,
+            fax: document.getElementById('editFax').value,
+            email: document.getElementById('editEmail').value,
+            other_contact: document.getElementById('editOtherContact').value
+        },
         status: document.getElementById('editStatus').value
     };
 
-    // Add optional name fields if they exist
-    const secondNameEl = document.getElementById('editSecondName');
-    if (secondNameEl) updatedData.name.second_name = secondNameEl.value;
+    // Collect work experience
+    const workExperiences = [];
+    const workItems = document.querySelectorAll('.work-experience-item');
+    workItems.forEach((item, index) => {
+        const company = item.querySelector(`[name="work_company_${index}"]`)?.value;
+        const position = item.querySelector(`[name="work_position_${index}"]`)?.value;
+        const dates = item.querySelector(`[name="work_dates_${index}"]`)?.value;
+        const salary = item.querySelector(`[name="work_salary_${index}"]`)?.value;
+        const status = item.querySelector(`[name="work_status_${index}"]`)?.value;
+        const years = item.querySelector(`[name="work_years_${index}"]`)?.value;
 
-    const middleInitialEl = document.getElementById('editMiddleInitial');
-    if (middleInitialEl) updatedData.name.middle_initial = middleInitialEl.value;
+        if (company || position) {
+            workExperiences.push({
+                company: company || '',
+                position: position || '',
+                inclusive_dates: dates || '',
+                monthly_salary: salary || '',
+                status_of_appointment: status || '',
+                years_of_experience: parseInt(years) || 0
+            });
+        }
+    });
+    updatedData.work_experience = workExperiences;
 
-    const nameExtensionEl = document.getElementById('editNameExtension');
-    if (nameExtensionEl) updatedData.name.name_extension = nameExtensionEl.value;
+    // Collect training seminars
+    const trainingSeminars = [];
+    const trainingItems = document.querySelectorAll('.training-seminar-item');
+    trainingItems.forEach((item, index) => {
+        const title = item.querySelector(`[name="training_title_${index}"]`)?.value;
+        const venue = item.querySelector(`[name="training_venue_${index}"]`)?.value;
+        const dates = item.querySelector(`[name="training_dates_${index}"]`)?.value;
+        const hours = item.querySelector(`[name="training_hours_${index}"]`)?.value;
+        const conductor = item.querySelector(`[name="training_conductor_${index}"]`)?.value;
 
-    // Add fax and other_contact to contact object
-    updatedData.contact.fax = document.getElementById('editFax').value;
-    updatedData.contact.other_contact = document.getElementById('editOtherContact').value;
+        if (title || venue) {
+            trainingSeminars.push({
+                title: title || '',
+                venue: venue || '',
+                inclusive_dates: dates || '',
+                number_of_hours: parseInt(hours) || 0,
+                conducted_by: conductor || ''
+            });
+        }
+    });
+    updatedData.training_seminars = trainingSeminars;
 
-    // Add district and zip to mailing_address
-    updatedData.mailing_address.district = document.getElementById('editDistrict').value;
-    updatedData.mailing_address.zip = document.getElementById('editZip').value;
+    // Collect licensure exams
+    const licensureExams = [];
+    const examItems = document.querySelectorAll('.licensure-exam-item');
+    examItems.forEach((item, index) => {
+        const title = item.querySelector(`[name="exam_title_${index}"]`)?.value;
+        const year = item.querySelector(`[name="exam_year_${index}"]`)?.value;
+        const venue = item.querySelector(`[name="exam_venue_${index}"]`)?.value;
+        const rating = item.querySelector(`[name="exam_rating_${index}"]`)?.value;
+        const remarks = item.querySelector(`[name="exam_remarks_${index}"]`)?.value;
+        const expiry = item.querySelector(`[name="exam_expiry_${index}"]`)?.value;
+
+        if (title || year) {
+            licensureExams.push({
+                title: title || '',
+                year_taken: parseInt(year) || 0,
+                examination_venue: venue || '',
+                rating: rating || '',
+                remarks: remarks || '',
+                expiry_date: expiry || ''
+            });
+        }
+    });
+    updatedData.licensure_exams = licensureExams;
+
+    // Collect competency assessments
+    const competencyAssessments = [];
+    const compItems = document.querySelectorAll('.competency-assessment-item');
+    compItems.forEach((item, index) => {
+        const title = item.querySelector(`[name="comp_title_${index}"]`)?.value;
+        const level = item.querySelector(`[name="comp_level_${index}"]`)?.value;
+        const sector = item.querySelector(`[name="comp_sector_${index}"]`)?.value;
+        const cert = item.querySelector(`[name="comp_cert_${index}"]`)?.value;
+        const issue = item.querySelector(`[name="comp_issue_${index}"]`)?.value;
+        const expiry = item.querySelector(`[name="comp_expiry_${index}"]`)?.value;
+
+        if (title || level) {
+            competencyAssessments.push({
+                title: title || '',
+                qualification_level: level || '',
+                industry_sector: sector || '',
+                certificate_number: cert || '',
+                date_of_issuance: issue || '',
+                expiration_date: expiry || ''
+            });
+        }
+    });
+    updatedData.competency_assessments = competencyAssessments;
 
     try {
         const response = await fetch(`${config.api.baseUrl}/api/v1/applications/${appId}`, {

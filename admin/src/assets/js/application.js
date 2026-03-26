@@ -297,13 +297,13 @@ async function changeStatus(appId, newStatus) {
         if (result.success) {
             // Reload applications
             await loadApplications();
-            alert(`Application status changed to ${newStatus}`);
+            showSuccess(`Application status changed to ${newStatus}`);
         } else {
-            alert('Failed to update status: ' + result.message);
+            showError('Failed to update status: ' + result.message);
         }
     } catch (error) {
         console.error('Error updating status:', error);
-        alert('Error updating status');
+        showError('Error updating status');
     }
 }
 
@@ -453,4 +453,39 @@ function formatDateForFilter(dateValue) {
 
 function filterApplicationsByDate(dateString) {
     applyFilters();
+}
+
+
+function showSuccess(message) {
+    showToast(message, 'success');
+}
+
+function showError(message) {
+    showToast(message, 'error');
+}
+
+function showToast(message, type = 'success') {
+    const container = document.getElementById('toastContainer');
+    if (!container) return;
+
+    const toast = document.createElement('div');
+    toast.className = `toast-notification ${type}`;
+
+    const icon = type === 'success' ? 'bx-check' :
+        type === 'error' ? 'bx-x' :
+            type === 'warning' ? 'bx-error-alt' : 'bxs-info-circle';
+
+    toast.innerHTML = `
+        <i class="bx ${icon} toast-icon"></i>
+        <div class="toast-content">
+            <div class="toast-message">${message}</div>
+        </div>
+    `;
+
+    container.appendChild(toast);
+
+    setTimeout(() => {
+        toast.classList.add('hiding');
+        setTimeout(() => toast.remove(), 300);
+    }, 5000);
 }

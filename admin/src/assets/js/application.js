@@ -364,6 +364,81 @@ function viewDetails(appId) {
     document.getElementById('viewMotherName').textContent = app.mothers_name || 'N/A';
     document.getElementById('viewFatherName').textContent = app.fathers_name || 'N/A';
 
+    // Work Experience
+    const workExpContainer = document.getElementById('viewWorkExperience');
+    if (app.work_experience && app.work_experience.length > 0) {
+        workExpContainer.innerHTML = app.work_experience.map((exp, index) => `
+            <div class="card mb-2" style="background: rgba(255,255,255,0.05);">
+                <div class="card-body p-3">
+                    <h6 class="text-white mb-2">${index + 1}. ${exp.company || 'N/A'}</h6>
+                    <p class="mb-1 text-white-50"><strong>Position:</strong> ${exp.position || 'N/A'}</p>
+                    <p class="mb-1 text-white-50"><strong>Inclusive Dates:</strong> ${exp.inclusive_dates || 'N/A'}</p>
+                    <p class="mb-1 text-white-50"><strong>Monthly Salary:</strong> ${exp.monthly_salary || 'N/A'}</p>
+                    <p class="mb-1 text-white-50"><strong>Status:</strong> ${exp.status_of_appointment || 'N/A'}</p>
+                    <p class="mb-0 text-white-50"><strong>Years of Experience:</strong> ${exp.years_of_experience || 'N/A'}</p>
+                </div>
+            </div>
+        `).join('');
+    } else {
+        workExpContainer.innerHTML = '<p class="text-white-50">No work experience recorded</p>';
+    }
+
+    // Training & Seminars
+    const trainingContainer = document.getElementById('viewTrainingSeminars');
+    if (app.training_seminars && app.training_seminars.length > 0) {
+        trainingContainer.innerHTML = app.training_seminars.map((training, index) => `
+            <div class="card mb-2" style="background: rgba(255,255,255,0.05);">
+                <div class="card-body p-3">
+                    <h6 class="text-white mb-2">${index + 1}. ${training.title || 'N/A'}</h6>
+                    <p class="mb-1 text-white-50"><strong>Venue:</strong> ${training.venue || 'N/A'}</p>
+                    <p class="mb-1 text-white-50"><strong>Inclusive Dates:</strong> ${training.inclusive_dates || 'N/A'}</p>
+                    <p class="mb-1 text-white-50"><strong>Number of Hours:</strong> ${training.number_of_hours || 'N/A'}</p>
+                    <p class="mb-0 text-white-50"><strong>Conducted By:</strong> ${training.conducted_by || 'N/A'}</p>
+                </div>
+            </div>
+        `).join('');
+    } else {
+        trainingContainer.innerHTML = '<p class="text-white-50">No training or seminars recorded</p>';
+    }
+
+    // Licensure Examinations
+    const licensureContainer = document.getElementById('viewLicensureExams');
+    if (app.licensure_exams && app.licensure_exams.length > 0) {
+        licensureContainer.innerHTML = app.licensure_exams.map((exam, index) => `
+            <div class="card mb-2" style="background: rgba(255,255,255,0.05);">
+                <div class="card-body p-3">
+                    <h6 class="text-white mb-2">${index + 1}. ${exam.title || 'N/A'}</h6>
+                    <p class="mb-1 text-white-50"><strong>Year Taken:</strong> ${exam.year_taken || 'N/A'}</p>
+                    <p class="mb-1 text-white-50"><strong>Venue:</strong> ${exam.examination_venue || 'N/A'}</p>
+                    <p class="mb-1 text-white-50"><strong>Rating:</strong> ${exam.rating || 'N/A'}</p>
+                    <p class="mb-1 text-white-50"><strong>Remarks:</strong> ${exam.remarks || 'N/A'}</p>
+                    <p class="mb-0 text-white-50"><strong>Expiry Date:</strong> ${exam.expiry_date || 'N/A'}</p>
+                </div>
+            </div>
+        `).join('');
+    } else {
+        licensureContainer.innerHTML = '<p class="text-white-50">No licensure examinations recorded</p>';
+    }
+
+    // Competency Assessments
+    const competencyContainer = document.getElementById('viewCompetencyAssessments');
+    if (app.competency_assessments && app.competency_assessments.length > 0) {
+        competencyContainer.innerHTML = app.competency_assessments.map((comp, index) => `
+            <div class="card mb-2" style="background: rgba(255,255,255,0.05);">
+                <div class="card-body p-3">
+                    <h6 class="text-white mb-2">${index + 1}. ${comp.title || 'N/A'}</h6>
+                    <p class="mb-1 text-white-50"><strong>Qualification Level:</strong> ${comp.qualification_level || 'N/A'}</p>
+                    <p class="mb-1 text-white-50"><strong>Industry Sector:</strong> ${comp.industry_sector || 'N/A'}</p>
+                    <p class="mb-1 text-white-50"><strong>Certificate Number:</strong> ${comp.certificate_number || 'N/A'}</p>
+                    <p class="mb-1 text-white-50"><strong>Date of Issuance:</strong> ${comp.date_of_issuance || 'N/A'}</p>
+                    <p class="mb-0 text-white-50"><strong>Expiration Date:</strong> ${comp.expiration_date || 'N/A'}</p>
+                </div>
+            </div>
+        `).join('');
+    } else {
+        competencyContainer.innerHTML = '<p class="text-white-50">No competency assessments recorded</p>';
+    }
+
     // Status
     const statusBadge = getStatusBadge(app.status);
     document.getElementById('viewStatus').innerHTML = statusBadge;
@@ -417,8 +492,19 @@ function editDetails(appId) {
     document.getElementById('editEmploymentStatus').value = app.employment_status || '';
 
     // Parent Information
-    document.getElementById('editMotherName').value = app.mother_name || '';
-    document.getElementById('editFatherName').value = app.father_name || '';
+    document.getElementById('editMotherName').value = app.mothers_name || '';
+    document.getElementById('editFatherName').value = app.fathers_name || '';
+
+    // Additional fields
+    document.getElementById('editBirthPlace').value = app.birth_place || '';
+    document.getElementById('editClientType').value = app.client_type || '';
+    document.getElementById('editFax').value = app.contact?.fax || '';
+    document.getElementById('editOtherContact').value = app.contact?.other_contact || '';
+    document.getElementById('editReferenceNumber').value = app.reference_number || '';
+    document.getElementById('editUli').value = app.uli || '';
+    document.getElementById('editSchoolAddress').value = app.school_address || '';
+    document.getElementById('editDistrict').value = address.district || '';
+    document.getElementById('editZip').value = address.zip || '';
 
     // Status
     document.getElementById('editStatus').value = app.status || 'pending';
@@ -463,12 +549,25 @@ async function saveEditedApplication() {
         age: parseInt(document.getElementById('editAge').value) || null,
         civil_status: document.getElementById('editCivilStatus').value,
         birth_date: document.getElementById('editBirthDate').value,
+        birth_place: document.getElementById('editBirthPlace').value,
         education: document.getElementById('editEducation').value,
         employment_status: document.getElementById('editEmploymentStatus').value,
-        mother_name: document.getElementById('editMotherName').value,
-        father_name: document.getElementById('editFatherName').value,
+        mothers_name: document.getElementById('editMotherName').value,
+        fathers_name: document.getElementById('editFatherName').value,
+        client_type: document.getElementById('editClientType').value,
+        reference_number: document.getElementById('editReferenceNumber').value,
+        uli: document.getElementById('editUli').value,
+        school_address: document.getElementById('editSchoolAddress').value,
         status: document.getElementById('editStatus').value
     };
+
+    // Add fax and other_contact to contact object
+    updatedData.contact.fax = document.getElementById('editFax').value;
+    updatedData.contact.other_contact = document.getElementById('editOtherContact').value;
+
+    // Add district and zip to mailing_address
+    updatedData.mailing_address.district = document.getElementById('editDistrict').value;
+    updatedData.mailing_address.zip = document.getElementById('editZip').value;
 
     try {
         const response = await fetch(`${config.api.baseUrl}/api/v1/applications/${appId}`, {

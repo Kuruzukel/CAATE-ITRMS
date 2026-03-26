@@ -181,6 +181,8 @@ function getFullName(app) {
 function getAvatarHtml(app) {
     // Priority: userData.profile_image (from trainees collection) > picture (from application form)
     const profileImage = app.userData?.profile_image || app.picture;
+    const fullName = getFullName(app);
+    const initials = getInitials(app);
 
     if (profileImage) {
         let imageSrc = profileImage;
@@ -192,15 +194,19 @@ function getAvatarHtml(app) {
             imageSrc = `${window.location.origin}/${cleanPath}`;
         }
 
-        const initials = getInitials(app);
-        return `<img src="${imageSrc}" alt="Avatar" class="avatar avatar-sm me-3 rounded-circle" 
-            style="width: 38px; height: 38px; object-fit: cover;" 
-            onerror="this.outerHTML='<div class=\\'avatar avatar-sm me-3\\' style=\\'background: linear-gradient(135deg, rgba(54, 145, 191, 0.1) 0%, rgba(50, 85, 150, 0.1) 100%); backdrop-filter: blur(10px) saturate(180%); -webkit-backdrop-filter: blur(10px) saturate(180%); border: 1px solid rgba(54, 145, 191, 0.4); box-shadow: 0 4px 12px rgba(22, 56, 86, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3); color: white; display: flex; align-items: center; justify-content: center; border-radius: 50%; width: 38px; height: 38px; font-weight: 600;\\'>${initials}</div>';">`;
+        return `
+            <div class="avatar avatar-sm me-3">
+                <img src="${imageSrc}" alt="${fullName}" class="rounded-circle" 
+                    style="width: 38px; height: 38px; object-fit: cover;" 
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="avatar-fallback" style="display: none; background: linear-gradient(135deg, rgba(54, 145, 191, 0.1) 0%, rgba(50, 85, 150, 0.1) 100%); backdrop-filter: blur(10px) saturate(180%); -webkit-backdrop-filter: blur(10px) saturate(180%); border: 1px solid rgba(54, 145, 191, 0.4); box-shadow: 0 4px 12px rgba(22, 56, 86, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3); color: white; align-items: center; justify-content: center; border-radius: 50%; width: 38px; height: 38px; font-weight: 600;">
+                    ${initials}
+                </div>
+            </div>
+        `;
     }
 
     // Fallback to initials
-    const initials = getInitials(app);
-
     return `
         <div class="avatar avatar-sm me-3"
             style="background: linear-gradient(135deg, rgba(54, 145, 191, 0.1) 0%, rgba(50, 85, 150, 0.1) 100%); 

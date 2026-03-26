@@ -76,7 +76,16 @@ class Application {
             ];
             
             $cursor = $this->collection->aggregate($pipeline);
-            return iterator_to_array($cursor);
+            $results = iterator_to_array($cursor);
+            
+            // Debug log
+            error_log("getAllWithUserData: Found " . count($results) . " applications");
+            if (count($results) > 0) {
+                error_log("First application user_id: " . json_encode($results[0]['user_id'] ?? 'null'));
+                error_log("First application userData: " . json_encode($results[0]['userData'] ?? 'null'));
+            }
+            
+            return $results;
         } catch (Exception $e) {
             error_log('Error in getAllWithUserData: ' . $e->getMessage());
             return $this->all();

@@ -195,8 +195,12 @@ function getFullName(app) {
 }
 
 function getAvatarHtml(app) {
-    // Check if user has profile_image
+    // Priority: userData.profile_image (from trainees collection) > picture (from application form)
     const profileImage = app.userData?.profile_image || app.picture;
+
+    console.log('getAvatarHtml - userData.profile_image:', app.userData?.profile_image);
+    console.log('getAvatarHtml - app.picture:', app.picture ? 'base64 data' : 'none');
+    console.log('getAvatarHtml - selected profileImage:', profileImage);
 
     if (profileImage) {
         let imageSrc = profileImage;
@@ -206,6 +210,7 @@ function getAvatarHtml(app) {
             // Remove leading slash if present
             const cleanPath = profileImage.startsWith('/') ? profileImage.substring(1) : profileImage;
             imageSrc = `${window.location.origin}/${cleanPath}`;
+            console.log('getAvatarHtml - constructed imageSrc:', imageSrc);
         }
 
         const initials = getInitials(app);

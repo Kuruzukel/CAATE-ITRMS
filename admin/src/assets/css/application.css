@@ -50,6 +50,33 @@
     border: 1px solid rgba(54, 145, 191, 0.15);
 }
 
+/* Invalid field highlighting styles */
+.form-control.is-invalid,
+.form-select.is-invalid {
+    border-color: #dc3545 !important;
+    background-color: rgba(220, 53, 69, 0.1) !important;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+    animation: invalidPulse 1.5s ease-in-out infinite;
+}
+
+.form-control.is-invalid:focus,
+.form-select.is-invalid:focus {
+    border-color: #dc3545 !important;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25), 0 0 0 0.1rem rgba(220, 53, 69, 0.1) !important;
+}
+
+@keyframes invalidPulse {
+    0% {
+        box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+    }
+    50% {
+        box-shadow: 0 0 0 0.3rem rgba(220, 53, 69, 0.4);
+    }
+    100% {
+        box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+    }
+}
+
 /* Toast Notification Styles - Same as Registration */
 .toast-container {
     position: fixed;

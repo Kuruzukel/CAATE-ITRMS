@@ -517,8 +517,52 @@ function editDetails(appId) {
         return;
     }
 
-    // Store original data for comparison
-    window.originalApplicationData = JSON.parse(JSON.stringify(app));
+    // Store original data in flat structure like registration.js
+    window.originalApplicationData = {
+        reference_number: app.reference_number || '',
+        uli: app.uli || '',
+        school_name: app.school_name || '',
+        school_address: app.school_address || '',
+        assessment_title: app.assessment_title || '',
+        application_date: app.application_date || '',
+        assessment_type: app.assessment_type || '',
+        client_type: app.client_type || '',
+        surname: app.name?.surname || '',
+        first_name: app.name?.first_name || '',
+        middle_name: app.name?.middle_name || '',
+        middle_initial: app.name?.middle_initial || '',
+        second_name: app.name?.second_name || '',
+        name_extension: app.name?.name_extension || '',
+        number_street: app.mailing_address?.number_street || '',
+        barangay: app.mailing_address?.barangay || '',
+        district: app.mailing_address?.district || '',
+        city: app.mailing_address?.city || '',
+        province: app.mailing_address?.province || '',
+        region: app.mailing_address?.region || '',
+        zip: app.mailing_address?.zip || '',
+        mothers_name: app.mothers_name || '',
+        fathers_name: app.fathers_name || '',
+        sex: app.sex || '',
+        civil_status: app.civil_status || '',
+        employment_status: app.employment_status || '',
+        age: app.age || '',
+        birth_date: app.birth_date || '',
+        birth_place: app.birth_place || '',
+        education: app.education || '',
+        parent_guardian_name: app.parent_guardian_name || '',
+        parent_guardian_address: app.parent_guardian_address || '',
+        tel: app.contact?.tel || '',
+        mobile: app.contact?.mobile || '',
+        fax: app.contact?.fax || '',
+        email: app.contact?.email || '',
+        other_contact: app.contact?.other_contact || '',
+        status: app.status || 'pending',
+        // Add dynamic arrays as JSON strings for comparison
+        work_experience: JSON.stringify(app.work_experience || []),
+        training_seminars: JSON.stringify(app.training_seminars || []),
+        licensure_exams: JSON.stringify(app.licensure_exams || []),
+        competency_assessments: JSON.stringify(app.competency_assessments || [])
+    };
 
     // Store application ID
     document.getElementById('editApplicationId').value = appId;
@@ -1019,6 +1063,15 @@ async function saveEditedApplication() {
         return;
     }
 
+    // Validation - Check required fields
+    const validationErrors = validateRequiredFields();
+    if (validationErrors.length > 0) {
+        const errorMessage = `Please fill in the following required fields:<br>${validationErrors.join('<br>')}`;
+        showError(errorMessage);
+        highlightInvalidFields(validationErrors);
+        return;
+    }
+
     // Collect updated data
     const updatedData = {
         reference_number: document.getElementById('editReferenceNumber').value,
@@ -1161,6 +1214,71 @@ async function saveEditedApplication() {
     });
     updatedData.competency_assessments = competencyAssessments;
 
+    // Check for changes using simple string comparison like registration.js
+    if (window.originalApplicationData) {
+        const currentData = {
+            reference_number: document.getElementById('editReferenceNumber').value.trim(),
+            uli: document.getElementById('editUli').value.trim(),
+            school_name: document.getElementById('editSchoolName').value.trim(),
+            school_address: document.getElementById('editSchoolAddress').value.trim(),
+            assessment_title: document.getElementById('editAssessmentTitle').value.trim(),
+            application_date: document.getElementById('editApplicationDate').value.trim(),
+            assessment_type: document.getElementById('editAssessmentType').value.trim(),
+            client_type: document.getElementById('editClientType').value.trim(),
+            surname: document.getElementById('editSurname').value.trim(),
+            first_name: document.getElementById('editFirstName').value.trim(),
+            middle_name: document.getElementById('editMiddleName').value.trim(),
+            middle_initial: document.getElementById('editMiddleInitial').value.trim(),
+            second_name: document.getElementById('editSecondName').value.trim(),
+            name_extension: document.getElementById('editNameExtension').value.trim(),
+            number_street: document.getElementById('editNumberStreet').value.trim(),
+            barangay: document.getElementById('editBarangay').value.trim(),
+            district: document.getElementById('editDistrict').value.trim(),
+            city: document.getElementById('editCity').value.trim(),
+            province: document.getElementById('editProvince').value.trim(),
+            region: document.getElementById('editRegion').value.trim(),
+            zip: document.getElementById('editZip').value.trim(),
+            mothers_name: document.getElementById('editMotherName').value.trim(),
+            fathers_name: document.getElementById('editFatherName').value.trim(),
+            sex: document.getElementById('editSex').value.trim(),
+            civil_status: document.getElementById('editCivilStatus').value.trim(),
+            employment_status: document.getElementById('editEmploymentStatus').value.trim(),
+            age: document.getElementById('editAge').value.trim(),
+            birth_date: document.getElementById('editBirthDate').value.trim(),
+            birth_place: document.getElementById('editBirthPlace').value.trim(),
+            education: document.getElementById('editEducation').value.trim(),
+            parent_guardian_name: document.getElementById('editParentGuardianName').value.trim(),
+            parent_guardian_address: document.getElementById('editParentGuardianAddress').value.trim(),
+            tel: document.getElementById('editTel').value.trim(),
+            mobile: document.getElementById('editMobile').value.trim(),
+            fax: document.getElementById('editFax').value.trim(),
+            email: document.getElementById('editEmail').value.trim(),
+            other_contact: document.getElementById('editOtherContact').value.trim(),
+            status: document.getElementById('editStatus').value.trim(),
+            // Add dynamic arrays as JSON strings for comparison
+            work_experience: JSON.stringify(workExperiences),
+            training_seminars: JSON.stringify(trainingSeminars),
+            licensure_exams: JSON.stringify(licensureExams),
+            competency_assessments: JSON.stringify(competencyAssessments)
+        };
+
+        let hasChanges = false;
+        for (const key in currentData) {
+            const originalValue = String(window.originalApplicationData[key] || '');
+            const currentValue = String(currentData[key] || '');
+            
+            if (originalValue !== currentValue) {
+                hasChanges = true;
+                break;
+            }
+        }
+
+        if (!hasChanges) {
+            showInfo('No changes were made to the application');
+            return;
+        }
+    }
+
     try {
         const response = await fetch(`${config.api.baseUrl}/api/v1/applications/${appId}`, {
             method: 'PUT',
@@ -1175,9 +1293,13 @@ async function saveEditedApplication() {
         if (result.success) {
             showSuccess('Application updated successfully');
 
-            // Close modal
+            // Close modal properly to avoid aria-hidden warning
             const modal = bootstrap.Modal.getInstance(document.getElementById('editDetailsModal'));
-            modal.hide();
+            if (modal) {
+                // Remove focus from save button before hiding modal
+                document.getElementById('saveEditBtn').blur();
+                modal.hide();
+            }
 
             // Reload applications
             await loadApplications();
@@ -1410,3 +1532,101 @@ function showToast(message, type = 'success') {
         setTimeout(() => toast.remove(), 300);
     }, 5000);
 }
+
+// Enhanced toast notification functions
+function showInfo(message) {
+    showToast(message, 'info');
+}
+
+function showWarning(message) {
+    showToast(message, 'warning');
+}
+
+// Validation function for required fields
+function validateRequiredFields() {
+    const errors = [];
+    const requiredFields = [
+        { id: 'editSurname', name: 'Surname' },
+        { id: 'editFirstName', name: 'First Name' },
+        { id: 'editNumberStreet', name: 'Number & Street' },
+        { id: 'editBarangay', name: 'Barangay' },
+        { id: 'editCity', name: 'City/Municipality' },
+        { id: 'editProvince', name: 'Province' },
+        { id: 'editRegion', name: 'Region' },
+        { id: 'editMobile', name: 'Mobile' },
+        { id: 'editEmail', name: 'Email' }
+    ];
+
+    requiredFields.forEach(field => {
+        const element = document.getElementById(field.id);
+        if (element && !element.value.trim()) {
+            errors.push(field.name);
+        }
+    });
+
+    // Email validation
+    const emailField = document.getElementById('editEmail');
+    if (emailField && emailField.value.trim()) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(emailField.value.trim())) {
+            errors.push('Valid Email address');
+        }
+    }
+
+    // Mobile validation (basic format)
+    const mobileField = document.getElementById('editMobile');
+    if (mobileField && mobileField.value.trim()) {
+        const mobileRegex = /^09\d{9}$/;
+        if (!mobileRegex.test(mobileField.value.trim().replace(/[^0-9]/g, ''))) {
+            errors.push('Valid Mobile number (09XX XXX XXXX)');
+        }
+    }
+
+    return errors;
+}
+
+// Function to highlight invalid fields
+function highlightInvalidFields(fieldNames) {
+    // Remove previous highlights
+    document.querySelectorAll('.is-invalid').forEach(field => {
+        field.classList.remove('is-invalid');
+    });
+
+    // Map field names to field IDs
+    const fieldMap = {
+        'Surname': 'editSurname',
+        'First Name': 'editFirstName',
+        'Number & Street': 'editNumberStreet',
+        'Barangay': 'editBarangay',
+        'City/Municipality': 'editCity',
+        'Province': 'editProvince',
+        'Region': 'editRegion',
+        'Mobile': 'editMobile',
+        'Email': 'editEmail',
+        'Valid Email address': 'editEmail',
+        'Valid Mobile number (09XX XXX XXXX)': 'editMobile'
+    };
+
+    fieldNames.forEach(fieldName => {
+        const fieldId = fieldMap[fieldName];
+        if (fieldId) {
+            const field = document.getElementById(fieldId);
+            if (field) {
+                field.classList.add('is-invalid');
+                // Scroll to first invalid field
+                if (fieldNames[0] === fieldName) {
+                    field.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    field.focus();
+                }
+            }
+        }
+    });
+
+    // Remove highlights after 5 seconds
+    setTimeout(() => {
+        document.querySelectorAll('.is-invalid').forEach(field => {
+            field.classList.remove('is-invalid');
+        });
+    }, 5000);
+}
+

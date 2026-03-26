@@ -11,7 +11,7 @@
         setupEventListeners();
     });
 
-    
+
     async function loadRegistrations(filters = {}) {
         try {
             const queryParams = new URLSearchParams({
@@ -24,7 +24,26 @@
             const data = await response.json();
 
             if (data.success) {
-                registrations = data.data;
+                // Fetch profile images for each registration
+                const registrationsWithImages = await Promise.all(
+                    data.data.map(async (registration) => {
+                        let profileImage = null;
+                        if (registration.userId) {
+                            try {
+                                const traineeResponse = await fetch(`${config.api.baseUrl}/api/v1/trainees/${registration.userId}`);
+                                const traineeData = await traineeResponse.json();
+                                if (traineeData.success && traineeData.data && traineeData.data.profile_image) {
+                                    profileImage = traineeData.data.profile_image;
+                                }
+                            } catch (error) {
+                                console.log('Could not fetch trainee profile:', error);
+                            }
+                        }
+                        return { ...registration, profileImage };
+                    })
+                );
+
+                registrations = registrationsWithImages;
                 renderRegistrations(registrations);
                 updateStatistics();
             } else {
@@ -37,7 +56,7 @@
         }
     }
 
-    
+
     async function loadCoursesForFilter() {
         const courseSelect = document.querySelectorAll('select')[1];
         if (!courseSelect) return;
@@ -65,7 +84,7 @@
         }
     }
 
-    
+
     function renderRegistrations(data) {
         const tbody = document.querySelector('.table tbody');
 
@@ -90,27 +109,59 @@
             const statusBadge = getStatusBadge(registration.status);
             const traineeId = registration.traineeId || 'N/A';
             const course = registration.selectedCourse || registration.courseQualification || 'N/A';
+            const profileImage = registration.profileImage;
+
+            // Create avatar HTML - use image if available, otherwise show initials
+            let avatarHtml;
+            if (profileImage) {
+                avatarHtml = `
+                    <div class="avatar avatar-sm me-3">
+                        <img src="${profileImage}" 
+                             alt="${fullName}" 
+                             class="rounded-circle" 
+                             style="width: 38px; height: 38px; object-fit: cover;"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="avatar-fallback" 
+                             style="display: none; background: linear-gradient(135deg, rgba(54, 145, 191, 0.1) 0%, rgba(50, 85, 150, 0.1) 100%); 
+                             backdrop-filter: blur(10px) saturate(180%); 
+                             -webkit-backdrop-filter: blur(10px) saturate(180%); 
+                             border: 1px solid rgba(54, 145, 191, 0.4); 
+                             box-shadow: 0 4px 12px rgba(22, 56, 86, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3); 
+                             color: white; 
+                             align-items: center; 
+                             justify-content: center; 
+                             border-radius: 50%; 
+                             width: 38px; 
+                             height: 38px; 
+                             font-weight: 600;">
+                            ${initials}
+                        </div>
+                    </div>`;
+            } else {
+                avatarHtml = `
+                    <div class="avatar avatar-sm me-3"
+                        style="background: linear-gradient(135deg, rgba(54, 145, 191, 0.1) 0%, rgba(50, 85, 150, 0.1) 100%); 
+                        backdrop-filter: blur(10px) saturate(180%); 
+                        -webkit-backdrop-filter: blur(10px) saturate(180%); 
+                        border: 1px solid rgba(54, 145, 191, 0.4); 
+                        box-shadow: 0 4px 12px rgba(22, 56, 86, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3); 
+                        color: white; 
+                        display: flex; 
+                        align-items: center; 
+                        justify-content: center; 
+                        border-radius: 50%; 
+                        width: 38px; 
+                        height: 38px; 
+                        font-weight: 600;">
+                        ${initials}
+                    </div>`;
+            }
 
             return `
                 <tr data-id="${registration._id.$oid}">
                     <td>
                         <div class="d-flex align-items-center">
-                            <div class="avatar avatar-sm me-3"
-                                style="background: linear-gradient(135deg, rgba(54, 145, 191, 0.1) 0%, rgba(50, 85, 150, 0.1) 100%); 
-                                backdrop-filter: blur(10px) saturate(180%); 
-                                -webkit-backdrop-filter: blur(10px) saturate(180%); 
-                                border: 1px solid rgba(54, 145, 191, 0.4); 
-                                box-shadow: 0 4px 12px rgba(22, 56, 86, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3); 
-                                color: white; 
-                                display: flex; 
-                                align-items: center; 
-                                justify-content: center; 
-                                border-radius: 50%; 
-                                width: 38px; 
-                                height: 38px; 
-                                font-weight: 600;">
-                                ${initials}
-                            </div>
+                            ${avatarHtml}
                             <span>${fullName}</span>
                         </div>
                     </td>
@@ -173,7 +224,7 @@
         attachActionListeners();
     }
 
-    
+
     function getInitials(name) {
         return name
             .split(' ')
@@ -184,7 +235,7 @@
             .substring(0, 2);
     }
 
-    
+
     function formatDate(dateString) {
         if (!dateString) return 'N/A';
 
@@ -224,7 +275,7 @@
         }
     }
 
-    
+
     function getStatusBadge(status) {
         const statusMap = {
             'approved': '<span class="badge bg-success">Approved</span>',
@@ -234,7 +285,7 @@
         return statusMap[status] || '<span class="badge bg-secondary">Unknown</span>';
     }
 
-    
+
     async function updateStatistics() {
         try {
             const response = await fetch(`${config.api.baseUrl}/api/v1/registrations?limit=1000`);
@@ -292,7 +343,7 @@
         }
     }
 
-    
+
     function calculatePercentage(current, previous) {
         if (previous === 0) {
             return current > 0 ? 100 : 0;
@@ -300,7 +351,7 @@
         return ((current - previous) / previous * 100).toFixed(1);
     }
 
-    
+
     function updateStatCard(index, value, percentage) {
         const cards = document.querySelectorAll('.card-body h3');
         if (cards[index]) {
@@ -333,7 +384,7 @@
         }
     }
 
-    
+
     function setupEventListeners() {
 
         const searchInput = document.querySelector('input[placeholder="Name or Trainee ID"]');
@@ -391,7 +442,7 @@
         }
     }
 
-    
+
     function applyFilters() {
         const searchValue = document.querySelector('input[placeholder="Name or Trainee ID"]')?.value.toLowerCase().trim();
         const statusValue = document.querySelector('select')?.value;
@@ -461,7 +512,7 @@
         }
     }
 
-    
+
     function clearAllHighlights() {
         const tbody = document.querySelector('.table tbody');
         if (tbody) {
@@ -482,7 +533,7 @@
         }
     }
 
-    
+
     function highlightSearchResults(searchTerm) {
         const tbody = document.querySelector('.table tbody');
         if (!tbody) return;
@@ -516,7 +567,7 @@
         }
     }
 
-    
+
     function resetFilters() {
         document.querySelector('input[placeholder="Name or Trainee ID"]').value = '';
         document.querySelector('select').value = '';
@@ -526,7 +577,7 @@
         renderRegistrations(registrations);
     }
 
-    
+
     function attachActionListeners() {
 
         document.querySelectorAll('.status-change').forEach(btn => {
@@ -559,7 +610,7 @@
         });
     }
 
-    
+
     async function updateStatus(id, status) {
         try {
             const response = await fetch(`${config.api.baseUrl}/api/v1/registrations/${id}`, {
@@ -584,7 +635,7 @@
         }
     }
 
-    
+
     function viewDetails(id) {
         const registration = registrations.find(r => r._id.$oid === id);
         if (!registration) {
@@ -683,7 +734,7 @@
         modal.show();
     }
 
-    
+
     async function editDetails(id) {
         const registration = registrations.find(r => r._id.$oid === id);
         if (!registration) {
@@ -825,7 +876,7 @@
         modal.show();
     }
 
-    
+
     async function loadCoursesForEditModal() {
         const dropdown = document.getElementById('editCourse');
         if (!dropdown) return;
@@ -853,7 +904,7 @@
         }
     }
 
-    
+
     async function saveEditedRegistration() {
         const form = document.getElementById('editRegistrationForm');
 
@@ -1030,7 +1081,7 @@
         }
     }
 
-    
+
     async function deleteRecord(id) {
         if (!confirm('Are you sure you want to delete this registration record?')) {
             return;
@@ -1055,7 +1106,7 @@
         }
     }
 
-    
+
     function debounce(func, wait) {
         let timeout;
         return function executedFunction(...args) {
@@ -1068,17 +1119,17 @@
         };
     }
 
-    
+
     function showSuccess(message) {
         showToast(message, 'success');
     }
 
-    
+
     function showError(message) {
         showToast(message, 'error');
     }
 
-    
+
     function showToast(message, type = 'success') {
         const container = document.getElementById('toastContainer');
         if (!container) return;
@@ -1105,7 +1156,7 @@
         }, 5000);
     }
 
-    
+
     function closeToast(button) {
         const toast = button.closest('.toast-notification');
         if (toast) {
@@ -1116,7 +1167,7 @@
         }
     }
 
-    
+
     function exportToCSV() {
         try {
             if (!registrations || registrations.length === 0) {
@@ -1168,7 +1219,7 @@
         }
     }
 
-    
+
     function exportToJSON() {
         try {
             if (!registrations || registrations.length === 0) {
@@ -1207,7 +1258,7 @@
         }
     }
 
-    
+
     async function openAddRegistrationModal() {
 
         await loadCoursesForModal();
@@ -1216,7 +1267,7 @@
         modal.show();
     }
 
-    
+
     async function loadCoursesForModal() {
         const dropdown = document.getElementById('addCourse');
         if (!dropdown) return;
@@ -1244,7 +1295,7 @@
         }
     }
 
-    
+
     async function saveNewRegistration() {
         const form = document.getElementById('addRegistrationForm');
 

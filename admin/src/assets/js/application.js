@@ -416,6 +416,10 @@ function editDetails(appId) {
     document.getElementById('editEducation').value = app.education || '';
     document.getElementById('editEmploymentStatus').value = app.employment_status || '';
 
+    // Parent Information
+    document.getElementById('editMotherName').value = app.mother_name || '';
+    document.getElementById('editFatherName').value = app.father_name || '';
+
     // Status
     document.getElementById('editStatus').value = app.status || 'pending';
 
@@ -461,6 +465,8 @@ async function saveEditedApplication() {
         birth_date: document.getElementById('editBirthDate').value,
         education: document.getElementById('editEducation').value,
         employment_status: document.getElementById('editEmploymentStatus').value,
+        mother_name: document.getElementById('editMotherName').value,
+        father_name: document.getElementById('editFatherName').value,
         status: document.getElementById('editStatus').value
     };
 

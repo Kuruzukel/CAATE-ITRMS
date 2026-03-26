@@ -88,9 +88,17 @@ function renderApplicationsTable(applications) {
     if (applications.length === 0) {
         tbody.innerHTML = `
             <tr>
-                <td colspan="6" class="text-center py-4">
-                    <i class="bx bx-info-circle" style="font-size: 3rem; color: #8592a3;"></i>
-                    <p class="mt-2 text-muted">No applications found</p>
+                <td colspan="6" class="text-center" style="padding: 60px 20px;">
+                    <div style="color: #697a8d;">
+                        <i class="bx bx-error-circle"
+                            style="font-size: 4rem; opacity: 0.3; display: block; margin-bottom: 15px; color: #ff3e1d;"></i>
+                        <h5 style="margin-bottom: 10px; color: #697a8d;">
+                            No application records available
+                        </h5>
+                        <p style="margin: 0; font-size: 0.9rem; opacity: 0.7;">
+                            There are currently no applications to review.
+                        </p>
+                    </div>
                 </td>
             </tr>
         `;
@@ -257,9 +265,17 @@ function showEmptyState() {
     if (tbody) {
         tbody.innerHTML = `
             <tr>
-                <td colspan="6" class="text-center py-4">
-                    <i class="bx bx-info-circle" style="font-size: 3rem; color: #8592a3;"></i>
-                    <p class="mt-2 text-muted">No applications found</p>
+                <td colspan="6" class="text-center" style="padding: 60px 20px;">
+                    <div style="color: #697a8d;">
+                        <i class="bx bx-error-circle"
+                            style="font-size: 4rem; opacity: 0.3; display: block; margin-bottom: 15px; color: #ff3e1d;"></i>
+                        <h5 style="margin-bottom: 10px; color: #697a8d;">
+                            No application records available
+                        </h5>
+                        <p style="margin: 0; font-size: 0.9rem; opacity: 0.7;">
+                            There are currently no applications to review.
+                        </p>
+                    </div>
                 </td>
             </tr>
         `;

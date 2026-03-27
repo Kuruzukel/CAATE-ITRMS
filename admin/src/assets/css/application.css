@@ -50,6 +50,25 @@
     border: 1px solid rgba(54, 145, 191, 0.15);
 }
 
+/* Calendar input white theme override for modals */
+.modal input[type="date"],
+.modal input[type="datetime-local"] {
+    color-scheme: light !important;
+}
+
+/* Specific styling for Submitted At and Last Updated */
+#addSubmittedAt,
+#addUpdatedAt,
+#editSubmittedAt,
+#editUpdatedAt {
+    color-scheme: light !important;
+}
+
+/* Keep filter date input dark */
+#applicationDateFilter {
+    color-scheme: light !important;
+}
+
 /* Invalid field highlighting styles */
 .form-control.is-invalid,
 .form-select.is-invalid {
@@ -69,9 +88,11 @@
     0% {
         box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
     }
+
     50% {
         box-shadow: 0 0 0 0.3rem rgba(220, 53, 69, 0.4);
     }
+
     100% {
         box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
     }

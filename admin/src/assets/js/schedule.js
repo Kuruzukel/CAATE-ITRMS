@@ -433,7 +433,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                         flex-shrink: 0;">
                                 ${initials}
                             </div>
-                            <div class="flex-grow-1">
+                            <div class="grow">
                                 <div class="d-flex justify-content-between align-items-start">
                                     <div>
                                         <h6 class="mb-1">${client}</h6>
@@ -549,7 +549,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                         flex-shrink: 0;">
                                 ${initials}
                             </div>
-                            <div class="flex-grow-1">
+                            <div class="grow">
                                 <div class="d-flex justify-content-between align-items-start">
                                     <div>
                                         <h6 class="mb-1">${client}</h6>

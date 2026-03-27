@@ -174,11 +174,11 @@ small.text-muted {
     align-items: center;
 }
 
-.navbar-dropdown.dropdown-user .flex-shrink-0 {
+.navbar-dropdown.dropdown-user .shrink-0 {
     flex-shrink: 0;
 }
 
-.navbar-dropdown.dropdown-user .flex-grow-1 {
+.navbar-dropdown.dropdown-user .grow {
     flex-grow: 1;
 }
 
@@ -466,12 +466,12 @@ small.text-muted {
 }
 
 /* Restore icon colors */
-.avatar.flex-shrink-0 i {
+.avatar.shrink-0 i {
     color: #10b981 !important;
     /* Green for book icon */
 }
 
-.avatar.flex-shrink-0 i.bx-award {
+.avatar.shrink-0 i.bx-award {
     color: #3b82f6 !important;
     /* Blue for award icon */
 }

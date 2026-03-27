@@ -426,7 +426,7 @@ function updateCourseEnrollmentUI(data) {
         li.className = isLast ? 'd-flex' : 'd-flex mb-4 pb-1';
 
         const avatarDiv = document.createElement('div');
-        avatarDiv.className = 'avatar flex-shrink-0 me-3';
+        avatarDiv.className = 'avatar shrink-0 me-3';
 
         const img = document.createElement('img');
         img.alt = course.name;
@@ -633,7 +633,7 @@ function updateRecentEnrollmentActivityUI(activities) {
         }
 
         li.innerHTML = `
-            <div class="avatar flex-shrink-0 me-3">
+            <div class="avatar shrink-0 me-3">
                 ${avatarHTML}
             </div>
             <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
@@ -671,7 +671,7 @@ function updateRecentEnrollmentUI(enrollments) {
 
         return `
             <li class="d-flex ${isLast ? '' : 'mb-4 pb-1'}">
-                <div class="avatar flex-shrink-0 me-3">
+                <div class="avatar shrink-0 me-3">
                     <span class="avatar-initial rounded-circle bg-label-${statusConfig.color}">
                         <i class="bx bx-user"></i>
                     </span>

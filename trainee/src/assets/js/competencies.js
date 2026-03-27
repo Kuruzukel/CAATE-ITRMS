@@ -107,7 +107,7 @@ function createCourseCard(course) {
             <div class="card-body d-flex flex-column">
                 <span class="badge ${badgeClass} mb-2 align-self-start">${badgeText}</span>
                 <h5 class="card-title">${course.title || 'Untitled Course'}</h5>
-                <div class="card-text flex-grow-1">
+                <div class="card-text grow">
                     ${basicComp.length > 0 ? `
                         <div class="mb-2">
                             <strong class="text-primary">Basic Competencies:</strong>

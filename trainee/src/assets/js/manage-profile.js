@@ -339,7 +339,7 @@ function updateNavbarUserInfo(data) {
     });
 
     // Also update the specific dropdown element (legacy support)
-    const userName = document.querySelector('.dropdown-menu .flex-grow-1 .fw-semibold');
+    const userName = document.querySelector('.dropdown-menu .grow .fw-semibold');
     if (userName) {
         userName.textContent = displayName;
     }

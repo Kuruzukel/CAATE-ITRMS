@@ -2,24 +2,28 @@
 
 require_once __DIR__ . '/../config/database.php';
 
-class RegistrationController {
-    
-    public function store() {
+use MongoDB\Exception\InvalidArgumentException;
+
+class RegistrationController
+{
+
+    public function store()
+    {
         header('Content-Type: application/json');
         header('Access-Control-Allow-Origin: *');
         header('Access-Control-Allow-Methods: POST, OPTIONS');
         header('Access-Control-Allow-Headers: Content-Type, Authorization');
-        
+
         // Handle preflight OPTIONS request
         if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
             http_response_code(200);
             exit();
         }
-        
+
         try {
             // Get JSON input
             $input = json_decode(file_get_contents('php://input'), true);
-            
+
             if (!$input) {
                 http_response_code(400);
                 echo json_encode([
@@ -28,17 +32,17 @@ class RegistrationController {
                 ]);
                 return;
             }
-            
+
             // Validate required fields
-            $requiredFields = ['firstName', 'sex', 'civilStatus'];
+            $requiredFields = ['firstName', 'lastName', 'sex', 'civilStatus'];
             $missingFields = [];
-            
+
             foreach ($requiredFields as $field) {
                 if (!isset($input[$field]) || empty(trim($input[$field]))) {
                     $missingFields[] = $field;
                 }
             }
-            
+
             if (!empty($missingFields)) {
                 http_response_code(400);
                 echo json_encode([
@@ -47,23 +51,23 @@ class RegistrationController {
                 ]);
                 return;
             }
-            
+
             // Get MongoDB connection
             $db = getMongoConnection();
-            
+
             // Get trainee information from userId if provided
             $traineeId = null;
             $traineeFullName = null;
-            
+
             if (isset($input['userId']) && !empty($input['userId'])) {
                 try {
                     $trainee = $db->trainees->findOne(['_id' => new MongoDB\BSON\ObjectId($input['userId'])]);
                     if ($trainee) {
                         $traineeId = $trainee['trainee_id'] ?? null;
                         $traineeFullName = trim(
-                            ($trainee['first_name'] ?? '') . ' ' . 
-                            ($trainee['middle_name'] ?? '') . ' ' . 
-                            ($trainee['last_name'] ?? '')
+                            ($trainee['first_name'] ?? '') . ' ' .
+                                ($trainee['middle_name'] ?? '') . ' ' .
+                                ($trainee['last_name'] ?? '')
                         );
                     }
                 } catch (Exception $e) {
@@ -71,7 +75,7 @@ class RegistrationController {
                     error_log('Failed to lookup trainee: ' . $e->getMessage());
                 }
             }
-            
+
             // Prepare registration data
             $registrationData = [
                 'userId' => $input['userId'] ?? null,
@@ -118,10 +122,10 @@ class RegistrationController {
                 'createdAt' => new MongoDB\BSON\UTCDateTime(),
                 'updatedAt' => new MongoDB\BSON\UTCDateTime()
             ];
-            
+
             // Insert into registrations collection
             $result = $db->registrations->insertOne($registrationData);
-            
+
             if ($result->getInsertedCount() > 0) {
                 echo json_encode([
                     'success' => true,
@@ -134,42 +138,36 @@ class RegistrationController {
             } else {
                 throw new Exception('Failed to insert registration');
             }
-            
-        } catch (MongoDB\Driver\Exception\Exception $e) {
-            http_response_code(500);
-            echo json_encode([
-                'success' => false,
-                'message' => 'Database error: ' . $e->getMessage()
-            ]);
         } catch (Exception $e) {
             http_response_code(500);
             echo json_encode([
                 'success' => false,
-                'message' => 'Server error: ' . $e->getMessage()
+                'message' => 'Error: ' . $e->getMessage()
             ]);
         }
     }
-    
-    public function index() {
+
+    public function index()
+    {
         header('Content-Type: application/json');
         header('Access-Control-Allow-Origin: *');
-        
+
         try {
             $db = getMongoConnection();
-            
+
             // Get query parameters
             $page = intval($_GET['page'] ?? 1);
             $limit = intval($_GET['limit'] ?? 10);
             $status = $_GET['status'] ?? null;
-            
+
             $skip = ($page - 1) * $limit;
-            
+
             // Build filter
             $filter = [];
             if ($status) {
                 $filter['status'] = $status;
             }
-            
+
             // Get registrations with pagination
             $registrations = $db->registrations->find(
                 $filter,
@@ -179,10 +177,10 @@ class RegistrationController {
                     'limit' => $limit
                 ]
             )->toArray();
-            
+
             // Get total count
             $total = $db->registrations->countDocuments($filter);
-            
+
             echo json_encode([
                 'success' => true,
                 'data' => $registrations,
@@ -193,7 +191,6 @@ class RegistrationController {
                     'pages' => ceil($total / $limit)
                 ]
             ]);
-            
         } catch (Exception $e) {
             http_response_code(500);
             echo json_encode([
@@ -202,16 +199,17 @@ class RegistrationController {
             ]);
         }
     }
-    
-    public function show($id) {
+
+    public function show($id)
+    {
         header('Content-Type: application/json');
         header('Access-Control-Allow-Origin: *');
-        
+
         try {
             $db = getMongoConnection();
-            
+
             $registration = $db->registrations->findOne(['_id' => new MongoDB\BSON\ObjectId($id)]);
-            
+
             if ($registration) {
                 echo json_encode([
                     'success' => true,
@@ -224,8 +222,7 @@ class RegistrationController {
                     'message' => 'Registration not found'
                 ]);
             }
-            
-        } catch (MongoDB\Driver\Exception\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             http_response_code(400);
             echo json_encode([
                 'success' => false,
@@ -239,22 +236,23 @@ class RegistrationController {
             ]);
         }
     }
-    
-    public function update($id) {
+
+    public function update($id)
+    {
         header('Content-Type: application/json');
         header('Access-Control-Allow-Origin: *');
         header('Access-Control-Allow-Methods: PUT, OPTIONS');
         header('Access-Control-Allow-Headers: Content-Type, Authorization');
-        
+
         // Handle preflight OPTIONS request
         if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
             http_response_code(200);
             exit();
         }
-        
+
         try {
             $input = json_decode(file_get_contents('php://input'), true);
-            
+
             if (!$input) {
                 http_response_code(400);
                 echo json_encode([
@@ -263,17 +261,17 @@ class RegistrationController {
                 ]);
                 return;
             }
-            
+
             $db = getMongoConnection();
-            
+
             // Add updated timestamp
             $input['updatedAt'] = new MongoDB\BSON\UTCDateTime();
-            
+
             $result = $db->registrations->updateOne(
                 ['_id' => new MongoDB\BSON\ObjectId($id)],
                 ['$set' => $input]
             );
-            
+
             if ($result->getMatchedCount() > 0) {
                 echo json_encode([
                     'success' => true,
@@ -286,8 +284,7 @@ class RegistrationController {
                     'message' => 'Registration not found'
                 ]);
             }
-            
-        } catch (MongoDB\Driver\Exception\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             http_response_code(400);
             echo json_encode([
                 'success' => false,

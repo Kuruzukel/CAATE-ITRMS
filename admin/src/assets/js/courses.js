@@ -443,7 +443,7 @@ function renderCourses(coursesData) {
                 <div class="card-body d-flex flex-column">
                     <span class="badge ${badgeClass} mb-2 align-self-start">${badge}</span>
                     <h5 class="card-title">${course.title}</h5>
-                    <p class="card-text flex-grow-1">${course.description}</p>
+                    <p class="card-text grow">${course.description}</p>
                     <div class="d-flex justify-content-between align-items-center mt-3">
                         <small><i class="fas fa-clock me-1"></i> ${hours}</small>
                         <button class="btn btn-sm btn-outline-primary edit-course-btn"

@@ -57,10 +57,10 @@
     display: flex;
     align-items: center;
 }
-.navbar-dropdown.dropdown-user .flex-shrink-0 {
+.navbar-dropdown.dropdown-user .shrink-0 {
     flex-shrink: 0;
 }
-.navbar-dropdown.dropdown-user .flex-grow-1 {
+.navbar-dropdown.dropdown-user .grow {
     flex-grow: 1;
 }
 .navbar-dropdown.dropdown-user .fw-semibold {

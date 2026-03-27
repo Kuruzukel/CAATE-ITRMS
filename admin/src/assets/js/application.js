@@ -300,7 +300,7 @@ function formatDate(dateValue) {
 
     try {
         let date;
-        
+
         // Handle different MongoDB date formats
         if (dateValue.$date) {
             // MongoDB extended JSON format
@@ -342,7 +342,7 @@ async function testAPI() {
         const response = await fetch(`${config.api.baseUrl}/api/v1/applications`);
         const result = await response.json();
         console.log('API Test Result:', result);
-        
+
         if (result.success && result.data) {
             console.log('Applications count:', result.data.length);
             console.log('Sample application:', result.data[0]);
@@ -358,11 +358,11 @@ function testChangeDetection() {
     const surnameField = document.getElementById('editSurname');
     const originalValue = surnameField.value;
     surnameField.value = originalValue + ' '; // Add a space
-    
+
     console.log('Test: Added space to surname field');
     console.log('Original:', originalValue);
     console.log('New:', surnameField.value);
-    
+
     // Now try to save
     document.getElementById('saveEditBtn').click();
 }
@@ -1143,7 +1143,7 @@ async function saveEditedApplication() {
     console.log('Starting validation...');
     const validationErrors = validateRequiredFields();
     console.log('Validation errors:', validationErrors);
-    
+
     if (validationErrors.length > 0) {
         const errorMessage = `Please fill in the following required fields:<br>${validationErrors.join('<br>')}`;
         console.log('Validation failed, showing error');
@@ -1292,7 +1292,7 @@ async function saveEditedApplication() {
         }
     });
     updatedData.competency_assessments = competencyAssessments;
-    
+
     console.log('Dynamic arrays collected:', {
         workExperiences: workExperiences.length,
         trainingSeminars: trainingSeminars.length,
@@ -1357,13 +1357,13 @@ async function saveEditedApplication() {
             work_experience: currentData.work_experience?.substring(0, 100) + '...',
             competency_assessments: currentData.competency_assessments?.substring(0, 100) + '...'
         });
-        
+
         let hasChanges = false;
         let changeCount = 0;
         for (const key in currentData) {
             const originalValue = String(window.originalApplicationData[key] || '');
             const currentValue = String(currentData[key] || '');
-            
+
             if (originalValue !== currentValue) {
                 console.log(`Change detected in ${key}: "${originalValue}" -> "${currentValue}"`);
                 hasChanges = true;
@@ -1389,7 +1389,7 @@ async function saveEditedApplication() {
     try {
         console.log('Saving application with ID:', appId);
         console.log('Data being sent to server:', updatedData);
-        
+
         const response = await fetch(`${config.api.baseUrl}/api/v1/applications/${appId}`, {
             method: 'PUT',
             headers: {
@@ -1742,3 +1742,384 @@ function highlightInvalidFields(fieldNames) {
     }, 5000);
 }
 
+
+
+// Export CSV functionality
+document.getElementById('exportCsvBtn')?.addEventListener('click', function () {
+    exportToCSV();
+});
+
+// Export JSON functionality
+document.getElementById('exportJsonBtn')?.addEventListener('click', function () {
+    exportToJSON();
+});
+
+// Add Application Button
+document.getElementById('addApplicationBtn')?.addEventListener('click', function () {
+    const modal = new bootstrap.Modal(document.getElementById('addApplicationModal'));
+    modal.show();
+});
+
+// Save Application Button
+document.getElementById('saveApplicationBtn')?.addEventListener('click', async function () {
+    await saveNewApplication();
+});
+
+function exportToCSV() {
+    if (allApplications.length === 0) {
+        showError('No data to export');
+        return;
+    }
+
+    const headers = ['Name', 'Trainee ID', 'Course', 'Date', 'Status', 'Reference Number', 'ULI', 'Email', 'Mobile'];
+    const rows = allApplications.map(app => [
+        getFullName(app),
+        app.userData?.trainee_id || 'N/A',
+        app.assessment_title || 'N/A',
+        formatDate(app.application_date || app.submitted_at),
+        app.status || 'pending',
+        app.reference_number || 'N/A',
+        app.uli || 'N/A',
+        app.contact?.email || 'N/A',
+        app.contact?.mobile || 'N/A'
+    ]);
+
+    let csvContent = headers.join(',') + '\n';
+    rows.forEach(row => {
+        csvContent += row.map(cell => `"${cell}"`).join(',') + '\n';
+    });
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `applications_${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    showSuccess('Applications exported to CSV successfully');
+}
+
+function exportToJSON() {
+    if (allApplications.length === 0) {
+        showError('No data to export');
+        return;
+    }
+
+    const dataStr = JSON.stringify(allApplications, null, 2);
+    const blob = new Blob([dataStr], { type: 'application/json' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `applications_${new Date().toISOString().split('T')[0]}.json`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    showSuccess('Applications exported to JSON successfully');
+}
+
+async function saveNewApplication() {
+    try {
+        // Collect form data
+        const formData = {
+            reference_number: document.getElementById('addReferenceNumber').value,
+            uli: document.getElementById('addUli').value,
+            school_name: document.getElementById('addSchoolName').value,
+            school_address: document.getElementById('addSchoolAddress').value,
+            assessment_title: document.getElementById('addAssessmentTitle').value,
+            application_date: document.getElementById('addApplicationDate').value,
+            assessment_type: document.getElementById('addAssessmentType').value,
+            client_type: document.getElementById('addClientType').value,
+            name: {
+                surname: document.getElementById('addSurname').value,
+                first_name: document.getElementById('addFirstName').value,
+                middle_name: document.getElementById('addMiddleName').value,
+                middle_initial: document.getElementById('addMiddleInitial').value,
+                second_name: document.getElementById('addSecondName').value,
+                name_extension: document.getElementById('addNameExtension').value
+            },
+            mailing_address: {
+                number_street: document.getElementById('addNumberStreet').value,
+                barangay: document.getElementById('addBarangay').value,
+                district: document.getElementById('addDistrict').value,
+                city: document.getElementById('addCity').value,
+                province: document.getElementById('addProvince').value,
+                region: document.getElementById('addRegion').value,
+                zip: document.getElementById('addZip').value
+            },
+            mothers_name: document.getElementById('addMotherName').value,
+            fathers_name: document.getElementById('addFatherName').value,
+            sex: document.querySelector('input[name="addSex"]:checked')?.value || '',
+            civil_status: document.querySelector('input[name="addCivilStatus"]:checked')?.value || '',
+            employment_status: document.querySelector('input[name="addEmploymentStatus"]:checked')?.value || '',
+            age: parseInt(document.getElementById('addAge').value) || 0,
+            birth_date: document.getElementById('addBirthDate').value,
+            birth_place: document.getElementById('addBirthPlace').value,
+            education: document.getElementById('addEducation').value,
+            contact: {
+                tel: document.getElementById('addTel').value,
+                mobile: document.getElementById('addMobile').value,
+                fax: document.getElementById('addFax').value,
+                email: document.getElementById('addEmail').value,
+                other_contact: document.getElementById('addOtherContact').value
+            },
+            status: document.getElementById('addStatus').value,
+            trainee_id: document.getElementById('addTraineeId').value,
+            submitted_at: new Date().toISOString()
+        };
+
+        // Handle file uploads (picture and signature)
+        const pictureFile = document.getElementById('addPicture').files[0];
+        const signatureFile = document.getElementById('addSignature').files[0];
+
+        if (pictureFile) {
+            formData.picture = await fileToBase64(pictureFile);
+        }
+
+        if (signatureFile) {
+            formData.signature = await fileToBase64(signatureFile);
+        }
+
+        // Send to API
+        const response = await fetch(`${config.api.baseUrl}/api/v1/applications`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            showSuccess('Application added successfully');
+
+            // Close modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('addApplicationModal'));
+            modal.hide();
+
+            // Reset form
+            document.getElementById('addApplicationForm').reset();
+
+            // Reload applications
+            await loadApplications();
+        } else {
+            showError('Failed to add application: ' + result.message);
+        }
+    } catch (error) {
+        console.error('Error adding application:', error);
+        showError('Error adding application');
+    }
+}
+
+function fileToBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+    });
+}
+
+// Dynamic array functions for Add Modal
+function addWorkExperienceToAddModal() {
+    const container = document.getElementById('addWorkExperienceContainer');
+    const count = container.querySelectorAll('.work-experience-item').length + 1;
+
+    const newItem = document.createElement('div');
+    newItem.className = 'work-experience-item mb-3';
+    newItem.innerHTML = `
+        <div class="card" style="background: rgba(255,255,255,0.05);">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h6 class="text-white mb-0">Work Experience ${count}</h6>
+                    <button type="button" class="btn btn-sm btn-danger" onclick="this.closest('.work-experience-item').remove()">
+                        <i class="bx bx-trash"></i>
+                    </button>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-white">Company</label>
+                        <input type="text" class="form-control work-company" placeholder="Enter company name">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-white">Position</label>
+                        <input type="text" class="form-control work-position" placeholder="Enter position">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label text-white">Inclusive Dates</label>
+                        <input type="text" class="form-control work-dates" placeholder="e.g., Jan 2020 - Dec 2021">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label text-white">Monthly Salary</label>
+                        <input type="text" class="form-control work-salary" placeholder="Enter salary">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label text-white">Status of Appointment</label>
+                        <input type="text" class="form-control work-status" placeholder="e.g., Permanent">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <label class="form-label text-white">Years of Experience</label>
+                        <input type="text" class="form-control work-years" placeholder="Enter years">
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    container.appendChild(newItem);
+}
+
+function addTrainingSeminarToAddModal() {
+    const container = document.getElementById('addTrainingSeminarContainer');
+    const count = container.querySelectorAll('.training-seminar-item').length + 1;
+
+    const newItem = document.createElement('div');
+    newItem.className = 'training-seminar-item mb-3';
+    newItem.innerHTML = `
+        <div class="card" style="background: rgba(255,255,255,0.05);">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h6 class="text-white mb-0">Training/Seminar ${count}</h6>
+                    <button type="button" class="btn btn-sm btn-danger" onclick="this.closest('.training-seminar-item').remove()">
+                        <i class="bx bx-trash"></i>
+                    </button>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-white">Title</label>
+                        <input type="text" class="form-control training-title" placeholder="Enter training title">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-white">Venue</label>
+                        <input type="text" class="form-control training-venue" placeholder="Enter venue">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label text-white">Inclusive Dates</label>
+                        <input type="text" class="form-control training-dates" placeholder="e.g., Jan 1-5, 2021">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label text-white">Number of Hours</label>
+                        <input type="text" class="form-control training-hours" placeholder="Enter hours">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label text-white">Conducted By</label>
+                        <input type="text" class="form-control training-conductor" placeholder="Enter conductor">
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    container.appendChild(newItem);
+}
+
+function addLicensureExamToAddModal() {
+    const container = document.getElementById('addLicensureExamContainer');
+    const count = container.querySelectorAll('.licensure-exam-item').length + 1;
+
+    const newItem = document.createElement('div');
+    newItem.className = 'licensure-exam-item mb-3';
+    newItem.innerHTML = `
+        <div class="card" style="background: rgba(255,255,255,0.05);">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h6 class="text-white mb-0">Licensure Examination ${count}</h6>
+                    <button type="button" class="btn btn-sm btn-danger" onclick="this.closest('.licensure-exam-item').remove()">
+                        <i class="bx bx-trash"></i>
+                    </button>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-white">Title</label>
+                        <input type="text" class="form-control licensure-title" placeholder="Enter examination title">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-white">Year Taken</label>
+                        <input type="text" class="form-control licensure-year" placeholder="Enter year">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label text-white">Examination Venue</label>
+                        <input type="text" class="form-control licensure-venue" placeholder="Enter venue">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label text-white">Rating</label>
+                        <input type="text" class="form-control licensure-rating" placeholder="Enter rating">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label text-white">Remarks</label>
+                        <input type="text" class="form-control licensure-remarks" placeholder="e.g., Passed">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <label class="form-label text-white">Expiry Date</label>
+                        <input type="date" class="form-control licensure-expiry">
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    container.appendChild(newItem);
+}
+
+function addCompetencyAssessmentToAddModal() {
+    const container = document.getElementById('addCompetencyAssessmentContainer');
+    const count = container.querySelectorAll('.competency-assessment-item').length + 1;
+
+    const newItem = document.createElement('div');
+    newItem.className = 'competency-assessment-item mb-3';
+    newItem.innerHTML = `
+        <div class="card" style="background: rgba(255,255,255,0.05);">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h6 class="text-white mb-0">Competency Assessment ${count}</h6>
+                    <button type="button" class="btn btn-sm btn-danger" onclick="this.closest('.competency-assessment-item').remove()">
+                        <i class="bx bx-trash"></i>
+                    </button>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-white">Title</label>
+                        <input type="text" class="form-control competency-title" placeholder="Enter assessment title">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-white">Qualification Level</label>
+                        <input type="text" class="form-control competency-level" placeholder="e.g., NC II">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label text-white">Industry Sector</label>
+                        <input type="text" class="form-control competency-sector" placeholder="Enter sector">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label text-white">Certificate Number</label>
+                        <input type="text" class="form-control competency-cert" placeholder="Enter certificate number">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label text-white">Date of Issuance</label>
+                        <input type="date" class="form-control competency-issued">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <label class="form-label text-white">Expiration Date</label>
+                        <input type="date" class="form-control competency-expiry">
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    container.appendChild(newItem);
+}

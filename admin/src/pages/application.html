@@ -363,10 +363,25 @@
                                 <div class="card">
                                     <div class="card-header d-flex justify-content-between align-items-center">
                                         <h5 class="mb-0">Application History</h5>
-                                        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
-                                            data-bs-target="#printExportModal">
-                                            <i class="bx bx-download"></i> Print/Export
-                                        </button>
+                                        <div class="d-flex gap-2">
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-primary dropdown-toggle"
+                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="bx bx-download"></i> Export
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li><a class="dropdown-item" href="javascript:void(0);"
+                                                            id="exportCsvBtn"><i class="bx bx-file me-2"></i>Export as
+                                                            CSV</a></li>
+                                                    <li><a class="dropdown-item" href="javascript:void(0);"
+                                                            id="exportJsonBtn"><i class="bx bx-code-alt me-2"></i>Export
+                                                            as JSON</a></li>
+                                                </ul>
+                                            </div>
+                                            <button type="button" class="btn btn-primary" id="addApplicationBtn">
+                                                <i class="bx bx-plus"></i> Add New Application
+                                            </button>
+                                        </div>
                                     </div>
                                     <div class="card-body">
 
@@ -501,35 +516,588 @@
 
 
 
-    <div class="modal fade" id="printExportModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
+    <!-- Add New Application Modal -->
+    <div class="modal fade" id="addApplicationModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document" style="max-width: 95%;">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Print / Export</h5>
+                    <h5 class="modal-title">Add New Application</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <p class="mb-4">Select an option to export or print the enrollment records:</p>
-                    <div class="d-grid gap-3">
-                        <button type="button"
-                            class="btn btn-outline-primary d-flex align-items-center justify-content-center gap-2">
-                            <i class="bx bx-printer"></i>
-                            Print Records
+                <div class="modal-body" style="max-height: 75vh; overflow-y: auto;">
+                    <form id="addApplicationForm">
+                        <!-- Reference & Identification -->
+                        <h6 class="mb-3"><i class="bx bx-id-card me-2"></i>Reference & Identification</h6>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="addReferenceNumber" class="form-label text-white">Reference Number</label>
+                                <input type="text" id="addReferenceNumber" name="referenceNumber" class="form-control"
+                                    placeholder="Enter reference number">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="addUli" class="form-label text-white">ULI</label>
+                                <input type="text" id="addUli" name="uli" class="form-control" placeholder="Enter ULI">
+                            </div>
+                        </div>
+
+                        <!-- Picture & Signature -->
+                        <h6 class="mb-3 mt-3"><i class="bx bx-image me-2"></i>Picture & Signature</h6>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="addPicture" class="form-label text-white">Picture</label>
+                                <input type="file" id="addPicture" name="picture" class="form-control" accept="image/*">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="addSignature" class="form-label text-white">Signature</label>
+                                <input type="file" id="addSignature" name="signature" class="form-control"
+                                    accept="image/*">
+                            </div>
+                        </div>
+
+                        <!-- School Information -->
+                        <h6 class="mb-3 mt-3"><i class="bx bx-building me-2"></i>School Information</h6>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="addSchoolName" class="form-label text-white">School Name</label>
+                                <select id="addSchoolName" name="schoolName" class="form-select">
+                                    <option value="">Select school/training center...</option>
+                                    <option value="Creative Aesthetic Academy & Technical Education Inc.">Creative
+                                        Aesthetic Academy & Technical Education Inc.</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="addSchoolAddress" class="form-label text-white">School Address</label>
+                                <textarea id="addSchoolAddress" name="schoolAddress" class="form-control" rows="2"
+                                    placeholder="Enter school address"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Assessment Information -->
+                        <h6 class="mb-3 mt-3"><i class="bx bx-book-open me-2"></i>Assessment Information</h6>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="addAssessmentTitle" class="form-label text-white">Assessment Title</label>
+                                <input type="text" id="addAssessmentTitle" name="assessmentTitle" class="form-control"
+                                    placeholder="Enter assessment title">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="addApplicationDate" class="form-label text-white">Application Date</label>
+                                <input type="date" id="addApplicationDate" name="applicationDate" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="addAssessmentType" class="form-label text-white">Assessment Type</label>
+                                <select id="addAssessmentType" name="assessmentType" class="form-select">
+                                    <option value="">Select assessment type</option>
+                                    <option value="full">Full Qualification</option>
+                                    <option value="coc">COC</option>
+                                    <option value="renewal">Renewal</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="addClientType" class="form-label text-white">Client Type</label>
+                                <select id="addClientType" name="clientType" class="form-select">
+                                    <option value="">Select client type</option>
+                                    <option value="tvet-graduating">TVET Graduating Student</option>
+                                    <option value="tvet-graduate">TVET Graduate</option>
+                                    <option value="industry-worker">Industry Worker</option>
+                                    <option value="k12">K-12</option>
+                                    <option value="owf">OWF</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Personal Information -->
+                        <h6 class="mb-3 mt-3"><i class="bx bx-user me-2"></i>Personal Information</h6>
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label for="addSurname" class="form-label text-white">Surname</label>
+                                <input type="text" id="addSurname" name="surname" class="form-control"
+                                    placeholder="Enter surname">
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="addFirstName" class="form-label text-white">First Name</label>
+                                <input type="text" id="addFirstName" name="firstName" class="form-control"
+                                    placeholder="Enter first name">
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="addMiddleName" class="form-label text-white">Middle Name</label>
+                                <input type="text" id="addMiddleName" name="middleName" class="form-control"
+                                    placeholder="Enter middle name">
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="addMiddleInitial" class="form-label text-white">Middle Initial</label>
+                                <input type="text" id="addMiddleInitial" name="middleInitial" class="form-control"
+                                    placeholder="M.I." maxlength="1">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="addSecondName" class="form-label text-white">Second Name</label>
+                                <input type="text" id="addSecondName" name="secondName" class="form-control"
+                                    placeholder="Enter second name">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="addNameExtension" class="form-label text-white">Name Extension</label>
+                                <input type="text" id="addNameExtension" name="nameExtension" class="form-control"
+                                    placeholder="Jr., Sr., III, etc.">
+                            </div>
+                        </div>
+
+                        <!-- Mailing Address -->
+                        <h6 class="mb-3 mt-3"><i class="bx bx-map me-2"></i>Mailing Address</h6>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="addNumberStreet" class="form-label text-white">Number & Street</label>
+                                <input type="text" id="addNumberStreet" name="numberStreet" class="form-control"
+                                    placeholder="House/Building No. and Street">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="addBarangay" class="form-label text-white">Barangay</label>
+                                <input type="text" id="addBarangay" name="barangay" class="form-control"
+                                    placeholder="Enter barangay">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="addDistrict" class="form-label text-white">District</label>
+                                <input type="number" id="addDistrict" name="district" class="form-control"
+                                    placeholder="Enter district number" min="1" max="9">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="addCity" class="form-label text-white">City/Municipality</label>
+                                <input type="text" id="addCity" name="city" class="form-control"
+                                    placeholder="Enter city">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="addProvince" class="form-label text-white">Province</label>
+                                <input type="text" id="addProvince" name="province" class="form-control"
+                                    placeholder="Enter province">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="addRegion" class="form-label text-white">Region</label>
+                                <select id="addRegion" name="region" class="form-select">
+                                    <option value="">Select region...</option>
+                                    <option value="Region I">Ilocos Region (Region I)</option>
+                                    <option value="Region II">Cagayan Valley (Region II)</option>
+                                    <option value="Region III">Central Luzon (Region III)</option>
+                                    <option value="Region IV-A">CALABARZON (Region IV-A)</option>
+                                    <option value="Region IV-B">MIMAROPA (Region IV-B)</option>
+                                    <option value="Region V">Bicol Region (Region V)</option>
+                                    <option value="Region VI">Western Visayas (Region VI)</option>
+                                    <option value="Region VII">Central Visayas (Region VII)</option>
+                                    <option value="Region VIII">Eastern Visayas (Region VIII)</option>
+                                    <option value="Region IX">Zamboanga Peninsula (Region IX)</option>
+                                    <option value="Region X">Northern Mindanao (Region X)</option>
+                                    <option value="Region XI">Davao Region (Region XI)</option>
+                                    <option value="Region XII">SOCCSKSARGEN (Region XII)</option>
+                                    <option value="Region XIII">Caraga (Region XIII)</option>
+                                    <option value="NCR">National Capital Region (NCR)</option>
+                                    <option value="CAR">Cordillera Administrative Region (CAR)</option>
+                                    <option value="BARMM">Bangsamoro Autonomous Region in Muslim Mindanao (BARMM)
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="addZip" class="form-label text-white">Zip Code</label>
+                                <input type="number" id="addZip" name="zip" class="form-control"
+                                    placeholder="Enter zip code" min="0" max="9999">
+                            </div>
+                        </div>
+
+                        <!-- Parent Information -->
+                        <h6 class="mb-3 mt-3"><i class="bx bx-group me-2"></i>Parent Information</h6>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="addMotherName" class="form-label text-white">Mother's Name</label>
+                                <input type="text" id="addMotherName" name="motherName" class="form-control"
+                                    placeholder="Enter mother's full name">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="addFatherName" class="form-label text-white">Father's Name</label>
+                                <input type="text" id="addFatherName" name="fatherName" class="form-control"
+                                    placeholder="Enter father's full name">
+                            </div>
+                        </div>
+
+                        <!-- Personal Details -->
+                        <h6 class="mb-3 mt-3"><i class="bx bx-info-circle me-2"></i>Personal Details</h6>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label text-white">Sex</label>
+                                <div class="d-flex gap-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="addSex" id="addSexMale"
+                                            value="male">
+                                        <label class="form-check-label text-white" for="addSexMale">Male</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="addSex" id="addSexFemale"
+                                            value="female">
+                                        <label class="form-check-label text-white" for="addSexFemale">Female</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label text-white">Civil Status</label>
+                                <div class="d-flex gap-2 flex-wrap">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="addCivilStatus"
+                                            id="addCivilSingle" value="single">
+                                        <label class="form-check-label text-white" for="addCivilSingle">Single</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="addCivilStatus"
+                                            id="addCivilMarried" value="married">
+                                        <label class="form-check-label text-white" for="addCivilMarried">Married</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="addCivilStatus"
+                                            id="addCivilWidower" value="widower">
+                                        <label class="form-check-label text-white" for="addCivilWidower">Widower</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="addCivilStatus"
+                                            id="addCivilSeparated" value="separated">
+                                        <label class="form-check-label text-white"
+                                            for="addCivilSeparated">Separated</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="addAge" class="form-label text-white">Age</label>
+                                <input type="number" id="addAge" name="age" class="form-control"
+                                    placeholder="Enter age">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="addBirthDate" class="form-label text-white">Birth Date</label>
+                                <input type="date" id="addBirthDate" name="birthDate" class="form-control">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="addBirthPlace" class="form-label text-white">Birth Place</label>
+                                <input type="text" id="addBirthPlace" name="birthPlace" class="form-control"
+                                    placeholder="Enter birth place">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="addEducation" class="form-label text-white">Highest Educational
+                                    Attainment</label>
+                                <select id="addEducation" name="education" class="form-select">
+                                    <option value="">Select education level</option>
+                                    <option value="elementary">Elementary Graduate</option>
+                                    <option value="highschool">High School Graduate</option>
+                                    <option value="tvet">TVET Graduate</option>
+                                    <option value="college-level">College Level</option>
+                                    <option value="college-graduate">College Graduate</option>
+                                    <option value="others">Others</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label text-white">Employment Status</label>
+                                <div class="d-flex gap-3 flex-wrap">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="addEmploymentStatus"
+                                            id="addEmpCasual" value="casual">
+                                        <label class="form-check-label text-white" for="addEmpCasual">Casual</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="addEmploymentStatus"
+                                            id="addEmpJobOrder" value="job-order">
+                                        <label class="form-check-label text-white" for="addEmpJobOrder">Job
+                                            Order</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="addEmploymentStatus"
+                                            id="addEmpProbationary" value="probationary">
+                                        <label class="form-check-label text-white"
+                                            for="addEmpProbationary">Probationary</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="addEmploymentStatus"
+                                            id="addEmpPermanent" value="permanent">
+                                        <label class="form-check-label text-white"
+                                            for="addEmpPermanent">Permanent</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="addEmploymentStatus"
+                                            id="addEmpSelfEmployed" value="self-employed">
+                                        <label class="form-check-label text-white"
+                                            for="addEmpSelfEmployed">Self-Employed</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="addEmploymentStatus"
+                                            id="addEmpOFW" value="ofw">
+                                        <label class="form-check-label text-white" for="addEmpOFW">OFW</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Contact Information -->
+                        <h6 class="mb-3 mt-3"><i class="bx bx-phone me-2"></i>Contact Information</h6>
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label for="addTel" class="form-label text-white">Telephone</label>
+                                <input type="text" id="addTel" name="tel" class="form-control"
+                                    placeholder="(02) 123-4567">
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="addMobile" class="form-label text-white">Mobile</label>
+                                <input type="text" id="addMobile" name="mobile" class="form-control"
+                                    placeholder="09XX XXX XXXX">
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="addFax" class="form-label text-white">Fax</label>
+                                <input type="text" id="addFax" name="fax" class="form-control"
+                                    placeholder="(02) 123-4567">
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="addEmail" class="form-label text-white">Email</label>
+                                <input type="email" id="addEmail" name="email" class="form-control"
+                                    placeholder="your.email@example.com">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label for="addOtherContact" class="form-label text-white">Other Contact</label>
+                                <textarea id="addOtherContact" name="otherContact" class="form-control" rows="2"
+                                    placeholder="Enter other contact information"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Work Experience -->
+                        <h6 class="mb-3 mt-3"><i class="bx bx-briefcase me-2"></i>Work Experience</h6>
+                        <div id="addWorkExperienceContainer">
+                            <div class="work-experience-item mb-3">
+                                <div class="card" style="background: rgba(255,255,255,0.05);">
+                                    <div class="card-body">
+                                        <h6 class="text-white mb-3">Work Experience 1</h6>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label text-white">Company</label>
+                                                <input type="text" class="form-control work-company"
+                                                    placeholder="Enter company name">
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label text-white">Position</label>
+                                                <input type="text" class="form-control work-position"
+                                                    placeholder="Enter position">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4 mb-3">
+                                                <label class="form-label text-white">Inclusive Dates</label>
+                                                <input type="text" class="form-control work-dates"
+                                                    placeholder="e.g., Jan 2020 - Dec 2021">
+                                            </div>
+                                            <div class="col-md-4 mb-3">
+                                                <label class="form-label text-white">Monthly Salary</label>
+                                                <input type="text" class="form-control work-salary"
+                                                    placeholder="Enter salary">
+                                            </div>
+                                            <div class="col-md-4 mb-3">
+                                                <label class="form-label text-white">Status of Appointment</label>
+                                                <input type="text" class="form-control work-status"
+                                                    placeholder="e.g., Permanent">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12 mb-3">
+                                                <label class="form-label text-white">Years of Experience</label>
+                                                <input type="text" class="form-control work-years"
+                                                    placeholder="Enter years">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-outline-primary mb-3"
+                            id="addWorkExperienceBtnModal">
+                            <i class="bx bx-plus"></i> Add Work Experience
                         </button>
-                        <button type="button"
-                            class="btn btn-outline-success d-flex align-items-center justify-content-center gap-2">
-                            <i class="bx bx-file-export"></i>
-                            Export as CSV
+
+                        <!-- Training & Seminars -->
+                        <h6 class="mb-3 mt-3"><i class="bx bx-book me-2"></i>Training & Seminars</h6>
+                        <div id="addTrainingSeminarContainer">
+                            <div class="training-seminar-item mb-3">
+                                <div class="card" style="background: rgba(255,255,255,0.05);">
+                                    <div class="card-body">
+                                        <h6 class="text-white mb-3">Training/Seminar 1</h6>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label text-white">Title</label>
+                                                <input type="text" class="form-control training-title"
+                                                    placeholder="Enter training title">
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label text-white">Venue</label>
+                                                <input type="text" class="form-control training-venue"
+                                                    placeholder="Enter venue">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4 mb-3">
+                                                <label class="form-label text-white">Inclusive Dates</label>
+                                                <input type="text" class="form-control training-dates"
+                                                    placeholder="e.g., Jan 1-5, 2021">
+                                            </div>
+                                            <div class="col-md-4 mb-3">
+                                                <label class="form-label text-white">Number of Hours</label>
+                                                <input type="text" class="form-control training-hours"
+                                                    placeholder="Enter hours">
+                                            </div>
+                                            <div class="col-md-4 mb-3">
+                                                <label class="form-label text-white">Conducted By</label>
+                                                <input type="text" class="form-control training-conductor"
+                                                    placeholder="Enter conductor">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-outline-primary mb-3"
+                            id="addTrainingSeminarBtnModal">
+                            <i class="bx bx-plus"></i> Add Training/Seminar
                         </button>
-                    </div>
+
+                        <!-- Licensure Examinations -->
+                        <h6 class="mb-3 mt-3"><i class="bx bx-award me-2"></i>Licensure Examinations</h6>
+                        <div id="addLicensureExamContainer">
+                            <div class="licensure-exam-item mb-3">
+                                <div class="card" style="background: rgba(255,255,255,0.05);">
+                                    <div class="card-body">
+                                        <h6 class="text-white mb-3">Licensure Examination 1</h6>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label text-white">Title</label>
+                                                <input type="text" class="form-control licensure-title"
+                                                    placeholder="Enter examination title">
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label text-white">Year Taken</label>
+                                                <input type="text" class="form-control licensure-year"
+                                                    placeholder="Enter year">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4 mb-3">
+                                                <label class="form-label text-white">Examination Venue</label>
+                                                <input type="text" class="form-control licensure-venue"
+                                                    placeholder="Enter venue">
+                                            </div>
+                                            <div class="col-md-4 mb-3">
+                                                <label class="form-label text-white">Rating</label>
+                                                <input type="text" class="form-control licensure-rating"
+                                                    placeholder="Enter rating">
+                                            </div>
+                                            <div class="col-md-4 mb-3">
+                                                <label class="form-label text-white">Remarks</label>
+                                                <input type="text" class="form-control licensure-remarks"
+                                                    placeholder="e.g., Passed">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12 mb-3">
+                                                <label class="form-label text-white">Expiry Date</label>
+                                                <input type="date" class="form-control licensure-expiry">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-outline-primary mb-3" id="addLicensureExamBtnModal">
+                            <i class="bx bx-plus"></i> Add Licensure Examination
+                        </button>
+
+                        <!-- Competency Assessments -->
+                        <h6 class="mb-3 mt-3"><i class="bx bx-certification me-2"></i>Competency Assessments</h6>
+                        <div id="addCompetencyAssessmentContainer">
+                            <div class="competency-assessment-item mb-3">
+                                <div class="card" style="background: rgba(255,255,255,0.05);">
+                                    <div class="card-body">
+                                        <h6 class="text-white mb-3">Competency Assessment 1</h6>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label text-white">Title</label>
+                                                <input type="text" class="form-control competency-title"
+                                                    placeholder="Enter assessment title">
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label text-white">Qualification Level</label>
+                                                <input type="text" class="form-control competency-level"
+                                                    placeholder="e.g., NC II">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4 mb-3">
+                                                <label class="form-label text-white">Industry Sector</label>
+                                                <input type="text" class="form-control competency-sector"
+                                                    placeholder="Enter sector">
+                                            </div>
+                                            <div class="col-md-4 mb-3">
+                                                <label class="form-label text-white">Certificate Number</label>
+                                                <input type="text" class="form-control competency-cert"
+                                                    placeholder="Enter certificate number">
+                                            </div>
+                                            <div class="col-md-4 mb-3">
+                                                <label class="form-label text-white">Date of Issuance</label>
+                                                <input type="date" class="form-control competency-issued">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12 mb-3">
+                                                <label class="form-label text-white">Expiration Date</label>
+                                                <input type="date" class="form-control competency-expiry">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-outline-primary mb-3"
+                            id="addCompetencyAssessmentBtnModal">
+                            <i class="bx bx-plus"></i> Add Competency Assessment
+                        </button>
+
+                        <!-- Application Status -->
+                        <h6 class="mb-3 mt-3"><i class="bx bx-check-circle me-2"></i>Application Status</h6>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="addStatus" class="form-label text-white">Status</label>
+                                <select id="addStatus" name="status" class="form-select">
+                                    <option value="pending">Pending</option>
+                                    <option value="approved">Approved</option>
+                                    <option value="cancelled">Cancelled</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="addSubmittedAt" class="form-label text-white">Submitted At</label>
+                                <input type="datetime-local" id="addSubmittedAt" name="submittedAt"
+                                    class="form-control">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="addUpdatedAt" class="form-label text-white">Last Updated</label>
+                                <input type="datetime-local" id="addUpdatedAt" name="updatedAt" class="form-control">
+                            </div>
+                        </div>
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="saveApplicationBtn">Add Application</button>
                 </div>
             </div>
         </div>
     </div>
-
 
     <!-- View Details Modal -->
     <div class="modal fade" id="viewProfileModal" tabindex="-1" aria-hidden="true">
@@ -852,8 +1420,11 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="editSchoolName" class="form-label text-white">School Name</label>
-                                <input type="text" id="editSchoolName" name="schoolName" class="form-control"
-                                    placeholder="Enter school/training center name">
+                                <select id="editSchoolName" name="schoolName" class="form-select">
+                                    <option value="">Select school/training center...</option>
+                                    <option value="Creative Aesthetic Academy & Technical Education Inc.">Creative
+                                        Aesthetic Academy & Technical Education Inc.</option>
+                                </select>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="editSchoolAddress" class="form-label text-white">School Address</label>
@@ -950,8 +1521,8 @@
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="editDistrict" class="form-label text-white">District</label>
-                                <input type="text" id="editDistrict" name="district" class="form-control"
-                                    placeholder="Enter district">
+                                <input type="number" id="editDistrict" name="district" class="form-control"
+                                    placeholder="Enter district number" min="1" max="9">
                             </div>
                         </div>
                         <div class="row">
@@ -967,15 +1538,34 @@
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="editRegion" class="form-label text-white">Region</label>
-                                <input type="text" id="editRegion" name="region" class="form-control"
-                                    placeholder="Enter region">
+                                <select id="editRegion" name="region" class="form-select">
+                                    <option value="">Select region...</option>
+                                    <option value="Region I">Ilocos Region (Region I)</option>
+                                    <option value="Region II">Cagayan Valley (Region II)</option>
+                                    <option value="Region III">Central Luzon (Region III)</option>
+                                    <option value="Region IV-A">CALABARZON (Region IV-A)</option>
+                                    <option value="Region IV-B">MIMAROPA (Region IV-B)</option>
+                                    <option value="Region V">Bicol Region (Region V)</option>
+                                    <option value="Region VI">Western Visayas (Region VI)</option>
+                                    <option value="Region VII">Central Visayas (Region VII)</option>
+                                    <option value="Region VIII">Eastern Visayas (Region VIII)</option>
+                                    <option value="Region IX">Zamboanga Peninsula (Region IX)</option>
+                                    <option value="Region X">Northern Mindanao (Region X)</option>
+                                    <option value="Region XI">Davao Region (Region XI)</option>
+                                    <option value="Region XII">SOCCSKSARGEN (Region XII)</option>
+                                    <option value="Region XIII">Caraga (Region XIII)</option>
+                                    <option value="NCR">National Capital Region (NCR)</option>
+                                    <option value="CAR">Cordillera Administrative Region (CAR)</option>
+                                    <option value="BARMM">Bangsamoro Autonomous Region in Muslim Mindanao (BARMM)
+                                    </option>
+                                </select>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="editZip" class="form-label text-white">Zip Code</label>
-                                <input type="text" id="editZip" name="zip" class="form-control"
-                                    placeholder="Enter zip code">
+                                <input type="number" id="editZip" name="zip" class="form-control"
+                                    placeholder="Enter zip code" min="0" max="9999">
                             </div>
                         </div>
 
@@ -1011,26 +1601,29 @@
                                     <option value="">Select status</option>
                                     <option value="single">Single</option>
                                     <option value="married">Married</option>
-                                    <option value="widowed">Widowed</option>
+                                    <option value="widower">Widower</option>
                                     <option value="separated">Separated</option>
                                 </select>
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label for="editEmploymentStatus" class="form-label text-white">Employment Status</label>
+                                <label for="editEmploymentStatus" class="form-label text-white">Employment
+                                    Status</label>
                                 <select id="editEmploymentStatus" name="employmentStatus" class="form-select">
                                     <option value="">Select employment status</option>
-                                    <option value="employed">Employed</option>
-                                    <option value="unemployed">Unemployed</option>
-                                    <option value="self-employed">Self-Employed</option>
+                                    <option value="casual">Casual</option>
+                                    <option value="job-order">Job Order</option>
                                     <option value="probationary">Probationary</option>
-                                    <option value="contractual">Contractual</option>
+                                    <option value="permanent">Permanent</option>
+                                    <option value="self-employed">Self-Employed</option>
+                                    <option value="ofw">OFW</option>
                                 </select>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-3 mb-3">
                                 <label for="editAge" class="form-label text-white">Age</label>
-                                <input type="number" id="editAge" name="age" class="form-control" placeholder="Enter age">
+                                <input type="number" id="editAge" name="age" class="form-control"
+                                    placeholder="Enter age">
                             </div>
                             <div class="col-md-3 mb-3">
                                 <label for="editBirthDate" class="form-label text-white">Birth Date</label>
@@ -1042,15 +1635,16 @@
                                     placeholder="Enter birth place">
                             </div>
                             <div class="col-md-3 mb-3">
-                                <label for="editEducation" class="form-label text-white">Education</label>
+                                <label for="editEducation" class="form-label text-white">Highest Educational
+                                    Attainment</label>
                                 <select id="editEducation" name="education" class="form-select">
                                     <option value="">Select education level</option>
-                                    <option value="elementary">Elementary</option>
-                                    <option value="high-school">High School</option>
-                                    <option value="vocational">Vocational</option>
-                                    <option value="tvet">TVET</option>
-                                    <option value="college">College</option>
-                                    <option value="post-graduate">Post Graduate</option>
+                                    <option value="elementary">Elementary Graduate</option>
+                                    <option value="highschool">High School Graduate</option>
+                                    <option value="tvet">TVET Graduate</option>
+                                    <option value="college-level">College Level</option>
+                                    <option value="college-graduate">College Graduate</option>
+                                    <option value="others">Others</option>
                                 </select>
                             </div>
                         </div>
@@ -1137,13 +1731,15 @@
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="editSubmittedAt" class="form-label text-white">Submitted At</label>
-                                <input type="text" id="editSubmittedAt" name="submittedAt" class="form-control" readonly>
+                                <input type="text" id="editSubmittedAt" name="submittedAt" class="form-control"
+                                    readonly>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="editLastUpdated" class="form-label text-white">Last Updated</label>
-                                <input type="text" id="editLastUpdated" name="lastUpdated" class="form-control" readonly>
+                                <input type="text" id="editLastUpdated" name="lastUpdated" class="form-control"
+                                    readonly>
                             </div>
                         </div>
 

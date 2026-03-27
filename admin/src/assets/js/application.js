@@ -1845,9 +1845,87 @@ function exportToJSON() {
 
 async function saveNewApplication() {
     try {
+        // Validate required fields (matching edit modal requirements)
+        const requiredFields = [
+            { id: 'addUli', name: 'ULI' },
+            { id: 'addSurname', name: 'Surname' },
+            { id: 'addFirstName', name: 'First Name' },
+            { id: 'addNumberStreet', name: 'Number & Street' },
+            { id: 'addBarangay', name: 'Barangay' },
+            { id: 'addCity', name: 'City/Municipality' },
+            { id: 'addProvince', name: 'Province' },
+            { id: 'addRegion', name: 'Region' },
+            { id: 'addMobile', name: 'Mobile' },
+            { id: 'addEmail', name: 'Email' }
+        ];
+
+        const errors = [];
+        requiredFields.forEach(field => {
+            const element = document.getElementById(field.id);
+            if (!element) {
+                console.error(`Field not found: ${field.id}`);
+                errors.push(field.name);
+            } else if (!element.value || !element.value.trim()) {
+                errors.push(field.name);
+            }
+        });
+
+        if (errors.length > 0) {
+            showError('Please complete all required fields.');
+            highlightInvalidAddFields(errors.map(err => err));
+            return;
+        }
+
+        // Email validation
+        const email = document.getElementById('addEmail').value;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            showError('Please enter a valid email address');
+            highlightInvalidAddFields(['Email']);
+            return;
+        }
+
+        // Mobile validation (basic format)
+        const mobile = document.getElementById('addMobile').value.trim().replace(/[^0-9]/g, '');
+        const mobileRegex = /^09\d{9}$/;
+        if (!mobileRegex.test(mobile)) {
+            showError('Please enter a valid mobile number (09XX XXX XXXX)');
+            highlightInvalidAddFields(['Mobile']);
+            return;
+        }
+
+        // Optional: Check for duplicate trainee_id (only if provided)
+        const traineeId = document.getElementById('addTraineeId').value.trim();
+        if (traineeId) {
+            const duplicateTrainee = allApplications.find(app =>
+                app.trainee_id && app.trainee_id.toLowerCase() === traineeId.toLowerCase()
+            );
+
+            if (duplicateTrainee) {
+                showError(`Trainee ID "${traineeId}" already exists in the system`);
+                highlightInvalidAddFields(['Trainee ID']);
+                return;
+            }
+        }
+
+        // Optional: Check for duplicate reference number (only if provided)
+        const referenceNumber = document.getElementById('addReferenceNumber').value.trim();
+        if (referenceNumber) {
+            const duplicateReference = allApplications.find(app =>
+                app.reference_number && app.reference_number.toLowerCase() === referenceNumber.toLowerCase()
+            );
+
+            if (duplicateReference) {
+                showError(`Reference Number "${referenceNumber}" already exists in the system`);
+                highlightInvalidAddFields(['Reference Number']);
+                return;
+            }
+        }
+
         // Collect form data
         const formData = {
-            reference_number: document.getElementById('addReferenceNumber').value,
+            trainee_id: traineeId,
+            reference_number: referenceNumber,
             uli: document.getElementById('addUli').value,
             school_name: document.getElementById('addSchoolName').value,
             school_address: document.getElementById('addSchoolAddress').value,
@@ -1889,13 +1967,102 @@ async function saveNewApplication() {
                 other_contact: document.getElementById('addOtherContact').value
             },
             status: document.getElementById('addStatus').value,
-            trainee_id: document.getElementById('addTraineeId').value,
             submitted_at: new Date().toISOString()
         };
 
+        // Collect work experience
+        const workExperiences = [];
+        document.querySelectorAll('#addWorkExperienceContainer .work-experience-item').forEach(item => {
+            const company = item.querySelector('.work-company')?.value || '';
+            const position = item.querySelector('.work-position')?.value || '';
+            const dates = item.querySelector('.work-dates')?.value || '';
+            const salary = item.querySelector('.work-salary')?.value || '';
+            const status = item.querySelector('.work-status')?.value || '';
+            const years = item.querySelector('.work-years')?.value || '';
+
+            if (company || position || dates) {
+                workExperiences.push({
+                    company,
+                    position,
+                    inclusive_dates: dates,
+                    monthly_salary: salary,
+                    status_of_appointment: status,
+                    years_of_experience: years
+                });
+            }
+        });
+        formData.work_experience = workExperiences;
+
+        // Collect training seminars
+        const trainingSeminars = [];
+        document.querySelectorAll('#addTrainingSeminarContainer .training-seminar-item').forEach(item => {
+            const title = item.querySelector('.training-title')?.value || '';
+            const venue = item.querySelector('.training-venue')?.value || '';
+            const dates = item.querySelector('.training-dates')?.value || '';
+            const hours = item.querySelector('.training-hours')?.value || '';
+            const conductedBy = item.querySelector('.training-conducted')?.value || '';
+
+            if (title || venue || dates) {
+                trainingSeminars.push({
+                    title,
+                    venue,
+                    inclusive_dates: dates,
+                    number_of_hours: hours,
+                    conducted_by: conductedBy
+                });
+            }
+        });
+        formData.training_seminars = trainingSeminars;
+
+        // Collect licensure exams
+        const licensureExams = [];
+        document.querySelectorAll('#addLicensureExamContainer .licensure-exam-item').forEach(item => {
+            const title = item.querySelector('.licensure-title')?.value || '';
+            const year = item.querySelector('.licensure-year')?.value || '';
+            const venue = item.querySelector('.licensure-venue')?.value || '';
+            const rating = item.querySelector('.licensure-rating')?.value || '';
+            const remarks = item.querySelector('.licensure-remarks')?.value || '';
+            const expiry = item.querySelector('.licensure-expiry')?.value || '';
+
+            if (title || year || venue) {
+                licensureExams.push({
+                    title,
+                    year_taken: year,
+                    examination_venue: venue,
+                    rating,
+                    remarks,
+                    expiry_date: expiry
+                });
+            }
+        });
+        formData.licensure_exams = licensureExams;
+
+        // Collect competency assessments
+        const competencyAssessments = [];
+        document.querySelectorAll('#addCompetencyAssessmentContainer .competency-assessment-item').forEach(item => {
+            const title = item.querySelector('.competency-title')?.value || '';
+            const level = item.querySelector('.competency-level')?.value || '';
+            const sector = item.querySelector('.competency-sector')?.value || '';
+            const certNumber = item.querySelector('.competency-cert')?.value || '';
+            const issuance = item.querySelector('.competency-issuance')?.value || '';
+            const expiration = item.querySelector('.competency-expiration')?.value || '';
+
+            if (title || level || sector) {
+                competencyAssessments.push({
+                    title,
+                    qualification_level: level,
+                    industry_sector: sector,
+                    certificate_number: certNumber,
+                    date_of_issuance: issuance,
+                    expiration_date: expiration
+                });
+            }
+        });
+        formData.competency_assessments = competencyAssessments;
+
         // Handle file uploads (picture and signature)
-        const pictureFile = document.getElementById('addPicture').files[0];
-        const signatureFile = document.getElementById('addSignature').files[0];
+        const pictureFile = document.getElementById('addPicture')?.files[0];
+        const signatureFile = document.getElementById('addSignature')?.files[0];
 
         if (pictureFile) {
             formData.picture = await fileToBase64(pictureFile);
@@ -1929,11 +2096,11 @@ async function saveNewApplication() {
             // Reload applications
             await loadApplications();
         } else {
-            showError('Failed to add application: ' + result.message);
+            showError('Failed to add application: ' + (result.message || 'Unknown error'));
         }
     } catch (error) {
         console.error('Error adding application:', error);
-        showError('Error adding application');
+        showError('Error adding application: ' + (error.message || 'Please check all fields and try again'));
     }
 }
 
@@ -1945,6 +2112,53 @@ function fileToBase64(file) {
         reader.onerror = error => reject(error);
     });
 }
+
+// Function to highlight invalid fields in Add Application modal
+function highlightInvalidAddFields(fieldNames) {
+    // Remove previous highlights
+    document.querySelectorAll('#addApplicationModal .is-invalid').forEach(field => {
+        field.classList.remove('is-invalid');
+    });
+
+    // Map field names to field IDs
+    const fieldMap = {
+        'Trainee ID': 'addTraineeId',
+        'Reference Number': 'addReferenceNumber',
+        'ULI': 'addUli',
+        'Surname': 'addSurname',
+        'First Name': 'addFirstName',
+        'Number & Street': 'addNumberStreet',
+        'Barangay': 'addBarangay',
+        'City/Municipality': 'addCity',
+        'Province': 'addProvince',
+        'Region': 'addRegion',
+        'Mobile': 'addMobile',
+        'Email': 'addEmail'
+    };
+
+    fieldNames.forEach(fieldName => {
+        const fieldId = fieldMap[fieldName];
+        if (fieldId) {
+            const field = document.getElementById(fieldId);
+            if (field) {
+                field.classList.add('is-invalid');
+                // Scroll to first invalid field
+                if (fieldNames[0] === fieldName) {
+                    field.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    field.focus();
+                }
+            }
+        }
+    });
+
+    // Remove highlights after 5 seconds
+    setTimeout(() => {
+        document.querySelectorAll('#addApplicationModal .is-invalid').forEach(field => {
+            field.classList.remove('is-invalid');
+        });
+    }, 5000);
+}
+
 
 // Dynamic array functions for Add Modal
 function addWorkExperienceToAddModal() {

@@ -529,14 +529,20 @@
                         <!-- Reference & Identification -->
                         <h6 class="mb-3"><i class="bx bx-id-card me-2"></i>Reference & Identification</h6>
                         <div class="row">
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-4 mb-3">
+                                <label for="addTraineeId" class="form-label text-white">Trainee ID</label>
+                                <input type="text" id="addTraineeId" name="traineeId" class="form-control"
+                                    placeholder="Enter trainee ID">
+                            </div>
+                            <div class="col-md-4 mb-3">
                                 <label for="addReferenceNumber" class="form-label text-white">Reference Number</label>
                                 <input type="text" id="addReferenceNumber" name="referenceNumber" class="form-control"
                                     placeholder="Enter reference number">
                             </div>
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-4 mb-3">
                                 <label for="addUli" class="form-label text-white">ULI</label>
-                                <input type="text" id="addUli" name="uli" class="form-control" placeholder="Enter ULI">
+                                <input type="text" id="addUli" name="uli" class="form-control" placeholder="Enter ULI"
+                                    required>
                             </div>
                         </div>
 
@@ -614,12 +620,12 @@
                             <div class="col-md-3 mb-3">
                                 <label for="addSurname" class="form-label text-white">Surname</label>
                                 <input type="text" id="addSurname" name="surname" class="form-control"
-                                    placeholder="Enter surname">
+                                    placeholder="Enter surname" required>
                             </div>
                             <div class="col-md-3 mb-3">
                                 <label for="addFirstName" class="form-label text-white">First Name</label>
                                 <input type="text" id="addFirstName" name="firstName" class="form-control"
-                                    placeholder="Enter first name">
+                                    placeholder="Enter first name" required>
                             </div>
                             <div class="col-md-3 mb-3">
                                 <label for="addMiddleName" class="form-label text-white">Middle Name</label>
@@ -651,12 +657,12 @@
                             <div class="col-md-4 mb-3">
                                 <label for="addNumberStreet" class="form-label text-white">Number & Street</label>
                                 <input type="text" id="addNumberStreet" name="numberStreet" class="form-control"
-                                    placeholder="House/Building No. and Street">
+                                    placeholder="House/Building No. and Street" required>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="addBarangay" class="form-label text-white">Barangay</label>
                                 <input type="text" id="addBarangay" name="barangay" class="form-control"
-                                    placeholder="Enter barangay">
+                                    placeholder="Enter barangay" required>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="addDistrict" class="form-label text-white">District</label>
@@ -668,16 +674,16 @@
                             <div class="col-md-4 mb-3">
                                 <label for="addCity" class="form-label text-white">City/Municipality</label>
                                 <input type="text" id="addCity" name="city" class="form-control"
-                                    placeholder="Enter city">
+                                    placeholder="Enter city" required>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="addProvince" class="form-label text-white">Province</label>
                                 <input type="text" id="addProvince" name="province" class="form-control"
-                                    placeholder="Enter province">
+                                    placeholder="Enter province" required>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="addRegion" class="form-label text-white">Region</label>
-                                <select id="addRegion" name="region" class="form-select">
+                                <select id="addRegion" name="region" class="form-select" required>
                                     <option value="">Select region...</option>
                                     <option value="Region I">Ilocos Region (Region I)</option>
                                     <option value="Region II">Cagayan Valley (Region II)</option>
@@ -850,7 +856,7 @@
                             <div class="col-md-3 mb-3">
                                 <label for="addMobile" class="form-label text-white">Mobile</label>
                                 <input type="text" id="addMobile" name="mobile" class="form-control"
-                                    placeholder="09XX XXX XXXX">
+                                    placeholder="09XX XXX XXXX" required>
                             </div>
                             <div class="col-md-3 mb-3">
                                 <label for="addFax" class="form-label text-white">Fax</label>
@@ -860,7 +866,7 @@
                             <div class="col-md-3 mb-3">
                                 <label for="addEmail" class="form-label text-white">Email</label>
                                 <input type="email" id="addEmail" name="email" class="form-control"
-                                    placeholder="your.email@example.com">
+                                    placeholder="your.email@example.com" required>
                             </div>
                         </div>
                         <div class="row">

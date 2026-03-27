@@ -541,8 +541,7 @@
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="addUli" class="form-label text-white">ULI</label>
-                                <input type="text" id="addUli" name="uli" class="form-control" placeholder="Enter ULI"
-                                    required>
+                                <input type="text" id="addUli" name="uli" class="form-control" placeholder="Enter ULI">
                             </div>
                         </div>
 
@@ -565,7 +564,7 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="addSchoolName" class="form-label text-white">School Name</label>
-                                <select id="addSchoolName" name="schoolName" class="form-select">
+                                <select id="addSchoolName" name="schoolName" class="form-select" required>
                                     <option value="">Select school/training center...</option>
                                     <option value="Creative Aesthetic Academy & Technical Education Inc.">Creative
                                         Aesthetic Academy & Technical Education Inc.</option>
@@ -574,7 +573,7 @@
                             <div class="col-md-6 mb-3">
                                 <label for="addSchoolAddress" class="form-label text-white">School Address</label>
                                 <textarea id="addSchoolAddress" name="schoolAddress" class="form-control" rows="2"
-                                    placeholder="Enter school address"></textarea>
+                                    placeholder="Enter school address" required></textarea>
                             </div>
                         </div>
 
@@ -584,7 +583,7 @@
                             <div class="col-md-6 mb-3">
                                 <label for="addAssessmentTitle" class="form-label text-white">Assessment Title</label>
                                 <input type="text" id="addAssessmentTitle" name="assessmentTitle" class="form-control"
-                                    placeholder="Enter assessment title">
+                                    placeholder="Enter assessment title" required>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="addApplicationDate" class="form-label text-white">Application Date</label>
@@ -620,7 +619,7 @@
                             <div class="col-md-3 mb-3">
                                 <label for="addSurname" class="form-label text-white">Surname</label>
                                 <input type="text" id="addSurname" name="surname" class="form-control"
-                                    placeholder="Enter surname" required>
+                                    placeholder="Enter surname">
                             </div>
                             <div class="col-md-3 mb-3">
                                 <label for="addFirstName" class="form-label text-white">First Name</label>
@@ -667,7 +666,7 @@
                             <div class="col-md-4 mb-3">
                                 <label for="addDistrict" class="form-label text-white">District</label>
                                 <input type="number" id="addDistrict" name="district" class="form-control"
-                                    placeholder="Enter district number" min="1" max="9">
+                                    placeholder="Enter district number" min="1" max="9" required>
                             </div>
                         </div>
                         <div class="row">
@@ -710,7 +709,7 @@
                             <div class="col-md-6 mb-3">
                                 <label for="addZip" class="form-label text-white">Zip Code</label>
                                 <input type="number" id="addZip" name="zip" class="form-control"
-                                    placeholder="Enter zip code" min="0" max="9999">
+                                    placeholder="Enter zip code" min="0" max="9999" required>
                             </div>
                         </div>
 
@@ -720,12 +719,12 @@
                             <div class="col-md-6 mb-3">
                                 <label for="addMotherName" class="form-label text-white">Mother's Name</label>
                                 <input type="text" id="addMotherName" name="motherName" class="form-control"
-                                    placeholder="Enter mother's full name">
+                                    placeholder="Enter mother's full name" required>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="addFatherName" class="form-label text-white">Father's Name</label>
                                 <input type="text" id="addFatherName" name="fatherName" class="form-control"
-                                    placeholder="Enter father's full name">
+                                    placeholder="Enter father's full name" required>
                             </div>
                         </div>
 
@@ -737,12 +736,12 @@
                                 <div class="d-flex gap-3">
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="addSex" id="addSexMale"
-                                            value="male">
+                                            value="male" required>
                                         <label class="form-check-label text-white" for="addSexMale">Male</label>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="addSex" id="addSexFemale"
-                                            value="female">
+                                            value="female" required>
                                         <label class="form-check-label text-white" for="addSexFemale">Female</label>
                                     </div>
                                 </div>
@@ -752,22 +751,22 @@
                                 <div class="d-flex gap-2 flex-wrap">
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="addCivilStatus"
-                                            id="addCivilSingle" value="single">
+                                            id="addCivilSingle" value="single" required>
                                         <label class="form-check-label text-white" for="addCivilSingle">Single</label>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="addCivilStatus"
-                                            id="addCivilMarried" value="married">
+                                            id="addCivilMarried" value="married" required>
                                         <label class="form-check-label text-white" for="addCivilMarried">Married</label>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="addCivilStatus"
-                                            id="addCivilWidower" value="widower">
+                                            id="addCivilWidower" value="widower" required>
                                         <label class="form-check-label text-white" for="addCivilWidower">Widower</label>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="addCivilStatus"
-                                            id="addCivilSeparated" value="separated">
+                                            id="addCivilSeparated" value="separated" required>
                                         <label class="form-check-label text-white"
                                             for="addCivilSeparated">Separated</label>
                                     </div>
@@ -775,24 +774,24 @@
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="addAge" class="form-label text-white">Age</label>
-                                <input type="number" id="addAge" name="age" class="form-control"
-                                    placeholder="Enter age">
+                                <input type="number" id="addAge" name="age" class="form-control" placeholder="Enter age"
+                                    required>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-4 mb-3">
                                 <label for="addBirthDate" class="form-label text-white">Birth Date</label>
-                                <input type="date" id="addBirthDate" name="birthDate" class="form-control">
+                                <input type="date" id="addBirthDate" name="birthDate" class="form-control" required>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="addBirthPlace" class="form-label text-white">Birth Place</label>
                                 <input type="text" id="addBirthPlace" name="birthPlace" class="form-control"
-                                    placeholder="Enter birth place">
+                                    placeholder="Enter birth place" required>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="addEducation" class="form-label text-white">Highest Educational
                                     Attainment</label>
-                                <select id="addEducation" name="education" class="form-select">
+                                <select id="addEducation" name="education" class="form-select" required>
                                     <option value="">Select education level</option>
                                     <option value="elementary">Elementary Graduate</option>
                                     <option value="highschool">High School Graduate</option>
@@ -809,36 +808,36 @@
                                 <div class="d-flex gap-3 flex-wrap">
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="addEmploymentStatus"
-                                            id="addEmpCasual" value="casual">
+                                            id="addEmpCasual" value="casual" required>
                                         <label class="form-check-label text-white" for="addEmpCasual">Casual</label>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="addEmploymentStatus"
-                                            id="addEmpJobOrder" value="job-order">
+                                            id="addEmpJobOrder" value="job-order" required>
                                         <label class="form-check-label text-white" for="addEmpJobOrder">Job
                                             Order</label>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="addEmploymentStatus"
-                                            id="addEmpProbationary" value="probationary">
+                                            id="addEmpProbationary" value="probationary" required>
                                         <label class="form-check-label text-white"
                                             for="addEmpProbationary">Probationary</label>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="addEmploymentStatus"
-                                            id="addEmpPermanent" value="permanent">
+                                            id="addEmpPermanent" value="permanent" required>
                                         <label class="form-check-label text-white"
                                             for="addEmpPermanent">Permanent</label>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="addEmploymentStatus"
-                                            id="addEmpSelfEmployed" value="self-employed">
+                                            id="addEmpSelfEmployed" value="self-employed" required>
                                         <label class="form-check-label text-white"
                                             for="addEmpSelfEmployed">Self-Employed</label>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="addEmploymentStatus"
-                                            id="addEmpOFW" value="ofw">
+                                            id="addEmpOFW" value="ofw" required>
                                         <label class="form-check-label text-white" for="addEmpOFW">OFW</label>
                                     </div>
                                 </div>

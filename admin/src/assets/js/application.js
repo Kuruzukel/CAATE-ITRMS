@@ -1779,6 +1779,23 @@ document.getElementById('exportJsonBtn')?.addEventListener('click', function () 
 document.getElementById('addApplicationBtn')?.addEventListener('click', function () {
     const modal = new bootstrap.Modal(document.getElementById('addApplicationModal'));
     modal.show();
+
+    // Add event listeners to remove error highlighting when user starts typing
+    setTimeout(() => {
+        const addModalFields = document.querySelectorAll('#addApplicationModal input, #addApplicationModal select, #addApplicationModal textarea');
+        addModalFields.forEach(field => {
+            field.addEventListener('input', function () {
+                if (this.classList.contains('is-invalid')) {
+                    this.classList.remove('is-invalid');
+                }
+            });
+            field.addEventListener('change', function () {
+                if (this.classList.contains('is-invalid')) {
+                    this.classList.remove('is-invalid');
+                }
+            });
+        });
+    }, 100);
 });
 
 // Save Application Button
@@ -1845,21 +1862,34 @@ function exportToJSON() {
 
 async function saveNewApplication() {
     try {
-        // Validate required fields (matching edit modal requirements)
+        // Initialize errors array first
+        const errors = [];
+
+        // Validate required fields
         const requiredFields = [
-            { id: 'addUli', name: 'ULI' },
-            { id: 'addSurname', name: 'Surname' },
-            { id: 'addFirstName', name: 'First Name' },
             { id: 'addNumberStreet', name: 'Number & Street' },
             { id: 'addBarangay', name: 'Barangay' },
+            { id: 'addDistrict', name: 'District' },
             { id: 'addCity', name: 'City/Municipality' },
             { id: 'addProvince', name: 'Province' },
             { id: 'addRegion', name: 'Region' },
+            { id: 'addZip', name: 'Zip Code' },
+            { id: 'addTraineeId', name: 'Trainee ID' },
+            { id: 'addSchoolName', name: 'School Name' },
+            { id: 'addSchoolAddress', name: 'School Address' },
+            { id: 'addAssessmentTitle', name: 'Assessment Title' },
+            { id: 'addMotherName', name: "Mother's Name" },
+            { id: 'addFatherName', name: "Father's Name" },
+            { id: 'addAge', name: 'Age' },
+            { id: 'addBirthDate', name: 'Birth Date' },
+            { id: 'addBirthPlace', name: 'Birth Place' },
+            { id: 'addEducation', name: 'Highest Educational Attainment' },
+            { id: 'addFirstName', name: 'First Name' },
             { id: 'addMobile', name: 'Mobile' },
             { id: 'addEmail', name: 'Email' }
         ];
 
-        const errors = [];
+        // Check text/select fields
         requiredFields.forEach(field => {
             const element = document.getElementById(field.id);
             if (!element) {
@@ -1869,6 +1899,21 @@ async function saveNewApplication() {
                 errors.push(field.name);
             }
         });
+
+        // Check for radio button required fields
+        const sexChecked = document.querySelector('input[name="addSex"]:checked');
+        const civilStatusChecked = document.querySelector('input[name="addCivilStatus"]:checked');
+        const employmentStatusChecked = document.querySelector('input[name="addEmploymentStatus"]:checked');
+
+        if (!sexChecked) {
+            errors.push('Sex');
+        }
+        if (!civilStatusChecked) {
+            errors.push('Civil Status');
+        }
+        if (!employmentStatusChecked) {
+            errors.push('Employment Status');
+        }
 
         if (errors.length > 0) {
             showError('Please complete all required fields.');
@@ -2129,9 +2174,20 @@ function highlightInvalidAddFields(fieldNames) {
         'First Name': 'addFirstName',
         'Number & Street': 'addNumberStreet',
         'Barangay': 'addBarangay',
+        'District': 'addDistrict',
         'City/Municipality': 'addCity',
         'Province': 'addProvince',
         'Region': 'addRegion',
+        'Zip Code': 'addZip',
+        'School Name': 'addSchoolName',
+        'School Address': 'addSchoolAddress',
+        'Assessment Title': 'addAssessmentTitle',
+        "Mother's Name": 'addMotherName',
+        "Father's Name": 'addFatherName',
+        'Age': 'addAge',
+        'Birth Date': 'addBirthDate',
+        'Birth Place': 'addBirthPlace',
+        'Highest Educational Attainment': 'addEducation',
         'Mobile': 'addMobile',
         'Email': 'addEmail'
     };
@@ -2151,12 +2207,7 @@ function highlightInvalidAddFields(fieldNames) {
         }
     });
 
-    // Remove highlights after 5 seconds
-    setTimeout(() => {
-        document.querySelectorAll('#addApplicationModal .is-invalid').forEach(field => {
-            field.classList.remove('is-invalid');
-        });
-    }, 5000);
+    // Don't remove highlights automatically - user must fix the fields
 }
 
 

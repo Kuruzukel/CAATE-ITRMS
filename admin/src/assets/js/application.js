@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function () {
         confirmDeleteBtn.addEventListener('click', confirmDeleteApplication);
     }
 
-    // Add buttons for dynamic arrays
+    // Add buttons for dynamic arrays (Edit Modal)
     const addWorkExpBtn = document.getElementById('addWorkExperienceBtn');
     if (addWorkExpBtn) {
         addWorkExpBtn.addEventListener('click', addWorkExperience);
@@ -69,6 +69,27 @@ document.addEventListener('DOMContentLoaded', function () {
     const addCompetencyBtn = document.getElementById('addCompetencyAssessmentBtn');
     if (addCompetencyBtn) {
         addCompetencyBtn.addEventListener('click', addCompetencyAssessment);
+    }
+
+    // Add buttons for dynamic arrays (Add Modal)
+    const addWorkExpBtnModal = document.getElementById('addWorkExperienceBtnModal');
+    if (addWorkExpBtnModal) {
+        addWorkExpBtnModal.addEventListener('click', addWorkExperienceToAddModal);
+    }
+
+    const addTrainingBtnModal = document.getElementById('addTrainingSeminarBtnModal');
+    if (addTrainingBtnModal) {
+        addTrainingBtnModal.addEventListener('click', addTrainingSeminarToAddModal);
+    }
+
+    const addLicensureBtnModal = document.getElementById('addLicensureExamBtnModal');
+    if (addLicensureBtnModal) {
+        addLicensureBtnModal.addEventListener('click', addLicensureExamToAddModal);
+    }
+
+    const addCompetencyBtnModal = document.getElementById('addCompetencyAssessmentBtnModal');
+    if (addCompetencyBtnModal) {
+        addCompetencyBtnModal.addEventListener('click', addCompetencyAssessmentToAddModal);
     }
 });
 

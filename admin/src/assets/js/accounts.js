@@ -55,7 +55,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     setupFilters();
 
-
     const toggleViewPassword = document.getElementById('toggleViewPassword');
     const viewPasswordInput = document.getElementById('viewTraineePassword');
     const viewPasswordIcon = document.getElementById('viewPasswordIcon');
@@ -1202,7 +1201,6 @@ function resetFilters() {
 
     renderTrainees(traineesData);
 }
-
 
 document.addEventListener('DOMContentLoaded', function () {
     const bulkUploadBtn = document.getElementById('bulkUploadBtn');

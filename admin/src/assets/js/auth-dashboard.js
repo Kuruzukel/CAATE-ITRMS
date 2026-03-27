@@ -27,7 +27,6 @@ const API_BASE_URL = window.location.hostname === 'localhost' || window.location
     ? 'http://localhost/CAATE-ITRMS/backend/public'
     : '/backend/public';
 
-
 function checkAuthentication(requiredRole = null) {
     const token = localStorage.getItem('authToken');
     const userRole = localStorage.getItem('userRole');
@@ -51,7 +50,6 @@ function checkAuthentication(requiredRole = null) {
     return true;
 }
 
-
 function redirectToLogin() {
 
     localStorage.clear();
@@ -62,12 +60,10 @@ function redirectToLogin() {
     window.location.replace(baseUrl + '/auth/src/pages/login.html');
 }
 
-
 function getCurrentUser() {
     const userData = localStorage.getItem('userData');
     return userData ? JSON.parse(userData) : null;
 }
-
 
 async function logout() {
     const token = localStorage.getItem('authToken');
@@ -93,7 +89,6 @@ async function logout() {
 
     window.location.replace(baseUrl + '/auth/src/pages/login.html');
 }
-
 
 (function preventBackButtonAccess() {
 
@@ -156,7 +151,6 @@ async function logout() {
     });
 })();
 
-
 document.addEventListener('DOMContentLoaded', function () {
     const pageRole = document.body.getAttribute('data-required-role');
     checkAuthentication(pageRole);
@@ -179,12 +173,10 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-
 function getCurrentUser() {
     const userData = localStorage.getItem('userData');
     return userData ? JSON.parse(userData) : null;
 }
-
 
 async function logout() {
     const token = localStorage.getItem('authToken');
@@ -211,7 +203,6 @@ async function logout() {
     window.history.pushState(null, '', window.location.href);
     window.location.replace(baseUrl + '/auth/src/pages/login.html');
 }
-
 
 (function () {
     'use strict';
@@ -266,7 +257,6 @@ async function logout() {
         }
     });
 })();
-
 
 document.addEventListener('DOMContentLoaded', function () {
     const pageRole = document.body.getAttribute('data-required-role');

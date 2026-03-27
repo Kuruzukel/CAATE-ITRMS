@@ -14,7 +14,6 @@ class Trainee {
         $document = $this->collection->findOne(['email' => $email]);
         if ($document) {
             $trainee = (array)$document;
-            // Convert MongoDB ObjectId to string
             if (isset($trainee['_id'])) {
                 $trainee['_id'] = (string)$trainee['_id'];
             }
@@ -27,7 +26,6 @@ class Trainee {
         $document = $this->collection->findOne(['username' => $username]);
         if ($document) {
             $trainee = (array)$document;
-            // Convert MongoDB ObjectId to string
             if (isset($trainee['_id'])) {
                 $trainee['_id'] = (string)$trainee['_id'];
             }
@@ -45,7 +43,6 @@ class Trainee {
         ]);
         if ($document) {
             $trainee = (array)$document;
-            // Convert MongoDB ObjectId to string
             if (isset($trainee['_id'])) {
                 $trainee['_id'] = (string)$trainee['_id'];
             }
@@ -59,7 +56,6 @@ class Trainee {
             $document = $this->collection->findOne(['_id' => new MongoDB\BSON\ObjectId($id)]);
             if ($document) {
                 $trainee = (array)$document;
-                // Convert MongoDB ObjectId to string
                 if (isset($trainee['_id'])) {
                     $trainee['_id'] = (string)$trainee['_id'];
                 }
@@ -79,7 +75,6 @@ class Trainee {
             $trainees = [];
             foreach ($cursor as $document) {
                 $trainee = (array)$document;
-                // Convert MongoDB ObjectId to string
                 if (isset($trainee['_id'])) {
                     $trainee['_id'] = (string)$trainee['_id'];
                 }
@@ -94,15 +89,11 @@ class Trainee {
     
     public function create($data) {
         try {
-            // Generate trainee_id if not provided or empty
             if (empty($data['trainee_id'])) {
                 $data['trainee_id'] = $this->generateTraineeId();
             }
             
-            // Don't hash password - store as plain text
-            // Password is already in plain text from the form
             
-            // Add timestamps
             $data['created_at'] = new MongoDB\BSON\UTCDateTime();
             $data['updated_at'] = new MongoDB\BSON\UTCDateTime();
             
@@ -115,39 +106,31 @@ class Trainee {
     }
     
     private function generateTraineeId() {
-        // Get current year
         $year = date('Y');
         
-        // Find the last trainee ID for this year
         $lastTrainee = $this->collection->findOne(
             ['trainee_id' => ['$regex' => "^TRN-$year-"]],
             ['sort' => ['trainee_id' => -1]]
         );
         
         if ($lastTrainee && isset($lastTrainee['trainee_id'])) {
-            // Extract the number from the last ID (e.g., "TRN-2026-005" -> 5)
             $lastId = $lastTrainee['trainee_id'];
             $parts = explode('-', $lastId);
             $lastNumber = isset($parts[2]) ? (int)$parts[2] : 0;
             $newNumber = $lastNumber + 1;
         } else {
-            // First trainee for this year
             $newNumber = 1;
         }
         
-        // Format: TRN-YYYY-NNN (e.g., TRN-2026-001)
         return sprintf('TRN-%d-%03d', $year, $newNumber);
     }
     
     public function update($id, $data) {
         try {
-            // Remove password from update if empty
             if (isset($data['password']) && empty($data['password'])) {
                 unset($data['password']);
             }
-            // Don't hash password - store as plain text
             
-            // Update timestamp
             $data['updated_at'] = new MongoDB\BSON\UTCDateTime();
             
             $result = $this->collection->updateOne(
@@ -177,7 +160,6 @@ class Trainee {
             $year = isset($_GET['year']) ? (int)$_GET['year'] : date('Y');
             $db = getMongoConnection();
             
-            // Total trainees - count all trainees in the collection
             $totalTrainees = 0;
             $activeTrainees = 0;
             $graduates = 0;
@@ -190,15 +172,12 @@ class Trainee {
                 error_log("Error counting trainees: " . $e->getMessage());
             }
             
-            // Get enrollment data from registrations and applications collections only (exclude admissions)
             $registrationCollection = $db->registrations;
             $applicationCollection = $db->applications;
             
-            // Count total enrollments from registrations and applications only
             $totalRegistrations = $registrationCollection->countDocuments();
             $totalApplications = $applicationCollection->countDocuments();
             
-            // Calculate today's enrollments (from registrations and applications only)
             $todayStart = new MongoDB\BSON\UTCDateTime(strtotime('today') * 1000);
             $todayEnd = new MongoDB\BSON\UTCDateTime(strtotime('tomorrow') * 1000);
             
@@ -210,7 +189,6 @@ class Trainee {
             ]);
             $todayEnrollments = $todayRegistrations + $todayApplications;
             
-            // Calculate yesterday's enrollments for percentage comparison
             $yesterdayStart = new MongoDB\BSON\UTCDateTime(strtotime('yesterday') * 1000);
             $yesterdayEnd = new MongoDB\BSON\UTCDateTime(strtotime('today') * 1000);
             
@@ -222,7 +200,6 @@ class Trainee {
             ]);
             $yesterdayEnrollments = $yesterdayRegistrations + $yesterdayApplications;
             
-            // Calculate percentage increase
             $todayPercentageIncrease = 0;
             if ($yesterdayEnrollments > 0) {
                 $todayPercentageIncrease = round((($todayEnrollments - $yesterdayEnrollments) / $yesterdayEnrollments) * 100, 1);
@@ -230,7 +207,6 @@ class Trainee {
                 $todayPercentageIncrease = 100;
             }
             
-            // Count approved enrollments (status = 'approved' or 'enrolled')
             $approvedRegistrations = $registrationCollection->countDocuments([
                 'status' => ['$in' => ['approved', 'enrolled']]
             ]);
@@ -239,12 +215,10 @@ class Trainee {
             ]);
             $approvedEnrollments = $approvedRegistrations + $approvedApplications;
             
-            // Count pending enrollments
             $pendingRegistrations = $registrationCollection->countDocuments(['status' => 'pending']);
             $pendingApplications = $applicationCollection->countDocuments(['status' => 'pending']);
             $pendingEnrollments = $pendingRegistrations + $pendingApplications;
             
-            // Count cancelled enrollments
             $cancelledRegistrations = $registrationCollection->countDocuments([
                 'status' => ['$in' => ['cancelled', 'rejected']]
             ]);
@@ -253,7 +227,6 @@ class Trainee {
             ]);
             $cancelledEnrollments = $cancelledRegistrations + $cancelledApplications;
             
-            // Calculate this month's enrollments
             $monthStart = new MongoDB\BSON\UTCDateTime(strtotime('first day of this month') * 1000);
             $monthEnd = new MongoDB\BSON\UTCDateTime(strtotime('first day of next month') * 1000);
             
@@ -265,7 +238,6 @@ class Trainee {
             ]);
             $monthEnrollments = $monthRegistrations + $monthApplications;
             
-            // Calculate last month's enrollments for percentage comparison
             $lastMonthStart = new MongoDB\BSON\UTCDateTime(strtotime('first day of last month') * 1000);
             $lastMonthEnd = new MongoDB\BSON\UTCDateTime(strtotime('first day of this month') * 1000);
             
@@ -277,7 +249,6 @@ class Trainee {
             ]);
             $lastMonthEnrollments = $lastMonthRegistrations + $lastMonthApplications;
             
-            // Calculate month percentage increase
             $monthPercentageIncrease = 0;
             if ($lastMonthEnrollments > 0) {
                 $monthPercentageIncrease = round((($monthEnrollments - $lastMonthEnrollments) / $lastMonthEnrollments) * 100, 1);
@@ -285,7 +256,6 @@ class Trainee {
                 $monthPercentageIncrease = 100;
             }
             
-            // Calculate pending enrollments percentage change (this month vs last month)
             $lastMonthPendingRegs = $registrationCollection->countDocuments([
                 'status' => 'pending',
                 'created_at' => ['$gte' => $lastMonthStart, '$lt' => $lastMonthEnd]
@@ -303,7 +273,6 @@ class Trainee {
                 $pendingPercentageChange = 100;
             }
             
-            // Calculate cancelled enrollments percentage change (this month vs last month)
             $lastMonthCancelledRegs = $registrationCollection->countDocuments([
                 'status' => ['$in' => ['cancelled', 'rejected']],
                 'created_at' => ['$gte' => $lastMonthStart, '$lt' => $lastMonthEnd]
@@ -321,7 +290,6 @@ class Trainee {
                 $cancelledPercentageChange = 100;
             }
             
-            // Calculate current year and previous year enrollments
             $yearStart = new MongoDB\BSON\UTCDateTime(strtotime("$year-01-01") * 1000);
             $yearEnd = new MongoDB\BSON\UTCDateTime(strtotime(($year + 1) . "-01-01") * 1000);
             
@@ -333,7 +301,6 @@ class Trainee {
             ]);
             $currentYearEnrollments = $currentYearRegistrations + $currentYearApplications;
             
-            // Previous year enrollments
             $prevYearStart = new MongoDB\BSON\UTCDateTime(strtotime(($year - 1) . "-01-01") * 1000);
             $prevYearEnd = new MongoDB\BSON\UTCDateTime(strtotime("$year-01-01") * 1000);
             
@@ -345,7 +312,6 @@ class Trainee {
             ]);
             $previousYearEnrollments = $prevYearRegistrations + $prevYearApplications;
             
-            // Calculate year growth percentage
             $yearGrowthPercentage = 0;
             if ($previousYearEnrollments > 0) {
                 $yearGrowthPercentage = round((($currentYearEnrollments - $previousYearEnrollments) / $previousYearEnrollments) * 100, 1);
@@ -353,7 +319,6 @@ class Trainee {
                 $yearGrowthPercentage = 100;
             }
             
-            // Monthly enrollments for the current year
             $monthlyEnrollments = array_fill(0, 12, 0);
             for ($month = 1; $month <= 12; $month++) {
                 $monthStartDate = new MongoDB\BSON\UTCDateTime(strtotime("$year-$month-01") * 1000);
@@ -371,7 +336,6 @@ class Trainee {
                 $monthlyEnrollments[$month - 1] = $monthRegs + $monthApps;
             }
             
-            // Monthly enrollments for the previous year
             $previousYearMonthlyEnrollments = array_fill(0, 12, 0);
             for ($month = 1; $month <= 12; $month++) {
                 $monthStartDate = new MongoDB\BSON\UTCDateTime(strtotime(($year - 1) . "-$month-01") * 1000);
@@ -389,30 +353,24 @@ class Trainee {
                 $previousYearMonthlyEnrollments[$month - 1] = $monthRegs + $monthApps;
             }
             
-            // Log statistics for debugging
             error_log("Statistics - Total Trainees: $totalTrainees, Registrations: $totalRegistrations, Applications: $totalApplications");
             error_log("Today's Enrollments: $todayEnrollments, Approved: $approvedEnrollments, Pending: $pendingEnrollments, Cancelled: $cancelledEnrollments");
             
-            // Get top enrolled courses
             $coursesCollection = $db->courses;
             $topCourses = [];
             
-            // Get all courses
             $allCourses = $coursesCollection->find();
             foreach ($allCourses as $course) {
                 $courseArray = (array)$course;
                 $courseName = $courseArray['title'] ?? $courseArray['name'] ?? 'Unknown Course';
                 
-                // Count enrollments for this course from registrations and applications only
                 $courseEnrollments = 0;
                 
-                // Count from registrations
                 $courseEnrollments += $registrationCollection->countDocuments([
                     'course' => $courseName,
                     'status' => 'approved'
                 ]);
                 
-                // Count from applications
                 $courseEnrollments += $applicationCollection->countDocuments([
                     'course' => $courseName,
                     'status' => 'approved'
@@ -426,7 +384,6 @@ class Trainee {
                 ];
             }
             
-            // Sort by enrollment count descending and take top 5
             usort($topCourses, function($a, $b) {
                 return $b['enrollmentCount'] - $a['enrollmentCount'];
             });

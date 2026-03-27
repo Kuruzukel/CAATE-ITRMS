@@ -2,7 +2,6 @@
 
 (function () {
 
-
   const toastPlacementExample = document.querySelector('.toast-placement-ex'),
     toastPlacementBtn = document.querySelector('#showToastPlacement');
   let selectedType, selectedPlacement, toastPlacement;

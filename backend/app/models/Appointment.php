@@ -14,7 +14,6 @@ class Appointment {
         $cursor = $this->collection->find([], ['sort' => ['createdAt' => -1]]);
         $appointments = iterator_to_array($cursor);
         
-        // Convert ObjectId to string for JSON serialization
         return array_map(function($appointment) {
             if (isset($appointment['_id'])) {
                 $appointment['_id'] = (string) $appointment['_id'];

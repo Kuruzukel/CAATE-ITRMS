@@ -21,7 +21,6 @@ class AuthController {
 
             $traineeModel = new Trainee();
 
-            // Check if trainee exists by email
             $existingTrainee = $traineeModel->findByEmail($data['email']);
             if ($existingTrainee) {
                 http_response_code(200);
@@ -32,7 +31,6 @@ class AuthController {
                 return;
             }
 
-            // Check if username already exists
             $existingUsername = $traineeModel->findByUsername($data['username']);
             if ($existingUsername) {
                 http_response_code(200);
@@ -43,12 +41,9 @@ class AuthController {
                 return;
             }
 
-            // Generate trainee ID
             $currentYear = date('Y');
             $traineeId = $this->generateTraineeId($traineeModel, $currentYear);
 
-            // Create trainee account - only store username, email, and password
-            // Name fields will be empty until filled in by admin
             $traineeData = [
                 'trainee_id' => $traineeId,
                 'first_name' => '',
@@ -86,9 +81,7 @@ class AuthController {
             ]);
         }
 
-        // Helper function to generate trainee ID
         private function generateTraineeId($traineeModel, $year) {
-            // Get all trainees with IDs for the current year
             $allTrainees = $traineeModel->all();
             $pattern = "/^TRN-{$year}-(\\d+)$/";
             $maxNumber = 0;
@@ -122,10 +115,8 @@ class AuthController {
         $identifier = $data['identifier'];
         $password = $data['password'];
         
-        // Debug logging
         error_log("Login attempt for identifier: " . $identifier);
         
-        // Try to find user in admins collection first
         $adminModel = new Admin();
         $admin = $adminModel->findByEmailOrUsername($identifier);
         
@@ -141,7 +132,6 @@ class AuthController {
                 error_log("Password comparison - Input: '$password', Stored: '{$admin['password']}'");
                 
                 if ($admin['password'] === $password) {
-                    // Admin login successful (plain text password comparison)
                     session_start();
                     $_SESSION['user_id'] = (string)$admin['_id'];
                     $_SESSION['user_role'] = 'admin';
@@ -179,7 +169,6 @@ class AuthController {
             error_log("No admin found with identifier: " . $identifier);
         }
         
-        // Try to find user in trainees collection
         $traineeModel = new Trainee();
         $trainee = $traineeModel->findByEmailOrUsername($identifier);
         
@@ -193,27 +182,22 @@ class AuthController {
             ]));
             
             if (isset($trainee['password'])) {
-                // Check if password matches (support both plain text and hashed)
                 $passwordMatches = false;
                 
-                // First try hashed password verification
                 if (password_verify($password, $trainee['password'])) {
                     $passwordMatches = true;
                     error_log("Trainee password verified (hashed)");
                 } 
-                // Fallback to plain text comparison
                 elseif ($trainee['password'] === $password) {
                     $passwordMatches = true;
                     error_log("Trainee password verified (plain text)");
                 }
                 
                 if ($passwordMatches) {
-                    // Trainee login successful
                     session_start();
                     $_SESSION['user_id'] = (string)$trainee['_id'];
                     $_SESSION['user_role'] = 'trainee';
                     
-                    // Build full name from available fields
                     $fullName = trim(
                         ($trainee['first_name'] ?? '') . ' ' . 
                         ($trainee['middle_name'] ?? '') . ' ' . 
@@ -258,7 +242,6 @@ class AuthController {
             error_log("No trainee found with identifier: " . $identifier);
         }
         
-        // Invalid credentials - return 200 with error flag to avoid console errors
         error_log("Login failed - invalid credentials");
         http_response_code(200);
         echo json_encode([
@@ -268,7 +251,6 @@ class AuthController {
     }
     
     public function logout() {
-        // Set headers to prevent caching
         header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
         header('Cache-Control: post-check=0, pre-check=0', false);
         header('Pragma: no-cache');
@@ -285,7 +267,6 @@ class AuthController {
     }
     
     public function checkSession() {
-        // Set headers to prevent caching
         header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
         header('Cache-Control: post-check=0, pre-check=0', false);
         header('Pragma: no-cache');
@@ -315,13 +296,11 @@ class AuthController {
         header('Content-Type: application/json');
         header('Access-Control-Allow-Origin: *');
         
-        // Log the start of the method
         error_log("=== AuthController::changePassword - START ===");
         error_log("Request method: " . $_SERVER['REQUEST_METHOD']);
         error_log("Request URI: " . $_SERVER['REQUEST_URI']);
         
         try {
-            // Get user from Bearer token
             $token = $this->getBearerToken();
             
             error_log("AuthController::changePassword - Token received: " . ($token ? "yes" : "no"));
@@ -336,7 +315,6 @@ class AuthController {
                 return;
             }
             
-            // Verify token and get user info
             $userInfo = $this->verifyToken($token);
             if (!$userInfo) {
                 error_log("AuthController::changePassword - Token verification failed");
@@ -373,7 +351,6 @@ class AuthController {
             
             error_log("AuthController::changePassword - User ID: $userId, Role: $userRole");
             
-            // Validate new password is different from current password
             if ($currentPassword === $newPassword) {
                 http_response_code(400);
                 echo json_encode([
@@ -383,7 +360,6 @@ class AuthController {
                 return;
             }
             
-            // Validate new password strength
             if (strlen($newPassword) < 8) {
                 http_response_code(400);
                 echo json_encode([
@@ -393,7 +369,6 @@ class AuthController {
                 return;
             }
             
-            // Get user based on role
             if ($userRole === 'admin') {
                 $adminModel = new Admin();
                 $user = $adminModel->findById($userId);
@@ -407,7 +382,6 @@ class AuthController {
                     return;
                 }
                 
-                // Verify current password
                 $storedPassword = trim($user['password']);
                 error_log("AuthController::changePassword - Admin stored password: " . $storedPassword);
                 error_log("AuthController::changePassword - Admin current password input: " . $currentPassword);
@@ -422,7 +396,6 @@ class AuthController {
                     return;
                 }
                 
-                // Update password (plain text for admin)
                 $adminModel->update($userId, ['password' => $newPassword]);
                 
             } else if ($userRole === 'trainee') {
@@ -438,18 +411,15 @@ class AuthController {
                     return;
                 }
                 
-                // Verify current password (support both hashed and plain text)
                 $passwordMatches = false;
                 
                 error_log("AuthController::changePassword - Stored password: " . $user['password']);
                 error_log("AuthController::changePassword - Current password input: " . $currentPassword);
                 
-                // First try hashed password verification
                 if (password_verify($currentPassword, $user['password'])) {
                     $passwordMatches = true;
                     error_log("AuthController::changePassword - Password verified using hash");
                 } 
-                // Then try plain text comparison (for legacy passwords)
                 elseif ($user['password'] === $currentPassword) {
                     $passwordMatches = true;
                     error_log("AuthController::changePassword - Password verified using plain text");
@@ -467,7 +437,6 @@ class AuthController {
                     return;
                 }
                 
-                // Update password (plain text for trainee)
                 $traineeModel->update($userId, ['password' => $newPassword]);
                 
             } else {
@@ -494,7 +463,6 @@ class AuthController {
         }
     }
 
-    // Helper method to extract Bearer token from Authorization header
     private function getBearerToken() {
         $headers = getallheaders();
         if (isset($headers['Authorization'])) {
@@ -506,7 +474,6 @@ class AuthController {
         return null;
     }
 
-    // Helper method to verify JWT token and extract user info
     private function verifyToken($token) {
         try {
             error_log("AuthController::verifyToken - Verifying token: " . substr($token, 0, 20) . "...");

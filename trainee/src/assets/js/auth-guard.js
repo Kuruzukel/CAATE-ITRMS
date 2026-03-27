@@ -1,7 +1,4 @@
-/**
- * Authentication Guard - MUST be loaded first in <head>
- * This file provides immediate authentication check before page renders
- */
+
 (function () {
     'use strict';
 
@@ -15,7 +12,6 @@
         return;
     }
 
-    // Check if user has correct role for this page (trainee)
     if (userRole !== 'trainee') {
         const baseUrl = window.location.origin + '/CAATE-ITRMS';
         if (userRole === 'admin') {

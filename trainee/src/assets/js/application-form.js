@@ -1,13 +1,10 @@
-// Application Form JavaScript
 
-// API Configuration - Use global API_BASE_URL if available
 if (typeof window.API_BASE_URL === 'undefined') {
     window.API_BASE_URL = (typeof config !== 'undefined' && config.api)
         ? config.api.baseUrl
         : window.location.origin + '/CAATE-ITRMS/backend/public';
 }
 
-// Load courses for assessment title dropdown
 async function loadCoursesForDropdown() {
     const dropdown = document.getElementById('assessmentTitle');
     const loadingIndicator = document.getElementById('assessmentTitleLoading');
@@ -19,11 +16,9 @@ async function loadCoursesForDropdown() {
     }
 
     try {
-        // Show loading
         if (loadingIndicator) loadingIndicator.classList.remove('d-none');
         if (errorIndicator) errorIndicator.classList.add('d-none');
 
-        // Fetch courses from competencies API
         const response = await fetch(`${window.API_BASE_URL}/api/v1/competencies`);
 
         if (!response.ok) {
@@ -33,10 +28,8 @@ async function loadCoursesForDropdown() {
         const result = await response.json();
 
         if (result.success && result.data && result.data.length > 0) {
-            // Clear existing options except the first one
             dropdown.innerHTML = '<option value="">Select an assessment...</option>';
 
-            // Add course options
             result.data.forEach(course => {
                 const option = document.createElement('option');
                 option.value = course.title || 'Untitled Course';
@@ -44,7 +37,6 @@ async function loadCoursesForDropdown() {
                 dropdown.appendChild(option);
             });
 
-            // Hide loading
             if (loadingIndicator) loadingIndicator.classList.add('d-none');
         } else {
             throw new Error('No assessments found');
@@ -52,13 +44,10 @@ async function loadCoursesForDropdown() {
     } catch (error) {
         console.warn('Could not load assessments, using manual entry:', error.message);
 
-        // Hide loading
         if (loadingIndicator) loadingIndicator.classList.add('d-none');
 
-        // Don't show error indicator, just provide manual entry option
         if (errorIndicator) errorIndicator.classList.add('d-none');
 
-        // Add a fallback option - allow manual entry
         dropdown.innerHTML = `
             <option value="">Select an assessment...</option>
             <option value="Manual Entry">Manual Entry (Type your assessment)</option>
@@ -66,18 +55,15 @@ async function loadCoursesForDropdown() {
     }
 }
 
-// Picture upload handler
 document.getElementById('picture').addEventListener('change', function (e) {
     const file = e.target.files[0];
     if (file) {
-        // Validate file type
         if (!file.type.startsWith('image/')) {
             alert('Please upload an image file');
             this.value = '';
             return;
         }
 
-        // Validate file size (max 2MB)
         if (file.size > 2 * 1024 * 1024) {
             alert('Image size should not exceed 2MB');
             this.value = '';
@@ -98,14 +84,11 @@ document.getElementById('picture').addEventListener('change', function (e) {
     }
 });
 
-// Picture action buttons
 document.addEventListener('DOMContentLoaded', function () {
-    // View picture button
     document.getElementById('viewPictureBtn').addEventListener('click', function (e) {
         e.stopPropagation();
         const preview = document.getElementById('picturePreview');
         if (preview.src) {
-            // Create modal to view full image
             const modal = document.createElement('div');
             modal.className = 'modal fade';
             modal.innerHTML = `
@@ -125,14 +108,12 @@ document.addEventListener('DOMContentLoaded', function () {
             const bsModal = new bootstrap.Modal(modal);
             bsModal.show();
 
-            // Remove modal from DOM when hidden
             modal.addEventListener('hidden.bs.modal', function () {
                 document.body.removeChild(modal);
             });
         }
     });
 
-    // Remove picture button
     document.getElementById('removePictureBtn').addEventListener('click', function (e) {
         e.stopPropagation();
         const pictureInput = document.getElementById('picture');
@@ -140,24 +121,20 @@ document.addEventListener('DOMContentLoaded', function () {
         const previewContainer = document.getElementById('picturePreviewContainer');
         const preview = document.getElementById('picturePreview');
 
-        // Clear the input
         pictureInput.value = '';
 
-        // Reset display
         preview.src = '';
         previewContainer.style.display = 'none';
         placeholder.style.display = 'flex';
     });
 });
 
-// Signature canvas functionality
 const canvas = document.getElementById('signatureCanvas');
 const ctx = canvas.getContext('2d', { willReadFrequently: true });
 let isDrawing = false;
 let lastX = 0;
 let lastY = 0;
 
-// Function to get correct coordinates accounting for canvas scaling
 function getCanvasCoordinates(e, canvas) {
     const rect = canvas.getBoundingClientRect();
     const scaleX = canvas.width / rect.width;
@@ -169,26 +146,21 @@ function getCanvasCoordinates(e, canvas) {
     };
 }
 
-// Function to resize canvas to match display size
 function resizeCanvas() {
     const rect = canvas.getBoundingClientRect();
     canvas.width = rect.width;
     canvas.height = rect.height;
 
-    // Set drawing properties
     ctx.strokeStyle = '#000';
     ctx.lineWidth = 2;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
 }
 
-// Initialize canvas size
 resizeCanvas();
 
-// Resize canvas when window resizes
 window.addEventListener('resize', resizeCanvas);
 
-// Mouse events
 canvas.addEventListener('mousedown', (e) => {
     isDrawing = true;
     const coords = getCanvasCoordinates(e, canvas);
@@ -209,7 +181,6 @@ canvas.addEventListener('mousemove', (e) => {
 canvas.addEventListener('mouseup', () => isDrawing = false);
 canvas.addEventListener('mouseout', () => isDrawing = false);
 
-// Touch events for mobile
 canvas.addEventListener('touchstart', (e) => {
     e.preventDefault();
     const touch = e.touches[0];
@@ -233,17 +204,14 @@ canvas.addEventListener('touchmove', (e) => {
 
 canvas.addEventListener('touchend', () => isDrawing = false);
 
-// Clear signature
 document.querySelector('.btn-clear').addEventListener('click', function () {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    // Reapply drawing properties after clearing
     ctx.strokeStyle = '#000';
     ctx.lineWidth = 2;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
 });
 
-// Calculate age from birthdate
 document.getElementById('birthDate').addEventListener('change', function () {
     const birthDate = new Date(this.value);
     const today = new Date();
@@ -257,7 +225,6 @@ document.getElementById('birthDate').addEventListener('change', function () {
     document.getElementById('age').value = age >= 0 ? age : '';
 });
 
-// Work Experience Row Functions
 function addWorkRow() {
     const tbody = document.getElementById('workExperienceBody');
     const row = document.createElement('tr');
@@ -282,7 +249,6 @@ function removeWorkRow(btn) {
     }
 }
 
-// Training Row Functions
 function addTrainingRow() {
     const tbody = document.getElementById('trainingBody');
     const row = document.createElement('tr');
@@ -306,7 +272,6 @@ function removeTrainingRow(btn) {
     }
 }
 
-// Licensure Row Functions
 function addLicensureRow() {
     const tbody = document.getElementById('licensureBody');
     const row = document.createElement('tr');
@@ -331,7 +296,6 @@ function removeLicensureRow(btn) {
     }
 }
 
-// Competency Row Functions
 function addCompetencyRow() {
     const tbody = document.getElementById('competencyBody');
     const row = document.createElement('tr');
@@ -356,7 +320,6 @@ function removeCompetencyRow(btn) {
     }
 }
 
-// Check if signature canvas has content
 function hasSignature() {
     const canvas = document.getElementById('signatureCanvas');
     const ctx = canvas.getContext('2d', { willReadFrequently: true });
@@ -364,25 +327,20 @@ function hasSignature() {
     return imageData.data.some(channel => channel !== 0);
 }
 
-// Form validation and submission
 document.getElementById('applicationForm').addEventListener('submit', function (e) {
     e.preventDefault();
 
-    // Validate form before showing confirmation modal
     if (!validateApplicationForm()) {
         return;
     }
 
-    // Show confirmation modal
     showConfirmationModal();
 });
 
-// Setup error removal listeners for form inputs
 function setupErrorRemovalListeners() {
     const form = document.getElementById('applicationForm');
     if (!form) return;
 
-    // Remove error state on input for text, select, date, and number fields
     const inputFields = form.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], input[type="date"], input[type="number"], select, textarea');
     inputFields.forEach(field => {
         field.addEventListener('input', function () {
@@ -398,11 +356,9 @@ function setupErrorRemovalListeners() {
         });
     });
 
-    // Remove error state on radio button selection
     const radioButtons = form.querySelectorAll('input[type="radio"]');
     radioButtons.forEach(radio => {
         radio.addEventListener('change', function () {
-            // Remove is-invalid from all radios with the same name
             const radioGroup = form.querySelectorAll(`input[name="${this.name}"]`);
             radioGroup.forEach(r => {
                 if (r.classList.contains('is-invalid')) {
@@ -412,7 +368,6 @@ function setupErrorRemovalListeners() {
         });
     });
 
-    // Remove error state on checkbox selection
     const checkboxes = form.querySelectorAll('input[type="checkbox"]');
     checkboxes.forEach(checkbox => {
         checkbox.addEventListener('change', function () {
@@ -422,7 +377,6 @@ function setupErrorRemovalListeners() {
         });
     });
 
-    // Remove error state on file input
     const fileInputs = form.querySelectorAll('input[type="file"]');
     fileInputs.forEach(fileInput => {
         fileInput.addEventListener('change', function () {
@@ -438,12 +392,10 @@ function validateApplicationForm() {
     let isValid = true;
     const missingFields = [];
 
-    // Clear previous validation states
     form.querySelectorAll('.is-invalid').forEach(field => {
         field.classList.remove('is-invalid');
     });
 
-    // Define required fields with their labels
     const requiredFields = [
         { id: 'schoolName', label: 'School/Training Center/Company' },
         { id: 'assessmentTitle', label: 'Assessment Title' },
@@ -452,9 +404,7 @@ function validateApplicationForm() {
         { id: 'mobile', label: 'Mobile Number' },
         { id: 'email', label: 'Email Address' },
         { id: 'birthDate', label: 'Birth Date' },
-        // Profile section - Name fields
         { id: 'firstName', label: 'First Name' },
-        // Mailing Address fields
         { id: 'numberStreet', label: 'Number Street' },
         { id: 'barangay', label: 'Barangay' },
         { id: 'district', label: 'District' },
@@ -462,15 +412,12 @@ function validateApplicationForm() {
         { id: 'province', label: 'Province' },
         { id: 'region', label: 'Region' },
         { id: 'zip', label: 'Zip' },
-        // Parent names
         { id: 'motherName', label: "Mother's Name" },
         { id: 'fatherName', label: "Father's Name" },
-        // Birth place and age
         { id: 'birthPlace', label: 'Birth Place' },
         { id: 'age', label: 'Age' }
     ];
 
-    // Check text/select/date inputs
     requiredFields.forEach(field => {
         const element = document.getElementById(field.id);
         if (element && (!element.value || element.value.trim() === '')) {
@@ -480,7 +427,6 @@ function validateApplicationForm() {
         }
     });
 
-    // Check radio button groups
     const radioGroups = [
         { name: 'sex', label: 'Sex' },
         { name: 'civilStatus', label: 'Civil Status' },
@@ -491,7 +437,6 @@ function validateApplicationForm() {
     radioGroups.forEach(group => {
         const checked = document.querySelector(`input[name="${group.name}"]:checked`);
         if (!checked) {
-            // Add visual indicator to radio group
             document.querySelectorAll(`input[name="${group.name}"]`).forEach(radio => {
                 radio.classList.add('is-invalid');
             });
@@ -500,7 +445,6 @@ function validateApplicationForm() {
         }
     });
 
-    // Show toast notification if validation fails
     if (!isValid) {
         showToast('Please complete all required fields.', 'error');
         return false;
@@ -510,25 +454,20 @@ function validateApplicationForm() {
 }
 
 function showConfirmationModal() {
-    // Show layout overlay
     const layoutOverlay = document.getElementById('layoutOverlay');
     if (layoutOverlay) {
         layoutOverlay.classList.add('active');
     }
 
-    // Show confirmation modal
     const modalElement = document.getElementById('confirmationModal');
     const modal = new bootstrap.Modal(modalElement);
 
-    // Add event listener for modal dismissal
     modalElement.addEventListener('hidden.bs.modal', () => {
-        // Hide layout overlay
         if (layoutOverlay) {
             layoutOverlay.classList.remove('active');
         }
     }, { once: true });
 
-    // Add click event to overlay to close modal
     if (layoutOverlay) {
         layoutOverlay.addEventListener('click', () => {
             modal.hide();
@@ -538,7 +477,6 @@ function showConfirmationModal() {
     modal.show();
 }
 
-// Handle confirmed submission
 document.addEventListener('DOMContentLoaded', function () {
     const confirmBtn = document.getElementById('confirmSubmitBtn');
     if (confirmBtn) {
@@ -551,36 +489,29 @@ document.addEventListener('DOMContentLoaded', function () {
 function handleConfirmedSubmit() {
     const form = document.getElementById('applicationForm');
 
-    // Hide confirmation modal
     const confirmationModal = bootstrap.Modal.getInstance(document.getElementById('confirmationModal'));
     if (confirmationModal) {
         confirmationModal.hide();
     }
 
-    // Hide layout overlay
     const layoutOverlay = document.getElementById('layoutOverlay');
     if (layoutOverlay) {
         layoutOverlay.classList.remove('active');
     }
 
-    // Show loading state
     const submitBtn = form.querySelector('button[type="submit"]');
     const originalText = submitBtn.innerHTML;
     submitBtn.disabled = true;
     submitBtn.innerHTML = '<i class="bx bx-loader-alt bx-spin me-2"></i>Submitting...';
 
-    // Collect form data
     const formData = new FormData(form);
     const data = {};
 
-    // Convert FormData to regular object, handling arrays properly
     for (let [key, value] of formData.entries()) {
-        // Skip file inputs - we'll handle them separately
         if (value instanceof File) {
             continue;
         }
 
-        // Handle array fields (fields with [] notation)
         if (key.endsWith('[]')) {
             const arrayKey = key.slice(0, -2); // Remove the []
             if (!data[arrayKey]) {
@@ -588,9 +519,7 @@ function handleConfirmedSubmit() {
             }
             data[arrayKey].push(value);
         } else {
-            // Handle regular fields
             if (data[key]) {
-                // If key already exists, convert to array
                 if (Array.isArray(data[key])) {
                     data[key].push(value);
                 } else {
@@ -602,29 +531,24 @@ function handleConfirmedSubmit() {
         }
     }
 
-    // Add userId from localStorage
     const userId = localStorage.getItem('userId');
     if (userId) {
         data.userId = userId;
     }
 
-    // Add picture as base64 if uploaded
     const picturePreview = document.getElementById('picturePreview');
     if (picturePreview && picturePreview.src && picturePreview.src.startsWith('data:')) {
         data.picture = picturePreview.src;
     }
 
-    // Add signature as base64
     const canvas = document.getElementById('signatureCanvas');
     if (canvas && hasSignature()) {
         data.signature = canvas.toDataURL();
     }
 
-    // Add timestamp and status
     data.submittedAt = new Date().toISOString();
     data.status = 'pending';
 
-    // Submit to database
     fetch(`${window.API_BASE_URL}/api/v1/applications`, {
         method: 'POST',
         headers: {
@@ -635,30 +559,24 @@ function handleConfirmedSubmit() {
     })
         .then(response => {
             if (!response.ok) {
-                // Try to get error message from response
                 return response.json().then(errorData => {
                     throw new Error(errorData.message || errorData.error || `Server error: ${response.status}`);
                 }).catch(jsonError => {
-                    // If can't parse JSON, throw generic error
                     throw new Error(`Server error: ${response.status}`);
                 });
             }
             return response.json();
         })
         .then(result => {
-            // Show success toast
             showToast('Application submitted successfully!', 'success');
 
-            // Reset form
             form.reset();
 
-            // Clear signature
             if (canvas) {
                 const ctx = canvas.getContext('2d', { willReadFrequently: true });
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
             }
 
-            // Clear picture preview
             const preview = document.getElementById('picturePreview');
             const placeholder = document.getElementById('picturePlaceholder');
             const previewContainer = document.getElementById('picturePreviewContainer');
@@ -668,34 +586,29 @@ function handleConfirmedSubmit() {
                 placeholder.style.display = 'flex';
             }
 
-            // Clear localStorage draft
             localStorage.removeItem('applicationFormDraft');
         })
         .catch(error => {
             console.error('Application submission error:', error);
 
-            // Save locally as fallback
             const applications = JSON.parse(localStorage.getItem('applications') || '[]');
             applications.push(data);
             localStorage.setItem('applications', JSON.stringify(applications));
 
-            // Show appropriate message based on error
             if (error.message.includes('MongoDB') || error.message.includes('timeout') || error.message.includes('connection')) {
-                showToast('⚠️ Database is offline. Your application has been saved locally. Please start MongoDB service and try again.', 'warning');
+                showToast('âš ï¸ Database is offline. Your application has been saved locally. Please start MongoDB service and try again.', 'warning');
                 console.error('MongoDB Connection Error - Please start MongoDB service');
                 console.info('To start MongoDB, run: net start MongoDB (as Administrator)');
             } else {
                 showToast('Application saved locally. It will be submitted when the server is available.', 'warning');
             }
 
-            // Reset form anyway
             form.reset();
             if (canvas) {
                 const ctx = canvas.getContext('2d', { willReadFrequently: true });
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
             }
 
-            // Clear picture preview
             const preview = document.getElementById('picturePreview');
             const placeholder = document.getElementById('picturePlaceholder');
             const previewContainer = document.getElementById('picturePreviewContainer');
@@ -706,20 +619,16 @@ function handleConfirmedSubmit() {
             }
         })
         .finally(() => {
-            // Reset button
             submitBtn.disabled = false;
             submitBtn.innerHTML = originalText;
         });
 }
 
-// Form reset handler
 document.getElementById('applicationForm').addEventListener('reset', function (e) {
-    // Clear signature
     const canvas = document.getElementById('signatureCanvas');
     const ctx = canvas.getContext('2d', { willReadFrequently: true });
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Clear picture preview
     const preview = document.getElementById('picturePreview');
     const placeholder = document.getElementById('picturePlaceholder');
     const previewContainer = document.getElementById('picturePreviewContainer');
@@ -727,21 +636,17 @@ document.getElementById('applicationForm').addEventListener('reset', function (e
     previewContainer.style.display = 'none';
     placeholder.style.display = 'flex';
 
-    // Clear age field
     document.getElementById('age').value = '';
 
-    // Clear validation states
     document.querySelectorAll('.is-invalid').forEach(field => {
         field.classList.remove('is-invalid');
     });
 
-    // Reset signature canvas border
     if (canvas) {
         canvas.style.border = '1px solid #d9dee3';
     }
 });
 
-// Auto-save to localStorage (optional feature)
 function autoSave() {
     const formData = new FormData(document.getElementById('applicationForm'));
     const data = {};
@@ -751,10 +656,8 @@ function autoSave() {
     localStorage.setItem('applicationFormDraft', JSON.stringify(data));
 }
 
-// Auto-save every 30 seconds
 setInterval(autoSave, 30000);
 
-// Load saved data on page load (optional)
 window.addEventListener('load', function () {
     const savedData = localStorage.getItem('applicationFormDraft');
     if (savedData) {
@@ -764,14 +667,11 @@ window.addEventListener('load', function () {
         for (let key in data) {
             const field = form.elements[key];
             if (field && field.type !== 'file') {
-                // Handle radio buttons properly
                 if (field.type === 'radio') {
-                    // Only check the radio button if the saved value matches this radio's value
                     if (field.value === data[key]) {
                         field.checked = true;
                     }
                 } else if (field.length) {
-                    // Handle radio button groups (NodeList)
                     for (let i = 0; i < field.length; i++) {
                         if (field[i].type === 'radio' && field[i].value === data[key]) {
                             field[i].checked = true;
@@ -780,7 +680,6 @@ window.addEventListener('load', function () {
                         }
                     }
                 } else {
-                    // Handle other input types
                     field.value = data[key];
                 }
             }
@@ -788,37 +687,28 @@ window.addEventListener('load', function () {
     }
 });
 
-// Confirmation functions for modals
 function confirmResetApplication() {
     document.getElementById('applicationForm').reset();
-    // Close modal
     const resetModal = bootstrap.Modal.getInstance(document.getElementById('resetModal'));
     resetModal.hide();
-    // Show success message
     alert('Form has been reset successfully!');
 }
 
 function confirmSubmitApplication() {
     const form = document.getElementById('applicationForm');
-    // You can add form validation here
-    // For now, we'll just submit the form
     form.submit();
-    // Close modal
     const submitModal = bootstrap.Modal.getInstance(document.getElementById('submitModal'));
     submitModal.hide();
 }
 
 function confirmPrintApplication() {
-    // Close modal first
     const printModal = bootstrap.Modal.getInstance(document.getElementById('printModal'));
     printModal.hide();
-    // Wait for modal to close, then print
     setTimeout(() => {
         window.print();
     }, 300);
 }
 
-// Toast notification function
 function showToast(message, type = 'success') {
     const container = document.getElementById('toastContainer');
     if (!container) return;
@@ -839,89 +729,63 @@ function showToast(message, type = 'success') {
 
     container.appendChild(toast);
 
-    // Auto remove after 5 seconds
     setTimeout(() => {
         toast.classList.add('hiding');
         setTimeout(() => toast.remove(), 300);
     }, 5000);
 }
 
-// Menu toggle is handled by main.js - no need to duplicate here
 document.addEventListener('DOMContentLoaded', function () {
-    // Load courses for the assessment title dropdown (silently fail if API unavailable)
     loadCoursesForDropdown().catch(err => {
         console.warn('Could not load courses:', err.message);
     });
 
-    // Initialize Philippine address dropdowns
     initializePhilippineAddressDropdowns();
 
-    // Clear any problematic localStorage data that might auto-select radio buttons
-    // Uncomment the line below if you want to clear all saved form data
-    // localStorage.removeItem('applicationFormDraft');
-
-    // Ensure all radio buttons start unchecked
     const assessmentRadios = document.querySelectorAll('input[name="assessmentType"]');
     assessmentRadios.forEach(radio => {
         radio.checked = false;
     });
 
-    // Application form specific initialization can go here
-
-    // Add error removal listeners for all form inputs
     setupErrorRemovalListeners();
 });
 
-// Philippine Address Dropdowns - DISABLED: All fields are now input fields
 function initializePhilippineAddressDropdowns() {
-    // All address fields (region, province, city, barangay, district) are now input fields
-    // No dropdown functionality needed
 
-    // Add single digit enforcement for district field
     const districtField = document.getElementById('district');
     if (districtField) {
-        // Prevent invalid keypress
         districtField.addEventListener('keypress', function (e) {
-            // Allow only digits 1-9, backspace, delete, tab, escape, enter
             const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter'];
             const isNumber = /[1-9]/.test(e.key);
 
-            // If field already has a value and user tries to type another character
             if (this.value.length >= 1 && !allowedKeys.includes(e.key)) {
                 e.preventDefault();
                 return;
             }
 
-            // Only allow digits 1-9
             if (!isNumber && !allowedKeys.includes(e.key)) {
                 e.preventDefault();
                 return;
             }
 
-            // Don't allow 0
             if (e.key === '0') {
                 e.preventDefault();
                 return;
             }
         });
 
-        // Clean up input on paste or other input events
         districtField.addEventListener('input', function (e) {
             let value = e.target.value;
 
-            // Remove any non-digit characters
             value = value.replace(/[^1-9]/g, '');
 
-            // Keep only the first digit
             if (value.length > 1) {
                 value = value.charAt(0);
             }
 
-            // Update the field value
             e.target.value = value;
         });
 
-        // Prevent paste of invalid content
         districtField.addEventListener('paste', function (e) {
             e.preventDefault();
             const paste = (e.clipboardData || window.clipboardData).getData('text');
@@ -932,13 +796,11 @@ function initializePhilippineAddressDropdowns() {
         });
     }
 
-    // Add text-only validation for Barangay, City, and Province fields
     const textOnlyFields = ['barangay', 'city', 'province'];
 
     textOnlyFields.forEach(fieldId => {
         const field = document.getElementById(fieldId);
         if (field) {
-            // Allow only letters, spaces, hyphens, apostrophes, and periods
             field.addEventListener('keypress', function (e) {
                 const char = String.fromCharCode(e.which);
                 const allowedPattern = /[a-zA-Z\s\-'\.]/;
@@ -948,9 +810,7 @@ function initializePhilippineAddressDropdowns() {
                 }
             });
 
-            // Clean up any invalid characters on input
             field.addEventListener('input', function (e) {
-                // Remove any characters that are not letters, spaces, hyphens, apostrophes, or periods
                 const cleanValue = e.target.value.replace(/[^a-zA-Z\s\-'\.]/g, '');
                 if (e.target.value !== cleanValue) {
                     e.target.value = cleanValue;
@@ -959,13 +819,10 @@ function initializePhilippineAddressDropdowns() {
         }
     });
 
-    // Phone number formatting for TEL, MOBILE, and FAX fields
     function formatPhoneNumber(value, type) {
-        // Remove all non-digit characters
         const digits = value.replace(/\D/g, '');
 
         if (type === 'mobile') {
-            // Mobile format: 0969 696 9696 (11 digits)
             if (digits.length <= 4) {
                 return digits;
             } else if (digits.length <= 7) {
@@ -975,7 +832,6 @@ function initializePhilippineAddressDropdowns() {
             }
             return digits.slice(0, 4) + ' ' + digits.slice(4, 7) + ' ' + digits.slice(7, 11);
         } else {
-            // TEL and FAX format: (02) 123-4567
             if (digits.length <= 2) {
                 return digits.length > 0 ? '(' + digits : '';
             } else if (digits.length <= 5) {
@@ -987,7 +843,6 @@ function initializePhilippineAddressDropdowns() {
         }
     }
 
-    // Apply phone formatting to TEL, MOBILE, and FAX fields
     const phoneFields = [
         { id: 'tel', type: 'landline' },
         { id: 'mobile', type: 'mobile' },
@@ -1005,7 +860,6 @@ function initializePhilippineAddressDropdowns() {
                 if (oldValue !== newValue) {
                     e.target.value = newValue;
 
-                    // Adjust cursor position
                     let newCursorPosition = cursorPosition;
                     if (newValue.length > oldValue.length) {
                         newCursorPosition = cursorPosition + (newValue.length - oldValue.length);
@@ -1014,7 +868,6 @@ function initializePhilippineAddressDropdowns() {
                 }
             });
 
-            // Handle keypress to allow only digits and control keys
             field.addEventListener('keypress', function (e) {
                 const char = String.fromCharCode(e.which);
                 if (!/[0-9]/.test(char) && e.which !== 8 && e.which !== 0 && e.which !== 46) {

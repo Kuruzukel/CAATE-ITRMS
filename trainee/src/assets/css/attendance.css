@@ -1,6 +1,5 @@
-/* Attendance specific styles */
 
-/* Course Card Styles */
+
 .course-card {
     cursor: pointer;
     transition: all 0.3s ease;
@@ -40,7 +39,6 @@
     color: #10b981 !important;
 }
 
-/* Legacy course selector styles (keeping for compatibility) */
 .course-selector {
     cursor: pointer;
     transition: all 0.3s ease;
@@ -57,7 +55,6 @@
     background-color: rgba(59, 130, 246, 0.05);
 }
 
-/* Time input icon styling */
 #attendanceTime {
     color-scheme: white;
 }
@@ -67,13 +64,11 @@
     cursor: pointer;
 }
 
-/* For Firefox */
 #attendanceTime::-moz-calendar-picker-indicator {
     filter: invert(1);
     cursor: pointer;
 }
 
-/* Image Preview Styles - Match System Dark Theme */
 #imagePreviewSection.image-preview-section {
     padding: 1rem !important;
     border: 2px solid #334155 !important;
@@ -101,7 +96,6 @@
     background-color: #1e293b !important;
 }
 
-/* Image action buttons - Match System Dark Theme */
 #imageActionButtons.image-action-buttons {
     position: absolute !important;
     bottom: 12px !important;
@@ -156,7 +150,6 @@
     box-shadow: 0 4px 8px rgba(239, 68, 68, 0.5) !important;
 }
 
-/* No image text styling - Match System Dark Theme */
 #noImageText {
     color: #94a3b8 !important;
 }
@@ -212,7 +205,6 @@
     transform: scale(1.02);
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
     .upload-area {
         height: 150px;
@@ -225,12 +217,11 @@
     }
 }
 
-/* Custom Scrollbar for Attendance Records Container - Match table-responsive */
 .attendance-records-container {
     scrollbar-width: thin;
     scrollbar-color: rgba(54, 145, 191, 0.9) rgba(15, 41, 66, 0.2);
     overflow-x: hidden;
-    /* Remove horizontal scroll */
+    
     overflow-y: auto;
 }
 

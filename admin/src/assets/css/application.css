@@ -50,13 +50,11 @@
     border: 1px solid rgba(54, 145, 191, 0.15);
 }
 
-/* Calendar input white theme override for modals */
 .modal input[type="date"],
 .modal input[type="datetime-local"] {
     color-scheme: light !important;
 }
 
-/* Specific styling for Submitted At and Last Updated */
 #addSubmittedAt,
 #addUpdatedAt,
 #editSubmittedAt,
@@ -64,12 +62,10 @@
     color-scheme: light !important;
 }
 
-/* Keep filter date input dark */
 #applicationDateFilter {
     color-scheme: light !important;
 }
 
-/* Invalid field highlighting styles */
 .form-control.is-invalid,
 .form-select.is-invalid {
     border-color: #dc3545 !important;
@@ -98,7 +94,6 @@
     }
 }
 
-/* Toast Notification Styles - Same as Registration */
 .toast-container {
     position: fixed;
     top: 20px;

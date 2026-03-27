@@ -3,16 +3,11 @@
 require_once __DIR__ . '/../../vendor/autoload.php';
 require_once __DIR__ . '/../../app/config/database.php';
 
-/**
- * Comprehensive Sample Data for CAATE-ITRMS
- */
-
 try {
     $db = getMongoConnection();
     
     echo "Seeding Comprehensive Sample Data for CAATE-ITRMS...\n\n";
     
-    // 1. Users Collection
     echo "Creating Users...\n";
     $usersCollection = $db->users;
     $users = [
@@ -48,11 +43,10 @@ try {
     foreach ($users as $user) {
         if (!$usersCollection->findOne(['email' => $user['email']])) {
             $usersCollection->insertOne($user);
-            echo "  ✓ Created user: {$user['name']}\n";
+            echo "  âœ“ Created user: {$user['name']}\n";
         }
     }
     
-    // 2. Courses Collection
     echo "\nCreating Courses...\n";
     $coursesCollection = $db->courses;
     $courses = [
@@ -114,13 +108,12 @@ try {
         if (!$existing) {
             $result = $coursesCollection->insertOne($course);
             $courseIds[$course['course_code']] = $result->getInsertedId();
-            echo "  ✓ Created course: {$course['title']}\n";
+            echo "  âœ“ Created course: {$course['title']}\n";
         } else {
             $courseIds[$course['course_code']] = $existing['_id'];
         }
     }
     
-    // 3. Trainees Collection
     echo "\nCreating Trainees...\n";
     $traineesCollection = $db->trainees;
     $trainees = [
@@ -192,13 +185,12 @@ try {
         if (!$existing) {
             $result = $traineesCollection->insertOne($trainee);
             $traineeIds[$trainee['trainee_id']] = $result->getInsertedId();
-            echo "  ✓ Created trainee: {$trainee['first_name']} {$trainee['last_name']}\n";
+            echo "  âœ“ Created trainee: {$trainee['first_name']} {$trainee['last_name']}\n";
         } else {
             $traineeIds[$trainee['trainee_id']] = $existing['_id'];
         }
     }
     
-    // 4. Enrollments Collection
     echo "\nCreating Enrollments...\n";
     $enrollmentsCollection = $db->enrollments;
     $enrollments = [
@@ -246,10 +238,9 @@ try {
     
     foreach ($enrollments as $enrollment) {
         $enrollmentsCollection->insertOne($enrollment);
-        echo "  ✓ Created enrollment\n";
+        echo "  âœ“ Created enrollment\n";
     }
     
-    // 5. Inventory Collection
     echo "\nCreating Inventory Items...\n";
     $inventoryCollection = $db->inventory;
     $inventoryItems = [
@@ -318,11 +309,10 @@ try {
     foreach ($inventoryItems as $item) {
         if (!$inventoryCollection->findOne(['item_code' => $item['item_code']])) {
             $inventoryCollection->insertOne($item);
-            echo "  ✓ Created inventory: {$item['name']}\n";
+            echo "  âœ“ Created inventory: {$item['name']}\n";
         }
     }
     
-    // 6. Applications Collection
     echo "\nCreating Applications...\n";
     $applicationsCollection = $db->applications;
     $applications = [
@@ -360,10 +350,9 @@ try {
     
     foreach ($applications as $application) {
         $applicationsCollection->insertOne($application);
-        echo "  ✓ Created application: {$application['first_name']} {$application['last_name']}\n";
+        echo "  âœ“ Created application: {$application['first_name']} {$application['last_name']}\n";
     }
     
-    // 7. Graduates Collection
     echo "\nCreating Graduates...\n";
     $graduatesCollection = $db->graduates;
     $graduates = [
@@ -389,10 +378,10 @@ try {
     
     foreach ($graduates as $graduate) {
         $graduatesCollection->insertOne($graduate);
-        echo "  ✓ Created graduate: {$graduate['student_name']}\n";
+        echo "  âœ“ Created graduate: {$graduate['student_name']}\n";
     }
     
-    echo "\n✅ Comprehensive sample data seeding completed!\n";
+    echo "\nâœ… Comprehensive sample data seeding completed!\n";
     echo "\nSummary:\n";
     echo "- Users: " . $usersCollection->countDocuments() . "\n";
     echo "- Courses: " . $coursesCollection->countDocuments() . "\n";

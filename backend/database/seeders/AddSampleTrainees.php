@@ -3,10 +3,6 @@
 require_once __DIR__ . '/../../vendor/autoload.php';
 require_once __DIR__ . '/../../app/config/database.php';
 
-/**
- * Add 10 Sample Trainee Accounts with Randomized Passwords
- */
-
 function generateRandomPassword($length = 10) {
     $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%';
     $password = '';
@@ -24,7 +20,6 @@ try {
     
     $traineesCollection = $db->trainees;
     
-    // Get the current highest trainee number
     $lastTrainee = $traineesCollection->findOne(
         [],
         ['sort' => ['trainee_id' => -1]]
@@ -47,7 +42,7 @@ try {
         '789 EDSA, Mandaluyong',
         '321 Ortigas Ave, Pasig',
         '654 Shaw Blvd, Mandaluyong',
-        '987 España Blvd, Manila',
+        '987 EspaÃ±a Blvd, Manila',
         '147 Katipunan Ave, Quezon City',
         '258 Commonwealth Ave, Quezon City',
         '369 Marcos Highway, Marikina',
@@ -60,10 +55,9 @@ try {
         $traineeNumber = str_pad($startNumber + $i, 3, '0', STR_PAD_LEFT);
         $traineeId = "TRN-2024-{$traineeNumber}";
         
-        // Check if trainee already exists
         $existing = $traineesCollection->findOne(['trainee_id' => $traineeId]);
         if ($existing) {
-            echo "  ⚠ Trainee {$traineeId} already exists, skipping...\n";
+            echo "  âš  Trainee {$traineeId} already exists, skipping...\n";
             continue;
         }
         
@@ -73,7 +67,6 @@ try {
         $password = generateRandomPassword(12);
         $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
         
-        // Random birth year between 1995 and 2003
         $birthYear = rand(1995, 2003);
         $birthMonth = rand(1, 12);
         $birthDay = rand(1, 28);
@@ -102,10 +95,10 @@ try {
             'password' => $password
         ];
         
-        echo "  ✓ Created trainee: {$firstName} {$lastName} ({$traineeId})\n";
+        echo "  âœ“ Created trainee: {$firstName} {$lastName} ({$traineeId})\n";
     }
     
-    echo "\n✅ Successfully created " . count($createdTrainees) . " trainee accounts!\n";
+    echo "\nâœ… Successfully created " . count($createdTrainees) . " trainee accounts!\n";
     echo "\n" . str_repeat("=", 80) . "\n";
     echo "TRAINEE ACCOUNT CREDENTIALS\n";
     echo str_repeat("=", 80) . "\n\n";

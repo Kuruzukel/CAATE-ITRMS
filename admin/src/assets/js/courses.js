@@ -369,7 +369,6 @@ async function loadCourses() {
     }
 }
 
-
 function renderCourses(coursesData) {
     const container = document.getElementById('coursesGrid');
     if (!container) return;

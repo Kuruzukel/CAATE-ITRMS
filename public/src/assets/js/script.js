@@ -23,7 +23,6 @@ mobileMenuToggle.addEventListener("click", () => {
   }
 });
 
-// Close mobile menu when clicking a link
 const mobileMenuLinks = mobileMenu.querySelectorAll(".nav-link");
 mobileMenuLinks.forEach((link) => {
   link.addEventListener("click", () => {
@@ -60,7 +59,6 @@ window.addEventListener("scroll", () => {
     }
   });
 
-  // Special case: if we're at the bottom of the page, activate footer
   if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 50) {
     current = "footer";
   }
@@ -83,20 +81,17 @@ const cardWidth = 285; // card width - updated to match CSS
 const gap = 24; // 1.5rem = 24px gap
 const totalCourses = 10;
 
-// Calculate how many cards fit in the viewport
 function getCardsPerView() {
   const containerWidth = carousel.offsetWidth;
   const cardsPerView = Math.floor((containerWidth + gap) / (cardWidth + gap));
   return Math.max(1, cardsPerView); // At least 1 card
 }
 
-// Calculate total pages needed based on cards per view
 function getTotalPages() {
   const cardsPerView = getCardsPerView();
   return Math.ceil(totalCourses / cardsPerView);
 }
 
-// Generate dots dynamically based on total pages
 function generateDots() {
   const totalPages = getTotalPages();
   dotsContainer.innerHTML = '';
@@ -144,7 +139,6 @@ nextBtn.addEventListener("click", () => {
   updateCarousel();
 });
 
-// Initialize dots on page load
 generateDots();
 
 let touchStartX = 0;
@@ -195,7 +189,6 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
   anchor.addEventListener("click", function (e) {
     const href = this.getAttribute("href");
 
-    // Skip if href is just "#" or empty
     if (!href || href === "#") {
       return;
     }
@@ -214,7 +207,6 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
         behavior: "smooth",
       });
 
-      // Update active nav link
       navLinks.forEach((link) => {
         link.classList.remove("active");
         if (link.getAttribute("href") === href) {

@@ -1,13 +1,10 @@
-/* Competencies Page Functionality */
 
-// API Configuration - Use global API_BASE_URL if available
+
 if (typeof window.API_BASE_URL === 'undefined') {
     window.API_BASE_URL = (typeof config !== 'undefined' && config.api)
         ? config.api.baseUrl
         : window.location.origin + '/CAATE-ITRMS/backend/public';
 }
-
-// Use API_BASE_URL directly from window object to avoid redeclaration conflicts
 
 let coursesData = [];
 
@@ -15,7 +12,6 @@ document.addEventListener('DOMContentLoaded', function () {
     loadCourses();
 });
 
-// Load courses from API
 async function loadCourses() {
     const loadingSpinner = document.getElementById('loadingSpinner');
     const errorState = document.getElementById('errorState');
@@ -23,13 +19,11 @@ async function loadCourses() {
     const coursesGrid = document.getElementById('coursesGrid');
 
     try {
-        // Show loading
         if (loadingSpinner) loadingSpinner.classList.remove('d-none');
         if (errorState) errorState.classList.add('d-none');
         if (emptyState) emptyState.classList.add('d-none');
         if (coursesGrid) coursesGrid.classList.add('d-none');
 
-        // Fetch competencies (one document per course)
         const response = await fetch(`${window.API_BASE_URL}/api/v1/competencies`);
 
         if (!response.ok) {
@@ -42,18 +36,15 @@ async function loadCourses() {
             coursesData = result.data;
             renderCourses(coursesData);
 
-            // Hide loading, show courses
             if (loadingSpinner) loadingSpinner.classList.add('d-none');
             if (coursesGrid) coursesGrid.classList.remove('d-none');
         } else {
-            // No courses found
             if (loadingSpinner) loadingSpinner.classList.add('d-none');
             if (emptyState) emptyState.classList.remove('d-none');
         }
     } catch (error) {
         console.error('Error loading competencies:', error);
 
-        // Show error
         if (loadingSpinner) loadingSpinner.classList.add('d-none');
         if (errorState) errorState.classList.remove('d-none');
         const errorMessage = document.getElementById('errorMessage');
@@ -63,7 +54,6 @@ async function loadCourses() {
     }
 }
 
-// Render courses to grid
 function renderCourses(courses) {
     const coursesGrid = document.getElementById('coursesGrid');
     if (!coursesGrid) return;
@@ -76,12 +66,10 @@ function renderCourses(courses) {
     });
 }
 
-// Create course card
 function createCourseCard(course) {
     const col = document.createElement('div');
     col.className = 'col';
 
-    // Determine badge color
     let badgeClass = 'bg-primary';
     const badgeText = course.badge || course.course_code || '';
 
@@ -93,7 +81,6 @@ function createCourseCard(course) {
         badgeClass = 'bg-secondary';
     }
 
-    // Parse competencies
     const basicComp = course.basic_competencies || [];
     const commonComp = course.common_competencies || [];
     const coreComp = course.core_competencies || [];

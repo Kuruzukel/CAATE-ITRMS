@@ -1,23 +1,13 @@
-/**
- * Trainee Navbar - Common navbar functionality for trainee pages
- * Handles authentication check and real data fetching for navbar dropdown
- */
 
-// API Base URL - Check if already defined globally to avoid conflicts
+
 if (typeof window.API_BASE_URL === 'undefined') {
     window.API_BASE_URL = window.location.origin + '/CAATE-ITRMS/backend/public';
 }
 
-// Use window.API_BASE_URL directly to avoid redeclaration conflicts
-
-// Cache for trainee data to avoid repeated API calls
 let traineeDataCache = null;
 let cacheTimestamp = null;
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
-/**
- * Load trainee profile data for navbar
- */
 async function loadTraineeProfileForNavbar() {
     try {
         const token = localStorage.getItem('authToken');
@@ -29,13 +19,11 @@ async function loadTraineeProfileForNavbar() {
             return null;
         }
 
-        // Check if we have valid cached data
         if (traineeDataCache && cacheTimestamp && (Date.now() - cacheTimestamp < CACHE_DURATION)) {
             updateNavbarWithData(traineeDataCache);
             return traineeDataCache;
         }
 
-        // Try to get user data from localStorage first
         let traineeData = null;
         if (userData) {
             try {
@@ -43,13 +31,10 @@ async function loadTraineeProfileForNavbar() {
                 updateNavbarWithData(traineeData);
                 return traineeData;
             } catch (e) {
-                // Error parsing userData, continue to API fetch
             }
         }
 
-        // Fetch from API with fallback strategy
         try {
-            // Try general users endpoint first
             let response = await fetch(`${window.API_BASE_URL}/api/v1/users/${userId}`, {
                 method: 'GET',
                 headers: {
@@ -59,7 +44,6 @@ async function loadTraineeProfileForNavbar() {
             });
 
             if (!response.ok) {
-                // Try trainee-specific endpoint
                 response = await fetch(`${window.API_BASE_URL}/api/v1/trainees/${userId}`, {
                     method: 'GET',
                     headers: {
@@ -75,14 +59,12 @@ async function loadTraineeProfileForNavbar() {
 
                 console.log('Raw trainee data from API:', traineeData); // Debug log
 
-                // Map the data to consistent format
                 const firstName = traineeData.firstName || traineeData.first_name || '';
                 const secondName = traineeData.secondName || traineeData.second_name || '';
                 const middleName = traineeData.middleName || traineeData.middle_name || '';
                 const lastName = traineeData.lastName || traineeData.last_name || '';
                 const suffix = traineeData.suffix || '';
 
-                // Build complete full name with all parts
                 const nameParts = [firstName, secondName, middleName, lastName, suffix].filter(part => part.trim() !== '');
                 const fullName = nameParts.join(' ').trim();
 
@@ -114,7 +96,6 @@ async function loadTraineeProfileForNavbar() {
                     profile_image: traineeData.profile_image || traineeData.profileImage || null
                 };
 
-                // Cache the data
                 traineeDataCache = mappedData;
                 cacheTimestamp = Date.now();
 
@@ -128,18 +109,15 @@ async function loadTraineeProfileForNavbar() {
         } catch (apiError) {
             console.error('API fetch failed:', apiError);
 
-            // Fallback: use data from localStorage
             if (userData) {
                 try {
                     const fallbackData = JSON.parse(userData);
-                    // Build full name first, then fallback to other options
                     const firstName = fallbackData.firstName || fallbackData.first_name || '';
                     const secondName = fallbackData.secondName || fallbackData.second_name || '';
                     const middleName = fallbackData.middleName || fallbackData.middle_name || '';
                     const lastName = fallbackData.lastName || fallbackData.last_name || '';
                     const suffix = fallbackData.suffix || '';
 
-                    // Build complete full name with all parts
                     const nameParts = [firstName, secondName, middleName, lastName, suffix].filter(part => part.trim() !== '');
                     const fullName = nameParts.join(' ').trim();
 
@@ -172,7 +150,6 @@ async function loadTraineeProfileForNavbar() {
                 }
             }
 
-            // Final fallback
             const defaultData = { name: 'Trainee', email: '', role: 'trainee' };
             updateNavbarWithData(defaultData);
             return defaultData;
@@ -181,29 +158,22 @@ async function loadTraineeProfileForNavbar() {
     } catch (error) {
         console.error('Error loading trainee profile for navbar:', error);
 
-        // Final fallback
         const defaultData = { name: 'Trainee', email: '', role: 'trainee' };
         updateNavbarWithData(defaultData);
         return defaultData;
     }
 }
 
-/**
- * Update navbar elements with trainee data
- */
 function updateNavbarWithData(data) {
     try {
-        // Determine the display name - prioritize full name, then username, then fallback
         let displayName = 'Trainee';
 
-        // First try to build full name from all available name parts
         const firstName = data.firstName || data.first_name || '';
         const secondName = data.secondName || data.second_name || '';
         const middleName = data.middleName || data.middle_name || '';
         const lastName = data.lastName || data.last_name || '';
         const suffix = data.suffix || '';
 
-        // Build complete full name with all parts
         const nameParts = [firstName, secondName, middleName, lastName, suffix].filter(part => part.trim() !== '');
         const fullName = nameParts.join(' ').trim();
 
@@ -215,7 +185,6 @@ function updateNavbarWithData(data) {
             displayName = data.username.trim();
         }
 
-        // Update user name in dropdown and welcome messages
         const userNameElements = document.querySelectorAll('.user-name');
         userNameElements.forEach(element => {
             if (element) {
@@ -223,7 +192,6 @@ function updateNavbarWithData(data) {
             }
         });
 
-        // Update welcome messages specifically
         const welcomeElements = document.querySelectorAll('.welcome-user-name, .dashboard-welcome .user-name');
         welcomeElements.forEach(element => {
             if (element) {
@@ -231,11 +199,9 @@ function updateNavbarWithData(data) {
             }
         });
 
-        // Update profile images using the global function
         const imagePath = data.profileImage || data.profile_image;
         window.updateTraineeProfileImages(imagePath);
 
-        // Store the display name globally for other scripts to use
         window.currentTraineeDisplayName = displayName;
 
     } catch (error) {
@@ -243,9 +209,6 @@ function updateNavbarWithData(data) {
     }
 }
 
-/**
- * Check authentication for trainee pages
- */
 function checkTraineeAuthentication() {
     const token = localStorage.getItem('authToken');
     const userRole = localStorage.getItem('userRole');
@@ -258,7 +221,6 @@ function checkTraineeAuthentication() {
     }
 
     if (userRole !== 'trainee') {
-        // Redirect to appropriate dashboard based on role
         const baseUrl = window.location.origin + '/CAATE-ITRMS';
         if (userRole === 'admin') {
             window.location.href = baseUrl + '/admin/src/pages/dashboard.html';
@@ -273,35 +235,23 @@ function checkTraineeAuthentication() {
     return true;
 }
 
-/**
- * Initialize trainee navbar
- */
 function initializeTraineeNavbar() {
-    // Check authentication first
     if (!checkTraineeAuthentication()) {
         return;
     }
 
-    // Load profile data for navbar
     loadTraineeProfileForNavbar();
 
-    // Override auth-dashboard.js updates
     overrideAuthDashboardUpdates();
 
-    // Ensure menu dropdowns work properly
     ensureMenuDropdownsWork();
 }
 
-/**
- * Override auth-dashboard.js user name updates with real data
- */
 function overrideAuthDashboardUpdates() {
-    // Use requestAnimationFrame for better performance instead of setTimeout
     requestAnimationFrame(() => {
         loadTraineeProfileForNavbar();
     });
 
-    // Debounced mutation observer to prevent excessive calls
     let debounceTimer;
     const observer = new MutationObserver((mutations) => {
         clearTimeout(debounceTimer);
@@ -310,7 +260,6 @@ function overrideAuthDashboardUpdates() {
 
             mutations.forEach((mutation) => {
                 if (mutation.type === 'childList' || mutation.type === 'characterData') {
-                    // Check if any user-name elements were updated with placeholder text
                     const userNameElements = document.querySelectorAll('.user-name');
                     userNameElements.forEach(element => {
                         if (element && (
@@ -335,7 +284,6 @@ function overrideAuthDashboardUpdates() {
         }, 50); // Reduced debounce time
     });
 
-    // Start observing with more specific options
     observer.observe(document.body, {
         childList: true,
         subtree: true,
@@ -343,20 +291,15 @@ function overrideAuthDashboardUpdates() {
     });
 }
 
-
-// Function to refresh navbar data (can be called from other pages)
 window.refreshTraineeNavbar = function () {
     loadTraineeProfileForNavbar();
 };
 
-// Initialize after menu system is ready
 document.addEventListener('DOMContentLoaded', function () {
-    // Wait for menu system to initialize first
     setTimeout(() => {
         initializeTraineeNavbar();
     }, 100);
 
-    // Listen for profile updates from other pages
     window.addEventListener('storage', function (e) {
         if (e.key === 'userData' && e.newValue) {
             try {
@@ -369,62 +312,16 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-/**
- * Ensure menu dropdowns work properly
- */
 function ensureMenuDropdownsWork() {
-    // Wait for menu system to be fully initialized
     setTimeout(() => {
-        // Re-initialize menu if needed - DISABLED to prevent conflicts with main menu system
-        /*
-        if (window.Helpers && window.Helpers.mainMenu) {
-            // Menu is already initialized, just ensure it's working
-            const menuToggles = document.querySelectorAll('.menu-toggle');
-            menuToggles.forEach(toggle => {
-                if (!toggle.hasAttribute('data-menu-initialized')) {
-                    toggle.setAttribute('data-menu-initialized', 'true');
-                    toggle.addEventListener('click', function (e) {
-                        e.preventDefault();
-                        const submenu = this.nextElementSibling;
-                        if (submenu && submenu.classList.contains('menu-sub')) {
-                            const isOpen = submenu.style.display === 'block';
-
-                            // Close all other submenus first
-                            const allSubmenus = document.querySelectorAll('.menu-sub');
-                            const allToggles = document.querySelectorAll('.menu-toggle');
-
-                            allSubmenus.forEach(sub => {
-                                if (sub !== submenu) {
-                                    sub.style.display = 'none';
-                                }
-                            });
-
-                            allToggles.forEach(tog => {
-                                if (tog !== this) {
-                                    tog.classList.remove('open');
-                                    tog.parentElement.classList.remove('open');
-                                }
-                            });
-
-                            // Toggle current submenu
-                            submenu.style.display = isOpen ? 'none' : 'block';
-                            this.classList.toggle('open', !isOpen);
-                            this.parentElement.classList.toggle('open', !isOpen);
-                        }
-                    });
-                }
-            });
-        }
-        */
+        
     }, 50);
 }
 
-// Global function to refresh user display name across all pages
 window.refreshUserDisplayName = function () {
     loadTraineeProfileForNavbar();
 };
 
-// Function to manually update display name (useful for testing or immediate updates)
 window.updateUserDisplayName = function (displayName) {
     if (displayName && displayName.trim()) {
         const userNameElements = document.querySelectorAll('.user-name');
@@ -445,7 +342,6 @@ window.updateUserDisplayName = function (displayName) {
     }
 };
 
-// Function to immediately fix placeholder text on page load
 function fixPlaceholderText() {
     const userNameElements = document.querySelectorAll('.user-name');
     userNameElements.forEach(element => {
@@ -455,28 +351,23 @@ function fixPlaceholderText() {
             element.textContent.includes('dsad')
         )) {
             element.textContent = 'Loading...';
-            // Trigger immediate data load
             loadTraineeProfileForNavbar();
         }
     });
 }
 
-// Run the fix immediately when script loads
 fixPlaceholderText();
 
-// Also run it when DOM is ready
 document.addEventListener('DOMContentLoaded', function () {
     setTimeout(fixPlaceholderText, 100);
 });
 
-// Force refresh user display name from localStorage (useful for immediate updates)
 window.forceRefreshUserName = function () {
     const userData = localStorage.getItem('userData');
     if (userData) {
         try {
             const user = JSON.parse(userData);
 
-            // Build complete full name with all parts
             const firstName = user.firstName || user.first_name || '';
             const secondName = user.secondName || user.second_name || '';
             const middleName = user.middleName || user.middle_name || '';
@@ -495,9 +386,6 @@ window.forceRefreshUserName = function () {
                 displayName = user.username.trim();
             }
 
-            // console.log('Force refreshing display name to:', displayName);
-
-            // Update all user name elements
             const userNameElements = document.querySelectorAll('.user-name');
             userNameElements.forEach(element => {
                 if (element) {
@@ -519,24 +407,19 @@ window.forceRefreshUserName = function () {
         }
     }
 };
-// Listen for profile updates from manage-profile page
 window.addEventListener('storage', function (e) {
     if (e.key === 'userData' && e.newValue) {
-        // console.log('User data updated in localStorage, refreshing display name...');
         setTimeout(() => {
             window.forceRefreshUserName();
         }, 100);
     }
 });
 
-// Also listen for custom profile update events
 window.addEventListener('profileUpdated', function (e) {
-    // console.log('Profile updated event received, refreshing display name...');
     setTimeout(() => {
         window.forceRefreshUserName();
     }, 100);
 });
-// Global function to update profile images across all trainee pages
 window.updateTraineeProfileImages = function (imagePath) {
     const profileImageSelectors = [
         '#profileImage', // Main profile image
@@ -558,13 +441,11 @@ window.updateTraineeProfileImages = function (imagePath) {
         const images = document.querySelectorAll(selector);
         images.forEach(img => {
             if (img) {
-                // Check if we have a valid uploaded image path
                 if (imagePath &&
                     imagePath !== '../assets/images/DEFAULT_AVATAR.png' &&
                     imagePath !== 'DEFAULT_AVATAR.png' &&
                     !imagePath.includes('DEFAULT_AVATAR')) {
 
-                    // Handle different path formats for uploaded images
                     if (imagePath.startsWith('/CAATE-ITRMS/')) {
                         img.src = window.location.origin + imagePath;
                     } else if (imagePath.startsWith('http')) {
@@ -572,16 +453,13 @@ window.updateTraineeProfileImages = function (imagePath) {
                     } else if (imagePath.startsWith('/')) {
                         img.src = window.location.origin + imagePath;
                     } else {
-                        // Assume it's a filename and construct the full path
                         img.src = `${window.location.origin}/CAATE-ITRMS/backend/public/uploads/profiles/${imagePath}`;
                     }
                     totalUpdated++;
                 } else {
-                    // Use default avatar for empty or default paths
                     img.src = '../assets/images/DEFAULT_AVATAR.png';
                 }
 
-                // Add error handling to fallback to default avatar
                 img.onerror = function () {
                     this.src = '../assets/images/DEFAULT_AVATAR.png';
                 };
@@ -589,18 +467,14 @@ window.updateTraineeProfileImages = function (imagePath) {
         });
     });
 
-    // console.log(`Updated ${totalUpdated} profile images across page with path: ${imagePath}`);
 };
 
-// Listen for profile image updates from other pages
 window.addEventListener('profileImageUpdated', function (e) {
     if (e.detail && e.detail.imagePath) {
-        // console.log('Profile image updated event received:', e.detail.imagePath);
         window.updateTraineeProfileImages(e.detail.imagePath);
     }
 });
 
-// Listen for storage changes to update profile images
 window.addEventListener('storage', function (e) {
     if (e.key === 'userData' && e.newValue) {
         try {
@@ -614,16 +488,12 @@ window.addEventListener('storage', function (e) {
     }
 });
 
-// Duplicate function removed - using the first implementation above
-
-// Listen for profile image updates from other pages
 window.addEventListener('profileImageUpdated', function (event) {
     if (event.detail && event.detail.imagePath) {
         window.updateTraineeProfileImages(event.detail.imagePath);
     }
 });
 
-// Listen for storage changes to sync profile images across tabs
 window.addEventListener('storage', function (event) {
     if (event.key === 'userData' && event.newValue) {
         try {

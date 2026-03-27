@@ -1,8 +1,4 @@
-/**
- * Registration Form Handler
- * Handles form submission and database operations for the registration form
- * Updated: 2026-03-18 - Simplified validation messages
- */
+
 
 'use strict';
 
@@ -30,19 +26,15 @@ class RegistrationFormHandler {
     }
 
     setupEventListeners() {
-        // Form submission handler - show confirmation modal first
         this.form.addEventListener('submit', (e) => this.showConfirmationModal(e));
 
-        // Confirmation modal submit handler
         const confirmSubmitBtn = document.getElementById('confirmSubmitBtn');
         if (confirmSubmitBtn) {
             confirmSubmitBtn.addEventListener('click', () => this.handleConfirmedSubmit());
         }
 
-        // Real-time validation for birth information fields
         this.setupBirthFieldValidation();
 
-        // Real-time validation for employment and education fields
         this.setupEmploymentEducationValidation();
     }
 
@@ -53,7 +45,6 @@ class RegistrationFormHandler {
         const age = document.getElementById('age');
         const contactNo = document.getElementById('contactNo');
 
-        // Birth Month validation
         if (birthMonth) {
             birthMonth.addEventListener('blur', () => {
                 const value = parseInt(birthMonth.value);
@@ -65,7 +56,6 @@ class RegistrationFormHandler {
             });
         }
 
-        // Birth Day validation
         if (birthDay) {
             birthDay.addEventListener('blur', () => {
                 const value = parseInt(birthDay.value);
@@ -77,7 +67,6 @@ class RegistrationFormHandler {
             });
         }
 
-        // Birth Year validation
         if (birthYear) {
             birthYear.addEventListener('blur', () => {
                 const value = parseInt(birthYear.value);
@@ -90,7 +79,6 @@ class RegistrationFormHandler {
             });
         }
 
-        // Age validation
         if (age) {
             age.addEventListener('blur', () => {
                 const value = parseInt(age.value);
@@ -102,7 +90,6 @@ class RegistrationFormHandler {
             });
         }
 
-        // Contact Number validation
         if (contactNo) {
             contactNo.addEventListener('blur', () => {
                 if (!contactNo.value || contactNo.value.trim() === '') {
@@ -115,26 +102,20 @@ class RegistrationFormHandler {
     }
 
     showFieldError(field, message) {
-        // Remove existing error
         this.clearFieldError(field);
 
-        // Add error class to field
         field.classList.add('is-invalid');
 
-        // Create error message element
         const errorDiv = document.createElement('div');
         errorDiv.className = 'invalid-feedback';
         errorDiv.textContent = message;
 
-        // Insert error message after the field
         field.parentNode.appendChild(errorDiv);
     }
 
     clearFieldError(field) {
-        // Remove error class
         field.classList.remove('is-invalid');
 
-        // Remove error message
         const errorDiv = field.parentNode.querySelector('.invalid-feedback');
         if (errorDiv) {
             errorDiv.remove();
@@ -142,18 +123,15 @@ class RegistrationFormHandler {
     }
 
     setupEmploymentEducationValidation() {
-        // Employment Status validation
         const employmentStatusInputs = document.querySelectorAll('input[name="employmentStatus"]');
         const employmentTypeInputs = document.querySelectorAll('input[name="employmentType"]');
         const educationInputs = document.querySelectorAll('input[name="education"]');
         const clientClassificationInputs = document.querySelectorAll('input[name="clientClassification"]');
 
-        // Employment Status change handler
         employmentStatusInputs.forEach(input => {
             input.addEventListener('change', () => {
                 this.clearRadioGroupRedBorder('employmentStatus');
 
-                // Show/hide employment type requirement based on selection
                 const selectedValue = document.querySelector('input[name="employmentStatus"]:checked')?.value;
                 const employmentTypeSection = document.querySelector('input[name="employmentType"]')?.closest('.mt-3');
 
@@ -167,7 +145,6 @@ class RegistrationFormHandler {
                         employmentTypeSection.style.opacity = '0.5';
                         employmentTypeSection.style.pointerEvents = 'none';
                     }
-                    // Clear employment type selection if not needed
                     employmentTypeInputs.forEach(typeInput => {
                         typeInput.checked = false;
                     });
@@ -176,21 +153,18 @@ class RegistrationFormHandler {
             });
         });
 
-        // Employment Type validation
         employmentTypeInputs.forEach(input => {
             input.addEventListener('change', () => {
                 this.clearRadioGroupRedBorder('employmentType');
             });
         });
 
-        // Education validation
         educationInputs.forEach(input => {
             input.addEventListener('change', () => {
                 this.clearRadioGroupRedBorder('education');
             });
         });
 
-        // Sex validation
         const sexInputs = document.querySelectorAll('input[name="sex"]');
         sexInputs.forEach(input => {
             input.addEventListener('change', () => {
@@ -198,7 +172,6 @@ class RegistrationFormHandler {
             });
         });
 
-        // Civil Status validation
         const civilStatusInputs = document.querySelectorAll('input[name="civilStatus"]');
         civilStatusInputs.forEach(input => {
             input.addEventListener('change', () => {
@@ -206,7 +179,6 @@ class RegistrationFormHandler {
             });
         });
 
-        // Client Classification validation
         clientClassificationInputs.forEach(input => {
             input.addEventListener('change', () => {
                 this.clearRadioGroupRedBorder('clientClassification');
@@ -215,56 +187,46 @@ class RegistrationFormHandler {
     }
 
     showRadioGroupRedBorder(groupName) {
-        // Remove existing red borders
         this.clearRadioGroupRedBorder(groupName);
 
-        // Add red border to all radio buttons in the group
         document.querySelectorAll(`input[name="${groupName}"]`).forEach(input => {
             input.classList.add('radio-required-error');
         });
     }
 
     clearRadioGroupRedBorder(groupName) {
-        // Remove red border class from all inputs in the group
         document.querySelectorAll(`input[name="${groupName}"]`).forEach(input => {
             input.classList.remove('radio-required-error');
         });
     }
 
     showRadioGroupError(groupName, message) {
-        // Remove existing error
         this.clearRadioGroupError(groupName);
 
-        // Find the radio group container
         const firstInput = document.querySelector(`input[name="${groupName}"]`);
         if (!firstInput) return;
 
         let container = firstInput.closest('.card-body') || firstInput.closest('.col-md-4') || firstInput.closest('.mb-3');
         if (!container) return;
 
-        // Create error message element
         const errorDiv = document.createElement('div');
         errorDiv.className = 'invalid-feedback radio-group-error';
         errorDiv.style.display = 'block';
         errorDiv.textContent = message;
         errorDiv.setAttribute('data-group', groupName);
 
-        // Add error styling to all inputs in the group
         document.querySelectorAll(`input[name="${groupName}"]`).forEach(input => {
             input.classList.add('is-invalid');
         });
 
-        // Insert error message at the end of the container
         container.appendChild(errorDiv);
     }
 
     clearRadioGroupError(groupName) {
-        // Remove error class from all inputs in the group
         document.querySelectorAll(`input[name="${groupName}"]`).forEach(input => {
             input.classList.remove('is-invalid');
         });
 
-        // Remove error message
         const errorDiv = document.querySelector(`.radio-group-error[data-group="${groupName}"]`);
         if (errorDiv) {
             errorDiv.remove();
@@ -272,7 +234,6 @@ class RegistrationFormHandler {
     }
 
     setupULIInputs() {
-        // Auto-move to next ULI input
         const uliInputs = document.querySelectorAll('.uli-input');
         uliInputs.forEach((input, index) => {
             input.addEventListener('input', function () {
@@ -286,40 +247,31 @@ class RegistrationFormHandler {
     showConfirmationModal(e) {
         e.preventDefault();
 
-        // Collect and validate form data first
         const formData = this.collectFormData();
 
         if (!this.validateForm(formData)) {
             return;
         }
 
-        // Store form data for later submission
         this.pendingFormData = formData;
 
-        // Load Level III courses with open enrollment
         this.loadLevelIIICourses();
 
-        // Show layout overlay
         const layoutOverlay = document.getElementById('layoutOverlay');
         if (layoutOverlay) {
             layoutOverlay.classList.add('active');
         }
 
-        // Show confirmation modal
         const modal = new bootstrap.Modal(document.getElementById('confirmationModal'));
 
-        // Add event listener for modal dismissal
         const modalElement = document.getElementById('confirmationModal');
         modalElement.addEventListener('hidden.bs.modal', () => {
-            // Hide layout overlay
             if (layoutOverlay) {
                 layoutOverlay.classList.remove('active');
             }
-            // Reset flag when modal is dismissed
             this.formSubmitted = false; // Reset flag
         }, { once: true });
 
-        // Add click event to overlay to close modal
         if (layoutOverlay) {
             layoutOverlay.addEventListener('click', () => {
                 modal.hide();
@@ -330,7 +282,6 @@ class RegistrationFormHandler {
     }
 
     async handleConfirmedSubmit() {
-        // Validate course selection
         const selectedCourse = document.getElementById('selectedCourse');
         if (!selectedCourse || !selectedCourse.value) {
             selectedCourse.classList.add('is-invalid');
@@ -339,37 +290,29 @@ class RegistrationFormHandler {
         }
         selectedCourse.classList.remove('is-invalid');
 
-        // Add selected course to form data
         this.pendingFormData.selectedCourse = selectedCourse.value;
         this.pendingFormData.selectedCourseId = selectedCourse.options[selectedCourse.selectedIndex].dataset.courseId;
 
-        // Set flag to indicate form is being submitted
         this.formSubmitted = true;
 
-        // Hide confirmation modal
         const confirmationModal = bootstrap.Modal.getInstance(document.getElementById('confirmationModal'));
         if (confirmationModal) {
             confirmationModal.hide();
         }
 
-        // Hide layout overlay
         const layoutOverlay = document.getElementById('layoutOverlay');
         if (layoutOverlay) {
             layoutOverlay.classList.remove('active');
         }
 
-        // Show loading state
         this.setLoadingState(true);
 
         try {
-            // Submit to database using stored form data
             const response = await this.submitToDatabase(this.pendingFormData);
 
             if (response.success) {
-                // Show success toast
                 this.showToast('Registration submitted successfully! You will receive a confirmation email shortly.', 'success');
 
-                // Reset form
                 this.form.reset();
             } else {
                 throw new Error(response.message || 'Failed to submit registration');
@@ -388,7 +331,6 @@ class RegistrationFormHandler {
         if (!dropdown) return;
 
         try {
-            // Fetch courses from API
             const API_BASE_URL = window.API_BASE_URL || window.location.origin + '/CAATE-ITRMS/backend/public';
             const response = await fetch(`${API_BASE_URL}/api/v1/courses`);
 
@@ -399,7 +341,6 @@ class RegistrationFormHandler {
             const result = await response.json();
 
             if (result.success && result.data && result.data.length > 0) {
-                // Filter for Level III courses with Open Enrollment status
                 const levelIIICourses = result.data.filter(course => {
                     const badge = (course.badge || course.course_code || '').toUpperCase();
                     const enrollmentStatus = course.enrollment_status || '';
@@ -407,11 +348,9 @@ class RegistrationFormHandler {
                         && enrollmentStatus === 'Open Enrollment';
                 });
 
-                // Clear existing options
                 dropdown.innerHTML = '<option value="">Select a course...</option>';
 
                 if (levelIIICourses.length > 0) {
-                    // Add course options
                     levelIIICourses.forEach(course => {
                         const option = document.createElement('option');
                         option.value = course.title || 'Untitled Course';
@@ -434,24 +373,19 @@ class RegistrationFormHandler {
     async handleSubmit(e) {
         e.preventDefault();
 
-        // Show loading state
         this.setLoadingState(true);
 
         try {
-            // Collect form data
             const formData = this.collectFormData();
 
-            // Validate required fields
             if (!this.validateForm(formData)) {
                 this.setLoadingState(false);
                 return;
             }
 
-            // Submit to database
             const response = await this.submitToDatabase(formData);
 
             if (response.success) {
-                // Reset form
                 this.form.reset();
             } else {
                 throw new Error(response.message || 'Failed to submit registration');
@@ -469,10 +403,8 @@ class RegistrationFormHandler {
         const formData = new FormData(this.form);
         const data = {};
 
-        // Convert FormData to regular object
         for (let [key, value] of formData.entries()) {
             if (data[key]) {
-                // Handle multiple values (like checkboxes)
                 if (Array.isArray(data[key])) {
                     data[key].push(value);
                 } else {
@@ -483,13 +415,11 @@ class RegistrationFormHandler {
             }
         }
 
-        // Add userId from localStorage
         const userId = localStorage.getItem('userId');
         if (userId) {
             data.userId = userId;
         }
 
-        // Collect ULI number from individual inputs
         const uliInputs = document.querySelectorAll('.uli-input');
         let uliNumber = '';
         uliInputs.forEach((input, index) => {
@@ -500,12 +430,10 @@ class RegistrationFormHandler {
         });
         data.uliNumber = uliNumber;
 
-        // Collect checkbox arrays properly
         const checkboxGroups = ['clientClassification', 'disabilityType', 'disabilityCause'];
         checkboxGroups.forEach(group => {
             const checkboxes = document.querySelectorAll(`input[name="${group}"]:checked`);
             data[group] = Array.from(checkboxes).map(cb => {
-                // Special handling for "others" option
                 if (cb.value === 'others' && group === 'clientClassification') {
                     const othersInput = document.querySelector('input[name="clientClassificationOthers"]');
                     const othersText = othersInput ? othersInput.value.trim() : '';
@@ -515,7 +443,6 @@ class RegistrationFormHandler {
             });
         });
 
-        // Add timestamp and status
         data.submittedAt = new Date().toISOString();
         data.status = 'pending';
 
@@ -525,11 +452,9 @@ class RegistrationFormHandler {
     validateForm(data) {
         let isValid = true;
 
-        // Clear all previous errors
         this.clearAllErrors();
 
         const requiredFields = [
-            // Personal Information
             'firstName',
             'numberStreet',
             'barangay',
@@ -540,12 +465,10 @@ class RegistrationFormHandler {
             'emailFacebook',
             'contactNo',
             'nationality',
-            // Personal Details (radio groups)
             'sex',
             'civilStatus',
             'employmentStatus',
             'education',
-            // Birth Information
             'birthMonth',
             'birthDay',
             'birthYear',
@@ -553,10 +476,8 @@ class RegistrationFormHandler {
             'birthCity',
             'birthProvince',
             'birthRegion',
-            // Parent/Guardian
             'parentName',
             'parentAddress',
-            // Course
             'courseQualification'
         ];
 
@@ -590,18 +511,15 @@ class RegistrationFormHandler {
             'clientClassification': 'Learner/Trainee/Student Classification'
         };
 
-        // Check basic required fields
         requiredFields.forEach(field => {
             if (!data[field] || data[field].toString().trim() === '') {
                 missingFields.push(fieldLabels[field] || field);
 
-                // Show red border for radio groups (no notification boxes)
                 if (field === 'sex' || field === 'civilStatus' || field === 'employmentStatus' || field === 'education') {
                     this.showRadioGroupRedBorder(field);
                     isValid = false;
                 }
 
-                // Show error for text inputs
                 const inputElement = document.getElementById(field) || document.querySelector(`[name="${field}"]`);
                 if (inputElement && (inputElement.type === 'text' || inputElement.type === 'number' || inputElement.type === 'email' || inputElement.tagName === 'TEXTAREA')) {
                     this.showFieldError(inputElement, `${fieldLabels[field]} is required`);
@@ -610,14 +528,12 @@ class RegistrationFormHandler {
             }
         });
 
-        // Check if at least one Client Classification is selected
         const clientClassifications = document.querySelectorAll('input[name="clientClassification"]:checked');
         if (clientClassifications.length === 0) {
             this.showRadioGroupRedBorder('clientClassification');
             isValid = false;
         }
 
-        // Check if Employment Type is required based on Employment Status
         if (data.employmentStatus && (data.employmentStatus === 'wage' || data.employmentStatus === 'underemployed')) {
             if (!data.employmentType || data.employmentType.toString().trim() === '') {
                 this.showRadioGroupRedBorder('employmentType');
@@ -626,9 +542,6 @@ class RegistrationFormHandler {
             }
         }
 
-        // Client Classification is now optional - no validation required
-
-        // Additional validation for birth information
         if (data.birthMonth && (data.birthMonth < 1 || data.birthMonth > 12)) {
             this.showToast('Month of Birth must be between 1 and 12', 'error');
             return false;
@@ -651,7 +564,6 @@ class RegistrationFormHandler {
         }
 
         if (missingFields.length > 0) {
-            // Updated: Show simple error message instead of listing all fields
             console.log('Validation failed - showing simple message');
             this.showToast('Please complete all required fields.', 'error');
             return false;
@@ -661,22 +573,18 @@ class RegistrationFormHandler {
     }
 
     clearAllErrors() {
-        // Clear all field errors
         document.querySelectorAll('.is-invalid').forEach(field => {
             field.classList.remove('is-invalid');
         });
 
-        // Clear all error messages
         document.querySelectorAll('.invalid-feedback, .radio-group-error').forEach(error => {
             error.remove();
         });
 
-        // Clear radio button red borders
         document.querySelectorAll('.radio-required-error').forEach(radio => {
             radio.classList.remove('radio-required-error');
         });
 
-        // Clear enhanced error styling
         document.querySelectorAll('.card-body').forEach(cardBody => {
             cardBody.style.backgroundColor = '';
         });
@@ -724,7 +632,6 @@ class RegistrationFormHandler {
     }
 
     showSuccessModal() {
-        // Modal removed - no longer showing success modal
     }
 
     showToast(message, type = 'success') {
@@ -747,7 +654,6 @@ class RegistrationFormHandler {
 
         container.appendChild(toast);
 
-        // Auto remove after 5 seconds
         setTimeout(() => {
             toast.classList.add('hiding');
             setTimeout(() => toast.remove(), 300);
@@ -759,11 +665,9 @@ class RegistrationFormHandler {
     }
 }
 
-// Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', function () {
     const handler = new RegistrationFormHandler();
 
-    // Add test function to window for debugging
     window.testToast = function (message = 'Test notification', type = 'success') {
         handler.showToast(message, type);
     };

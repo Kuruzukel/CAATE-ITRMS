@@ -1,4 +1,4 @@
-/* Manage Profile Page Styles */
+
 .profile-container {
     padding: 20px;
     background-color: #f8f9fa;
@@ -186,7 +186,6 @@
     margin-bottom: 8px;
 }
 
-/* Exclude navbar search from these styles */
 .content-wrapper .form-control,
 .profile-form .form-control,
 .card .form-control {

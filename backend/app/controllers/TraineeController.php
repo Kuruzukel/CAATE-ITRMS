@@ -11,11 +11,9 @@ class TraineeController {
         try {
             $db = getMongoConnection();
             
-            // Test basic connection
             $collections = [];
             $errors = [];
             
-            // Test trainees collection
             try {
                 $count = $db->trainees->countDocuments();
                 $collections['trainees'] = ['status' => 'ok', 'count' => $count];
@@ -24,7 +22,6 @@ class TraineeController {
                 $collections['trainees'] = ['status' => 'error', 'error' => $e->getMessage()];
             }
             
-            // Test enrollments collection
             try {
                 $count = $db->enrollments->countDocuments();
                 $collections['enrollments'] = ['status' => 'ok', 'count' => $count];
@@ -33,7 +30,6 @@ class TraineeController {
                 $collections['enrollments'] = ['status' => 'error', 'error' => $e->getMessage()];
             }
             
-            // Test courses collection
             try {
                 $count = $db->courses->countDocuments();
                 $collections['courses'] = ['status' => 'ok', 'count' => $count];
@@ -42,7 +38,6 @@ class TraineeController {
                 $collections['courses'] = ['status' => 'error', 'error' => $e->getMessage()];
             }
             
-            // Test admins collection
             try {
                 $count = $db->admins->countDocuments();
                 $collections['admins'] = ['status' => 'ok', 'count' => $count];
@@ -51,7 +46,6 @@ class TraineeController {
                 $collections['admins'] = ['status' => 'error', 'error' => $e->getMessage()];
             }
             
-            // Test applications collection
             try {
                 $count = $db->applications->countDocuments();
                 $collections['applications'] = ['status' => 'ok', 'count' => $count];
@@ -60,7 +54,6 @@ class TraineeController {
                 $collections['applications'] = ['status' => 'error', 'error' => $e->getMessage()];
             }
             
-            // Test admissions collection
             try {
                 $count = $db->admissions->countDocuments();
                 $collections['admissions'] = ['status' => 'ok', 'count' => $count];
@@ -156,17 +149,14 @@ class TraineeController {
         $data = [];
         $imagePath = null;
 
-        // Get Content-Type header
         $contentType = isset($_SERVER['CONTENT_TYPE']) ? $_SERVER['CONTENT_TYPE'] : '';
         
         if (strpos($contentType, 'multipart/form-data') !== false) {
-            // Extract boundary from Content-Type header
             if (preg_match('/boundary=([^;]+)/', $contentType, $matches)) {
                 $boundary = trim($matches[1], '"');
                 
                 $input = file_get_contents('php://input');
                 
-                // Split by boundary
                 $parts = preg_split('/--' . preg_quote($boundary) . '(?:--)?/', $input);
                 
                 foreach ($parts as $index => $part) {
@@ -175,7 +165,6 @@ class TraineeController {
                         continue;
                     }
                     
-                    // Split headers from content using double CRLF
                     if (strpos($part, "\r\n\r\n") !== false) {
                         list($headers, $content) = explode("\r\n\r\n", $part, 2);
                     } elseif (strpos($part, "\n\n") !== false) {
@@ -184,18 +173,14 @@ class TraineeController {
                         continue;
                     }
                     
-                    // Remove trailing CRLF or LF from content
                     $content = rtrim($content, "\r\n");
                     
-                    // Extract field name
                     if (preg_match('/name="([^"]+)"/', $headers, $nameMatch)) {
                         $fieldName = $nameMatch[1];
                         
-                        // Check if this is a file upload
                         if (preg_match('/filename="([^"]+)"/', $headers, $filenameMatch)) {
                             $fileName = $filenameMatch[1];
                             
-                            // This is the profile_image file
                             if ($fieldName === 'profile_image') {
                                 $uploadDir = __DIR__ . '/../../public/uploads/profiles/';
                                 
@@ -203,12 +188,10 @@ class TraineeController {
                                     mkdir($uploadDir, 0755, true);
                                 }
                                 
-                                // Get file extension
                                 $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
                                 $newFileName = 'trainee_' . $id . '_' . time() . '.' . $fileExtension;
                                 $filePath = $uploadDir . $newFileName;
                                 
-                                // Validate file type by checking magic bytes
                                 $finfo = finfo_open(FILEINFO_MIME_TYPE);
                                 $mimeType = finfo_buffer($finfo, $content);
                                 finfo_close($finfo);
@@ -220,14 +203,12 @@ class TraineeController {
                                     return;
                                 }
                                 
-                                // Validate file size (max 2MB)
                                 if (strlen($content) > 2 * 1024 * 1024) {
                                     http_response_code(400);
                                     echo json_encode(['success' => false, 'error' => 'File size exceeds 2MB limit.']);
                                     return;
                                 }
                                 
-                                // Save file
                                 if (file_put_contents($filePath, $content)) {
                                     $imagePath = '/CAATE-ITRMS/backend/public/uploads/profiles/' . $newFileName;
                                     $data['profile_image'] = $imagePath;
@@ -238,27 +219,23 @@ class TraineeController {
                                 }
                             }
                         } else {
-                            // Regular form field
                             $data[$fieldName] = $content;
                         }
                     }
                 }
             }
         } else {
-            // Handle JSON data
             $data = json_decode(file_get_contents('php://input'), true);
             if (!$data) {
                 $data = [];
             }
         }
         
-        // Update trainee
         $result = $traineeModel->update($id, $data);
         
         if ($result) {
             $response = ['success' => true, 'message' => 'Trainee updated successfully'];
             
-            // Include image path in response if uploaded
             if ($imagePath) {
                 $response['profile_image'] = $imagePath;
             }

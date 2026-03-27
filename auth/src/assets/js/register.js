@@ -1,12 +1,7 @@
-/**
- * CAATE Register Page JavaScript
- * Handles registration form functionality, password visibility toggle, and validation
- */
 
-// API Base URL - works for both localhost and network access
+
 const API_BASE_URL = window.location.origin + '/CAATE-ITRMS/backend/public';
 
-// Toast notification function
 function showToast(message, type = 'success') {
     const container = document.getElementById('toastContainer');
     if (!container) return;
@@ -22,7 +17,6 @@ function showToast(message, type = 'success') {
 
     container.appendChild(toast);
 
-    // Auto remove after 5 seconds for info, 3 seconds for others
     const duration = type === 'info' ? 5000 : 3000;
     setTimeout(() => {
         toast.classList.add('hiding');
@@ -32,7 +26,6 @@ function showToast(message, type = 'success') {
     }, duration);
 }
 
-// Form validation and submission
 document.addEventListener('DOMContentLoaded', function () {
     const registerForm = document.getElementById('formAuthentication');
 
@@ -45,7 +38,6 @@ document.addEventListener('DOMContentLoaded', function () {
             const password = document.getElementById('password').value;
             const confirmPassword = document.getElementById('confirmPassword').value;
 
-            // Validate all fields are filled
             if (!username) {
                 showToast('Please enter a username', 'error');
                 document.getElementById('username').focus();
@@ -58,7 +50,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 return false;
             }
 
-            // Validate email format
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {
                 showToast('Please enter a valid email address', 'error');
@@ -78,14 +69,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 return false;
             }
 
-            // Check if passwords match
             if (password !== confirmPassword) {
                 showToast('Passwords do not match. Please try again.', 'error');
                 document.getElementById('confirmPassword').focus();
                 return false;
             }
 
-            // Send registration data to backend
             try {
                 const response = await fetch(`${API_BASE_URL}/api/v1/auth/register`, {
                     method: 'POST',
@@ -103,7 +92,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 if (result.success) {
                     showToast(result.message || 'Account created successfully!', 'success');
-                    // Redirect to login page after 2 seconds
                     setTimeout(() => {
                         window.location.href = 'login.html';
                     }, 2000);
@@ -116,11 +104,9 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
 
-        // Remove real-time password match validation that uses setCustomValidity
         const confirmPasswordInput = document.getElementById('confirmPassword');
         if (confirmPasswordInput) {
             confirmPasswordInput.addEventListener('input', function () {
-                // Clear any custom validity
                 this.setCustomValidity('');
             });
         }

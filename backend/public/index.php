@@ -1,11 +1,8 @@
 <?php
 
-// Check if this is an API request
 $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
 if (strpos($requestUri, '/api/') !== false) {
-    // API Request
-    // Disable error display for API requests
     ini_set('display_errors', 0);
     error_reporting(E_ALL);
     
@@ -18,13 +15,11 @@ if (strpos($requestUri, '/api/') !== false) {
     require_once __DIR__ . '/../app/config/database.php';
     require_once __DIR__ . '/../routes/api.php';
 
-    // Handle OPTIONS request
     if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
         http_response_code(200);
         exit();
     }
 
-    // Set error handler for API requests
     set_error_handler(function($errno, $errstr, $errfile, $errline) {
         http_response_code(500);
         echo json_encode([
@@ -36,7 +31,6 @@ if (strpos($requestUri, '/api/') !== false) {
         exit();
     });
 
-    // Set exception handler for API requests
     set_exception_handler(function($exception) {
         http_response_code(500);
         echo json_encode([
@@ -48,11 +42,9 @@ if (strpos($requestUri, '/api/') !== false) {
         exit();
     });
 
-    // Route handler
     $requestMethod = $_SERVER['REQUEST_METHOD'];
     handleRequest($requestUri, $requestMethod);
 } else {
-    // Web Request - Show welcome page
     ?>
     <!DOCTYPE html>
     <html lang="en">
@@ -155,16 +147,16 @@ if (strpos($requestUri, '/api/') !== false) {
     </head>
     <body>
         <div class="container">
-            <h1>🎓 CAATE-ITRMS</h1>
+            <h1>ðŸŽ“ CAATE-ITRMS</h1>
             <p>Integrated Training & Resource Management System</p>
             
             <div class="status">
-                ✅ Backend API is Running
+                âœ… Backend API is Running
             </div>
             
             <div class="links">
-                <a href="view-data.php" target="_blank">📊 View Database Data</a>
-                <a href="api-data.php" target="_blank">🔌 View JSON API Data</a>
+                <a href="view-data.php" target="_blank">ðŸ“Š View Database Data</a>
+                <a href="api-data.php" target="_blank">ðŸ”Œ View JSON API Data</a>
             </div>
             
             <div class="endpoints">

@@ -72,7 +72,6 @@ class UserController {
         
         $file = $_FILES['profileImage'];
         
-        // Validate file type
         $allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
         if (!in_array($file['type'], $allowedTypes)) {
             http_response_code(400);
@@ -80,7 +79,6 @@ class UserController {
             return;
         }
         
-        // Validate file size (2MB max)
         $maxSize = 2 * 1024 * 1024; // 2MB
         if ($file['size'] > $maxSize) {
             http_response_code(400);
@@ -88,20 +86,16 @@ class UserController {
             return;
         }
         
-        // Create uploads directory if it doesn't exist
         $uploadDir = __DIR__ . '/../../public/uploads/profiles/';
         if (!is_dir($uploadDir)) {
             mkdir($uploadDir, 0755, true);
         }
         
-        // Generate unique filename
         $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
         $filename = 'user_' . $id . '_' . time() . '.' . $extension;
         $uploadPath = $uploadDir . $filename;
         
-        // Move uploaded file
         if (move_uploaded_file($file['tmp_name'], $uploadPath)) {
-            // Update user record with new profile image path
             $userModel = new User();
             $imagePath = '/CAATE-ITRMS/backend/public/uploads/profiles/' . $filename;
             $result = $userModel->update($id, ['profile_image' => $imagePath]);

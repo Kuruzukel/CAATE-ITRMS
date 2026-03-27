@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
 
-
     const editTimeInInput = document.getElementById('editTimeInImage');
     const editTimeInPreview = document.getElementById('editTimeInImagePreview');
     const editTimeInActions = document.getElementById('editTimeInActions');

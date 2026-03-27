@@ -3,17 +3,11 @@
 require_once __DIR__ . '/../../vendor/autoload.php';
 require_once __DIR__ . '/../../app/config/database.php';
 
-/**
- * Initialize MongoDB Collections for CAATE-ITRMS
- * Run this file once to create all collections with indexes
- */
-
 try {
     $db = getMongoConnection();
     
     echo "Initializing CAATE-ITRMS Database Collections...\n\n";
     
-    // Collections to create
     $collections = [
         'users' => [
             'indexes' => [
@@ -97,15 +91,13 @@ try {
     ];
     
     foreach ($collections as $collectionName => $config) {
-        // Create collection
         try {
             $db->createCollection($collectionName);
-            echo "✓ Created collection: {$collectionName}\n";
+            echo "âœ“ Created collection: {$collectionName}\n";
         } catch (Exception $e) {
             echo "  Collection '{$collectionName}' already exists\n";
         }
         
-        // Create indexes
         if (isset($config['indexes'])) {
             $collection = $db->selectCollection($collectionName);
             foreach ($config['indexes'] as $index) {
@@ -113,7 +105,7 @@ try {
                     $options = isset($index['unique']) ? ['unique' => $index['unique']] : [];
                     $collection->createIndex($index['key'], $options);
                     $indexKeys = json_encode($index['key']);
-                    echo "  ✓ Created index on {$collectionName}: {$indexKeys}\n";
+                    echo "  âœ“ Created index on {$collectionName}: {$indexKeys}\n";
                 } catch (Exception $e) {
                     echo "  Index already exists on {$collectionName}\n";
                 }

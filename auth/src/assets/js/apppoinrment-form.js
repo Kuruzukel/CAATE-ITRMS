@@ -1,4 +1,3 @@
-// Service Type Options based on Category
 const serviceTypes = {
     skincare: [
         { value: 'facial-treatment', text: 'Facial Treatment' },
@@ -43,17 +42,13 @@ const serviceTypes = {
     ]
 };
 
-// Check if time slot is already booked for a specific date
 async function checkTimeSlotAvailability(date, time) {
     try {
-        // Fetch all appointments for the selected date
         const response = await fetch('/CAATE-ITRMS/backend/public/api/v1/appointments');
         const result = await response.json();
 
         if (result.success && result.data) {
-            // Filter appointments for the selected date and time
             const conflictingAppointments = result.data.filter(appointment => {
-                // Check if date and time match
                 return appointment.preferredDate === date &&
                     appointment.preferredTime === time &&
                     appointment.status !== 'Cancelled'; // Don't count cancelled appointments
@@ -68,19 +63,16 @@ async function checkTimeSlotAvailability(date, time) {
         return { available: true, conflictCount: 0 };
     } catch (error) {
         console.error('Error checking time slot availability:', error);
-        // In case of error, allow the booking but log the error
         return { available: true, conflictCount: 0 };
     }
 }
 
-// DOM Elements
 const serviceCategorySelect = document.getElementById('serviceCategory');
 const serviceTypeSelect = document.getElementById('serviceType');
 const appointmentForm = document.getElementById('appointmentForm');
 const preferredDateInput = document.getElementById('preferredDate');
 const preferredTimeSelect = document.getElementById('preferredTime');
 
-// All available time slots
 const allTimeSlots = [
     { value: '09:00', text: '09:00 AM' },
     { value: '10:00', text: '10:00 AM' },
@@ -91,14 +83,12 @@ const allTimeSlots = [
     { value: '16:00', text: '04:00 PM' }
 ];
 
-// Function to get booked time slots for a specific date
 async function getBookedTimeSlots(date) {
     try {
         const response = await fetch('/CAATE-ITRMS/backend/public/api/v1/appointments');
         const result = await response.json();
 
         if (result.success && result.data) {
-            // Get all booked time slots for the selected date (excluding cancelled)
             const bookedSlots = result.data
                 .filter(appointment =>
                     appointment.preferredDate === date &&
@@ -116,12 +106,10 @@ async function getBookedTimeSlots(date) {
     }
 }
 
-// Function to update available time slots based on selected date
 async function updateAvailableTimeSlots() {
     const selectedDate = preferredDateInput.value;
 
     if (!selectedDate) {
-        // Reset to all time slots if no date selected
         preferredTimeSelect.innerHTML = '<option value="">Select a time</option>';
         allTimeSlots.forEach(slot => {
             const option = document.createElement('option');
@@ -132,14 +120,11 @@ async function updateAvailableTimeSlots() {
         return;
     }
 
-    // Show loading state
     preferredTimeSelect.innerHTML = '<option value="">Loading available times...</option>';
     preferredTimeSelect.disabled = true;
 
-    // Get booked time slots for the selected date
     const bookedSlots = await getBookedTimeSlots(selectedDate);
 
-    // Clear and rebuild time slot options
     preferredTimeSelect.innerHTML = '<option value="">Select a time</option>';
 
     let availableCount = 0;
@@ -148,12 +133,10 @@ async function updateAvailableTimeSlots() {
         option.value = slot.value;
 
         if (bookedSlots.includes(slot.value)) {
-            // Mark as booked (disabled)
             option.textContent = `${slot.text} (Booked)`;
             option.disabled = true;
             option.style.color = '#999';
         } else {
-            // Available slot
             option.textContent = slot.text;
             availableCount++;
         }
@@ -161,28 +144,22 @@ async function updateAvailableTimeSlots() {
         preferredTimeSelect.appendChild(option);
     });
 
-    // Re-enable the select
     preferredTimeSelect.disabled = false;
 
-    // Show message if no slots available
     if (availableCount === 0) {
         showToast('All time slots are booked for this date. Please select another date.', 'warning');
         preferredTimeSelect.innerHTML = '<option value="">No available time slots</option>';
     }
 }
 
-// Listen for date changes
 preferredDateInput.addEventListener('change', updateAvailableTimeSlots);
 
-// Set minimum date to today
 const today = new Date().toISOString().split('T')[0];
 preferredDateInput.setAttribute('min', today);
 
-// Safari date input placeholder fix
 function handleDatePlaceholder() {
     const dateInput = preferredDateInput;
 
-    // Create a wrapper for the placeholder
     if (!dateInput.value) {
         dateInput.classList.add('date-empty');
     }
@@ -206,18 +183,14 @@ function handleDatePlaceholder() {
     });
 }
 
-// Initialize placeholder handling
 handleDatePlaceholder();
 
-// Handle Service Category Change
 serviceCategorySelect.addEventListener('change', function () {
     const selectedCategory = this.value;
 
-    // Clear and reset service type dropdown
     serviceTypeSelect.innerHTML = '<option value="">Select a service type</option>';
 
     if (selectedCategory && serviceTypes[selectedCategory]) {
-        // Enable and populate service type dropdown
         serviceTypeSelect.disabled = false;
 
         serviceTypes[selectedCategory].forEach(service => {
@@ -227,17 +200,14 @@ serviceCategorySelect.addEventListener('change', function () {
             serviceTypeSelect.appendChild(option);
         });
     } else {
-        // Disable if no category selected
         serviceTypeSelect.disabled = true;
     }
 });
 
-// Form Submission Handler
 appointmentForm.addEventListener('submit', async function (e) {
     e.preventDefault();
     e.stopPropagation();
 
-    // Validate First Name
     const firstNameInput = document.getElementById('firstName');
     if (!firstNameInput.value.trim()) {
         showToast('First Name is required. Please enter your first name.', 'error');
@@ -245,7 +215,6 @@ appointmentForm.addEventListener('submit', async function (e) {
         return;
     }
 
-    // Validate Phone Number
     const phoneInput = document.getElementById('contactNumber');
     const phoneValue = phoneInput.value.replace(/\D/g, '');
     if (!phoneInput.value.trim()) {
@@ -259,7 +228,6 @@ appointmentForm.addEventListener('submit', async function (e) {
         return;
     }
 
-    // Validate Email
     const emailInput = document.getElementById('email');
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailInput.value.trim()) {
@@ -273,7 +241,6 @@ appointmentForm.addEventListener('submit', async function (e) {
         return;
     }
 
-    // Validate Service Category
     const serviceCategoryInput = document.getElementById('serviceCategory');
     if (!serviceCategoryInput.value) {
         showToast('Service Category is required. Please select a service category.', 'error');
@@ -281,7 +248,6 @@ appointmentForm.addEventListener('submit', async function (e) {
         return;
     }
 
-    // Validate Service Type
     const serviceTypeInput = document.getElementById('serviceType');
     if (!serviceTypeInput.value) {
         showToast('Service Type is required. Please select a service type.', 'error');
@@ -289,7 +255,6 @@ appointmentForm.addEventListener('submit', async function (e) {
         return;
     }
 
-    // Validate Preferred Date
     const dateInput = document.getElementById('preferredDate');
     if (!dateInput.value) {
         showToast('Preferred Date is required. Please select your appointment date.', 'error');
@@ -307,7 +272,6 @@ appointmentForm.addEventListener('submit', async function (e) {
         return;
     }
 
-    // Validate Preferred Time
     const timeInput = document.getElementById('preferredTime');
     if (!timeInput.value) {
         showToast('Preferred Time is required. Please select your appointment time.', 'error');
@@ -315,7 +279,6 @@ appointmentForm.addEventListener('submit', async function (e) {
         return;
     }
 
-    // Check if time slot is available
     const availability = await checkTimeSlotAvailability(dateInput.value, timeInput.value);
     if (!availability.available) {
         showToast('This time slot is already booked. Please select a different time.', 'error');
@@ -323,7 +286,6 @@ appointmentForm.addEventListener('submit', async function (e) {
         return;
     }
 
-    // Get form data
     const formData = new FormData(appointmentForm);
     const appointmentData = {};
 
@@ -331,14 +293,11 @@ appointmentForm.addEventListener('submit', async function (e) {
         appointmentData[key] = value;
     });
 
-    // Populate confirmation modal
     populateConfirmationModal(appointmentData);
 
-    // Show confirmation modal
     openModal('confirmationModal');
 });
 
-// Helper function to highlight error fields
 function highlightError(element) {
     element.focus();
     element.style.borderColor = '#f56565';
@@ -350,9 +309,7 @@ function highlightError(element) {
     }, 600);
 }
 
-// Populate confirmation modal with form data
 function populateConfirmationModal(data) {
-    // Full name
     const fullName = [
         data.firstName,
         data.secondName,
@@ -362,11 +319,9 @@ function populateConfirmationModal(data) {
     ].filter(Boolean).join(' ');
     document.getElementById('confirmFullName').value = fullName;
 
-    // Contact info
     document.getElementById('confirmEmail').value = data.email;
     document.getElementById('confirmPhone').value = data.contactNumber;
 
-    // Service details
     const categoryMap = {
         'skincare': 'Skin Care',
         'haircare': 'Hair Care',
@@ -381,7 +336,6 @@ function populateConfirmationModal(data) {
     ).join(' ');
     document.getElementById('confirmServiceType').value = serviceTypeText;
 
-    // Appointment schedule
     const dateObj = new Date(data.preferredDate);
     const formattedDate = dateObj.toLocaleDateString('en-US', {
         weekday: 'long',
@@ -391,7 +345,6 @@ function populateConfirmationModal(data) {
     });
     document.getElementById('confirmDate').value = formattedDate;
 
-    // Format time
     const [hours, minutes] = data.preferredTime.split(':');
     const hour = parseInt(hours);
     const ampm = hour >= 12 ? 'PM' : 'AM';
@@ -399,7 +352,6 @@ function populateConfirmationModal(data) {
     const formattedTime = `${hour12}:${minutes} ${ampm}`;
     document.getElementById('confirmTime').value = formattedTime;
 
-    // Special notes
     if (data.specialNotes && data.specialNotes.trim()) {
         document.getElementById('notesSection').style.display = 'block';
         document.getElementById('confirmNotes').value = data.specialNotes;
@@ -408,16 +360,13 @@ function populateConfirmationModal(data) {
     }
 }
 
-// Handle confirmation submit
 document.getElementById('confirmSubmitBtn').addEventListener('click', async function () {
     const btn = this;
     const originalText = btn.innerHTML;
 
-    // Disable button and show loading
     btn.disabled = true;
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
 
-    // Get form data
     const formData = new FormData(appointmentForm);
     const appointmentData = {};
 
@@ -425,12 +374,10 @@ document.getElementById('confirmSubmitBtn').addEventListener('click', async func
         appointmentData[key] = value;
     });
 
-    // Add status
     appointmentData.status = 'Pending';
     appointmentData.submittedAt = new Date().toISOString();
 
     try {
-        // Send data to backend API
         const response = await fetch('/CAATE-ITRMS/backend/public/api/v1/appointments', {
             method: 'POST',
             headers: {
@@ -442,18 +389,14 @@ document.getElementById('confirmSubmitBtn').addEventListener('click', async func
         const result = await response.json();
 
         if (result.success) {
-            // Close confirmation modal
             closeModal('confirmationModal');
 
-            // Show success toast
             showToast('Appointment submitted! Check your email for approval status.', 'success');
 
-            // Reset form
             appointmentForm.reset();
             serviceTypeSelect.disabled = true;
             serviceTypeSelect.innerHTML = '<option value="">Select a service type</option>';
 
-            // Scroll to top
             window.scrollTo({ top: 0, behavior: 'smooth' });
         } else {
             showToast('Error booking appointment: ' + (result.error || 'Unknown error'), 'error');
@@ -462,13 +405,11 @@ document.getElementById('confirmSubmitBtn').addEventListener('click', async func
         console.error('Error:', error);
         showToast('Failed to book appointment. Please try again later.', 'error');
     } finally {
-        // Re-enable button
         btn.disabled = false;
         btn.innerHTML = originalText;
     }
 });
 
-// Toast notification function
 function showToast(message, type = 'success') {
     const container = document.getElementById('toastContainer');
     if (!container) return;
@@ -484,14 +425,12 @@ function showToast(message, type = 'success') {
 
     container.appendChild(toast);
 
-    // Auto remove after 2.5 seconds
     setTimeout(() => {
         toast.classList.add('hiding');
         setTimeout(() => toast.remove(), 300);
     }, 2500);
 }
 
-// Close toast notification
 function closeToast(button) {
     const toast = button.closest('.toast-notification');
     if (toast) {
@@ -502,17 +441,14 @@ function closeToast(button) {
     }
 }
 
-// Phone number formatting
 const contactNumberInput = document.getElementById('contactNumber');
 contactNumberInput.addEventListener('input', function (e) {
     let value = e.target.value.replace(/\D/g, '');
 
-    // Limit to 11 digits for Philippine numbers
     if (value.length > 11) {
         value = value.slice(0, 11);
     }
 
-    // Format: 09XX XXX XXXX
     if (value.length > 4 && value.length <= 7) {
         value = value.slice(0, 4) + ' ' + value.slice(4);
     } else if (value.length > 7) {
@@ -522,7 +458,6 @@ contactNumberInput.addEventListener('input', function (e) {
     e.target.value = value;
 });
 
-// Navbar scroll effect
 let lastScroll = 0;
 const navbar = document.getElementById('navbar');
 
@@ -538,7 +473,6 @@ window.addEventListener('scroll', () => {
     lastScroll = currentScroll;
 });
 
-// Form validation feedback
 const inputs = appointmentForm.querySelectorAll('input[required], select[required], textarea[required]');
 
 inputs.forEach(input => {
@@ -555,7 +489,6 @@ inputs.forEach(input => {
     });
 });
 
-// Email validation
 const emailInput = document.getElementById('email');
 emailInput.addEventListener('blur', function () {
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -566,23 +499,19 @@ emailInput.addEventListener('blur', function () {
     }
 });
 
-// Letter-only validation for name fields
 const nameFields = ['firstName', 'secondName', 'middleName', 'lastName', 'suffix'];
 
 nameFields.forEach(fieldId => {
     const field = document.getElementById(fieldId);
     if (field) {
         field.addEventListener('input', function (e) {
-            // For suffix, allow letters, dots, commas, and spaces
             if (fieldId === 'suffix') {
                 this.value = this.value.replace(/[^A-Za-z.,\s]/g, '');
             } else {
-                // For other name fields, allow only letters and spaces
                 this.value = this.value.replace(/[^A-Za-z\s]/g, '');
             }
         });
 
-        // Prevent paste of non-letter characters
         field.addEventListener('paste', function (e) {
             e.preventDefault();
             const pastedText = (e.clipboardData || window.clipboardData).getData('text');
@@ -597,21 +526,14 @@ nameFields.forEach(fieldId => {
     }
 });
 
-// ========================================
-// CUSTOM MODAL FUNCTIONS (Bootstrap Replacement)
-// ========================================
-
 function openModal(modalId) {
     const modal = document.getElementById(modalId);
     if (!modal) return;
 
-    // Add show class to trigger animations
     modal.classList.add('show');
 
-    // Prevent body scroll
     document.body.classList.add('modal-open');
 
-    // Setup close handlers
     setupModalCloseHandlers(modal);
 }
 
@@ -619,15 +541,12 @@ function closeModal(modalId) {
     const modal = document.getElementById(modalId);
     if (!modal) return;
 
-    // Remove show class to trigger exit animations
     modal.classList.remove('show');
 
-    // Allow body scroll
     document.body.classList.remove('modal-open');
 }
 
 function setupModalCloseHandlers(modal) {
-    // Close button handler
     const closeBtn = modal.querySelector('.custom-modal-close');
     if (closeBtn) {
         closeBtn.onclick = function () {
@@ -635,7 +554,6 @@ function setupModalCloseHandlers(modal) {
         };
     }
 
-    // Cancel button handler
     const cancelBtn = modal.querySelector('.modal-cancel-btn');
     if (cancelBtn) {
         cancelBtn.onclick = function () {
@@ -643,7 +561,6 @@ function setupModalCloseHandlers(modal) {
         };
     }
 
-    // Backdrop click handler
     const backdrop = modal.querySelector('.custom-modal-backdrop');
     if (backdrop) {
         backdrop.onclick = function () {
@@ -651,7 +568,6 @@ function setupModalCloseHandlers(modal) {
         };
     }
 
-    // Escape key handler
     const escapeHandler = function (e) {
         if (e.key === 'Escape' && modal.classList.contains('show')) {
             closeModal(modal.id);

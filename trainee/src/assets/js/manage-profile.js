@@ -1,9 +1,7 @@
-/* Manage Profile Page Script - Trainee */
 
-// API Configuration
+
 const API_BASE_URL = config.api.baseUrl;
 
-// Authentication check
 function checkAuthentication() {
     const token = localStorage.getItem('authToken');
     const userRole = localStorage.getItem('userRole');
@@ -28,15 +26,12 @@ function checkAuthentication() {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    // Check authentication first
     if (!checkAuthentication()) {
         return;
     }
 
-    // Set flag to prevent trainee-navbar.js from double-initializing
     window.traineeNavbarInitialized = true;
 
-    // Initialize navbar functionality manually since we're preventing auto-init
     if (typeof initializeTraineeNavbar === 'function') {
         initializeTraineeNavbar();
     }
@@ -46,7 +41,6 @@ document.addEventListener('DOMContentLoaded', function () {
     initializeEditForm();
 });
 
-// Load trainee profile data from database
 async function loadTraineeProfile() {
     try {
         const token = localStorage.getItem('authToken');
@@ -57,7 +51,6 @@ async function loadTraineeProfile() {
             return;
         }
 
-        // Fetch trainee data from the trainees collection
         try {
             const response = await fetch(`${API_BASE_URL}/api/v1/trainees/${userId}`, {
                 method: 'GET',
@@ -72,7 +65,6 @@ async function loadTraineeProfile() {
 
                 let traineeData = result.data || result.trainee || result;
 
-                // Map database fields to frontend format
                 const mappedData = {
                     _id: traineeData._id,
                     name: traineeData.name,
@@ -95,16 +87,12 @@ async function loadTraineeProfile() {
                     profile_image: traineeData.profile_image || traineeData.profileImage || '../assets/images/DEFAULT_AVATAR.png'
                 };
 
-                // Update profile overview
                 updateProfileOverview(mappedData);
 
-                // Update personal information
                 updatePersonalInformation(mappedData);
 
-                // Update navbar user info
                 updateNavbarUserInfo(mappedData);
 
-                // Store the mapped data in localStorage for future use
                 localStorage.setItem('userData', JSON.stringify(mappedData));
 
             } else {
@@ -114,7 +102,6 @@ async function loadTraineeProfile() {
                     const errorData = await response.json();
                     errorMessage = errorData.error || errorMessage;
                 } catch (e) {
-                    // If response is not JSON, use status text
                     errorMessage = response.statusText || errorMessage;
                 }
 
@@ -122,7 +109,6 @@ async function loadTraineeProfile() {
             }
 
         } catch (apiError) {
-            // Fallback: try to use data from localStorage
             const userData = localStorage.getItem('userData');
             if (userData) {
                 try {
@@ -144,9 +130,7 @@ async function loadTraineeProfile() {
     }
 }
 
-// Update profile overview section
 function updateProfileOverview(data) {
-    // Full name - combine first_name, second_name, middle_name, last_name, suffix
     const fullNameElement = document.getElementById('profileFullName');
     if (fullNameElement) {
         const nameParts = [
@@ -161,20 +145,17 @@ function updateProfileOverview(data) {
         fullNameElement.textContent = fullName;
     }
 
-    // Trainee ID - replace role badge
     const roleBadge = document.getElementById('profileRole');
     if (roleBadge) {
         roleBadge.textContent = data.traineeId || data._id || 'N/A';
         roleBadge.className = 'badge bg-primary';
     }
 
-    // Email - fetch from database
     const emailElement = document.getElementById('profileEmail');
     if (emailElement) {
         emailElement.textContent = data.email || 'N/A';
     }
 
-    // Date of Birth - replace account status
     const statusBadge = document.getElementById('profileStatus');
     if (statusBadge) {
         const dateOfBirth = data.dateOfBirth ? new Date(data.dateOfBirth).toLocaleDateString() : 'N/A';
@@ -182,105 +163,86 @@ function updateProfileOverview(data) {
         statusBadge.className = 'badge bg-info';
     }
 
-    // Phone number
     const phoneElement = document.getElementById('profilePhone');
     if (phoneElement) {
         let phoneValue = data.phone || data.phoneNumber || 'N/A';
-        // Format phone number for display: 09XX XXX XXXX
         if (phoneValue && phoneValue !== 'N/A' && phoneValue.length === 11) {
             phoneValue = phoneValue.slice(0, 4) + ' ' + phoneValue.slice(4, 7) + ' ' + phoneValue.slice(7);
         }
         phoneElement.textContent = phoneValue;
     }
 
-    // Address
     const addressElement = document.getElementById('profileAddress');
     if (addressElement) {
         addressElement.textContent = data.address || 'N/A';
     }
 
-    // Profile image - use uploaded image if available, otherwise default avatar
     updateAllProfileImages(data.profileImage || data.profile_image);
 
-    // Update navbar user info
     updateNavbarUserInfo(data);
 }
 
-// Update personal information section
 function updatePersonalInformation(data) {
-    // Trainee ID
     const traineeIdInput = document.getElementById('personalTraineeId');
     if (traineeIdInput) {
         traineeIdInput.value = data.traineeId || data._id || '';
     }
 
-    // Username
     const usernameInput = document.getElementById('personalUsername');
     if (usernameInput) {
         usernameInput.value = data.username || '';
     }
 
-    // First name
     const firstNameInput = document.getElementById('personalFirstName');
     if (firstNameInput) {
         firstNameInput.value = data.firstName || '';
     }
 
-    // Second name
     const secondNameInput = document.getElementById('personalSecondName');
     if (secondNameInput) {
         secondNameInput.value = data.secondName || '';
     }
 
-    // Middle name
     const middleNameInput = document.getElementById('personalMiddleName');
     if (middleNameInput) {
         middleNameInput.value = data.middleName || '';
     }
 
-    // Last name
     const lastNameInput = document.getElementById('personalLastName');
     if (lastNameInput) {
         lastNameInput.value = data.lastName || '';
     }
 
-    // Suffix
     const suffixInput = document.getElementById('personalSuffix');
     if (suffixInput) {
         suffixInput.value = data.suffix || '';
     }
 
-    // Date of Birth
     const dateOfBirthInput = document.getElementById('personalDateOfBirth');
     if (dateOfBirthInput) {
         const dateValue = data.dateOfBirth ? new Date(data.dateOfBirth).toISOString().split('T')[0] : '';
         dateOfBirthInput.value = dateValue;
     }
 
-    // Phone number
     const phoneInput = document.getElementById('personalPhone');
     if (phoneInput) {
         let phoneValue = data.phoneNumber || data.phone || '';
-        // Format phone number for display: 09XX XXX XXXX
         if (phoneValue && phoneValue.length === 11) {
             phoneValue = phoneValue.slice(0, 4) + ' ' + phoneValue.slice(4, 7) + ' ' + phoneValue.slice(7);
         }
         phoneInput.value = phoneValue;
     }
 
-    // Email address
     const emailInput = document.getElementById('personalEmail');
     if (emailInput) {
         emailInput.value = data.email || '';
     }
 
-    // Address
     const addressTextarea = document.getElementById('personalAddress');
     if (addressTextarea) {
         addressTextarea.value = data.address || '';
     }
 
-    // Update edit modal fields
     const editTraineeId = document.getElementById('editTraineeId');
     const editUsername = document.getElementById('editUsername');
     const editFirstName = document.getElementById('editFirstName');
@@ -306,7 +268,6 @@ function updatePersonalInformation(data) {
     }
     if (editPhone) {
         let phoneValue = data.phoneNumber || data.phone || '';
-        // Format phone number for display: 09XX XXX XXXX
         if (phoneValue && phoneValue.length === 11) {
             phoneValue = phoneValue.slice(0, 4) + ' ' + phoneValue.slice(4, 7) + ' ' + phoneValue.slice(7);
         }
@@ -316,10 +277,7 @@ function updatePersonalInformation(data) {
     if (editAddress) editAddress.value = data.address || '';
 }
 
-
-// Update navbar user info
 function updateNavbarUserInfo(data) {
-    // Build full name from all name parts
     const nameParts = [
         data.firstName || '',
         data.secondName || '',
@@ -330,7 +288,6 @@ function updateNavbarUserInfo(data) {
 
     const displayName = nameParts.join(' ') || 'Trainee';
 
-    // Update all user-name elements (this is the main fix)
     const userNameElements = document.querySelectorAll('.user-name');
     userNameElements.forEach(element => {
         if (element) {
@@ -338,13 +295,11 @@ function updateNavbarUserInfo(data) {
         }
     });
 
-    // Also update the specific dropdown element (legacy support)
     const userName = document.querySelector('.dropdown-menu .grow .fw-semibold');
     if (userName) {
         userName.textContent = displayName;
     }
 
-    // Update welcome messages
     const welcomeElements = document.querySelectorAll('.welcome-user-name, .dashboard-welcome .user-name');
     welcomeElements.forEach(element => {
         if (element) {
@@ -352,20 +307,16 @@ function updateNavbarUserInfo(data) {
         }
     });
 
-    // Store globally for other scripts
     window.currentTraineeDisplayName = displayName;
 
-    // Update profile images in navbar - target all avatar images more comprehensively
     updateAllProfileImages(data.profileImage || data.profile_image);
 }
 
-// Initialize edit form
 function initializeEditForm() {
     const saveButton = document.querySelector('#editInformationModal .btn-primary');
     if (!saveButton) return;
 
     saveButton.addEventListener('click', async function () {
-        // Show loading state
         const originalText = saveButton.innerHTML;
         saveButton.disabled = true;
         saveButton.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i> Saving...';
@@ -373,25 +324,20 @@ function initializeEditForm() {
         try {
             await saveProfileChanges();
         } finally {
-            // Reset button state
             saveButton.disabled = false;
             saveButton.innerHTML = originalText;
         }
     });
 
-    // Add phone number validation and formatting
     const phoneInput = document.getElementById('editPhone');
     if (phoneInput) {
         phoneInput.addEventListener('input', function (e) {
-            // Remove all non-numeric characters
             let value = e.target.value.replace(/\D/g, '');
 
-            // Limit to 11 digits
             if (value.length > 11) {
                 value = value.slice(0, 11);
             }
 
-            // Format with spacing like placeholder: 09XX XXX XXXX
             if (value.length >= 4) {
                 if (value.length >= 7) {
                     value = value.slice(0, 4) + ' ' + value.slice(4, 7) + ' ' + value.slice(7);
@@ -404,7 +350,6 @@ function initializeEditForm() {
         });
 
         phoneInput.addEventListener('keypress', function (e) {
-            // Only allow numeric characters and space
             if (!/[0-9\s]/.test(e.key) && !['Backspace', 'Delete', 'Tab', 'Escape', 'Enter'].includes(e.key)) {
                 e.preventDefault();
             }
@@ -412,7 +357,6 @@ function initializeEditForm() {
     }
 }
 
-// Save profile changes
 async function saveProfileChanges() {
     const token = localStorage.getItem('authToken');
     const userId = localStorage.getItem('userId');
@@ -447,34 +391,28 @@ async function saveProfileChanges() {
         address: editAddress ? editAddress.value.trim() : ''
     };
 
-    // Basic validation - first name, username, email, date of birth, and address are required
     if (!updatedData.first_name || !updatedData.email || !updatedData.username) {
         showToast('First name, username, and email are required.', 'error');
         return;
     }
 
-    // Date of birth validation
     if (!updatedData.date_of_birth) {
         showToast('Date of birth is required.', 'error');
         return;
     }
 
-    // Address validation
     if (!updatedData.address || updatedData.address.trim() === '') {
         showToast('Address is required.', 'error');
         return;
     }
 
-    // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(updatedData.email)) {
         showToast('Please enter a valid email address.', 'error');
         return;
     }
 
-    // Phone number validation (optional but if provided, should be valid)
     if (updatedData.phone && updatedData.phone.length > 0) {
-        // Remove any non-digit characters for validation
         const cleanPhone = updatedData.phone.replace(/\D/g, '');
         if (cleanPhone.length !== 11 || !cleanPhone.startsWith('09')) {
             showToast('Please enter a valid 11-digit phone number starting with 09 (e.g., 09XX XXX XXXX).', 'error');
@@ -495,20 +433,16 @@ async function saveProfileChanges() {
         if (response.ok) {
             const result = await response.json();
 
-            // Close modal
             const modal = bootstrap.Modal.getInstance(document.getElementById('editInformationModal'));
             if (modal) modal.hide();
 
-            // Reload profile data to reflect changes
             await loadTraineeProfile();
 
-            // Show success toast
             showToast('Profile updated successfully!', 'success');
         } else {
             const errorData = await response.json();
             let errorMessage = 'Failed to update profile';
 
-            // Handle specific error cases
             if (response.status === 404) {
                 errorMessage = 'Trainee account not found. Please contact support.';
             } else if (response.status === 401) {
@@ -533,7 +467,6 @@ async function saveProfileChanges() {
             throw new Error(errorMessage);
         }
     } catch (error) {
-        // Handle network errors
         if (error.name === 'TypeError' && error.message.includes('fetch')) {
             showToast('Network error. Please check your connection and try again.', 'error');
         } else if (error.message.includes('Authentication expired')) {
@@ -544,7 +477,6 @@ async function saveProfileChanges() {
     }
 }
 
-// Photo upload functionality
 function initializePhotoUpload() {
     const changePhotoBtn = document.getElementById('changePhotoBtn');
     const profileImageInput = document.getElementById('profileImageInput');
@@ -560,33 +492,28 @@ function initializePhotoUpload() {
         const file = e.target.files[0];
         if (!file) return;
 
-        // Validate file type
         const validTypes = ['image/jpeg', 'image/jpg', 'image/png'];
         if (!validTypes.includes(file.type)) {
             showToast('Please select a valid image file (JPG or PNG)', 'error');
             return;
         }
 
-        // Validate file size (2MB max)
         const maxSize = 2 * 1024 * 1024;
         if (file.size > maxSize) {
             showToast('File size must be less than 2MB', 'error');
             return;
         }
 
-        // Preview the uploaded image
         const reader = new FileReader();
         reader.onload = function (event) {
             profileImage.src = event.target.result;
         };
         reader.readAsDataURL(file);
 
-        // Upload to server
         await uploadProfileImage(file);
     });
 }
 
-// Upload profile image
 async function uploadProfileImage(file) {
     try {
         const token = localStorage.getItem('authToken');
@@ -597,7 +524,6 @@ async function uploadProfileImage(file) {
             return;
         }
 
-        // Show loading state
         const changePhotoBtn = document.getElementById('changePhotoBtn');
         changePhotoBtn.disabled = true;
         changePhotoBtn.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i> Uploading...';
@@ -607,7 +533,6 @@ async function uploadProfileImage(file) {
 
         const uploadUrl = `${API_BASE_URL}/api/v1/trainees/${userId}`;
 
-        // Try the main trainee update endpoint
         const response = await fetch(uploadUrl, {
             method: 'PUT',
             headers: {
@@ -619,14 +544,11 @@ async function uploadProfileImage(file) {
         if (response.ok) {
             const result = await response.json();
 
-            // Check if server returned an image path
             const imagePath = result.profile_image || result.profileImage || result.image_path || result.data?.profile_image || result.data?.profileImage;
 
             if (imagePath) {
-                // Server returned image path - update all profile images
                 updateAllProfileImages(imagePath);
 
-                // Update cached user data
                 const userData = localStorage.getItem('userData');
                 if (userData) {
                     try {
@@ -636,21 +558,17 @@ async function uploadProfileImage(file) {
                         updateNavbarUserInfo(userDataObj);
                         localStorage.setItem('userData', JSON.stringify(userDataObj));
                     } catch (e) {
-                        // Silently handle errors
                     }
                 }
 
-                // Notify other pages
                 window.dispatchEvent(new CustomEvent('profileImageUpdated', {
                     detail: { imagePath: imagePath }
                 }));
 
                 showToast('Profile photo updated successfully!', 'success');
             } else {
-                // Server returned success but no image path
                 showToast('Profile photo uploaded successfully!', 'success');
 
-                // Reload profile to get the updated image path from database
                 setTimeout(() => {
                     loadTraineeProfile();
                 }, 500);
@@ -663,7 +581,6 @@ async function uploadProfileImage(file) {
     } catch (error) {
         showToast(error.message || 'Failed to upload photo', 'error');
 
-        // Reset image on error
         const profileImage = document.getElementById('profileImage');
         const userData = localStorage.getItem('userData');
         if (profileImage && userData) {
@@ -675,7 +592,6 @@ async function uploadProfileImage(file) {
             }
         }
     } finally {
-        // Reset button state
         const changePhotoBtn = document.getElementById('changePhotoBtn');
         if (changePhotoBtn) {
             changePhotoBtn.disabled = false;
@@ -684,9 +600,6 @@ async function uploadProfileImage(file) {
     }
 }
 
-
-
-// Toast notification functions
 function showToast(message, type = 'success') {
     const container = document.getElementById('toastContainer');
     if (!container) return;
@@ -708,7 +621,6 @@ function showToast(message, type = 'success') {
 
     container.appendChild(toast);
 
-    // Auto remove after 5 seconds (or 3 seconds for info messages)
     const timeout = type === 'info' ? 3000 : 5000;
     setTimeout(() => {
         toast.classList.add('hiding');
@@ -716,22 +628,18 @@ function showToast(message, type = 'success') {
     }, timeout);
 }
 
-// Show success message
 function showSuccess(message) {
     showToast(message, 'success');
 }
 
-// Show error message
 function showError(message) {
     showToast(message, 'error');
 }
 
-// Show info message
 function showInfo(message) {
     showToast(message, 'info');
 }
 
-// Show warning message
 function showWarning(message) {
     showToast(message, 'warning');
 }
@@ -739,7 +647,6 @@ function showWarning(message) {
 function showNotification(message, type = 'info') {
     showToast(message, type);
 }
-// Function to manually refresh user display name (can be called from console for testing)
 window.refreshTraineeDisplayName = function () {
     const userData = localStorage.getItem('userData');
     if (userData) {
@@ -747,8 +654,6 @@ window.refreshTraineeDisplayName = function () {
             const data = JSON.parse(userData);
             updateNavbarUserInfo(data);
         } catch (e) {
-            // Silently handle errors
-            // Reload from API
             loadTraineeProfile();
         }
     } else {
@@ -756,7 +661,6 @@ window.refreshTraineeDisplayName = function () {
     }
 };
 
-// Function to fix placeholder text immediately
 window.fixPlaceholderDisplayName = function () {
     const userNameElements = document.querySelectorAll('.user-name');
     let foundPlaceholder = false;
@@ -778,17 +682,13 @@ window.fixPlaceholderDisplayName = function () {
         window.refreshTraineeDisplayName();
     }
 };
-// Test function to check profile image functionality
 window.testProfileImageUpdate = function (imagePath) {
-    // Update local images
     updateAllProfileImages(imagePath);
 
-    // Update navbar images
     if (window.updateTraineeProfileImages) {
         window.updateTraineeProfileImages(imagePath);
     }
 
-    // Update localStorage
     const userData = localStorage.getItem('userData');
     if (userData) {
         try {
@@ -797,7 +697,6 @@ window.testProfileImageUpdate = function (imagePath) {
             userDataObj.profile_image = imagePath;
             localStorage.setItem('userData', JSON.stringify(userDataObj));
 
-            // Trigger events
             window.dispatchEvent(new CustomEvent('profileImageUpdated', {
                 detail: { imagePath: imagePath }
             }));
@@ -806,9 +705,6 @@ window.testProfileImageUpdate = function (imagePath) {
     }
 };
 
-// Function to update all profile images across the page
-// Function to update all profile images across the page
-// Function to update all profile images across the page
 function updateAllProfileImages(imagePath) {
     const profileImageSelectors = [
         '#profileImage', // Main profile image
@@ -830,13 +726,11 @@ function updateAllProfileImages(imagePath) {
         const images = document.querySelectorAll(selector);
         images.forEach(img => {
             if (img) {
-                // Check if we have a valid uploaded image path
                 if (imagePath &&
                     imagePath !== '../assets/images/DEFAULT_AVATAR.png' &&
                     imagePath !== 'DEFAULT_AVATAR.png' &&
                     !imagePath.includes('DEFAULT_AVATAR')) {
 
-                    // Handle different path formats for uploaded images
                     if (imagePath.startsWith('/CAATE-ITRMS/')) {
                         img.src = window.location.origin + imagePath;
                     } else if (imagePath.startsWith('http')) {
@@ -844,16 +738,13 @@ function updateAllProfileImages(imagePath) {
                     } else if (imagePath.startsWith('/')) {
                         img.src = window.location.origin + imagePath;
                     } else {
-                        // Assume it's a filename and construct the full path
                         img.src = `${window.location.origin}/CAATE-ITRMS/backend/public/uploads/profiles/${imagePath}`;
                     }
                     totalUpdated++;
                 } else {
-                    // Use default avatar for empty or default paths
                     img.src = '../assets/images/DEFAULT_AVATAR.png';
                 }
 
-                // Add error handling to fallback to default avatar
                 img.onerror = function () {
                     this.src = '../assets/images/DEFAULT_AVATAR.png';
                 };
@@ -863,11 +754,6 @@ function updateAllProfileImages(imagePath) {
 
 }
 
-
-
-
-
-// Function to manually refresh user display name (can be called from console for testing)
 window.refreshTraineeDisplayName = function () {
     const userData = localStorage.getItem('userData');
     if (userData) {
@@ -875,7 +761,6 @@ window.refreshTraineeDisplayName = function () {
             const data = JSON.parse(userData);
             updateNavbarUserInfo(data);
         } catch (e) {
-            // Silently handle errors
             loadTraineeProfile();
         }
     } else {
@@ -883,7 +768,6 @@ window.refreshTraineeDisplayName = function () {
     }
 };
 
-// Test function to check profile image functionality
 window.testProfileImageUpdate = function (imagePath) {
     updateAllProfileImages(imagePath);
 

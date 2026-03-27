@@ -3,17 +3,11 @@
 require_once __DIR__ . '/../../vendor/autoload.php';
 require_once __DIR__ . '/../../app/config/database.php';
 
-/**
- * Seed Sample Data for CAATE-ITRMS
- * Run this file to populate collections with sample data
- */
-
 try {
     $db = getMongoConnection();
     
     echo "Seeding Sample Data for CAATE-ITRMS...\n\n";
     
-    // Sample Admin User
     $usersCollection = $db->users;
     $adminExists = $usersCollection->findOne(['email' => 'admin@caate.edu']);
     
@@ -26,12 +20,11 @@ try {
             'created_at' => new MongoDB\BSON\UTCDateTime(),
             'updated_at' => new MongoDB\BSON\UTCDateTime()
         ]);
-        echo "✓ Created admin user (email: admin@caate.edu, password: admin123)\n";
+        echo "âœ“ Created admin user (email: admin@caate.edu, password: admin123)\n";
     } else {
         echo "  Admin user already exists\n";
     }
     
-    // Sample Courses
     $coursesCollection = $db->courses;
     $courseExists = $coursesCollection->findOne(['course_code' => 'BC-NC-001']);
     
@@ -67,12 +60,11 @@ try {
         ];
         
         $coursesCollection->insertMany($courses);
-        echo "✓ Created " . count($courses) . " sample courses\n";
+        echo "âœ“ Created " . count($courses) . " sample courses\n";
     } else {
         echo "  Sample courses already exist\n";
     }
     
-    // Sample Trainee
     $traineesCollection = $db->trainees;
     $traineeExists = $traineesCollection->findOne(['email' => 'trainee@example.com']);
     
@@ -87,7 +79,7 @@ try {
             'created_at' => new MongoDB\BSON\UTCDateTime(),
             'updated_at' => new MongoDB\BSON\UTCDateTime()
         ]);
-        echo "✓ Created sample trainee\n";
+        echo "âœ“ Created sample trainee\n";
     } else {
         echo "  Sample trainee already exists\n";
     }

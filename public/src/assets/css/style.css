@@ -37,7 +37,6 @@
   box-sizing: border-box;
 }
 
-/* Prevent horizontal overflow */
 html,
 body {
   max-width: 100%;
@@ -50,7 +49,6 @@ body {
   width: 100%;
 }
 
-/* Ensure all sections don't cause horizontal overflow */
 section,
 .hero,
 .about,
@@ -65,11 +63,11 @@ section,
 html {
   scroll-behavior: smooth;
   font-size: 16px;
-  /* Hide scrollbar for Chrome, Safari and Opera */
+  
   scrollbar-width: none;
-  /* Firefox */
+  
   -ms-overflow-style: none;
-  /* IE and Edge */
+  
   overflow-x: hidden;
   max-width: 100%;
   width: 100%;
@@ -77,7 +75,7 @@ html {
 
 html::-webkit-scrollbar {
   display: none;
-  /* Chrome, Safari and Opera */
+  
 }
 
 body {
@@ -90,18 +88,18 @@ body {
   line-height: 1.6;
   overflow-x: hidden;
   background-color: var(--white);
-  /* Hide scrollbar for Chrome, Safari and Opera */
+  
   scrollbar-width: none;
-  /* Firefox */
+  
   -ms-overflow-style: none;
-  /* IE and Edge */
+  
   max-width: 100%;
   width: 100%;
 }
 
 body::-webkit-scrollbar {
   display: none;
-  /* Chrome, Safari and Opera */
+  
 }
 
 h1,
@@ -730,7 +728,6 @@ h6 {
   width: 100%;
 }
 
-
 .mobile-menu .navbar-actions {
   flex-direction: column;
   margin-top: 1rem;
@@ -925,17 +922,15 @@ h6 {
   position: relative;
 }
 
-/* CAATE Logo - Specific Styling */
 .hero-logo.caate-logo {
   width: 205px;
-  /* Adjust this to control image size inside the circle */
+  
 }
 
-/* TESDA Logo - Specific Styling */
 .hero-logo.tesda-logo {
   width: 205px;
   padding: 25px;
-  /* Adjust this to control image size inside the circle */
+  
 }
 
 .hero-logo::before {
@@ -2712,7 +2707,7 @@ h6 {
     width: 50px;
   }
 
-  /* Hero dark section background adjustments for mobile */
+  
   .hero.dark-section::before {
     background-size: cover;
     background-position: center center;
@@ -2723,7 +2718,7 @@ h6 {
     background: linear-gradient(135deg, rgba(22, 56, 86, 0.8), rgba(18, 57, 90, 0.8));
   }
 
-  /* Ensure hero content is fully visible on mobile */
+  
   .hero-content {
     opacity: 1 !important;
   }
@@ -2923,7 +2918,6 @@ h6 {
   transform: translateY(0);
 }
 
-/* Scrollbar Customization with Enhanced Glassmorphism */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -2961,7 +2955,6 @@ h6 {
   position: relative;
 }
 
-/* Add a subtle glow effect */
 ::-webkit-scrollbar-thumb::before {
   content: "";
   position: absolute;
@@ -2976,7 +2969,6 @@ h6 {
   pointer-events: none;
 }
 
-/* Enhanced hover state */
 ::-webkit-scrollbar-track:hover {
   background: linear-gradient(135deg,
       rgba(255, 255, 255, 0.15) 0%,
@@ -3002,7 +2994,6 @@ h6 {
   transform: scaleX(1.2);
 }
 
-/* Active/pressed state */
 ::-webkit-scrollbar-thumb:active {
   background: linear-gradient(135deg,
       rgba(50, 85, 150, 0.95) 0%,
@@ -3017,7 +3008,6 @@ h6 {
   transform: scaleX(1);
 }
 
-/* Scrollbar Corner with glassmorphism */
 ::-webkit-scrollbar-corner {
   background: linear-gradient(135deg,
       rgba(255, 255, 255, 0.1) 0%,
@@ -3028,7 +3018,6 @@ h6 {
   border: 1px solid rgba(54, 145, 191, 0.1);
 }
 
-/* Firefox Scrollbar with enhanced glassmorphism */
 * {
   scrollbar-width: thin;
   scrollbar-color: rgba(54, 145, 191, 0.6) rgba(232, 244, 252, 0.15);
@@ -3039,7 +3028,6 @@ h6 {
   scrollbar-color: rgba(54, 145, 191, 0.85) rgba(232, 244, 252, 0.2);
 }
 
-/* Special styling for dark sections */
 .dark-section::-webkit-scrollbar-track {
   background: linear-gradient(135deg,
       rgba(22, 56, 86, 0.2) 0%,

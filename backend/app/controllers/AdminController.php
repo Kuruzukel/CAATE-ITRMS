@@ -28,7 +28,6 @@ class AdminController {
                 return;
             }
             
-            // Format the admin data for the frontend
             $formattedAdmin = [
                 'id' => isset($admin['_id']) ? (string)$admin['_id'] : $id,
                 'name' => $admin['name'] ?? '',
@@ -76,14 +75,12 @@ class AdminController {
             $rawInput = file_get_contents('php://input');
             $data = json_decode($rawInput, true);
             
-            // Enhanced logging for debugging
             error_log("=== AdminController::update START ===");
             error_log("AdminController::update - ID: $id");
             error_log("AdminController::update - Raw input: " . $rawInput);
             error_log("AdminController::update - Decoded data: " . json_encode($data));
             error_log("AdminController::update - Data keys: " . implode(', ', array_keys($data ?? [])));
             
-            // Check if data is valid
             if (!$data) {
                 error_log("AdminController::update - ERROR: No data received or invalid JSON");
                 http_response_code(400);
@@ -91,7 +88,6 @@ class AdminController {
                 return;
             }
             
-            // Validate ID format
             if (!$id || strlen($id) !== 24) {
                 error_log("AdminController::update - ERROR: Invalid ID format: $id");
                 http_response_code(400);
@@ -99,7 +95,6 @@ class AdminController {
                 return;
             }
         
-        // Validate required fields
         if (isset($data['username']) && empty(trim($data['username']))) {
             http_response_code(422);
             echo json_encode(['error' => 'Username is required']);
@@ -118,11 +113,9 @@ class AdminController {
             return;
         }
         
-        // Last name is optional - no validation needed
         
         $adminModel = new Admin();
         
-        // First check if admin exists
         $existingAdmin = $adminModel->findById($id);
         if (!$existingAdmin) {
             error_log("AdminController::update - ERROR: Admin not found with ID: $id");
@@ -133,7 +126,6 @@ class AdminController {
         
         error_log("AdminController::update - Admin found, proceeding with validation");
         
-        // Check for duplicate username (only if username is being changed)
         if (isset($data['username']) && $data['username'] !== ($existingAdmin['username'] ?? '')) {
             $duplicateAdmin = $adminModel->findByUsername($data['username']);
             if ($duplicateAdmin && (string)$duplicateAdmin['_id'] !== $id) {
@@ -143,7 +135,6 @@ class AdminController {
             }
         }
         
-        // If individual name fields are being updated, also update the combined name field
         if (isset($data['first_name']) || isset($data['second_name']) || isset($data['middle_name']) || isset($data['last_name']) || isset($data['suffix'])) {
             $firstName = $data['first_name'] ?? $existingAdmin['first_name'] ?? '';
             $secondName = $data['second_name'] ?? $existingAdmin['second_name'] ?? '';
@@ -151,7 +142,6 @@ class AdminController {
             $lastName = $data['last_name'] ?? $existingAdmin['last_name'] ?? '';
             $suffix = $data['suffix'] ?? $existingAdmin['suffix'] ?? '';
             
-            // Construct full name
             $nameParts = array_filter([$firstName, $secondName, $middleName, $lastName, $suffix]);
             $data['name'] = implode(' ', $nameParts);
             
@@ -202,7 +192,6 @@ class AdminController {
         
         $file = $_FILES['profileImage'];
         
-        // Validate file type
         $allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
         if (!in_array($file['type'], $allowedTypes)) {
             http_response_code(400);
@@ -210,7 +199,6 @@ class AdminController {
             return;
         }
         
-        // Validate file size (2MB max)
         $maxSize = 2 * 1024 * 1024;
         if ($file['size'] > $maxSize) {
             http_response_code(400);
@@ -218,24 +206,19 @@ class AdminController {
             return;
         }
         
-        // Create upload directory if it doesn't exist
         $uploadDir = __DIR__ . '/../../public/uploads/profiles/';
         if (!is_dir($uploadDir)) {
             mkdir($uploadDir, 0755, true);
         }
         
-        // Generate unique filename
         $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
         $filename = 'admin_' . $id . '_' . time() . '.' . $extension;
         $uploadPath = $uploadDir . $filename;
         
-        // Move uploaded file
         if (move_uploaded_file($file['tmp_name'], $uploadPath)) {
-            // Update admin record with new profile image path
             $adminModel = new Admin();
             $imagePath = '/CAATE-ITRMS/backend/public/uploads/profiles/' . $filename;
             
-            // Log the update operation
             error_log("AdminController::uploadProfileImage - Updating admin $id with image path: $imagePath");
             
             $result = $adminModel->update($id, ['profile_image' => $imagePath]);
@@ -243,7 +226,6 @@ class AdminController {
             error_log("AdminController::uploadProfileImage - Update result: " . ($result ? 'success' : 'failed'));
             
             if ($result) {
-                // Verify the update by fetching the admin record
                 $updatedAdmin = $adminModel->findById($id);
                 error_log("AdminController::uploadProfileImage - Verified profile_image in DB: " . ($updatedAdmin['profile_image'] ?? 'null'));
                 
@@ -261,14 +243,12 @@ class AdminController {
         }
     }
     
-    // Debug method to test database connection
     public function testUpdate($id) {
         error_log("=== AdminController::testUpdate START ===");
         
         try {
             $adminModel = new Admin();
             
-            // Test 1: Check if admin exists
             $admin = $adminModel->findById($id);
             if (!$admin) {
                 error_log("testUpdate - Admin not found");
@@ -278,7 +258,6 @@ class AdminController {
             
             error_log("testUpdate - Admin found: " . json_encode($admin));
             
-            // Test 2: Try a simple update
             $testData = ['test_field' => 'test_value_' . time()];
             $result = $adminModel->update($id, $testData);
             

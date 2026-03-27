@@ -1,6 +1,5 @@
 <?php
 
-// Load Composer autoloader if it exists
 $autoloadPaths = [
     __DIR__ . '/../../../vendor/autoload.php',  // Project root
     __DIR__ . '/../../vendor/autoload.php',      // Backend folder
@@ -13,14 +12,12 @@ foreach ($autoloadPaths as $autoloadPath) {
     }
 }
 
-// MongoDB Configuration
 define('DB_HOST', getenv('DB_HOST') ?: '127.0.0.1');
 define('DB_PORT', getenv('DB_PORT') ?: 27017);
 define('DB_NAME', getenv('DB_NAME') ?: 'CAATE-ITRMS');
 define('DB_USERNAME', getenv('DB_USERNAME') ?: '');
 define('DB_PASSWORD', getenv('DB_PASSWORD') ?: '');
 
-// Database Class
 class Database {
     private $client;
     private $database;
@@ -37,7 +34,6 @@ class Database {
             
             $this->client = new MongoDB\Client($connectionString);
             
-            // Test the connection
             $this->client->listDatabases();
             
             $this->database = $this->client->selectDatabase(DB_NAME);
@@ -74,7 +70,6 @@ class Database {
     }
 }
 
-// MongoDB Connection Singleton
 $_mongoConnection = null;
 
 function getMongoConnection() {

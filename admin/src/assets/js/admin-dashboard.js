@@ -651,7 +651,6 @@ function updateRecentEnrollmentActivityUI(activities) {
     });
 }
 
-
 function updateRecentEnrollmentUI(enrollments) {
     const listElement = document.getElementById('recentEnrollmentActivityList');
     if (!listElement) return;

@@ -11,7 +11,6 @@
         setupEventListeners();
     });
 
-
     async function loadRegistrations(filters = {}) {
         try {
             const queryParams = new URLSearchParams({
@@ -24,7 +23,6 @@
             const data = await response.json();
 
             if (data.success) {
-                // Fetch profile images for each registration
                 const registrationsWithImages = await Promise.all(
                     data.data.map(async (registration) => {
                         let profileImage = null;
@@ -56,7 +54,6 @@
         }
     }
 
-
     async function loadCoursesForFilter() {
         const courseSelect = document.querySelectorAll('select')[1];
         if (!courseSelect) return;
@@ -84,7 +81,6 @@
         }
     }
 
-
     function renderRegistrations(data) {
         const tbody = document.querySelector('.table tbody');
 
@@ -111,7 +107,6 @@
             const course = registration.selectedCourse || registration.courseQualification || 'N/A';
             const profileImage = registration.profileImage;
 
-            // Create avatar HTML - use image if available, otherwise show initials
             let avatarHtml;
             if (profileImage) {
                 avatarHtml = `
@@ -224,7 +219,6 @@
         attachActionListeners();
     }
 
-
     function getInitials(name) {
         return name
             .split(' ')
@@ -234,7 +228,6 @@
             .toUpperCase()
             .substring(0, 2);
     }
-
 
     function formatDate(dateString) {
         if (!dateString) return 'N/A';
@@ -275,7 +268,6 @@
         }
     }
 
-
     function getStatusBadge(status) {
         const statusMap = {
             'approved': '<span class="badge bg-success">Approved</span>',
@@ -284,7 +276,6 @@
         };
         return statusMap[status] || '<span class="badge bg-secondary">Unknown</span>';
     }
-
 
     async function updateStatistics() {
         try {
@@ -343,14 +334,12 @@
         }
     }
 
-
     function calculatePercentage(current, previous) {
         if (previous === 0) {
             return current > 0 ? 100 : 0;
         }
         return ((current - previous) / previous * 100).toFixed(1);
     }
-
 
     function updateStatCard(index, value, percentage) {
         const cards = document.querySelectorAll('.card-body h3');
@@ -383,7 +372,6 @@
             }
         }
     }
-
 
     function setupEventListeners() {
 
@@ -441,7 +429,6 @@
             saveEditBtn.addEventListener('click', saveEditedRegistration);
         }
     }
-
 
     function applyFilters() {
         const searchValue = document.querySelector('input[placeholder="Name or Trainee ID"]')?.value.toLowerCase().trim();
@@ -512,7 +499,6 @@
         }
     }
 
-
     function clearAllHighlights() {
         const tbody = document.querySelector('.table tbody');
         if (tbody) {
@@ -532,7 +518,6 @@
             });
         }
     }
-
 
     function highlightSearchResults(searchTerm) {
         const tbody = document.querySelector('.table tbody');
@@ -567,7 +552,6 @@
         }
     }
 
-
     function resetFilters() {
         document.querySelector('input[placeholder="Name or Trainee ID"]').value = '';
         document.querySelector('select').value = '';
@@ -576,7 +560,6 @@
         clearAllHighlights();
         renderRegistrations(registrations);
     }
-
 
     function attachActionListeners() {
 
@@ -610,7 +593,6 @@
         });
     }
 
-
     async function updateStatus(id, status) {
         try {
             const response = await fetch(`${config.api.baseUrl}/api/v1/registrations/${id}`, {
@@ -634,7 +616,6 @@
             showError('Error updating status');
         }
     }
-
 
     function viewDetails(id) {
         const registration = registrations.find(r => r._id.$oid === id);
@@ -733,7 +714,6 @@
         const modal = new bootstrap.Modal(document.getElementById('viewDetailsModal'));
         modal.show();
     }
-
 
     async function editDetails(id) {
         const registration = registrations.find(r => r._id.$oid === id);
@@ -876,7 +856,6 @@
         modal.show();
     }
 
-
     async function loadCoursesForEditModal() {
         const dropdown = document.getElementById('editCourse');
         if (!dropdown) return;
@@ -904,10 +883,8 @@
         }
     }
 
-
     async function saveEditedRegistration() {
         const form = document.getElementById('editRegistrationForm');
-
 
         const ageElement = document.getElementById('editAge');
         const ageValue = parseInt(ageElement.value);
@@ -1081,7 +1058,6 @@
         }
     }
 
-
     async function deleteRecord(id) {
         if (!confirm('Are you sure you want to delete this registration record?')) {
             return;
@@ -1106,7 +1082,6 @@
         }
     }
 
-
     function debounce(func, wait) {
         let timeout;
         return function executedFunction(...args) {
@@ -1119,16 +1094,13 @@
         };
     }
 
-
     function showSuccess(message) {
         showToast(message, 'success');
     }
 
-
     function showError(message) {
         showToast(message, 'error');
     }
-
 
     function showToast(message, type = 'success') {
         const container = document.getElementById('toastContainer');
@@ -1156,7 +1128,6 @@
         }, 5000);
     }
 
-
     function closeToast(button) {
         const toast = button.closest('.toast-notification');
         if (toast) {
@@ -1166,7 +1137,6 @@
             }, 300);
         }
     }
-
 
     function exportToCSV() {
         try {
@@ -1219,7 +1189,6 @@
         }
     }
 
-
     function exportToJSON() {
         try {
             if (!registrations || registrations.length === 0) {
@@ -1258,7 +1227,6 @@
         }
     }
 
-
     async function openAddRegistrationModal() {
 
         await loadCoursesForModal();
@@ -1266,7 +1234,6 @@
         const modal = new bootstrap.Modal(document.getElementById('addRegistrationModal'));
         modal.show();
     }
-
 
     async function loadCoursesForModal() {
         const dropdown = document.getElementById('addCourse');
@@ -1294,7 +1261,6 @@
             dropdown.innerHTML = '<option value="">Error loading courses</option>';
         }
     }
-
 
     async function saveNewRegistration() {
         const form = document.getElementById('addRegistrationForm');

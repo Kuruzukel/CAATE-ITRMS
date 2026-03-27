@@ -3,10 +3,6 @@
 require_once __DIR__ . '/../../vendor/autoload.php';
 require_once __DIR__ . '/../../app/config/database.php';
 
-/**
- * Add 10 Sample Trainee Accounts (matching John Aeron's structure)
- */
-
 try {
     $db = getMongoConnection();
     
@@ -29,10 +25,9 @@ try {
         $email = strtolower($firstName . '.' . $lastName . '@example.com');
         $phone = '0917' . str_pad(rand(1000000, 9999999), 7, '0', STR_PAD_LEFT);
         
-        // Check if trainee already exists
         $existing = $traineesCollection->findOne(['trainee_id' => $traineeId]);
         if ($existing) {
-            echo "  ⚠ Skipped: {$traineeId} already exists\n";
+            echo "  âš  Skipped: {$traineeId} already exists\n";
             continue;
         }
         
@@ -51,11 +46,11 @@ try {
         ];
         
         $traineesCollection->insertOne($trainee);
-        echo "  ✓ Created: {$firstName} {$lastName} ({$traineeId})\n";
+        echo "  âœ“ Created: {$firstName} {$lastName} ({$traineeId})\n";
         $created++;
     }
     
-    echo "\n✅ Successfully created {$created} trainee accounts!\n";
+    echo "\nâœ… Successfully created {$created} trainee accounts!\n";
     echo "\n" . str_repeat("=", 80) . "\n";
     echo "TRAINEE ACCOUNTS SUMMARY\n";
     echo str_repeat("=", 80) . "\n";
@@ -68,7 +63,7 @@ try {
     echo "\nTotal trainees in database: " . $traineesCollection->countDocuments() . "\n";
     
 } catch (Exception $e) {
-    echo "❌ Error: " . $e->getMessage() . "\n";
+    echo "âŒ Error: " . $e->getMessage() . "\n";
     echo "\nIf you see a duplicate key error on student_id, run this first:\n";
     echo "php database/migrations/drop_student_id_index.php\n";
     exit(1);

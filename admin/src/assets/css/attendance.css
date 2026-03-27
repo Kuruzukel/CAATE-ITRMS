@@ -90,17 +90,14 @@
     color: #ffffff !important;
 }
 
-/* Remove bold font-weight from table cells */
 .table td {
     font-weight: normal !important;
 }
 
-/* Make trainee ID bold (second column) */
 .table td:nth-child(2) {
     font-weight: bold !important;
 }
 
-/* Remove bold font-weight from menu items */
 .menu-inner .menu-item .menu-link div {
     font-weight: normal !important;
 }

@@ -109,7 +109,6 @@ function updateNavbarUserInfo(data) {
                 return;
             }
 
-            // Skip images inside tables (application/trainee data)
             if (img.closest('table') || img.closest('tbody')) {
                 return;
             }
@@ -136,9 +135,7 @@ function updateNavbarUserInfo(data) {
         });
     });
 
-
     setTimeout(() => {
-        // Only update navbar and dropdown images, not table content
         const navbarImages = document.querySelectorAll('.navbar img, .dropdown-menu img, .layout-navbar img');
         let forceUpdated = 0;
         navbarImages.forEach(img => {
@@ -147,7 +144,6 @@ function updateNavbarUserInfo(data) {
                 return;
             }
 
-            // Skip images inside tables (application/trainee data)
             if (img.closest('table') || img.closest('tbody')) {
                 return;
             }
@@ -195,7 +191,6 @@ function initializeAdminNavbar() {
     window.addEventListener('profileImageUpdated', function (e) {
         if (e.detail && e.detail.imagePath) {
 
-
             const allAvatarImages = document.querySelectorAll('.navbar .avatar img, .dropdown-menu .avatar img, .layout-navbar .avatar img');
             allAvatarImages.forEach((img) => {
 
@@ -222,7 +217,6 @@ window.refreshAdminNavbar = function () {
 };
 
 window.forceUpdateAvatars = function (imagePath) {
-
 
     const allAvatarImages = document.querySelectorAll('.navbar .avatar img, .dropdown-menu .avatar img, .layout-navbar .avatar img');
     allAvatarImages.forEach((img) => {

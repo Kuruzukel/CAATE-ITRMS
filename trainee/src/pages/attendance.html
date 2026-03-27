@@ -9,48 +9,48 @@
     <title>CAATE | Attendance</title>
     <meta name="description" content="" />
 
-    <!-- Favicon -->
+    
     <link rel="icon" type="image/x-icon" href="../assets/images/CAATE_META_LOGO.png" />
 
-    <!-- Fonts -->
+    
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
         href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
         rel="stylesheet" />
 
-    <!-- Icons -->
+    
     <link rel="stylesheet" href="../assets/vendor/fonts/boxicons.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
-    <!-- Core CSS -->
+    
     <link rel="stylesheet" href="../assets/vendor/css/core.css" class="template-customizer-core-css" />
     <link rel="stylesheet" href="../assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
     <link rel="stylesheet" href="../assets/css/demo.css" />
     <link rel="stylesheet" href="../assets/css/custom-theme.css" />
     <link rel="stylesheet" href="../assets/css/dashboard.css" />
 
-    <!-- Vendors CSS -->
+    
     <link rel="stylesheet" href="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
 
-    <!-- Helpers -->
+    
     <script src="../assets/vendor/js/helpers.js"></script>
     <script src="../assets/js/config.js"></script>
 
-    <!-- Trainee Navbar - Common navbar functionality -->
+    
     <script src="../assets/js/trainee-navbar.js"></script>
 
-    <!-- Attendance CSS -->
+    
     <link rel="stylesheet" href="../assets/css/attendance.css" />
 </head>
 
 <body>
-    <!-- Layout wrapper -->
+    
     <div class="layout-wrapper layout-content-navbar">
         <div class="layout-container">
-            <!-- Menu -->
+            
             <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
-                <!-- Close button for mobile - only visible on screens below 1200px -->
+                
                 <button class="menu-close-btn" aria-label="Close menu">
                     <i class="fas fa-times"></i>
                 </button>
@@ -69,7 +69,7 @@
                 <div class="menu-inner-shadow"></div>
 
                 <ul class="menu-inner py-1">
-                    <!-- Dashboard -->
+                    
                     <li class="menu-item">
                         <a href="dashboard.html" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-home-circle"></i>
@@ -77,7 +77,7 @@
                         </a>
                     </li>
 
-                    <!-- Class Records -->
+                    
                     <li class="menu-item active open">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
                             <i class="menu-icon tf-icons bx bx-book"></i>
@@ -97,7 +97,7 @@
                         </ul>
                     </li>
 
-                    <!-- Training Catalog -->
+                    
                     <li class="menu-item">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
                             <i class="menu-icon tf-icons bx bx-book-open"></i>
@@ -117,7 +117,7 @@
                         </ul>
                     </li>
 
-                    <!-- Forms -->
+                    
                     <li class="menu-item">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
                             <i class="menu-icon tf-icons bx bx-file"></i>
@@ -142,7 +142,7 @@
                         </ul>
                     </li>
 
-                    <!-- Settings -->
+                    
                     <li class="menu-item">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
                             <i class="menu-icon tf-icons bx bx-cog"></i>
@@ -163,11 +163,11 @@
                     </li>
                 </ul>
             </aside>
-            <!-- / Menu -->
+            
 
-            <!-- Layout container -->
+            
             <div class="layout-page">
-                <!-- Navbar -->
+                
                 <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
                     id="layout-navbar">
                     <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0">
@@ -179,7 +179,7 @@
 
                     <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse"
                         style="justify-content: space-between !important;">
-                        <!-- Search -->
+                        
                         <div class="navbar-nav align-items-center" style="flex: 0 0 auto; max-width: 250px;">
                             <div class="nav-item d-flex align-items-center position-relative"
                                 style="width: 250px; max-width: 250px;">
@@ -190,11 +190,11 @@
                                     style="padding-left: 40px; width: 250px; max-width: 250px;" />
                             </div>
                         </div>
-                        <!-- /Search -->
+                        
 
                         <ul class="navbar-nav flex-row align-items-center ms-auto"
                             style="flex-shrink: 0; margin-left: auto;">
-                            <!-- User -->
+                            
                             <li class="nav-item navbar-dropdown dropdown-user dropdown">
                                 <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);"
                                     data-bs-toggle="dropdown">
@@ -236,17 +236,17 @@
                                     </li>
                                 </ul>
                             </li>
-                            <!--/ User -->
+                            
                         </ul>
                     </div>
                 </nav>
-                <!-- / Navbar -->
+                
 
-                <!-- Content wrapper -->
+                
                 <div class="content-wrapper">
-                    <!-- Content -->
+                    
                     <div class="container-xxl grow container-p-y">
-                        <!-- Course Selection -->
+                        
                         <div class="row mb-4">
                             <div class="col-12">
                                 <div class="row" id="coursesContainer">
@@ -306,7 +306,7 @@
                             </div>
                         </div>
 
-                        <!-- Attendance Form -->
+                        
                         <div id="attendanceForm">
                             <div class="card">
                                 <div class="card-header">
@@ -314,7 +314,7 @@
                                 </div>
                                 <div class="card-body">
                                     <form id="attendanceFormElement">
-                                        <!-- Attendance Type -->
+                                        
                                         <div class="row mb-3">
                                             <div class="col-md-6">
                                                 <label class="form-label" for="attendanceType">Attendance Type</label>
@@ -334,7 +334,7 @@
                                             </div>
                                         </div>
 
-                                        <!-- Date and Time -->
+                                        
                                         <div class="row mb-3">
                                             <div class="col-md-6">
                                                 <label class="form-label" for="attendanceDate">Date</label>
@@ -346,10 +346,10 @@
                                             </div>
                                         </div>
 
-                                        <!-- Image Upload -->
+                                        
                                         <div class="mb-3">
                                             <div class="row">
-                                                <!-- Upload Area - Left Side -->
+                                                
                                                 <div class="col-md-6">
                                                     <label class="form-label">Upload Image</label>
                                                     <div class="upload-area" id="uploadArea">
@@ -365,7 +365,7 @@
                                                     </div>
                                                 </div>
 
-                                                <!-- Image Preview - Right Side -->
+                                                
                                                 <div class="col-md-6">
                                                     <label class="form-label">Image Preview</label>
                                                     <div id="imagePreviewSection" class="image-preview-section">
@@ -397,14 +397,14 @@
                                             </div>
                                         </div>
 
-                                        <!-- Notes -->
+                                        
                                         <div class="mb-3">
                                             <label class="form-label" for="notes">Notes (Optional)</label>
                                             <textarea class="form-control" id="notes" rows="3"
                                                 placeholder="Add any additional notes..."></textarea>
                                         </div>
 
-                                        <!-- Buttons -->
+                                        
                                         <div class="d-flex gap-2">
                                             <button type="submit" class="btn btn-outline-secondary">
                                                 <i class="bx bx-check me-2"></i>Submit Attendance
@@ -415,7 +415,7 @@
                             </div>
                         </div>
 
-                        <!-- Attendance History -->
+                        
                         <div class="card mt-4">
                             <div class="card-header d-flex justify-content-between align-items-center">
                                 <h5 class="mb-0">Attendance History</h5>
@@ -425,7 +425,7 @@
                                 </button>
                             </div>
                             <div class="card-body">
-                                <!-- Filter Panel -->
+                                
                                 <div class="mb-4">
                                     <div class="card card-body"
                                         style="background-color: #1a2332; border: 1px solid #2d3e52;">
@@ -499,11 +499,11 @@
                                     </div>
                                 </div>
 
-                                <!-- Attendance Records Grid -->
+                                
                                 <div class="attendance-records-container"
                                     style="max-height: 600px; overflow-y: auto; padding-right: 10px;">
                                     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-                                        <!-- Attendance Record 1 -->
+                                        
                                         <div class="col">
                                             <div class="card h-100"
                                                 style="background-color: #1e293b; border: 1px solid #334155;">
@@ -536,7 +536,7 @@
                                             </div>
                                         </div>
 
-                                        <!-- Attendance Record 2 -->
+                                        
                                         <div class="col">
                                             <div class="card h-100"
                                                 style="background-color: #1e293b; border: 1px solid #334155;">
@@ -569,7 +569,7 @@
                                             </div>
                                         </div>
 
-                                        <!-- Attendance Record 3 -->
+                                        
                                         <div class="col">
                                             <div class="card h-100"
                                                 style="background-color: #1e293b; border: 1px solid #334155;">
@@ -602,7 +602,7 @@
                                             </div>
                                         </div>
 
-                                        <!-- Attendance Record 4 -->
+                                        
                                         <div class="col">
                                             <div class="card h-100"
                                                 style="background-color: #1e293b; border: 1px solid #334155;">
@@ -635,7 +635,7 @@
                                             </div>
                                         </div>
 
-                                        <!-- Attendance Record 5 -->
+                                        
                                         <div class="col">
                                             <div class="card h-100"
                                                 style="background-color: #1e293b; border: 1px solid #334155;">
@@ -668,7 +668,7 @@
                                             </div>
                                         </div>
 
-                                        <!-- Attendance Record 6 -->
+                                        
                                         <div class="col">
                                             <div class="card h-100"
                                                 style="background-color: #1e293b; border: 1px solid #334155;">
@@ -701,7 +701,7 @@
                                             </div>
                                         </div>
 
-                                        <!-- Attendance Record 7 -->
+                                        
                                         <div class="col">
                                             <div class="card h-100"
                                                 style="background-color: #1e293b; border: 1px solid #334155;">
@@ -734,7 +734,7 @@
                                             </div>
                                         </div>
 
-                                        <!-- Attendance Record 8 -->
+                                        
                                         <div class="col">
                                             <div class="card h-100"
                                                 style="background-color: #1e293b; border: 1px solid #334155;">
@@ -767,7 +767,7 @@
                                             </div>
                                         </div>
 
-                                        <!-- Attendance Record 9 -->
+                                        
                                         <div class="col">
                                             <div class="card h-100"
                                                 style="background-color: #1e293b; border: 1px solid #334155;">
@@ -800,7 +800,7 @@
                                             </div>
                                         </div>
 
-                                        <!-- Attendance Record 10 -->
+                                        
                                         <div class="col">
                                             <div class="card h-100"
                                                 style="background-color: #1e293b; border: 1px solid #334155;">
@@ -833,7 +833,7 @@
                                             </div>
                                         </div>
 
-                                        <!-- Attendance Record 11 -->
+                                        
                                         <div class="col">
                                             <div class="card h-100"
                                                 style="background-color: #1e293b; border: 1px solid #334155;">
@@ -866,7 +866,7 @@
                                             </div>
                                         </div>
 
-                                        <!-- Attendance Record 12 -->
+                                        
                                         <div class="col">
                                             <div class="card h-100"
                                                 style="background-color: #1e293b; border: 1px solid #334155;">
@@ -904,29 +904,29 @@
                         </div>
                     </div>
                 </div>
-                <!-- / Content -->
+                
 
-                <!-- Footer -->
+                
                 <footer class="content-footer footer bg-footer-theme">
                     <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
                         <div class="mb-2 mb-md-0">
-                            Â© 2026 Creative Aesthetic Academy & Technical Education Inc.
+                            Ã‚Â© 2026 Creative Aesthetic Academy & Technical Education Inc.
                         </div>
                     </div>
                 </footer>
-                <!-- / Footer -->
+                
             </div>
-            <!-- / Content wrapper -->
+            
         </div>
-        <!-- / Layout page -->
+        
     </div>
 
-    <!-- Overlay -->
+    
     <div class="layout-overlay"></div>
     </div>
-    <!-- / Layout wrapper -->
+    
 
-    <!-- Confirmation Modal -->
+    
     <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -964,7 +964,7 @@
         </div>
     </div>
 
-    <!-- Image Preview Modal -->
+    
     <div class="modal fade" id="imagePreviewModal" tabindex="-1" aria-labelledby="imagePreviewModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -988,19 +988,19 @@
         </div>
     </div>
 
-    <!-- Core JS -->
+    
     <script src="../assets/vendor/libs/jquery/jquery.js"></script>
     <script src="../assets/vendor/libs/popper/popper.js"></script>
     <script src="../assets/vendor/js/bootstrap.js"></script>
     <script src="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
     <script src="../assets/vendor/js/menu.js"></script>
-    <!-- Main JS -->
+    
     <script src="../assets/js/main.js"></script>
 
-    <!-- Menu Toggle JS -->
+    
     <script src="../assets/js/menu-toggle.js"></script>
 
-    <!-- Attendance JS -->
+    
     <script src="../assets/js/attendance.js"></script>
 </body>
 

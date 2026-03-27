@@ -14,19 +14,15 @@ class CompetencyController {
             $competenciesCollection = $db->competencies;
             $coursesCollection = $db->courses;
             
-            // Get all competencies
             $competencies = iterator_to_array($competenciesCollection->find());
             
-            // Enrich competencies with course data (badge and image)
             foreach ($competencies as &$competency) {
                 $courseCode = $competency['course_code'] ?? '';
                 
                 if ($courseCode) {
-                    // Find matching course
                     $course = $coursesCollection->findOne(['course_code' => $courseCode]);
                     
                     if ($course) {
-                        // Add badge and image from course
                         $competency['badge'] = $course['badge'] ?? $courseCode;
                         $competency['image'] = $course['image'] ?? '';
                         $competency['hours'] = $course['hours'] ?? $course['duration'] ?? '';

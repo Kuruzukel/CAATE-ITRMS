@@ -9,7 +9,6 @@ if (typeof API_BASE_URL === 'undefined') {
 
 document.addEventListener('DOMContentLoaded', function () {
 
-
     loadInventoryData();
 
     const modals = ['addInventoryModal', 'editEquipmentModal', 'viewEquipmentModal', 'deleteEquipmentModal'];

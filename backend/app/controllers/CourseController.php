@@ -12,8 +12,6 @@ class CourseController {
             $courseModel = new Course();
             $courses = $courseModel->all();
 
-            // Load competencies and group them by course_code so we can
-            // expose basic/common/core arrays without storing them on courses
             $db = getMongoConnection();
             $competenciesCollection = $db->competencies;
 
@@ -50,7 +48,6 @@ class CourseController {
                 }
             }
 
-            // Attach arrays to each course for API response only
             foreach ($courses as &$course) {
                 $courseCode = $course['course_code'] ?? '';
 
@@ -146,7 +143,6 @@ class CourseController {
 
             $courseModel = new Course();
             
-            // Get the course before updating to get course_code and course_title
             $course = $courseModel->findById($id);
             if (!$course) {
                 http_response_code(404);
@@ -154,8 +150,6 @@ class CourseController {
                 return;
             }
             
-            // Update the course (course document no longer stores competency arrays;
-            // competencies are managed exclusively in the competencies collection)
             $result = $courseModel->update($id, $data);
 
             if ($result['success']) {
@@ -199,13 +193,11 @@ class CourseController {
             $courseCode = $course['course_code'] ?? '';
             $courseTitle = $course['title'] ?? '';
             
-            // Delete existing competencies for this course
             $competenciesCollection->deleteMany(['course_code' => $courseCode]);
             
             $now = new MongoDB\BSON\UTCDateTime();
             $competenciesToInsert = [];
             
-            // Insert Basic Competencies
             if (isset($data['basic_competencies']) && is_array($data['basic_competencies'])) {
                 foreach ($data['basic_competencies'] as $competency) {
                     if (trim($competency)) {
@@ -221,7 +213,6 @@ class CourseController {
                 }
             }
             
-            // Insert Common Competencies
             if (isset($data['common_competencies']) && is_array($data['common_competencies'])) {
                 foreach ($data['common_competencies'] as $competency) {
                     if (trim($competency)) {
@@ -237,7 +228,6 @@ class CourseController {
                 }
             }
             
-            // Insert Core Competencies
             if (isset($data['core_competencies']) && is_array($data['core_competencies'])) {
                 foreach ($data['core_competencies'] as $competency) {
                     if (trim($competency)) {
@@ -253,13 +243,11 @@ class CourseController {
                 }
             }
             
-            // Insert all competencies at once if there are any
             if (!empty($competenciesToInsert)) {
                 $competenciesCollection->insertMany($competenciesToInsert);
             }
             
         } catch (Exception $e) {
-            // Log error but don't fail the main update
             error_log("Failed to sync competencies: " . $e->getMessage());
         }
     }
@@ -299,7 +287,6 @@ class CourseController {
                 $admissionCollection = $db->admissions;
                 $coursesCollection = $db->courses;
 
-                // Get all courses with error handling
                 $courses = [];
                 try {
                     $courses = $coursesCollection->find()->toArray();
@@ -308,7 +295,6 @@ class CourseController {
                     $courses = [];
                 }
 
-                // Count approved enrollments per course from registrations, applications, and admissions
                 $allCourses = [];
                 $totalEnrollmentsCount = 0;
 
@@ -320,7 +306,6 @@ class CourseController {
                         $courseImage = $course['image'] ?? '';
                         $courseDescription = $course['description'] ?? '';
 
-                        // Count approved enrollments from registrations (uses selectedCourseId field)
                         $approvedRegistrations = 0;
                         try {
                             $approvedRegistrations = $registrationCollection->countDocuments([
@@ -331,7 +316,6 @@ class CourseController {
                             error_log("CourseController::getEnrollmentStatistics - Error counting registrations for course $courseId: " . $e->getMessage());
                         }
 
-                        // Count approved enrollments from applications (uses course_id field)
                         $approvedApplications = 0;
                         try {
                             $approvedApplications = $applicationCollection->countDocuments([
@@ -342,7 +326,6 @@ class CourseController {
                             error_log("CourseController::getEnrollmentStatistics - Error counting applications for course $courseId: " . $e->getMessage());
                         }
 
-                        // Count approved enrollments from admissions (uses course_id field)
                         $approvedAdmissions = 0;
                         try {
                             $approvedAdmissions = $admissionCollection->countDocuments([
@@ -353,7 +336,6 @@ class CourseController {
                             error_log("CourseController::getEnrollmentStatistics - Error counting admissions for course $courseId: " . $e->getMessage());
                         }
 
-                        // Total approved enrollments for this course
                         $enrollmentCount = $approvedRegistrations + $approvedApplications + $approvedAdmissions;
                         $totalEnrollmentsCount += $enrollmentCount;
 
@@ -376,15 +358,12 @@ class CourseController {
                     }
                 }
 
-                // Sort by enrollment count descending
                 usort($allCourses, function($a, $b) {
                     return $b['enrollmentCount'] - $a['enrollmentCount'];
                 });
 
-                // Return all courses
                 $topCourses = $allCourses;
 
-                // Calculate total approved enrollments from all three collections
                 $totalApprovedRegistrations = 0;
                 $totalApprovedApplications = 0;
                 $totalApprovedAdmissions = 0;

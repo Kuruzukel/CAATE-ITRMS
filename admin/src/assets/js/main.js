@@ -14,7 +14,6 @@ let menu, animate;
 
 (function () {
 
-
   let layoutMenuEl = document.querySelectorAll('#layout-menu');
   layoutMenuEl.forEach(function (element) {
     menu = new Menu(element, {
@@ -82,7 +81,6 @@ let menu, animate;
     });
   }
 
-
   const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
   tooltipTriggerList.map(function (tooltipTriggerEl) {
     return new bootstrap.Tooltip(tooltipTriggerEl);
@@ -108,15 +106,12 @@ let menu, animate;
 
   window.Helpers.initSpeechToText();
 
-
   if (window.Helpers.isSmallScreen()) {
     return;
   }
 
-
   window.Helpers.setCollapsed(false, false);
 })();
-
 
 (function () {
   'use strict';

@@ -71,18 +71,18 @@
 </head>
 <body>
     <div class="container">
-        <h1>🌱 Seed Courses Database</h1>
+        <h1>ðŸŒ± Seed Courses Database</h1>
         
         <div class="warning">
-            <strong>⚠️ Warning:</strong> This will clear all existing courses and insert 10 new courses into the database.
+            <strong>âš ï¸ Warning:</strong> This will clear all existing courses and insert 10 new courses into the database.
         </div>
 
         <form method="POST">
             <button type="submit" name="action" value="seed" class="btn">
-                🚀 Seed Database
+                ðŸš€ Seed Database
             </button>
             <button type="submit" name="action" value="clear" class="btn btn-danger">
-                🗑️ Clear All Courses
+                ðŸ—‘ï¸ Clear All Courses
             </button>
         </form>
 
@@ -101,18 +101,15 @@
                 if ($action === 'clear') {
                     echo "Clearing all courses...\n";
                     $result = $collection->deleteMany([]);
-                    echo "<span class='success'>✓ Deleted {$result->getDeletedCount()} courses</span>\n";
+                    echo "<span class='success'>âœ“ Deleted {$result->getDeletedCount()} courses</span>\n";
                     
                 } elseif ($action === 'seed') {
-                    // Drop the unique index on course_code if it exists
                     try {
                         $collection->dropIndex('course_code_1');
                         echo "Dropped old course_code index\n";
                     } catch (Exception $e) {
-                        // Index doesn't exist, that's fine
                     }
                     
-                    // Course data
                     $courses = [
                         [
                             'badge' => 'NC II - SOCBCN220',
@@ -220,7 +217,7 @@
                         
                         if ($result->getInsertedId()) {
                             $insertedCount++;
-                            echo "<span class='success'>✓ Inserted: {$course['title']}</span>\n";
+                            echo "<span class='success'>âœ“ Inserted: {$course['title']}</span>\n";
                         }
                     }
                     

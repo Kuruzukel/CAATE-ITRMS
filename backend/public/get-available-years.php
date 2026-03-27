@@ -1,8 +1,4 @@
 <?php
-/**
- * Get available years from enrollment data
- * Returns years that have registrations, applications, or admissions
- */
 
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
@@ -18,7 +14,6 @@ try {
     
     $years = [];
     
-    // Get years from registrations
     $registrations = $registrationCollection->find(
         [],
         ['projection' => ['created_at' => 1]]
@@ -31,7 +26,6 @@ try {
         }
     }
     
-    // Get years from applications
     $applications = $applicationCollection->find(
         [],
         ['projection' => ['created_at' => 1]]
@@ -44,7 +38,6 @@ try {
         }
     }
     
-    // Get years from admissions
     $admissions = $admissionCollection->find(
         [],
         ['projection' => ['created_at' => 1]]
@@ -57,11 +50,9 @@ try {
         }
     }
     
-    // Convert to array and sort descending
     $yearsList = array_keys($years);
     rsort($yearsList);
     
-    // If no years found, add current year
     if (empty($yearsList)) {
         $yearsList = [(int)date('Y')];
     }

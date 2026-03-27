@@ -14,13 +14,11 @@ require_once __DIR__ . '/../app/controllers/RegistrationController.php';
 require_once __DIR__ . '/../app/controllers/ApplicationController.php';
 
 function handleRequest($uri, $method) {
-    // Remove base path if exists
     $uri = preg_replace('#^/CAATE-ITRMS/backend/public#', '', $uri);
     $uri = preg_replace('#^/CAATE-ITRMS/backend#', '', $uri);
     $uri = preg_replace('#^/backend/public#', '', $uri);
     $uri = preg_replace('#^/backend#', '', $uri);
     
-    // API Routes
     $routes = [
         'GET:/api/v1/health' => ['TraineeController', 'health'],
         'POST:/api/v1/auth/register' => ['AuthController', 'register'],
@@ -84,11 +82,9 @@ function handleRequest($uri, $method) {
         'DELETE:/api/v1/appointments/{id}' => ['AppointmentController', 'destroy'],
     ];
     
-    // Match route
     foreach ($routes as $route => $handler) {
         list($routeMethod, $routePath) = explode(':', $route);
         
-        // Convert route pattern to regex
         $pattern = preg_replace('/\{[a-zA-Z0-9_]+\}/', '([a-zA-Z0-9_-]+)', $routePath);
         $pattern = '#^' . $pattern . '$#';
         
@@ -104,7 +100,6 @@ function handleRequest($uri, $method) {
         }
     }
     
-    // Route not found
     http_response_code(404);
     echo json_encode(['error' => 'Route not found']);
 }

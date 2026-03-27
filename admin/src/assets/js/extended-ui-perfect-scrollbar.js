@@ -6,13 +6,11 @@ document.addEventListener('DOMContentLoaded', function () {
       horizontalExample = document.getElementById('horizontal-example'),
       horizVertExample = document.getElementById('both-scrollbars-example');
 
-
     if (verticalExample) {
       new PerfectScrollbar(verticalExample, {
         wheelPropagation: false
       });
     }
-
 
     if (horizontalExample) {
       new PerfectScrollbar(horizontalExample, {
@@ -20,7 +18,6 @@ document.addEventListener('DOMContentLoaded', function () {
         suppressScrollY: true
       });
     }
-
 
     if (horizVertExample) {
       new PerfectScrollbar(horizVertExample, {

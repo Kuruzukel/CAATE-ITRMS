@@ -1,26 +1,21 @@
-/* Courses specific JavaScript */
 
-// API Configuration - Use global API_BASE_URL if available
+
 if (typeof window.API_BASE_URL === 'undefined') {
     window.API_BASE_URL = (typeof config !== 'undefined' && config.api)
         ? config.api.baseUrl
         : window.location.origin + '/CAATE-ITRMS/backend/public';
 }
 
-// Use API_BASE_URL directly from window object to avoid redeclaration conflicts
 const getApiBaseUrl = () => window.API_BASE_URL;
 
-// Store courses data globally
 let coursesData = [];
 
-// Handle enroll button clicks and course functionality
 document.addEventListener('DOMContentLoaded', function () {
     loadCourses();
     initializeCourseSearch();
     initializeEnrollButtonHandlers();
 });
 
-// Initialize enroll button handlers
 function initializeEnrollButtonHandlers() {
     document.addEventListener('click', function (e) {
         if (e.target.closest('.enroll-course-btn')) {
@@ -28,7 +23,6 @@ function initializeEnrollButtonHandlers() {
             const card = button.closest('.card');
             const enrollmentStatus = card.dataset.enrollmentStatus;
 
-            // If enrollment is not open, show notification
             if (enrollmentStatus !== 'Open Enrollment') {
                 let message = '';
                 if (enrollmentStatus === 'Closed') {
@@ -42,18 +36,14 @@ function initializeEnrollButtonHandlers() {
                 return;
             }
 
-            // If enrollment is open, proceed with enrollment logic
             const courseId = card.dataset.courseId;
             const courseTitle = card.querySelector('.card-title').textContent;
-            // Get the course type badge (not the enrollment status badge)
-            // The course type badge is inside card-body, enrollment status is in position-absolute
             const badgeText = card.querySelector('.card-body .badge').textContent.trim();
             handleEnrollment(courseId, courseTitle, badgeText);
         }
     });
 }
 
-// Load courses from API
 async function loadCourses() {
     const loadingState = document.getElementById('loading-state');
     const errorState = document.getElementById('error-state');
@@ -61,13 +51,11 @@ async function loadCourses() {
     const coursesGrid = document.getElementById('courses-grid');
 
     try {
-        // Show loading state
         loadingState.classList.remove('d-none');
         errorState.classList.add('d-none');
         emptyState.classList.add('d-none');
         coursesGrid.classList.add('d-none');
 
-        // Fetch courses from API
         const response = await fetch(`${window.API_BASE_URL}/api/v1/courses`);
 
         if (!response.ok) {
@@ -80,20 +68,17 @@ async function loadCourses() {
             coursesData = result.data;
             renderCourses(coursesData);
 
-            // Hide loading, show courses
             loadingState.classList.add('d-none');
             coursesGrid.classList.remove('d-none');
 
             initializeCourseFilters();
         } else {
-            // No courses found
             loadingState.classList.add('d-none');
             emptyState.classList.remove('d-none');
         }
     } catch (error) {
         console.error('Error loading courses:', error);
 
-        // Show error state
         loadingState.classList.add('d-none');
         errorState.classList.remove('d-none');
         document.getElementById('error-message').textContent =
@@ -101,7 +86,6 @@ async function loadCourses() {
     }
 }
 
-// Render courses to the grid
 function renderCourses(courses) {
     const coursesGrid = document.getElementById('courses-grid');
     coursesGrid.innerHTML = '';
@@ -112,12 +96,10 @@ function renderCourses(courses) {
     });
 }
 
-// Create a course card element
 function createCourseCard(course) {
     const col = document.createElement('div');
     col.className = 'col';
 
-    // Determine badge color based on badge text
     let badgeClass = 'bg-primary';
     const badgeText = course.badge || course.course_code || '';
 
@@ -129,10 +111,8 @@ function createCourseCard(course) {
         badgeClass = 'bg-secondary';
     }
 
-    // Get enrollment status or default to 'Unpublished'
     const enrollmentStatus = course.enrollment_status || 'Unpublished';
 
-    // Determine status badge color
     let statusBadgeClass = 'bg-secondary';
     if (enrollmentStatus === 'Open Enrollment') {
         statusBadgeClass = 'bg-success';
@@ -140,7 +120,6 @@ function createCourseCard(course) {
         statusBadgeClass = 'bg-danger';
     }
 
-    // Determine if enrollment is allowed
     const isEnrollmentOpen = enrollmentStatus === 'Open Enrollment';
     const enrollButtonDisabled = !isEnrollmentOpen ? 'disabled' : '';
     const enrollButtonClass = isEnrollmentOpen ? 'btn-primary' : 'btn-secondary';
@@ -174,7 +153,6 @@ function createCourseCard(course) {
     return col;
 }
 
-// Course search functionality
 function initializeCourseSearch() {
     const searchInput = document.querySelector('input[placeholder*="Search"]');
 
@@ -205,7 +183,6 @@ function filterCourses(searchTerm) {
     });
 }
 
-// Course filters functionality
 function initializeCourseFilters() {
     createFilterButtons();
 }
@@ -214,7 +191,6 @@ function createFilterButtons() {
     const container = document.querySelector('.container-xxl');
     if (!container) return;
 
-    // Check if filter buttons already exist
     if (container.querySelector('.filter-container')) return;
 
     const filterContainer = document.createElement('div');
@@ -228,20 +204,16 @@ function createFilterButtons() {
         </div>
     `;
 
-    // Insert before the courses grid
     const coursesGrid = container.querySelector('#courses-grid');
     if (coursesGrid) {
         container.insertBefore(filterContainer, coursesGrid);
 
-        // Add event listeners to filter buttons
         const filterButtons = filterContainer.querySelectorAll('.filter-btn');
         filterButtons.forEach(button => {
             button.addEventListener('click', function () {
-                // Update active button
                 filterButtons.forEach(btn => btn.classList.remove('active'));
                 this.classList.add('active');
 
-                // Filter courses
                 const filter = this.getAttribute('data-filter');
                 filterCoursesByType(filter);
             });
@@ -277,33 +249,26 @@ function filterCoursesByType(filter) {
     });
 }
 
-// Utility functions
 function handleEnrollment(courseId, courseTitle, badgeText) {
     console.log('Enrolling in course:', courseId, courseTitle, badgeText);
 
-    // Detect badge type
     const badgeUpper = badgeText.toUpperCase();
 
     if (badgeUpper.includes('NC II') || badgeUpper.includes('NC-II') || badgeUpper.includes('NCII')) {
-        // NC II courses - redirect to application form
         showToast('Please fill up the Application Form and Admission Slip to complete your enrollment.', 'info');
 
-        // Redirect after 5 seconds
         setTimeout(() => {
             window.location.href = 'application-form.html';
         }, 5000);
 
     } else if (badgeUpper.includes('LEVEL III') || badgeUpper.includes('LEVEL 3') || badgeUpper.includes('LEVEL-III')) {
-        // Level III courses - redirect to registration form
         showToast('Please fill up the Registration Form to complete your enrollment.', 'info');
 
-        // Redirect after 5 seconds
         setTimeout(() => {
             window.location.href = 'registration-form.html';
         }, 5000);
 
     } else {
-        // Default case - show generic message
         showToast('Please complete the required forms to enroll in this course.', 'info');
     }
 }
@@ -328,14 +293,12 @@ function showToast(message, type = 'success') {
 
     container.appendChild(toast);
 
-    // Auto remove after 5 seconds
     setTimeout(() => {
         toast.classList.add('hiding');
         setTimeout(() => toast.remove(), 300);
     }, 5000);
 }
 
-// Alias for backward compatibility
 function showNotification(message, type = 'info', duration = 5000) {
     showToast(message, type);
 }

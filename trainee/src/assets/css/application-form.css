@@ -1,6 +1,5 @@
-/* Application Form Styles */
 
-/* Override default card input padding */
+
 .card input[type="search"],
 .card input[type="text"].form-control,
 .card input[type="email"].form-control,
@@ -10,7 +9,6 @@
     padding-left: 0.75rem !important;
 }
 
-/* Reference Number Section */
 .reference-inputs {
     display: flex;
     gap: 5px;
@@ -42,7 +40,6 @@
     -moz-appearance: none !important;
 }
 
-/* Add different background colors for each reference input group - matching screenshot */
 .reference-input-group:nth-child(1) input {
     background-color: #9d9b6e !important;
 }
@@ -68,7 +65,6 @@
     background-color: #f0d8a8 !important;
 }
 
-
 .reference-input-group:nth-child(11) input,
 .reference-input-group:nth-child(12) input,
 .reference-input-group:nth-child(13) input,
@@ -78,14 +74,12 @@
     background-color: #c8c8d8 !important;
 }
 
-/* Add gaps between logical groups */
 .reference-input-group:nth-child(2),
 .reference-input-group:nth-child(4),
 .reference-input-group:nth-child(6) {
     margin-left: 20px;
 }
 
-/* Keep inputs within "Assigned to AC" and "Number Series" groups close together */
 .reference-input-group:nth-child(8) {
     margin-left: 20px;
 }
@@ -129,7 +123,6 @@
     bottom: -22px;
 }
 
-/* ULI Input Section */
 .uli-inputs {
     display: flex;
     gap: 5px;
@@ -154,28 +147,23 @@
     box-shadow: 0 0 0 0.2rem rgba(54, 145, 191, 0.15);
 }
 
-/* Different colors for each ULI group */
-/* First 3 boxes - light blue */
 #uli1,
 #uli2,
 #uli3 {
     background-color: #d4e8ff !important;
 }
 
-/* Next 2 boxes - light pink */
 #uli4,
 #uli5 {
     background-color: #ffe0e0 !important;
 }
 
-/* Next 3 boxes - light green */
 #uli6,
 #uli7,
 #uli8 {
     background-color: #e0f0c8 !important;
 }
 
-/* Next 5 boxes - light peach */
 #uli9,
 #uli10,
 #uli11,
@@ -184,7 +172,6 @@
     background-color: #ffe8c8 !important;
 }
 
-/* Last 3 boxes - light purple */
 #uli14,
 #uli15,
 #uli16 {
@@ -198,7 +185,6 @@
     padding: 0 5px;
 }
 
-/* Picture and Signature Section */
 .picture-signature-section {
     display: grid;
     grid-template-columns: auto 1fr;
@@ -258,7 +244,6 @@
     border-radius: 4px;
 }
 
-/* Picture Preview Container - Auto-fit passport size */
 .picture-preview-container {
     position: absolute;
     top: 8px;
@@ -283,7 +268,6 @@
     border-radius: 4px;
 }
 
-/* Picture Action Buttons */
 .picture-action-buttons {
     position: absolute;
     bottom: 12px;
@@ -358,7 +342,6 @@
     color: white;
 }
 
-/* Radio Groups */
 .radio-group {
     display: flex;
     gap: 1.5rem;
@@ -441,7 +424,6 @@
     color: #3691bf;
 }
 
-/* Data Tables */
 .data-table {
     width: 100%;
     border-collapse: separate;
@@ -529,7 +511,6 @@
     font-style: italic;
 }
 
-/* Buttons */
 .btn-add-row {
     padding: 0.65rem 1.5rem;
     background-color: rgba(15, 41, 66, 0.6) !important;
@@ -571,7 +552,6 @@
     transform: scale(1.05);
 }
 
-/* Section Titles */
 .subsection-title {
     font-weight: 700;
     margin: 2rem 0 1rem;
@@ -581,7 +561,6 @@
     border-bottom: 2px solid #3691bf;
 }
 
-/* Form Controls */
 .form-control {
     color: #2c3e50;
     font-weight: 600;
@@ -601,7 +580,6 @@
     font-weight: 500;
 }
 
-/* Dropdown specific styling - System color palette */
 select.form-control {
     background-color: #1e293b;
     color: #ffffff;
@@ -628,7 +606,6 @@ select.form-control:hover {
     border-color: #64748b;
 }
 
-/* Dropdown options styling */
 select.form-control option {
     background-color: #1e293b;
     color: #ffffff;
@@ -647,13 +624,11 @@ select.form-control option:checked {
     color: #ffffff;
 }
 
-/* Placeholder option styling */
 select.form-control option[value=""] {
     color: #94a3b8;
     font-style: italic;
 }
 
-/* Loading and error indicators for dropdown - System colors */
 #assessmentTitleLoading,
 #assessmentTitleError {
     margin-top: 0.5rem;
@@ -696,7 +671,6 @@ select.form-control option[value=""] {
     font-weight: 600;
 }
 
-/* Card Headers */
 .card-header h4 {
     color: #ffffff;
     font-weight: 700;
@@ -706,7 +680,6 @@ select.form-control option[value=""] {
     color: #3691bf !important;
 }
 
-/* Specific icon colors for application form sections - Override dashboard.css white text rules */
 .content-wrapper .card-header h4 i.bx-info-circle,
 .content-wrapper .card-header h4 i.bx-user,
 .content-wrapper .card-header h4 i.bx-briefcase,
@@ -740,7 +713,6 @@ select.form-control option[value=""] {
     color: #3691bf !important;
 }
 
-/* Helper Text */
 .helper-text {
     color: #e9ecef;
     font-size: 0.85rem;
@@ -750,7 +722,6 @@ select.form-control option[value=""] {
     display: block;
 }
 
-/* Table Container */
 .table-container {
     overflow-x: auto;
     border-radius: 8px;
@@ -775,19 +746,16 @@ select.form-control option[value=""] {
     background: #2a7ba8;
 }
 
-/* Required Asterisk */
 .text-danger {
     color: #dc3545 !important;
     font-weight: 700;
 }
 
-/* Badges */
 .badge {
     font-weight: 700;
     letter-spacing: 0.5px;
 }
 
-/* Submit Buttons */
 .btn-primary.btn-lg {
     padding: 0.75rem 2rem;
     font-weight: 700;
@@ -820,7 +788,6 @@ select.form-control option[value=""] {
     transform: translateY(-2px);
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
     .picture-signature-section {
         grid-template-columns: 1fr;
@@ -851,7 +818,6 @@ select.form-control option[value=""] {
     }
 }
 
-/* Visually Hidden */
 .visually-hidden {
     position: absolute;
     width: 1px;
@@ -864,7 +830,6 @@ select.form-control option[value=""] {
     border-width: 0;
 }
 
-/* Hide number input spinner arrows completely */
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
     -webkit-appearance: none;
@@ -888,9 +853,6 @@ input[type="number"] {
     appearance: textfield;
 }
 
-/* Registration Form Specific Styles */
-
-/* Checkbox styling for registration form */
 .radio-label input[type="checkbox"] {
     width: 16px;
     height: 16px;
@@ -913,7 +875,7 @@ input[type="number"] {
 }
 
 .radio-label input[type="checkbox"]:checked::before {
-    content: '✓';
+    content: 'âœ“';
     position: absolute;
     top: 50%;
     left: 50%;
@@ -934,7 +896,6 @@ input[type="number"] {
     box-shadow: 0 0 0 3px rgba(54, 145, 191, 0.2);
 }
 
-/* Signature boxes */
 .signature-box {
     min-height: 60px;
     display: flex;
@@ -942,20 +903,17 @@ input[type="number"] {
     padding: 10px 0;
 }
 
-/* Privacy consent text styling */
 .card-body p em {
     color: #2c3e50;
     font-weight: 500;
 }
 
-/* Disability section styling */
 .card-header h4 em {
     color: #6c757d;
     font-size: 0.85rem;
     font-weight: 400;
 }
 
-/* Others input field styling */
 .radio-label input[type="text"],
 .radio-label input[type="text"].form-control {
     margin-left: 10px;
@@ -969,7 +927,6 @@ input[type="number"] {
     box-sizing: border-box;
 }
 
-/* Responsive adjustments for registration form */
 @media (max-width: 992px) {
 
     .radio-label input[type="text"],
@@ -996,7 +953,6 @@ input[type="number"] {
     }
 }
 
-/* Remove search icons from form input fields */
 .card input[type="text"]::-webkit-search-decoration,
 .card input[type="text"]::-webkit-search-cancel-button,
 .card input[type="text"]::-webkit-search-results-button,
@@ -1005,7 +961,6 @@ input[type="number"] {
     display: none;
 }
 
-/* Ensure no background images (search icons) on form inputs */
 .card input[type="text"].form-control,
 .card input[type="email"].form-control,
 .card input[type="tel"].form-control {
@@ -1015,13 +970,11 @@ input[type="number"] {
     padding-left: 0.75rem !important;
 }
 
-/* Remove any pseudo-elements that might be adding search icons */
 .card input[type="text"].form-control::before,
 .card input[type="text"].form-control::after {
     display: none !important;
 }
 
-/* Force remove any search styling from registration form inputs */
 #registrationForm input[type="text"] {
     -webkit-appearance: none !important;
     -moz-appearance: none !important;
@@ -1033,7 +986,6 @@ input[type="number"] {
     padding-left: 0.75rem !important;
 }
 
-/* Specifically target name input fields */
 #firstName,
 #middleName,
 #lastName {
@@ -1043,7 +995,6 @@ input[type="number"] {
     appearance: none !important;
 }
 
-/* Ensure all radio buttons are circular - specific override */
 input[type="radio"] {
     border-radius: 50% !important;
     -webkit-appearance: none !important;
@@ -1076,7 +1027,6 @@ input[type="radio"]:checked::before {
     background-color: white !important;
 }
 
-/* Force circular radio buttons for education section */
 input[name="education"] {
     width: 18px !important;
     height: 18px !important;
@@ -1108,7 +1058,6 @@ input[name="education"]:checked::before {
     background-color: white !important;
 }
 
-/* Force circular radio buttons - most aggressive approach */
 .radio-label input[type="radio"],
 input[type="radio"] {
     -webkit-appearance: none !important;
@@ -1148,14 +1097,12 @@ input[type="radio"]:checked::before {
     display: block !important;
 }
 
-/* Override any conflicting styles */
 .card .radio-label input[type="radio"] {
     border-radius: 50% !important;
     width: 18px !important;
     height: 18px !important;
 }
 
-/* Ensure radio labels display properly */
 .radio-label {
     display: flex !important;
     align-items: flex-start !important;
@@ -1163,7 +1110,6 @@ input[type="radio"]:checked::before {
     margin-bottom: 8px !important;
 }
 
-/* Registration Form ULI Input Styling - Match Application Form Colors */
 #registrationForm .uli-input {
     width: 55px !important;
     text-align: center;
@@ -1181,28 +1127,23 @@ input[type="radio"]:checked::before {
     box-shadow: 0 0 0 0.2rem rgba(54, 145, 191, 0.15);
 }
 
-/* Registration Form ULI Color Groups - Match Application Form */
-/* First 3 boxes - light blue */
 #registrationForm .uli-input:nth-child(1),
 #registrationForm .uli-input:nth-child(2),
 #registrationForm .uli-input:nth-child(3) {
     background-color: #d4e8ff !important;
 }
 
-/* Next 2 boxes - light pink */
 #registrationForm .uli-input:nth-child(5),
 #registrationForm .uli-input:nth-child(6) {
     background-color: #ffe0e0 !important;
 }
 
-/* Next 3 boxes - light green */
 #registrationForm .uli-input:nth-child(8),
 #registrationForm .uli-input:nth-child(9),
 #registrationForm .uli-input:nth-child(10) {
     background-color: #e0f0c8 !important;
 }
 
-/* Next 5 boxes - light peach */
 #registrationForm .uli-input:nth-child(12),
 #registrationForm .uli-input:nth-child(13),
 #registrationForm .uli-input:nth-child(14),
@@ -1211,25 +1152,21 @@ input[type="radio"]:checked::before {
     background-color: #ffe8c8 !important;
 }
 
-/* Last 3 boxes - light purple */
 #registrationForm .uli-input:nth-child(18),
 #registrationForm .uli-input:nth-child(19),
 #registrationForm .uli-input:nth-child(20) {
     background-color: #e0e0f0 !important;
 }
 
-/* Shield icon color for Privacy Consent section */
 .content-wrapper .card-header h4 i.bx-shield,
 .layout-page .content-wrapper .container-xxl .card-header h4 i.bx-shield {
     color: #3691bf !important;
 }
 
-/* Ensure shield icon is visible in all contexts */
 i.bx-shield {
     color: #3691bf !important;
 }
 
-/* Force dark blue color for all reference and ULI inputs - Most specific selectors */
 .reference-inputs .reference-input-group input.form-control,
 .reference-inputs .reference-input-group input[type="text"],
 .reference-input-group input.form-control,
@@ -1253,7 +1190,6 @@ i.bx-shield {
     color: #0f2942 !important;
 }
 
-/* Force dark blue color for all ULI inputs - Most specific selectors */
 .uli-inputs .uli-input.form-control,
 .uli-inputs input.uli-input,
 .uli-inputs input[type="text"],
@@ -1278,7 +1214,6 @@ input.uli-input[type="text"],
     color: #0f2942 !important;
 }
 
-/* Override any Bootstrap or other framework styles */
 .card .reference-inputs input,
 .card .uli-inputs input,
 .form-control.uli-input,
@@ -1286,7 +1221,6 @@ input.form-control.uli-input {
     color: #0f2942 !important;
 }
 
-/* Remove blue background on focus for all reference and ULI inputs */
 .reference-inputs .reference-input-group input:focus,
 .reference-inputs .reference-input-group input.form-control:focus,
 .reference-input-group input:focus,
@@ -1332,7 +1266,6 @@ input.uli-input.form-control:focus,
     color: #0f2942 !important;
 }
 
-/* Specific focus background colors for reference inputs to match their normal state */
 #referenceQualifiable:focus {
     background-color: #9d9b6e !important;
 }
@@ -1367,7 +1300,6 @@ input.uli-input.form-control:focus,
     background-color: #c8c8d8 !important;
 }
 
-/* Specific focus background colors for ULI inputs to match their normal state */
 #uli1:focus,
 #uli2:focus,
 #uli3:focus {
@@ -1399,9 +1331,6 @@ input.uli-input.form-control:focus,
     background-color: #e0e0f0 !important;
 }
 
-
-/* Toast Notification Overrides - Force Dark Glassmorphism Style */
-/* Override any conflicting styles to match registration form exactly */
 #toastContainer.toast-container .toast-notification {
     min-width: 320px !important;
     max-width: 400px !important;
@@ -1424,7 +1353,6 @@ input.uli-input.form-control:focus,
     overflow: hidden !important;
 }
 
-/* Success Toast */
 #toastContainer.toast-container .toast-notification.success {
     border-color: rgba(16, 185, 129, 0.5) !important;
     box-shadow: 0 10px 40px rgba(16, 185, 129, 0.3),
@@ -1432,7 +1360,6 @@ input.uli-input.form-control:focus,
         inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
 }
 
-/* Error Toast */
 #toastContainer.toast-container .toast-notification.error {
     border-color: rgba(239, 68, 68, 0.5) !important;
     box-shadow: 0 10px 40px rgba(239, 68, 68, 0.3),
@@ -1440,7 +1367,6 @@ input.uli-input.form-control:focus,
         inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
 }
 
-/* Warning Toast */
 #toastContainer.toast-container .toast-notification.warning {
     border-color: rgba(245, 158, 11, 0.5) !important;
     box-shadow: 0 10px 40px rgba(245, 158, 11, 0.3),
@@ -1448,7 +1374,6 @@ input.uli-input.form-control:focus,
         inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
 }
 
-/* Info Toast */
 #toastContainer.toast-container .toast-notification.info {
     border-color: rgba(54, 145, 191, 0.5) !important;
     box-shadow: 0 10px 40px rgba(54, 145, 191, 0.3),
@@ -1456,7 +1381,6 @@ input.uli-input.form-control:focus,
         inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
 }
 
-/* Toast Icon */
 #toastContainer.toast-container .toast-notification .toast-icon {
     width: 40px !important;
     height: 40px !important;
@@ -1502,7 +1426,6 @@ input.uli-input.form-control:focus,
         inset 0 0 10px rgba(54, 145, 191, 0.1) !important;
 }
 
-/* Toast Content */
 #toastContainer.toast-container .toast-notification .toast-content {
     flex: 1 !important;
     padding-top: 0 !important;
@@ -1522,7 +1445,6 @@ input.uli-input.form-control:focus,
     color: rgba(255, 255, 255, 0.75) !important;
 }
 
-/* Animation */
 @keyframes slideInGlass {
     from {
         transform: translateX(450px) scale(0.9);
@@ -1551,11 +1473,6 @@ input.uli-input.form-control:focus,
     }
 }
 
-/* ========================================
-   ERROR VALIDATION STYLES
-   ======================================== */
-
-/* Error validation styles for required fields - Enhanced */
 .form-control.is-invalid,
 input.is-invalid,
 textarea.is-invalid,
@@ -1574,7 +1491,6 @@ select.is-invalid {
     font-weight: 500;
 }
 
-/* Error state for number inputs */
 input[type="number"].is-invalid {
     border-color: #dc3545 !important;
     background-image: none !important;
@@ -1585,7 +1501,6 @@ input[type="number"].is-invalid:focus {
     box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
 }
 
-/* Error state for date inputs */
 input[type="date"].is-invalid {
     border-color: #dc3545 !important;
     box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
@@ -1596,20 +1511,17 @@ input[type="date"].is-invalid:focus {
     box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
 }
 
-/* Radio button error state */
 input[type="radio"].is-invalid,
 input[type="checkbox"].is-invalid {
     border-color: #dc3545 !important;
     box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
 }
 
-/* Radio label error state */
 .radio-label:has(input.is-invalid) {
     color: #dc3545 !important;
     font-weight: 600;
 }
 
-/* Radio group error styling */
 .radio-group-error {
     display: block !important;
     width: 100%;
@@ -1623,7 +1535,6 @@ input[type="checkbox"].is-invalid {
     padding: 0.5rem;
 }
 
-/* Success state for validated fields */
 .form-control.is-valid {
     border-color: #28a745 !important;
     box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25) !important;
@@ -1638,13 +1549,11 @@ input[type="checkbox"].is-invalid {
     font-weight: 500;
 }
 
-/* Required field indicator */
 .text-danger {
     color: #dc3545 !important;
     font-weight: bold;
 }
 
-/* Enhanced required field styling */
 input[required],
 textarea[required],
 select[required] {
@@ -1658,14 +1567,12 @@ select[required]:focus {
     box-shadow: 0 0 0 0.2rem rgba(54, 145, 191, 0.25);
 }
 
-/* Override required styling when field has error */
 input[required].is-invalid,
 textarea[required].is-invalid,
 select[required].is-invalid {
     border-left: 3px solid #dc3545 !important;
 }
 
-/* File input error state */
 input[type="file"].is-invalid {
     border-color: #dc3545 !important;
 }

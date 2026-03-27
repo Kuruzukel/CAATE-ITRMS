@@ -1,12 +1,7 @@
-/**
- * CAATE Login Page JavaScript
- * Handles login form functionality and password visibility toggle
- */
 
-// API Base URL - works for both localhost and network access
+
 const API_BASE_URL = window.location.origin + '/CAATE-ITRMS/backend/public';
 
-// Toast notification function
 function showToast(message, type = 'success') {
     const container = document.getElementById('toastContainer');
     if (!container) return;
@@ -22,7 +17,6 @@ function showToast(message, type = 'success') {
 
     container.appendChild(toast);
 
-    // Auto remove after 5 seconds for info, 3 seconds for others
     const duration = type === 'info' ? 5000 : 3000;
     setTimeout(() => {
         toast.classList.add('hiding');
@@ -32,8 +26,6 @@ function showToast(message, type = 'success') {
     }, duration);
 }
 
-
-// Close toast notification - MUST be global for onclick to work
 window.closeToast = function (button) {
     const toast = button.closest('.toast-notification');
     if (toast) {
@@ -44,15 +36,12 @@ window.closeToast = function (button) {
     }
 };
 
-// Form validation and submission
 document.addEventListener('DOMContentLoaded', function () {
-    // Clear any existing session data when arriving at login page
     localStorage.removeItem('authToken');
     localStorage.removeItem('userRole');
     localStorage.removeItem('userData');
     sessionStorage.clear();
 
-    // Prevent back button to cached authenticated pages
     window.history.pushState(null, '', window.location.href);
     window.addEventListener('popstate', function () {
         window.history.pushState(null, '', window.location.href);
@@ -63,12 +52,10 @@ document.addEventListener('DOMContentLoaded', function () {
     const passwordInput = document.getElementById('password');
     const rememberMeCheckbox = document.getElementById('remember-me');
 
-    // Remove any required attribute from remember-me checkbox
     if (rememberMeCheckbox) {
         rememberMeCheckbox.removeAttribute('required');
     }
 
-    // Load saved credentials if "Remember Me" was checked
     loadSavedCredentials();
 
     if (loginForm) {
@@ -79,7 +66,6 @@ document.addEventListener('DOMContentLoaded', function () {
             const password = passwordInput.value;
             const rememberMe = rememberMeCheckbox ? rememberMeCheckbox.checked : false;
 
-            // Validation - check each field independently
             if (!identifier && !password) {
                 showToast('Please enter your email/username and password', 'error');
                 emailInput.focus();
@@ -113,20 +99,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 const result = await response.json();
 
                 if (result.success) {
-                    // Handle "Remember Me" functionality
                     if (rememberMe) {
                         saveCredentials(identifier, password);
                     } else {
                         clearSavedCredentials();
                     }
 
-                    // Store authentication data
                     localStorage.setItem('authToken', result.token);
                     localStorage.setItem('userRole', result.role);
                     localStorage.setItem('userId', result.user.id || result.user._id);
                     localStorage.setItem('userData', JSON.stringify(result.user));
 
-                    // Redirect immediately - no toast needed
                     const baseUrl = window.location.origin + '/CAATE-ITRMS';
 
                     if (result.role === 'admin') {
@@ -137,7 +120,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         showToast('Unknown user role', 'error');
                     }
                 } else {
-                    // Handle authentication failure - user doesn't exist or wrong credentials
                     showToast('User does not exist or invalid credentials', 'error');
                 }
             } catch (error) {
@@ -147,12 +129,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
-/**
- * Save credentials to localStorage (encrypted with base64)
- */
 function saveCredentials(identifier, password) {
     try {
-        // Simple encoding (base64) - NOT secure encryption, just obfuscation
         const encodedIdentifier = btoa(identifier);
         const encodedPassword = btoa(password);
 
@@ -164,9 +142,6 @@ function saveCredentials(identifier, password) {
     }
 }
 
-/**
- * Load saved credentials from localStorage
- */
 function loadSavedCredentials() {
     try {
         const rememberMe = localStorage.getItem('rememberMe');
@@ -176,11 +151,9 @@ function loadSavedCredentials() {
             const encodedPassword = localStorage.getItem('rememberedPass');
 
             if (encodedIdentifier && encodedPassword) {
-                // Decode the credentials
                 const identifier = atob(encodedIdentifier);
                 const password = atob(encodedPassword);
 
-                // Fill in the form
                 const emailInput = document.getElementById('email');
                 const passwordInput = document.getElementById('password');
                 const rememberMeCheckbox = document.getElementById('remember-me');
@@ -196,9 +169,6 @@ function loadSavedCredentials() {
     }
 }
 
-/**
- * Clear saved credentials from localStorage
- */
 function clearSavedCredentials() {
     localStorage.removeItem('rememberedUser');
     localStorage.removeItem('rememberedPass');

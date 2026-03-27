@@ -1,4 +1,4 @@
-/* CAATE Admin Panel - Main Stylesheet */
+
 
 :root {
     --primary-color: #6c63ff;
@@ -55,7 +55,6 @@ body {
     border-color: #5a52d5;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
     .container-xxl {
         padding: 15px;

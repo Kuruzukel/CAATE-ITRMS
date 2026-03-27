@@ -14,10 +14,8 @@ class InventorySeeder {
     public function seed() {
         echo "Starting inventory seeding...\n";
         
-        // Seed CAATE Inventory
         $this->seedCaateInventory();
         
-        // Seed Audit Inventory
         $this->seedAuditInventory();
         
         echo "Inventory seeding completed!\n";
@@ -28,17 +26,14 @@ class InventorySeeder {
         
         $collection = $this->db->selectCollection('caate-inventory');
         
-        // Clear existing data
         $collection->deleteMany([]);
         
-        // Load data from JSON files
         $nailCareData = $this->loadJsonFile(__DIR__ . '/../../../inventory-data/json/nail-care-inventory.json');
         $skinCareData = $this->loadJsonFile(__DIR__ . '/../../../inventory-data/json/skin-care-inventory.json');
         
         $allData = array_merge($nailCareData, $skinCareData);
         
         if (!empty($allData)) {
-            // Convert date strings to MongoDB date objects
             foreach ($allData as &$item) {
                 if (isset($item['created_at'])) {
                     $item['created_at'] = new MongoDB\BSON\UTCDateTime(strtotime($item['created_at']) * 1000);
@@ -60,17 +55,14 @@ class InventorySeeder {
         
         $collection = $this->db->selectCollection('audit-inventory');
         
-        // Clear existing data
         $collection->deleteMany([]);
         
-        // Load data from JSON files (same data for now)
         $nailCareData = $this->loadJsonFile(__DIR__ . '/../../../inventory-data/json/nail-care-inventory.json');
         $skinCareData = $this->loadJsonFile(__DIR__ . '/../../../inventory-data/json/skin-care-inventory.json');
         
         $allData = array_merge($nailCareData, $skinCareData);
         
         if (!empty($allData)) {
-            // Convert date strings to MongoDB date objects
             foreach ($allData as &$item) {
                 if (isset($item['created_at'])) {
                     $item['created_at'] = new MongoDB\BSON\UTCDateTime(strtotime($item['created_at']) * 1000);
@@ -105,7 +97,6 @@ class InventorySeeder {
     }
 }
 
-// Run the seeder
 if (php_sapi_name() === 'cli') {
     $seeder = new InventorySeeder();
     $seeder->seed();

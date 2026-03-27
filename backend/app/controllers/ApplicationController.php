@@ -11,7 +11,6 @@ class ApplicationController {
         header('Access-Control-Allow-Headers: Content-Type');
         
         try {
-            // Get JSON input
             $rawInput = file_get_contents('php://input');
             $input = json_decode($rawInput, true);
             
@@ -24,34 +23,25 @@ class ApplicationController {
                 return;
             }
             
-            // Prepare application data structure
             $applicationData = [
-                // User reference - convert to ObjectId if it's a string
                 'user_id' => $this->convertToObjectId($input['userId'] ?? null),
                 
-                // Reference Number (concatenated from individual fields)
                 'reference_number' => $this->buildReferenceNumber($input),
                 
-                // ULI (concatenated from individual fields)
                 'uli' => $this->buildULI($input),
                 
-                // Picture and Signature
                 'picture' => $input['picture'] ?? null,
                 'signature' => $input['signature'] ?? null,
                 
-                // School Information
                 'school_name' => $input['schoolName'] ?? '',
                 'assessment_title' => $input['assessmentTitle'] ?? '',
                 'school_address' => $input['schoolAddress'] ?? '',
                 'application_date' => $input['applicationDate'] ?? '',
                 
-                // Assessment Type
                 'assessment_type' => $input['assessmentType'] ?? '',
                 
-                // Client Type
                 'client_type' => $input['clientType'] ?? '',
                 
-                // Profile - Name
                 'name' => [
                     'surname' => $input['surname'] ?? '',
                     'first_name' => $input['firstName'] ?? '',
@@ -61,7 +51,6 @@ class ApplicationController {
                     'name_extension' => $input['nameExtension'] ?? ''
                 ],
                 
-                // Mailing Address
                 'mailing_address' => [
                     'number_street' => $input['numberStreet'] ?? '',
                     'barangay' => $input['barangay'] ?? '',
@@ -72,11 +61,9 @@ class ApplicationController {
                     'zip' => $input['zip'] ?? ''
                 ],
                 
-                // Parent Information
                 'mothers_name' => $input['motherName'] ?? '',
                 'fathers_name' => $input['fatherName'] ?? '',
                 
-                // Personal Information
                 'sex' => $input['sex'] ?? '',
                 'civil_status' => $input['civilStatus'] ?? '',
                 'employment_status' => $input['employmentStatus'] ?? '',
@@ -87,7 +74,6 @@ class ApplicationController {
                 'parent_guardian_name' => $input['parentGuardianName'] ?? '',
                 'parent_guardian_address' => $input['parentGuardianAddress'] ?? '',
                 
-                // Contact Information
                 'contact' => [
                     'tel' => $input['tel'] ?? '',
                     'mobile' => $input['mobile'] ?? '',
@@ -96,26 +82,20 @@ class ApplicationController {
                     'other_contact' => $input['otherContact'] ?? ''
                 ],
                 
-                // Work Experience (array of objects)
                 'work_experience' => $this->buildWorkExperience($input),
                 
-                // Training/Seminars (array of objects)
                 'training_seminars' => $this->buildTrainingSeminars($input),
                 
-                // Licensure Examinations (array of objects)
                 'licensure_exams' => $this->buildLicensureExams($input),
                 
-                // Competency Assessments (array of objects)
                 'competency_assessments' => $this->buildCompetencyAssessments($input),
                 
-                // Status and timestamps
                 'status' => $input['status'] ?? 'pending',
                 'submitted_at' => $input['submittedAt'] ?? date('Y-m-d H:i:s'),
                 'created_at' => new MongoDB\BSON\UTCDateTime(),
                 'updated_at' => new MongoDB\BSON\UTCDateTime()
             ];
             
-            // Use the Application model to create
             $applicationModel = new Application();
             $insertedId = $applicationModel->create($applicationData);
             
@@ -142,7 +122,6 @@ class ApplicationController {
         }
     }
     
-    // Helper function to convert string to ObjectId
     private function convertToObjectId($id) {
         if (!$id) return null;
         
@@ -157,7 +136,6 @@ class ApplicationController {
         }
     }
     
-    // Helper function to build reference number from individual fields
     private function buildReferenceNumber($input) {
         $parts = [
             $input['referenceQualifiable'] ?? '',
@@ -180,7 +158,6 @@ class ApplicationController {
         return implode('', $parts);
     }
     
-    // Helper function to build ULI from individual fields
     private function buildULI($input) {
         $parts = [];
         for ($i = 1; $i <= 16; $i++) {
@@ -189,7 +166,6 @@ class ApplicationController {
         return implode('', $parts);
     }
     
-    // Helper function to build work experience array
     private function buildWorkExperience($input) {
         $workExperience = [];
         
@@ -197,7 +173,6 @@ class ApplicationController {
             $count = count($input['workCompany']);
             
             for ($i = 0; $i < $count; $i++) {
-                // Get all field values
                 $company = trim($input['workCompany'][$i] ?? '');
                 $position = trim($input['workPosition'][$i] ?? '');
                 $dates = trim($input['workDates'][$i] ?? '');
@@ -205,7 +180,6 @@ class ApplicationController {
                 $status = trim($input['workStatus'][$i] ?? '');
                 $years = isset($input['workYears'][$i]) && $input['workYears'][$i] !== '' ? (float)$input['workYears'][$i] : 0;
                 
-                // Only add if at least one field has a non-empty value
                 if ($company !== '' || $position !== '' || $dates !== '' || $salary !== '' || $status !== '' || $years > 0) {
                     $workExperience[] = [
                         'company' => $company,
@@ -222,21 +196,18 @@ class ApplicationController {
         return $workExperience;
     }
     
-    // Helper function to build training/seminars array
     private function buildTrainingSeminars($input) {
         $trainingSeminars = [];
         
         if (isset($input['trainingTitle']) && is_array($input['trainingTitle'])) {
             $count = count($input['trainingTitle']);
             for ($i = 0; $i < $count; $i++) {
-                // Get all field values
                 $title = trim($input['trainingTitle'][$i] ?? '');
                 $venue = trim($input['trainingVenue'][$i] ?? '');
                 $dates = trim($input['trainingDates'][$i] ?? '');
                 $hours = isset($input['trainingHours'][$i]) && $input['trainingHours'][$i] !== '' ? (int)$input['trainingHours'][$i] : 0;
                 $conductedBy = trim($input['trainingConductedBy'][$i] ?? '');
                 
-                // Only add if at least one field has a non-empty value
                 if ($title !== '' || $venue !== '' || $dates !== '' || $hours > 0 || $conductedBy !== '') {
                     $trainingSeminars[] = [
                         'title' => $title,
@@ -252,14 +223,12 @@ class ApplicationController {
         return $trainingSeminars;
     }
     
-    // Helper function to build licensure exams array
     private function buildLicensureExams($input) {
         $licensureExams = [];
         
         if (isset($input['licensureTitle']) && is_array($input['licensureTitle'])) {
             $count = count($input['licensureTitle']);
             for ($i = 0; $i < $count; $i++) {
-                // Get all field values
                 $title = trim($input['licensureTitle'][$i] ?? '');
                 $year = isset($input['licensureYear'][$i]) && $input['licensureYear'][$i] !== '' ? (int)$input['licensureYear'][$i] : null;
                 $venue = trim($input['licensureVenue'][$i] ?? '');
@@ -267,7 +236,6 @@ class ApplicationController {
                 $remarks = trim($input['licensureRemarks'][$i] ?? '');
                 $expiry = trim($input['licensureExpiry'][$i] ?? '');
                 
-                // Only add if at least one field has a non-empty value
                 if ($title !== '' || $year !== null || $venue !== '' || $rating !== '' || $remarks !== '' || $expiry !== '') {
                     $licensureExams[] = [
                         'title' => $title,
@@ -284,14 +252,12 @@ class ApplicationController {
         return $licensureExams;
     }
     
-    // Helper function to build competency assessments array
     private function buildCompetencyAssessments($input) {
         $competencyAssessments = [];
         
         if (isset($input['competencyTitle']) && is_array($input['competencyTitle'])) {
             $count = count($input['competencyTitle']);
             for ($i = 0; $i < $count; $i++) {
-                // Get all field values
                 $title = trim($input['competencyTitle'][$i] ?? '');
                 $level = trim($input['competencyLevel'][$i] ?? '');
                 $sector = trim($input['competencySector'][$i] ?? '');
@@ -299,7 +265,6 @@ class ApplicationController {
                 $issuance = trim($input['competencyIssuance'][$i] ?? '');
                 $expiry = trim($input['competencyExpiry'][$i] ?? '');
                 
-                // Only add if at least one field has a non-empty value
                 if ($title !== '' || $level !== '' || $sector !== '' || $cert !== '' || $issuance !== '' || $expiry !== '') {
                     $competencyAssessments[] = [
                         'title' => $title,

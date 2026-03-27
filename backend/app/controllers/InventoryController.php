@@ -8,25 +8,20 @@ class InventoryController {
         $database = new Database();
         $this->db = $database->getDatabase();
         
-        // Determine collection based on query parameter
         $collectionName = $_GET['collection'] ?? 'inventory';
         
-        // Use selectCollection for collection names with hyphens
         $this->collection = $this->db->selectCollection($collectionName);
     }
     
-    // Get all inventory items with optional filters
     public function index() {
         try {
             $filter = [];
             
-            // Get query parameters
             $inventoryType = $_GET['inventory_type'] ?? null;
             $program = $_GET['program'] ?? null;
             $stockStatus = $_GET['stock_status'] ?? null;
             $search = $_GET['search'] ?? null;
             
-            // Build filter
             if ($inventoryType) {
                 $filter['inventory_type'] = $inventoryType;
             }
@@ -50,7 +45,6 @@ class InventoryController {
             $cursor = $this->collection->find($filter, $options);
             $items = iterator_to_array($cursor);
             
-            // Convert MongoDB ObjectId to string
             foreach ($items as &$item) {
                 if (isset($item['_id'])) {
                     $item['_id'] = (string) $item['_id'];
@@ -72,7 +66,6 @@ class InventoryController {
         }
     }
     
-    // Get single inventory item
     public function show($id) {
         try {
             $item = $this->collection->findOne(['_id' => new MongoDB\BSON\ObjectId($id)]);
@@ -102,12 +95,10 @@ class InventoryController {
         }
     }
     
-    // Create new inventory item
     public function store() {
         try {
             $data = json_decode(file_get_contents('php://input'), true);
             
-            // Validate required fields
             $required = ['program', 'inventory_type', 'item_name', 'specification', 'quantity_required', 'quantity_on_site'];
             foreach ($required as $field) {
                 if (!isset($data[$field])) {
@@ -120,7 +111,6 @@ class InventoryController {
                 }
             }
             
-            // Calculate difference and stock status
             $qtyRequired = (int) $data['quantity_required'];
             $qtyOnSite = (int) $data['quantity_on_site'];
             $difference = $qtyOnSite - $qtyRequired;
@@ -164,12 +154,10 @@ class InventoryController {
         }
     }
     
-    // Update inventory item
     public function update($id) {
         try {
             $data = json_decode(file_get_contents('php://input'), true);
             
-            // Get existing item first
             $existingItem = $this->collection->findOne(['_id' => new MongoDB\BSON\ObjectId($id)]);
             
             if (!$existingItem) {
@@ -183,7 +171,6 @@ class InventoryController {
             
             $updateData = [];
             
-            // Helper function to normalize values for comparison
             $normalize = function($value) {
                 if ($value === null || $value === '' || $value === 'N/A') {
                     return '';
@@ -191,7 +178,6 @@ class InventoryController {
                 return trim((string)$value);
             };
             
-            // Only add fields that have actually changed
             if (isset($data['program']) && $normalize($data['program']) !== $normalize($existingItem['program'] ?? '')) {
                 $updateData['program'] = $data['program'];
             }
@@ -217,7 +203,6 @@ class InventoryController {
                 $updateData['stock_status'] = $data['stock_status'];
             }
             
-            // Recalculate difference and stock status if quantities changed
             if (isset($updateData['quantity_required']) || isset($updateData['quantity_on_site'])) {
                 $qtyRequired = $updateData['quantity_required'] ?? (int)($existingItem['quantity_required'] ?? 0);
                 $qtyOnSite = $updateData['quantity_on_site'] ?? (int)($existingItem['quantity_on_site'] ?? 0);
@@ -242,7 +227,6 @@ class InventoryController {
                 }
             }
             
-            // If no changes, return success but with modified = false
             if (empty($updateData)) {
                 http_response_code(200);
                 echo json_encode([
@@ -253,7 +237,6 @@ class InventoryController {
                 return;
             }
             
-            // Add updated_at only when there are actual changes
             $updateData['updated_at'] = new MongoDB\BSON\UTCDateTime();
             
             $result = $this->collection->updateOne(
@@ -276,10 +259,8 @@ class InventoryController {
         }
     }
     
-    // Delete inventory item
     public function destroy($id) {
         try {
-            // Re-initialize collection in case it wasn't set properly in constructor
             $collectionName = $_GET['collection'] ?? 'inventory';
             $collection = $this->db->selectCollection($collectionName);
             
@@ -308,7 +289,6 @@ class InventoryController {
         }
     }
     
-    // Get inventory statistics
     public function statistics() {
         try {
             $totalItems = $this->collection->countDocuments([]);
@@ -335,16 +315,12 @@ class InventoryController {
         }
     }
     
-    // Get unique filter values (programs and stock statuses)
     public function getFilterOptions() {
         try {
-            // Get unique programs
             $programs = $this->collection->distinct('program');
             
-            // Get unique stock statuses
             $stockStatuses = $this->collection->distinct('stock_status');
             
-            // Sort the arrays
             sort($programs);
             sort($stockStatuses);
             

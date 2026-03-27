@@ -97,7 +97,6 @@ document.addEventListener('DOMContentLoaded', function () {
             const modal = bootstrap.Modal.getInstance(document.getElementById('editGraduateModal'));
             modal.hide();
 
-
         } else {
             form.reportValidity();
         }

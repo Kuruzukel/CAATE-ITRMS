@@ -1,4 +1,3 @@
-// Picture upload preview
 document.getElementById('pictureUpload').addEventListener('change', function (e) {
     const file = e.target.files[0];
     if (file) {
@@ -11,7 +10,6 @@ document.getElementById('pictureUpload').addEventListener('change', function (e)
     }
 });
 
-// Signature Canvas Setup
 function setupSignatureCanvas(canvasId) {
     const canvas = document.getElementById(canvasId);
     const ctx = canvas.getContext('2d');
@@ -39,7 +37,6 @@ function setupSignatureCanvas(canvasId) {
     canvas.addEventListener('mouseup', () => isDrawing = false);
     canvas.addEventListener('mouseout', () => isDrawing = false);
 
-    // Touch support
     canvas.addEventListener('touchstart', (e) => {
         e.preventDefault();
         const touch = e.touches[0];
@@ -74,47 +71,34 @@ function clearSignature(canvasId) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
-// Initialize signature canvases
 setupSignatureCanvas('signatureCanvas1');
 setupSignatureCanvas('signatureCanvas2');
 
-// Confirmation functions
 function confirmReset() {
     document.getElementById('admissionSlipForm').reset();
-    // Clear signature canvases
     clearSignature('signatureCanvas1');
     clearSignature('signatureCanvas2');
-    // Clear picture upload
     const pictureBox = document.querySelector('.picture-upload-box');
     pictureBox.innerHTML = `<span>PICTURE<br>(Passport<br>size)</span>`;
-    // Close modal
     const resetModal = bootstrap.Modal.getInstance(document.getElementById('resetModal'));
     resetModal.hide();
-    // Show success message
     alert('Form has been reset successfully!');
 }
 
 function confirmSubmit() {
     const form = document.getElementById('admissionSlipForm');
-    // You can add form validation here
-    // For now, we'll just submit the form
     form.submit();
-    // Close modal
     const submitModal = bootstrap.Modal.getInstance(document.getElementById('submitModal'));
     submitModal.hide();
 }
 
 function confirmPrint() {
-    // Close modal first
     const printModal = bootstrap.Modal.getInstance(document.getElementById('printModal'));
     printModal.hide();
-    // Wait for modal to close, then print
     setTimeout(() => {
         window.print();
     }, 300);
 }
 
-// Menu toggle is handled by main.js - no need to duplicate here
 document.addEventListener('DOMContentLoaded', function () {
-    // Admission slip specific initialization can go here
 });

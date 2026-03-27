@@ -65,11 +65,9 @@
 
   
   <script>
-    // Clear any stored password data that might trigger Google Password Manager
     if (localStorage.getItem('rememberedPass')) {
       localStorage.removeItem('rememberedPass');
     }
-    // Also clear any other password-related data
     if (localStorage.getItem('password')) {
       localStorage.removeItem('password');
     }
@@ -149,7 +147,6 @@
               </li>
             </ul>
           </li>
-
 
           
           <li class="menu-item">
@@ -538,7 +535,7 @@
           <footer class="content-footer footer bg-footer-theme">
             <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
               <div class="mb-2 mb-md-0">
-                Â©
+                Ã‚Â©
                 <span id="currentYear"></span>
                 Creative Aesthetic Academy & Technical Education Inc.
               </div>

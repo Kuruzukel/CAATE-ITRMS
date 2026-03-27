@@ -486,7 +486,6 @@ async function saveProfileChanges() {
         return;
     }
 
-
     try {
         console.log('Sending data to backend:', updatedData);
         const response = await fetch(`${config.api.baseUrl}/api/v1/admins/${userId}`, {
@@ -500,7 +499,6 @@ async function saveProfileChanges() {
 
         console.log('Response status:', response.status);
         console.log('Response headers:', response.headers);
-
 
         if (response.ok) {
             const result = await response.json();

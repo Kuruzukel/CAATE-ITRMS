@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
 
-
     const dateFilter = document.getElementById('admissionDateFilter');
 
     if (dateFilter) {
@@ -27,7 +26,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
 
-
             const admissionDateCell = row.querySelector('td:nth-child(6)');
 
             if (admissionDateCell) {
@@ -45,7 +43,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function parseDateFromCell(cellText) {
-
 
         const dateMatch = cellText.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
         if (dateMatch) {

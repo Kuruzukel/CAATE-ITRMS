@@ -1,6 +1,5 @@
-/* Dashboard specific styles */
 
-/* Global White Text Color for Dashboard */
+
 body,
 .content-wrapper,
 .container-xxl,
@@ -31,7 +30,6 @@ strong,
     color: white !important;
 }
 
-/* Specific dashboard content text colors */
 .card-body h6,
 .card-body .card-title,
 .card-body span,
@@ -43,21 +41,18 @@ strong,
     color: white !important;
 }
 
-/* Course completion text */
 .progress+small,
 .text-muted,
 small.text-muted {
     color: white !important;
 }
 
-/* Certificate information text */
 .card-body .mb-2 small,
 .card-body .mb-2 strong,
 .card-body .mb-3 small {
     color: white !important;
 }
 
-/* Welcome message text */
 .card-title.text-primary,
 .card-body p,
 .welcome-user-name,
@@ -65,27 +60,25 @@ small.text-muted {
     color: white !important;
 }
 
-/* Statistics cards text - restore original colors */
 .card-title.mb-2 {
     color: white !important;
 }
 
 .fw-semibold.d-block.mb-1 {
     color: white !important;
-    /* Make labels white */
+    
 }
 
 .text-success.fw-semibold {
     color: white !important;
-    /* Make "In Progress" text white */
+    
 }
 
 .text-info.fw-semibold {
     color: white !important;
-    /* Make "Certified" text white */
+    
 }
 
-/* Navbar User Dropdown Styles */
 .navbar-dropdown.dropdown-user {
     position: relative;
 }
@@ -109,23 +102,18 @@ small.text-muted {
     object-fit: cover;
 }
 
-/* Green dot removed - avatar-online indicator disabled */
-
-/* Ensure avatar image loads properly */
 .avatar img {
     max-width: 100%;
     height: auto;
     border-radius: 50%;
 }
 
-/* Fix for avatar alignment */
 .navbar .avatar {
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-/* Override any conflicting styles */
 .navbar-dropdown.dropdown-user .avatar img {
     width: 40px !important;
     height: 40px !important;
@@ -202,7 +190,6 @@ small.text-muted {
     display: none !important;
 }
 
-/* Responsive adjustments for user dropdown */
 @media (max-width: 767px) {
     .navbar-dropdown.dropdown-user .dropdown-item {
         padding: 0.5rem 1rem;
@@ -210,10 +197,9 @@ small.text-muted {
     }
 }
 
-/* Collapsed menu styles for screens >= 1200px */
 @media (min-width: 1200px) {
 
-    /* When menu is collapsed on large screens */
+    
     .layout-menu-collapsed .layout-menu {
         width: 80px !important;
     }
@@ -222,7 +208,7 @@ small.text-muted {
         padding-left: 80px !important;
     }
 
-    /* Hide text in collapsed menu */
+    
     .layout-menu-collapsed .menu-text,
     .layout-menu-collapsed .app-brand-text,
     .layout-menu-collapsed .menu-link>div:not(.menu-icon) {
@@ -231,31 +217,30 @@ small.text-muted {
         transition: opacity 0.3s ease, visibility 0.3s ease;
     }
 
-    /* Center icons in collapsed menu */
+    
     .layout-menu-collapsed .menu-link {
         justify-content: center;
     }
 
-    /* Hide submenu arrows in collapsed state */
+    
     .layout-menu-collapsed .menu-toggle::after {
         display: none;
     }
 
-    /* Adjust menu item padding in collapsed state */
+    
     .layout-menu-collapsed .menu-item .menu-link {
         padding-left: 1rem;
         padding-right: 1rem;
     }
 }
 
-/* Ensure navbar maintains proper spacing on all screen sizes */
 @media (max-width: 1199.98px) {
     .layout-navbar {
         margin-left: 1.625rem !important;
         margin-right: 1.625rem !important;
     }
 
-    /* Automatically hide/close the sidebar menu by default */
+    
     .layout-menu {
         transform: translateX(-100%) !important;
         opacity: 0 !important;
@@ -263,26 +248,26 @@ small.text-muted {
         transition: transform 0.3s ease, opacity 0.3s ease !important;
     }
 
-    /* Show menu when expanded */
+    
     .layout-menu-expanded .layout-menu {
         transform: translateX(0) !important;
         opacity: 1 !important;
         pointer-events: auto !important;
     }
 
-    /* Expand layout page to full width when sidebar is hidden */
+    
     .layout-page {
         margin-left: 0 !important;
         padding-left: 0 !important;
         width: 100% !important;
     }
 
-    /* Adjust layout container */
+    
     .layout-container {
         padding-left: 0 !important;
     }
 
-    /* Fix navbar positioning - remove extra left margin */
+    
     .layout-navbar {
         margin-left: 1rem !important;
         margin-right: 1rem !important;
@@ -291,7 +276,7 @@ small.text-muted {
         max-width: none !important;
     }
 
-    /* Ensure navbar container spans properly */
+    
     .layout-navbar .container-xxl {
         max-width: 100% !important;
         padding-left: 1rem !important;
@@ -299,7 +284,6 @@ small.text-muted {
     }
 }
 
-/* When menu is hidden on mobile, ensure navbar has proper margins */
 @media (max-width: 991.98px) {
     .layout-menu.menu-hidden~.layout-page .layout-navbar {
         margin-left: 1.625rem !important;
@@ -317,7 +301,6 @@ small.text-muted {
     }
 }
 
-/* Fix card layout below 1090px - move cards below welcome card */
 @media (max-width: 1089px) {
     .col-lg-8.mb-4.order-0 {
         flex: 0 0 100% !important;
@@ -345,7 +328,6 @@ small.text-muted {
     }
 }
 
-/* Keep original layout above 1086px */
 @media (min-width: 1086px) {
     .col-lg-8.mb-4.order-0 {
         flex: 0 0 66.666667%;
@@ -358,8 +340,6 @@ small.text-muted {
     }
 }
 
-/* Additional comprehensive white text styling */
-/* Override any Bootstrap text color classes */
 .text-primary,
 .text-secondary,
 .text-success,
@@ -372,17 +352,14 @@ small.text-muted {
     color: white !important;
 }
 
-/* All text elements in cards */
 .card * {
     color: white !important;
 }
 
-/* Ensure all content wrapper text is white */
 .content-wrapper * {
     color: white !important;
 }
 
-/* Badge text should remain visible - keep success badges green text */
 .badge.bg-success {
     color: white !important;
 }
@@ -395,22 +372,18 @@ small.text-muted {
     color: white !important;
 }
 
-/* Force all dashboard text to be white with highest specificity */
 .layout-page .content-wrapper .container-xxl * {
     color: white !important;
 }
 
-/* Specific overrides for common elements */
 .layout-page .content-wrapper .container-xxl .card .card-body * {
     color: white !important;
 }
 
-/* Progress bar text */
 .progress+* {
     color: white !important;
 }
 
-/* All headings */
 .layout-page h1,
 .layout-page h2,
 .layout-page h3,
@@ -420,7 +393,6 @@ small.text-muted {
     color: white !important;
 }
 
-/* All paragraphs and spans */
 .layout-page p,
 .layout-page span,
 .layout-page div,
@@ -429,54 +401,47 @@ small.text-muted {
     color: white !important;
 }
 
-/* Override for Log Out text - make it red with highest specificity */
 .layout-page .dropdown-menu .dropdown-item .bx-power-off+span.align-middle {
     color: rgba(var(--bs-danger-rgb), 1) !important;
 }
 
-/* Additional fallback selectors with maximum specificity */
 .layout-page .navbar .dropdown-menu .dropdown-item span.align-middle {
     color: rgba(var(--bs-danger-rgb), 1) !important;
 }
 
-/* Even more specific - target the exact structure */
 .layout-page .navbar-nav .dropdown .dropdown-menu .dropdown-item span.align-middle {
     color: rgba(var(--bs-danger-rgb), 1) !important;
 }
 
-/* Nuclear option - override everything for Log Out */
 .layout-page span.align-middle {
     color: rgba(var(--bs-danger-rgb), 1) !important;
 }
 
-/* Restore original colors for statistics cards */
 .col-lg-6.col-md-12.col-6.mb-4 .card .card-body .fw-semibold.d-block.mb-1 {
     color: white !important;
-    /* Make label white */
+    
 }
 
 .col-lg-6.col-md-12.col-6.mb-4 .card .card-body .text-success.fw-semibold {
     color: white !important;
-    /* Make "In Progress" white */
+    
 }
 
 .col-lg-6.col-md-12.col-6.mb-4 .card .card-body .text-info.fw-semibold {
     color: white !important;
-    /* Make "Certified" white */
+    
 }
 
-/* Restore icon colors */
 .avatar.shrink-0 i {
     color: #10b981 !important;
-    /* Green for book icon */
+    
 }
 
 .avatar.shrink-0 i.bx-award {
     color: #3b82f6 !important;
-    /* Blue for award icon */
+    
 }
 
-/* Specific icon color overrides */
 .card .avatar i.bx-book-open {
     color: #10b981 !important;
 }
@@ -485,7 +450,6 @@ small.text-muted {
     color: #3b82f6 !important;
 }
 
-/* Override the global white text for specific statistics elements */
 .card .card-body .fw-semibold.d-block.mb-1:not(.text-white) {
     color: #697a8d !important;
 }
@@ -498,7 +462,6 @@ small.text-muted {
     color: white !important;
 }
 
-/* More specific overrides for statistics cards */
 .col-lg-4.col-md-4.order-1 .card .card-body span.fw-semibold.d-block.mb-1 {
     color: #697a8d !important;
 }
@@ -511,7 +474,6 @@ small.text-muted {
     color: white !important;
 }
 
-/* Statistics card icons with proper colors */
 .col-lg-4.col-md-4.order-1 .card .avatar i {
     color: inherit !important;
 }
@@ -524,7 +486,6 @@ small.text-muted {
     color: #3b82f6 !important;
 }
 
-/* Force specific colors for the statistics elements */
 .row .col-lg-6.col-md-12.col-6.mb-4 .card .card-body span {
     color: #697a8d !important;
 }
@@ -541,23 +502,20 @@ small.text-muted {
     color: white !important;
 }
 
-/* Fix for small icons in statistics cards */
 .text-success.fw-semibold i.bx-up-arrow-alt {
     color: #10b981 !important;
-    /* Green for up arrow */
+    
 }
 
 .text-info.fw-semibold i.bx-check-circle {
     color: #3b82f6 !important;
-    /* Blue for check circle */
+    
 }
 
-/* Ensure "Certified" text is white with highest specificity */
 small.text-info.fw-semibold {
     color: white !important;
 }
 
-/* Force all small icons in statistics cards to have proper colors */
 .col-lg-6.col-md-12.col-6.mb-4 .card .card-body small i {
     color: inherit !important;
 }
@@ -570,7 +528,6 @@ small.text-info.fw-semibold {
     color: #3b82f6 !important;
 }
 
-/* Override any global white text for these specific icons */
 .card-body small.text-success.fw-semibold i.bx {
     color: #10b981 !important;
 }
@@ -579,7 +536,6 @@ small.text-info.fw-semibold {
     color: #3b82f6 !important;
 }
 
-/* Ensure text remains white but icons get proper colors */
 .card-body small.text-success.fw-semibold {
     color: white !important;
 }
@@ -588,14 +544,12 @@ small.text-info.fw-semibold {
     color: white !important;
 }
 
-/* CRITICAL: Force Log Out text to be red - highest specificity */
 html body .layout-page .navbar .dropdown-menu .dropdown-item span.align-middle,
 html body .layout-page .dropdown-menu .dropdown-item .bx-power-off+span.align-middle,
 html body .layout-page span.align-middle {
     color: rgba(var(--bs-danger-rgb), 1) !important;
 }
 
-/* Fallback with even higher specificity */
 .layout-page .navbar-nav .nav-item .dropdown-menu .dropdown-item span.align-middle {
     color: rgba(var(--bs-danger-rgb), 1) !important;
 }

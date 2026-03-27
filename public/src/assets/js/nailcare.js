@@ -1,4 +1,3 @@
-// Navbar scroll effect
 const navbar = document.getElementById("navbar");
 
 window.addEventListener("scroll", () => {
@@ -9,7 +8,6 @@ window.addEventListener("scroll", () => {
     }
 });
 
-// Mobile menu toggle - only if element exists
 const mobileMenuToggle = document.getElementById("mobileMenuToggle");
 const mobileMenu = document.getElementById("mobileMenu");
 
@@ -26,7 +24,6 @@ if (mobileMenuToggle && mobileMenu) {
         }
     });
 
-    // Close mobile menu when clicking a link
     const mobileMenuLinks = mobileMenu.querySelectorAll(".nav-link");
     mobileMenuLinks.forEach((link) => {
         link.addEventListener("click", () => {
@@ -37,7 +34,6 @@ if (mobileMenuToggle && mobileMenu) {
         });
     });
 
-    // Close mobile menu when clicking outside
     document.addEventListener("click", (e) => {
         if (!mobileMenu.contains(e.target) && !mobileMenuToggle.contains(e.target)) {
             mobileMenu.classList.remove("active");
@@ -47,7 +43,6 @@ if (mobileMenuToggle && mobileMenu) {
         }
     });
 
-    // Courses Carousel (only if elements exist)
     const carousel = document.getElementById("coursesCarousel");
     const prevBtn = document.getElementById("prevBtn");
     const nextBtn = document.getElementById("nextBtn");
@@ -99,7 +94,6 @@ if (mobileMenuToggle && mobileMenu) {
             });
         });
 
-        // Touch swipe support
         let touchStartX = 0;
         let touchEndX = 0;
 
@@ -127,7 +121,6 @@ if (mobileMenuToggle && mobileMenu) {
         }
     }
 
-    // Reveal animations
     const revealElements = document.querySelectorAll(".reveal");
 
     function reveal() {
@@ -145,7 +138,6 @@ if (mobileMenuToggle && mobileMenu) {
     window.addEventListener("scroll", reveal);
     reveal();
 
-    // Smooth scroll for anchor links
     document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
         anchor.addEventListener("click", function (e) {
             const href = this.getAttribute("href");
@@ -170,7 +162,6 @@ if (mobileMenuToggle && mobileMenu) {
         });
     });
 
-    // Page load animation
     window.addEventListener("load", () => {
         document.body.classList.add("loaded");
     });

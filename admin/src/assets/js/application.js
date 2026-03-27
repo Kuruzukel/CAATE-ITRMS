@@ -1,8 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // Load applications from MongoDB
     loadApplications();
 
-    // Date filter
     const dateFilter = document.getElementById('applicationDateFilter');
     if (dateFilter) {
         dateFilter.addEventListener('change', function () {
@@ -11,7 +9,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Search and filter inputs
     const searchInput = document.querySelector('input[placeholder="Name or Trainee ID"]');
     const statusFilter = document.querySelector('select[class*="form-select"]');
     const courseFilter = document.querySelectorAll('select[class*="form-select"]')[1];
@@ -26,7 +23,6 @@ document.addEventListener('DOMContentLoaded', function () {
         courseFilter.addEventListener('change', applyFilters);
     }
 
-    // Reset button
     const resetBtn = document.querySelector('.btn-outline-secondary');
     if (resetBtn) {
         resetBtn.addEventListener('click', function () {
@@ -38,19 +34,16 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Edit modal save button
     const saveEditBtn = document.getElementById('saveEditBtn');
     if (saveEditBtn) {
         saveEditBtn.addEventListener('click', saveEditedApplication);
     }
 
-    // Delete modal confirm button
     const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
     if (confirmDeleteBtn) {
         confirmDeleteBtn.addEventListener('click', confirmDeleteApplication);
     }
 
-    // Add buttons for dynamic arrays (Edit Modal)
     const addWorkExpBtn = document.getElementById('addWorkExperienceBtn');
     if (addWorkExpBtn) {
         addWorkExpBtn.addEventListener('click', addWorkExperience);
@@ -71,7 +64,6 @@ document.addEventListener('DOMContentLoaded', function () {
         addCompetencyBtn.addEventListener('click', addCompetencyAssessment);
     }
 
-    // Add buttons for dynamic arrays (Add Modal)
     const addWorkExpBtnModal = document.getElementById('addWorkExperienceBtnModal');
     if (addWorkExpBtnModal) {
         addWorkExpBtnModal.addEventListener('click', addWorkExperienceToAddModal);
@@ -103,13 +95,8 @@ async function loadApplications() {
         if (result.success && result.data) {
             allApplications = result.data;
 
-            // Data already includes userData from server-side join
-            // No need to fetch user data separately
-
-            // Update statistics
             updateStatistics(allApplications);
 
-            // Render table
             renderApplicationsTable(allApplications);
         } else {
             console.error('Failed to load applications:', result.message);
@@ -127,7 +114,6 @@ function updateStatistics(applications) {
     const pending = applications.filter(app => app.status === 'pending').length;
     const cancelled = applications.filter(app => app.status === 'cancelled').length;
 
-    // Update cards
     const cards = document.querySelectorAll('.card-body h3');
     if (cards[0]) cards[0].textContent = total;
     if (cards[1]) cards[1].textContent = approved;
@@ -241,7 +227,6 @@ function getFullName(app) {
 }
 
 function getAvatarHtml(app) {
-    // Priority: userData.profile_image (from trainees collection) > picture (from application form)
     const profileImage = app.userData?.profile_image || app.picture;
     const fullName = getFullName(app);
     const initials = getInitials(app);
@@ -249,9 +234,7 @@ function getAvatarHtml(app) {
     if (profileImage) {
         let imageSrc = profileImage;
 
-        // If it's not a base64 image and not a full URL, construct the full URL
         if (!profileImage.startsWith('data:image') && !profileImage.startsWith('http')) {
-            // Remove leading slash if present
             const cleanPath = profileImage.startsWith('/') ? profileImage.substring(1) : profileImage;
             imageSrc = `${window.location.origin}/${cleanPath}`;
         }
@@ -268,7 +251,6 @@ function getAvatarHtml(app) {
         `;
     }
 
-    // Fallback to initials
     return `
         <div class="avatar avatar-sm me-3"
             style="background: linear-gradient(135deg, rgba(54, 145, 191, 0.1) 0%, rgba(50, 85, 150, 0.1) 100%); 
@@ -322,28 +304,20 @@ function formatDate(dateValue) {
     try {
         let date;
 
-        // Handle different MongoDB date formats
         if (dateValue.$date) {
-            // MongoDB extended JSON format
             date = new Date(dateValue.$date);
         } else if (dateValue.$numberLong) {
-            // MongoDB numberLong format
             date = new Date(parseInt(dateValue.$numberLong));
         } else if (typeof dateValue === 'string') {
-            // String format
             date = new Date(dateValue);
         } else if (typeof dateValue === 'number') {
-            // Timestamp format
             date = new Date(dateValue);
         } else if (dateValue instanceof Date) {
-            // Already a Date object
             date = dateValue;
         } else {
-            // Try direct conversion
             date = new Date(dateValue);
         }
 
-        // Check if date is valid
         if (isNaN(date.getTime())) {
             return 'N/A';
         }
@@ -356,7 +330,6 @@ function formatDate(dateValue) {
     }
 }
 
-// Test function to verify API connectivity - add this to browser console
 async function testAPI() {
     try {
         console.log('Testing API connection...');
@@ -373,9 +346,7 @@ async function testAPI() {
     }
 }
 
-// Test function to verify change detection - run in browser console
 function testChangeDetection() {
-    // Make a small change to test
     const surnameField = document.getElementById('editSurname');
     const originalValue = surnameField.value;
     surnameField.value = originalValue + ' '; // Add a space
@@ -384,13 +355,8 @@ function testChangeDetection() {
     console.log('Original:', originalValue);
     console.log('New:', surnameField.value);
 
-    // Now try to save
     document.getElementById('saveEditBtn').click();
 }
-
-// Run this in browser console: testChangeDetection()
-
-// Run this in browser console: testAPI()
 
 function showEmptyState() {
     const tbody = document.querySelector('.table tbody');
@@ -427,7 +393,6 @@ async function changeStatus(appId, newStatus) {
         const result = await response.json();
 
         if (result.success) {
-            // Reload applications
             await loadApplications();
             showSuccess('Status updated successfully');
         } else {
@@ -446,11 +411,9 @@ function viewDetails(appId) {
         return;
     }
 
-    // Reference & ULI
     document.getElementById('viewReferenceNumber').textContent = app.reference_number || 'N/A';
     document.getElementById('viewUli').textContent = app.uli || 'N/A';
 
-    // Picture & Signature
     const pictureImg = document.getElementById('viewPicture');
     const noPictureText = document.getElementById('viewNoPicture');
     if (app.picture) {
@@ -473,17 +436,14 @@ function viewDetails(appId) {
         noSignatureText.style.display = 'block';
     }
 
-    // School Information
     document.getElementById('viewSchoolName').textContent = app.school_name || 'N/A';
     document.getElementById('viewSchoolAddress').textContent = app.school_address || 'N/A';
 
-    // Assessment Information
     document.getElementById('viewAssessmentTitle').textContent = app.assessment_title || 'N/A';
     document.getElementById('viewApplicationDate').textContent = formatDate(app.application_date || app.submitted_at);
     document.getElementById('viewAssessmentType').textContent = formatAssessmentType(app.assessment_type);
     document.getElementById('viewClientType').textContent = formatClientType(app.client_type);
 
-    // Personal Information
     document.getElementById('viewSurname').textContent = app.name?.surname || 'N/A';
     document.getElementById('viewFirstName').textContent = app.name?.first_name || 'N/A';
     document.getElementById('viewMiddleName').textContent = app.name?.middle_name || 'N/A';
@@ -491,7 +451,6 @@ function viewDetails(appId) {
     document.getElementById('viewSecondName').textContent = app.name?.second_name || 'N/A';
     document.getElementById('viewNameExtension').textContent = app.name?.name_extension || 'N/A';
 
-    // Mailing Address
     const address = app.mailing_address || {};
     document.getElementById('viewNumberStreet').textContent = address.number_street || 'N/A';
     document.getElementById('viewBarangay').textContent = address.barangay || 'N/A';
@@ -501,11 +460,9 @@ function viewDetails(appId) {
     document.getElementById('viewRegion').textContent = address.region || 'N/A';
     document.getElementById('viewZip').textContent = address.zip || 'N/A';
 
-    // Parent Information
     document.getElementById('viewMotherName').textContent = app.mothers_name || 'N/A';
     document.getElementById('viewFatherName').textContent = app.fathers_name || 'N/A';
 
-    // Personal Details
     document.getElementById('viewSex').textContent = app.sex ? app.sex.charAt(0).toUpperCase() + app.sex.slice(1) : 'N/A';
     document.getElementById('viewCivilStatus').textContent = app.civil_status ? app.civil_status.charAt(0).toUpperCase() + app.civil_status.slice(1) : 'N/A';
     document.getElementById('viewEmploymentStatus').textContent = app.employment_status || 'N/A';
@@ -514,14 +471,12 @@ function viewDetails(appId) {
     document.getElementById('viewBirthPlace').textContent = app.birth_place || 'N/A';
     document.getElementById('viewEducation').textContent = app.education || 'N/A';
 
-    // Contact Information
     document.getElementById('viewTel').textContent = app.contact?.tel || 'N/A';
     document.getElementById('viewMobile').textContent = app.contact?.mobile || 'N/A';
     document.getElementById('viewFax').textContent = app.contact?.fax || 'N/A';
     document.getElementById('viewEmail').textContent = app.contact?.email || 'N/A';
     document.getElementById('viewOtherContact').textContent = app.contact?.other_contact || 'N/A';
 
-    // Work Experience
     const workExpContainer = document.getElementById('viewWorkExperience');
     if (app.work_experience && app.work_experience.length > 0) {
         workExpContainer.innerHTML = app.work_experience.map((exp, index) => `
@@ -540,7 +495,6 @@ function viewDetails(appId) {
         workExpContainer.innerHTML = '<p class="text-white-50">No work experience recorded</p>';
     }
 
-    // Training & Seminars
     const trainingContainer = document.getElementById('viewTrainingSeminars');
     if (app.training_seminars && app.training_seminars.length > 0) {
         trainingContainer.innerHTML = app.training_seminars.map((training, index) => `
@@ -558,7 +512,6 @@ function viewDetails(appId) {
         trainingContainer.innerHTML = '<p class="text-white-50">No training or seminars recorded</p>';
     }
 
-    // Licensure Examinations
     const licensureContainer = document.getElementById('viewLicensureExams');
     if (app.licensure_exams && app.licensure_exams.length > 0) {
         licensureContainer.innerHTML = app.licensure_exams.map((exam, index) => `
@@ -577,7 +530,6 @@ function viewDetails(appId) {
         licensureContainer.innerHTML = '<p class="text-white-50">No licensure examinations recorded</p>';
     }
 
-    // Competency Assessments
     const competencyContainer = document.getElementById('viewCompetencyAssessments');
     if (app.competency_assessments && app.competency_assessments.length > 0) {
         competencyContainer.innerHTML = app.competency_assessments.map((comp, index) => `
@@ -596,13 +548,11 @@ function viewDetails(appId) {
         competencyContainer.innerHTML = '<p class="text-white-50">No competency assessments recorded</p>';
     }
 
-    // Status
     const statusBadge = getStatusBadge(app.status);
     document.getElementById('viewStatus').innerHTML = statusBadge;
     document.getElementById('viewSubmittedAt').textContent = formatDate(app.submitted_at);
     document.getElementById('viewUpdatedAt').textContent = formatDate(app.updated_at);
 
-    // Show modal
     const modal = new bootstrap.Modal(document.getElementById('viewProfileModal'));
     modal.show();
 }
@@ -614,7 +564,6 @@ function editDetails(appId) {
         return;
     }
 
-    // Store original data in flat structure like registration.js
     window.originalApplicationData = {
         reference_number: app.reference_number || '',
         uli: app.uli || '',
@@ -652,33 +601,27 @@ function editDetails(appId) {
         email: app.contact?.email || '',
         other_contact: app.contact?.other_contact || '',
         status: app.status || 'pending',
-        // Add dynamic arrays as JSON strings for comparison
         work_experience: JSON.stringify(app.work_experience || []),
         training_seminars: JSON.stringify(app.training_seminars || []),
         licensure_exams: JSON.stringify(app.licensure_exams || []),
         competency_assessments: JSON.stringify(app.competency_assessments || [])
     };
 
-    // Store application ID
     document.getElementById('editApplicationId').value = appId;
     console.log('Setting edit Application ID to:', appId);
     console.log('Application ID type:', typeof appId);
 
-    // Reference & ULI
     document.getElementById('editReferenceNumber').value = app.reference_number || '';
     document.getElementById('editUli').value = app.uli || '';
 
-    // School Information
     document.getElementById('editSchoolName').value = app.school_name || '';
     document.getElementById('editSchoolAddress').value = app.school_address || '';
 
-    // Assessment Information
     document.getElementById('editAssessmentTitle').value = app.assessment_title || '';
     document.getElementById('editApplicationDate').value = app.application_date || '';
     document.getElementById('editAssessmentType').value = app.assessment_type || '';
     document.getElementById('editClientType').value = app.client_type || '';
 
-    // Personal Information - Name fields
     document.getElementById('editSurname').value = app.name?.surname || '';
     document.getElementById('editFirstName').value = app.name?.first_name || '';
     document.getElementById('editMiddleName').value = app.name?.middle_name || '';
@@ -686,7 +629,6 @@ function editDetails(appId) {
     document.getElementById('editSecondName').value = app.name?.second_name || '';
     document.getElementById('editNameExtension').value = app.name?.name_extension || '';
 
-    // Mailing Address
     const address = app.mailing_address || {};
     document.getElementById('editNumberStreet').value = address.number_street || '';
     document.getElementById('editBarangay').value = address.barangay || '';
@@ -696,11 +638,9 @@ function editDetails(appId) {
     document.getElementById('editRegion').value = address.region || '';
     document.getElementById('editZip').value = address.zip || '';
 
-    // Parent Information
     document.getElementById('editMotherName').value = app.mothers_name || '';
     document.getElementById('editFatherName').value = app.fathers_name || '';
 
-    // Personal Details
     document.getElementById('editSex').value = app.sex || '';
     document.getElementById('editCivilStatus').value = app.civil_status || '';
     document.getElementById('editEmploymentStatus').value = app.employment_status || '';
@@ -709,34 +649,26 @@ function editDetails(appId) {
     document.getElementById('editBirthPlace').value = app.birth_place || '';
     document.getElementById('editEducation').value = app.education || '';
 
-    // Contact Information
     document.getElementById('editTel').value = app.contact?.tel || '';
     document.getElementById('editMobile').value = app.contact?.mobile || '';
     document.getElementById('editFax').value = app.contact?.fax || '';
     document.getElementById('editEmail').value = app.contact?.email || '';
     document.getElementById('editOtherContact').value = app.contact?.other_contact || '';
 
-    // Work Experience
     populateWorkExperience(app.work_experience || []);
 
-    // Training & Seminars
     populateTrainingSeminars(app.training_seminars || []);
 
-    // Licensure Examinations
     populateLicensureExams(app.licensure_exams || []);
 
-    // Competency Assessments
     populateCompetencyAssessments(app.competency_assessments || []);
 
-    // Status
     document.getElementById('editStatus').value = app.status || 'pending';
 
-    // Show modal
     const modal = new bootstrap.Modal(document.getElementById('editDetailsModal'));
     modal.show();
 }
 
-// Helper function to populate work experience
 function populateWorkExperience(workExperiences) {
     const container = document.getElementById('editWorkExperienceContainer');
     container.innerHTML = '';
@@ -788,7 +720,6 @@ function populateWorkExperience(workExperiences) {
     });
 }
 
-// Helper function to populate training seminars
 function populateTrainingSeminars(trainings) {
     const container = document.getElementById('editTrainingSeminarsContainer');
     container.innerHTML = '';
@@ -834,7 +765,6 @@ function populateTrainingSeminars(trainings) {
     });
 }
 
-// Helper function to populate licensure exams
 function populateLicensureExams(exams) {
     const container = document.getElementById('editLicensureExamsContainer');
     container.innerHTML = '';
@@ -886,7 +816,6 @@ function populateLicensureExams(exams) {
     });
 }
 
-// Helper function to populate competency assessments
 function populateCompetencyAssessments(assessments) {
     const container = document.getElementById('editCompetencyAssessmentsContainer');
     container.innerHTML = '';
@@ -938,7 +867,6 @@ function populateCompetencyAssessments(assessments) {
     });
 }
 
-// Functions to remove items
 function removeWorkExperience(index) {
     const item = document.querySelector(`.work-experience-item[data-index="${index}"]`);
     if (item) item.remove();
@@ -959,7 +887,6 @@ function removeCompetencyAssessment(index) {
     if (item) item.remove();
 }
 
-// Functions to add new items
 function addWorkExperience() {
     const container = document.getElementById('editWorkExperienceContainer');
     const index = container.querySelectorAll('.work-experience-item').length;
@@ -1160,7 +1087,6 @@ async function saveEditedApplication() {
         return;
     }
 
-    // Validation - Check required fields
     console.log('Starting validation...');
     const validationErrors = validateRequiredFields();
     console.log('Validation errors:', validationErrors);
@@ -1174,7 +1100,6 @@ async function saveEditedApplication() {
     }
     console.log('Validation passed');
 
-    // Collect updated data
     const updatedData = {
         reference_number: document.getElementById('editReferenceNumber').value,
         uli: document.getElementById('editUli').value,
@@ -1220,7 +1145,6 @@ async function saveEditedApplication() {
         status: document.getElementById('editStatus').value
     };
 
-    // Collect work experience
     const workExperiences = [];
     const workItems = document.querySelectorAll('.work-experience-item');
     workItems.forEach((item, index) => {
@@ -1244,7 +1168,6 @@ async function saveEditedApplication() {
     });
     updatedData.work_experience = workExperiences;
 
-    // Collect training seminars
     const trainingSeminars = [];
     const trainingItems = document.querySelectorAll('.training-seminar-item');
     trainingItems.forEach((item, index) => {
@@ -1266,7 +1189,6 @@ async function saveEditedApplication() {
     });
     updatedData.training_seminars = trainingSeminars;
 
-    // Collect licensure exams
     const licensureExams = [];
     const examItems = document.querySelectorAll('.licensure-exam-item');
     examItems.forEach((item, index) => {
@@ -1290,7 +1212,6 @@ async function saveEditedApplication() {
     });
     updatedData.licensure_exams = licensureExams;
 
-    // Collect competency assessments
     const competencyAssessments = [];
     const compItems = document.querySelectorAll('.competency-assessment-item');
     compItems.forEach((item, index) => {
@@ -1321,7 +1242,6 @@ async function saveEditedApplication() {
         competencyAssessments: competencyAssessments.length
     });
 
-    // Check for changes using simple string comparison like registration.js
     console.log('Starting change detection...');
     if (window.originalApplicationData) {
         console.log('Original data exists, comparing...');
@@ -1362,7 +1282,6 @@ async function saveEditedApplication() {
             email: document.getElementById('editEmail').value.trim(),
             other_contact: document.getElementById('editOtherContact').value.trim(),
             status: document.getElementById('editStatus').value.trim(),
-            // Add dynamic arrays as JSON strings for comparison
             work_experience: JSON.stringify(workExperiences),
             training_seminars: JSON.stringify(trainingSeminars),
             licensure_exams: JSON.stringify(licensureExams),
@@ -1425,15 +1344,12 @@ async function saveEditedApplication() {
         if (result.success) {
             showSuccess('Application updated successfully');
 
-            // Close modal properly to avoid aria-hidden warning
             const modal = bootstrap.Modal.getInstance(document.getElementById('editDetailsModal'));
             if (modal) {
-                // Remove focus from save button before hiding modal
                 document.getElementById('saveEditBtn').blur();
                 modal.hide();
             }
 
-            // Reload applications
             await loadApplications();
         } else {
             console.error('Server error:', result);
@@ -1452,16 +1368,13 @@ function deleteApplication(appId) {
         return;
     }
 
-    // Store application ID for deletion
     document.getElementById('deleteApplicationId').value = appId;
 
-    // Show application details in delete modal
     document.getElementById('deleteFullName').textContent = getFullName(app);
     document.getElementById('deleteTraineeId').textContent = app.userData?.trainee_id || 'N/A';
     document.getElementById('deleteCourse').textContent = app.assessment_title || 'N/A';
     document.getElementById('deleteApplicationDate').textContent = formatDate(app.application_date || app.submitted_at);
 
-    // Show modal
     const modal = new bootstrap.Modal(document.getElementById('deleteModal'));
     modal.show();
 }
@@ -1488,14 +1401,11 @@ async function confirmDeleteApplication() {
         if (result.success) {
             showSuccess('Application deleted successfully');
 
-            // Close modal
             const modal = bootstrap.Modal.getInstance(document.getElementById('deleteModal'));
             modal.hide();
 
-            // Clear confirmation text
             document.getElementById('deleteConfirmText').value = '';
 
-            // Reload applications
             await loadApplications();
         } else {
             showError('Failed to delete application: ' + result.message);
@@ -1533,7 +1443,6 @@ function applyFilters() {
 
     renderApplicationsTable(filtered);
 
-    // Highlight search results if search term exists
     if (searchTerm) {
         setTimeout(() => {
             clearAllHighlights();
@@ -1631,7 +1540,6 @@ function filterApplicationsByDate(dateString) {
     applyFilters();
 }
 
-
 function showSuccess(message) {
     showToast(message, 'success');
 }
@@ -1666,7 +1574,6 @@ function showToast(message, type = 'success') {
     }, 5000);
 }
 
-// Enhanced toast notification functions
 function showInfo(message) {
     showToast(message, 'info');
 }
@@ -1675,7 +1582,6 @@ function showWarning(message) {
     showToast(message, 'warning');
 }
 
-// Validation function for required fields
 function validateRequiredFields() {
     const errors = [];
     const requiredFields = [
@@ -1697,7 +1603,6 @@ function validateRequiredFields() {
         }
     });
 
-    // Email validation
     const emailField = document.getElementById('editEmail');
     if (emailField && emailField.value.trim()) {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -1706,7 +1611,6 @@ function validateRequiredFields() {
         }
     }
 
-    // Mobile validation (basic format)
     const mobileField = document.getElementById('editMobile');
     if (mobileField && mobileField.value.trim()) {
         const mobileRegex = /^09\d{9}$/;
@@ -1718,14 +1622,11 @@ function validateRequiredFields() {
     return errors;
 }
 
-// Function to highlight invalid fields
 function highlightInvalidFields(fieldNames) {
-    // Remove previous highlights
     document.querySelectorAll('.is-invalid').forEach(field => {
         field.classList.remove('is-invalid');
     });
 
-    // Map field names to field IDs
     const fieldMap = {
         'Surname': 'editSurname',
         'First Name': 'editFirstName',
@@ -1746,7 +1647,6 @@ function highlightInvalidFields(fieldNames) {
             const field = document.getElementById(fieldId);
             if (field) {
                 field.classList.add('is-invalid');
-                // Scroll to first invalid field
                 if (fieldNames[0] === fieldName) {
                     field.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     field.focus();
@@ -1755,7 +1655,6 @@ function highlightInvalidFields(fieldNames) {
         }
     });
 
-    // Remove highlights after 5 seconds
     setTimeout(() => {
         document.querySelectorAll('.is-invalid').forEach(field => {
             field.classList.remove('is-invalid');
@@ -1763,24 +1662,18 @@ function highlightInvalidFields(fieldNames) {
     }, 5000);
 }
 
-
-
-// Export CSV functionality
 document.getElementById('exportCsvBtn')?.addEventListener('click', function () {
     exportToCSV();
 });
 
-// Export JSON functionality
 document.getElementById('exportJsonBtn')?.addEventListener('click', function () {
     exportToJSON();
 });
 
-// Add Application Button
 document.getElementById('addApplicationBtn')?.addEventListener('click', function () {
     const modal = new bootstrap.Modal(document.getElementById('addApplicationModal'));
     modal.show();
 
-    // Add event listeners to remove error highlighting when user starts typing
     setTimeout(() => {
         const addModalFields = document.querySelectorAll('#addApplicationModal input, #addApplicationModal select, #addApplicationModal textarea');
         addModalFields.forEach(field => {
@@ -1798,7 +1691,6 @@ document.getElementById('addApplicationBtn')?.addEventListener('click', function
     }, 100);
 });
 
-// Save Application Button
 document.getElementById('saveApplicationBtn')?.addEventListener('click', async function () {
     await saveNewApplication();
 });
@@ -1862,10 +1754,8 @@ function exportToJSON() {
 
 async function saveNewApplication() {
     try {
-        // Initialize errors array first
         const errors = [];
 
-        // Validate required fields
         const requiredFields = [
             { id: 'addNumberStreet', name: 'Number & Street' },
             { id: 'addBarangay', name: 'Barangay' },
@@ -1889,7 +1779,6 @@ async function saveNewApplication() {
             { id: 'addEmail', name: 'Email' }
         ];
 
-        // Check text/select fields
         requiredFields.forEach(field => {
             const element = document.getElementById(field.id);
             if (!element) {
@@ -1900,7 +1789,6 @@ async function saveNewApplication() {
             }
         });
 
-        // Check for radio button required fields
         const sexChecked = document.querySelector('input[name="addSex"]:checked');
         const civilStatusChecked = document.querySelector('input[name="addCivilStatus"]:checked');
         const employmentStatusChecked = document.querySelector('input[name="addEmploymentStatus"]:checked');
@@ -1921,7 +1809,6 @@ async function saveNewApplication() {
             return;
         }
 
-        // Email validation
         const email = document.getElementById('addEmail').value;
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
@@ -1930,7 +1817,6 @@ async function saveNewApplication() {
             return;
         }
 
-        // Mobile validation (basic format)
         const mobile = document.getElementById('addMobile').value.trim().replace(/[^0-9]/g, '');
         const mobileRegex = /^09\d{9}$/;
         if (!mobileRegex.test(mobile)) {
@@ -1939,7 +1825,6 @@ async function saveNewApplication() {
             return;
         }
 
-        // Optional: Check for duplicate trainee_id (only if provided)
         const traineeId = document.getElementById('addTraineeId').value.trim();
         if (traineeId) {
             const duplicateTrainee = allApplications.find(app =>
@@ -1953,7 +1838,6 @@ async function saveNewApplication() {
             }
         }
 
-        // Optional: Check for duplicate reference number (only if provided)
         const referenceNumber = document.getElementById('addReferenceNumber').value.trim();
         if (referenceNumber) {
             const duplicateReference = allApplications.find(app =>
@@ -1967,7 +1851,6 @@ async function saveNewApplication() {
             }
         }
 
-        // Collect form data
         const formData = {
             trainee_id: traineeId,
             reference_number: referenceNumber,
@@ -2015,7 +1898,6 @@ async function saveNewApplication() {
             submitted_at: new Date().toISOString()
         };
 
-        // Collect work experience
         const workExperiences = [];
         document.querySelectorAll('#addWorkExperienceContainer .work-experience-item').forEach(item => {
             const company = item.querySelector('.work-company')?.value || '';
@@ -2038,7 +1920,6 @@ async function saveNewApplication() {
         });
         formData.work_experience = workExperiences;
 
-        // Collect training seminars
         const trainingSeminars = [];
         document.querySelectorAll('#addTrainingSeminarContainer .training-seminar-item').forEach(item => {
             const title = item.querySelector('.training-title')?.value || '';
@@ -2059,7 +1940,6 @@ async function saveNewApplication() {
         });
         formData.training_seminars = trainingSeminars;
 
-        // Collect licensure exams
         const licensureExams = [];
         document.querySelectorAll('#addLicensureExamContainer .licensure-exam-item').forEach(item => {
             const title = item.querySelector('.licensure-title')?.value || '';
@@ -2082,7 +1962,6 @@ async function saveNewApplication() {
         });
         formData.licensure_exams = licensureExams;
 
-        // Collect competency assessments
         const competencyAssessments = [];
         document.querySelectorAll('#addCompetencyAssessmentContainer .competency-assessment-item').forEach(item => {
             const title = item.querySelector('.competency-title')?.value || '';
@@ -2105,7 +1984,6 @@ async function saveNewApplication() {
         });
         formData.competency_assessments = competencyAssessments;
 
-        // Handle file uploads (picture and signature)
         const pictureFile = document.getElementById('addPicture')?.files[0];
         const signatureFile = document.getElementById('addSignature')?.files[0];
 
@@ -2117,7 +1995,6 @@ async function saveNewApplication() {
             formData.signature = await fileToBase64(signatureFile);
         }
 
-        // Send to API
         const response = await fetch(`${config.api.baseUrl}/api/v1/applications`, {
             method: 'POST',
             headers: {
@@ -2131,14 +2008,11 @@ async function saveNewApplication() {
         if (result.success) {
             showSuccess('Application added successfully');
 
-            // Close modal
             const modal = bootstrap.Modal.getInstance(document.getElementById('addApplicationModal'));
             modal.hide();
 
-            // Reset form
             document.getElementById('addApplicationForm').reset();
 
-            // Reload applications
             await loadApplications();
         } else {
             showError('Failed to add application: ' + (result.message || 'Unknown error'));
@@ -2158,14 +2032,11 @@ function fileToBase64(file) {
     });
 }
 
-// Function to highlight invalid fields in Add Application modal
 function highlightInvalidAddFields(fieldNames) {
-    // Remove previous highlights
     document.querySelectorAll('#addApplicationModal .is-invalid').forEach(field => {
         field.classList.remove('is-invalid');
     });
 
-    // Map field names to field IDs
     const fieldMap = {
         'Trainee ID': 'addTraineeId',
         'Reference Number': 'addReferenceNumber',
@@ -2198,7 +2069,6 @@ function highlightInvalidAddFields(fieldNames) {
             const field = document.getElementById(fieldId);
             if (field) {
                 field.classList.add('is-invalid');
-                // Scroll to first invalid field
                 if (fieldNames[0] === fieldName) {
                     field.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     field.focus();
@@ -2207,11 +2077,8 @@ function highlightInvalidAddFields(fieldNames) {
         }
     });
 
-    // Don't remove highlights automatically - user must fix the fields
 }
 
-
-// Dynamic array functions for Add Modal
 function addWorkExperienceToAddModal() {
     const container = document.getElementById('addWorkExperienceContainer');
     const count = container.querySelectorAll('.work-experience-item').length + 1;

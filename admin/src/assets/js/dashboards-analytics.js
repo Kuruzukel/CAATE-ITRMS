@@ -465,7 +465,6 @@
 
   function initOrderStatisticsChart() {
 
-
     return;
   }
 

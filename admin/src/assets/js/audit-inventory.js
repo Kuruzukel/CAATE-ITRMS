@@ -9,7 +9,6 @@ let inventoryData = [];
 
 document.addEventListener('DOMContentLoaded', function () {
 
-
     loadInventoryData();
 
     const modals = ['addInventoryModal', 'editEquipmentModal', 'viewEquipmentModal', 'deleteEquipmentModal'];
@@ -205,7 +204,6 @@ function highlightSearchResults(searchTerm) {
         firstMatch.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 }
-
 
 async function loadInventoryData() {
 

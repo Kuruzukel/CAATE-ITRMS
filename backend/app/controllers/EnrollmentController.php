@@ -18,7 +18,6 @@ class EnrollmentController {
             $coursesCollection = $db->courses;
             $traineesCollection = $db->trainees;
             
-            // Get recent enrollments sorted by enrollment_date descending
             $enrollments = $enrollmentsCollection->find(
                 [],
                 [
@@ -33,23 +32,19 @@ class EnrollmentController {
                 $courseId = $enrollment['course_id'] ?? '';
                 $traineeId = $enrollment['trainee_id'] ?? '';
                 
-                // Get course details
                 $course = null;
                 if ($courseId) {
                     try {
                         $course = $coursesCollection->findOne(['_id' => new MongoDB\BSON\ObjectId($courseId)]);
                     } catch (Exception $e) {
-                        // Invalid course ID
                     }
                 }
                 
-                // Get trainee details
                 $trainee = null;
                 if ($traineeId) {
                     try {
                         $trainee = $traineesCollection->findOne(['_id' => new MongoDB\BSON\ObjectId($traineeId)]);
                     } catch (Exception $e) {
-                        // Invalid trainee ID
                     }
                 }
                 

@@ -14,14 +14,12 @@ class RegistrationController
         header('Access-Control-Allow-Methods: POST, OPTIONS');
         header('Access-Control-Allow-Headers: Content-Type, Authorization');
 
-        // Handle preflight OPTIONS request
         if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
             http_response_code(200);
             exit();
         }
 
         try {
-            // Get JSON input
             $input = json_decode(file_get_contents('php://input'), true);
 
             if (!$input) {
@@ -33,7 +31,6 @@ class RegistrationController
                 return;
             }
 
-            // Validate required fields
             $requiredFields = ['firstName', 'lastName', 'sex', 'civilStatus'];
             $missingFields = [];
 
@@ -52,10 +49,8 @@ class RegistrationController
                 return;
             }
 
-            // Get MongoDB connection
             $db = getMongoConnection();
 
-            // Get trainee information from userId if provided
             $traineeId = null;
             $traineeFullName = null;
 
@@ -71,12 +66,10 @@ class RegistrationController
                         );
                     }
                 } catch (Exception $e) {
-                    // If user lookup fails, continue without trainee info
                     error_log('Failed to lookup trainee: ' . $e->getMessage());
                 }
             }
 
-            // Prepare registration data
             $registrationData = [
                 'userId' => $input['userId'] ?? null,
                 'traineeId' => $traineeId,
@@ -123,7 +116,6 @@ class RegistrationController
                 'updatedAt' => new MongoDB\BSON\UTCDateTime()
             ];
 
-            // Insert into registrations collection
             $result = $db->registrations->insertOne($registrationData);
 
             if ($result->getInsertedCount() > 0) {
@@ -155,20 +147,17 @@ class RegistrationController
         try {
             $db = getMongoConnection();
 
-            // Get query parameters
             $page = intval($_GET['page'] ?? 1);
             $limit = intval($_GET['limit'] ?? 10);
             $status = $_GET['status'] ?? null;
 
             $skip = ($page - 1) * $limit;
 
-            // Build filter
             $filter = [];
             if ($status) {
                 $filter['status'] = $status;
             }
 
-            // Get registrations with pagination
             $registrations = $db->registrations->find(
                 $filter,
                 [
@@ -178,7 +167,6 @@ class RegistrationController
                 ]
             )->toArray();
 
-            // Get total count
             $total = $db->registrations->countDocuments($filter);
 
             echo json_encode([
@@ -244,7 +232,6 @@ class RegistrationController
         header('Access-Control-Allow-Methods: PUT, OPTIONS');
         header('Access-Control-Allow-Headers: Content-Type, Authorization');
 
-        // Handle preflight OPTIONS request
         if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
             http_response_code(200);
             exit();
@@ -264,7 +251,6 @@ class RegistrationController
 
             $db = getMongoConnection();
 
-            // Add updated timestamp
             $input['updatedAt'] = new MongoDB\BSON\UTCDateTime();
 
             $result = $db->registrations->updateOne(

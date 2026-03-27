@@ -1,4 +1,4 @@
-/* Class Roster specific styles */
+
 
 .course-card {
     cursor: pointer;
@@ -75,7 +75,6 @@
     margin-bottom: 1rem;
 }
 
-/* Badge styling copied from bg-success */
 .badge-present {
     display: inline-block;
     padding: 0.52em 0.593em;
@@ -91,12 +90,10 @@
     background-color: #10b981 !important;
 }
 
-/* Present status - using success green color */
 .badge-present[style*="background-color: #3691bf"] {
     background-color: #10b981 !important;
 }
 
-/* Absent status - using danger red color */
 .badge-present[style*="background-color: #ef4444"] {
     background-color: rgba(255, 62, 29, 1) !important;
 }
@@ -112,7 +109,6 @@
     color: white !important;
 }
 
-/* Custom Scrollbar Styling - Matching Admin Dashboard */
 #studentsList::-webkit-scrollbar {
     width: 12px;
     height: 12px;
@@ -151,20 +147,17 @@
         inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
-/* Firefox Scrollbar */
 #studentsList {
     scrollbar-width: thin;
     scrollbar-color: rgba(54, 145, 191, 0.9) rgba(15, 41, 66, 0.2);
 }
 
-/* Danger badge styling for Absent status */
 .badge.bg-danger {
     --bs-bg-opacity: 1;
     background-color: rgba(255, 62, 29, var(--bs-bg-opacity)) !important;
     color: #fff;
 }
 
-/* Success badge styling for Present status */
 .badge.bg-success {
     --bs-bg-opacity: 1;
     background-color: #10b981 !important;

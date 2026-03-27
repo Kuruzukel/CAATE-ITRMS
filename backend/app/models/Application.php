@@ -23,10 +23,8 @@ class Application {
         try {
             $db = getMongoConnection();
             
-            // First, try to convert string user_ids to ObjectIds
             $this->convertUserIdsToObjectIds();
             
-            // Aggregate to join with trainees collection (not users)
             $pipeline = [
                 [
                     '$addFields' => [
@@ -78,7 +76,6 @@ class Application {
             $cursor = $this->collection->aggregate($pipeline);
             $results = iterator_to_array($cursor);
             
-            // Debug log
             error_log("getAllWithUserData: Found " . count($results) . " applications");
             if (count($results) > 0) {
                 error_log("First application user_id: " . json_encode($results[0]['user_id'] ?? 'null'));
@@ -94,7 +91,6 @@ class Application {
     
     private function convertUserIdsToObjectIds() {
         try {
-            // Find all applications with string user_ids and convert them
             $applications = $this->collection->find([
                 'user_id' => ['$type' => 'string']
             ]);
@@ -130,14 +126,11 @@ class Application {
     }
     
     public function create($data) {
-        // Add timestamps
         $data['created_at'] = new MongoDB\BSON\UTCDateTime();
         $data['updated_at'] = new MongoDB\BSON\UTCDateTime();
         
-        // Set default status
         $data['status'] = $data['status'] ?? 'pending';
         
-        // Insert the document
         $result = $this->collection->insertOne($data);
         return (string)$result->getInsertedId();
     }

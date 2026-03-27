@@ -59,12 +59,10 @@ class AppointmentController {
                 return;
             }
             
-            // Add default status if not provided
             if (!isset($data['status'])) {
                 $data['status'] = 'Pending';
             }
             
-            // Add timestamp
             $data['createdAt'] = new MongoDB\BSON\UTCDateTime();
             $data['updatedAt'] = new MongoDB\BSON\UTCDateTime();
             
@@ -99,7 +97,6 @@ class AppointmentController {
                 return;
             }
             
-            // Update timestamp
             $data['updatedAt'] = new MongoDB\BSON\UTCDateTime();
             
             $appointmentModel = new Appointment();

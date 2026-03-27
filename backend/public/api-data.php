@@ -10,7 +10,6 @@ require_once __DIR__ . '/../app/config/database.php';
 try {
     $db = getMongoConnection();
     
-    // Get collection parameter
     $collection = isset($_GET['collection']) ? $_GET['collection'] : 'all';
     
     $response = [];
@@ -119,7 +118,6 @@ try {
         }, $graduates);
     }
     
-    // Add statistics
     $response['statistics'] = [
         'total_users' => $db->users->countDocuments(),
         'total_trainees' => $db->trainees->countDocuments(),

@@ -873,7 +873,6 @@ async function saveAppointmentChanges() {
         return;
     }
 
-
     const missingFields = [];
     if (!updatedData.firstName) missingFields.push('First Name');
     if (!updatedData.email) missingFields.push('Email');
@@ -1062,7 +1061,6 @@ function updateRowWithNewData(row, data) {
     row.setAttribute('data-appointment', JSON.stringify(appointmentData));
 }
 
-
 const allTimeSlots = [
     { value: '09:00', text: '09:00 AM' },
     { value: '10:00', text: '10:00 AM' },
@@ -1244,7 +1242,6 @@ async function updateAvailableTimeSlotsForEdit() {
         showToast('Error loading available time slots', 'error');
     }
 }
-
 
 async function handleSaveNewAppointment() {
     const btn = document.getElementById('saveNewAppointmentBtn');

@@ -1,6 +1,5 @@
-/* Registration Form Specific Styles */
 
-/* Layout Overlay for Modal */
+
 .layout-overlay {
     position: fixed;
     top: 0;
@@ -24,7 +23,6 @@
     pointer-events: auto;
 }
 
-/* Ensure modal appears above overlay */
 .modal {
     z-index: 1100 !important;
 }
@@ -33,18 +31,15 @@
     z-index: 1101 !important;
 }
 
-/* Remove Bootstrap modal backdrop */
 .modal-backdrop {
     display: none !important;
 }
 
-/* Radio Groups - Set gap to 0rem for vertical layout */
 .radio-group.vertical {
     flex-direction: column;
     gap: 0rem;
 }
 
-/* ULI Input Section - Match Application Form Style */
 .uli-inputs {
     display: flex;
     gap: 5px;
@@ -75,28 +70,23 @@
     outline: none !important;
 }
 
-/* ULI Color Groups - Match Application Form */
-/* First 3 boxes - light blue */
 .uli-input:nth-child(1),
 .uli-input:nth-child(2),
 .uli-input:nth-child(3) {
     background-color: #d4e8ff !important;
 }
 
-/* Next 2 boxes - light pink */
 .uli-input:nth-child(5),
 .uli-input:nth-child(6) {
     background-color: #ffe0e0 !important;
 }
 
-/* Next 3 boxes - light green */
 .uli-input:nth-child(8),
 .uli-input:nth-child(9),
 .uli-input:nth-child(10) {
     background-color: #e0f0c8 !important;
 }
 
-/* Next 5 boxes - light peach */
 .uli-input:nth-child(12),
 .uli-input:nth-child(13),
 .uli-input:nth-child(14),
@@ -105,7 +95,6 @@
     background-color: #ffe8c8 !important;
 }
 
-/* Last 3 boxes - light purple */
 .uli-input:nth-child(18),
 .uli-input:nth-child(19),
 .uli-input:nth-child(20) {
@@ -119,26 +108,22 @@
     padding: 0 5px;
 }
 
-/* Radio button error styling - bright red for required fields (RADIO ONLY) */
 input[type="radio"].radio-required-error {
     border: 2px solid #dc3545 !important;
     box-shadow: 0 0 0 0.3rem rgba(220, 53, 69, 0.4) !important;
 }
 
-/* Override default radio button styling when in error state */
 .radio-label input[type="radio"].radio-required-error,
 input[type="radio"].radio-required-error {
     border: 2px solid #dc3545 !important;
 }
 
-/* Checkbox error styling (separate, lighter styling) */
 input[type="checkbox"].radio-required-error {
     border-color: #dc3545 !important;
     border-width: 2px !important;
     box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
 }
 
-/* Force circular radio buttons - most aggressive approach */
 .radio-label input[type="radio"],
 input[type="radio"] {
     -webkit-appearance: none !important;
@@ -178,7 +163,6 @@ input[type="radio"]:checked::before {
     display: block !important;
 }
 
-/* Checkbox styling for registration form */
 .radio-label input[type="checkbox"] {
     width: 16px;
     height: 16px;
@@ -201,7 +185,7 @@ input[type="radio"]:checked::before {
 }
 
 .radio-label input[type="checkbox"]:checked::before {
-    content: '✓';
+    content: 'âœ“';
     position: absolute;
     top: 50%;
     left: 50%;
@@ -222,7 +206,6 @@ input[type="radio"]:checked::before {
     box-shadow: 0 0 0 3px rgba(54, 145, 191, 0.2);
 }
 
-/* Radio Groups */
 .radio-group {
     display: flex;
     gap: 1.5rem;
@@ -256,7 +239,6 @@ input[type="radio"]:checked::before {
     overflow-wrap: break-word;
 }
 
-/* Responsive radio label layout */
 @media (max-width: 992px) {
     .radio-label {
         flex-direction: row;
@@ -278,7 +260,6 @@ input[type="radio"]:checked::before {
     color: #3691bf;
 }
 
-/* Remove search icons from form input fields */
 input[type="text"]::-webkit-search-decoration,
 input[type="text"]::-webkit-search-cancel-button,
 input[type="text"]::-webkit-search-results-button,
@@ -287,7 +268,6 @@ input[type="text"]::-webkit-search-results-decoration {
     display: none;
 }
 
-/* Ensure no background images (search icons) on form inputs */
 input[type="text"].form-control,
 input[type="email"].form-control,
 input[type="tel"].form-control {
@@ -297,7 +277,6 @@ input[type="tel"].form-control {
     padding-left: 0.75rem !important;
 }
 
-/* Force remove any search styling from registration form inputs */
 input[type="text"] {
     -webkit-appearance: none !important;
     -moz-appearance: none !important;
@@ -309,7 +288,6 @@ input[type="text"] {
     padding-left: 0.75rem !important;
 }
 
-/* Signature boxes */
 .signature-box {
     min-height: 60px;
     display: flex;
@@ -317,20 +295,17 @@ input[type="text"] {
     padding: 10px 0;
 }
 
-/* Privacy consent text styling */
 .card-body p em {
     color: #2c3e50;
     font-weight: 500;
 }
 
-/* Disability section styling */
 .card-header h4 em {
     color: #6c757d;
     font-size: 0.85rem;
     font-weight: 400;
 }
 
-/* Others input field styling */
 .radio-label input[type="text"],
 .radio-label input[type="text"].form-control {
     margin-left: 10px;
@@ -344,7 +319,6 @@ input[type="text"] {
     box-sizing: border-box;
 }
 
-/* Responsive adjustments for registration form */
 @media (max-width: 992px) {
 
     .radio-label input[type="text"],
@@ -370,7 +344,7 @@ input[type="text"] {
         min-height: 40px;
     }
 
-    /* Keep ULI inputs in one line even on mobile */
+    
     .uli-inputs {
         flex-wrap: nowrap;
         overflow-x: auto;
@@ -391,7 +365,6 @@ input[type="text"] {
     }
 }
 
-/* Force dark blue color for all ULI inputs in registration form - Most specific selectors */
 .uli-inputs .uli-input.form-control,
 .uli-inputs input.uli-input,
 .uli-inputs input[type="text"],
@@ -402,12 +375,10 @@ input.form-control.uli-input {
     color: #0f2942 !important;
 }
 
-/* Override any Bootstrap or other framework styles for registration form */
 .card .uli-inputs input {
     color: #0f2942 !important;
 }
 
-/* Remove blue background on focus for ULI inputs in registration form */
 .uli-inputs .uli-input:focus,
 .uli-inputs input.uli-input:focus,
 .uli-inputs input.form-control:focus,
@@ -417,7 +388,6 @@ input.uli-input.form-control:focus {
     color: #0f2942 !important;
 }
 
-/* Error validation styles for required fields - Enhanced */
 .form-control.is-invalid,
 input.is-invalid,
 textarea.is-invalid,
@@ -435,15 +405,11 @@ select.is-invalid {
     font-weight: 500;
 }
 
-/* Required field asterisk styling */
 .text-danger {
     color: #dc3545 !important;
     font-weight: bold;
 }
 
-/* Required field asterisk styling - REMOVED */
-
-/* Enhanced required field styling */
 input[required],
 textarea[required],
 select[required] {
@@ -457,13 +423,11 @@ select[required]:focus {
     box-shadow: 0 0 0 0.2rem rgba(54, 145, 191, 0.25);
 }
 
-/* Birth information section highlighting */
 .birth-info-section .form-control:focus {
     border-color: #3691bf !important;
     box-shadow: 0 0 0 0.2rem rgba(54, 145, 191, 0.25) !important;
 }
 
-/* Error state for number inputs */
 input[type="number"].is-invalid {
     border-color: #dc3545 !important;
     background-image: none !important;
@@ -474,7 +438,6 @@ input[type="number"].is-invalid:focus {
     box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
 }
 
-/* Success state for validated fields */
 .form-control.is-valid {
     border-color: #28a745 !important;
     box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25) !important;
@@ -489,7 +452,6 @@ input[type="number"].is-invalid:focus {
     font-weight: 500;
 }
 
-/* Radio group error styling */
 .radio-group-error {
     display: block !important;
     width: 100%;
@@ -503,42 +465,35 @@ input[type="number"].is-invalid:focus {
     padding: 0.5rem;
 }
 
-/* Radio button error state */
 input[type="radio"].is-invalid,
 input[type="checkbox"].is-invalid {
     border-color: #dc3545 !important;
     box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
 }
 
-/* Radio label error state */
 .radio-label:has(input.is-invalid) {
     color: #dc3545 !important;
     font-weight: 600;
 }
 
-/* Employment type section styling */
 .mt-3 {
     transition: opacity 0.3s ease, pointer-events 0.3s ease;
 }
 
-/* Section headers with required asterisks */
 .card-header h4 .text-danger {
     font-size: 1rem;
     margin-left: 0.25rem;
 }
 
-/* Enhanced error visibility for radio groups - removed red border */
 .card-body:has(.radio-group-error) {
     background-color: rgba(220, 53, 69, 0.05);
 }
 
-/* Validation success state for radio groups */
 .radio-group.validated {
     border-left: 4px solid #28a745;
     padding-left: 1rem;
 }
 
-/* Confirmation Modal Styling - Match Admin Calendar Modal */
 #confirmationModal .modal-content {
     background-color: #0f2942 !important;
     background: linear-gradient(135deg, #0f2942 0%, #0a1f33 100%) !important;

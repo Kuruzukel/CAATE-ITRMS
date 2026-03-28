@@ -1661,6 +1661,9 @@ function validateRequiredFields() {
         { id: 'editCity', name: 'City/Municipality' },
         { id: 'editProvince', name: 'Province' },
         { id: 'editRegion', name: 'Region' },
+        { id: 'editSex', name: 'Sex' },
+        { id: 'editCivilStatus', name: 'Civil Status' },
+        { id: 'editEmploymentStatus', name: 'Employment Status' },
         { id: 'editMobile', name: 'Mobile' },
         { id: 'editEmail', name: 'Email' }
     ];

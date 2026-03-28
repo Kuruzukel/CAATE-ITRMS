@@ -1083,16 +1083,19 @@
                 </div>
                 <div class="modal-body" style="max-height: 75vh; overflow-y: auto;">
 
-                    
                     <h6 class="mb-3"><i class="bx bx-id-card me-2"></i>Reference & Identification</h6>
                     <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label text-white">Reference Number</label>
-                            <p class="form-control-plaintext text-white" id="viewReferenceNumber">-</p>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label text-white">Trainee ID</label>
+                            <input type="text" id="viewTraineeId" class="form-control" readonly>
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label text-white">Reference Number</label>
+                            <input type="text" id="viewReferenceNumber" class="form-control" readonly>
+                        </div>
+                        <div class="col-md-4 mb-3">
                             <label class="form-label text-white">ULI</label>
-                            <p class="form-control-plaintext text-white" id="viewUli">-</p>
+                            <input type="text" id="viewUli" class="form-control" readonly>
                         </div>
                     </div>
 
@@ -1361,12 +1364,17 @@
                         
                         <h6 class="mb-3"><i class="bx bx-id-card me-2"></i>Reference & Identification</h6>
                         <div class="row">
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-4 mb-3">
+                                <label for="editTraineeId" class="form-label text-white">Trainee ID</label>
+                                <input type="text" id="editTraineeId" name="traineeId" class="form-control"
+                                    placeholder="Enter trainee ID">
+                            </div>
+                            <div class="col-md-4 mb-3">
                                 <label for="editReferenceNumber" class="form-label text-white">Reference Number</label>
                                 <input type="text" id="editReferenceNumber" name="referenceNumber" class="form-control"
                                     placeholder="Enter reference number">
                             </div>
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-4 mb-3">
                                 <label for="editUli" class="form-label text-white">ULI</label>
                                 <input type="text" id="editUli" name="uli" class="form-control" placeholder="Enter ULI">
                             </div>

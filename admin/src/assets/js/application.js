@@ -588,8 +588,9 @@ function viewDetails(appId) {
     }
     const data = getNormalizedApplicationData(app);
 
-    document.getElementById('viewReferenceNumber').textContent = data.referenceNumber || 'N/A';
-    document.getElementById('viewUli').textContent = data.uli || 'N/A';
+    document.getElementById('viewTraineeId').value = data.traineeId || 'N/A';
+    document.getElementById('viewReferenceNumber').value = data.referenceNumber || 'N/A';
+    document.getElementById('viewUli').value = data.uli || 'N/A';
 
     const pictureImg = document.getElementById('viewPicture');
     const noPictureText = document.getElementById('viewNoPicture');
@@ -791,6 +792,7 @@ function getApplicationContactData(app) {
 
 function getNormalizedApplicationData(app) {
     return {
+        traineeId: getApplicationValue(app, ['trainee_id', 'traineeId'], getNestedApplicationValue(app?.userData || {}, ['trainee_id'])),
         referenceNumber: getApplicationValue(app, ['reference_number', 'referenceNumber']),
         uli: getApplicationValue(app, ['uli']),
         schoolName: getApplicationValue(app, ['school_name', 'schoolName']),
@@ -811,10 +813,10 @@ function getNormalizedApplicationData(app) {
         status: getApplicationValue(app, ['status'], 'pending'),
         submittedAt: getApplicationValue(app, ['submitted_at', 'submittedAt']),
         updatedAt: getApplicationValue(app, ['updated_at', 'updatedAt']),
-        workExperience: normalizeApplicationCollection(app.work_experience),
-        trainingSeminars: normalizeApplicationCollection(app.training_seminars),
-        licensureExams: normalizeApplicationCollection(app.licensure_exams),
-        competencyAssessments: normalizeApplicationCollection(app.competency_assessments),
+        workExperience: normalizeApplicationCollection(getApplicationValue(app, ['work_experience', 'workExperience'], [])),
+        trainingSeminars: normalizeApplicationCollection(getApplicationValue(app, ['training_seminars', 'trainingSeminars'], [])),
+        licensureExams: normalizeApplicationCollection(getApplicationValue(app, ['licensure_exams', 'licensureExams'], [])),
+        competencyAssessments: normalizeApplicationCollection(getApplicationValue(app, ['competency_assessments', 'competencyAssessments'], [])),
         name: getApplicationNameData(app),
         address: getApplicationAddressData(app),
         contact: getApplicationContactData(app)
@@ -848,6 +850,7 @@ function editDetails(appId) {
 
     window.originalApplicationData = {
         reference_number: data.referenceNumber || '',
+        trainee_id: data.traineeId || '',
         uli: data.uli || '',
         school_name: data.schoolName || '',
         school_address: data.schoolAddress || '',
@@ -893,6 +896,7 @@ function editDetails(appId) {
     console.log('Setting edit Application ID to:', appId);
     console.log('Application ID type:', typeof appId);
 
+    document.getElementById('editTraineeId').value = data.traineeId || '';
     document.getElementById('editReferenceNumber').value = data.referenceNumber || '';
     document.getElementById('editUli').value = data.uli || '';
 
@@ -1390,6 +1394,7 @@ async function saveEditedApplication() {
     console.log('Validation passed');
 
     const updatedData = {
+        trainee_id: document.getElementById('editTraineeId').value,
         reference_number: document.getElementById('editReferenceNumber').value,
         uli: document.getElementById('editUli').value,
         school_name: document.getElementById('editSchoolName').value,

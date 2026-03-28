@@ -426,8 +426,7 @@ function validateApplicationForm() {
         { id: 'zip', label: 'Zip' },
         { id: 'mothersName', label: "Mother's Name" },
         { id: 'fathersName', label: "Father's Name" },
-        { id: 'birthPlace', label: 'Birth Place' },
-        { id: 'age', label: 'Age' }
+        { id: 'birthPlace', label: 'Birth Place' }
     ];
 
     requiredFields.forEach(field => {

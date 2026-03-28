@@ -55,6 +55,19 @@ async function loadCoursesForDropdown() {
     }
 }
 
+function ensureToastContainer() {
+    let container = document.getElementById('toastContainer');
+
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'toastContainer';
+        document.body.appendChild(container);
+    }
+
+    container.classList.add('toast-container');
+    return container;
+}
+
 document.getElementById('picture').addEventListener('change', function (e) {
     const file = e.target.files[0];
     if (file) {
@@ -405,7 +418,7 @@ function validateApplicationForm() {
         { id: 'email', label: 'Email Address' },
         { id: 'birthDate', label: 'Birth Date' },
         { id: 'firstName', label: 'First Name' },
-        { id: 'numberStreet', label: 'Number Street' },
+        { id: 'mailingNumber', label: 'Number Street' },
         { id: 'barangay', label: 'Barangay' },
         { id: 'district', label: 'District' },
         { id: 'city', label: 'City' },
@@ -446,6 +459,10 @@ function validateApplicationForm() {
     });
 
     if (!isValid) {
+        const firstInvalidField = form.querySelector('.is-invalid');
+        if (firstInvalidField) {
+            firstInvalidField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
         showToast('Please complete all required fields.', 'error');
         return false;
     }
@@ -710,8 +727,7 @@ function confirmPrintApplication() {
 }
 
 function showToast(message, type = 'success') {
-    const container = document.getElementById('toastContainer');
-    if (!container) return;
+    const container = ensureToastContainer();
 
     const toast = document.createElement('div');
     toast.className = `toast-notification ${type}`;
@@ -736,6 +752,9 @@ function showToast(message, type = 'success') {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
+    localStorage.removeItem('applicationFormDraft');
+    ensureToastContainer();
+
     loadCoursesForDropdown().catch(err => {
         console.warn('Could not load courses:', err.message);
     });

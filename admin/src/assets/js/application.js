@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     loadApplications();
     loadAssessmentTitleDropdowns();
+    setupMobileFieldFormatting();
 
     const dateFilter = document.getElementById('applicationDateFilter');
     if (dateFilter) {
@@ -88,6 +89,47 @@ document.addEventListener('DOMContentLoaded', function () {
 
 let allApplications = [];
 let assessmentTitleOptions = [];
+
+function formatMobileNumber(value) {
+    const digits = String(value || '').replace(/\D/g, '').slice(0, 11);
+
+    if (digits.length <= 4) {
+        return digits;
+    }
+
+    if (digits.length <= 7) {
+        return `${digits.slice(0, 4)} ${digits.slice(4)}`;
+    }
+
+    return `${digits.slice(0, 4)} ${digits.slice(4, 7)} ${digits.slice(7)}`;
+}
+
+function setupMobileFieldFormatting() {
+    ['addMobile', 'editMobile'].forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (!field || field.dataset.mobileFormatterAttached === 'true') {
+            return;
+        }
+
+        field.dataset.mobileFormatterAttached = 'true';
+        field.maxLength = 13;
+
+        field.addEventListener('input', function () {
+            const formattedValue = formatMobileNumber(this.value);
+            if (this.value !== formattedValue) {
+                this.value = formattedValue;
+            }
+        });
+
+        field.addEventListener('paste', function () {
+            setTimeout(() => {
+                this.value = formatMobileNumber(this.value);
+            }, 0);
+        });
+
+        field.value = formatMobileNumber(field.value);
+    });
+}
 
 async function loadAssessmentTitleDropdowns() {
     try {
@@ -719,7 +761,7 @@ function editDetails(appId) {
     document.getElementById('editEducation').value = app.education || '';
 
     document.getElementById('editTel').value = app.contact?.tel || '';
-    document.getElementById('editMobile').value = app.contact?.mobile || '';
+    document.getElementById('editMobile').value = formatMobileNumber(app.contact?.mobile || '');
     document.getElementById('editFax').value = app.contact?.fax || '';
     document.getElementById('editEmail').value = app.contact?.email || '';
     document.getElementById('editOtherContact').value = app.contact?.other_contact || '';

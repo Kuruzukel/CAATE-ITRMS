@@ -340,6 +340,100 @@ function hasSignature() {
     return imageData.data.some(channel => channel !== 0);
 }
 
+function collectTableRowData(row, fieldNames) {
+    const values = {};
+
+    fieldNames.forEach((fieldName) => {
+        const field = row.querySelector(`[name="${fieldName}[]"]`);
+        values[fieldName] = field ? field.value.trim() : '';
+    });
+
+    return values;
+}
+
+function collectWorkExperiences() {
+    const rows = document.querySelectorAll('#workExperienceBody tr');
+    const items = [];
+
+    rows.forEach((row) => {
+        const values = collectTableRowData(row, ['workCompany', 'workPosition', 'workDates', 'workSalary', 'workStatus', 'workYears']);
+        if (values.workCompany || values.workPosition || values.workDates || values.workSalary || values.workStatus || values.workYears) {
+            items.push({
+                company: values.workCompany,
+                position: values.workPosition,
+                inclusive_dates: values.workDates,
+                monthly_salary: values.workSalary,
+                status_of_appointment: values.workStatus,
+                years_of_experience: values.workYears ? parseFloat(values.workYears) || 0 : 0
+            });
+        }
+    });
+
+    return items;
+}
+
+function collectTrainingSeminars() {
+    const rows = document.querySelectorAll('#trainingBody tr');
+    const items = [];
+
+    rows.forEach((row) => {
+        const values = collectTableRowData(row, ['trainingTitle', 'trainingVenue', 'trainingDates', 'trainingHours', 'trainingConductedBy']);
+        if (values.trainingTitle || values.trainingVenue || values.trainingDates || values.trainingHours || values.trainingConductedBy) {
+            items.push({
+                title: values.trainingTitle,
+                venue: values.trainingVenue,
+                inclusive_dates: values.trainingDates,
+                number_of_hours: values.trainingHours ? parseInt(values.trainingHours, 10) || 0 : 0,
+                conducted_by: values.trainingConductedBy
+            });
+        }
+    });
+
+    return items;
+}
+
+function collectLicensureExams() {
+    const rows = document.querySelectorAll('#licensureBody tr');
+    const items = [];
+
+    rows.forEach((row) => {
+        const values = collectTableRowData(row, ['licensureTitle', 'licensureYear', 'licensureVenue', 'licensureRating', 'licensureRemarks', 'licensureExpiry']);
+        if (values.licensureTitle || values.licensureYear || values.licensureVenue || values.licensureRating || values.licensureRemarks || values.licensureExpiry) {
+            items.push({
+                title: values.licensureTitle,
+                year_taken: values.licensureYear ? parseInt(values.licensureYear, 10) || 0 : null,
+                examination_venue: values.licensureVenue,
+                rating: values.licensureRating,
+                remarks: values.licensureRemarks,
+                expiry_date: values.licensureExpiry
+            });
+        }
+    });
+
+    return items;
+}
+
+function collectCompetencyAssessments() {
+    const rows = document.querySelectorAll('#competencyBody tr');
+    const items = [];
+
+    rows.forEach((row) => {
+        const values = collectTableRowData(row, ['competencyTitle', 'competencyLevel', 'competencySector', 'competencyCert', 'competencyIssuance', 'competencyExpiry']);
+        if (values.competencyTitle || values.competencyLevel || values.competencySector || values.competencyCert || values.competencyIssuance || values.competencyExpiry) {
+            items.push({
+                title: values.competencyTitle,
+                qualification_level: values.competencyLevel,
+                industry_sector: values.competencySector,
+                certificate_number: values.competencyCert,
+                date_of_issuance: values.competencyIssuance,
+                expiration_date: values.competencyExpiry
+            });
+        }
+    });
+
+    return items;
+}
+
 document.getElementById('applicationForm').addEventListener('submit', function (e) {
     e.preventDefault();
 
@@ -560,6 +654,11 @@ function handleConfirmedSubmit() {
     if (canvas && hasSignature()) {
         data.signature = canvas.toDataURL();
     }
+
+    data.work_experience = collectWorkExperiences();
+    data.training_seminars = collectTrainingSeminars();
+    data.licensure_exams = collectLicensureExams();
+    data.competency_assessments = collectCompetencyAssessments();
 
     data.submittedAt = new Date().toISOString();
     data.status = 'pending';

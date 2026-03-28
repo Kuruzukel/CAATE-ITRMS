@@ -154,7 +154,7 @@ class ApplicationController {
 
         return [
             'surname' => $this->getFirstAvailableValue($nameInput + $input, ['surname'], $trainee['last_name'] ?? ''),
-            'first_name' => $this->getFirstAvailableValue($nameInput + $input, ['first_name', 'firstName'], $trainee['first_name'] ?? ''),
+            'first_name' => $this->getFirstAvailableValue($nameInput + $input, ['first_name', 'firstName', 'firstname'], $trainee['first_name'] ?? ''),
             'second_name' => $this->getFirstAvailableValue($nameInput + $input, ['second_name', 'secondname']),
             'middle_name' => $this->getFirstAvailableValue($nameInput + $input, ['middle_name', 'middleName'], $trainee['middle_name'] ?? ''),
             'middle_initial' => $this->getFirstAvailableValue($nameInput + $input, ['middle_initial', 'middleInitial']),

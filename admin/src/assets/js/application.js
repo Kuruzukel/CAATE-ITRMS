@@ -654,8 +654,8 @@ function viewDetails(appId) {
     document.getElementById('viewOtherContact').textContent = data.contact.otherContact || 'N/A';
 
     const workExpContainer = document.getElementById('viewWorkExperience');
-    if (app.work_experience && app.work_experience.length > 0) {
-        workExpContainer.innerHTML = app.work_experience.map((exp, index) => `
+    if (data.workExperience.length > 0) {
+        workExpContainer.innerHTML = data.workExperience.map((exp, index) => `
             <div class="card mb-2" style="background: rgba(255,255,255,0.05);">
                 <div class="card-body p-3">
                     <h6 class="text-white mb-2">${index + 1}. ${exp.company || 'N/A'}</h6>
@@ -672,8 +672,8 @@ function viewDetails(appId) {
     }
 
     const trainingContainer = document.getElementById('viewTrainingSeminars');
-    if (app.training_seminars && app.training_seminars.length > 0) {
-        trainingContainer.innerHTML = app.training_seminars.map((training, index) => `
+    if (data.trainingSeminars.length > 0) {
+        trainingContainer.innerHTML = data.trainingSeminars.map((training, index) => `
             <div class="card mb-2" style="background: rgba(255,255,255,0.05);">
                 <div class="card-body p-3">
                     <h6 class="text-white mb-2">${index + 1}. ${training.title || 'N/A'}</h6>
@@ -689,8 +689,8 @@ function viewDetails(appId) {
     }
 
     const licensureContainer = document.getElementById('viewLicensureExams');
-    if (app.licensure_exams && app.licensure_exams.length > 0) {
-        licensureContainer.innerHTML = app.licensure_exams.map((exam, index) => `
+    if (data.licensureExams.length > 0) {
+        licensureContainer.innerHTML = data.licensureExams.map((exam, index) => `
             <div class="card mb-2" style="background: rgba(255,255,255,0.05);">
                 <div class="card-body p-3">
                     <h6 class="text-white mb-2">${index + 1}. ${exam.title || 'N/A'}</h6>
@@ -707,8 +707,8 @@ function viewDetails(appId) {
     }
 
     const competencyContainer = document.getElementById('viewCompetencyAssessments');
-    if (app.competency_assessments && app.competency_assessments.length > 0) {
-        competencyContainer.innerHTML = app.competency_assessments.map((comp, index) => `
+    if (data.competencyAssessments.length > 0) {
+        competencyContainer.innerHTML = data.competencyAssessments.map((comp, index) => `
             <div class="card mb-2" style="background: rgba(255,255,255,0.05);">
                 <div class="card-body p-3">
                     <h6 class="text-white mb-2">${index + 1}. ${comp.title || 'N/A'}</h6>
@@ -811,10 +811,31 @@ function getNormalizedApplicationData(app) {
         status: getApplicationValue(app, ['status'], 'pending'),
         submittedAt: getApplicationValue(app, ['submitted_at', 'submittedAt']),
         updatedAt: getApplicationValue(app, ['updated_at', 'updatedAt']),
+        workExperience: normalizeApplicationCollection(app.work_experience),
+        trainingSeminars: normalizeApplicationCollection(app.training_seminars),
+        licensureExams: normalizeApplicationCollection(app.licensure_exams),
+        competencyAssessments: normalizeApplicationCollection(app.competency_assessments),
         name: getApplicationNameData(app),
         address: getApplicationAddressData(app),
         contact: getApplicationContactData(app)
     };
+}
+
+function normalizeApplicationCollection(value) {
+    if (Array.isArray(value)) {
+        return value;
+    }
+
+    if (typeof value === 'string' && value.trim() !== '') {
+        try {
+            const parsed = JSON.parse(value);
+            return Array.isArray(parsed) ? parsed : [];
+        } catch (error) {
+            return [];
+        }
+    }
+
+    return [];
 }
 
 function editDetails(appId) {
@@ -862,10 +883,10 @@ function editDetails(appId) {
         email: data.contact.email || '',
         other_contact: data.contact.otherContact || '',
         status: data.status || 'pending',
-        work_experience: JSON.stringify(app.work_experience || []),
-        training_seminars: JSON.stringify(app.training_seminars || []),
-        licensure_exams: JSON.stringify(app.licensure_exams || []),
-        competency_assessments: JSON.stringify(app.competency_assessments || [])
+        work_experience: JSON.stringify(data.workExperience),
+        training_seminars: JSON.stringify(data.trainingSeminars),
+        licensure_exams: JSON.stringify(data.licensureExams),
+        competency_assessments: JSON.stringify(data.competencyAssessments)
     };
 
     document.getElementById('editApplicationId').value = appId;
@@ -921,13 +942,13 @@ function editDetails(appId) {
     document.getElementById('editEmail').value = data.contact.email || '';
     document.getElementById('editOtherContact').value = data.contact.otherContact || '';
 
-    populateWorkExperience(app.work_experience || []);
+    populateWorkExperience(data.workExperience);
 
-    populateTrainingSeminars(app.training_seminars || []);
+    populateTrainingSeminars(data.trainingSeminars);
 
-    populateLicensureExams(app.licensure_exams || []);
+    populateLicensureExams(data.licensureExams);
 
-    populateCompetencyAssessments(app.competency_assessments || []);
+    populateCompetencyAssessments(data.competencyAssessments);
 
     document.getElementById('editStatus').value = data.status || 'pending';
     document.getElementById('editSubmittedAt').value = formatDate(data.submittedAt);

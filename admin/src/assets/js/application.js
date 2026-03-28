@@ -586,9 +586,10 @@ function viewDetails(appId) {
         showError('Application not found');
         return;
     }
+    const data = getNormalizedApplicationData(app);
 
-    document.getElementById('viewReferenceNumber').textContent = app.reference_number || 'N/A';
-    document.getElementById('viewUli').textContent = app.uli || 'N/A';
+    document.getElementById('viewReferenceNumber').textContent = data.referenceNumber || 'N/A';
+    document.getElementById('viewUli').textContent = data.uli || 'N/A';
 
     const pictureImg = document.getElementById('viewPicture');
     const noPictureText = document.getElementById('viewNoPicture');
@@ -612,46 +613,45 @@ function viewDetails(appId) {
         noSignatureText.style.display = 'block';
     }
 
-    document.getElementById('viewSchoolName').textContent = app.school_name || 'N/A';
-    document.getElementById('viewSchoolAddress').textContent = app.school_address || 'N/A';
+    document.getElementById('viewSchoolName').textContent = data.schoolName || 'N/A';
+    document.getElementById('viewSchoolAddress').textContent = data.schoolAddress || 'N/A';
 
-    document.getElementById('viewAssessmentTitle').textContent = app.assessment_title || 'N/A';
-    document.getElementById('viewApplicationDate').textContent = formatDate(app.application_date || app.submitted_at);
-    document.getElementById('viewAssessmentType').textContent = formatAssessmentType(app.assessment_type);
-    document.getElementById('viewClientType').textContent = formatClientType(app.client_type);
+    document.getElementById('viewAssessmentTitle').textContent = data.assessmentTitle || 'N/A';
+    document.getElementById('viewApplicationDate').textContent = formatDate(data.applicationDate);
+    document.getElementById('viewAssessmentType').textContent = formatAssessmentType(data.assessmentType);
+    document.getElementById('viewClientType').textContent = formatClientType(data.clientType);
 
-    document.getElementById('viewSurname').textContent = app.name?.surname || 'N/A';
-    document.getElementById('viewFirstName').textContent = app.name?.first_name || 'N/A';
-    document.getElementById('viewMiddleName').textContent = app.name?.middle_name || 'N/A';
-    document.getElementById('viewMiddleInitial').textContent = app.name?.middle_initial || 'N/A';
-    document.getElementById('viewSecondName').textContent = app.name?.second_name || 'N/A';
-    document.getElementById('viewNameExtension').textContent = app.name?.name_extension || 'N/A';
+    document.getElementById('viewSurname').textContent = data.name.surname || 'N/A';
+    document.getElementById('viewFirstName').textContent = data.name.firstName || 'N/A';
+    document.getElementById('viewMiddleName').textContent = data.name.middleName || 'N/A';
+    document.getElementById('viewMiddleInitial').textContent = data.name.middleInitial || 'N/A';
+    document.getElementById('viewSecondName').textContent = data.name.secondName || 'N/A';
+    document.getElementById('viewNameExtension').textContent = data.name.nameExtension || 'N/A';
 
-    const address = app.mailing_address || {};
-    document.getElementById('viewNumberStreet').textContent = address.number_street || 'N/A';
-    document.getElementById('viewBarangay').textContent = address.barangay || 'N/A';
-    document.getElementById('viewDistrict').textContent = address.district || 'N/A';
-    document.getElementById('viewCity').textContent = address.city || 'N/A';
-    document.getElementById('viewProvince').textContent = address.province || 'N/A';
-    document.getElementById('viewRegion').textContent = address.region || 'N/A';
-    document.getElementById('viewZip').textContent = address.zip || 'N/A';
+    document.getElementById('viewNumberStreet').textContent = data.address.numberStreet || 'N/A';
+    document.getElementById('viewBarangay').textContent = data.address.barangay || 'N/A';
+    document.getElementById('viewDistrict').textContent = data.address.district || 'N/A';
+    document.getElementById('viewCity').textContent = data.address.city || 'N/A';
+    document.getElementById('viewProvince').textContent = data.address.province || 'N/A';
+    document.getElementById('viewRegion').textContent = data.address.region || 'N/A';
+    document.getElementById('viewZip').textContent = data.address.zip || 'N/A';
 
-    document.getElementById('viewMotherName').textContent = app.mothers_name || 'N/A';
-    document.getElementById('viewFatherName').textContent = app.fathers_name || 'N/A';
+    document.getElementById('viewMotherName').textContent = data.motherName || 'N/A';
+    document.getElementById('viewFatherName').textContent = data.fatherName || 'N/A';
 
-    document.getElementById('viewSex').textContent = app.sex ? app.sex.charAt(0).toUpperCase() + app.sex.slice(1) : 'N/A';
-    document.getElementById('viewCivilStatus').textContent = app.civil_status ? app.civil_status.charAt(0).toUpperCase() + app.civil_status.slice(1) : 'N/A';
-    document.getElementById('viewEmploymentStatus').textContent = app.employment_status || 'N/A';
-    document.getElementById('viewAge').textContent = app.age || 'N/A';
-    document.getElementById('viewBirthDate').textContent = app.birth_date || 'N/A';
-    document.getElementById('viewBirthPlace').textContent = app.birth_place || 'N/A';
-    document.getElementById('viewEducation').textContent = app.education || 'N/A';
+    document.getElementById('viewSex').textContent = data.sex ? data.sex.charAt(0).toUpperCase() + data.sex.slice(1) : 'N/A';
+    document.getElementById('viewCivilStatus').textContent = data.civilStatus ? data.civilStatus.charAt(0).toUpperCase() + data.civilStatus.slice(1) : 'N/A';
+    document.getElementById('viewEmploymentStatus').textContent = data.employmentStatus || 'N/A';
+    document.getElementById('viewAge').textContent = data.age || 'N/A';
+    document.getElementById('viewBirthDate').textContent = data.birthDate || 'N/A';
+    document.getElementById('viewBirthPlace').textContent = data.birthPlace || 'N/A';
+    document.getElementById('viewEducation').textContent = data.education || 'N/A';
 
-    document.getElementById('viewTel').textContent = app.contact?.tel || 'N/A';
-    document.getElementById('viewMobile').textContent = app.contact?.mobile || 'N/A';
-    document.getElementById('viewFax').textContent = app.contact?.fax || 'N/A';
-    document.getElementById('viewEmail').textContent = app.contact?.email || 'N/A';
-    document.getElementById('viewOtherContact').textContent = app.contact?.other_contact || 'N/A';
+    document.getElementById('viewTel').textContent = data.contact.tel || 'N/A';
+    document.getElementById('viewMobile').textContent = data.contact.mobile || 'N/A';
+    document.getElementById('viewFax').textContent = data.contact.fax || 'N/A';
+    document.getElementById('viewEmail').textContent = data.contact.email || 'N/A';
+    document.getElementById('viewOtherContact').textContent = data.contact.otherContact || 'N/A';
 
     const workExpContainer = document.getElementById('viewWorkExperience');
     if (app.work_experience && app.work_experience.length > 0) {
@@ -726,11 +726,95 @@ function viewDetails(appId) {
 
     const statusBadge = getStatusBadge(app.status);
     document.getElementById('viewStatus').innerHTML = statusBadge;
-    document.getElementById('viewSubmittedAt').textContent = formatDate(app.submitted_at);
-    document.getElementById('viewUpdatedAt').textContent = formatDate(app.updated_at);
+    document.getElementById('viewSubmittedAt').textContent = formatDate(data.submittedAt);
+    document.getElementById('viewUpdatedAt').textContent = formatDate(data.updatedAt);
 
     const modal = new bootstrap.Modal(document.getElementById('viewProfileModal'));
     modal.show();
+}
+
+function getApplicationValue(app, keys, defaultValue = '') {
+    for (const key of keys) {
+        const value = app?.[key];
+        if (value !== undefined && value !== null && value !== '') {
+            return value;
+        }
+    }
+    return defaultValue;
+}
+
+function getNestedApplicationValue(source, keys, defaultValue = '') {
+    for (const key of keys) {
+        const value = source?.[key];
+        if (value !== undefined && value !== null && value !== '') {
+            return value;
+        }
+    }
+    return defaultValue;
+}
+
+function getApplicationNameData(app) {
+    const name = app?.name || {};
+    return {
+        surname: getNestedApplicationValue(name, ['surname', 'last_name'], getApplicationValue(app, ['surname', 'last_name'])),
+        firstName: getNestedApplicationValue(name, ['first_name', 'firstName'], getApplicationValue(app, ['first_name', 'firstName', 'firstname'])),
+        middleName: getNestedApplicationValue(name, ['middle_name', 'middleName'], getApplicationValue(app, ['middle_name', 'middleName'])),
+        middleInitial: getNestedApplicationValue(name, ['middle_initial', 'middleInitial'], getApplicationValue(app, ['middle_initial', 'middleInitial'])),
+        secondName: getNestedApplicationValue(name, ['second_name', 'secondName', 'secondname'], getApplicationValue(app, ['second_name', 'secondName', 'secondname'])),
+        nameExtension: getNestedApplicationValue(name, ['name_extension', 'nameExtension'], getApplicationValue(app, ['name_extension', 'nameExtension']))
+    };
+}
+
+function getApplicationAddressData(app) {
+    const address = app?.mailing_address || {};
+    return {
+        numberStreet: getNestedApplicationValue(address, ['number_street', 'numberStreet', 'mailingNumber'], getApplicationValue(app, ['number_street', 'numberStreet', 'mailingNumber'])),
+        barangay: getNestedApplicationValue(address, ['barangay'], getApplicationValue(app, ['barangay'])),
+        district: getNestedApplicationValue(address, ['district'], getApplicationValue(app, ['district'])),
+        city: getNestedApplicationValue(address, ['city', 'cityMunicipality'], getApplicationValue(app, ['city', 'cityMunicipality'])),
+        province: getNestedApplicationValue(address, ['province'], getApplicationValue(app, ['province'])),
+        region: getNestedApplicationValue(address, ['region'], getApplicationValue(app, ['region'])),
+        zip: getNestedApplicationValue(address, ['zip'], getApplicationValue(app, ['zip']))
+    };
+}
+
+function getApplicationContactData(app) {
+    const contact = app?.contact || {};
+    return {
+        tel: getNestedApplicationValue(contact, ['tel'], getApplicationValue(app, ['tel'])),
+        mobile: getNestedApplicationValue(contact, ['mobile'], getApplicationValue(app, ['mobile'])),
+        fax: getNestedApplicationValue(contact, ['fax'], getApplicationValue(app, ['fax'])),
+        email: getNestedApplicationValue(contact, ['email'], getApplicationValue(app, ['email'])),
+        otherContact: getNestedApplicationValue(contact, ['other_contact', 'otherContact'], getApplicationValue(app, ['other_contact', 'otherContact']))
+    };
+}
+
+function getNormalizedApplicationData(app) {
+    return {
+        referenceNumber: getApplicationValue(app, ['reference_number', 'referenceNumber']),
+        uli: getApplicationValue(app, ['uli']),
+        schoolName: getApplicationValue(app, ['school_name', 'schoolName']),
+        schoolAddress: getApplicationValue(app, ['school_address', 'schoolAddress']),
+        assessmentTitle: getApplicationValue(app, ['assessment_title', 'assessmentTitle']),
+        applicationDate: getApplicationValue(app, ['application_date', 'applicationDate', 'submitted_at', 'submittedAt']),
+        assessmentType: getApplicationValue(app, ['assessment_type', 'assessmentType']),
+        clientType: getApplicationValue(app, ['client_type', 'clientType']),
+        motherName: getApplicationValue(app, ['mothers_name', 'mothersName', 'motherName']),
+        fatherName: getApplicationValue(app, ['fathers_name', 'fathersName', 'fatherName']),
+        sex: getApplicationValue(app, ['sex']),
+        civilStatus: getApplicationValue(app, ['civil_status', 'civilStatus']),
+        employmentStatus: getApplicationValue(app, ['employment_status', 'employmentStatus']),
+        age: getApplicationValue(app, ['age']),
+        birthDate: getApplicationValue(app, ['birth_date', 'birthDate']),
+        birthPlace: getApplicationValue(app, ['birth_place', 'birthPlace']),
+        education: getApplicationValue(app, ['education']),
+        status: getApplicationValue(app, ['status'], 'pending'),
+        submittedAt: getApplicationValue(app, ['submitted_at', 'submittedAt']),
+        updatedAt: getApplicationValue(app, ['updated_at', 'updatedAt']),
+        name: getApplicationNameData(app),
+        address: getApplicationAddressData(app),
+        contact: getApplicationContactData(app)
+    };
 }
 
 function editDetails(appId) {
@@ -739,44 +823,45 @@ function editDetails(appId) {
         showError('Application not found');
         return;
     }
+    const data = getNormalizedApplicationData(app);
 
     window.originalApplicationData = {
-        reference_number: app.reference_number || '',
-        uli: app.uli || '',
-        school_name: app.school_name || '',
-        school_address: app.school_address || '',
-        assessment_title: app.assessment_title || '',
-        application_date: app.application_date || '',
-        assessment_type: app.assessment_type || '',
-        client_type: app.client_type || '',
-        surname: app.name?.surname || '',
-        first_name: app.name?.first_name || '',
-        middle_name: app.name?.middle_name || '',
-        middle_initial: app.name?.middle_initial || '',
-        second_name: app.name?.second_name || '',
-        name_extension: app.name?.name_extension || '',
-        number_street: app.mailing_address?.number_street || '',
-        barangay: app.mailing_address?.barangay || '',
-        district: app.mailing_address?.district || '',
-        city: app.mailing_address?.city || '',
-        province: app.mailing_address?.province || '',
-        region: app.mailing_address?.region || '',
-        zip: app.mailing_address?.zip || '',
-        mothers_name: app.mothers_name || '',
-        fathers_name: app.fathers_name || '',
-        sex: app.sex || '',
-        civil_status: app.civil_status || '',
-        employment_status: app.employment_status || '',
-        age: app.age || '',
-        birth_date: app.birth_date || '',
-        birth_place: app.birth_place || '',
-        education: app.education || '',
-        tel: app.contact?.tel || '',
-        mobile: app.contact?.mobile || '',
-        fax: app.contact?.fax || '',
-        email: app.contact?.email || '',
-        other_contact: app.contact?.other_contact || '',
-        status: app.status || 'pending',
+        reference_number: data.referenceNumber || '',
+        uli: data.uli || '',
+        school_name: data.schoolName || '',
+        school_address: data.schoolAddress || '',
+        assessment_title: data.assessmentTitle || '',
+        application_date: data.applicationDate || '',
+        assessment_type: data.assessmentType || '',
+        client_type: data.clientType || '',
+        surname: data.name.surname || '',
+        first_name: data.name.firstName || '',
+        middle_name: data.name.middleName || '',
+        middle_initial: data.name.middleInitial || '',
+        second_name: data.name.secondName || '',
+        name_extension: data.name.nameExtension || '',
+        number_street: data.address.numberStreet || '',
+        barangay: data.address.barangay || '',
+        district: data.address.district || '',
+        city: data.address.city || '',
+        province: data.address.province || '',
+        region: data.address.region || '',
+        zip: data.address.zip || '',
+        mothers_name: data.motherName || '',
+        fathers_name: data.fatherName || '',
+        sex: data.sex || '',
+        civil_status: data.civilStatus || '',
+        employment_status: data.employmentStatus || '',
+        age: data.age || '',
+        birth_date: data.birthDate || '',
+        birth_place: data.birthPlace || '',
+        education: data.education || '',
+        tel: data.contact.tel || '',
+        mobile: data.contact.mobile || '',
+        fax: data.contact.fax || '',
+        email: data.contact.email || '',
+        other_contact: data.contact.otherContact || '',
+        status: data.status || 'pending',
         work_experience: JSON.stringify(app.work_experience || []),
         training_seminars: JSON.stringify(app.training_seminars || []),
         licensure_exams: JSON.stringify(app.licensure_exams || []),
@@ -787,55 +872,54 @@ function editDetails(appId) {
     console.log('Setting edit Application ID to:', appId);
     console.log('Application ID type:', typeof appId);
 
-    document.getElementById('editReferenceNumber').value = app.reference_number || '';
-    document.getElementById('editUli').value = app.uli || '';
+    document.getElementById('editReferenceNumber').value = data.referenceNumber || '';
+    document.getElementById('editUli').value = data.uli || '';
 
-    document.getElementById('editSchoolName').value = app.school_name || '';
-    document.getElementById('editSchoolAddress').value = app.school_address || '';
+    document.getElementById('editSchoolName').value = data.schoolName || '';
+    document.getElementById('editSchoolAddress').value = data.schoolAddress || '';
 
     if (!assessmentTitleOptions.length) {
         loadAssessmentTitleDropdowns().finally(() => {
-            populateAssessmentTitleSelect('editAssessmentTitle', app.assessment_title || '');
+            populateAssessmentTitleSelect('editAssessmentTitle', data.assessmentTitle || '');
         });
     } else {
-        populateAssessmentTitleSelect('editAssessmentTitle', app.assessment_title || '');
+        populateAssessmentTitleSelect('editAssessmentTitle', data.assessmentTitle || '');
     }
-    document.getElementById('editApplicationDate').value = app.application_date || '';
-    document.getElementById('editAssessmentType').value = app.assessment_type || '';
-    document.getElementById('editClientType').value = app.client_type || '';
+    document.getElementById('editApplicationDate').value = data.applicationDate || '';
+    document.getElementById('editAssessmentType').value = data.assessmentType || '';
+    document.getElementById('editClientType').value = data.clientType || '';
 
-    document.getElementById('editSurname').value = app.name?.surname || '';
-    document.getElementById('editFirstName').value = app.name?.first_name || '';
-    document.getElementById('editMiddleName').value = app.name?.middle_name || '';
-    document.getElementById('editMiddleInitial').value = app.name?.middle_initial || '';
-    document.getElementById('editSecondName').value = app.name?.second_name || '';
-    document.getElementById('editNameExtension').value = app.name?.name_extension || '';
+    document.getElementById('editSurname').value = data.name.surname || '';
+    document.getElementById('editFirstName').value = data.name.firstName || '';
+    document.getElementById('editMiddleName').value = data.name.middleName || '';
+    document.getElementById('editMiddleInitial').value = data.name.middleInitial || '';
+    document.getElementById('editSecondName').value = data.name.secondName || '';
+    document.getElementById('editNameExtension').value = data.name.nameExtension || '';
 
-    const address = app.mailing_address || {};
-    document.getElementById('editNumberStreet').value = address.number_street || '';
-    document.getElementById('editBarangay').value = address.barangay || '';
-    document.getElementById('editDistrict').value = address.district || '';
-    document.getElementById('editCity').value = address.city || '';
-    document.getElementById('editProvince').value = address.province || '';
-    document.getElementById('editRegion').value = address.region || '';
-    document.getElementById('editZip').value = address.zip || '';
+    document.getElementById('editNumberStreet').value = data.address.numberStreet || '';
+    document.getElementById('editBarangay').value = data.address.barangay || '';
+    document.getElementById('editDistrict').value = data.address.district || '';
+    document.getElementById('editCity').value = data.address.city || '';
+    document.getElementById('editProvince').value = data.address.province || '';
+    document.getElementById('editRegion').value = data.address.region || '';
+    document.getElementById('editZip').value = data.address.zip || '';
 
-    document.getElementById('editMotherName').value = app.mothers_name || '';
-    document.getElementById('editFatherName').value = app.fathers_name || '';
+    document.getElementById('editMotherName').value = data.motherName || '';
+    document.getElementById('editFatherName').value = data.fatherName || '';
 
-    document.getElementById('editSex').value = app.sex || '';
-    document.getElementById('editCivilStatus').value = app.civil_status || '';
-    document.getElementById('editEmploymentStatus').value = app.employment_status || '';
-    document.getElementById('editAge').value = app.age || '';
-    document.getElementById('editBirthDate').value = app.birth_date || '';
-    document.getElementById('editBirthPlace').value = app.birth_place || '';
-    document.getElementById('editEducation').value = app.education || '';
+    document.getElementById('editSex').value = data.sex || '';
+    document.getElementById('editCivilStatus').value = data.civilStatus || '';
+    document.getElementById('editEmploymentStatus').value = data.employmentStatus || '';
+    document.getElementById('editAge').value = data.age || '';
+    document.getElementById('editBirthDate').value = data.birthDate || '';
+    document.getElementById('editBirthPlace').value = data.birthPlace || '';
+    document.getElementById('editEducation').value = data.education || '';
 
-    document.getElementById('editTel').value = app.contact?.tel || '';
-    document.getElementById('editMobile').value = formatMobileNumber(app.contact?.mobile || '');
-    document.getElementById('editFax').value = app.contact?.fax || '';
-    document.getElementById('editEmail').value = app.contact?.email || '';
-    document.getElementById('editOtherContact').value = app.contact?.other_contact || '';
+    document.getElementById('editTel').value = data.contact.tel || '';
+    document.getElementById('editMobile').value = formatMobileNumber(data.contact.mobile || '');
+    document.getElementById('editFax').value = data.contact.fax || '';
+    document.getElementById('editEmail').value = data.contact.email || '';
+    document.getElementById('editOtherContact').value = data.contact.otherContact || '';
 
     populateWorkExperience(app.work_experience || []);
 
@@ -845,7 +929,9 @@ function editDetails(appId) {
 
     populateCompetencyAssessments(app.competency_assessments || []);
 
-    document.getElementById('editStatus').value = app.status || 'pending';
+    document.getElementById('editStatus').value = data.status || 'pending';
+    document.getElementById('editSubmittedAt').value = formatDate(data.submittedAt);
+    document.getElementById('editLastUpdated').value = formatDate(data.updatedAt);
 
     const modal = new bootstrap.Modal(document.getElementById('editDetailsModal'));
     modal.show();

@@ -42,8 +42,8 @@ class ApplicationController {
                 'client_type' => $this->getFirstAvailableValue($input, ['clientType', 'client_type']),
                 'name' => $this->buildNameData($input, $trainee),
                 'mailing_address' => $this->buildMailingAddressData($input),
-                'mothers_name' => $this->getFirstAvailableValue($input, ['motherName', 'mothers_name']),
-                'fathers_name' => $this->getFirstAvailableValue($input, ['fatherName', 'fathers_name']),
+                'mothers_name' => $this->getFirstAvailableValue($input, ['motherName', 'mothersName', 'mothers_name']),
+                'fathers_name' => $this->getFirstAvailableValue($input, ['fatherName', 'fathersName', 'fathers_name']),
                 'sex' => $this->getFirstAvailableValue($input, ['sex']),
                 'civil_status' => $this->getFirstAvailableValue($input, ['civilStatus', 'civil_status']),
                 'employment_status' => $this->getFirstAvailableValue($input, ['employmentStatus', 'employment_status']),
@@ -166,7 +166,7 @@ class ApplicationController {
         $addressInput = isset($input['mailing_address']) && is_array($input['mailing_address']) ? $input['mailing_address'] : [];
 
         return [
-            'number_street' => $this->getFirstAvailableValue($addressInput + $input, ['number_street', 'numberStreet']),
+            'number_street' => $this->getFirstAvailableValue($addressInput + $input, ['number_street', 'numberStreet', 'mailingNumber']),
             'barangay' => $this->getFirstAvailableValue($addressInput + $input, ['barangay']),
             'district' => $this->getFirstAvailableValue($addressInput + $input, ['district']),
             'city' => $this->getFirstAvailableValue($addressInput + $input, ['city', 'cityMunicipality']),

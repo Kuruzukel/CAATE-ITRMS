@@ -1763,6 +1763,18 @@ document.getElementById('addApplicationBtn')?.addEventListener('click', function
                 if (this.classList.contains('is-invalid')) {
                     this.classList.remove('is-invalid');
                 }
+
+                if (this.type === 'radio') {
+                    if (this.name === 'addSex') {
+                        document.getElementById('addSexGroup')?.classList.remove('is-invalid');
+                    }
+                    if (this.name === 'addCivilStatus') {
+                        document.getElementById('addCivilStatusGroup')?.classList.remove('is-invalid');
+                    }
+                    if (this.name === 'addEmploymentStatus') {
+                        document.getElementById('addEmploymentStatusGroup')?.classList.remove('is-invalid');
+                    }
+                }
             });
         });
     }, 100);
@@ -2140,7 +2152,25 @@ function highlightInvalidAddFields(fieldNames) {
         'Email': 'addEmail'
     };
 
+    const radioGroupMap = {
+        'Sex': 'addSexGroup',
+        'Civil Status': 'addCivilStatusGroup',
+        'Employment Status': 'addEmploymentStatusGroup'
+    };
+
     fieldNames.forEach(fieldName => {
+        const radioGroupId = radioGroupMap[fieldName];
+        if (radioGroupId) {
+            const radioGroup = document.getElementById(radioGroupId);
+            if (radioGroup) {
+                radioGroup.classList.add('is-invalid');
+                if (fieldNames[0] === fieldName) {
+                    radioGroup.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+            return;
+        }
+
         const fieldId = fieldMap[fieldName];
         if (fieldId) {
             const field = document.getElementById(fieldId);

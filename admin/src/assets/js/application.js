@@ -2,6 +2,8 @@ document.addEventListener('DOMContentLoaded', function () {
     loadApplications();
     loadAssessmentTitleDropdowns();
     setupMobileFieldFormatting();
+    loadTraineesCache();
+    setupAddApplicationTraineeLookup();
 
     const dateFilter = document.getElementById('applicationDateFilter');
     if (dateFilter) {
@@ -89,6 +91,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 let allApplications = [];
 let assessmentTitleOptions = [];
+let traineesCache = [];
 
 function formatMobileNumber(value) {
     const digits = String(value || '').replace(/\D/g, '').slice(0, 11);
@@ -128,6 +131,76 @@ function setupMobileFieldFormatting() {
         });
 
         field.value = formatMobileNumber(field.value);
+    });
+}
+
+async function loadTraineesCache() {
+    try {
+        const response = await fetch(`${config.api.baseUrl}/api/v1/trainees`);
+        const result = await response.json();
+
+        if (result.success && Array.isArray(result.data)) {
+            traineesCache = result.data;
+        }
+    } catch (error) {
+        console.error('Error loading trainees:', error);
+    }
+}
+
+function findTraineeByTraineeId(traineeId) {
+    const normalizedId = String(traineeId || '').trim().toLowerCase();
+    if (!normalizedId) {
+        return null;
+    }
+
+    return traineesCache.find(trainee =>
+        String(trainee.trainee_id || '').trim().toLowerCase() === normalizedId
+    ) || null;
+}
+
+function populateAddApplicationTraineeDetails(trainee) {
+    if (!trainee) {
+        return;
+    }
+
+    const firstName = trainee.first_name || '';
+    const middleName = trainee.middle_name || '';
+    const surname = trainee.last_name || '';
+    const middleInitial = middleName ? middleName.charAt(0).toUpperCase() : '';
+
+    const addFirstName = document.getElementById('addFirstName');
+    const addMiddleName = document.getElementById('addMiddleName');
+    const addMiddleInitial = document.getElementById('addMiddleInitial');
+    const addSurname = document.getElementById('addSurname');
+    const addEmail = document.getElementById('addEmail');
+
+    if (addFirstName) addFirstName.value = firstName;
+    if (addMiddleName) addMiddleName.value = middleName;
+    if (addMiddleInitial) addMiddleInitial.value = middleInitial;
+    if (addSurname) addSurname.value = surname;
+    if (addEmail && trainee.email) addEmail.value = trainee.email;
+}
+
+function setupAddApplicationTraineeLookup() {
+    const traineeIdField = document.getElementById('addTraineeId');
+    if (!traineeIdField || traineeIdField.dataset.lookupAttached === 'true') {
+        return;
+    }
+
+    traineeIdField.dataset.lookupAttached = 'true';
+
+    traineeIdField.addEventListener('change', function () {
+        const trainee = findTraineeByTraineeId(this.value);
+        if (trainee) {
+            populateAddApplicationTraineeDetails(trainee);
+        }
+    });
+
+    traineeIdField.addEventListener('blur', function () {
+        const trainee = findTraineeByTraineeId(this.value);
+        if (trainee) {
+            populateAddApplicationTraineeDetails(trainee);
+        }
     });
 }
 
@@ -1956,10 +2029,24 @@ async function saveNewApplication() {
             return;
         }
 
+        if (!traineesCache.length) {
+            await loadTraineesCache();
+        }
+
         const traineeId = document.getElementById('addTraineeId').value.trim();
+        const selectedTrainee = findTraineeByTraineeId(traineeId);
+
+        if (!selectedTrainee) {
+            showError(`Trainee ID "${traineeId}" was not found in the database`);
+            highlightInvalidAddFields(['Trainee ID']);
+            return;
+        }
+
+        populateAddApplicationTraineeDetails(selectedTrainee);
+
         if (traineeId) {
             const duplicateTrainee = allApplications.find(app =>
-                app.trainee_id && app.trainee_id.toLowerCase() === traineeId.toLowerCase()
+                String(app.trainee_id || app.userData?.trainee_id || '').toLowerCase() === traineeId.toLowerCase()
             );
 
             if (duplicateTrainee) {
@@ -1983,15 +2070,31 @@ async function saveNewApplication() {
         }
 
         const formData = {
+            userId: selectedTrainee._id || '',
+            traineeId: traineeId,
             trainee_id: traineeId,
+            referenceNumber: referenceNumber,
             reference_number: referenceNumber,
+            uliNumber: document.getElementById('addUli').value,
             uli: document.getElementById('addUli').value,
+            schoolName: document.getElementById('addSchoolName').value,
             school_name: document.getElementById('addSchoolName').value,
+            schoolAddress: document.getElementById('addSchoolAddress').value,
             school_address: document.getElementById('addSchoolAddress').value,
+            assessmentTitle: document.getElementById('addAssessmentTitle').value,
             assessment_title: document.getElementById('addAssessmentTitle').value,
+            applicationDate: document.getElementById('addApplicationDate').value,
             application_date: document.getElementById('addApplicationDate').value,
+            assessmentType: document.getElementById('addAssessmentType').value,
             assessment_type: document.getElementById('addAssessmentType').value,
+            clientType: document.getElementById('addClientType').value,
             client_type: document.getElementById('addClientType').value,
+            surname: document.getElementById('addSurname').value,
+            firstName: document.getElementById('addFirstName').value,
+            middleName: document.getElementById('addMiddleName').value,
+            middleInitial: document.getElementById('addMiddleInitial').value,
+            secondname: document.getElementById('addSecondName').value,
+            nameExtension: document.getElementById('addNameExtension').value,
             name: {
                 surname: document.getElementById('addSurname').value,
                 first_name: document.getElementById('addFirstName').value,
@@ -2000,6 +2103,7 @@ async function saveNewApplication() {
                 second_name: document.getElementById('addSecondName').value,
                 name_extension: document.getElementById('addNameExtension').value
             },
+            numberStreet: document.getElementById('addNumberStreet').value,
             mailing_address: {
                 number_street: document.getElementById('addNumberStreet').value,
                 barangay: document.getElementById('addBarangay').value,
@@ -2009,15 +2113,32 @@ async function saveNewApplication() {
                 region: document.getElementById('addRegion').value,
                 zip: document.getElementById('addZip').value
             },
+            barangay: document.getElementById('addBarangay').value,
+            district: document.getElementById('addDistrict').value,
+            city: document.getElementById('addCity').value,
+            province: document.getElementById('addProvince').value,
+            region: document.getElementById('addRegion').value,
+            zip: document.getElementById('addZip').value,
+            motherName: document.getElementById('addMotherName').value,
             mothers_name: document.getElementById('addMotherName').value,
+            fatherName: document.getElementById('addFatherName').value,
             fathers_name: document.getElementById('addFatherName').value,
             sex: document.querySelector('input[name="addSex"]:checked')?.value || '',
+            civilStatus: document.querySelector('input[name="addCivilStatus"]:checked')?.value || '',
             civil_status: document.querySelector('input[name="addCivilStatus"]:checked')?.value || '',
+            employmentStatus: document.querySelector('input[name="addEmploymentStatus"]:checked')?.value || '',
             employment_status: document.querySelector('input[name="addEmploymentStatus"]:checked')?.value || '',
             age: parseInt(document.getElementById('addAge').value) || 0,
+            birthDate: document.getElementById('addBirthDate').value,
             birth_date: document.getElementById('addBirthDate').value,
+            birthPlace: document.getElementById('addBirthPlace').value,
             birth_place: document.getElementById('addBirthPlace').value,
             education: document.getElementById('addEducation').value,
+            tel: document.getElementById('addTel').value,
+            mobile: document.getElementById('addMobile').value,
+            fax: document.getElementById('addFax').value,
+            email: document.getElementById('addEmail').value,
+            otherContact: document.getElementById('addOtherContact').value,
             contact: {
                 tel: document.getElementById('addTel').value,
                 mobile: document.getElementById('addMobile').value,
@@ -2026,6 +2147,7 @@ async function saveNewApplication() {
                 other_contact: document.getElementById('addOtherContact').value
             },
             status: document.getElementById('addStatus').value,
+            submittedAt: new Date().toISOString(),
             submitted_at: new Date().toISOString()
         };
 

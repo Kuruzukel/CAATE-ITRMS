@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../models/Application.php';
+require_once __DIR__ . '/../models/Trainee.php';
 
 class ApplicationController {
     
@@ -23,75 +24,42 @@ class ApplicationController {
                 return;
             }
             
+            $resolvedTrainee = $this->resolveTrainee($input);
+            $trainee = $resolvedTrainee['trainee'];
+
             $applicationData = [
-                'user_id' => $this->convertToObjectId($input['userId'] ?? null),
-                
-                'reference_number' => $this->buildReferenceNumber($input),
-                
-                'uli' => $this->buildULI($input),
-                
+                'user_id' => $resolvedTrainee['user_id'],
+                'trainee_id' => $this->getFirstAvailableValue($input, ['traineeId', 'trainee_id'], $trainee['trainee_id'] ?? ''),
+                'reference_number' => $this->getFirstAvailableValue($input, ['referenceNumber', 'reference_number'], $this->buildReferenceNumber($input)),
+                'uli' => $this->getFirstAvailableValue($input, ['uliNumber', 'uli'], $this->buildULI($input)),
                 'picture' => $input['picture'] ?? null,
                 'signature' => $input['signature'] ?? null,
-                
-                'school_name' => $input['schoolName'] ?? '',
-                'assessment_title' => $input['assessmentTitle'] ?? '',
-                'school_address' => $input['schoolAddress'] ?? '',
-                'application_date' => $input['applicationDate'] ?? '',
-                
-                'assessment_type' => $input['assessmentType'] ?? '',
-                
-                'client_type' => $input['clientType'] ?? '',
-                
-                'name' => [
-                    'surname' => $input['surname'] ?? '',
-                    'first_name' => $input['firstName'] ?? '',
-                    'second_name' => $input['secondname'] ?? '',
-                    'middle_name' => $input['middleName'] ?? '',
-                    'middle_initial' => $input['middleInitial'] ?? '',
-                    'name_extension' => $input['nameExtension'] ?? ''
-                ],
-                
-                'mailing_address' => [
-                    'number_street' => $input['numberStreet'] ?? '',
-                    'barangay' => $input['barangay'] ?? '',
-                    'district' => $input['district'] ?? '',
-                    'city' => $input['city'] ?? '',
-                    'province' => $input['province'] ?? '',
-                    'region' => $input['region'] ?? '',
-                    'zip' => $input['zip'] ?? ''
-                ],
-                
-                'mothers_name' => $input['motherName'] ?? '',
-                'fathers_name' => $input['fatherName'] ?? '',
-                
-                'sex' => $input['sex'] ?? '',
-                'civil_status' => $input['civilStatus'] ?? '',
-                'employment_status' => $input['employmentStatus'] ?? '',
-                'birth_date' => $input['birthDate'] ?? '',
-                'birth_place' => $input['birthPlace'] ?? '',
-                'age' => isset($input['age']) ? (int)$input['age'] : null,
-                'education' => $input['education'] ?? '',
-                'parent_guardian_name' => $input['parentGuardianName'] ?? '',
-                'parent_guardian_address' => $input['parentGuardianAddress'] ?? '',
-                
-                'contact' => [
-                    'tel' => $input['tel'] ?? '',
-                    'mobile' => $input['mobile'] ?? '',
-                    'fax' => $input['fax'] ?? '',
-                    'email' => $input['email'] ?? '',
-                    'other_contact' => $input['otherContact'] ?? ''
-                ],
-                
-                'work_experience' => $this->buildWorkExperience($input),
-                
-                'training_seminars' => $this->buildTrainingSeminars($input),
-                
-                'licensure_exams' => $this->buildLicensureExams($input),
-                
-                'competency_assessments' => $this->buildCompetencyAssessments($input),
-                
-                'status' => $input['status'] ?? 'pending',
-                'submitted_at' => $input['submittedAt'] ?? date('Y-m-d H:i:s'),
+                'school_name' => $this->getFirstAvailableValue($input, ['schoolName', 'school_name']),
+                'assessment_title' => $this->getFirstAvailableValue($input, ['assessmentTitle', 'assessment_title']),
+                'school_address' => $this->getFirstAvailableValue($input, ['schoolAddress', 'school_address']),
+                'application_date' => $this->getFirstAvailableValue($input, ['applicationDate', 'application_date']),
+                'assessment_type' => $this->getFirstAvailableValue($input, ['assessmentType', 'assessment_type']),
+                'client_type' => $this->getFirstAvailableValue($input, ['clientType', 'client_type']),
+                'name' => $this->buildNameData($input, $trainee),
+                'mailing_address' => $this->buildMailingAddressData($input),
+                'mothers_name' => $this->getFirstAvailableValue($input, ['motherName', 'mothers_name']),
+                'fathers_name' => $this->getFirstAvailableValue($input, ['fatherName', 'fathers_name']),
+                'sex' => $this->getFirstAvailableValue($input, ['sex']),
+                'civil_status' => $this->getFirstAvailableValue($input, ['civilStatus', 'civil_status']),
+                'employment_status' => $this->getFirstAvailableValue($input, ['employmentStatus', 'employment_status']),
+                'birth_date' => $this->getFirstAvailableValue($input, ['birthDate', 'birth_date']),
+                'birth_place' => $this->getFirstAvailableValue($input, ['birthPlace', 'birth_place']),
+                'age' => $this->getIntegerValue($input, ['age']),
+                'education' => $this->getFirstAvailableValue($input, ['education']),
+                'parent_guardian_name' => $this->getFirstAvailableValue($input, ['parentGuardianName', 'parent_guardian_name']),
+                'parent_guardian_address' => $this->getFirstAvailableValue($input, ['parentGuardianAddress', 'parent_guardian_address']),
+                'contact' => $this->buildContactData($input, $trainee),
+                'work_experience' => $this->buildWorkExperienceData($input),
+                'training_seminars' => $this->buildTrainingSeminarsData($input),
+                'licensure_exams' => $this->buildLicensureExamsData($input),
+                'competency_assessments' => $this->buildCompetencyAssessmentsData($input),
+                'status' => $this->getFirstAvailableValue($input, ['status'], 'pending'),
+                'submitted_at' => $this->getFirstAvailableValue($input, ['submittedAt', 'submitted_at'], date('Y-m-d H:i:s')),
                 'created_at' => new MongoDB\BSON\UTCDateTime(),
                 'updated_at' => new MongoDB\BSON\UTCDateTime()
             ];
@@ -134,6 +102,118 @@ class ApplicationController {
             error_log('Error converting to ObjectId: ' . $e->getMessage());
             return $id;
         }
+    }
+
+    private function getFirstAvailableValue($input, $keys, $default = '') {
+        foreach ($keys as $key) {
+            if (array_key_exists($key, $input) && $input[$key] !== null && $input[$key] !== '') {
+                return $input[$key];
+            }
+        }
+        return $default;
+    }
+
+    private function getIntegerValue($input, $keys, $default = null) {
+        $value = $this->getFirstAvailableValue($input, $keys, null);
+        if ($value === null || $value === '') {
+            return $default;
+        }
+        return (int)$value;
+    }
+
+    private function resolveTrainee($input) {
+        $traineeModel = new Trainee();
+        $trainee = null;
+        $userId = $this->getFirstAvailableValue($input, ['userId', 'user_id'], null);
+
+        if ($userId) {
+            $trainee = $traineeModel->findById($userId);
+        }
+
+        if (!$trainee) {
+            $traineeId = $this->getFirstAvailableValue($input, ['traineeId', 'trainee_id'], null);
+            if ($traineeId) {
+                foreach ($traineeModel->all() as $candidate) {
+                    if (($candidate['trainee_id'] ?? '') === $traineeId) {
+                        $trainee = $candidate;
+                        $userId = $candidate['_id'] ?? $userId;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return [
+            'trainee' => $trainee,
+            'user_id' => $this->convertToObjectId($userId)
+        ];
+    }
+
+    private function buildNameData($input, $trainee = null) {
+        $nameInput = isset($input['name']) && is_array($input['name']) ? $input['name'] : [];
+
+        return [
+            'surname' => $this->getFirstAvailableValue($nameInput + $input, ['surname'], $trainee['last_name'] ?? ''),
+            'first_name' => $this->getFirstAvailableValue($nameInput + $input, ['first_name', 'firstName'], $trainee['first_name'] ?? ''),
+            'second_name' => $this->getFirstAvailableValue($nameInput + $input, ['second_name', 'secondname']),
+            'middle_name' => $this->getFirstAvailableValue($nameInput + $input, ['middle_name', 'middleName'], $trainee['middle_name'] ?? ''),
+            'middle_initial' => $this->getFirstAvailableValue($nameInput + $input, ['middle_initial', 'middleInitial']),
+            'name_extension' => $this->getFirstAvailableValue($nameInput + $input, ['name_extension', 'nameExtension'])
+        ];
+    }
+
+    private function buildMailingAddressData($input) {
+        $addressInput = isset($input['mailing_address']) && is_array($input['mailing_address']) ? $input['mailing_address'] : [];
+
+        return [
+            'number_street' => $this->getFirstAvailableValue($addressInput + $input, ['number_street', 'numberStreet']),
+            'barangay' => $this->getFirstAvailableValue($addressInput + $input, ['barangay']),
+            'district' => $this->getFirstAvailableValue($addressInput + $input, ['district']),
+            'city' => $this->getFirstAvailableValue($addressInput + $input, ['city', 'cityMunicipality']),
+            'province' => $this->getFirstAvailableValue($addressInput + $input, ['province']),
+            'region' => $this->getFirstAvailableValue($addressInput + $input, ['region']),
+            'zip' => $this->getFirstAvailableValue($addressInput + $input, ['zip'])
+        ];
+    }
+
+    private function buildContactData($input, $trainee = null) {
+        $contactInput = isset($input['contact']) && is_array($input['contact']) ? $input['contact'] : [];
+
+        return [
+            'tel' => $this->getFirstAvailableValue($contactInput + $input, ['tel']),
+            'mobile' => $this->getFirstAvailableValue($contactInput + $input, ['mobile']),
+            'fax' => $this->getFirstAvailableValue($contactInput + $input, ['fax']),
+            'email' => $this->getFirstAvailableValue($contactInput + $input, ['email'], $trainee['email'] ?? ''),
+            'other_contact' => $this->getFirstAvailableValue($contactInput + $input, ['other_contact', 'otherContact'])
+        ];
+    }
+
+    private function buildWorkExperienceData($input) {
+        if (isset($input['work_experience']) && is_array($input['work_experience'])) {
+            return $input['work_experience'];
+        }
+        return $this->buildWorkExperience($input);
+    }
+
+    private function buildTrainingSeminarsData($input) {
+        if (isset($input['training_seminars']) && is_array($input['training_seminars'])) {
+            return $input['training_seminars'];
+        }
+        return $this->buildTrainingSeminars($input);
+    }
+
+    private function buildLicensureExamsData($input) {
+        if (isset($input['licensure_exams']) && is_array($input['licensure_exams'])) {
+            return $input['licensure_exams'];
+        }
+        return $this->buildLicensureExams($input);
+    }
+
+    private function buildCompetencyAssessmentsData($input) {
+        if (isset($input['competency_assessments']) && is_array($input['competency_assessments'])) {
+            return $input['competency_assessments'];
+        }
+        return $this->buildCompetencyAssessments($input);
     }
     
     private function buildReferenceNumber($input) {

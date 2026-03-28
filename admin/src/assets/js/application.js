@@ -654,76 +654,60 @@ function viewDetails(appId) {
     document.getElementById('viewEmail').textContent = data.contact.email || 'N/A';
     document.getElementById('viewOtherContact').textContent = data.contact.otherContact || 'N/A';
 
-    const workExpContainer = document.getElementById('viewWorkExperience');
-    if (data.workExperience.length > 0) {
-        workExpContainer.innerHTML = data.workExperience.map((exp, index) => `
-            <div class="card mb-2" style="background: rgba(255,255,255,0.05);">
-                <div class="card-body p-3">
-                    <h6 class="text-white mb-2">${index + 1}. ${exp.company || 'N/A'}</h6>
-                    <p class="mb-1 text-white-50"><strong>Position:</strong> ${exp.position || 'N/A'}</p>
-                    <p class="mb-1 text-white-50"><strong>Inclusive Dates:</strong> ${exp.inclusive_dates || 'N/A'}</p>
-                    <p class="mb-1 text-white-50"><strong>Monthly Salary:</strong> ${exp.monthly_salary || 'N/A'}</p>
-                    <p class="mb-1 text-white-50"><strong>Status:</strong> ${exp.status_of_appointment || 'N/A'}</p>
-                    <p class="mb-0 text-white-50"><strong>Years of Experience:</strong> ${exp.years_of_experience || 'N/A'}</p>
-                </div>
-            </div>
-        `).join('');
-    } else {
-        workExpContainer.innerHTML = '<p class="text-white-50">No work experience recorded</p>';
-    }
+    document.getElementById('viewWorkExperience').innerHTML = renderViewSectionItems(
+        data.workExperience,
+        'No work experience recorded',
+        'Work Experience',
+        [
+            { label: 'Company', key: 'company', columnClass: 'col-md-6' },
+            { label: 'Position', key: 'position', columnClass: 'col-md-6' },
+            { label: 'Inclusive Dates', key: 'inclusive_dates', columnClass: 'col-md-6' },
+            { label: 'Monthly Salary', key: 'monthly_salary', columnClass: 'col-md-6' },
+            { label: 'Status of Appointment', key: 'status_of_appointment', columnClass: 'col-md-6' },
+            { label: 'Years of Experience', key: 'years_of_experience', columnClass: 'col-md-6' }
+        ]
+    );
 
-    const trainingContainer = document.getElementById('viewTrainingSeminars');
-    if (data.trainingSeminars.length > 0) {
-        trainingContainer.innerHTML = data.trainingSeminars.map((training, index) => `
-            <div class="card mb-2" style="background: rgba(255,255,255,0.05);">
-                <div class="card-body p-3">
-                    <h6 class="text-white mb-2">${index + 1}. ${training.title || 'N/A'}</h6>
-                    <p class="mb-1 text-white-50"><strong>Venue:</strong> ${training.venue || 'N/A'}</p>
-                    <p class="mb-1 text-white-50"><strong>Inclusive Dates:</strong> ${training.inclusive_dates || 'N/A'}</p>
-                    <p class="mb-1 text-white-50"><strong>Number of Hours:</strong> ${training.number_of_hours || 'N/A'}</p>
-                    <p class="mb-0 text-white-50"><strong>Conducted By:</strong> ${training.conducted_by || 'N/A'}</p>
-                </div>
-            </div>
-        `).join('');
-    } else {
-        trainingContainer.innerHTML = '<p class="text-white-50">No training or seminars recorded</p>';
-    }
+    document.getElementById('viewTrainingSeminars').innerHTML = renderViewSectionItems(
+        data.trainingSeminars,
+        'No training or seminars recorded',
+        'Training/Seminar',
+        [
+            { label: 'Title', key: 'title', columnClass: 'col-md-6' },
+            { label: 'Venue', key: 'venue', columnClass: 'col-md-6' },
+            { label: 'Inclusive Dates', key: 'inclusive_dates', columnClass: 'col-md-6' },
+            { label: 'Number of Hours', key: 'number_of_hours', columnClass: 'col-md-6' },
+            { label: 'Conducted By', key: 'conducted_by', columnClass: 'col-md-6' }
+        ]
+    );
 
-    const licensureContainer = document.getElementById('viewLicensureExams');
-    if (data.licensureExams.length > 0) {
-        licensureContainer.innerHTML = data.licensureExams.map((exam, index) => `
-            <div class="card mb-2" style="background: rgba(255,255,255,0.05);">
-                <div class="card-body p-3">
-                    <h6 class="text-white mb-2">${index + 1}. ${exam.title || 'N/A'}</h6>
-                    <p class="mb-1 text-white-50"><strong>Year Taken:</strong> ${exam.year_taken || 'N/A'}</p>
-                    <p class="mb-1 text-white-50"><strong>Venue:</strong> ${exam.examination_venue || 'N/A'}</p>
-                    <p class="mb-1 text-white-50"><strong>Rating:</strong> ${exam.rating || 'N/A'}</p>
-                    <p class="mb-1 text-white-50"><strong>Remarks:</strong> ${exam.remarks || 'N/A'}</p>
-                    <p class="mb-0 text-white-50"><strong>Expiry Date:</strong> ${exam.expiry_date || 'N/A'}</p>
-                </div>
-            </div>
-        `).join('');
-    } else {
-        licensureContainer.innerHTML = '<p class="text-white-50">No licensure examinations recorded</p>';
-    }
+    document.getElementById('viewLicensureExams').innerHTML = renderViewSectionItems(
+        data.licensureExams,
+        'No licensure examinations recorded',
+        'Licensure Examination',
+        [
+            { label: 'Title', key: 'title', columnClass: 'col-md-6' },
+            { label: 'Year Taken', key: 'year_taken', columnClass: 'col-md-6' },
+            { label: 'Examination Venue', key: 'examination_venue', columnClass: 'col-md-6' },
+            { label: 'Rating', key: 'rating', columnClass: 'col-md-6' },
+            { label: 'Remarks', key: 'remarks', columnClass: 'col-md-6' },
+            { label: 'Expiry Date', key: 'expiry_date', columnClass: 'col-md-6' }
+        ]
+    );
 
-    const competencyContainer = document.getElementById('viewCompetencyAssessments');
-    if (data.competencyAssessments.length > 0) {
-        competencyContainer.innerHTML = data.competencyAssessments.map((comp, index) => `
-            <div class="card mb-2" style="background: rgba(255,255,255,0.05);">
-                <div class="card-body p-3">
-                    <h6 class="text-white mb-2">${index + 1}. ${comp.title || 'N/A'}</h6>
-                    <p class="mb-1 text-white-50"><strong>Qualification Level:</strong> ${comp.qualification_level || 'N/A'}</p>
-                    <p class="mb-1 text-white-50"><strong>Industry Sector:</strong> ${comp.industry_sector || 'N/A'}</p>
-                    <p class="mb-1 text-white-50"><strong>Certificate Number:</strong> ${comp.certificate_number || 'N/A'}</p>
-                    <p class="mb-1 text-white-50"><strong>Date of Issuance:</strong> ${comp.date_of_issuance || 'N/A'}</p>
-                    <p class="mb-0 text-white-50"><strong>Expiration Date:</strong> ${comp.expiration_date || 'N/A'}</p>
-                </div>
-            </div>
-        `).join('');
-    } else {
-        competencyContainer.innerHTML = '<p class="text-white-50">No competency assessments recorded</p>';
-    }
+    document.getElementById('viewCompetencyAssessments').innerHTML = renderViewSectionItems(
+        data.competencyAssessments,
+        'No competency assessments recorded',
+        'Competency Assessment',
+        [
+            { label: 'Title', key: 'title', columnClass: 'col-md-6' },
+            { label: 'Qualification Level', key: 'qualification_level', columnClass: 'col-md-6' },
+            { label: 'Industry Sector', key: 'industry_sector', columnClass: 'col-md-6' },
+            { label: 'Certificate Number', key: 'certificate_number', columnClass: 'col-md-6' },
+            { label: 'Date of Issuance', key: 'date_of_issuance', columnClass: 'col-md-6' },
+            { label: 'Expiration Date', key: 'expiration_date', columnClass: 'col-md-6' }
+        ]
+    );
 
     const statusBadge = getStatusBadge(app.status);
     document.getElementById('viewStatus').innerHTML = statusBadge;
@@ -893,8 +877,6 @@ function editDetails(appId) {
     };
 
     document.getElementById('editApplicationId').value = appId;
-    console.log('Setting edit Application ID to:', appId);
-    console.log('Application ID type:', typeof appId);
 
     document.getElementById('editTraineeId').value = data.traineeId || '';
     document.getElementById('editReferenceNumber').value = data.referenceNumber || '';
@@ -1383,28 +1365,46 @@ function getTrimmedSelectorValue(item, selector) {
     return item.querySelector(selector)?.value?.trim() || '';
 }
 
+function renderViewSectionItems(items, emptyMessage, titlePrefix, fields) {
+    if (!Array.isArray(items) || items.length === 0) {
+        return `<p class="text-white-50">${emptyMessage}</p>`;
+    }
+
+    return items.map((item, index) => `
+        <div class="card mb-3 view-detail-card">
+            <div class="card-body p-3">
+                <h6 class="text-white mb-3 view-detail-title">${titlePrefix} ${index + 1}</h6>
+                <div class="row">
+                    ${fields.map(field => `
+                        <div class="${field.columnClass || 'col-md-4'} mb-3 view-detail-item">
+                            <div class="view-detail-row">
+                                <label class="form-label text-white view-detail-label">${field.label}:</label>
+                                <p class="form-control-plaintext text-white view-detail-value">${item?.[field.key] || 'N/A'}</p>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
 async function saveEditedApplication() {
     const appId = document.getElementById('editApplicationId').value;
-    console.log('Edit Application ID from form:', appId);
-    console.log('Application ID type:', typeof appId);
 
     if (!appId) {
         showError('Application ID not found');
         return;
     }
 
-    console.log('Starting validation...');
     const validationErrors = validateRequiredFields();
-    console.log('Validation errors:', validationErrors);
 
     if (validationErrors.length > 0) {
         const errorMessage = `Please fill in the following required fields:<br>${validationErrors.join('<br>')}`;
-        console.log('Validation failed, showing error');
         showError(errorMessage);
         highlightInvalidFields(validationErrors);
         return;
     }
-    console.log('Validation passed');
 
     const updatedData = {
         trainee_id: document.getElementById('editTraineeId').value,

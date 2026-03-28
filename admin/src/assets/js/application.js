@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     loadApplications();
+    loadAssessmentTitleDropdowns();
 
     const dateFilter = document.getElementById('applicationDateFilter');
     if (dateFilter) {
@@ -86,6 +87,68 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 let allApplications = [];
+let assessmentTitleOptions = [];
+
+async function loadAssessmentTitleDropdowns() {
+    try {
+        assessmentTitleOptions = await fetchCourseTitles();
+    } catch (error) {
+        console.error('Error loading assessment titles:', error);
+        assessmentTitleOptions = [];
+    }
+
+    populateAssessmentTitleSelect('addAssessmentTitle');
+    populateAssessmentTitleSelect('editAssessmentTitle');
+}
+
+async function fetchCourseTitles() {
+    const apiResponse = await fetch(`${config.api.baseUrl}/api/v1/courses`);
+    const apiResult = await apiResponse.json();
+
+    if (apiResult.success && Array.isArray(apiResult.data) && apiResult.data.length > 0) {
+        return normalizeCourseTitles(apiResult.data);
+    }
+
+    const fallbackResponse = await fetch(`${window.location.origin}/CAATE-ITRMS/backend/public/CAATE-ITRMS.courses.json`);
+    const fallbackData = await fallbackResponse.json();
+
+    if (!Array.isArray(fallbackData) || fallbackData.length === 0) {
+        throw new Error(apiResult.message || 'Failed to load courses');
+    }
+
+    return normalizeCourseTitles(fallbackData);
+}
+
+function normalizeCourseTitles(courses) {
+    return courses
+        .map(item => item?.title?.trim())
+        .filter(Boolean)
+        .filter((title, index, array) => array.indexOf(title) === index)
+        .sort((a, b) => a.localeCompare(b));
+}
+
+function populateAssessmentTitleSelect(selectId, selectedValue = '') {
+    const select = document.getElementById(selectId);
+    if (!select) return;
+
+    const currentValue = selectedValue || select.value || '';
+    const options = [...assessmentTitleOptions];
+
+    if (currentValue && !options.includes(currentValue)) {
+        options.unshift(currentValue);
+    }
+
+    select.innerHTML = '<option value="">Select assessment title</option>';
+
+    options.forEach(title => {
+        const option = document.createElement('option');
+        option.value = title;
+        option.textContent = title;
+        select.appendChild(option);
+    });
+
+    select.value = currentValue;
+}
 
 async function loadApplications() {
     try {
@@ -617,7 +680,13 @@ function editDetails(appId) {
     document.getElementById('editSchoolName').value = app.school_name || '';
     document.getElementById('editSchoolAddress').value = app.school_address || '';
 
-    document.getElementById('editAssessmentTitle').value = app.assessment_title || '';
+    if (!assessmentTitleOptions.length) {
+        loadAssessmentTitleDropdowns().finally(() => {
+            populateAssessmentTitleSelect('editAssessmentTitle', app.assessment_title || '');
+        });
+    } else {
+        populateAssessmentTitleSelect('editAssessmentTitle', app.assessment_title || '');
+    }
     document.getElementById('editApplicationDate').value = app.application_date || '';
     document.getElementById('editAssessmentType').value = app.assessment_type || '';
     document.getElementById('editClientType').value = app.client_type || '';
@@ -1673,6 +1742,11 @@ document.getElementById('exportJsonBtn')?.addEventListener('click', function () 
 document.getElementById('addApplicationBtn')?.addEventListener('click', function () {
     const modal = new bootstrap.Modal(document.getElementById('addApplicationModal'));
     modal.show();
+    if (!assessmentTitleOptions.length) {
+        loadAssessmentTitleDropdowns();
+    } else {
+        populateAssessmentTitleSelect('addAssessmentTitle');
+    }
 
     setTimeout(() => {
         const addModalFields = document.querySelectorAll('#addApplicationModal input, #addApplicationModal select, #addApplicationModal textarea');

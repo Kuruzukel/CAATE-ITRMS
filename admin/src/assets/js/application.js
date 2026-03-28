@@ -1379,6 +1379,10 @@ function hasAnyValue(values) {
     return values.some(value => value !== '' && value !== null && value !== undefined);
 }
 
+function getTrimmedSelectorValue(item, selector) {
+    return item.querySelector(selector)?.value?.trim() || '';
+}
+
 async function saveEditedApplication() {
     const appId = document.getElementById('editApplicationId').value;
     console.log('Edit Application ID from form:', appId);
@@ -2274,14 +2278,14 @@ async function saveNewApplication() {
 
         const workExperiences = [];
         document.querySelectorAll('#addWorkExperienceContainer .work-experience-item').forEach(item => {
-            const company = item.querySelector('.work-company')?.value || '';
-            const position = item.querySelector('.work-position')?.value || '';
-            const dates = item.querySelector('.work-dates')?.value || '';
-            const salary = item.querySelector('.work-salary')?.value || '';
-            const status = item.querySelector('.work-status')?.value || '';
-            const years = item.querySelector('.work-years')?.value || '';
+            const company = getTrimmedSelectorValue(item, '.work-company');
+            const position = getTrimmedSelectorValue(item, '.work-position');
+            const dates = getTrimmedSelectorValue(item, '.work-dates');
+            const salary = getTrimmedSelectorValue(item, '.work-salary');
+            const status = getTrimmedSelectorValue(item, '.work-status');
+            const years = getTrimmedSelectorValue(item, '.work-years');
 
-            if (company || position || dates) {
+            if (hasAnyValue([company, position, dates, salary, status, years])) {
                 workExperiences.push({
                     company,
                     position,
@@ -2296,13 +2300,13 @@ async function saveNewApplication() {
 
         const trainingSeminars = [];
         document.querySelectorAll('#addTrainingSeminarContainer .training-seminar-item').forEach(item => {
-            const title = item.querySelector('.training-title')?.value || '';
-            const venue = item.querySelector('.training-venue')?.value || '';
-            const dates = item.querySelector('.training-dates')?.value || '';
-            const hours = item.querySelector('.training-hours')?.value || '';
-            const conductedBy = item.querySelector('.training-conducted')?.value || '';
+            const title = getTrimmedSelectorValue(item, '.training-title');
+            const venue = getTrimmedSelectorValue(item, '.training-venue');
+            const dates = getTrimmedSelectorValue(item, '.training-dates');
+            const hours = getTrimmedSelectorValue(item, '.training-hours');
+            const conductedBy = getTrimmedSelectorValue(item, '.training-conductor');
 
-            if (title || venue || dates) {
+            if (hasAnyValue([title, venue, dates, hours, conductedBy])) {
                 trainingSeminars.push({
                     title,
                     venue,
@@ -2316,14 +2320,14 @@ async function saveNewApplication() {
 
         const licensureExams = [];
         document.querySelectorAll('#addLicensureExamContainer .licensure-exam-item').forEach(item => {
-            const title = item.querySelector('.licensure-title')?.value || '';
-            const year = item.querySelector('.licensure-year')?.value || '';
-            const venue = item.querySelector('.licensure-venue')?.value || '';
-            const rating = item.querySelector('.licensure-rating')?.value || '';
-            const remarks = item.querySelector('.licensure-remarks')?.value || '';
-            const expiry = item.querySelector('.licensure-expiry')?.value || '';
+            const title = getTrimmedSelectorValue(item, '.licensure-title');
+            const year = getTrimmedSelectorValue(item, '.licensure-year');
+            const venue = getTrimmedSelectorValue(item, '.licensure-venue');
+            const rating = getTrimmedSelectorValue(item, '.licensure-rating');
+            const remarks = getTrimmedSelectorValue(item, '.licensure-remarks');
+            const expiry = getTrimmedSelectorValue(item, '.licensure-expiry');
 
-            if (title || year || venue) {
+            if (hasAnyValue([title, year, venue, rating, remarks, expiry])) {
                 licensureExams.push({
                     title,
                     year_taken: year,
@@ -2338,14 +2342,14 @@ async function saveNewApplication() {
 
         const competencyAssessments = [];
         document.querySelectorAll('#addCompetencyAssessmentContainer .competency-assessment-item').forEach(item => {
-            const title = item.querySelector('.competency-title')?.value || '';
-            const level = item.querySelector('.competency-level')?.value || '';
-            const sector = item.querySelector('.competency-sector')?.value || '';
-            const certNumber = item.querySelector('.competency-cert')?.value || '';
-            const issuance = item.querySelector('.competency-issuance')?.value || '';
-            const expiration = item.querySelector('.competency-expiration')?.value || '';
+            const title = getTrimmedSelectorValue(item, '.competency-title');
+            const level = getTrimmedSelectorValue(item, '.competency-level');
+            const sector = getTrimmedSelectorValue(item, '.competency-sector');
+            const certNumber = getTrimmedSelectorValue(item, '.competency-cert');
+            const issuance = getTrimmedSelectorValue(item, '.competency-issued');
+            const expiration = getTrimmedSelectorValue(item, '.competency-expiry');
 
-            if (title || level || sector) {
+            if (hasAnyValue([title, level, sector, certNumber, issuance, expiration])) {
                 competencyAssessments.push({
                     title,
                     qualification_level: level,

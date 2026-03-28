@@ -190,12 +190,24 @@ class ApplicationController {
         if (isset($input['work_experience']) && is_array($input['work_experience'])) {
             return $input['work_experience'];
         }
+        if (isset($input['work_experience']) && is_string($input['work_experience'])) {
+            $decoded = json_decode($input['work_experience'], true);
+            if (is_array($decoded)) {
+                return $decoded;
+            }
+        }
         return $this->buildWorkExperience($input);
     }
 
     private function buildTrainingSeminarsData($input) {
         if (isset($input['training_seminars']) && is_array($input['training_seminars'])) {
             return $input['training_seminars'];
+        }
+        if (isset($input['training_seminars']) && is_string($input['training_seminars'])) {
+            $decoded = json_decode($input['training_seminars'], true);
+            if (is_array($decoded)) {
+                return $decoded;
+            }
         }
         return $this->buildTrainingSeminars($input);
     }
@@ -204,6 +216,12 @@ class ApplicationController {
         if (isset($input['licensure_exams']) && is_array($input['licensure_exams'])) {
             return $input['licensure_exams'];
         }
+        if (isset($input['licensure_exams']) && is_string($input['licensure_exams'])) {
+            $decoded = json_decode($input['licensure_exams'], true);
+            if (is_array($decoded)) {
+                return $decoded;
+            }
+        }
         return $this->buildLicensureExams($input);
     }
 
@@ -211,7 +229,28 @@ class ApplicationController {
         if (isset($input['competency_assessments']) && is_array($input['competency_assessments'])) {
             return $input['competency_assessments'];
         }
+        if (isset($input['competency_assessments']) && is_string($input['competency_assessments'])) {
+            $decoded = json_decode($input['competency_assessments'], true);
+            if (is_array($decoded)) {
+                return $decoded;
+            }
+        }
         return $this->buildCompetencyAssessments($input);
+    }
+
+    private function decodeArrayField($value) {
+        if (is_array($value)) {
+            return $value;
+        }
+
+        if (is_string($value)) {
+            $decoded = json_decode($value, true);
+            if (is_array($decoded)) {
+                return $decoded;
+            }
+        }
+
+        return $value;
     }
     
     private function buildReferenceNumber($input) {
@@ -428,6 +467,12 @@ class ApplicationController {
                     'message' => 'Invalid JSON input'
                 ]);
                 return;
+            }
+
+            foreach (['work_experience', 'training_seminars', 'licensure_exams', 'competency_assessments'] as $field) {
+                if (array_key_exists($field, $input)) {
+                    $input[$field] = $this->decodeArrayField($input[$field]);
+                }
             }
             
             $applicationModel = new Application();

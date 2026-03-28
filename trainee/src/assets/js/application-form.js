@@ -413,11 +413,10 @@ function validateApplicationForm() {
         { id: 'schoolName', label: 'School/Training Center/Company' },
         { id: 'assessmentTitle', label: 'Assessment Title' },
         { id: 'schoolAddress', label: 'School Address' },
-        { id: 'applicationDate', label: 'Date of Application' },
         { id: 'mobile', label: 'Mobile Number' },
         { id: 'email', label: 'Email Address' },
         { id: 'birthDate', label: 'Birth Date' },
-        { id: 'firstName', label: 'First Name' },
+        { id: 'firstname', label: 'First Name' },
         { id: 'mailingNumber', label: 'Number Street' },
         { id: 'barangay', label: 'Barangay' },
         { id: 'district', label: 'District' },
@@ -425,8 +424,8 @@ function validateApplicationForm() {
         { id: 'province', label: 'Province' },
         { id: 'region', label: 'Region' },
         { id: 'zip', label: 'Zip' },
-        { id: 'motherName', label: "Mother's Name" },
-        { id: 'fatherName', label: "Father's Name" },
+        { id: 'mothersName', label: "Mother's Name" },
+        { id: 'fathersName', label: "Father's Name" },
         { id: 'birthPlace', label: 'Birth Place' },
         { id: 'age', label: 'Age' }
     ];

@@ -533,7 +533,7 @@
                                                     <label for="applicationDate" class="form-label fw-semibold">Date
                                                         of Application</label>
                                                     <input type="date" id="applicationDate" name="applicationDate"
-                                                        class="form-control" required>
+                                                        class="form-control">
                                                 </div>
                                             </div>
 
@@ -542,7 +542,7 @@
                                                 <label class="form-label fw-semibold">Assessment Type</label>
                                                 <div class="radio-group">
                                                     <label class="radio-label">
-                                                        <input type="radio" name="assessmentType" value="full" required>
+                                                        <input type="radio" name="assessmentType" value="full">
                                                         <span>Full Qualification</span>
                                                     </label>
                                                     <label class="radio-label">
@@ -561,8 +561,7 @@
                                                 <label class="form-label fw-semibold">1. Client Type</label>
                                                 <div class="radio-group">
                                                     <label class="radio-label">
-                                                        <input type="radio" name="clientType" value="tvet-graduating"
-                                                            required>
+                                                        <input type="radio" name="clientType" value="tvet-graduating">
                                                         <span>TVET Graduating Student</span>
                                                     </label>
                                                     <label class="radio-label">
@@ -609,7 +608,7 @@
                                                         NAME</label>
                                                     <input type="text" id="firstname" name="firstname"
                                                         class="form-control" placeholder="Enter your first name"
-                                                        autocomplete="given-name">
+                                                        autocomplete="given-name" required>
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -651,7 +650,7 @@
                                                     Street</label>
                                                 <input type="text" id="mailingNumber" name="mailingNumber"
                                                     class="form-control" placeholder="House/Building No. and Street"
-                                                    autocomplete="address-line1">
+                                                    autocomplete="address-line1" required>
                                             </div>
                                             
                                             <div class="row">
@@ -660,7 +659,7 @@
                                                         class="form-label fw-semibold">Barangay</label>
                                                     <input type="text" id="barangay" name="barangay"
                                                         class="form-control" placeholder="Enter barangay..."
-                                                        autocomplete="address-level3">
+                                                        autocomplete="address-level3" required>
                                                 </div>
                                                 <div class="col-md-6 mb-3">
                                                     <label for="district"
@@ -668,27 +667,29 @@
                                                     <input type="number" id="district" name="district"
                                                         class="form-control no-spinner"
                                                         placeholder="Enter district number..."
-                                                        autocomplete="address-level4" min="1" max="9" maxlength="1">
+                                                        autocomplete="address-level4" min="1" max="9" maxlength="1"
+                                                        required>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-6 mb-3">
                                                     <label for="city" class="form-label fw-semibold">City</label>
                                                     <input type="text" id="city" name="city" class="form-control"
-                                                        placeholder="Enter city..." autocomplete="address-level2">
+                                                        placeholder="Enter city..." autocomplete="address-level2"
+                                                        required>
                                                 </div>
                                                 <div class="col-md-6 mb-3">
                                                     <label for="province"
                                                         class="form-label fw-semibold">Province</label>
                                                     <input type="text" id="province" name="province"
                                                         class="form-control" placeholder="Enter province..."
-                                                        autocomplete="address-level1">
+                                                        autocomplete="address-level1" required>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-6 mb-3">
                                                     <label for="region" class="form-label fw-semibold">Region</label>
-                                                    <select id="region" name="region" class="form-control">
+                                                    <select id="region" name="region" class="form-control" required>
                                                         <option value="">Select region...</option>
                                                         <option value="Region I">Ilocos Region (Region I)</option>
                                                         <option value="Region II">Cagayan Valley (Region II)</option>
@@ -717,7 +718,7 @@
                                                     <label for="zip" class="form-label fw-semibold">Zip</label>
                                                     <input type="number" id="zip" name="zip"
                                                         class="form-control no-spinner" placeholder="Enter zip code"
-                                                        autocomplete="postal-code" min="0" max="9999">
+                                                        autocomplete="postal-code" min="0" max="9999" required>
                                                 </div>
                                             </div>
 
@@ -727,14 +728,14 @@
                                                         Name</label>
                                                     <input type="text" id="mothersName" name="mothersName"
                                                         class="form-control" placeholder="Enter mother's full name"
-                                                        autocomplete="off">
+                                                        autocomplete="off" required>
                                                 </div>
                                                 <div class="col-md-6 mb-3">
                                                     <label for="fathersName" class="form-label fw-semibold">2.4 Father's
                                                         Name</label>
                                                     <input type="text" id="fathersName" name="fathersName"
                                                         class="form-control" placeholder="Enter father's full name"
-                                                        autocomplete="off">
+                                                        autocomplete="off" required>
                                                 </div>
                                             </div>
 
@@ -891,13 +892,14 @@
                                                         place</label>
                                                     <input type="text" id="birthPlace" name="birthPlace"
                                                         class="form-control" placeholder="Enter birth place"
-                                                        autocomplete="off">
+                                                        autocomplete="off" required>
                                                 </div>
                                                 <div class="col-md-4 mb-3">
                                                     <label for="age" class="form-label fw-semibold">2.12 Age</label>
                                                     <input type="number" id="age" name="age"
                                                         class="form-control readonly-field" min="1" max="999"
-                                                        maxlength="3" placeholder="Age" readonly autocomplete="off">
+                                                        maxlength="3" placeholder="Age" readonly autocomplete="off"
+                                                        required>
                                                 </div>
                                             </div>
                                         </div>

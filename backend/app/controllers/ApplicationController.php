@@ -51,8 +51,6 @@ class ApplicationController {
                 'birth_place' => $this->getFirstAvailableValue($input, ['birthPlace', 'birth_place']),
                 'age' => $this->getIntegerValue($input, ['age']),
                 'education' => $this->getFirstAvailableValue($input, ['education']),
-                'parent_guardian_name' => $this->getFirstAvailableValue($input, ['parentGuardianName', 'parent_guardian_name']),
-                'parent_guardian_address' => $this->getFirstAvailableValue($input, ['parentGuardianAddress', 'parent_guardian_address']),
                 'contact' => $this->buildContactData($input, $trainee),
                 'work_experience' => $this->buildWorkExperienceData($input),
                 'training_seminars' => $this->buildTrainingSeminarsData($input),

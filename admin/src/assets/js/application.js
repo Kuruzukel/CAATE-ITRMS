@@ -1370,6 +1370,15 @@ function addCompetencyAssessment() {
     container.insertAdjacentHTML('beforeend', assessmentHtml);
 }
 
+function getScopedFieldValue(item, fieldName) {
+    const field = item.querySelector(`[name="${fieldName}"]`);
+    return field ? field.value.trim() : '';
+}
+
+function hasAnyValue(values) {
+    return values.some(value => value !== '' && value !== null && value !== undefined);
+}
+
 async function saveEditedApplication() {
     const appId = document.getElementById('editApplicationId').value;
     console.log('Edit Application ID from form:', appId);
@@ -1441,21 +1450,22 @@ async function saveEditedApplication() {
 
     const workExperiences = [];
     const workItems = document.querySelectorAll('.work-experience-item');
-    workItems.forEach((item, index) => {
-        const company = item.querySelector(`[name="work_company_${index}"]`)?.value;
-        const position = item.querySelector(`[name="work_position_${index}"]`)?.value;
-        const dates = item.querySelector(`[name="work_dates_${index}"]`)?.value;
-        const salary = item.querySelector(`[name="work_salary_${index}"]`)?.value;
-        const status = item.querySelector(`[name="work_status_${index}"]`)?.value;
-        const years = item.querySelector(`[name="work_years_${index}"]`)?.value;
+    workItems.forEach((item) => {
+        const rowIndex = item.dataset.index;
+        const company = getScopedFieldValue(item, `work_company_${rowIndex}`);
+        const position = getScopedFieldValue(item, `work_position_${rowIndex}`);
+        const dates = getScopedFieldValue(item, `work_dates_${rowIndex}`);
+        const salary = getScopedFieldValue(item, `work_salary_${rowIndex}`);
+        const status = getScopedFieldValue(item, `work_status_${rowIndex}`);
+        const years = getScopedFieldValue(item, `work_years_${rowIndex}`);
 
-        if (company || position) {
+        if (hasAnyValue([company, position, dates, salary, status, years])) {
             workExperiences.push({
-                company: company || '',
-                position: position || '',
-                inclusive_dates: dates || '',
-                monthly_salary: salary || '',
-                status_of_appointment: status || '',
+                company,
+                position,
+                inclusive_dates: dates,
+                monthly_salary: salary,
+                status_of_appointment: status,
                 years_of_experience: parseInt(years) || 0
             });
         }
@@ -1464,20 +1474,21 @@ async function saveEditedApplication() {
 
     const trainingSeminars = [];
     const trainingItems = document.querySelectorAll('.training-seminar-item');
-    trainingItems.forEach((item, index) => {
-        const title = item.querySelector(`[name="training_title_${index}"]`)?.value;
-        const venue = item.querySelector(`[name="training_venue_${index}"]`)?.value;
-        const dates = item.querySelector(`[name="training_dates_${index}"]`)?.value;
-        const hours = item.querySelector(`[name="training_hours_${index}"]`)?.value;
-        const conductor = item.querySelector(`[name="training_conductor_${index}"]`)?.value;
+    trainingItems.forEach((item) => {
+        const rowIndex = item.dataset.index;
+        const title = getScopedFieldValue(item, `training_title_${rowIndex}`);
+        const venue = getScopedFieldValue(item, `training_venue_${rowIndex}`);
+        const dates = getScopedFieldValue(item, `training_dates_${rowIndex}`);
+        const hours = getScopedFieldValue(item, `training_hours_${rowIndex}`);
+        const conductor = getScopedFieldValue(item, `training_conductor_${rowIndex}`);
 
-        if (title || venue) {
+        if (hasAnyValue([title, venue, dates, hours, conductor])) {
             trainingSeminars.push({
-                title: title || '',
-                venue: venue || '',
-                inclusive_dates: dates || '',
+                title,
+                venue,
+                inclusive_dates: dates,
                 number_of_hours: parseInt(hours) || 0,
-                conducted_by: conductor || ''
+                conducted_by: conductor
             });
         }
     });
@@ -1485,22 +1496,23 @@ async function saveEditedApplication() {
 
     const licensureExams = [];
     const examItems = document.querySelectorAll('.licensure-exam-item');
-    examItems.forEach((item, index) => {
-        const title = item.querySelector(`[name="exam_title_${index}"]`)?.value;
-        const year = item.querySelector(`[name="exam_year_${index}"]`)?.value;
-        const venue = item.querySelector(`[name="exam_venue_${index}"]`)?.value;
-        const rating = item.querySelector(`[name="exam_rating_${index}"]`)?.value;
-        const remarks = item.querySelector(`[name="exam_remarks_${index}"]`)?.value;
-        const expiry = item.querySelector(`[name="exam_expiry_${index}"]`)?.value;
+    examItems.forEach((item) => {
+        const rowIndex = item.dataset.index;
+        const title = getScopedFieldValue(item, `exam_title_${rowIndex}`);
+        const year = getScopedFieldValue(item, `exam_year_${rowIndex}`);
+        const venue = getScopedFieldValue(item, `exam_venue_${rowIndex}`);
+        const rating = getScopedFieldValue(item, `exam_rating_${rowIndex}`);
+        const remarks = getScopedFieldValue(item, `exam_remarks_${rowIndex}`);
+        const expiry = getScopedFieldValue(item, `exam_expiry_${rowIndex}`);
 
-        if (title || year) {
+        if (hasAnyValue([title, year, venue, rating, remarks, expiry])) {
             licensureExams.push({
-                title: title || '',
-                year_taken: parseInt(year) || 0,
-                examination_venue: venue || '',
-                rating: rating || '',
-                remarks: remarks || '',
-                expiry_date: expiry || ''
+                title,
+                year_taken: year === '' ? null : parseInt(year) || 0,
+                examination_venue: venue,
+                rating,
+                remarks,
+                expiry_date: expiry
             });
         }
     });
@@ -1508,22 +1520,23 @@ async function saveEditedApplication() {
 
     const competencyAssessments = [];
     const compItems = document.querySelectorAll('.competency-assessment-item');
-    compItems.forEach((item, index) => {
-        const title = item.querySelector(`[name="comp_title_${index}"]`)?.value;
-        const level = item.querySelector(`[name="comp_level_${index}"]`)?.value;
-        const sector = item.querySelector(`[name="comp_sector_${index}"]`)?.value;
-        const cert = item.querySelector(`[name="comp_cert_${index}"]`)?.value;
-        const issue = item.querySelector(`[name="comp_issue_${index}"]`)?.value;
-        const expiry = item.querySelector(`[name="comp_expiry_${index}"]`)?.value;
+    compItems.forEach((item) => {
+        const rowIndex = item.dataset.index;
+        const title = getScopedFieldValue(item, `comp_title_${rowIndex}`);
+        const level = getScopedFieldValue(item, `comp_level_${rowIndex}`);
+        const sector = getScopedFieldValue(item, `comp_sector_${rowIndex}`);
+        const cert = getScopedFieldValue(item, `comp_cert_${rowIndex}`);
+        const issue = getScopedFieldValue(item, `comp_issue_${rowIndex}`);
+        const expiry = getScopedFieldValue(item, `comp_expiry_${rowIndex}`);
 
-        if (title || level) {
+        if (hasAnyValue([title, level, sector, cert, issue, expiry])) {
             competencyAssessments.push({
-                title: title || '',
-                qualification_level: level || '',
-                industry_sector: sector || '',
-                certificate_number: cert || '',
-                date_of_issuance: issue || '',
-                expiration_date: expiry || ''
+                title,
+                qualification_level: level,
+                industry_sector: sector,
+                certificate_number: cert,
+                date_of_issuance: issue,
+                expiration_date: expiry
             });
         }
     });

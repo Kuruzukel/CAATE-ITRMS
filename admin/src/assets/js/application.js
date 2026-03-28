@@ -190,16 +190,14 @@ function setupAddApplicationTraineeLookup() {
     traineeIdField.dataset.lookupAttached = 'true';
 
     traineeIdField.addEventListener('change', function () {
-        const trainee = findTraineeByTraineeId(this.value);
-        if (trainee) {
-            populateAddApplicationTraineeDetails(trainee);
+        if (this.classList.contains('is-invalid')) {
+            this.classList.remove('is-invalid');
         }
     });
 
     traineeIdField.addEventListener('blur', function () {
-        const trainee = findTraineeByTraineeId(this.value);
-        if (trainee) {
-            populateAddApplicationTraineeDetails(trainee);
+        if (this.classList.contains('is-invalid')) {
+            this.classList.remove('is-invalid');
         }
     });
 }
@@ -325,7 +323,7 @@ function renderApplicationsTable(applications) {
 
     tbody.innerHTML = applications.map(app => {
         const fullName = getFullName(app);
-        const traineeId = app.userData?.trainee_id || 'N/A';
+        const traineeId = app.trainee_id || app.userData?.trainee_id || 'N/A';
         const course = app.assessment_title || 'N/A';
         const date = formatDate(app.application_date || app.submitted_at);
         const status = app.status || 'pending';
@@ -1555,7 +1553,7 @@ function deleteApplication(appId) {
     document.getElementById('deleteApplicationId').value = appId;
 
     document.getElementById('deleteFullName').textContent = getFullName(app);
-    document.getElementById('deleteTraineeId').textContent = app.userData?.trainee_id || 'N/A';
+    document.getElementById('deleteTraineeId').textContent = app.trainee_id || app.userData?.trainee_id || 'N/A';
     document.getElementById('deleteCourse').textContent = app.assessment_title || 'N/A';
     document.getElementById('deleteApplicationDate').textContent = formatDate(app.application_date || app.submitted_at);
 
@@ -1613,7 +1611,7 @@ function applyFilters() {
 
     let filtered = allApplications.filter(app => {
         const fullName = getFullName(app).toLowerCase();
-        const traineeId = (app.userData?.trainee_id || '').toLowerCase();
+        const traineeId = String(app.trainee_id || app.userData?.trainee_id || '').toLowerCase();
         const matchesSearch = !searchTerm || fullName.includes(searchTerm) || traineeId.includes(searchTerm);
 
         const matchesStatus = !statusValue || app.status === statusValue;
@@ -1908,7 +1906,7 @@ function exportToCSV() {
     const headers = ['Name', 'Trainee ID', 'Course', 'Date', 'Status', 'Reference Number', 'ULI', 'Email', 'Mobile'];
     const rows = allApplications.map(app => [
         getFullName(app),
-        app.userData?.trainee_id || 'N/A',
+        app.trainee_id || app.userData?.trainee_id || 'N/A',
         app.assessment_title || 'N/A',
         formatDate(app.application_date || app.submitted_at),
         app.status || 'pending',
@@ -2034,15 +2032,13 @@ async function saveNewApplication() {
         }
 
         const traineeId = document.getElementById('addTraineeId').value.trim();
-        const selectedTrainee = findTraineeByTraineeId(traineeId);
+        const existingTrainee = findTraineeByTraineeId(traineeId);
 
-        if (!selectedTrainee) {
-            showError(`Trainee ID "${traineeId}" was not found in the database`);
+        if (existingTrainee) {
+            showError(`Trainee ID "${traineeId}" already exists in the trainee database`);
             highlightInvalidAddFields(['Trainee ID']);
             return;
         }
-
-        populateAddApplicationTraineeDetails(selectedTrainee);
 
         if (traineeId) {
             const duplicateTrainee = allApplications.find(app =>
@@ -2070,7 +2066,7 @@ async function saveNewApplication() {
         }
 
         const formData = {
-            userId: selectedTrainee._id || '',
+            userId: '',
             traineeId: traineeId,
             trainee_id: traineeId,
             referenceNumber: referenceNumber,

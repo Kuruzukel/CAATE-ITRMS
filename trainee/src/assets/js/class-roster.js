@@ -1,7 +1,7 @@
 const enrolledCourses = [
-    { id: 1, name: 'Beauty Care (Skin Care) NC II', hours: '307 hours', image: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=400&h=250&fit=crop' },
-    { id: 2, name: 'Beauty Care (Nail Care) NC II', hours: '307 hours', image: 'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&h=250&fit=crop' },
-    { id: 3, name: 'Aesthetic Services Level II', hours: '264 hours', image: 'https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=400&h=250&fit=crop' }
+    { id: 1, name: 'Beauty Care (Skin Care) NC II', code: 'SOCBCS220', hours: '307 hours', type: 'NC II', status: 'active', image: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=400&h=250&fit=crop' },
+    { id: 2, name: 'Beauty Care (Nail Care) NC II', code: 'SOCBCN220', hours: '307 hours', type: 'NC II', status: 'active', image: 'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&h=250&fit=crop' },
+    { id: 3, name: 'Aesthetic Services Level III', code: 'SOCAES320', hours: '264 hours', type: 'Level III', status: 'completed', image: 'https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=400&h=250&fit=crop' }
 ];
 
 const courseStudents = {
@@ -58,7 +58,8 @@ const courseStudents = {
     ]
 };
 
-let selectedCourseId = 1; // Default to Beauty Care (Skin Care) NC II
+let selectedCourseId = 1;
+let filteredCourses = [...enrolledCourses];
 
 const avatarColors = [
     'linear-gradient(135deg, #3691bf 0%, #325596 100%)',
@@ -92,16 +93,36 @@ function initializeCourses() {
     const container = document.getElementById('coursesContainer');
     container.innerHTML = '';
 
-    enrolledCourses.forEach((course, index) => {
+    if (filteredCourses.length === 0) {
+        container.innerHTML = `
+            <div class="col-12 text-center py-5">
+                <i class="bx bx-search" style="font-size: 3rem; color: #6c757d;"></i>
+                <p class="mt-3 text-muted" style="color: white !important;">No courses found matching your filters</p>
+            </div>
+        `;
+        return;
+    }
+
+    filteredCourses.forEach((course, index) => {
+        const statusBadge = course.status === 'active'
+            ? '<span class="badge bg-success">Active</span>'
+            : course.status === 'completed'
+                ? '<span class="badge bg-info">Completed</span>'
+                : '<span class="badge bg-warning">Pending</span>';
+
         const card = document.createElement('div');
         card.className = 'col-md-6 col-lg-4 mb-4';
         card.innerHTML = `
             <div class="card course-card" data-course-id="${course.id}" onclick="viewStudents(${course.id}, '${course.name}', this)">
                 <div class="card-body">
-                    <div class="d-flex align-items-center mb-3">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
                         <img src="${course.image}" alt="${course.name}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 50%; border: 3px solid #3691bf;" />
+                        ${statusBadge}
                     </div>
                     <h5 class="card-title">${course.name}</h5>
+                    <p class="text-muted mb-2">
+                        <i class="bx bx-code-alt me-1"></i>${course.code}
+                    </p>
                     <p class="text-muted mb-0">
                         <i class="bx bx-time-five me-1"></i>${course.hours}
                     </p>
@@ -111,17 +132,30 @@ function initializeCourses() {
         container.appendChild(card);
     });
 
-    setTimeout(() => {
-        const firstCard = document.querySelector('.course-card');
-        if (firstCard) {
-            firstCard.classList.add('active');
-            viewStudents(1, enrolledCourses[0].name, firstCard);
-        }
-    }, 100);
+    // Auto-select first course if available
+    if (filteredCourses.length > 0) {
+        setTimeout(() => {
+            const firstCard = document.querySelector('.course-card');
+            if (firstCard) {
+                firstCard.classList.add('active');
+                viewStudents(filteredCourses[0].id, filteredCourses[0].name, firstCard);
+            }
+        }, 100);
+    }
 }
 
 function viewStudents(courseId, courseName, cardElement) {
     selectedCourseId = courseId;
+
+    // Update the selected course name in the student list view
+    const selectedCourseNameElement = document.getElementById('selectedCourseName');
+    if (selectedCourseNameElement) {
+        selectedCourseNameElement.textContent = courseName;
+    }
+
+    // Show student list view and hide courses view
+    document.getElementById('coursesView').parentElement.style.display = 'none';
+    document.getElementById('studentListView').style.display = 'block';
 
     document.querySelectorAll('.course-card').forEach(card => {
         card.classList.remove('active');
@@ -207,8 +241,51 @@ function viewStudents(courseId, courseName, cardElement) {
     });
 }
 
-document.addEventListener('DOMContentLoaded', function () {
+// Filter function
+function applyFilters() {
+    const searchTerm = document.getElementById('searchCourseInput').value.toLowerCase();
+    const courseType = document.getElementById('courseTypeFilter').value;
+    const courseStatus = document.getElementById('courseStatusFilter').value;
+
+    filteredCourses = enrolledCourses.filter(course => {
+        const matchesSearch = course.name.toLowerCase().includes(searchTerm) ||
+            course.code.toLowerCase().includes(searchTerm);
+        const matchesType = !courseType || course.type === courseType;
+        const matchesStatus = !courseStatus || course.status === courseStatus;
+
+        return matchesSearch && matchesType && matchesStatus;
+    });
+
     initializeCourses();
+}
+
+// Reset filters
+function resetFilters() {
+    document.getElementById('searchCourseInput').value = '';
+    document.getElementById('courseTypeFilter').value = '';
+    document.getElementById('courseStatusFilter').value = '';
+    filteredCourses = [...enrolledCourses];
+    initializeCourses();
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Initialize courses
+    initializeCourses();
+
+    // Add event listeners for filters
+    document.getElementById('searchCourseInput').addEventListener('input', applyFilters);
+    document.getElementById('courseTypeFilter').addEventListener('change', applyFilters);
+    document.getElementById('courseStatusFilter').addEventListener('change', applyFilters);
+    document.getElementById('resetCourseFilters').addEventListener('click', resetFilters);
+
+    // Back to courses button
+    const backBtn = document.getElementById('backToCoursesBtn');
+    if (backBtn) {
+        backBtn.addEventListener('click', function () {
+            document.getElementById('studentListView').style.display = 'none';
+            document.getElementById('coursesView').parentElement.style.display = 'block';
+        });
+    }
 
     setTimeout(() => {
         const firstCard = document.querySelector('.course-card');

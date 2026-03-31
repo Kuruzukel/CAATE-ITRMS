@@ -59,14 +59,14 @@ async function fetchAllData() {
 }
 
 // Process trainees data - show ALL approved applications
-function processTraineesData() {
+async function processTraineesData() {
     const combinedData = [];
 
     console.log('Processing data - Trainees:', allTrainees.length, 'Applications:', allApplications.length, 'Registrations:', allRegistrations.length);
     const approvedApps = allApplications.filter(app => app.status === 'approved');
 
-    // Show ALL approved applications
-    approvedApps.forEach(application => {
+    // Show ALL approved applications with profile images
+    for (const application of approvedApps) {
         const appTraineeId = application.trainee_id || application.user_id || 'N/A';
 
         // Extract name from application.name object
@@ -84,16 +84,38 @@ function processTraineesData() {
                 .join(' ');
         }
 
+        // Fetch profile image from trainee data
+        let profileImage = null;
+        let userId = application.user_id || application.userId;
+
+        // Handle MongoDB ObjectId format
+        if (userId && typeof userId === 'object') {
+            userId = userId.$oid || userId._id || null;
+        }
+
+        if (userId && typeof userId === 'string') {
+            try {
+                const traineeResponse = await fetch(`${config.api.baseUrl}/api/v1/trainees/${userId}`);
+                const traineeData = await traineeResponse.json();
+                if (traineeData.success && traineeData.data && traineeData.data.profile_image) {
+                    profileImage = traineeData.data.profile_image;
+                }
+            } catch (error) {
+                console.log('Could not fetch trainee profile:', error);
+            }
+        }
+
         combinedData.push({
             id: application._id?.$oid || application._id,
             traineeId: appTraineeId,
             name: fullName || 'Unknown',
             initials: getInitials(fullName),
+            profileImage: profileImage,
             course: application.assessment_title || application.course || 'N/A',
             email: 'N/A',
             phone: 'N/A'
         });
-    });
+    }
 
     filteredTrainees = combinedData;
     renderTraineesTable();
@@ -141,9 +163,64 @@ function renderTraineesTable() {
 
     filteredTrainees.forEach(trainee => {
         const row = document.createElement('tr');
+
+        const profileImage = trainee.profileImage;
+        const initials = trainee.initials;
+        const fullName = trainee.name;
+
+        let avatarHtml;
+        if (profileImage) {
+            avatarHtml = `
+                <div class="avatar avatar-sm me-3">
+                    <img src="${profileImage}" 
+                         alt="${fullName}" 
+                         class="rounded-circle" 
+                         style="width: 38px; height: 38px; object-fit: cover;"
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="avatar-fallback" 
+                         style="display: none; background: linear-gradient(135deg, rgba(54, 145, 191, 0.1) 0%, rgba(50, 85, 150, 0.1) 100%); 
+                         backdrop-filter: blur(10px) saturate(180%); 
+                         -webkit-backdrop-filter: blur(10px) saturate(180%); 
+                         border: 1px solid rgba(54, 145, 191, 0.4); 
+                         box-shadow: 0 4px 12px rgba(22, 56, 86, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3); 
+                         color: white; 
+                         align-items: center; 
+                         justify-content: center; 
+                         border-radius: 50%; 
+                         width: 38px; 
+                         height: 38px; 
+                         font-weight: 600;">
+                        ${initials}
+                    </div>
+                </div>`;
+        } else {
+            avatarHtml = `
+                <div class="avatar avatar-sm me-3"
+                    style="background: linear-gradient(135deg, rgba(54, 145, 191, 0.1) 0%, rgba(50, 85, 150, 0.1) 100%); 
+                    backdrop-filter: blur(10px) saturate(180%); 
+                    -webkit-backdrop-filter: blur(10px) saturate(180%); 
+                    border: 1px solid rgba(54, 145, 191, 0.4); 
+                    box-shadow: 0 4px 12px rgba(22, 56, 86, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3); 
+                    color: white; 
+                    display: flex; 
+                    align-items: center; 
+                    justify-content: center; 
+                    border-radius: 50%; 
+                    width: 38px; 
+                    height: 38px; 
+                    font-weight: 600;">
+                    ${initials}
+                </div>`;
+        }
+
         row.innerHTML = `
+            <td>
+                <div class="d-flex align-items-center">
+                    ${avatarHtml}
+                    <span>${trainee.name}</span>
+                </div>
+            </td>
             <td>${trainee.traineeId}</td>
-            <td>${trainee.name}</td>
             <td>${trainee.course}</td>
             <td>
                 <button class="btn btn-sm btn-primary" onclick="viewTraineeDetails('${trainee.id}')">
@@ -181,11 +258,16 @@ function applyFilters() {
                 .join(' ');
         }
 
+        // Find existing trainee data to preserve profile image
+        const existingTrainee = filteredTrainees.find(t => t.id === (application._id?.$oid || application._id));
+        const profileImage = existingTrainee ? existingTrainee.profileImage : null;
+
         combinedData.push({
             id: application._id?.$oid || application._id,
             traineeId: appTraineeId,
             name: fullName || 'Unknown',
             initials: getInitials(fullName),
+            profileImage: profileImage,
             course: application.assessment_title || application.course || 'N/A',
             email: 'N/A',
             phone: 'N/A'

@@ -277,11 +277,39 @@ async function loadStatistics() {
             console.error('Error fetching registration count:', regError);
         }
 
+        let applicationCount = 0;
+        try {
+            const appResponse = await fetch(`${API_BASE_URL}/applications`);
+            if (appResponse.ok) {
+                const appResult = await appResponse.json();
+                if (appResult.success && appResult.data) {
+                    applicationCount = appResult.data.filter(app => app.status === 'approved').length;
+                }
+            }
+        } catch (appError) {
+            console.error('Error fetching application count:', appError);
+        }
+
+        let admissionCount = 0;
+        try {
+            const admResponse = await fetch(`${API_BASE_URL}/admissions`);
+            if (admResponse.ok) {
+                const admResult = await admResponse.json();
+                if (admResult.success && admResult.data) {
+                    admissionCount = admResult.data.filter(adm => adm.status === 'approved').length;
+                }
+            }
+        } catch (admError) {
+            console.error('Error fetching admission count:', admError);
+        }
+
         if (result.success) {
 
             const statsWithRegistration = {
                 ...result.data,
-                totalRegistration: registrationCount
+                totalRegistration: registrationCount,
+                totalApplication: applicationCount,
+                totalAdmission: admissionCount
             };
             updateStatistics(statsWithRegistration);
         }

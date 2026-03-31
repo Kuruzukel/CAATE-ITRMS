@@ -1,41 +1,106 @@
-const enrolledCourses = [
-    { id: 1, name: 'Beauty Care (Skin Care) NC II', code: 'SOCBCS220', hours: '307 hours', type: 'NC II', status: 'active', image: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=400&h=250&fit=crop' },
-    { id: 2, name: 'Beauty Care (Nail Care) NC II', code: 'SOCBCN220', hours: '307 hours', type: 'NC II', status: 'active', image: 'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&h=250&fit=crop' },
-    { id: 3, name: 'Aesthetic Services Level III', code: 'SOCAES320', hours: '264 hours', type: 'Level III', status: 'completed', image: 'https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=400&h=250&fit=crop' }
-];
+let allTrainees = [];
+let allApplications = [];
+let allRegistrations = [];
+let filteredTrainees = [];
 
-// Sample trainee data with applications and registrations
-const traineesData = [
-    { id: 1, name: 'Maria Santos', traineeId: 'TRN-001', initials: 'MS', courseId: 1, applicationStatus: 'approved', registrationStatus: 'approved' },
-    { id: 2, name: 'Anna Cruz', traineeId: 'TRN-002', initials: 'AC', courseId: 1, applicationStatus: 'approved', registrationStatus: 'pending' },
-    { id: 3, name: 'Rosa Garcia', traineeId: 'TRN-003', initials: 'RG', courseId: 1, applicationStatus: 'pending', registrationStatus: 'pending' },
-    { id: 4, name: 'Elena Lopez', traineeId: 'TRN-004', initials: 'EL', courseId: 1, applicationStatus: 'approved', registrationStatus: 'approved' },
-    { id: 5, name: 'Sofia Martinez', traineeId: 'TRN-005', initials: 'SM', courseId: 1, applicationStatus: 'cancelled', registrationStatus: 'cancelled' },
-    { id: 6, name: 'Isabella Reyes', traineeId: 'TRN-006', initials: 'IR', courseId: 2, applicationStatus: 'approved', registrationStatus: 'approved' },
-    { id: 7, name: 'Carmen Flores', traineeId: 'TRN-007', initials: 'CF', courseId: 2, applicationStatus: 'approved', registrationStatus: 'approved' },
-    { id: 8, name: 'Lucia Morales', traineeId: 'TRN-008', initials: 'LM', courseId: 2, applicationStatus: 'pending', registrationStatus: 'approved' },
-    { id: 9, name: 'Valentina Ruiz', traineeId: 'TRN-009', initials: 'VR', courseId: 3, applicationStatus: 'approved', registrationStatus: 'approved' },
-    { id: 10, name: 'Gabriela Soto', traineeId: 'TRN-010', initials: 'GS', courseId: 3, applicationStatus: 'approved', registrationStatus: 'pending' }
-];
-
-let filteredTrainees = [...traineesData];
-
-// Get status badge HTML
-function getStatusBadge(status) {
-    if (status === 'approved') {
-        return '<span class="badge bg-success">Approved</span>';
-    } else if (status === 'pending') {
-        return '<span class="badge bg-warning">Pending</span>';
-    } else if (status === 'cancelled') {
-        return '<span class="badge bg-danger">Cancelled</span>';
+// Get initials from name
+function getInitials(name) {
+    if (!name) return '??';
+    const parts = name.split(' ');
+    if (parts.length >= 2) {
+        return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
     }
-    return '<span class="badge bg-secondary">Unknown</span>';
+    return name.substring(0, 2).toUpperCase();
 }
 
-// Get course name by ID
-function getCourseName(courseId) {
-    const course = enrolledCourses.find(c => c.id === courseId);
-    return course ? course.name : 'Unknown Course';
+// Fetch all data from database
+async function fetchAllData() {
+    try {
+        // Fetch trainees
+        const traineesResponse = await fetch(`${config.api.baseUrl}/api/v1/trainees`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        const traineesResult = await traineesResponse.json();
+        allTrainees = traineesResult.data || [];
+
+        // Fetch applications
+        const applicationsResponse = await fetch(`${config.api.baseUrl}/api/v1/applications`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        const applicationsResult = await applicationsResponse.json();
+        allApplications = applicationsResult.data || [];
+
+        // Fetch registrations
+        const registrationsResponse = await fetch(`${config.api.baseUrl}/api/v1/registrations`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        const registrationsResult = await registrationsResponse.json();
+        allRegistrations = registrationsResult.data || [];
+
+        // Populate course filter
+        populateCourseFilter();
+
+        // Process and render data
+        processTraineesData();
+
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        showError('Failed to load data. Please refresh the page.');
+    }
+}
+
+// Process trainees data - only show approved applications and registrations
+function processTraineesData() {
+    const combinedData = [];
+
+    console.log('Processing data - Trainees:', allTrainees.length, 'Applications:', allApplications.length, 'Registrations:', allRegistrations.length);
+
+    // For each trainee, find their APPROVED applications and registrations
+    allTrainees.forEach(trainee => {
+        const traineeIdStr = trainee._id?.$oid || trainee._id;
+
+        // Find APPROVED applications for this trainee
+        const traineeApplications = allApplications.filter(app => {
+            const appTraineeId = app.trainee_id || app.traineeId;
+            return appTraineeId === traineeIdStr && app.status === 'approved';
+        });
+
+        // Find APPROVED registration for this trainee
+        const registration = allRegistrations.find(r => {
+            const rTraineeId = r.trainee_id || r.traineeId;
+            return rTraineeId === traineeIdStr && r.status === 'approved';
+        });
+
+        const fullName = `${trainee.firstName || ''} ${trainee.middleName || ''} ${trainee.lastName || ''}`.trim();
+
+        // Only show trainees with APPROVED applications AND registrations
+        if (traineeApplications.length > 0 && registration) {
+            traineeApplications.forEach(application => {
+                combinedData.push({
+                    id: traineeIdStr,
+                    traineeId: trainee.traineeId || trainee.trainee_id || 'N/A',
+                    name: fullName || trainee.username || 'Unknown',
+                    initials: getInitials(fullName),
+                    course: application.assessment_title || application.course || 'N/A',
+                    email: trainee.email || 'N/A',
+                    phone: trainee.phoneNumber || trainee.phone || 'N/A'
+                });
+            });
+        }
+    });
+
+    console.log('Combined data (approved only):', combinedData.length);
+    filteredTrainees = combinedData;
+    renderTraineesTable();
 }
 
 // Render trainees table
@@ -50,14 +115,31 @@ function renderTraineesTable() {
     tbody.innerHTML = '';
 
     if (filteredTrainees.length === 0) {
-        tbody.innerHTML = `
-            <tr>
-                <td colspan="6" class="text-center" style="padding: 60px 20px;">
-                    <i class="bx bx-search" style="font-size: 3rem; color: #6c757d;"></i>
-                    <p class="mt-3 text-muted" style="color: white !important;">No trainees found matching your filters</p>
-                </td>
-            </tr>
-        `;
+        // Check if any filters are active
+        const searchTerm = document.getElementById('searchTraineeInput').value;
+        const courseFilter = document.getElementById('courseFilter').value;
+
+        const hasActiveFilters = searchTerm || courseFilter;
+
+        if (hasActiveFilters) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="4" class="text-center" style="padding: 60px 20px;">
+                        <i class="bx bx-search" style="font-size: 3rem; color: #6c757d;"></i>
+                        <p class="mt-3 text-muted" style="color: white !important;">No trainees found matching your filters</p>
+                    </td>
+                </tr>
+            `;
+        } else {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="4" class="text-center" style="padding: 60px 20px;">
+                        <i class="bx bx-info-circle" style="font-size: 3rem; color: #6c757d;"></i>
+                        <p class="mt-3 text-muted" style="color: white !important;">No approved trainees enrolled yet</p>
+                    </td>
+                </tr>
+            `;
+        }
         return;
     }
 
@@ -73,11 +155,9 @@ function renderTraineesTable() {
                     <span>${trainee.name}</span>
                 </div>
             </td>
-            <td>${getCourseName(trainee.courseId)}</td>
-            <td>${getStatusBadge(trainee.applicationStatus)}</td>
-            <td>${getStatusBadge(trainee.registrationStatus)}</td>
+            <td>${trainee.course}</td>
             <td>
-                <button class="btn btn-sm btn-primary" onclick="viewTraineeDetails(${trainee.id})">
+                <button class="btn btn-sm btn-primary" onclick="viewTraineeDetails('${trainee.id}')">
                     <i class="bx bx-show"></i> View
                 </button>
             </td>
@@ -89,20 +169,55 @@ function renderTraineesTable() {
 // Filter function
 function applyFilters() {
     const searchTerm = document.getElementById('searchTraineeInput').value.toLowerCase();
-    const courseFilter = document.getElementById('courseFilter').value;
-    const appStatus = document.getElementById('applicationStatusFilter').value;
-    const regStatus = document.getElementById('registrationStatusFilter').value;
+    const courseFilter = document.getElementById('courseFilter').value.toLowerCase();
 
-    filteredTrainees = traineesData.filter(trainee => {
-        const matchesSearch = trainee.name.toLowerCase().includes(searchTerm) ||
-            trainee.traineeId.toLowerCase().includes(searchTerm);
-        const matchesCourse = !courseFilter || trainee.courseId === parseInt(courseFilter);
-        const matchesAppStatus = !appStatus || trainee.applicationStatus === appStatus;
-        const matchesRegStatus = !regStatus || trainee.registrationStatus === regStatus;
+    // Get all combined data again from the original arrays (approved only)
+    const combinedData = [];
 
-        return matchesSearch && matchesCourse && matchesAppStatus && matchesRegStatus;
+    allTrainees.forEach(trainee => {
+        const traineeIdStr = trainee._id?.$oid || trainee._id;
+
+        // Find APPROVED applications for this trainee
+        const traineeApplications = allApplications.filter(app => {
+            const appTraineeId = app.trainee_id || app.traineeId;
+            return appTraineeId === traineeIdStr && app.status === 'approved';
+        });
+
+        // Find APPROVED registration for this trainee
+        const registration = allRegistrations.find(r => {
+            const rTraineeId = r.trainee_id || r.traineeId;
+            return rTraineeId === traineeIdStr && r.status === 'approved';
+        });
+
+        const fullName = `${trainee.firstName || ''} ${trainee.middleName || ''} ${trainee.lastName || ''}`.trim();
+
+        // Only show trainees with APPROVED applications AND registrations
+        if (traineeApplications.length > 0 && registration) {
+            traineeApplications.forEach(application => {
+                combinedData.push({
+                    id: traineeIdStr,
+                    traineeId: trainee.traineeId || trainee.trainee_id || 'N/A',
+                    name: fullName || trainee.username || 'Unknown',
+                    initials: getInitials(fullName),
+                    course: application.assessment_title || application.course || 'N/A',
+                    email: trainee.email || 'N/A',
+                    phone: trainee.phoneNumber || trainee.phone || 'N/A'
+                });
+            });
+        }
     });
 
+    // Apply filters
+    filteredTrainees = combinedData.filter(trainee => {
+        const matchesSearch = !searchTerm ||
+            trainee.name.toLowerCase().includes(searchTerm) ||
+            trainee.traineeId.toLowerCase().includes(searchTerm);
+        const matchesCourse = !courseFilter || trainee.course.toLowerCase().includes(courseFilter);
+
+        return matchesSearch && matchesCourse;
+    });
+
+    console.log('Total combined:', combinedData.length, 'Filtered:', filteredTrainees.length);
     renderTraineesTable();
 }
 
@@ -110,44 +225,52 @@ function applyFilters() {
 function resetFilters() {
     document.getElementById('searchTraineeInput').value = '';
     document.getElementById('courseFilter').value = '';
-    document.getElementById('applicationStatusFilter').value = '';
-    document.getElementById('registrationStatusFilter').value = '';
-    filteredTrainees = [...traineesData];
-    renderTraineesTable();
+    processTraineesData();
 }
 
 // Populate course filter dropdown
 function populateCourseFilter() {
     const courseFilter = document.getElementById('courseFilter');
-    enrolledCourses.forEach(course => {
+
+    // Get unique courses from APPROVED applications only
+    const approvedApplications = allApplications.filter(app => app.status === 'approved');
+    const uniqueCourses = [...new Set(approvedApplications.map(app => app.assessment_title || app.course).filter(c => c))];
+
+    uniqueCourses.forEach(course => {
         const option = document.createElement('option');
-        option.value = course.id;
-        option.textContent = course.name;
+        option.value = course.toLowerCase();
+        option.textContent = course;
         courseFilter.appendChild(option);
     });
 }
 
-// View trainee details (placeholder function)
+// View trainee details
 function viewTraineeDetails(traineeId) {
-    const trainee = traineesData.find(t => t.id === traineeId);
+    const trainee = filteredTrainees.find(t => t.id === traineeId);
     if (trainee) {
-        alert(`Viewing details for: ${trainee.name}\nTrainee ID: ${trainee.traineeId}\nCourse: ${getCourseName(trainee.courseId)}`);
+        alert(`Viewing details for: ${trainee.name}\nTrainee ID: ${trainee.traineeId}\nCourse: ${trainee.course}\nEmail: ${trainee.email}\nPhone: ${trainee.phone}`);
     }
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-    // Populate course filter
-    populateCourseFilter();
+// Show error message
+function showError(message) {
+    const tbody = document.getElementById('traineesTableBody');
+    tbody.innerHTML = `
+        <tr>
+            <td colspan="4" class="text-center" style="padding: 60px 20px;">
+                <i class="bx bx-error-circle" style="font-size: 3rem; color: #ff3e1d;"></i>
+                <p class="mt-3 text-danger">${message}</p>
+            </td>
+        </tr>
+    `;
+}
 
-    // Initial render
-    setTimeout(() => {
-        renderTraineesTable();
-    }, 500);
+document.addEventListener('DOMContentLoaded', function () {
+    // Fetch all data
+    fetchAllData();
 
     // Add event listeners for filters
     document.getElementById('searchTraineeInput').addEventListener('input', applyFilters);
     document.getElementById('courseFilter').addEventListener('change', applyFilters);
-    document.getElementById('applicationStatusFilter').addEventListener('change', applyFilters);
-    document.getElementById('registrationStatusFilter').addEventListener('change', applyFilters);
     document.getElementById('resetCourseFilters').addEventListener('click', resetFilters);
 });

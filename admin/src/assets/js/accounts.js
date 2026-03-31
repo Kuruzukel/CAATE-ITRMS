@@ -376,19 +376,64 @@ function createTraineeRow(trainee, index) {
 
     const displayName = hasName ? fullName : '<span class="text-muted">N/A</span>';
 
-    tr.innerHTML = `
-        <td><strong>${displayId}</strong></td>
-        <td>${displayUsername}</td>
-        <td>
-            <div class="d-flex align-items-center">
-                <div class="avatar avatar-sm me-3" style="background: linear-gradient(135deg, rgba(54, 145, 191, 0.1) 0%, rgba(50, 85, 150, 0.1) 100%); backdrop-filter: blur(10px) saturate(180%); -webkit-backdrop-filter: blur(10px) saturate(180%); border: 1px solid rgba(54, 145, 191, 0.4); box-shadow: 0 4px 12px rgba(22, 56, 86, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3); color: white; display: flex; align-items: center; justify-content: center; border-radius: 50%; width: 38px; height: 38px; font-weight: 600;">
+    const profileImage = trainee.profile_image;
+
+    let avatarHtml;
+    if (profileImage) {
+        avatarHtml = `
+            <div class="avatar avatar-sm me-3">
+                <img src="${profileImage}" 
+                     alt="${fullName}" 
+                     class="rounded-circle" 
+                     style="width: 38px; height: 38px; object-fit: cover;"
+                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="avatar-fallback" 
+                     style="display: none; background: linear-gradient(135deg, rgba(54, 145, 191, 0.1) 0%, rgba(50, 85, 150, 0.1) 100%); 
+                     backdrop-filter: blur(10px) saturate(180%); 
+                     -webkit-backdrop-filter: blur(10px) saturate(180%); 
+                     border: 1px solid rgba(54, 145, 191, 0.4); 
+                     box-shadow: 0 4px 12px rgba(22, 56, 86, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3); 
+                     color: white; 
+                     align-items: center; 
+                     justify-content: center; 
+                     border-radius: 50%; 
+                     width: 38px; 
+                     height: 38px; 
+                     font-weight: 600;">
                     ${initials}
                 </div>
+            </div>`;
+    } else {
+        avatarHtml = `
+            <div class="avatar avatar-sm me-3"
+                style="background: linear-gradient(135deg, rgba(54, 145, 191, 0.1) 0%, rgba(50, 85, 150, 0.1) 100%); 
+                backdrop-filter: blur(10px) saturate(180%); 
+                -webkit-backdrop-filter: blur(10px) saturate(180%); 
+                border: 1px solid rgba(54, 145, 191, 0.4); 
+                box-shadow: 0 4px 12px rgba(22, 56, 86, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3); 
+                color: white; 
+                display: flex; 
+                align-items: center; 
+                justify-content: center; 
+                border-radius: 50%; 
+                width: 38px; 
+                height: 38px; 
+                font-weight: 600;">
+                ${initials}
+            </div>`;
+    }
+
+    tr.innerHTML = `
+        <td>
+            <div class="d-flex align-items-center">
+                ${avatarHtml}
                 <div>
                     <strong>${displayName}</strong>
                 </div>
             </div>
         </td>
+        <td><strong>${displayId}</strong></td>
+        <td>${displayUsername}</td>
         <td>${trainee.email}</td>
         <td>${trainee.phone || '<span class="text-muted">N/A</span>'}</td>
         <td>

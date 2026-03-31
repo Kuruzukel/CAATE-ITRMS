@@ -133,7 +133,7 @@ function renderTraineesTable() {
         } else {
             tbody.innerHTML = `
                 <tr>
-                    <td colspan="4" class="text-center" style="padding: 60px 20px;">
+                    <td colspan="4" class="text-center" style="padding: 110px 20px;">
                         <i class="bx bx-info-circle" style="font-size: 3rem; color: #6c757d;"></i>
                         <p class="mt-3 text-muted" style="color: white !important;">No approved trainees enrolled yet</p>
                     </td>

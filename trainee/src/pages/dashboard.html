@@ -9,56 +9,55 @@
     <title>CAATE | Trainee Dashboard</title>
     <meta name="description" content="" />
 
-    
+
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
 
-    
+
     <meta name="format-detection" content="password=no" />
     <meta name="password-detection" content="off" />
 
-    
+
     <meta name="password-manager" content="disabled" />
     <meta name="save-password" content="false" />
     <meta name="autocomplete" content="off" />
     <meta name="credential-manager" content="disabled" />
     <meta name="password-notification" content="disabled" />
 
-    
+
     <link rel="icon" type="image/x-icon" href="../assets/images/CAATE_META_LOGO.png" />
 
-    
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
         href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
         rel="stylesheet" />
 
-    
+
     <link rel="stylesheet" href="../assets/vendor/fonts/boxicons.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
-    
+
     <link rel="stylesheet" href="../assets/vendor/css/core.css" class="template-customizer-core-css" />
     <link rel="stylesheet" href="../assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
     <link rel="stylesheet" href="../assets/css/demo.css" />
     <link rel="stylesheet" href="../assets/css/custom-theme.css" />
 
-    
+
     <link rel="stylesheet" href="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
     <link rel="stylesheet" href="../assets/vendor/libs/apex-charts/apex-charts.css" />
 
-    
+
     <script src="../assets/vendor/js/helpers.js"></script>
     <script src="../assets/js/config.js"></script>
 
-    
+
     <link rel="stylesheet" href="../assets/css/dashboard.css" />
 
-    
+
     <style>
-        
         [data-password-manager-popup],
         [data-password-manager-dialog],
         .password-manager-popup,
@@ -71,7 +70,7 @@
             opacity: 0 !important;
         }
 
-        
+
         input:-webkit-autofill,
         input:-webkit-autofill:hover,
         input:-webkit-autofill:focus {
@@ -80,10 +79,10 @@
         }
     </style>
 
-    
+
     <script src="../assets/js/auth-guard.js"></script>
 
-    
+
     <script>
         if (localStorage.getItem('rememberedPass')) {
             localStorage.removeItem('rememberedPass');
@@ -93,17 +92,17 @@
         }
     </script>
 
-    
+
     <script src="../assets/js/disable-password-manager.js"></script>
 </head>
 
 <body data-required-role="trainee">
-    
+
     <div class="layout-wrapper layout-content-navbar">
         <div class="layout-container">
-            
+
             <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
-                
+
                 <button class="menu-close-btn" aria-label="Close menu">
                     <i class="fas fa-times"></i>
                 </button>
@@ -122,7 +121,7 @@
                 <div class="menu-inner-shadow"></div>
 
                 <ul class="menu-inner py-1">
-                    
+
                     <li class="menu-item active">
                         <a href="dashboard.html" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-home-circle"></i>
@@ -130,7 +129,7 @@
                         </a>
                     </li>
 
-                    
+
                     <li class="menu-item">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
                             <i class="menu-icon tf-icons bx bx-book"></i>
@@ -150,7 +149,7 @@
                         </ul>
                     </li>
 
-                    
+
                     <li class="menu-item">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
                             <i class="menu-icon tf-icons bx bx-book-open"></i>
@@ -170,7 +169,7 @@
                         </ul>
                     </li>
 
-                    
+
                     <li class="menu-item">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
                             <i class="menu-icon tf-icons bx bx-file"></i>
@@ -196,7 +195,7 @@
                         </ul>
                     </li>
 
-                    
+
                     <li class="menu-item">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
                             <i class="menu-icon tf-icons bx bx-cog"></i>
@@ -217,11 +216,11 @@
                     </li>
                 </ul>
             </aside>
-            
 
-            
+
+
             <div class="layout-page">
-                
+
                 <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
                     id="layout-navbar">
                     <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0">
@@ -233,7 +232,7 @@
 
                     <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse"
                         style="justify-content: space-between !important;">
-                        
+
                         <div class="navbar-nav align-items-center" style="flex: 0 0 auto; max-width: 250px;">
                             <div class="nav-item d-flex align-items-center position-relative"
                                 style="width: 250px; max-width: 250px;">
@@ -244,11 +243,11 @@
                                     style="padding-left: 40px; width: 250px; max-width: 250px;" />
                             </div>
                         </div>
-                        
+
 
                         <ul class="navbar-nav flex-row align-items-center ms-auto"
                             style="flex-shrink: 0; margin-left: auto;">
-                            
+
                             <li class="nav-item navbar-dropdown dropdown-user dropdown">
                                 <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);"
                                     data-bs-toggle="dropdown">
@@ -272,8 +271,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="grow">
-                                                    <span
-                                                        class="fw-semibold d-block text-white user-name">Loading...</span>
+                                                    <span class="fw-semibold d-block text-white user-name"></span>
                                                     <small class="text-white">Trainee</small>
                                                 </div>
                                             </div>
@@ -290,15 +288,15 @@
                                     </li>
                                 </ul>
                             </li>
-                            
+
                         </ul>
                     </div>
                 </nav>
-                
 
-                
+
+
                 <div class="content-wrapper">
-                    
+
                     <div class="container-xxl grow container-p-y">
                         <div class="row">
                             <div class="col-lg-8 mb-4 order-0">
@@ -307,9 +305,9 @@
                                         <div class="col-sm-7">
                                             <div class="card-body">
                                                 <h5 class="card-title text-primary">Welcome Back, <span
-                                                        class="user-name welcome-user-name">Loading...</span>!</h5>
+                                                        class="user-name welcome-user-name"></span>!</h5>
                                                 <p class="mb-4">
-                                                    You have <span class="fw-bold">3 active courses</span>. Continue
+                                                    You have <span class="fw-bold">0 active courses</span>. Start
                                                     your learning journey today!
                                                 </p>
                                                 <a href="courses-programs.html"
@@ -333,14 +331,17 @@
                                                 <div
                                                     class="card-title d-flex align-items-start justify-content-between">
                                                     <div class="avatar shrink-0">
-                                                        <i class="bx bx-book-open"
+                                                        <i class="bx bx-certification"
                                                             style="font-size: 2rem; color: #10b981;"></i>
                                                     </div>
                                                 </div>
-                                                <span class="fw-semibold d-block mb-1">Active Courses</span>
-                                                <h3 class="card-title mb-2">3</h3>
-                                                <small class="text-success fw-semibold"><i
-                                                        class="bx bx-up-arrow-alt"></i> In Progress</small>
+                                                <span class="fw-semibold d-block mb-1"
+                                                    style="display: block !important;">Completed NC II</span>
+                                                <h3 class="card-title mb-2"
+                                                    style="display: block !important; margin-top: 0.5rem;">0</h3>
+                                                <small class="text-success fw-semibold"
+                                                    style="display: block !important; margin-top: 0.5rem;"><i
+                                                        class="bx bx-check-circle"></i> Courses</small>
                                             </div>
                                         </div>
                                     </div>
@@ -350,14 +351,18 @@
                                                 <div
                                                     class="card-title d-flex align-items-start justify-content-between">
                                                     <div class="avatar shrink-0">
-                                                        <i class="bx bx-award"
+                                                        <i class="bx bx-medal"
                                                             style="font-size: 2rem; color: #3b82f6;"></i>
                                                     </div>
                                                 </div>
-                                                <span class="fw-semibold d-block mb-1">Completed</span>
-                                                <h3 class="card-title mb-2">2</h3>
-                                                <small class="text-info fw-semibold"><i class="bx bx-check-circle"></i>
-                                                    Certified</small>
+                                                <span class="fw-semibold d-block mb-1"
+                                                    style="display: block !important;">Completed Levels</span>
+                                                <h3 class="card-title mb-2"
+                                                    style="display: block !important; margin-top: 0.5rem;">0</h3>
+                                                <small class="text-info fw-semibold"
+                                                    style="display: block !important; margin-top: 0.5rem;"><i
+                                                        class="bx bx-trophy"></i>
+                                                    Courses</small>
                                             </div>
                                         </div>
                                     </div>
@@ -365,7 +370,7 @@
                             </div>
                         </div>
 
-                        
+
                         <div class="row mb-4">
                             <div class="col-12">
                                 <div class="card">
@@ -432,78 +437,40 @@
                             </div>
                         </div>
 
-                        
+
                         <div class="row mb-4">
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-header d-flex justify-content-between align-items-center">
-                                        <h5 class="mb-0"><i class="bx bx-award me-2"></i>Completed Courses</h5>
-                                        <span class="badge bg-success">2 Completed Courses</span>
+                                        <h5 class="mb-0"><i class="bx bx-award me-2"></i>Completed NC II Courses</h5>
+                                        <span class="badge bg-success">0 Completed NC II</span>
                                     </div>
                                     <div class="card-body">
                                         <div class="row">
-                                            
-                                            <div class="col-md-6 mb-3">
-                                                <div class="card border shadow-sm h-100">
-                                                    <div class="card-body">
-                                                        <div class="d-flex align-items-start mb-3">
-                                                            <div class="shrink-0 me-3">
-                                                                <img src="https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&h=250&fit=crop"
-                                                                    alt="Nail Care" class="rounded-circle"
-                                                                    style="width: 60px; height: 60px; object-fit: cover; border: 3px solid #10b981;">
-                                                            </div>
-                                                            <div class="grow">
-                                                                <h6 class="mb-1">Beauty Care (Nail Care) Services NC II
-                                                                </h6>
-                                                                <small class="text-muted">SOCBCN220</small>
-                                                            </div>
-                                                        </div>
-                                                        <div class="mb-2">
-                                                            <small class="text-muted d-block">Completion Date</small>
-                                                            <strong>January 28, 2026</strong>
-                                                        </div>
-                                                        <div class="mb-2">
-                                                            <small class="text-muted d-block">Certificate Number</small>
-                                                            <strong>CAATE-NC2-2026-001</strong>
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <small class="text-muted d-block">Final Grade</small>
-                                                            <span class="badge bg-success">95% - Excellent</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                            <div class="col-12 text-center py-4">
+                                                <i class="bx bx-book-open" style="font-size: 3rem; color: #d1d5db;"></i>
+                                                <p class="text-muted mt-2">No completed NC II courses yet</p>
                                             </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-                                            
-                                            <div class="col-md-6 mb-3">
-                                                <div class="card border shadow-sm h-100">
-                                                    <div class="card-body">
-                                                        <div class="d-flex align-items-start mb-3">
-                                                            <div class="shrink-0 me-3">
-                                                                <img src="https://tse3.mm.bing.net/th/id/OIP.f7lQ7Rt0CCBsxUWqGsYPwQHaE8?pid=Api&P=0&h=180"
-                                                                    alt="Eyelash and Eyebrow" class="rounded-circle"
-                                                                    style="width: 60px; height: 60px; object-fit: cover; border: 3px solid #10b981;">
-                                                            </div>
-                                                            <div class="grow">
-                                                                <h6 class="mb-1">Eyelash and Eyebrow Services Level III
-                                                                </h6>
-                                                                <small class="text-muted">Level III</small>
-                                                            </div>
-                                                        </div>
-                                                        <div class="mb-2">
-                                                            <small class="text-muted d-block">Completion Date</small>
-                                                            <strong>December 15, 2025</strong>
-                                                        </div>
-                                                        <div class="mb-2">
-                                                            <small class="text-muted d-block">Certificate Number</small>
-                                                            <strong>CAATE-L3-2025-045</strong>
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <small class="text-muted d-block">Final Grade</small>
-                                                            <span class="badge bg-success">92% - Excellent</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
+
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                        <h5 class="mb-0"><i class="bx bx-certification me-2"></i>Complete Levels Courses
+                                        </h5>
+                                        <span class="badge bg-info">0 Complete Levels</span>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-12 text-center py-4">
+                                                <i class="bx bx-medal" style="font-size: 3rem; color: #d1d5db;"></i>
+                                                <p class="text-muted mt-2">No complete levels courses yet</p>
                                             </div>
                                         </div>
                                     </div>
@@ -511,9 +478,9 @@
                             </div>
                         </div>
                     </div>
-                    
 
-                    
+
+
                     <footer class="content-footer footer bg-footer-theme">
                         <div
                             class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
@@ -522,40 +489,40 @@
                             </div>
                         </div>
                     </footer>
-                    
+
 
                     <div class="content-backdrop fade"></div>
                 </div>
-                
+
             </div>
-            
+
         </div>
 
-        
+
         <div class="layout-overlay"></div>
     </div>
-    
 
-    
+
+
     <script src="../assets/vendor/libs/jquery/jquery.js"></script>
     <script src="../assets/vendor/libs/popper/popper.js"></script>
     <script src="../assets/vendor/js/bootstrap.js"></script>
     <script src="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
     <script src="../assets/vendor/js/menu.js"></script>
 
-    
+
     <script src="../assets/js/main.js"></script>
 
-    
+
     <script src="../assets/js/auth-dashboard.js"></script>
 
-    
+
     <script src="../assets/js/trainee-navbar.js"></script>
 
-    
+
     <script src="../assets/js/menu-toggle.js"></script>
 
-    
+
     <script src="../assets/js/dashboard.js"></script>
 </body>
 

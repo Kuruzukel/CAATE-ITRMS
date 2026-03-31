@@ -62,12 +62,16 @@ async function fetchAllData() {
 async function processTraineesData() {
     const combinedData = [];
 
-    console.log('Processing data - Trainees:', allTrainees.length, 'Applications:', allApplications.length, 'Registrations:', allRegistrations.length);
     const approvedApps = allApplications.filter(app => app.status === 'approved');
 
     // Show ALL approved applications with profile images
     for (const application of approvedApps) {
-        const appTraineeId = application.trainee_id || application.user_id || 'N/A';
+        let appTraineeId = application.trainee_id || application.user_id || 'N/A';
+
+        // Handle MongoDB ObjectId format for trainee_id
+        if (appTraineeId && typeof appTraineeId === 'object') {
+            appTraineeId = appTraineeId.$oid || appTraineeId._id || 'N/A';
+        }
 
         // Extract name from application.name object
         let fullName = 'Unknown';
@@ -101,7 +105,7 @@ async function processTraineesData() {
                     profileImage = traineeData.data.profile_image;
                 }
             } catch (error) {
-                console.log('Could not fetch trainee profile:', error);
+                // Silently fail if profile image cannot be fetched
             }
         }
 
@@ -242,7 +246,12 @@ function applyFilters() {
     const combinedData = [];
 
     approvedApps.forEach(application => {
-        const appTraineeId = application.trainee_id || application.user_id || 'N/A';
+        let appTraineeId = application.trainee_id || application.user_id || 'N/A';
+
+        // Handle MongoDB ObjectId format for trainee_id
+        if (appTraineeId && typeof appTraineeId === 'object') {
+            appTraineeId = appTraineeId.$oid || appTraineeId._id || 'N/A';
+        }
 
         // Extract name from application.name object
         let fullName = 'Unknown';
@@ -285,12 +294,76 @@ function applyFilters() {
     });
 
     renderTraineesTable();
+
+    // Apply search highlighting if there's a search term
+    if (searchTerm) {
+        setTimeout(() => {
+            clearAllHighlights();
+            highlightSearchResults(searchTerm);
+        }, 50);
+    } else {
+        clearAllHighlights();
+    }
+}
+
+// Clear all row highlights
+function clearAllHighlights() {
+    const tbody = document.getElementById('traineesTableBody');
+    if (tbody) {
+        const rows = tbody.querySelectorAll('tr');
+        rows.forEach(row => {
+            row.style.boxShadow = '';
+            row.style.border = '';
+            row.style.borderLeft = '';
+            row.style.borderRadius = '';
+            row.style.background = '';
+            row.style.transition = '';
+            row.style.transform = '';
+            row.style.outline = '';
+            row.style.outlineOffset = '';
+            row.style.zIndex = '';
+            row.style.position = '';
+        });
+    }
+}
+
+// Highlight search results
+function highlightSearchResults(searchTerm) {
+    const tbody = document.getElementById('traineesTableBody');
+    if (!tbody) return;
+
+    const rows = tbody.querySelectorAll('tr');
+    let firstMatch = null;
+
+    rows.forEach(row => {
+        const rowText = row.textContent.toLowerCase();
+
+        if (rowText.includes(searchTerm)) {
+            row.style.position = 'relative';
+            row.style.boxShadow = '0 8px 24px rgba(22, 56, 86, 0.5), 0 4px 12px rgba(54, 145, 191, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15)';
+            row.style.outline = '2px solid rgba(54, 145, 191, 0.6)';
+            row.style.outlineOffset = '2px';
+            row.style.borderRadius = '10px';
+            row.style.background = 'linear-gradient(135deg, rgba(54, 145, 191, 0.08) 0%, rgba(50, 85, 150, 0.08) 100%)';
+            row.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+            row.style.zIndex = '10';
+
+            if (!firstMatch) {
+                firstMatch = row;
+            }
+        }
+    });
+
+    if (firstMatch) {
+        firstMatch.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
 }
 
 // Reset filters
 function resetFilters() {
     document.getElementById('searchTraineeInput').value = '';
     document.getElementById('courseFilter').value = '';
+    clearAllHighlights();
     processTraineesData();
 }
 

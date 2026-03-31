@@ -4,19 +4,7 @@ This directory contains database seeding scripts for the CAATE-ITRMS system.
 
 ## Available Seeders
 
-### 1. ComprehensiveSampleData.php
-
-Seeds the database with initial sample data including:
-
-- Users (admin, staff, instructor)
-- Courses (5 beauty care courses)
-- Trainees (5 initial trainees)
-- Enrollments
-- Inventory items
-- Applications
-- Graduates
-
-### 2. AddTraineeAccounts.php
+### 1. AddTraineeAccounts.php
 
 Adds 10 new trainee accounts with randomized passwords.
 
@@ -40,9 +28,6 @@ Features:
 From the `backend` directory:
 
 ```bash
-# Run comprehensive sample data seeder
-php database/seeders/ComprehensiveSampleData.php
-
 # Add 10 trainee accounts
 php database/seeders/AddTraineeAccounts.php
 ```

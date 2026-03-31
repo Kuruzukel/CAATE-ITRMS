@@ -298,16 +298,7 @@ CAATE-ITRMS/
 │   │   ├── gulpfile.js                # Gulp build configuration
 │   │   └── README.md                  # Config documentation
 │   ├── 📂 docs/
-│   │   ├── 📂 inventory-data/         # Inventory sample data
-│   │   │   ├── nail-care-inventory.csv
-│   │   │   ├── nail-care-inventory.json
-│   │   │   ├── skin-care-inventory.csv
-│   │   │   ├── skin-care-inventory.json
-│   │   │   └── README.md
 │   │   ├── MIGRATION_GUIDE.md         # Migration documentation
-│   │   ├── nail-care-inventory.csv    # Legacy inventory data
-│   │   ├── sample-trainees.csv        # Sample trainee data
-│   │   ├── sample-trainees.json
 │   │   └── README.md                  # Docs overview
 │   ├── 📂 public/                     # Static files
 │   │   └── README.md
@@ -503,7 +494,6 @@ CAATE-ITRMS/
 │   ├── README.md                      # Backend documentation
 │   ├── seed-admin.php                 # Admin seeder
 │   ├── seed-inventory.php             # Inventory seeder
-│   ├── seed-today-enrollments.php     # Enrollment seeder
 │   ├── update-admin-passwords.php     # Password utility
 │   └── verify-admin.php               # Admin verification
 │

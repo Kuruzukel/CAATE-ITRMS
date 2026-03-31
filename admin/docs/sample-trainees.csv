@@ -1,6 +1,0 @@
-trainee_id,username,first_name,second_name,middle_name,last_name,suffix,email,phone,password
-T2024001,jdoe,John,,Michael,Doe,,john.doe@email.com,09171234567,Password123!
-T2024002,msmith,Maria,Grace,Santos,Smith,,maria.smith@email.com,09181234568,Password123!
-T2024003,rjohnson,Robert,,Lee,Johnson,Jr.,robert.johnson@email.com,09191234569,Password123!
-T2024004,agarcia,Ana,Marie,Cruz,Garcia,,ana.garcia@email.com,09201234570,Password123!
-T2024005,dwilson,David,,James,Wilson,Sr.,david.wilson@email.com,09211234571,Password123!

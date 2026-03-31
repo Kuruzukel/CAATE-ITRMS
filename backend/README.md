@@ -252,13 +252,7 @@ extension=mongodb
 php database/seeders/InitializeCollections.php
 ```
 
-6. Seed comprehensive sample data:
-
-```bash
-php database/seeders/ComprehensiveSampleData.php
-```
-
-7. Access the backend:
+6. Access the backend:
    - Main page: `http://localhost/backend/public/`
    - View data: `http://localhost/backend/public/view-data.php`
    - JSON API: `http://localhost/backend/public/api-data.php`

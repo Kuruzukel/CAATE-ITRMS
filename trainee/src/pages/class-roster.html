@@ -271,38 +271,46 @@
                                             <div class="card card-body"
                                                 style="background-color: #1a2332; border: 1px solid #2d3e52;">
                                                 <div class="row g-3">
-                                                    <div class="col-md-4">
+                                                    <div class="col" style="flex: 0 0 25.6%;">
                                                         <label class="form-label" style="color: #b8c5d6;">Search
-                                                            Course</label>
-                                                        <input type="text" id="searchCourseInput" class="form-control"
-                                                            placeholder="Course name or code"
+                                                            Trainee</label>
+                                                        <input type="text" id="searchTraineeInput" class="form-control"
+                                                            placeholder="Name or Trainee ID"
                                                             style="background-color: #243447; border: 1px solid #3d4f63; color: #b8c5d6;">
                                                     </div>
-                                                    <div class="col-md-3">
-                                                        <label class="form-label" style="color: #b8c5d6;">Course
-                                                            Type</label>
-                                                        <select id="courseTypeFilter" class="form-select"
+                                                    <div class="col" style="flex: 0 0 22%;">
+                                                        <label class="form-label" style="color: #b8c5d6;">Course</label>
+                                                        <select id="courseFilter" class="form-select"
                                                             style="background-color: #243447; border: 1px solid #3d4f63; color: #b8c5d6;">
-                                                            <option value="">All Types</option>
-                                                            <option value="NC II">NC II</option>
-                                                            <option value="Level III">Level III</option>
-                                                            <option value="Level IV">Level IV</option>
+                                                            <option value="">All Courses</option>
                                                         </select>
                                                     </div>
-                                                    <div class="col-md-3">
-                                                        <label class="form-label" style="color: #b8c5d6;">Status</label>
-                                                        <select id="courseStatusFilter" class="form-select"
+                                                    <div class="col" style="flex: 0 0 22%;">
+                                                        <label class="form-label" style="color: #b8c5d6;">Application
+                                                            Status</label>
+                                                        <select id="applicationStatusFilter" class="form-select"
                                                             style="background-color: #243447; border: 1px solid #3d4f63; color: #b8c5d6;">
                                                             <option value="">All Status</option>
-                                                            <option value="active">Active</option>
-                                                            <option value="completed">Completed</option>
+                                                            <option value="approved">Approved</option>
                                                             <option value="pending">Pending</option>
+                                                            <option value="cancelled">Cancelled</option>
                                                         </select>
                                                     </div>
-                                                    <div class="col-md-2 d-flex align-items-end">
+                                                    <div class="col" style="flex: 0 0 22%;">
+                                                        <label class="form-label" style="color: #b8c5d6;">Registration
+                                                            Status</label>
+                                                        <select id="registrationStatusFilter" class="form-select"
+                                                            style="background-color: #243447; border: 1px solid #3d4f63; color: #b8c5d6;">
+                                                            <option value="">All Status</option>
+                                                            <option value="approved">Approved</option>
+                                                            <option value="pending">Pending</option>
+                                                            <option value="cancelled">Cancelled</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-1 d-flex align-items-end">
                                                         <button type="button" id="resetCourseFilters"
                                                             class="btn btn-outline-secondary w-100">
-                                                            <i class="bx bx-reset"></i> Reset
+                                                            <i class="bx bx-reset"></i>
                                                         </button>
                                                     </div>
                                                 </div>

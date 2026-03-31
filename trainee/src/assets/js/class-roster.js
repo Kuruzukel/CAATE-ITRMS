@@ -4,62 +4,23 @@ const enrolledCourses = [
     { id: 3, name: 'Aesthetic Services Level III', code: 'SOCAES320', hours: '264 hours', type: 'Level III', status: 'completed', image: 'https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=400&h=250&fit=crop' }
 ];
 
-const courseStudents = {
-    1: [
-        { id: 1, name: 'Maria Santos', initials: 'MS' },
-        { id: 2, name: 'Anna Cruz', initials: 'AC' },
-        { id: 3, name: 'Rosa Garcia', initials: 'RG' },
-        { id: 4, name: 'Elena Lopez', initials: 'EL' },
-        { id: 5, name: 'Sofia Martinez', initials: 'SM' },
-        { id: 6, name: 'Isabella Reyes', initials: 'IR' },
-        { id: 7, name: 'Carmen Flores', initials: 'CF' },
-        { id: 8, name: 'Lucia Morales', initials: 'LM' },
-        { id: 9, name: 'Valentina Ruiz', initials: 'VR' },
-        { id: 10, name: 'Gabriela Soto', initials: 'GS' },
-        { id: 11, name: 'Daniela Vargas', initials: 'DV' },
-        { id: 12, name: 'Alejandra Pena', initials: 'AP' },
-        { id: 13, name: 'Catalina Diaz', initials: 'CD' },
-        { id: 14, name: 'Mariana Gutierrez', initials: 'MG' },
-        { id: 15, name: 'Francisca Herrera', initials: 'FH' }
-    ],
-    2: [
-        { id: 1, name: 'Maria Santos', initials: 'MS' },
-        { id: 2, name: 'Anna Cruz', initials: 'AC' },
-        { id: 3, name: 'Rosa Garcia', initials: 'RG' },
-        { id: 4, name: 'Lucia Morales', initials: 'LM' },
-        { id: 5, name: 'Valentina Ruiz', initials: 'VR' },
-        { id: 6, name: 'Gabriela Soto', initials: 'GS' },
-        { id: 7, name: 'Daniela Vargas', initials: 'DV' },
-        { id: 8, name: 'Alejandra Pena', initials: 'AP' },
-        { id: 9, name: 'Catalina Diaz', initials: 'CD' },
-        { id: 10, name: 'Mariana Gutierrez', initials: 'MG' },
-        { id: 11, name: 'Francisca Herrera', initials: 'FH' },
-        { id: 12, name: 'Isabella Reyes', initials: 'IR' },
-        { id: 13, name: 'Carmen Flores', initials: 'CF' },
-        { id: 14, name: 'Elena Lopez', initials: 'EL' },
-        { id: 15, name: 'Sofia Martinez', initials: 'SM' }
-    ],
-    3: [
-        { id: 1, name: 'Elena Lopez', initials: 'EL' },
-        { id: 2, name: 'Sofia Martinez', initials: 'SM' },
-        { id: 3, name: 'Maria Santos', initials: 'MS' },
-        { id: 4, name: 'Anna Cruz', initials: 'AC' },
-        { id: 5, name: 'Isabella Reyes', initials: 'IR' },
-        { id: 6, name: 'Carmen Flores', initials: 'CF' },
-        { id: 7, name: 'Lucia Morales', initials: 'LM' },
-        { id: 8, name: 'Valentina Ruiz', initials: 'VR' },
-        { id: 9, name: 'Gabriela Soto', initials: 'GS' },
-        { id: 10, name: 'Daniela Vargas', initials: 'DV' },
-        { id: 11, name: 'Alejandra Pena', initials: 'AP' },
-        { id: 12, name: 'Catalina Diaz', initials: 'CD' },
-        { id: 13, name: 'Mariana Gutierrez', initials: 'MG' },
-        { id: 14, name: 'Francisca Herrera', initials: 'FH' },
-        { id: 15, name: 'Rosa Garcia', initials: 'RG' }
-    ]
-};
+// Sample trainee data with applications and registrations
+const traineesData = [
+    { id: 1, name: 'Maria Santos', traineeId: 'TRN-001', initials: 'MS', courseId: 1, applicationStatus: 'approved', registrationStatus: 'approved' },
+    { id: 2, name: 'Anna Cruz', traineeId: 'TRN-002', initials: 'AC', courseId: 1, applicationStatus: 'approved', registrationStatus: 'pending' },
+    { id: 3, name: 'Rosa Garcia', traineeId: 'TRN-003', initials: 'RG', courseId: 1, applicationStatus: 'pending', registrationStatus: 'pending' },
+    { id: 4, name: 'Elena Lopez', traineeId: 'TRN-004', initials: 'EL', courseId: 1, applicationStatus: 'approved', registrationStatus: 'approved' },
+    { id: 5, name: 'Sofia Martinez', traineeId: 'TRN-005', initials: 'SM', courseId: 1, applicationStatus: 'cancelled', registrationStatus: 'cancelled' },
+    { id: 6, name: 'Isabella Reyes', traineeId: 'TRN-006', initials: 'IR', courseId: 2, applicationStatus: 'approved', registrationStatus: 'approved' },
+    { id: 7, name: 'Carmen Flores', traineeId: 'TRN-007', initials: 'CF', courseId: 2, applicationStatus: 'approved', registrationStatus: 'approved' },
+    { id: 8, name: 'Lucia Morales', traineeId: 'TRN-008', initials: 'LM', courseId: 2, applicationStatus: 'pending', registrationStatus: 'approved' },
+    { id: 9, name: 'Valentina Ruiz', traineeId: 'TRN-009', initials: 'VR', courseId: 3, applicationStatus: 'approved', registrationStatus: 'approved' },
+    { id: 10, name: 'Gabriela Soto', traineeId: 'TRN-010', initials: 'GS', courseId: 3, applicationStatus: 'approved', registrationStatus: 'pending' }
+];
 
 let selectedCourseId = 1;
 let filteredCourses = [...enrolledCourses];
+let filteredTrainees = [...traineesData];
 
 const avatarColors = [
     'linear-gradient(135deg, #3691bf 0%, #325596 100%)',
@@ -213,29 +174,44 @@ function viewStudents(courseId, courseName, cardElement) {
         }
     }
 
-    const students = courseStudents[courseId] || [];
+    // Get filtered trainees for this course
+    const students = filteredTrainees.filter(t => t.courseId === courseId);
     const studentsList = document.getElementById('studentsList');
     studentsList.innerHTML = '';
 
     if (students.length === 0) {
-        studentsList.innerHTML = '<p class="text-muted">No students enrolled in this course.</p>';
+        studentsList.innerHTML = '<p class="text-muted" style="color: white !important;">No students found matching your filters.</p>';
         return;
     }
 
     students.forEach((student, index) => {
         const studentItem = document.createElement('div');
         studentItem.className = 'student-item';
-        const attendanceStatus = getRandomAttendance();
-        const badgeColor = getBadgeColor(attendanceStatus);
         const avatarColor = avatarColors[index % avatarColors.length];
+
+        // Status badges
+        const appStatusBadge = student.applicationStatus === 'approved'
+            ? '<span class="badge bg-success">App: Approved</span>'
+            : student.applicationStatus === 'pending'
+                ? '<span class="badge bg-warning">App: Pending</span>'
+                : '<span class="badge bg-danger">App: Cancelled</span>';
+
+        const regStatusBadge = student.registrationStatus === 'approved'
+            ? '<span class="badge bg-success">Reg: Approved</span>'
+            : student.registrationStatus === 'pending'
+                ? '<span class="badge bg-warning">Reg: Pending</span>'
+                : '<span class="badge bg-danger">Reg: Cancelled</span>';
 
         studentItem.innerHTML = `
             <div class="student-avatar" style="background: linear-gradient(135deg, rgba(54, 145, 191, 0.1) 0%, rgba(50, 85, 150, 0.1) 100%); backdrop-filter: blur(10px) saturate(180%); -webkit-backdrop-filter: blur(10px) saturate(180%); border: 1px solid rgba(54, 145, 191, 0.4); box-shadow: 0 4px 12px rgba(22, 56, 86, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3); color: white;">${student.initials}</div>
             <div class="grow">
                 <h6 class="mb-0">${student.name}</h6>
-                <small class="text-muted">Student ID: STU-${String(student.id).padStart(4, '0')}</small>
+                <small class="text-muted">Trainee ID: ${student.traineeId}</small>
             </div>
-            <span class="badge ${badgeColor}">${attendanceStatus}</span>
+            <div class="d-flex gap-2">
+                ${appStatusBadge}
+                ${regStatusBadge}
+            </div>
         `;
         studentsList.appendChild(studentItem);
     });
@@ -243,39 +219,70 @@ function viewStudents(courseId, courseName, cardElement) {
 
 // Filter function
 function applyFilters() {
-    const searchTerm = document.getElementById('searchCourseInput').value.toLowerCase();
-    const courseType = document.getElementById('courseTypeFilter').value;
-    const courseStatus = document.getElementById('courseStatusFilter').value;
+    const searchTerm = document.getElementById('searchTraineeInput').value.toLowerCase();
+    const courseFilter = document.getElementById('courseFilter').value;
+    const appStatus = document.getElementById('applicationStatusFilter').value;
+    const regStatus = document.getElementById('registrationStatusFilter').value;
 
-    filteredCourses = enrolledCourses.filter(course => {
-        const matchesSearch = course.name.toLowerCase().includes(searchTerm) ||
-            course.code.toLowerCase().includes(searchTerm);
-        const matchesType = !courseType || course.type === courseType;
-        const matchesStatus = !courseStatus || course.status === courseStatus;
+    filteredTrainees = traineesData.filter(trainee => {
+        const matchesSearch = trainee.name.toLowerCase().includes(searchTerm) ||
+            trainee.traineeId.toLowerCase().includes(searchTerm);
+        const matchesCourse = !courseFilter || trainee.courseId === parseInt(courseFilter);
+        const matchesAppStatus = !appStatus || trainee.applicationStatus === appStatus;
+        const matchesRegStatus = !regStatus || trainee.registrationStatus === regStatus;
 
-        return matchesSearch && matchesType && matchesStatus;
+        return matchesSearch && matchesCourse && matchesAppStatus && matchesRegStatus;
     });
 
-    initializeCourses();
+    // Update the student list if a course is selected
+    if (selectedCourseId) {
+        const selectedCourse = enrolledCourses.find(c => c.id === selectedCourseId);
+        if (selectedCourse) {
+            viewStudents(selectedCourseId, selectedCourse.name, document.querySelector(`.course-card[data-course-id="${selectedCourseId}"]`));
+        }
+    }
 }
 
 // Reset filters
 function resetFilters() {
-    document.getElementById('searchCourseInput').value = '';
-    document.getElementById('courseTypeFilter').value = '';
-    document.getElementById('courseStatusFilter').value = '';
-    filteredCourses = [...enrolledCourses];
-    initializeCourses();
+    document.getElementById('searchTraineeInput').value = '';
+    document.getElementById('courseFilter').value = '';
+    document.getElementById('applicationStatusFilter').value = '';
+    document.getElementById('registrationStatusFilter').value = '';
+    filteredTrainees = [...traineesData];
+
+    // Refresh the current view
+    if (selectedCourseId) {
+        const selectedCourse = enrolledCourses.find(c => c.id === selectedCourseId);
+        if (selectedCourse) {
+            viewStudents(selectedCourseId, selectedCourse.name, document.querySelector(`.course-card[data-course-id="${selectedCourseId}"]`));
+        }
+    }
+}
+
+// Populate course filter dropdown
+function populateCourseFilter() {
+    const courseFilter = document.getElementById('courseFilter');
+    enrolledCourses.forEach(course => {
+        const option = document.createElement('option');
+        option.value = course.id;
+        option.textContent = course.name;
+        courseFilter.appendChild(option);
+    });
 }
 
 document.addEventListener('DOMContentLoaded', function () {
+    // Populate course filter
+    populateCourseFilter();
+
     // Initialize courses
     initializeCourses();
 
     // Add event listeners for filters
-    document.getElementById('searchCourseInput').addEventListener('input', applyFilters);
-    document.getElementById('courseTypeFilter').addEventListener('change', applyFilters);
-    document.getElementById('courseStatusFilter').addEventListener('change', applyFilters);
+    document.getElementById('searchTraineeInput').addEventListener('input', applyFilters);
+    document.getElementById('courseFilter').addEventListener('change', applyFilters);
+    document.getElementById('applicationStatusFilter').addEventListener('change', applyFilters);
+    document.getElementById('registrationStatusFilter').addEventListener('change', applyFilters);
     document.getElementById('resetCourseFilters').addEventListener('click', resetFilters);
 
     // Back to courses button

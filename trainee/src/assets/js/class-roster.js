@@ -58,47 +58,43 @@ async function fetchAllData() {
     }
 }
 
-// Process trainees data - only show approved applications and registrations
+// Process trainees data - show ALL approved applications
 function processTraineesData() {
     const combinedData = [];
 
     console.log('Processing data - Trainees:', allTrainees.length, 'Applications:', allApplications.length, 'Registrations:', allRegistrations.length);
+    const approvedApps = allApplications.filter(app => app.status === 'approved');
 
-    // For each trainee, find their APPROVED applications and registrations
-    allTrainees.forEach(trainee => {
-        const traineeIdStr = trainee._id?.$oid || trainee._id;
+    // Show ALL approved applications
+    approvedApps.forEach(application => {
+        const appTraineeId = application.trainee_id || application.user_id || 'N/A';
 
-        // Find APPROVED applications for this trainee
-        const traineeApplications = allApplications.filter(app => {
-            const appTraineeId = app.trainee_id || app.traineeId;
-            return appTraineeId === traineeIdStr && app.status === 'approved';
-        });
+        // Extract name from application.name object
+        let fullName = 'Unknown';
+        if (application.name) {
+            const firstName = application.name.first_name || '';
+            const secondName = application.name.second_name || '';
+            const middleName = application.name.middle_name || '';
+            const surname = application.name.surname || '';
+            const extension = application.name.name_extension || '';
 
-        // Find APPROVED registration for this trainee
-        const registration = allRegistrations.find(r => {
-            const rTraineeId = r.trainee_id || r.traineeId;
-            return rTraineeId === traineeIdStr && r.status === 'approved';
-        });
-
-        const fullName = `${trainee.firstName || ''} ${trainee.middleName || ''} ${trainee.lastName || ''}`.trim();
-
-        // Only show trainees with APPROVED applications AND registrations
-        if (traineeApplications.length > 0 && registration) {
-            traineeApplications.forEach(application => {
-                combinedData.push({
-                    id: traineeIdStr,
-                    traineeId: trainee.traineeId || trainee.trainee_id || 'N/A',
-                    name: fullName || trainee.username || 'Unknown',
-                    initials: getInitials(fullName),
-                    course: application.assessment_title || application.course || 'N/A',
-                    email: trainee.email || 'N/A',
-                    phone: trainee.phoneNumber || trainee.phone || 'N/A'
-                });
-            });
+            // Build full name: First Second Middle Surname Extension
+            fullName = [firstName, secondName, middleName, surname, extension]
+                .filter(part => part && part.trim())
+                .join(' ');
         }
+
+        combinedData.push({
+            id: application._id?.$oid || application._id,
+            traineeId: appTraineeId,
+            name: fullName || 'Unknown',
+            initials: getInitials(fullName),
+            course: application.assessment_title || application.course || 'N/A',
+            email: 'N/A',
+            phone: 'N/A'
+        });
     });
 
-    console.log('Combined data (approved only):', combinedData.length);
     filteredTrainees = combinedData;
     renderTraineesTable();
 }
@@ -147,14 +143,7 @@ function renderTraineesTable() {
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${trainee.traineeId}</td>
-            <td>
-                <div class="d-flex align-items-center">
-                    <div class="avatar avatar-sm me-3" style="width: 38px; height: 38px; background: linear-gradient(135deg, rgba(54, 145, 191, 0.1) 0%, rgba(50, 85, 150, 0.1) 100%); backdrop-filter: blur(10px) saturate(180%); border: 1px solid rgba(54, 145, 191, 0.4); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600;">
-                        ${trainee.initials}
-                    </div>
-                    <span>${trainee.name}</span>
-                </div>
-            </td>
+            <td>${trainee.name}</td>
             <td>${trainee.course}</td>
             <td>
                 <button class="btn btn-sm btn-primary" onclick="viewTraineeDetails('${trainee.id}')">
@@ -171,40 +160,36 @@ function applyFilters() {
     const searchTerm = document.getElementById('searchTraineeInput').value.toLowerCase();
     const courseFilter = document.getElementById('courseFilter').value.toLowerCase();
 
-    // Get all combined data again from the original arrays (approved only)
+    // Get all approved applications again
+    const approvedApps = allApplications.filter(app => app.status === 'approved');
     const combinedData = [];
 
-    allTrainees.forEach(trainee => {
-        const traineeIdStr = trainee._id?.$oid || trainee._id;
+    approvedApps.forEach(application => {
+        const appTraineeId = application.trainee_id || application.user_id || 'N/A';
 
-        // Find APPROVED applications for this trainee
-        const traineeApplications = allApplications.filter(app => {
-            const appTraineeId = app.trainee_id || app.traineeId;
-            return appTraineeId === traineeIdStr && app.status === 'approved';
-        });
+        // Extract name from application.name object
+        let fullName = 'Unknown';
+        if (application.name) {
+            const firstName = application.name.first_name || '';
+            const secondName = application.name.second_name || '';
+            const middleName = application.name.middle_name || '';
+            const surname = application.name.surname || '';
+            const extension = application.name.name_extension || '';
 
-        // Find APPROVED registration for this trainee
-        const registration = allRegistrations.find(r => {
-            const rTraineeId = r.trainee_id || r.traineeId;
-            return rTraineeId === traineeIdStr && r.status === 'approved';
-        });
-
-        const fullName = `${trainee.firstName || ''} ${trainee.middleName || ''} ${trainee.lastName || ''}`.trim();
-
-        // Only show trainees with APPROVED applications AND registrations
-        if (traineeApplications.length > 0 && registration) {
-            traineeApplications.forEach(application => {
-                combinedData.push({
-                    id: traineeIdStr,
-                    traineeId: trainee.traineeId || trainee.trainee_id || 'N/A',
-                    name: fullName || trainee.username || 'Unknown',
-                    initials: getInitials(fullName),
-                    course: application.assessment_title || application.course || 'N/A',
-                    email: trainee.email || 'N/A',
-                    phone: trainee.phoneNumber || trainee.phone || 'N/A'
-                });
-            });
+            fullName = [firstName, secondName, middleName, surname, extension]
+                .filter(part => part && part.trim())
+                .join(' ');
         }
+
+        combinedData.push({
+            id: application._id?.$oid || application._id,
+            traineeId: appTraineeId,
+            name: fullName || 'Unknown',
+            initials: getInitials(fullName),
+            course: application.assessment_title || application.course || 'N/A',
+            email: 'N/A',
+            phone: 'N/A'
+        });
     });
 
     // Apply filters
@@ -217,7 +202,6 @@ function applyFilters() {
         return matchesSearch && matchesCourse;
     });
 
-    console.log('Total combined:', combinedData.length, 'Filtered:', filteredTrainees.length);
     renderTraineesTable();
 }
 
@@ -232,7 +216,7 @@ function resetFilters() {
 function populateCourseFilter() {
     const courseFilter = document.getElementById('courseFilter');
 
-    // Get unique courses from APPROVED applications only
+    // Get unique courses from approved applications only
     const approvedApplications = allApplications.filter(app => app.status === 'approved');
     const uniqueCourses = [...new Set(approvedApplications.map(app => app.assessment_title || app.course).filter(c => c))];
 

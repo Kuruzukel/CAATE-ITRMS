@@ -271,15 +271,48 @@
 
 <div align="center">
 
-|                                                   Browser                                                   |    Status    |
-| :---------------------------------------------------------------------------------------------------------: | :----------: |
-| ![Chrome](https://img.shields.io/badge/Chrome-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white) |  ✅ Latest   |
-|  ![Firefox](https://img.shields.io/badge/Firefox-FF7139?style=for-the-badge&logo=firefox&logoColor=white)   |  ✅ Latest   |
-|    ![Safari](https://img.shields.io/badge/Safari-000000?style=for-the-badge&logo=safari&logoColor=white)    |  ✅ Latest   |
-|  ![Edge](https://img.shields.io/badge/Edge-0078D7?style=for-the-badge&logo=microsoftedge&logoColor=white)   |  ✅ Latest   |
-|             ![Mobile](https://img.shields.io/badge/Mobile-Browsers-28a745?style=for-the-badge)              | ✅ Supported |
+#### Desktop Browsers
+
+|                                                        Browser                                                         |       Status       | Minimum Version |
+| :--------------------------------------------------------------------------------------------------------------------: | :----------------: | :-------------: |
+|      ![Chrome](https://img.shields.io/badge/Chrome-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white)       | ✅ Fully Supported |       90+       |
+|        ![Firefox](https://img.shields.io/badge/Firefox-FF7139?style=for-the-badge&logo=firefox&logoColor=white)        | ✅ Fully Supported |       88+       |
+|         ![Safari](https://img.shields.io/badge/Safari-000000?style=for-the-badge&logo=safari&logoColor=white)          | ✅ Fully Supported |       14+       |
+|        ![Edge](https://img.shields.io/badge/Edge-0078D7?style=for-the-badge&logo=microsoftedge&logoColor=white)        | ✅ Fully Supported |       90+       |
+|           ![Opera](https://img.shields.io/badge/Opera-FF1B2D?style=for-the-badge&logo=opera&logoColor=white)           | ✅ Fully Supported |       76+       |
+|           ![Brave](https://img.shields.io/badge/Brave-FB542B?style=for-the-badge&logo=brave&logoColor=white)           | ✅ Fully Supported |      1.25+      |
+|        ![Vivaldi](https://img.shields.io/badge/Vivaldi-EF3939?style=for-the-badge&logo=vivaldi&logoColor=white)        | ✅ Fully Supported |      4.0+       |
+| ![IE](https://img.shields.io/badge/Internet_Explorer-0076D6?style=for-the-badge&logo=internetexplorer&logoColor=white) | ⚠️ Limited Support |     11 only     |
+
+#### Mobile Browsers
+
+|                                                              Browser                                                               |       Status       |  Platform   |
+| :--------------------------------------------------------------------------------------------------------------------------------: | :----------------: | :---------: |
+|     ![Chrome Mobile](https://img.shields.io/badge/Chrome_Mobile-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white)      | ✅ Fully Supported | Android/iOS |
+|        ![Safari Mobile](https://img.shields.io/badge/Safari_Mobile-000000?style=for-the-badge&logo=safari&logoColor=white)         | ✅ Fully Supported |     iOS     |
+| ![Samsung Internet](https://img.shields.io/badge/Samsung_Internet-1428A0?style=for-the-badge&logo=samsunginternet&logoColor=white) | ✅ Fully Supported |   Android   |
+|       ![Firefox Mobile](https://img.shields.io/badge/Firefox_Mobile-FF7139?style=for-the-badge&logo=firefox&logoColor=white)       | ✅ Fully Supported | Android/iOS |
+|          ![Opera Mobile](https://img.shields.io/badge/Opera_Mobile-FF1B2D?style=for-the-badge&logo=opera&logoColor=white)          | ✅ Fully Supported | Android/iOS |
+|       ![Edge Mobile](https://img.shields.io/badge/Edge_Mobile-0078D7?style=for-the-badge&logo=microsoftedge&logoColor=white)       | ✅ Fully Supported | Android/iOS |
+|          ![UC Browser](https://img.shields.io/badge/UC_Browser-FF6600?style=for-the-badge&logo=ucbrowser&logoColor=white)          |    ✅ Supported    |   Android   |
+
+#### Browser Engine Compatibility
+
+|                                                     Engine                                                      |       Status       |               Used By               |
+| :-------------------------------------------------------------------------------------------------------------: | :----------------: | :---------------------------------: |
+| ![Chromium](https://img.shields.io/badge/Chromium-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white) | ✅ Fully Supported | Chrome, Edge, Opera, Brave, Vivaldi |
+|      ![Gecko](https://img.shields.io/badge/Gecko-FF7139?style=for-the-badge&logo=firefox&logoColor=white)       | ✅ Fully Supported |               Firefox               |
+|      ![WebKit](https://img.shields.io/badge/WebKit-000000?style=for-the-badge&logo=safari&logoColor=white)      | ✅ Fully Supported |               Safari                |
 
 </div>
+
+**Notes:**
+
+- ✅ **Fully Supported**: All features work perfectly
+- ⚠️ **Limited Support**: Core features work, some modern features may not be available
+- Minimum versions based on ES6+, CSS Grid, Flexbox, and modern JavaScript APIs
+- Internet Explorer 11 has limited support (polyfills may be required for some features)
+- All Chromium-based browsers (Chrome, Edge, Opera, Brave, Vivaldi) share similar compatibility
 
 ---
 

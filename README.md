@@ -92,7 +92,6 @@
 
 </div>
 
-
 ---
 
 <div align="center">
@@ -117,19 +116,20 @@
 
 #### 🗂️ Administration & Management
 
-- **Multi-role Administration** — Admin, Trainee, and Public interfaces
-- **Course Management** — 10+ professional courses with detailed information
-- **Trainee Management** — Complete lifecycle from admission to graduation
-- **Inventory Tracking** — Audit and CAATE inventory management
+- **Multi-role Administration** - Admin, Trainee, and Public interfaces
+- **Course Management** - 10+ professional courses with detailed information
+- **Trainee Management** - Complete lifecycle from admission to graduation
+- **Inventory Tracking** - Audit and CAATE inventory management
 
 </td>
 <td width="50%" valign="top">
 
 #### 🎓 Training & Assessment
-- **Schedule Management** — Advanced scheduling and calendar features
-- **Competency Framework** — Competency tracking and assessment
-- **Secure Authentication** — Comprehensive auth and admission workflow
-- **Responsive Design** — Works seamlessly on all devices
+
+- **Schedule Management** - Advanced scheduling and calendar features
+- **Competency Framework** - Competency tracking and assessment
+- **Secure Authentication** - Comprehensive auth and admission workflow
+- **Responsive Design** - Works seamlessly on all devices
 
 </td>
 </tr>
@@ -778,21 +778,21 @@ npm run watch
 
 ### Main Documentation
 
-- **[README.md](README.md)** — Project overview (this file)
+- **[README.md](README.md)** - Project overview (this file)
 
 ### Application Documentation
 
-- **[admin/README.md](admin/README.md)** — Admin dashboard guide
-- **[auth/README.md](auth/README.md)** — Authentication system guide
-- **[public/README.md](public/README.md)** — Landing page guide
-- **[trainee/README.md](trainee/README.md)** — Trainee dashboard guide
-- **[img/README.md](img/README.md)** — Asset management guide
+- **[admin/README.md](admin/README.md)** - Admin dashboard guide
+- **[auth/README.md](auth/README.md)** - Authentication system guide
+- **[public/README.md](public/README.md)** - Landing page guide
+- **[trainee/README.md](trainee/README.md)** - Trainee dashboard guide
+- **[img/README.md](img/README.md)** - Asset management guide
 
 ### Additional Resources
 
-- `admin/docs/STRUCTURE.md` — Detailed structure documentation
-- `admin/docs/QUICK_START.md` — Quick start guide
-- `admin/docs/MIGRATION_GUIDE.md` — Migration information
+- `admin/docs/STRUCTURE.md` - Detailed structure documentation
+- `admin/docs/QUICK_START.md` - Quick start guide
+- `admin/docs/MIGRATION_GUIDE.md` - Migration information
 
 ---
 

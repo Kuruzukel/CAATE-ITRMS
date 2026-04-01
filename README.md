@@ -431,13 +431,17 @@
 | :------------------------------------------------------------------------------------------------------------------------------ | :-------------------------------- | :-----: |
 | ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)                              | Semantic markup & structure       | Latest  |
 | ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)                                 | Styling & responsive design       | Latest  |
+| ![Sass](https://img.shields.io/badge/Sass-CC6699?style=for-the-badge&logo=sass&logoColor=white)                                 | CSS preprocessor                  | Latest  |
 | ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)               | Client-side logic & interactivity |  ES6+   |
-| ![Bootstrap](https://img.shields.io/badge/Bootstrap-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white)                  | UI framework & components         | 4.x/5.x |
+| ![Bootstrap](https://img.shields.io/badge/Bootstrap-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white)                  | UI framework & components         |  5.1.3  |
 | ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)          | Utility-first CSS classes         | Present |
-| ![jQuery](https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white)                           | DOM manipulation & utilities      |   3.x   |
-| ![Popper.js](https://img.shields.io/badge/Popper.js-FFC107?style=for-the-badge&logo=javascript&logoColor=black)                 | Tooltip & popover positioning     | Latest  |
-| ![Perfect Scrollbar](https://img.shields.io/badge/Perfect_Scrollbar-4A90E2?style=for-the-badge&logo=javascript&logoColor=white) | Custom scrollbar styling          | Latest  |
-| ![Boxicons](https://img.shields.io/badge/Boxicons-00D4FF?style=for-the-badge&logo=iconify&logoColor=white)                      | Icon library                      | Latest  |
+| ![jQuery](https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white)                           | DOM manipulation & utilities      |  3.5.1  |
+| ![Popper.js](https://img.shields.io/badge/Popper.js-FFC107?style=for-the-badge&logo=javascript&logoColor=black)                 | Tooltip & popover positioning     |  2.9.2  |
+| ![Perfect Scrollbar](https://img.shields.io/badge/Perfect_Scrollbar-4A90E2?style=for-the-badge&logo=javascript&logoColor=white) | Custom scrollbar styling          |  1.5.1  |
+| ![Boxicons](https://img.shields.io/badge/Boxicons-00D4FF?style=for-the-badge&logo=iconify&logoColor=white)                      | Icon library                      |  2.0.9  |
+| ![ApexCharts](https://img.shields.io/badge/ApexCharts-00E396?style=for-the-badge&logo=chartdotjs&logoColor=white)               | Interactive charts & graphs       | 3.28.3  |
+| ![Highlight.js](https://img.shields.io/badge/Highlight.js-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)           | Syntax highlighting               | 9.17.1  |
+| ![Masonry](https://img.shields.io/badge/Masonry-E67E22?style=for-the-badge&logo=javascript&logoColor=white)                     | Grid layout library               |  4.2.1  |
 
 </div>
 
@@ -448,9 +452,11 @@
 | Technology                                                                                                  | Purpose                   | Version |
 | :---------------------------------------------------------------------------------------------------------- | :------------------------ | :-----: |
 | ![PHP](https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white)                | Server-side programming   |  7.4+   |
-| ![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white)    | NoSQL database            | Latest  |
-| ![Composer](https://img.shields.io/badge/Composer-885630?style=for-the-badge&logo=composer&logoColor=white) | PHP dependency management | Latest  |
+| ![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white)    | NoSQL database            |  4.0+   |
+| ![Composer](https://img.shields.io/badge/Composer-885630?style=for-the-badge&logo=composer&logoColor=white) | PHP dependency management |  2.0+   |
 | ![REST API](https://img.shields.io/badge/REST_API-009688?style=for-the-badge&logo=fastapi&logoColor=white)  | RESTful API architecture  |    -    |
+| ![Apache](https://img.shields.io/badge/Apache-D22128?style=for-the-badge&logo=apache&logoColor=white)       | Web server                | Latest  |
+| ![XAMPP](https://img.shields.io/badge/XAMPP-FB7A24?style=for-the-badge&logo=xampp&logoColor=white)          | Development environment   | Latest  |
 
 </div>
 
@@ -458,12 +464,43 @@
 
 <div align="center">
 
-| Tool                                                                                                       | Purpose                           |
-| :--------------------------------------------------------------------------------------------------------- | :-------------------------------- |
-| ![Webpack](https://img.shields.io/badge/Webpack-8DD6F9?style=for-the-badge&logo=webpack&logoColor=black)   | Module bundler & asset management |
-| ![Gulp](https://img.shields.io/badge/Gulp-CF4647?style=for-the-badge&logo=gulp&logoColor=white)            | Task automation & build pipeline  |
-| ![npm](https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white)               | Package management                |
-| ![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white) | JavaScript runtime (v14+)         |
+| Tool                                                                                                                 | Purpose                           | Version |
+| :------------------------------------------------------------------------------------------------------------------- | :-------------------------------- | :-----: |
+| ![Webpack](https://img.shields.io/badge/Webpack-8DD6F9?style=for-the-badge&logo=webpack&logoColor=black)             | Module bundler & asset management | 4.41.0  |
+| ![Gulp](https://img.shields.io/badge/Gulp-CF4647?style=for-the-badge&logo=gulp&logoColor=white)                      | Task automation & build pipeline  |  4.0.2  |
+| ![npm](https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white)                         | Package management                |   6+    |
+| ![Yarn](https://img.shields.io/badge/Yarn-2C8EBB?style=for-the-badge&logo=yarn&logoColor=white)                      | Alternative package manager       | 1.21.1  |
+| ![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)           | JavaScript runtime                |   14+   |
+| ![Babel](https://img.shields.io/badge/Babel-F9DC3E?style=for-the-badge&logo=babel&logoColor=black)                   | JavaScript transpiler             |  7.7.7  |
+| ![Sass](https://img.shields.io/badge/Sass-CC6699?style=for-the-badge&logo=sass&logoColor=white)                      | CSS preprocessor compiler         | Latest  |
+| ![ESLint](https://img.shields.io/badge/ESLint-4B32C3?style=for-the-badge&logo=eslint&logoColor=white)                | JavaScript linter                 |  6.8.0  |
+| ![Prettier](https://img.shields.io/badge/Prettier-F7B93E?style=for-the-badge&logo=prettier&logoColor=black)          | Code formatter                    |  2.2.1  |
+| ![BrowserSync](https://img.shields.io/badge/BrowserSync-AC5EF0?style=for-the-badge&logo=browsersync&logoColor=white) | Live reload & sync                | 2.26.7  |
+
+</div>
+
+### Additional Libraries & Plugins
+
+<div align="center">
+
+| Library                                                                                                                 | Purpose                 | Version |
+| :---------------------------------------------------------------------------------------------------------------------- | :---------------------- | :-----: |
+| ![Autoprefixer](https://img.shields.io/badge/Autoprefixer-DD3735?style=for-the-badge&logo=autoprefixer&logoColor=white) | CSS vendor prefixing    |  7.0.1  |
+| ![UglifyJS](https://img.shields.io/badge/UglifyJS-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)           | JavaScript minification |  2.2.0  |
+| ![js-beautify](https://img.shields.io/badge/js--beautify-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)    | Code beautification     | 1.10.3  |
+
+</div>
+
+### Development Environment (XAMPP Stack)
+
+<div align="center">
+
+| Component                                                                                                         | Purpose                        | Included In |
+| :---------------------------------------------------------------------------------------------------------------- | :----------------------------- | :---------: |
+| ![Apache](https://img.shields.io/badge/Apache-D22128?style=for-the-badge&logo=apache&logoColor=white)             | HTTP web server                |    XAMPP    |
+| ![PHP](https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white)                      | Server-side scripting          |    XAMPP    |
+| ![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white)          | NoSQL database                 |  Separate   |
+| ![phpMyAdmin](https://img.shields.io/badge/phpMyAdmin-6C78AF?style=for-the-badge&logo=phpmyadmin&logoColor=white) | Database management (optional) |    XAMPP    |
 
 </div>
 

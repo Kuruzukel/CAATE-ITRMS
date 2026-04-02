@@ -291,8 +291,8 @@ document.addEventListener('DOMContentLoaded', function () {
             <div class="fc">
                 <div class="fc-header-toolbar">
                     <div class="fc-toolbar-chunk">
-                        <button class="fc-button" onclick="alert('Previous month')">â€¹</button>
-                        <button class="fc-button" onclick="alert('Next month')">â€º</button>
+                        <button class="fc-button" onclick="alert('Previous month')">‹</button>
+                        <button class="fc-button" onclick="alert('Next month')">›</button>
                         <button class="fc-button" onclick="alert('Today')">Today</button>
                     </div>
                     <div class="fc-toolbar-chunk">

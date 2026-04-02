@@ -12,7 +12,7 @@ const PHILIPPINE_ADDRESS_DATA = {
                 'Barangay Novaliches', 'Barangay Diliman', 'Barangay Project 8', 'Barangay Cubao', 'Barangay Kamuning', 'Barangay Teachers Village'
             ],
             'Makati': [
-                'Barangay Poblacion', 'Barangay Bel-Air', 'Barangay Forbes Park', 'Barangay DasmariÃ±as', 'Barangay San Lorenzo', 'Barangay Urdaneta',
+                'Barangay Poblacion', 'Barangay Bel-Air', 'Barangay Forbes Park', 'Barangay Dasmariñas', 'Barangay San Lorenzo', 'Barangay Urdaneta',
                 'Barangay Valenzuela', 'Barangay Bangkal', 'Barangay La Paz', 'Barangay Magallanes', 'Barangay Olympia', 'Barangay Palanan', 'Barangay Pio del Pilar',
                 'Barangay Rizal', 'Barangay San Antonio', 'Barangay Santa Cruz', 'Barangay Singkamas', 'Barangay Tejeros'
             ],
@@ -33,7 +33,7 @@ const PHILIPPINE_ADDRESS_DATA = {
                 'Barangay 11', 'Barangay 12', 'Barangay 13', 'Barangay 14', 'Barangay 15', 'Barangay 16', 'Barangay 17', 'Barangay 18', 'Barangay 19', 'Barangay 20',
                 'Bagong Silang', 'Camarin', 'Kaybiga', 'Novaliches North', 'Novaliches South', 'Sangandaan', 'Tala'
             ],
-            'Las PiÃ±as': [
+            'Las Piñas': [
                 'Barangay Almanza Dos', 'Barangay Almanza Uno', 'Barangay BF International Village', 'Barangay Daniel Fajardo', 'Barangay Elias Aldana',
                 'Barangay Ilaya', 'Barangay Manuyo Dos', 'Barangay Manuyo Uno', 'Barangay Pamplona Dos', 'Barangay Pamplona Tres', 'Barangay Pamplona Uno',
                 'Barangay Pilar', 'Barangay Poblacion', 'Barangay Pulang Lupa Dos', 'Barangay Pulang Lupa Uno', 'Barangay Talon Dos', 'Barangay Talon Kuatro',
@@ -41,8 +41,8 @@ const PHILIPPINE_ADDRESS_DATA = {
             ],
             'Marikina': [
                 'Barangay Barangka', 'Barangay Calumpang', 'Barangay Concepcion Dos', 'Barangay Concepcion Uno', 'Barangay Fortune',
-                'Barangay Industrial Valley Complex', 'Barangay Jesus Dela PeÃ±a', 'Barangay Malanday', 'Barangay Marikina Heights',
-                'Barangay Nangka', 'Barangay Parang', 'Barangay San Roque', 'Barangay Santa Elena', 'Barangay Santo NiÃ±o', 'Barangay Tanong', 'Barangay Tumana'
+                'Barangay Industrial Valley Complex', 'Barangay Jesus Dela Peña', 'Barangay Malanday', 'Barangay Marikina Heights',
+                'Barangay Nangka', 'Barangay Parang', 'Barangay San Roque', 'Barangay Santa Elena', 'Barangay Santo Niño', 'Barangay Tanong', 'Barangay Tumana'
             ],
             'Muntinlupa': [
                 'Barangay Alabang', 'Barangay Ayala Alabang', 'Barangay Buli', 'Barangay Cupang', 'Barangay New Alabang Village',
@@ -54,10 +54,10 @@ const PHILIPPINE_ADDRESS_DATA = {
                 'Barangay San Jose', 'Barangay San Rafael Village', 'Barangay San Roque', 'Barangay Sipac-Almacen', 'Barangay Tangos North', 'Barangay Tangos South',
                 'Barangay Tanza I', 'Barangay Tanza II'
             ],
-            'ParaÃ±aque': [
+            'Parañaque': [
                 'Barangay Baclaran', 'Barangay BF Homes', 'Barangay Don Bosco', 'Barangay La Huerta', 'Barangay Marcelo Green Village',
                 'Barangay Merville', 'Barangay Moonwalk', 'Barangay San Antonio', 'Barangay San Dionisio', 'Barangay San Isidro',
-                'Barangay San Martin de Porres', 'Barangay Santo NiÃ±o', 'Barangay Sun Valley', 'Barangay Tambo', 'Barangay Vitalez'
+                'Barangay San Martin de Porres', 'Barangay Santo Niño', 'Barangay Sun Valley', 'Barangay Tambo', 'Barangay Vitalez'
             ],
             'Pasay': [
                 'Barangay 1', 'Barangay 2', 'Barangay 3', 'Barangay 4', 'Barangay 5', 'Barangay 6', 'Barangay 7', 'Barangay 8', 'Barangay 9', 'Barangay 10',
@@ -69,9 +69,9 @@ const PHILIPPINE_ADDRESS_DATA = {
                 'Barangay San Roque', 'Barangay Santa Ana', 'Barangay Santo Rosario-Kanluran', 'Barangay Santo Rosario-Silangan', 'Barangay Tabacalera'
             ],
             'San Juan': [
-                'Barangay Addition Hills', 'Barangay Balong-Bato', 'Barangay Batis', 'Barangay Corazon de Jesus', 'Barangay ErmitaÃ±o',
+                'Barangay Addition Hills', 'Barangay Balong-Bato', 'Barangay Batis', 'Barangay Corazon de Jesus', 'Barangay Ermitaño',
                 'Barangay Greenhills', 'Barangay Halo-halo', 'Barangay Isabelita', 'Barangay Kabayanan', 'Barangay Little Baguio',
-                'Barangay Maytunas', 'Barangay Onse', 'Barangay PasadeÃ±a', 'Barangay Pedro Cruz', 'Barangay Poblacion',
+                'Barangay Maytunas', 'Barangay Onse', 'Barangay Pasadeña', 'Barangay Pedro Cruz', 'Barangay Poblacion',
                 'Barangay Progreso', 'Barangay Rivera', 'Barangay Salapan', 'Barangay San Perfecto', 'Barangay Santa Lucia', 'Barangay Tibagan', 'Barangay West Crame'
             ],
             'Valenzuela': [
@@ -99,7 +99,7 @@ PHILIPPINE_ADDRESS_DATA.NCR['Metro Manila']['Caloocan'] = [
     'Bagong Silang', 'Camarin', 'Kaybiga', 'Novaliches North', 'Novaliches South', 'Sangandaan', 'Tala'
 ];
 
-PHILIPPINE_ADDRESS_DATA.NCR['Metro Manila']['Las PiÃ±as'] = [
+PHILIPPINE_ADDRESS_DATA.NCR['Metro Manila']['Las Piñas'] = [
     'Barangay Almanza Dos', 'Barangay Almanza Uno', 'Barangay BF International Village', 'Barangay Daniel Fajardo', 'Barangay Elias Aldana',
     'Barangay Ilaya', 'Barangay Manuyo Dos', 'Barangay Manuyo Uno', 'Barangay Pamplona Dos', 'Barangay Pamplona Tres', 'Barangay Pamplona Uno',
     'Barangay Pilar', 'Barangay Poblacion', 'Barangay Pulang Lupa Dos', 'Barangay Pulang Lupa Uno', 'Barangay Talon Dos', 'Barangay Talon Kuatro',
@@ -108,8 +108,8 @@ PHILIPPINE_ADDRESS_DATA.NCR['Metro Manila']['Las PiÃ±as'] = [
 
 PHILIPPINE_ADDRESS_DATA.NCR['Metro Manila']['Marikina'] = [
     'Barangay Barangka', 'Barangay Calumpang', 'Barangay Concepcion Dos', 'Barangay Concepcion Uno', 'Barangay Fortune',
-    'Barangay Industrial Valley Complex', 'Barangay Jesus Dela PeÃ±a', 'Barangay Malanday', 'Barangay Marikina Heights',
-    'Barangay Nangka', 'Barangay Parang', 'Barangay San Roque', 'Barangay Santa Elena', 'Barangay Santo NiÃ±o', 'Barangay Tanong', 'Barangay Tumana'
+    'Barangay Industrial Valley Complex', 'Barangay Jesus Dela Peña', 'Barangay Malanday', 'Barangay Marikina Heights',
+    'Barangay Nangka', 'Barangay Parang', 'Barangay San Roque', 'Barangay Santa Elena', 'Barangay Santo Niño', 'Barangay Tanong', 'Barangay Tumana'
 ];
 
 PHILIPPINE_ADDRESS_DATA.NCR['Metro Manila']['Muntinlupa'] = [
@@ -124,10 +124,10 @@ PHILIPPINE_ADDRESS_DATA.NCR['Metro Manila']['Navotas'] = [
     'Barangay Tanza I', 'Barangay Tanza II'
 ];
 
-PHILIPPINE_ADDRESS_DATA.NCR['Metro Manila']['ParaÃ±aque'] = [
+PHILIPPINE_ADDRESS_DATA.NCR['Metro Manila']['Parañaque'] = [
     'Barangay Baclaran', 'Barangay BF Homes', 'Barangay Don Bosco', 'Barangay La Huerta', 'Barangay Marcelo Green Village',
     'Barangay Merville', 'Barangay Moonwalk', 'Barangay San Antonio', 'Barangay San Dionisio', 'Barangay San Isidro',
-    'Barangay San Martin de Porres', 'Barangay Santo NiÃ±o', 'Barangay Sun Valley', 'Barangay Tambo', 'Barangay Vitalez'
+    'Barangay San Martin de Porres', 'Barangay Santo Niño', 'Barangay Sun Valley', 'Barangay Tambo', 'Barangay Vitalez'
 ];
 
 PHILIPPINE_ADDRESS_DATA.NCR['Metro Manila']['Pasay'] = [
@@ -142,9 +142,9 @@ PHILIPPINE_ADDRESS_DATA.NCR['Metro Manila']['Pateros'] = [
 ];
 
 PHILIPPINE_ADDRESS_DATA.NCR['Metro Manila']['San Juan'] = [
-    'Barangay Addition Hills', 'Barangay Balong-Bato', 'Barangay Batis', 'Barangay Corazon de Jesus', 'Barangay ErmitaÃ±o',
+    'Barangay Addition Hills', 'Barangay Balong-Bato', 'Barangay Batis', 'Barangay Corazon de Jesus', 'Barangay Ermitaño',
     'Barangay Greenhills', 'Barangay Halo-halo', 'Barangay Isabelita', 'Barangay Kabayanan', 'Barangay Little Baguio',
-    'Barangay Maytunas', 'Barangay Onse', 'Barangay PasadeÃ±a', 'Barangay Pedro Cruz', 'Barangay Poblacion',
+    'Barangay Maytunas', 'Barangay Onse', 'Barangay Pasadeña', 'Barangay Pedro Cruz', 'Barangay Poblacion',
     'Barangay Progreso', 'Barangay Rivera', 'Barangay Salapan', 'Barangay San Perfecto', 'Barangay Santa Lucia', 'Barangay Tibagan', 'Barangay West Crame'
 ];
 
@@ -241,7 +241,7 @@ PHILIPPINE_ADDRESS_DATA['Region III'] = {
             'Barangay Pamarawan', 'Barangay Panasahan', 'Barangay Pinagbakahan', 'Barangay San Agustin',
             'Barangay San Gabriel', 'Barangay San Juan', 'Barangay San Pablo', 'Barangay San Vicente',
             'Barangay Santa Ana', 'Barangay Santa Rosa', 'Barangay Santiago', 'Barangay Santisima Trinidad',
-            'Barangay Santo Cristo', 'Barangay Santo NiÃ±o', 'Barangay Santo Rosario', 'Barangay Sumapang Bata',
+            'Barangay Santo Cristo', 'Barangay Santo Niño', 'Barangay Santo Rosario', 'Barangay Sumapang Bata',
             'Barangay Sumapang Matanda', 'Barangay Taal', 'Barangay Tikay'
         ],
         'San Jose del Monte': [
@@ -255,8 +255,8 @@ PHILIPPINE_ADDRESS_DATA['Region III'] = {
             'Barangay San Martin I', 'Barangay San Martin II', 'Barangay San Martin III', 'Barangay San Martin IV',
             'Barangay San Pedro', 'Barangay San Rafael I', 'Barangay San Rafael II', 'Barangay San Rafael III',
             'Barangay San Rafael IV', 'Barangay San Rafael V', 'Barangay Santa Cruz I', 'Barangay Santa Cruz II',
-            'Barangay Santa Cruz III', 'Barangay Santa Cruz IV', 'Barangay Santo Cristo', 'Barangay Santo NiÃ±o I',
-            'Barangay Santo NiÃ±o II', 'Barangay Sapang Palay', 'Barangay Tungkong Mangga'
+            'Barangay Santa Cruz III', 'Barangay Santa Cruz IV', 'Barangay Santo Cristo', 'Barangay Santo Niño I',
+            'Barangay Santo Niño II', 'Barangay Sapang Palay', 'Barangay Tungkong Mangga'
         ],
         'Meycauayan': [
             'Barangay Bagbaguin', 'Barangay Bahay Pare', 'Barangay Bancal', 'Barangay Banga', 'Barangay Calvario',
@@ -272,12 +272,12 @@ PHILIPPINE_ADDRESS_DATA['Region III'] = {
             'Barangay Lara', 'Barangay Magliman', 'Barangay Malino', 'Barangay Malpitic', 'Barangay Panipuan',
             'Barangay Pulung Bulu', 'Barangay Saguin', 'Barangay San Agustin', 'Barangay San Felipe', 'Barangay San Isidro',
             'Barangay San Jose', 'Barangay San Juan', 'Barangay San Nicolas', 'Barangay San Pedro', 'Barangay Santa Lucia',
-            'Barangay Santa Teresita', 'Barangay Santo NiÃ±o', 'Barangay Santo Rosario', 'Barangay Sindalan'
+            'Barangay Santa Teresita', 'Barangay Santo Niño', 'Barangay Santo Rosario', 'Barangay Sindalan'
         ],
         'Angeles': [
             'Barangay Agapito del Rosario', 'Barangay Amsic', 'Barangay Balibago', 'Barangay Capaya', 'Barangay Claro M. Recto',
             'Barangay Cuayan', 'Barangay Cutcut', 'Barangay Cutud', 'Barangay Lourdes Norte', 'Barangay Lourdes Sur',
-            'Barangay MalabaÃ±as', 'Barangay Margot', 'Barangay Mining', 'Barangay Ninoy Aquino', 'Barangay Pampang',
+            'Barangay Malabañas', 'Barangay Margot', 'Barangay Mining', 'Barangay Ninoy Aquino', 'Barangay Pampang',
             'Barangay Pandan', 'Barangay Pulung Cacutud', 'Barangay Pulung Maragul', 'Barangay Salapungan',
             'Barangay San Jose', 'Barangay San Nicolas', 'Barangay Santa Teresita', 'Barangay Santa Trinidad',
             'Barangay Santo Cristo', 'Barangay Santo Domingo', 'Barangay Santo Rosario', 'Barangay Sapalibutad',
@@ -293,7 +293,7 @@ PHILIPPINE_ADDRESS_DATA['Region III'] = {
             'Barangay Kalikid Sur', 'Barangay Kapitan Pepe', 'Barangay Lagare', 'Barangay Magsaysay Norte',
             'Barangay Magsaysay Sur', 'Barangay Mahipon', 'Barangay Malapit', 'Barangay Mayapyap Norte',
             'Barangay Mayapyap Sur', 'Barangay MS Garcia', 'Barangay Pagas', 'Barangay Pampanga',
-            'Barangay Pangatian', 'Barangay PiÃ±ahan', 'Barangay Poblacion', 'Barangay Polilio',
+            'Barangay Pangatian', 'Barangay Piñahan', 'Barangay Poblacion', 'Barangay Polilio',
             'Barangay Rosales', 'Barangay Sabani', 'Barangay San Roque Norte', 'Barangay San Roque Sur',
             'Barangay Sangitan East', 'Barangay Sangitan West', 'Barangay Santa Arcadia', 'Barangay Samon',
             'Barangay Sumacab Este', 'Barangay Sumacab Norte', 'Barangay Talipapa', 'Barangay Tambo Adorable',
@@ -354,12 +354,12 @@ PHILIPPINE_ADDRESS_DATA['Region IV-A'] = {
             'Barangay Malitlit', 'Barangay Malusak', 'Barangay Market Area', 'Barangay Pooc', 'Barangay Pulong Santa Cruz',
             'Barangay Santo Domingo', 'Barangay Sinalhan', 'Barangay Tagapo'
         ],
-        'BiÃ±an': [
-            'Barangay BiÃ±an', 'Barangay Bungahan', 'Barangay Canlalay', 'Barangay Casile', 'Barangay De La Paz',
+        'Biñan': [
+            'Barangay Biñan', 'Barangay Bungahan', 'Barangay Canlalay', 'Barangay Casile', 'Barangay De La Paz',
             'Barangay Ganado', 'Barangay Langkiwa', 'Barangay Loma', 'Barangay Malaban', 'Barangay Malamig',
             'Barangay Mamplasan', 'Barangay Platero', 'Barangay Poblacion', 'Barangay San Antonio',
             'Barangay San Francisco', 'Barangay San Jose', 'Barangay San Vicente', 'Barangay Santo Domingo',
-            'Barangay Santo NiÃ±o', 'Barangay Soro-soro', 'Barangay Southville', 'Barangay Timbao',
+            'Barangay Santo Niño', 'Barangay Soro-soro', 'Barangay Southville', 'Barangay Timbao',
             'Barangay Tubigan', 'Barangay Zapote'
         ]
     },
@@ -381,7 +381,7 @@ PHILIPPINE_ADDRESS_DATA['Region IV-A'] = {
             'Barangay San Agapito', 'Barangay San Agustin Kanluran', 'Barangay San Agustin Silangan',
             'Barangay San Andres', 'Barangay San Antonio', 'Barangay San Isidro', 'Barangay San Jose Sico',
             'Barangay San Miguel', 'Barangay Santa Clara', 'Barangay Santa Rita Kita', 'Barangay Santa Rita Proper',
-            'Barangay Santo Domingo', 'Barangay Santo NiÃ±o', 'Barangay Simlong', 'Barangay Sirang Lupa',
+            'Barangay Santo Domingo', 'Barangay Santo Niño', 'Barangay Simlong', 'Barangay Sirang Lupa',
             'Barangay Sorosoro Ibaba', 'Barangay Sorosoro Ilaya', 'Barangay Sorosoro Karsada', 'Barangay Tabangao Ambulong',
             'Barangay Tabangao Aplaya', 'Barangay Talahib Pandayan', 'Barangay Talahib Payapa', 'Barangay Tingga Itaas',
             'Barangay Tingga Labac', 'Barangay Tulo', 'Barangay Wawa'
@@ -414,7 +414,7 @@ PHILIPPINE_ADDRESS_DATA['Region VII'] = {
             'Barangay Agus', 'Barangay Babag', 'Barangay Bankal', 'Barangay Baring', 'Barangay Basak',
             'Barangay Buaya', 'Barangay Calawisan', 'Barangay Canjulao', 'Barangay Caw-oy', 'Barangay Caubian',
             'Barangay Gun-ob', 'Barangay Ibo', 'Barangay Looc', 'Barangay Mactan', 'Barangay Maribago',
-            'Barangay Marigondon', 'Barangay Pajac', 'Barangay Pajo', 'Barangay Poblacion', 'Barangay Punta EngaÃ±o',
+            'Barangay Marigondon', 'Barangay Pajac', 'Barangay Pajo', 'Barangay Poblacion', 'Barangay Punta Engaño',
             'Barangay Pusok', 'Barangay Sabang', 'Barangay Santa Rosa', 'Barangay Subabasbas', 'Barangay Talima',
             'Barangay Tingo', 'Barangay Tubigan', 'Barangay Tungasan'
         ]
@@ -442,7 +442,7 @@ PHILIPPINE_ADDRESS_DATA['Region XI'] = {
             'Barangay Baguio', 'Barangay Bangkas Heights', 'Barangay Biao Escuela', 'Barangay Biao Guianga',
             'Barangay Biao Joaquin', 'Barangay Bucana', 'Barangay Buda', 'Barangay Buhangin', 'Barangay Bunawan',
             'Barangay Cabantian', 'Barangay Calinan', 'Barangay Callawa', 'Barangay Catalunan Grande',
-            'Barangay Catalunan PequeÃ±o', 'Barangay Catitipan', 'Barangay Cawayan', 'Barangay Centro',
+            'Barangay Catalunan Pequeño', 'Barangay Catitipan', 'Barangay Cawayan', 'Barangay Centro',
             'Barangay Communal', 'Barangay Crossing Bayabas', 'Barangay Dacudao', 'Barangay Daliao',
             'Barangay Daliaon Plantation', 'Barangay Dominga', 'Barangay Dumoy', 'Barangay Eden',
             'Barangay Fatima', 'Barangay Gatungan', 'Barangay Guadalupe', 'Barangay Gumalang',
@@ -482,7 +482,7 @@ PHILIPPINE_ADDRESS_DATA['Region V'] = {
             'Barangay Pigcale', 'Barangay Poblacion', 'Barangay Puro', 'Barangay Rawis', 'Barangay Sabang',
             'Barangay San Joaquin', 'Barangay San Rafael', 'Barangay San Roque', 'Barangay Santa Cruz',
             'Barangay Tahao', 'Barangay Tamaoyan', 'Barangay Taysan', 'Barangay Tinago', 'Barangay Tula-tula Grande',
-            'Barangay Tula-tula PequeÃ±o', 'Barangay Victory Village North', 'Barangay Victory Village South',
+            'Barangay Tula-tula Pequeño', 'Barangay Victory Village North', 'Barangay Victory Village South',
             'Barangay Washington Drive', 'Barangay Yawa'
         ]
     },
@@ -490,9 +490,9 @@ PHILIPPINE_ADDRESS_DATA['Region V'] = {
         'Naga': [
             'Barangay Abella', 'Barangay Bagumbayan Norte', 'Barangay Bagumbayan Sur', 'Barangay Balatas',
             'Barangay Calauag', 'Barangay Cararayan', 'Barangay Carolina', 'Barangay Concepcion Grande',
-            'Barangay Concepcion PequeÃ±a', 'Barangay Dayangdang', 'Barangay Del Rosario', 'Barangay Dinaga',
+            'Barangay Concepcion Pequeña', 'Barangay Dayangdang', 'Barangay Del Rosario', 'Barangay Dinaga',
             'Barangay Igualdad Interior', 'Barangay Lerma', 'Barangay Liboton', 'Barangay Mabolo',
-            'Barangay Pacol', 'Barangay Panicuason', 'Barangay PeÃ±afrancia', 'Barangay Sabang',
+            'Barangay Pacol', 'Barangay Panicuason', 'Barangay Peñafrancia', 'Barangay Sabang',
             'Barangay San Felipe', 'Barangay San Francisco', 'Barangay San Isidro', 'Barangay Tabuco',
             'Barangay Tinago', 'Barangay Triangulo'
         ]
@@ -521,8 +521,8 @@ PHILIPPINE_ADDRESS_DATA['Region VI'] = {
             'Barangay Sambag', 'Barangay San Agustin', 'Barangay San Antonio', 'Barangay San Felix',
             'Barangay San Isidro', 'Barangay San Jose', 'Barangay San Juan', 'Barangay San Nicolas',
             'Barangay San Pedro', 'Barangay San Rafael', 'Barangay San Roque', 'Barangay Santa Cruz',
-            'Barangay Santa Rosa', 'Barangay Santo Domingo', 'Barangay Santo NiÃ±o Norte',
-            'Barangay Santo NiÃ±o Sur', 'Barangay Santo Rosario-Duran', 'Barangay Sinikway',
+            'Barangay Santa Rosa', 'Barangay Santo Domingo', 'Barangay Santo Niño Norte',
+            'Barangay Santo Niño Sur', 'Barangay Santo Rosario-Duran', 'Barangay Sinikway',
             'Barangay Sooc', 'Barangay South Baluarte', 'Barangay South Fundidor', 'Barangay South San Jose',
             'Barangay Tabuc Suba', 'Barangay Tacas', 'Barangay Tagbac', 'Barangay Tabucan',
             'Barangay Tanza-Esperanza', 'Barangay Tap-oc', 'Barangay Ungka I', 'Barangay Ungka II',
@@ -742,7 +742,7 @@ PHILIPPINE_ADDRESS_DATA['Region III'] = {
         'Gapan': ['Barangay Balante', 'Barangay Bayanihan', 'Barangay Bungo', 'Barangay Kapalangan', 'Barangay Lambac'],
         'San Jose': ['Barangay Abar 1st', 'Barangay Abar 2nd', 'Barangay Bagong Sikat', 'Barangay Caanawan', 'Barangay Camanacsacan'],
         'Palayan': ['Barangay Atate', 'Barangay Bagong Buhay', 'Barangay Marcos', 'Barangay Maligaya', 'Barangay Singalat'],
-        'MuÃ±oz': ['Barangay Bagong Sikat', 'Barangay Bantug', 'Barangay Calabalabaan', 'Barangay Curva', 'Barangay Poblacion Norte']
+        'Muñoz': ['Barangay Bagong Sikat', 'Barangay Bantug', 'Barangay Calabalabaan', 'Barangay Curva', 'Barangay Poblacion Norte']
     },
     'Pampanga': {
         'San Fernando': [
@@ -788,7 +788,7 @@ PHILIPPINE_ADDRESS_DATA['Region IV-A'] = {
             'Barangay Alapan I-A', 'Barangay Alapan I-B', 'Barangay Alapan II-A', 'Barangay Alapan II-B',
             'Barangay Anabu I-A', 'Barangay Anabu I-B', 'Barangay Anabu I-C', 'Barangay Anabu I-D'
         ],
-        'DasmariÃ±as': ['Barangay Bagong Bayan', 'Barangay Burol I', 'Barangay Burol II', 'Barangay Burol III', 'Barangay Langkaan I'],
+        'Dasmariñas': ['Barangay Bagong Bayan', 'Barangay Burol I', 'Barangay Burol II', 'Barangay Burol III', 'Barangay Langkaan I'],
         'General Trias': ['Barangay Alingaro', 'Barangay Arnaldo Poblacion', 'Barangay Bacao I', 'Barangay Bacao II', 'Barangay Bagumbayan'],
         'Trece Martires': ['Barangay Aguado', 'Barangay Cabezas', 'Barangay Cabuco', 'Barangay Conchu', 'Barangay De Ocampo'],
         'Kawit': ['Barangay Binakayan-Kanluran', 'Barangay Binakayan-Silangan', 'Barangay Kaingen', 'Barangay Magdalo', 'Barangay Panamitan'],
@@ -800,14 +800,14 @@ PHILIPPINE_ADDRESS_DATA['Region IV-A'] = {
             'Barangay Aplaya', 'Barangay Balibago', 'Barangay Caingin', 'Barangay Dila', 'Barangay Dita',
             'Barangay Don Jose', 'Barangay Ibaba', 'Barangay Kanluran', 'Barangay Labas', 'Barangay Macabling'
         ],
-        'BiÃ±an': [
-            'Barangay BiÃ±an', 'Barangay Bungahan', 'Barangay Canlalay', 'Barangay Casile', 'Barangay De La Paz',
+        'Biñan': [
+            'Barangay Biñan', 'Barangay Bungahan', 'Barangay Canlalay', 'Barangay Casile', 'Barangay De La Paz',
             'Barangay Ganado', 'Barangay Langkiwa', 'Barangay Loma', 'Barangay Malaban', 'Barangay Malamig'
         ],
         'San Pedro': ['Barangay Calendola', 'Barangay Chrysanthemum', 'Barangay Cuyab', 'Barangay Fatima', 'Barangay G.S.I.S.'],
         'Cabuyao': ['Barangay Banay-banay', 'Barangay Banlic', 'Barangay Bigaa', 'Barangay Butong', 'Barangay Casile'],
         'Calamba': ['Barangay Bagong Kalsada', 'Barangay Banadero', 'Barangay Banlic', 'Barangay Barandal', 'Barangay Batino'],
-        'Los BaÃ±os': ['Barangay Anos', 'Barangay Bagong Silang', 'Barangay Bambang', 'Barangay Batong Malake', 'Barangay Baybayin']
+        'Los Baños': ['Barangay Anos', 'Barangay Bagong Silang', 'Barangay Bambang', 'Barangay Batong Malake', 'Barangay Baybayin']
     },
     'Quezon': {
         'Lucena': ['Barangay Barra', 'Barangay Bocohan', 'Barangay Cotta', 'Barangay Dalahican', 'Barangay Gulang-Gulang'],
@@ -1060,12 +1060,12 @@ PHILIPPINE_ADDRESS_DATA['Region XII'] = {
     },
     'South Cotabato': {
         'General Santos': ['Barangay Apopong', 'Barangay Baluan', 'Barangay Batomelong', 'Barangay Buayan', 'Barangay Calumpang'],
-        'Koronadal': ['Barangay Assumption', 'Barangay AvanceÃ±a', 'Barangay Carpenter Hill', 'Barangay Concepcion', 'Barangay Esperanza'],
+        'Koronadal': ['Barangay Assumption', 'Barangay Avanceña', 'Barangay Carpenter Hill', 'Barangay Concepcion', 'Barangay Esperanza'],
         'Surallah': ['Barangay Albagan', 'Barangay Bagacay', 'Barangay Centrala', 'Barangay Datal Anggas', 'Barangay Lambayong']
     },
     'Sultan Kudarat': {
         'Isulan': ['Barangay Bambad', 'Barangay Dansuli', 'Barangay Kalawag I', 'Barangay Kalawag II', 'Barangay Kalawag III'],
-        'Tacurong': ['Barangay Baras', 'Barangay Buenaflor', 'Barangay Calean', 'Barangay EJC Montilla', 'Barangay GriÃ±o'],
+        'Tacurong': ['Barangay Baras', 'Barangay Buenaflor', 'Barangay Calean', 'Barangay EJC Montilla', 'Barangay Griño'],
         'Bagumbayan': ['Barangay Alunan', 'Barangay Antong', 'Barangay Datu Karon', 'Barangay Esperanza', 'Barangay Kabulohan']
     },
     'Sarangani': {
@@ -1077,7 +1077,7 @@ PHILIPPINE_ADDRESS_DATA['Region XII'] = {
 
 PHILIPPINE_ADDRESS_DATA['Region XIII'] = {
     'Agusan del Norte': {
-        'Butuan': ['Barangay Agao', 'Barangay Agusan PequeÃ±o', 'Barangay Ambago', 'Barangay Amparo', 'Barangay Anticala'],
+        'Butuan': ['Barangay Agao', 'Barangay Agusan Pequeño', 'Barangay Ambago', 'Barangay Amparo', 'Barangay Anticala'],
         'Cabadbaran': ['Barangay Bay-ang', 'Barangay Bayabas', 'Barangay Cabinet', 'Barangay Calibunan', 'Barangay Comagascas']
     },
     'Agusan del Sur': {

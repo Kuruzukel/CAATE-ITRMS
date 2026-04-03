@@ -6,7 +6,7 @@ if (typeof window.API_BASE_URL === 'undefined') {
 
 let traineeDataCache = null;
 let cacheTimestamp = null;
-const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+const CACHE_DURATION = 5 * 60 * 1000;
 
 async function loadTraineeProfileForNavbar() {
     try {
@@ -57,7 +57,7 @@ async function loadTraineeProfileForNavbar() {
                 const result = await response.json();
                 traineeData = result.data || result.user || result;
 
-                console.log('Raw trainee data from API:', traineeData); // Debug log
+                console.log('Raw trainee data from API:', traineeData);
 
                 const firstName = traineeData.firstName || traineeData.first_name || '';
                 const secondName = traineeData.secondName || traineeData.second_name || '';
@@ -68,7 +68,7 @@ async function loadTraineeProfileForNavbar() {
                 const nameParts = [firstName, secondName, middleName, lastName, suffix].filter(part => part.trim() !== '');
                 const fullName = nameParts.join(' ').trim();
 
-                console.log('Extracted names:', { firstName, secondName, middleName, lastName, suffix, fullName }); // Debug log
+                console.log('Extracted names:', { firstName, secondName, middleName, lastName, suffix, fullName });
 
                 let displayName = 'Trainee';
                 if (fullName && fullName !== '') {
@@ -79,7 +79,7 @@ async function loadTraineeProfileForNavbar() {
                     displayName = (traineeData.username || traineeData.trainee_id || '').trim();
                 }
 
-                console.log('Final display name:', displayName); // Debug log
+                console.log('Final display name:', displayName);
 
                 const mappedData = {
                     _id: traineeData._id || traineeData.id,
@@ -268,7 +268,7 @@ function overrideAuthDashboardUpdates() {
                             element.textContent.trim() === 'Trainee' ||
                             element.textContent.trim() === 'Loading...' ||
                             element.textContent.trim() === '' ||
-                            element.textContent.includes('dsad') // Catch any variation of the placeholder
+                            element.textContent.includes('dsad')
                         )) {
                             shouldUpdate = true;
                         }
@@ -281,7 +281,7 @@ function overrideAuthDashboardUpdates() {
                     loadTraineeProfileForNavbar();
                 });
             }
-        }, 50); // Reduced debounce time
+        }, 50);
     });
 
     observer.observe(document.body, {
@@ -314,7 +314,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function ensureMenuDropdownsWork() {
     setTimeout(() => {
-        
+
     }, 50);
 }
 
@@ -422,7 +422,7 @@ window.addEventListener('profileUpdated', function (e) {
 });
 window.updateTraineeProfileImages = function (imagePath) {
     const profileImageSelectors = [
-        '#profileImage', // Main profile image
+        '#profileImage',
         '.navbar .avatar img',
         '.dropdown-menu .avatar img',
         '.navbar-dropdown .avatar img',
@@ -432,8 +432,8 @@ window.updateTraineeProfileImages = function (imagePath) {
         '.navbar img.rounded-circle',
         '.dropdown-menu img.w-px-40',
         '.dropdown-menu img.rounded-circle',
-        '.avatar img', // Generic avatar images
-        'img[alt="Profile Picture"]' // Specific profile picture images
+        '.avatar img',
+        'img[alt="Profile Picture"]'
     ];
 
     let totalUpdated = 0;

@@ -6,7 +6,7 @@ const enrolledCourses = [
     { id: 3, name: 'Aesthetic Services Level II', hours: '264 hours', image: 'https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=400&h=250&fit=crop' }
 ];
 
-let selectedCourseId = 1; // Default to first course
+let selectedCourseId = 1;
 
 function selectCourse(courseId, courseName, cardElement) {
     selectedCourseId = courseId;

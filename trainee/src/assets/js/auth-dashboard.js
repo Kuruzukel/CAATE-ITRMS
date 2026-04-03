@@ -12,7 +12,7 @@
         return;
     }
 
-    const pageRole = 'trainee'; // This is trainee dashboard
+    const pageRole = 'trainee';
     if (userRole !== pageRole) {
         const baseUrl = window.location.origin + '/CAATE-ITRMS';
         if (userRole === 'admin') {
@@ -92,7 +92,7 @@ async function logout() {
 (function preventBackButtonAccess() {
     const pageRole = document.body.getAttribute('data-required-role');
     if (!checkAuthentication(pageRole)) {
-        return; // Stop execution if not authenticated
+        return;
     }
 
     window.history.pushState(null, '', window.location.href);

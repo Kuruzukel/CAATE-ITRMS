@@ -87,7 +87,7 @@
                 mutations.forEach((mutation) => {
                     if (mutation.addedNodes.length) {
                         mutation.addedNodes.forEach((node) => {
-                            if (node.nodeType === 1) { // Element node
+                            if (node.nodeType === 1) {
                                 const text = node.textContent || '';
                                 if (text.includes('password') || text.includes('breach') || text.includes('data breach')) {
                                     node.style.display = 'none !important';

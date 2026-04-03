@@ -269,7 +269,7 @@ class RegistrationFormHandler {
             if (layoutOverlay) {
                 layoutOverlay.classList.remove('active');
             }
-            this.formSubmitted = false; // Reset flag
+            this.formSubmitted = false;
         }, { once: true });
 
         if (layoutOverlay) {

@@ -3,7 +3,6 @@ let allApplications = [];
 let allRegistrations = [];
 let filteredTrainees = [];
 
-// Get initials from name
 function getInitials(name) {
     if (!name) return '??';
     const parts = name.split(' ');
@@ -13,10 +12,8 @@ function getInitials(name) {
     return name.substring(0, 2).toUpperCase();
 }
 
-// Fetch all data from database
 async function fetchAllData() {
     try {
-        // Fetch trainees
         const traineesResponse = await fetch(`${config.api.baseUrl}/api/v1/trainees`, {
             method: 'GET',
             headers: {
@@ -26,7 +23,6 @@ async function fetchAllData() {
         const traineesResult = await traineesResponse.json();
         allTrainees = traineesResult.data || [];
 
-        // Fetch applications
         const applicationsResponse = await fetch(`${config.api.baseUrl}/api/v1/applications`, {
             method: 'GET',
             headers: {
@@ -36,7 +32,6 @@ async function fetchAllData() {
         const applicationsResult = await applicationsResponse.json();
         allApplications = applicationsResult.data || [];
 
-        // Fetch registrations
         const registrationsResponse = await fetch(`${config.api.baseUrl}/api/v1/registrations`, {
             method: 'GET',
             headers: {
@@ -46,10 +41,8 @@ async function fetchAllData() {
         const registrationsResult = await registrationsResponse.json();
         allRegistrations = registrationsResult.data || [];
 
-        // Populate course filter
         populateCourseFilter();
 
-        // Process and render data
         processTraineesData();
 
     } catch (error) {
@@ -58,22 +51,18 @@ async function fetchAllData() {
     }
 }
 
-// Process trainees data - show ALL approved applications
 async function processTraineesData() {
     const combinedData = [];
 
     const approvedApps = allApplications.filter(app => app.status === 'approved');
 
-    // Show ALL approved applications with profile images
     for (const application of approvedApps) {
         let appTraineeId = application.trainee_id || application.user_id || 'N/A';
 
-        // Handle MongoDB ObjectId format for trainee_id
         if (appTraineeId && typeof appTraineeId === 'object') {
             appTraineeId = appTraineeId.$oid || appTraineeId._id || 'N/A';
         }
 
-        // Extract name from application.name object
         let fullName = 'Unknown';
         if (application.name) {
             const firstName = application.name.first_name || '';
@@ -82,17 +71,14 @@ async function processTraineesData() {
             const surname = application.name.surname || '';
             const extension = application.name.name_extension || '';
 
-            // Build full name: First Second Middle Surname Extension
             fullName = [firstName, secondName, middleName, surname, extension]
                 .filter(part => part && part.trim())
                 .join(' ');
         }
 
-        // Fetch profile image from trainee data
         let profileImage = null;
         let userId = application.user_id || application.userId;
 
-        // Handle MongoDB ObjectId format
         if (userId && typeof userId === 'object') {
             userId = userId.$oid || userId._id || null;
         }
@@ -105,7 +91,6 @@ async function processTraineesData() {
                     profileImage = traineeData.data.profile_image;
                 }
             } catch (error) {
-                // Silently fail if profile image cannot be fetched
             }
         }
 
@@ -125,7 +110,6 @@ async function processTraineesData() {
     renderTraineesTable();
 }
 
-// Render trainees table
 function renderTraineesTable() {
     const tbody = document.getElementById('traineesTableBody');
     const loader = document.getElementById('tableLoader');
@@ -137,7 +121,6 @@ function renderTraineesTable() {
     tbody.innerHTML = '';
 
     if (filteredTrainees.length === 0) {
-        // Check if any filters are active
         const searchTerm = document.getElementById('searchTraineeInput').value;
         const courseFilter = document.getElementById('courseFilter').value;
 
@@ -236,24 +219,20 @@ function renderTraineesTable() {
     });
 }
 
-// Filter function
 function applyFilters() {
     const searchTerm = document.getElementById('searchTraineeInput').value.toLowerCase();
     const courseFilter = document.getElementById('courseFilter').value.toLowerCase();
 
-    // Get all approved applications again
     const approvedApps = allApplications.filter(app => app.status === 'approved');
     const combinedData = [];
 
     approvedApps.forEach(application => {
         let appTraineeId = application.trainee_id || application.user_id || 'N/A';
 
-        // Handle MongoDB ObjectId format for trainee_id
         if (appTraineeId && typeof appTraineeId === 'object') {
             appTraineeId = appTraineeId.$oid || appTraineeId._id || 'N/A';
         }
 
-        // Extract name from application.name object
         let fullName = 'Unknown';
         if (application.name) {
             const firstName = application.name.first_name || '';
@@ -267,7 +246,6 @@ function applyFilters() {
                 .join(' ');
         }
 
-        // Find existing trainee data to preserve profile image
         const existingTrainee = filteredTrainees.find(t => t.id === (application._id?.$oid || application._id));
         const profileImage = existingTrainee ? existingTrainee.profileImage : null;
 
@@ -283,7 +261,6 @@ function applyFilters() {
         });
     });
 
-    // Apply filters
     filteredTrainees = combinedData.filter(trainee => {
         const matchesSearch = !searchTerm ||
             trainee.name.toLowerCase().includes(searchTerm) ||
@@ -295,7 +272,6 @@ function applyFilters() {
 
     renderTraineesTable();
 
-    // Apply search highlighting if there's a search term
     if (searchTerm) {
         setTimeout(() => {
             clearAllHighlights();
@@ -306,7 +282,6 @@ function applyFilters() {
     }
 }
 
-// Clear all row highlights
 function clearAllHighlights() {
     const tbody = document.getElementById('traineesTableBody');
     if (tbody) {
@@ -327,7 +302,6 @@ function clearAllHighlights() {
     }
 }
 
-// Highlight search results
 function highlightSearchResults(searchTerm) {
     const tbody = document.getElementById('traineesTableBody');
     if (!tbody) return;
@@ -359,7 +333,6 @@ function highlightSearchResults(searchTerm) {
     }
 }
 
-// Reset filters
 function resetFilters() {
     document.getElementById('searchTraineeInput').value = '';
     document.getElementById('courseFilter').value = '';
@@ -367,11 +340,9 @@ function resetFilters() {
     processTraineesData();
 }
 
-// Populate course filter dropdown
 function populateCourseFilter() {
     const courseFilter = document.getElementById('courseFilter');
 
-    // Get unique courses from approved applications only
     const approvedApplications = allApplications.filter(app => app.status === 'approved');
     const uniqueCourses = [...new Set(approvedApplications.map(app => app.assessment_title || app.course).filter(c => c))];
 
@@ -383,7 +354,6 @@ function populateCourseFilter() {
     });
 }
 
-// View trainee details
 function viewTraineeDetails(traineeId) {
     const trainee = filteredTrainees.find(t => t.id === traineeId);
     if (trainee) {
@@ -391,7 +361,6 @@ function viewTraineeDetails(traineeId) {
     }
 }
 
-// Show error message
 function showError(message) {
     const tbody = document.getElementById('traineesTableBody');
     tbody.innerHTML = `
@@ -405,10 +374,8 @@ function showError(message) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    // Fetch all data
     fetchAllData();
 
-    // Add event listeners for filters
     document.getElementById('searchTraineeInput').addEventListener('input', applyFilters);
     document.getElementById('courseFilter').addEventListener('change', applyFilters);
     document.getElementById('resetCourseFilters').addEventListener('click', resetFilters);

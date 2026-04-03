@@ -386,7 +386,7 @@ async function saveProfileChanges() {
         last_name: editLastName ? editLastName.value.trim() : '',
         suffix: editSuffix ? editSuffix.value.trim() : '',
         date_of_birth: editDateOfBirth ? editDateOfBirth.value : '',
-        phone: editPhone ? editPhone.value.replace(/\s/g, '').trim() : '', // Remove spaces for storage
+        phone: editPhone ? editPhone.value.replace(/\s/g, '').trim() : '',
         email: editEmail ? editEmail.value.trim() : '',
         address: editAddress ? editAddress.value.trim() : ''
     };
@@ -701,13 +701,13 @@ window.testProfileImageUpdate = function (imagePath) {
                 detail: { imagePath: imagePath }
             }));
         } catch (e) {
-                    }
+        }
     }
 };
 
 function updateAllProfileImages(imagePath) {
     const profileImageSelectors = [
-        '#profileImage', // Main profile image
+        '#profileImage',
         '.navbar .avatar img',
         '.dropdown-menu .avatar img',
         '.navbar-dropdown .avatar img',
@@ -717,8 +717,8 @@ function updateAllProfileImages(imagePath) {
         '.navbar img.rounded-circle',
         '.dropdown-menu img.w-px-40',
         '.dropdown-menu img.rounded-circle',
-        '.avatar img', // Generic avatar images
-        'img[alt="Profile Picture"]' // Specific profile picture images
+        '.avatar img',
+        'img[alt="Profile Picture"]'
     ];
 
     let totalUpdated = 0;
@@ -787,6 +787,6 @@ window.testProfileImageUpdate = function (imagePath) {
                 detail: { imagePath: imagePath }
             }));
         } catch (e) {
-                    }
+        }
     }
 };

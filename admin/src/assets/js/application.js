@@ -525,7 +525,7 @@ async function testAPI() {
 function testChangeDetection() {
     const surnameField = document.getElementById('editSurname');
     const originalValue = surnameField.value;
-    surnameField.value = originalValue + ' '; // Add a space
+    surnameField.value = originalValue + ' ';
 
     console.log('Test: Added space to surname field');
     console.log('Original:', originalValue);

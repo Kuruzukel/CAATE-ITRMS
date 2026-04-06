@@ -413,33 +413,33 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 appointmentsHTML += `
                     <div class="list-group-item list-group-item-action" data-event-id="${event.id}">
-                        <div class="d-flex align-items-center">
-                            <div style="background: linear-gradient(135deg, rgba(54, 145, 191, 0.1) 0%, rgba(50, 85, 150, 0.1) 100%); 
-                                        backdrop-filter: blur(10px) saturate(180%); 
-                                        -webkit-backdrop-filter: blur(10px) saturate(180%); 
-                                        border: 1px solid rgba(54, 145, 191, 0.4); 
-                                        box-shadow: 0 4px 12px rgba(22, 56, 86, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3); 
-                                        color: white; 
-                                        display: flex; 
-                                        align-items: center; 
-                                        justify-content: center; 
-                                        border-radius: 50%; 
-                                        width: 40px; 
-                                        height: 40px; 
-                                        font-weight: 600; 
-                                        font-size: 14px; 
-                                        margin-right: 12px;
-                                        flex-shrink: 0;">
-                                ${initials}
-                            </div>
-                            <div class="grow">
-                                <div class="d-flex justify-content-between align-items-start">
-                                    <div>
-                                        <h6 class="mb-1">${client}</h6>
-                                        <small class="text-muted"><i class="bx bx-time"></i> ${startTime} | ${service}</small>
-                                    </div>
-                                    <span class="badge bg-${getStatusColor(eventStatus)}">${eventStatus}</span>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center flex-grow-1">
+                                <div style="background: linear-gradient(135deg, rgba(54, 145, 191, 0.1) 0%, rgba(50, 85, 150, 0.1) 100%); 
+                                            backdrop-filter: blur(10px) saturate(180%); 
+                                            -webkit-backdrop-filter: blur(10px) saturate(180%); 
+                                            border: 1px solid rgba(54, 145, 191, 0.4); 
+                                            box-shadow: 0 4px 12px rgba(22, 56, 86, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3); 
+                                            color: white; 
+                                            display: flex; 
+                                            align-items: center; 
+                                            justify-content: center; 
+                                            border-radius: 50%; 
+                                            width: 40px; 
+                                            height: 40px; 
+                                            font-weight: 600; 
+                                            font-size: 14px; 
+                                            margin-right: 12px;
+                                            flex-shrink: 0;">
+                                    ${initials}
                                 </div>
+                                <div>
+                                    <h6 class="mb-1">${client}</h6>
+                                    <small class="text-muted"><i class="bx bx-time"></i> ${startTime} | ${service}</small>
+                                </div>
+                            </div>
+                            <div class="ms-3">
+                                <span class="badge bg-${getStatusColor(eventStatus)}">${eventStatus}</span>
                             </div>
                         </div>
                     </div>
@@ -529,34 +529,34 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 appointmentsHTML += `
                     <div class="list-group-item appointment-item" data-event-index="${index}">
-                        <div class="d-flex align-items-center">
-                            <div style="background: linear-gradient(135deg, rgba(54, 145, 191, 0.1) 0%, rgba(50, 85, 150, 0.1) 100%); 
-                                        backdrop-filter: blur(10px) saturate(180%); 
-                                        -webkit-backdrop-filter: blur(10px) saturate(180%); 
-                                        border: 1px solid rgba(54, 145, 191, 0.4); 
-                                        box-shadow: 0 4px 12px rgba(22, 56, 86, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3); 
-                                        color: white; 
-                                        display: flex; 
-                                        align-items: center; 
-                                        justify-content: center; 
-                                        border-radius: 50%; 
-                                        width: 40px; 
-                                        height: 40px; 
-                                        font-weight: 600; 
-                                        font-size: 14px; 
-                                        margin-right: 12px;
-                                        flex-shrink: 0;">
-                                ${initials}
-                            </div>
-                            <div class="grow">
-                                <div class="d-flex justify-content-between align-items-start">
-                                    <div>
-                                        <h6 class="mb-1">${client}</h6>
-                                        <small class="text-muted d-block">${service}</small>
-                                        <small class="text-muted"><i class="bx bx-time"></i> ${time}</small>
-                                    </div>
-                                    <span class="badge bg-${getStatusColor(eventStatus)}">${eventStatus}</span>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center flex-grow-1">
+                                <div style="background: linear-gradient(135deg, rgba(54, 145, 191, 0.1) 0%, rgba(50, 85, 150, 0.1) 100%); 
+                                            backdrop-filter: blur(10px) saturate(180%); 
+                                            -webkit-backdrop-filter: blur(10px) saturate(180%); 
+                                            border: 1px solid rgba(54, 145, 191, 0.4); 
+                                            box-shadow: 0 4px 12px rgba(22, 56, 86, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3); 
+                                            color: white; 
+                                            display: flex; 
+                                            align-items: center; 
+                                            justify-content: center; 
+                                            border-radius: 50%; 
+                                            width: 40px; 
+                                            height: 40px; 
+                                            font-weight: 600; 
+                                            font-size: 14px; 
+                                            margin-right: 12px;
+                                            flex-shrink: 0;">
+                                    ${initials}
                                 </div>
+                                <div>
+                                    <h6 class="mb-1">${client}</h6>
+                                    <small class="text-muted d-block">${service}</small>
+                                    <small class="text-muted"><i class="bx bx-time"></i> ${time}</small>
+                                </div>
+                            </div>
+                            <div class="ms-3">
+                                <span class="badge bg-${getStatusColor(eventStatus)}">${eventStatus}</span>
                             </div>
                         </div>
                     </div>
@@ -637,8 +637,8 @@ document.addEventListener('DOMContentLoaded', function () {
                                 ${initials}
                             </div>
                             <div>
-                                <h5 class="mb-0">${client}</h5>
-                                <small class="text-muted">${email}</small>
+                                <h5 class="mb-0" style="color: white;">${client}</h5>
+                                <small style="color: white;">${email}</small>
                             </div>
                         </div>
                         <hr />

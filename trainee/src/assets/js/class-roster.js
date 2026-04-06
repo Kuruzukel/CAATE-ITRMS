@@ -110,6 +110,42 @@ async function processTraineesData() {
     renderTraineesTable();
 }
 
+function updateStatistics() {
+    // Total Classmates (filtered count)
+    const totalClassmates = filteredTrainees.length;
+    document.getElementById('totalClassmates').textContent = totalClassmates;
+
+    // Active Courses (unique courses in filtered data)
+    const uniqueCourses = [...new Set(filteredTrainees.map(t => t.course))];
+    const activeCourses = uniqueCourses.length;
+    document.getElementById('activeCourses').textContent = activeCourses;
+
+    // My Courses (get current user's enrolled courses)
+    const currentUserId = localStorage.getItem('userId');
+    let myCourses = 0;
+    if (currentUserId) {
+        const myApplications = allApplications.filter(app => {
+            let userId = app.user_id || app.userId;
+            if (userId && typeof userId === 'object') {
+                userId = userId.$oid || userId._id;
+            }
+            return userId === currentUserId && app.status === 'approved';
+        });
+        const myUniqueCourses = [...new Set(myApplications.map(app => app.assessment_title || app.course))];
+        myCourses = myUniqueCourses.length;
+    }
+    document.getElementById('myCourses').textContent = myCourses;
+
+    // Class Average (placeholder - can be calculated from grades if available)
+    // For now, showing the number of trainees per course as average
+    if (activeCourses > 0) {
+        const avgPerCourse = (totalClassmates / activeCourses).toFixed(1);
+        document.getElementById('classAverage').textContent = avgPerCourse;
+    } else {
+        document.getElementById('classAverage').textContent = '-';
+    }
+}
+
 function renderTraineesTable() {
     const tbody = document.getElementById('traineesTableBody');
     const loader = document.getElementById('tableLoader');
@@ -119,6 +155,9 @@ function renderTraineesTable() {
     }
 
     tbody.innerHTML = '';
+
+    // Update statistics based on filtered data
+    updateStatistics();
 
     if (filteredTrainees.length === 0) {
         const searchTerm = document.getElementById('searchTraineeInput').value;

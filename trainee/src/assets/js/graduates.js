@@ -29,6 +29,7 @@ async function fetchGraduatesData() {
         filteredGraduates = [...allGraduates];
 
         populateCourseFilter();
+        populateYearFilter();
         updateStatistics();
         renderGraduatesGrid();
 
@@ -73,23 +74,27 @@ function renderGraduatesGrid() {
     if (filteredGraduates.length === 0) {
         const searchTerm = document.getElementById('searchGraduateInput').value;
         const courseFilter = document.getElementById('courseFilter').value;
-        const hasActiveFilters = searchTerm || courseFilter;
+        const monthFilter = document.getElementById('monthFilter').value;
+        const yearFilter = document.getElementById('yearFilter').value;
+        const hasActiveFilters = searchTerm || courseFilter || monthFilter || yearFilter;
 
         if (hasActiveFilters) {
             grid.innerHTML = `
                 <div class="col-12">
-                    <div class="text-center" style="padding: 60px 20px;">
-                        <i class="bx bx-search" style="font-size: 3rem; color: #6c757d;"></i>
-                        <p class="mt-3 text-muted" style="color: white !important;">No graduates found matching your filters</p>
+                    <div class="d-flex flex-column align-items-center justify-content-center" style="padding: 110px 20px;">
+                        <i class="bx bx-search" style="font-size: 4rem; color: #696cff; margin-bottom: 1rem;"></i>
+                        <p class="mt-3 text-muted text-center" style="color: white !important; font-size: 1.1rem;">No graduates found matching your filters</p>
+                        <p class="text-muted text-center" style="color: #b8c5d6 !important; font-size: 0.9rem;">Try adjusting your search criteria</p>
                     </div>
                 </div>
             `;
         } else {
             grid.innerHTML = `
                 <div class="col-12">
-                    <div class="text-center" style="padding: 110px 20px;">
-                        <i class="bx bx-info-circle" style="font-size: 3rem; color: #6c757d;"></i>
-                        <p class="mt-3 text-muted" style="color: white !important;">No graduates data available</p>
+                    <div class="d-flex flex-column align-items-center justify-content-center" style="padding: 110px 20px;">
+                        <i class="bx bx-info-circle" style="font-size: 4rem; color: #696cff; margin-bottom: 1rem;"></i>
+                        <p class="mt-3 text-muted text-center" style="color: white !important; font-size: 1.1rem;">No graduates data available</p>
+                        <p class="text-muted text-center" style="color: #b8c5d6 !important; font-size: 0.9rem;">Check back later for graduate information</p>
                     </div>
                 </div>
             `;
@@ -158,7 +163,32 @@ function applyFilters() {
         const matchesCourse = !courseFilter ||
             (graduate.course && graduate.course.toLowerCase().includes(courseFilter));
 
-        return matchesSearch && matchesCourse;
+        let matchesMonth = true;
+        let matchesYear = true;
+
+        if (graduate.graduation_date) {
+            const gradDate = new Date(graduate.graduation_date);
+            const monthFilter = document.getElementById('monthFilter').value;
+            const yearFilter = document.getElementById('yearFilter').value;
+
+            if (monthFilter !== '') {
+                matchesMonth = gradDate.getMonth() === parseInt(monthFilter);
+            }
+
+            if (yearFilter !== '') {
+                matchesYear = gradDate.getFullYear() === parseInt(yearFilter);
+            }
+        } else {
+            const monthFilter = document.getElementById('monthFilter').value;
+            const yearFilter = document.getElementById('yearFilter').value;
+            // If no graduation date, exclude from month/year filters
+            if (monthFilter !== '' || yearFilter !== '') {
+                matchesMonth = false;
+                matchesYear = false;
+            }
+        }
+
+        return matchesSearch && matchesCourse && matchesMonth && matchesYear;
     });
 
     updateStatistics();
@@ -168,6 +198,8 @@ function applyFilters() {
 function resetFilters() {
     document.getElementById('searchGraduateInput').value = '';
     document.getElementById('courseFilter').value = '';
+    document.getElementById('monthFilter').value = '';
+    document.getElementById('yearFilter').value = '';
     filteredGraduates = [...allGraduates];
     updateStatistics();
     renderGraduatesGrid();
@@ -185,6 +217,22 @@ function populateCourseFilter() {
     });
 }
 
+function populateYearFilter() {
+    const yearFilter = document.getElementById('yearFilter');
+    const years = allGraduates
+        .map(grad => grad.graduation_date ? new Date(grad.graduation_date).getFullYear() : null)
+        .filter(year => year !== null);
+
+    const uniqueYears = [...new Set(years)].sort((a, b) => b - a); // Sort descending
+
+    uniqueYears.forEach(year => {
+        const option = document.createElement('option');
+        option.value = year;
+        option.textContent = year;
+        yearFilter.appendChild(option);
+    });
+}
+
 function viewGraduateDetails(graduateId) {
     const graduate = filteredGraduates.find(g => (g._id || g.id) === graduateId);
     if (graduate) {
@@ -197,9 +245,12 @@ function showError(message) {
     const grid = document.getElementById('graduatesGrid');
     grid.innerHTML = `
         <div class="col-12">
-            <div class="text-center" style="padding: 60px 20px;">
-                <i class="bx bx-error-circle" style="font-size: 3rem; color: #ff3e1d;"></i>
-                <p class="mt-3 text-danger">${message}</p>
+            <div class="d-flex flex-column align-items-center justify-content-center" style="padding: 110px 20px;">
+                <i class="bx bx-error-circle" style="font-size: 4rem; color: #ff3e1d; margin-bottom: 1rem;"></i>
+                <p class="mt-3 text-center" style="color: #ff3e1d !important; font-size: 1.1rem; font-weight: 600;">${message}</p>
+                <button class="btn btn-primary mt-3" onclick="location.reload()">
+                    <i class="bx bx-refresh"></i> Refresh Page
+                </button>
             </div>
         </div>
     `;
@@ -210,5 +261,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.getElementById('searchGraduateInput').addEventListener('input', applyFilters);
     document.getElementById('courseFilter').addEventListener('change', applyFilters);
+    document.getElementById('monthFilter').addEventListener('change', applyFilters);
+    document.getElementById('yearFilter').addEventListener('change', applyFilters);
     document.getElementById('resetFilters').addEventListener('click', resetFilters);
 });

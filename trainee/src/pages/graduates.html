@@ -6,28 +6,10 @@
     <meta charset="utf-8" />
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
-    <title>CAATE | Trainee Dashboard</title>
+    <title>CAATE | Graduates</title>
     <meta name="description" content="" />
 
-
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-    <meta http-equiv="Pragma" content="no-cache" />
-    <meta http-equiv="Expires" content="0" />
-
-
-    <meta name="format-detection" content="password=no" />
-    <meta name="password-detection" content="off" />
-
-
-    <meta name="password-manager" content="disabled" />
-    <meta name="save-password" content="false" />
-    <meta name="autocomplete" content="off" />
-    <meta name="credential-manager" content="disabled" />
-    <meta name="password-notification" content="disabled" />
-
-
     <link rel="icon" type="image/x-icon" href="../assets/images/CAATE_META_LOGO.png" />
-
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -35,68 +17,24 @@
         href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
         rel="stylesheet" />
 
-
     <link rel="stylesheet" href="../assets/vendor/fonts/boxicons.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-
 
     <link rel="stylesheet" href="../assets/vendor/css/core.css" class="template-customizer-core-css" />
     <link rel="stylesheet" href="../assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
     <link rel="stylesheet" href="../assets/css/demo.css" />
     <link rel="stylesheet" href="../assets/css/custom-theme.css" />
 
-
     <link rel="stylesheet" href="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
-    <link rel="stylesheet" href="../assets/vendor/libs/apex-charts/apex-charts.css" />
-
 
     <script src="../assets/vendor/js/helpers.js"></script>
     <script src="../assets/js/config.js"></script>
+    <script src="../assets/js/trainee-navbar.js"></script>
 
-
-    <link rel="stylesheet" href="../assets/css/dashboard.css" />
-
-
-    <style>
-        [data-password-manager-popup],
-        [data-password-manager-dialog],
-        .password-manager-popup,
-        .password-manager-dialog,
-        [role="dialog"][aria-label*="password"],
-        [role="dialog"][aria-label*="Password"],
-        div[style*="position: fixed"][style*="z-index"] {
-            display: none !important;
-            visibility: hidden !important;
-            opacity: 0 !important;
-        }
-
-
-        input:-webkit-autofill,
-        input:-webkit-autofill:hover,
-        input:-webkit-autofill:focus {
-            -webkit-box-shadow: none !important;
-            box-shadow: none !important;
-        }
-    </style>
-
-
-    <script src="../assets/js/auth-guard.js"></script>
-
-
-    <script>
-        if (localStorage.getItem('rememberedPass')) {
-            localStorage.removeItem('rememberedPass');
-        }
-        if (localStorage.getItem('password')) {
-            localStorage.removeItem('password');
-        }
-    </script>
-
-
-    <script src="../assets/js/disable-password-manager.js"></script>
+    <link rel="stylesheet" href="../assets/css/graduates.css" />
 </head>
 
-<body data-required-role="trainee">
+<body>
 
     <div class="layout-wrapper layout-content-navbar">
         <div class="layout-container">
@@ -122,15 +60,14 @@
 
                 <ul class="menu-inner py-1">
 
-                    <li class="menu-item active">
+                    <li class="menu-item">
                         <a href="dashboard.html" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-home-circle"></i>
                             <div data-i18n="Dashboard">Dashboard</div>
                         </a>
                     </li>
 
-
-                    <li class="menu-item">
+                    <li class="menu-item active open">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
                             <i class="menu-icon tf-icons bx bx-book"></i>
                             <div data-i18n="Class Records">Class Records</div>
@@ -141,7 +78,7 @@
                                     <div data-i18n="Class Roster">Class Roster</div>
                                 </a>
                             </li>
-                            <li class="menu-item">
+                            <li class="menu-item active">
                                 <a href="graduates.html" class="menu-link">
                                     <div data-i18n="Graduates">Graduates</div>
                                 </a>
@@ -153,7 +90,6 @@
                             </li>
                         </ul>
                     </li>
-
 
                     <li class="menu-item">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -173,7 +109,6 @@
                             </li>
                         </ul>
                     </li>
-
 
                     <li class="menu-item">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -196,10 +131,8 @@
                                     <div data-i18n="Admission Slip">Admission Slip</div>
                                 </a>
                             </li>
-
                         </ul>
                     </li>
-
 
                     <li class="menu-item">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -222,8 +155,6 @@
                 </ul>
             </aside>
 
-
-
             <div class="layout-page">
 
                 <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
@@ -244,11 +175,10 @@
                                 <i class="bx bx-search fs-4 lh-0 position-absolute"
                                     style="left: 12px; z-index: 10;"></i>
                                 <input type="text" class="form-control border-0 shadow-none" placeholder="Search..."
-                                    aria-label="Search..." autocomplete="off" data-lpignore="true"
+                                    aria-label="Search..."
                                     style="padding-left: 40px; width: 250px; max-width: 250px;" />
                             </div>
                         </div>
-
 
                         <ul class="navbar-nav flex-row align-items-center ms-auto"
                             style="flex-shrink: 0; margin-left: auto;">
@@ -276,7 +206,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="grow">
-                                                    <span class="fw-semibold d-block text-white user-name"></span>
+                                                    <span
+                                                        class="fw-semibold d-block text-white user-name">Loading...</span>
                                                     <small class="text-white">Trainee</small>
                                                 </div>
                                             </div>
@@ -298,184 +229,119 @@
                     </div>
                 </nav>
 
-
-
                 <div class="content-wrapper">
 
                     <div class="container-xxl grow container-p-y">
+
+                        <!-- Statistics Cards -->
+                        <div class="row mb-4">
+                            <div class="col-lg-3 col-md-6 col-6 mb-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="card-title d-flex align-items-start justify-content-between">
+                                            <div class="avatar shrink-0">
+                                                <i class="bx bx-user-check"
+                                                    style="font-size: 2rem; color: #10b981 !important;"></i>
+                                            </div>
+                                        </div>
+                                        <span class="fw-semibold d-block mb-1">Total Graduates</span>
+                                        <h3 class="card-title mb-2" id="totalGraduates">0</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-6 col-6 mb-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="card-title d-flex align-items-start justify-content-between">
+                                            <div class="avatar shrink-0">
+                                                <i class="bx bx-calendar-check"
+                                                    style="font-size: 2rem; color: #3b82f6 !important;"></i>
+                                            </div>
+                                        </div>
+                                        <span class="fw-semibold d-block mb-1">This Year</span>
+                                        <h3 class="card-title mb-2" id="thisYear">0</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-6 col-6 mb-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="card-title d-flex align-items-start justify-content-between">
+                                            <div class="avatar shrink-0">
+                                                <i class="bx bx-time-five"
+                                                    style="font-size: 2rem; color: #f59e0b !important;"></i>
+                                            </div>
+                                        </div>
+                                        <span class="d-block mb-1">This Month</span>
+                                        <h3 class="card-title text-nowrap mb-2" id="thisMonth">0</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-6 col-6 mb-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="card-title d-flex align-items-start justify-content-between">
+                                            <div class="avatar shrink-0">
+                                                <i class="bx bx-certification"
+                                                    style="font-size: 2rem; color: #8b5cf6 !important;"></i>
+                                            </div>
+                                        </div>
+                                        <span class="fw-semibold d-block mb-1">Certified NC II</span>
+                                        <h3 class="card-title mb-2" id="certifiedNC2">0</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Graduates List -->
                         <div class="row">
-                            <div class="col-lg-8 mb-4 order-0">
-                                <div class="card">
-                                    <div class="d-flex align-items-start row">
-                                        <div class="col-sm-7">
-                                            <div class="card-body">
-                                                <h5 class="card-title text-primary">Welcome Back, <span
-                                                        class="user-name welcome-user-name"></span>!</h5>
-                                                <p class="mb-4">
-                                                    You have <span class="fw-bold">0 active courses</span>. Start
-                                                    your learning journey today!
-                                                </p>
-                                                <a href="courses-programs.html"
-                                                    class="btn btn-sm btn-outline-primary">View Courses</a>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-5 text-center text-sm-left">
-                                            <div class="card-body pb-0 px-0 px-md-4">
-                                                <img src="../assets/img/illustrations/man-with-laptop-light.png"
-                                                    height="140" alt="View Badge User" style="object-fit: contain;" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-4 order-1">
-                                <div class="row">
-                                    <div class="col-lg-6 col-md-12 col-6 mb-4">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <div
-                                                    class="card-title d-flex align-items-start justify-content-between">
-                                                    <div class="avatar shrink-0">
-                                                        <i class="bx bx-certification"
-                                                            style="font-size: 2rem; color: #10b981;"></i>
-                                                    </div>
-                                                </div>
-                                                <span class="fw-semibold d-block mb-1"
-                                                    style="display: block !important;">Completed NC II</span>
-                                                <h3 class="card-title mb-2"
-                                                    style="display: block !important; margin-top: 0.5rem;">0</h3>
-                                                <small class="text-success fw-semibold"
-                                                    style="display: block !important; margin-top: 0.5rem;"><i
-                                                        class="bx bx-check-circle"></i> Courses</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6 col-md-12 col-6 mb-4">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <div
-                                                    class="card-title d-flex align-items-start justify-content-between">
-                                                    <div class="avatar shrink-0">
-                                                        <i class="bx bx-medal"
-                                                            style="font-size: 2rem; color: #3b82f6;"></i>
-                                                    </div>
-                                                </div>
-                                                <span class="fw-semibold d-block mb-1"
-                                                    style="display: block !important;">Completed Levels</span>
-                                                <h3 class="card-title mb-2"
-                                                    style="display: block !important; margin-top: 0.5rem;">0</h3>
-                                                <small class="text-info fw-semibold"
-                                                    style="display: block !important; margin-top: 0.5rem;"><i
-                                                        class="bx bx-trophy"></i>
-                                                    Courses</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div class="row mb-4">
-                            <div class="col-12">
+                            <div class="col-12 mb-4">
                                 <div class="card">
                                     <div class="card-header d-flex justify-content-between align-items-center">
-                                        <h5 class="mb-0">My Courses</h5>
-                                        <a href="courses-programs.html" class="btn btn-sm btn-primary">View All</a>
+                                        <h5 class="mb-0" style="color: white !important;">All Graduates</h5>
                                     </div>
                                     <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-md-4 mb-3">
-                                                <div class="card h-100">
-                                                    <img src="https://images.unsplash.com/photo-1552693673-1bf958298935?w=400&h=250&fit=crop"
-                                                        class="card-img-top" alt="Skin Care"
-                                                        style="height: 150px; object-fit: cover;" />
-                                                    <div class="card-body">
-                                                        <span class="badge bg-primary mb-2">NC II</span>
-                                                        <h6 class="card-title">Beauty Care (Skin Care) NC II</h6>
-                                                        <div class="progress mb-2" style="height: 6px;">
-                                                            <div class="progress-bar" role="progressbar"
-                                                                style="width: 65%;" aria-valuenow="65" aria-valuemin="0"
-                                                                aria-valuemax="100"></div>
-                                                        </div>
-                                                        <small class="text-muted">65% Complete</small>
+
+                                        <!-- Filter Panel -->
+                                        <div class="mb-4">
+                                            <div class="card card-body"
+                                                style="background-color: #1a2332; border: 1px solid #2d3e52;">
+                                                <div class="row g-3">
+                                                    <div class="col-md-5">
+                                                        <label class="form-label" style="color: #b8c5d6;">Search</label>
+                                                        <input type="text" id="searchGraduateInput" class="form-control"
+                                                            placeholder="Name or Graduate ID"
+                                                            style="background-color: #243447; border: 1px solid #3d4f63; color: #b8c5d6;">
                                                     </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4 mb-3">
-                                                <div class="card h-100">
-                                                    <img src="https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&h=250&fit=crop"
-                                                        class="card-img-top" alt="Nail Care"
-                                                        style="height: 150px; object-fit: cover;" />
-                                                    <div class="card-body">
-                                                        <span class="badge bg-primary mb-2">NC II</span>
-                                                        <h6 class="card-title">Beauty Care (Nail Care) NC II</h6>
-                                                        <div class="progress mb-2" style="height: 6px;">
-                                                            <div class="progress-bar" role="progressbar"
-                                                                style="width: 45%;" aria-valuenow="45" aria-valuemin="0"
-                                                                aria-valuemax="100"></div>
-                                                        </div>
-                                                        <small class="text-muted">45% Complete</small>
+                                                    <div class="col-md-5">
+                                                        <label class="form-label" style="color: #b8c5d6;">Course</label>
+                                                        <select id="courseFilter" class="form-select"
+                                                            style="background-color: #243447; border: 1px solid #3d4f63; color: #b8c5d6;">
+                                                            <option value="">All Courses</option>
+                                                        </select>
                                                     </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4 mb-3">
-                                                <div class="card h-100">
-                                                    <img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=400&h=250&fit=crop"
-                                                        class="card-img-top" alt="Aesthetic"
-                                                        style="height: 150px; object-fit: cover;" />
-                                                    <div class="card-body">
-                                                        <span class="badge bg-info mb-2">Level III</span>
-                                                        <h6 class="card-title">Aesthetic Services Level III</h6>
-                                                        <div class="progress mb-2" style="height: 6px;">
-                                                            <div class="progress-bar bg-info" role="progressbar"
-                                                                style="width: 30%;" aria-valuenow="30" aria-valuemin="0"
-                                                                aria-valuemax="100"></div>
-                                                        </div>
-                                                        <small class="text-muted">30% Complete</small>
+                                                    <div class="col-md-2 d-flex align-items-end">
+                                                        <button type="button" id="resetFilters"
+                                                            class="btn btn-outline-secondary w-100">
+                                                            <i class="bx bx-reset"></i> Reset
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
 
-
-                        <div class="row mb-4">
-                            <div class="col-12">
-                                <div class="card">
-                                    <div class="card-header d-flex justify-content-between align-items-center">
-                                        <h5 class="mb-0"><i class="bx bx-award me-2"></i>Completed NC II Courses</h5>
-                                        <span class="badge bg-success">0 Completed NC II</span>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-12 text-center py-4">
-                                                <i class="bx bx-book-open" style="font-size: 3rem; color: #d1d5db;"></i>
-                                                <p class="text-muted mt-2">No completed NC II courses yet</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div class="row mb-4">
-                            <div class="col-12">
-                                <div class="card">
-                                    <div class="card-header d-flex justify-content-between align-items-center">
-                                        <h5 class="mb-0"><i class="bx bx-certification me-2"></i>Complete Levels Courses
-                                        </h5>
-                                        <span class="badge bg-info">0 Complete Levels</span>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-12 text-center py-4">
-                                                <i class="bx bx-medal" style="font-size: 3rem; color: #d1d5db;"></i>
-                                                <p class="text-muted mt-2">No complete levels courses yet</p>
+                                        <!-- Graduates Grid -->
+                                        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4"
+                                            id="graduatesGrid">
+                                            <div class="col-12">
+                                                <div class="text-center" style="padding: 110px 20px;">
+                                                    <div class="spinner-border text-primary" role="status"
+                                                        style="width: 3rem; height: 3rem;">
+                                                        <span class="visually-hidden">Loading...</span>
+                                                    </div>
+                                                    <p class="mt-3 text-muted" style="color: white !important;">
+                                                        Loading graduates...</p>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -483,8 +349,6 @@
                             </div>
                         </div>
                     </div>
-
-
 
                     <footer class="content-footer footer bg-footer-theme">
                         <div
@@ -495,40 +359,23 @@
                         </div>
                     </footer>
 
-
-                    <div class="content-backdrop fade"></div>
                 </div>
 
             </div>
 
         </div>
 
-
         <div class="layout-overlay"></div>
     </div>
-
-
 
     <script src="../assets/vendor/libs/jquery/jquery.js"></script>
     <script src="../assets/vendor/libs/popper/popper.js"></script>
     <script src="../assets/vendor/js/bootstrap.js"></script>
     <script src="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
     <script src="../assets/vendor/js/menu.js"></script>
-
-
     <script src="../assets/js/main.js"></script>
-
-
-    <script src="../assets/js/auth-dashboard.js"></script>
-
-
-    <script src="../assets/js/trainee-navbar.js"></script>
-
-
     <script src="../assets/js/menu-toggle.js"></script>
-
-
-    <script src="../assets/js/dashboard.js"></script>
+    <script src="../assets/js/graduates.js"></script>
 </body>
 
 </html>

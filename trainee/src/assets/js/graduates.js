@@ -74,27 +74,23 @@ function renderGraduatesGrid() {
     if (filteredGraduates.length === 0) {
         const searchTerm = document.getElementById('searchGraduateInput').value;
         const courseFilter = document.getElementById('courseFilter').value;
-        const monthFilter = document.getElementById('monthFilter').value;
-        const yearFilter = document.getElementById('yearFilter').value;
-        const hasActiveFilters = searchTerm || courseFilter || monthFilter || yearFilter;
+        const hasActiveFilters = searchTerm || courseFilter;
 
         if (hasActiveFilters) {
             grid.innerHTML = `
                 <div class="col-12">
-                    <div class="d-flex flex-column align-items-center justify-content-center" style="padding: 110px 20px;">
-                        <i class="bx bx-search" style="font-size: 4rem; color: #696cff; margin-bottom: 1rem;"></i>
-                        <p class="mt-3 text-muted text-center" style="color: white !important; font-size: 1.1rem;">No graduates found matching your filters</p>
-                        <p class="text-muted text-center" style="color: #b8c5d6 !important; font-size: 0.9rem;">Try adjusting your search criteria</p>
+                    <div class="text-center" style="padding: 60px 20px;">
+                        <i class="bx bx-search" style="font-size: 3rem; color: #6c757d;"></i>
+                        <p class="mt-3 text-muted" style="color: white !important;">No graduates found matching your filters</p>
                     </div>
                 </div>
             `;
         } else {
             grid.innerHTML = `
                 <div class="col-12">
-                    <div class="d-flex flex-column align-items-center justify-content-center" style="padding: 110px 20px;">
-                        <i class="bx bx-info-circle" style="font-size: 4rem; color: #696cff; margin-bottom: 1rem;"></i>
-                        <p class="mt-3 text-muted text-center" style="color: white !important; font-size: 1.1rem;">No graduates data available</p>
-                        <p class="text-muted text-center" style="color: #b8c5d6 !important; font-size: 0.9rem;">Check back later for graduate information</p>
+                    <div class="text-center" style="padding: 110px 20px;">
+                        <i class="bx bx-info-circle" style="font-size: 3rem; color: #6c757d;"></i>
+                        <p class="mt-3 text-muted" style="color: white !important;">No graduates data available</p>
                     </div>
                 </div>
             `;
@@ -245,12 +241,9 @@ function showError(message) {
     const grid = document.getElementById('graduatesGrid');
     grid.innerHTML = `
         <div class="col-12">
-            <div class="d-flex flex-column align-items-center justify-content-center" style="padding: 110px 20px;">
-                <i class="bx bx-error-circle" style="font-size: 4rem; color: #ff3e1d; margin-bottom: 1rem;"></i>
-                <p class="mt-3 text-center" style="color: #ff3e1d !important; font-size: 1.1rem; font-weight: 600;">${message}</p>
-                <button class="btn btn-primary mt-3" onclick="location.reload()">
-                    <i class="bx bx-refresh"></i> Refresh Page
-                </button>
+            <div class="text-center" style="padding: 60px 20px;">
+                <i class="bx bx-error-circle" style="font-size: 3rem; color: #ff3e1d;"></i>
+                <p class="mt-3 text-danger">${message}</p>
             </div>
         </div>
     `;

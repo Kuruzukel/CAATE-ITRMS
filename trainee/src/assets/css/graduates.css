@@ -1,0 +1,14 @@
+.view-graduate-btn,
+.edit-graduate-btn {
+    border-radius: var(--border-radius-sm) !important;
+}
+
+.card-body .badge.bg-primary {
+    background-color: var(--primary-blue) !important;
+    color: #ffffff !important;
+    font-weight: 500;
+}
+
+.pagination .page-link {
+    transition: all 0.3s ease !important;
+}

@@ -12,8 +12,8 @@ function getInitials(name) {
 
 async function fetchGraduatesData() {
     try {
-        // Fetch graduates data from API
-        const response = await fetch(`${config.api.baseUrl}/api/v1/graduates`, {
+        // Fetch trainees data from API (graduates are trainees with graduation_date)
+        const response = await fetch(`${config.api.baseUrl}/api/v1/trainees`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -25,10 +25,12 @@ async function fetchGraduatesData() {
         }
 
         const result = await response.json();
-        allGraduates = result.data || [];
+        // Filter only trainees who have graduated (have graduation_date)
+        const allTrainees = result.data || [];
+        allGraduates = allTrainees.filter(trainee => trainee.graduation_date);
         filteredGraduates = [...allGraduates];
 
-        populateCourseFilter();
+        await populateCourseFilter();
         populateYearFilter();
         updateStatistics();
         renderGraduatesGrid();
@@ -78,19 +80,19 @@ function renderGraduatesGrid() {
 
         if (hasActiveFilters) {
             grid.innerHTML = `
-                <div class="col-12">
-                    <div class="text-center" style="padding: 60px 20px;">
+                <div class="col-12" style="display: flex; justify-content: center; align-items: center; width: 100%;">
+                    <div class="d-flex flex-column align-items-center justify-content-center text-center" style="padding: 60px 20px; width: 100%;">
                         <i class="bx bx-search" style="font-size: 3rem; color: #6c757d;"></i>
-                        <p class="mt-3 text-muted" style="color: white !important;">No graduates found matching your filters</p>
+                        <p class="mt-3 text-muted" style="color: white !important; margin: 0 auto;">No graduates found matching your filters</p>
                     </div>
                 </div>
             `;
         } else {
             grid.innerHTML = `
-                <div class="col-12">
-                    <div class="text-center" style="padding: 110px 20px;">
+                <div class="col-12" style="display: flex; justify-content: center; align-items: center; width: 100%;">
+                    <div class="d-flex flex-column align-items-center justify-content-center text-center" style="padding: 110px 20px; width: 100%;">
                         <i class="bx bx-info-circle" style="font-size: 3rem; color: #6c757d;"></i>
-                        <p class="mt-3 text-muted" style="color: white !important;">No graduates data available</p>
+                        <p class="mt-3 text-muted" style="color: white !important; margin: 0 auto;">No graduates data available</p>
                     </div>
                 </div>
             `;
@@ -201,16 +203,50 @@ function resetFilters() {
     renderGraduatesGrid();
 }
 
-function populateCourseFilter() {
+async function populateCourseFilter() {
     const courseFilter = document.getElementById('courseFilter');
-    const uniqueCourses = [...new Set(allGraduates.map(grad => grad.course).filter(c => c))];
 
-    uniqueCourses.forEach(course => {
-        const option = document.createElement('option');
-        option.value = course.toLowerCase();
-        option.textContent = course;
-        courseFilter.appendChild(option);
-    });
+    try {
+        // Fetch courses from the courses collection
+        const response = await fetch(`${config.api.baseUrl}/api/v1/courses`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            const courses = result.data || [];
+
+            // Populate dropdown with courses from collection
+            courses.forEach(course => {
+                const option = document.createElement('option');
+                option.value = (course.assessment_title || course.name || course.title || '').toLowerCase();
+                option.textContent = course.assessment_title || course.name || course.title || 'Unknown Course';
+                courseFilter.appendChild(option);
+            });
+        } else {
+            // Fallback to unique courses from graduates data
+            const uniqueCourses = [...new Set(allGraduates.map(grad => grad.course).filter(c => c))];
+            uniqueCourses.forEach(course => {
+                const option = document.createElement('option');
+                option.value = course.toLowerCase();
+                option.textContent = course;
+                courseFilter.appendChild(option);
+            });
+        }
+    } catch (error) {
+        console.error('Error fetching courses:', error);
+        // Fallback to unique courses from graduates data
+        const uniqueCourses = [...new Set(allGraduates.map(grad => grad.course).filter(c => c))];
+        uniqueCourses.forEach(course => {
+            const option = document.createElement('option');
+            option.value = course.toLowerCase();
+            option.textContent = course;
+            courseFilter.appendChild(option);
+        });
+    }
 }
 
 function populateYearFilter() {
@@ -241,9 +277,9 @@ function showError(message) {
     const grid = document.getElementById('graduatesGrid');
     grid.innerHTML = `
         <div class="col-12">
-            <div class="text-center" style="padding: 60px 20px;">
+            <div class="text-center d-flex flex-column align-items-center justify-content-center" style="padding: 60px 20px;">
                 <i class="bx bx-error-circle" style="font-size: 3rem; color: #ff3e1d;"></i>
-                <p class="mt-3 text-danger">${message}</p>
+                <p class="mt-3 text-danger text-center">${message}</p>
             </div>
         </div>
     `;

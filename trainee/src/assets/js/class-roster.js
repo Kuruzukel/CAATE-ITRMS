@@ -41,7 +41,7 @@ async function fetchAllData() {
         const registrationsResult = await registrationsResponse.json();
         allRegistrations = registrationsResult.data || [];
 
-        populateCourseFilter();
+        await populateCourseFilter();
 
         processTraineesData();
 
@@ -379,18 +379,52 @@ function resetFilters() {
     processTraineesData();
 }
 
-function populateCourseFilter() {
+async function populateCourseFilter() {
     const courseFilter = document.getElementById('courseFilter');
 
-    const approvedApplications = allApplications.filter(app => app.status === 'approved');
-    const uniqueCourses = [...new Set(approvedApplications.map(app => app.assessment_title || app.course).filter(c => c))];
+    try {
+        // Fetch courses from the courses collection
+        const response = await fetch(`${config.api.baseUrl}/api/v1/courses`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
 
-    uniqueCourses.forEach(course => {
-        const option = document.createElement('option');
-        option.value = course.toLowerCase();
-        option.textContent = course;
-        courseFilter.appendChild(option);
-    });
+        if (response.ok) {
+            const result = await response.json();
+            const courses = result.data || [];
+
+            // Populate dropdown with courses from collection
+            courses.forEach(course => {
+                const option = document.createElement('option');
+                option.value = (course.assessment_title || course.name || course.title || '').toLowerCase();
+                option.textContent = course.assessment_title || course.name || course.title || 'Unknown Course';
+                courseFilter.appendChild(option);
+            });
+        } else {
+            // Fallback to unique courses from applications
+            const approvedApplications = allApplications.filter(app => app.status === 'approved');
+            const uniqueCourses = [...new Set(approvedApplications.map(app => app.assessment_title || app.course).filter(c => c))];
+            uniqueCourses.forEach(course => {
+                const option = document.createElement('option');
+                option.value = course.toLowerCase();
+                option.textContent = course;
+                courseFilter.appendChild(option);
+            });
+        }
+    } catch (error) {
+        console.error('Error fetching courses:', error);
+        // Fallback to unique courses from applications
+        const approvedApplications = allApplications.filter(app => app.status === 'approved');
+        const uniqueCourses = [...new Set(approvedApplications.map(app => app.assessment_title || app.course).filter(c => c))];
+        uniqueCourses.forEach(course => {
+            const option = document.createElement('option');
+            option.value = course.toLowerCase();
+            option.textContent = course;
+            courseFilter.appendChild(option);
+        });
+    }
 }
 
 function viewTraineeDetails(traineeId) {
@@ -405,8 +439,10 @@ function showError(message) {
     tbody.innerHTML = `
         <tr>
             <td colspan="4" class="text-center" style="padding: 60px 20px;">
-                <i class="bx bx-error-circle" style="font-size: 3rem; color: #ff3e1d;"></i>
-                <p class="mt-3 text-danger">${message}</p>
+                <div class="d-flex flex-column align-items-center justify-content-center">
+                    <i class="bx bx-error-circle" style="font-size: 3rem; color: #ff3e1d;"></i>
+                    <p class="mt-3 text-danger text-center">${message}</p>
+                </div>
             </td>
         </tr>
     `;

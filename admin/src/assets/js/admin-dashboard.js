@@ -405,7 +405,6 @@ async function fetchCourseEnrollmentStatistics() {
 function updateCourseEnrollmentUI(data) {
     const coursesList = document.getElementById('topEnrolledCoursesList');
     if (!coursesList) {
-        console.log('topEnrolledCoursesList element not found');
         return;
     }
 

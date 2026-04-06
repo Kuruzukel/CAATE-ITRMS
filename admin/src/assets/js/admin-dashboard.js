@@ -466,79 +466,51 @@ function updateCourseEnrollmentUI(data) {
 
 async function fetchRecentEnrollmentActivity() {
     try {
+        // Fetch all enrollments (all statuses) from the backend
+        const response = await fetch(`${config.api.baseUrl}/api/v1/enrollments/recent?limit=10`);
+        const enrollmentsData = await response.json();
 
-        const fetchPromises = [
-            fetch(`${config.api.baseUrl}/api/v1/enrollments/recent?limit=10`).then(res => res.json()),
-            fetch(`${config.api.baseUrl}/api/v1/registrations?limit=10&sort=createdAt&order=desc`).then(res => res.json())
-        ];
-
-        const [enrollmentsData, registrationsData] = await Promise.all(fetchPromises);
-
-        const combinedData = [];
-
-        if (enrollmentsData.success && enrollmentsData.data) {
-            for (const enrollment of enrollmentsData.data) {
-
-                let profileImage = null;
-                if (enrollment.traineeId) {
-                    try {
-                        const traineeResponse = await fetch(`${config.api.baseUrl}/api/v1/trainees/${enrollment.traineeId}`);
-                        const traineeData = await traineeResponse.json();
-                        if (traineeData.success && traineeData.data && traineeData.data.profile_image) {
-                            profileImage = traineeData.data.profile_image;
-                        }
-                    } catch (error) {
-                        console.log('Could not fetch trainee profile:', error);
-                    }
-                }
-
-                combinedData.push({
-                    traineeName: enrollment.traineeName || 'Unknown',
-                    courseName: enrollment.courseName || 'No Course Selected',
-                    status: enrollment.status || 'pending',
-                    createdAt: enrollment.enrollmentDate || enrollment.enrollment_date || new Date().toISOString(),
-                    profileImage: profileImage,
-                    type: 'enrollment'
-                });
-            }
+        if (!enrollmentsData.success || !enrollmentsData.data) {
+            throw new Error('Failed to fetch enrollment data');
         }
 
-        if (registrationsData.success && registrationsData.data) {
-            for (const reg of registrationsData.data) {
+        const activities = [];
 
-                let profileImage = null;
-                if (reg.userId) {
-                    try {
-                        const traineeResponse = await fetch(`${config.api.baseUrl}/api/v1/trainees/${reg.userId}`);
-                        const traineeData = await traineeResponse.json();
-                        if (traineeData.success && traineeData.data && traineeData.data.profile_image) {
-                            profileImage = traineeData.data.profile_image;
-                        }
-                    } catch (error) {
-                        console.log('Could not fetch trainee profile:', error);
+        // Process enrollments and fetch profile images
+        for (const enrollment of enrollmentsData.data) {
+            let profileImage = null;
+
+            // Fetch trainee profile image if traineeId exists
+            if (enrollment.traineeId) {
+                try {
+                    const traineeResponse = await fetch(`${config.api.baseUrl}/api/v1/trainees/${enrollment.traineeId}`);
+                    const traineeData = await traineeResponse.json();
+                    if (traineeData.success && traineeData.data && traineeData.data.profile_image) {
+                        profileImage = traineeData.data.profile_image;
                     }
+                } catch (error) {
+                    console.log('Could not fetch trainee profile:', error);
                 }
-
-                combinedData.push({
-                    traineeName: reg.traineeFullName || `${reg.firstName || ''} ${reg.lastName || ''}`.trim() || 'Unknown',
-                    courseName: reg.selectedCourse || reg.courseTitle || reg.course || 'No Course Selected',
-                    status: reg.status || 'pending',
-                    createdAt: reg.createdAt || reg.created_at || new Date().toISOString(),
-                    profileImage: profileImage,
-                    type: 'registration'
-                });
             }
+
+            activities.push({
+                traineeName: enrollment.traineeName || 'Unknown',
+                courseName: enrollment.courseName || 'No Course Selected',
+                status: enrollment.status || 'pending',
+                createdAt: enrollment.enrollmentDate || new Date().toISOString(),
+                profileImage: profileImage,
+                type: enrollment.type || 'enrollment'
+            });
         }
 
-        combinedData.sort((a, b) => {
+        // Sort by date (most recent first)
+        activities.sort((a, b) => {
             const dateA = new Date(a.createdAt);
             const dateB = new Date(b.createdAt);
             return dateB - dateA;
         });
 
-        const recentActivities = combinedData.slice(0, 11);
-
-        updateRecentEnrollmentActivityUI(recentActivities);
+        updateRecentEnrollmentActivityUI(activities);
     } catch (error) {
         console.error('Error fetching recent enrollment activity:', error);
 

@@ -542,9 +542,8 @@
                                                 <div class="col-md-6 mb-3">
                                                     <label class="form-label fw-semibold">Processing Officer's
                                                         Signature</label>
-                                                    <div class="signature-canvas-wrapper">
-                                                        <canvas id="signatureCanvas1" class="signature-canvas"
-                                                            width="400" height="100"></canvas>
+                                                    <div class="canvas-wrapper">
+                                                        <canvas id="signatureCanvas1" width="400" height="100"></canvas>
                                                     </div>
                                                     <button type="button" class="btn-clear"
                                                         onclick="clearSignature('signatureCanvas1')">Clear
@@ -561,9 +560,8 @@
                                                 </div>
                                                 <div class="col-md-6 mb-3">
                                                     <label class="form-label fw-semibold">Applicant's Signature</label>
-                                                    <div class="signature-canvas-wrapper">
-                                                        <canvas id="signatureCanvas2" class="signature-canvas"
-                                                            width="400" height="100" required></canvas>
+                                                    <div class="canvas-wrapper">
+                                                        <canvas id="signatureCanvas2" width="400" height="100"></canvas>
                                                     </div>
                                                     <button type="button" class="btn-clear"
                                                         onclick="clearSignature('signatureCanvas2')">Clear
@@ -593,7 +591,9 @@
                                             class="card-body d-flex justify-content-between align-items-center flex-wrap gap-3">
                                             <p class="mb-0"
                                                 style="color: #3691bf; font-weight: 700; font-style: italic; font-size: 1rem;">
-                                                <i class="bx bx-info-circle me-2"></i>Note: Please bring this Admission
+                                                <i class="bx bx-info-circle me-2"
+                                                    style="color: #3691bf !important;"></i>Note: Please bring this
+                                                Admission
                                                 Slip on your assessment date.
                                             </p>
                                             <div class="d-flex gap-2">

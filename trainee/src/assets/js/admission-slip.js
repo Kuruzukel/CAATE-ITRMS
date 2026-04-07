@@ -74,26 +74,50 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function setupSignatureCanvas(canvasId) {
     const canvas = document.getElementById(canvasId);
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
     let isDrawing = false;
     let lastX = 0;
     let lastY = 0;
 
+    function getCanvasCoordinates(e, canvas) {
+        const rect = canvas.getBoundingClientRect();
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+
+        return {
+            x: (e.clientX - rect.left) * scaleX,
+            y: (e.clientY - rect.top) * scaleY
+        };
+    }
+
+    function resizeCanvas() {
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = rect.width;
+        canvas.height = rect.height;
+
+        ctx.strokeStyle = '#000';
+        ctx.lineWidth = 2;
+        ctx.lineCap = 'round';
+    }
+
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
     canvas.addEventListener('mousedown', (e) => {
         isDrawing = true;
-        [lastX, lastY] = [e.offsetX, e.offsetY];
+        const coords = getCanvasCoordinates(e, canvas);
+        [lastX, lastY] = [coords.x, coords.y];
     });
 
     canvas.addEventListener('mousemove', (e) => {
         if (!isDrawing) return;
+        const coords = getCanvasCoordinates(e, canvas);
+
         ctx.beginPath();
         ctx.moveTo(lastX, lastY);
-        ctx.lineTo(e.offsetX, e.offsetY);
-        ctx.strokeStyle = '#2c3e50';
-        ctx.lineWidth = 2;
-        ctx.lineCap = 'round';
+        ctx.lineTo(coords.x, coords.y);
         ctx.stroke();
-        [lastX, lastY] = [e.offsetX, e.offsetY];
+        [lastX, lastY] = [coords.x, coords.y];
     });
 
     canvas.addEventListener('mouseup', () => isDrawing = false);
@@ -102,26 +126,22 @@ function setupSignatureCanvas(canvasId) {
     canvas.addEventListener('touchstart', (e) => {
         e.preventDefault();
         const touch = e.touches[0];
-        const rect = canvas.getBoundingClientRect();
+        const coords = getCanvasCoordinates(touch, canvas);
         isDrawing = true;
-        [lastX, lastY] = [touch.clientX - rect.left, touch.clientY - rect.top];
+        [lastX, lastY] = [coords.x, coords.y];
     });
 
     canvas.addEventListener('touchmove', (e) => {
         e.preventDefault();
         if (!isDrawing) return;
         const touch = e.touches[0];
-        const rect = canvas.getBoundingClientRect();
-        const x = touch.clientX - rect.left;
-        const y = touch.clientY - rect.top;
+        const coords = getCanvasCoordinates(touch, canvas);
+
         ctx.beginPath();
         ctx.moveTo(lastX, lastY);
-        ctx.lineTo(x, y);
-        ctx.strokeStyle = '#2c3e50';
-        ctx.lineWidth = 2;
-        ctx.lineCap = 'round';
+        ctx.lineTo(coords.x, coords.y);
         ctx.stroke();
-        [lastX, lastY] = [x, y];
+        [lastX, lastY] = [coords.x, coords.y];
     });
 
     canvas.addEventListener('touchend', () => isDrawing = false);
@@ -129,8 +149,11 @@ function setupSignatureCanvas(canvasId) {
 
 function clearSignature(canvasId) {
     const canvas = document.getElementById(canvasId);
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.strokeStyle = '#000';
+    ctx.lineWidth = 2;
+    ctx.lineCap = 'round';
 }
 
 setupSignatureCanvas('signatureCanvas1');

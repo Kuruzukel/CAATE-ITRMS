@@ -148,3 +148,10 @@ input[type="time"]::-webkit-calendar-picker-indicator {
         margin: 0 auto 1.5rem;
     }
 }
+
+
+/* Icon color override */
+.card-header i,
+.bx {
+    color: #3691bf !important;
+}

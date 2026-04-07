@@ -1,13 +1,75 @@
-document.getElementById('pictureUpload').addEventListener('change', function (e) {
+document.getElementById('picture').addEventListener('change', function (e) {
     const file = e.target.files[0];
     if (file) {
+        if (!file.type.startsWith('image/')) {
+            alert('Please upload an image file');
+            this.value = '';
+            return;
+        }
+
+        if (file.size > 2 * 1024 * 1024) {
+            alert('Image size should not exceed 2MB');
+            this.value = '';
+            return;
+        }
+
         const reader = new FileReader();
         reader.onload = function (event) {
-            const pictureBox = document.querySelector('.picture-upload-box');
-            pictureBox.innerHTML = `<img src="${event.target.result}" alt="Applicant Photo">`;
+            const preview = document.getElementById('picturePreview');
+            const placeholder = document.getElementById('picturePlaceholder');
+            const previewContainer = document.getElementById('picturePreviewContainer');
+
+            preview.src = event.target.result;
+            placeholder.style.display = 'none';
+            previewContainer.style.display = 'flex';
         };
         reader.readAsDataURL(file);
     }
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('viewPictureBtn').addEventListener('click', function (e) {
+        e.stopPropagation();
+        const preview = document.getElementById('picturePreview');
+        if (preview.src) {
+            const modal = document.createElement('div');
+            modal.className = 'modal fade';
+            modal.innerHTML = `
+                <div class="modal-dialog modal-lg modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Picture Preview</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body text-center">
+                            <img src="${preview.src}" class="img-fluid" style="max-height: 70vh;">
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            const bsModal = new bootstrap.Modal(modal);
+            bsModal.show();
+
+            modal.addEventListener('hidden.bs.modal', function () {
+                document.body.removeChild(modal);
+            });
+        }
+    });
+
+    document.getElementById('removePictureBtn').addEventListener('click', function (e) {
+        e.stopPropagation();
+        const pictureInput = document.getElementById('picture');
+        const placeholder = document.getElementById('picturePlaceholder');
+        const previewContainer = document.getElementById('picturePreviewContainer');
+        const preview = document.getElementById('picturePreview');
+
+        pictureInput.value = '';
+
+        preview.src = '';
+        previewContainer.style.display = 'none';
+        placeholder.style.display = 'flex';
+    });
 });
 
 function setupSignatureCanvas(canvasId) {
@@ -78,8 +140,17 @@ function confirmReset() {
     document.getElementById('admissionSlipForm').reset();
     clearSignature('signatureCanvas1');
     clearSignature('signatureCanvas2');
-    const pictureBox = document.querySelector('.picture-upload-box');
-    pictureBox.innerHTML = `<span>PICTURE<br>(Passport<br>size)</span>`;
+
+    const pictureInput = document.getElementById('picture');
+    const placeholder = document.getElementById('picturePlaceholder');
+    const previewContainer = document.getElementById('picturePreviewContainer');
+    const preview = document.getElementById('picturePreview');
+
+    if (pictureInput) pictureInput.value = '';
+    if (preview) preview.src = '';
+    if (previewContainer) previewContainer.style.display = 'none';
+    if (placeholder) placeholder.style.display = 'flex';
+
     const resetModal = bootstrap.Modal.getInstance(document.getElementById('resetModal'));
     resetModal.hide();
     alert('Form has been reset successfully!');

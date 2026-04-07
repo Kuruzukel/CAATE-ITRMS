@@ -149,9 +149,22 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     }
 }
 
+/* Required field styling */
+input[required],
+textarea[required],
+select[required] {
+    border-left: 3px solid #ffc107;
+}
 
-/* Icon color override */
-.card-header i,
-.bx {
-    color: #3691bf !important;
+input[required]:focus,
+textarea[required]:focus,
+select[required]:focus {
+    border-left: 3px solid #3691bf;
+    box-shadow: 0 0 0 0.2rem rgba(54, 145, 191, 0.25);
+}
+
+input[required].is-invalid,
+textarea[required].is-invalid,
+select[required].is-invalid {
+    border-left: 3px solid #dc3545 !important;
 }

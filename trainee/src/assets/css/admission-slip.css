@@ -168,3 +168,11 @@ textarea[required].is-invalid,
 select[required].is-invalid {
     border-left: 3px solid #dc3545 !important;
 }
+
+/* Card header icon colors */
+.card-header .bx-id-card,
+.card-header .bx-clipboard,
+.card-header .bx-pen,
+.card-header .bx-info-circle {
+    color: #3691bf !important;
+}

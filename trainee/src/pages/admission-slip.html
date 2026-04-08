@@ -298,82 +298,82 @@
                                                     <div class="reference-input-group">
                                                         <input type="text" id="referenceQualifiable"
                                                             name="referenceQualifiable" class="form-control"
-                                                            maxlength="1" autocomplete="off" placeholder="Q" required>
+                                                            maxlength="1" autocomplete="off" placeholder="Q">
                                                     </div>
                                                     <div class="reference-input-group">
                                                         <input type="text" id="referenceYY1" name="referenceYY1"
                                                             class="form-control" maxlength="1" autocomplete="off"
-                                                            placeholder="Y" required>
+                                                            placeholder="Y">
                                                     </div>
                                                     <div class="reference-input-group">
                                                         <input type="text" id="referenceYY2" name="referenceYY2"
                                                             class="form-control" maxlength="1" autocomplete="off"
-                                                            placeholder="Y" required>
+                                                            placeholder="Y">
                                                     </div>
                                                     <div class="reference-input-group">
                                                         <input type="text" id="referenceRegion1" name="referenceRegion1"
                                                             class="form-control" maxlength="1" autocomplete="off"
-                                                            placeholder="R" required>
+                                                            placeholder="R">
                                                     </div>
                                                     <div class="reference-input-group">
                                                         <input type="text" id="referenceRegion2" name="referenceRegion2"
                                                             class="form-control" maxlength="1" autocomplete="off"
-                                                            placeholder="R" required>
+                                                            placeholder="R">
                                                     </div>
                                                     <div class="reference-input-group">
                                                         <input type="text" id="referenceProvince1"
                                                             name="referenceProvince1" class="form-control" maxlength="1"
-                                                            autocomplete="off" placeholder="P" required>
+                                                            autocomplete="off" placeholder="P">
                                                     </div>
                                                     <div class="reference-input-group">
                                                         <input type="text" id="referenceProvince2"
                                                             name="referenceProvince2" class="form-control" maxlength="1"
-                                                            autocomplete="off" placeholder="P" required>
+                                                            autocomplete="off" placeholder="P">
                                                     </div>
                                                     <div class="reference-input-group">
                                                         <input type="text" id="referenceAC1" name="referenceAC1"
                                                             class="form-control" maxlength="1" autocomplete="off"
-                                                            placeholder="A" required>
+                                                            placeholder="A">
                                                     </div>
                                                     <div class="reference-input-group">
                                                         <input type="text" id="referenceAC2" name="referenceAC2"
                                                             class="form-control" maxlength="1" autocomplete="off"
-                                                            placeholder="A" required>
+                                                            placeholder="A">
                                                     </div>
                                                     <div class="reference-input-group">
                                                         <input type="text" id="referenceAC3" name="referenceAC3"
                                                             class="form-control" maxlength="1" autocomplete="off"
-                                                            placeholder="A" required>
+                                                            placeholder="A">
                                                     </div>
                                                     <div class="reference-input-group">
                                                         <input type="text" id="referenceSeries1" name="referenceSeries1"
                                                             class="form-control" maxlength="1" autocomplete="off"
-                                                            placeholder="N" required>
+                                                            placeholder="N">
                                                     </div>
                                                     <div class="reference-input-group">
                                                         <input type="text" id="referenceSeries2" name="referenceSeries2"
                                                             class="form-control" maxlength="1" autocomplete="off"
-                                                            placeholder="N" required>
+                                                            placeholder="N">
                                                     </div>
                                                     <div class="reference-input-group">
                                                         <input type="text" id="referenceSeries3" name="referenceSeries3"
                                                             class="form-control" maxlength="1" autocomplete="off"
-                                                            placeholder="N" required>
+                                                            placeholder="N">
                                                     </div>
                                                     <div class="reference-input-group">
                                                         <input type="text" id="referenceSeries4" name="referenceSeries4"
                                                             class="form-control" maxlength="1" autocomplete="off"
-                                                            placeholder="N" required>
+                                                            placeholder="N">
                                                     </div>
                                                     <div class="reference-input-group">
                                                         <input type="text" id="referenceSeries5" name="referenceSeries5"
                                                             class="form-control" maxlength="1" autocomplete="off"
-                                                            placeholder="N" required>
+                                                            placeholder="N">
                                                     </div>
                                                     <div class="reference-input-group">
                                                         <input type="text" id="referenceSeries6" name="referenceSeries6"
                                                             class="form-control" maxlength="1" autocomplete="off"
-                                                            placeholder="N" required>
+                                                            placeholder="N">
                                                         <small></small>
                                                     </div>
                                                 </div>
@@ -382,7 +382,7 @@
                                             <div class="mb-3">
                                                 <label class="form-label fw-semibold">PICTURE</label>
                                                 <input type="file" id="picture" name="picture" accept="image/*"
-                                                    style="display: none;" required>
+                                                    style="display: none;">
                                                 <div class="picture-container"
                                                     onclick="document.getElementById('picture').click()">
                                                     <div class="picture-placeholder" id="picturePlaceholder">
@@ -432,13 +432,14 @@
                                             <div class="row mb-3">
                                                 <div class="col-md-6">
                                                     <label class="form-label fw-semibold">Name of Applicant:</label>
-                                                    <input type="text" class="form-control"
-                                                        placeholder="Enter full name" required>
+                                                    <input type="text" id="applicantName" name="applicantName"
+                                                        class="form-control" placeholder="Enter full name" required>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <label class="form-label fw-semibold">Tel. Number:</label>
-                                                    <input type="tel" class="form-control"
-                                                        placeholder="Enter telephone number">
+                                                    <input type="tel" id="telNumber" name="telNumber"
+                                                        class="form-control" placeholder="Enter telephone number"
+                                                        required>
                                                 </div>
                                             </div>
 
@@ -446,17 +447,20 @@
                                                 <div class="col-md-6 mb-3">
                                                     <label class="form-label fw-semibold">Assessment Applied
                                                         for:</label>
-                                                    <input type="text" class="form-control"
-                                                        placeholder="Enter assessment title" required>
+                                                    <input type="text" id="assessmentApplied" name="assessmentApplied"
+                                                        class="form-control" placeholder="Enter assessment title"
+                                                        required>
                                                 </div>
                                                 <div class="col-md-3 mb-3">
                                                     <label class="form-label fw-semibold">Official Receipt
                                                         Number:</label>
-                                                    <input type="text" class="form-control" placeholder="OR Number">
+                                                    <input type="text" id="orNumber" name="orNumber"
+                                                        class="form-control" placeholder="OR Number">
                                                 </div>
                                                 <div class="col-md-3 mb-3">
                                                     <label class="form-label fw-semibold">Date Issued:</label>
-                                                    <input type="date" class="form-control">
+                                                    <input type="date" id="dateIssued" name="dateIssued"
+                                                        class="form-control">
                                                 </div>
                                             </div>
                                         </div>
@@ -479,8 +483,8 @@
 
                                             <div class="mb-3">
                                                 <label class="form-label fw-semibold">Name of Assessment Center:</label>
-                                                <input type="text" class="form-control"
-                                                    placeholder="Enter assessment center name" required>
+                                                <input type="text" id="assessmentCenter" name="assessmentCenter"
+                                                    class="form-control" placeholder="Enter assessment center name">
                                             </div>
 
                                             <div class="row mb-3">
@@ -569,12 +573,14 @@
                                                         Signature</button>
                                                     <div class="mt-3">
                                                         <label class="form-label fw-semibold">Printed Name:</label>
-                                                        <input type="text" class="form-control" placeholder="Enter name"
-                                                            required>
+                                                        <input type="text" id="applicantPrintedName"
+                                                            name="applicantPrintedName" class="form-control"
+                                                            placeholder="Enter name" required>
                                                     </div>
                                                     <div class="mt-2">
                                                         <label class="form-label fw-semibold">Date:</label>
-                                                        <input type="date" class="form-control" required>
+                                                        <input type="date" id="applicantDate" name="applicantDate"
+                                                            class="form-control" required>
                                                     </div>
                                                 </div>
                                             </div>

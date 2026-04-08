@@ -157,8 +157,6 @@ function confirmPrint() {
 
 // Initialize everything when DOM is ready
 document.addEventListener('DOMContentLoaded', function () {
-    console.log('Admission Slip JS Loaded');
-
     // Ensure toast container exists
     ensureToastContainer();
 
@@ -240,6 +238,32 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // Name validation - only letters, spaces, and periods
+    const applicantNameField = document.getElementById('applicantName');
+    const applicantPrintedNameField = document.getElementById('applicantPrintedName');
+
+    const nameFields = [applicantNameField, applicantPrintedNameField];
+
+    nameFields.forEach(field => {
+        if (field) {
+            field.addEventListener('input', function (e) {
+                // Remove any characters that are not letters, spaces, or periods
+                const cleanValue = e.target.value.replace(/[^a-zA-Z\s.]/g, '');
+                if (e.target.value !== cleanValue) {
+                    e.target.value = cleanValue;
+                }
+            });
+
+            field.addEventListener('keypress', function (e) {
+                const char = String.fromCharCode(e.which);
+                // Allow only letters, spaces, and periods
+                if (!/[a-zA-Z\s.]/.test(char) && e.which !== 8 && e.which !== 0) {
+                    e.preventDefault();
+                }
+            });
+        }
+    });
+
     // View picture button
     const viewPictureBtn = document.getElementById('viewPictureBtn');
     if (viewPictureBtn) {
@@ -293,11 +317,8 @@ document.addEventListener('DOMContentLoaded', function () {
     // Form validation on submit
     const form = document.getElementById('admissionSlipForm');
     if (form) {
-        console.log('Form found, attaching submit handler');
-
         form.addEventListener('submit', function (e) {
             e.preventDefault();
-            console.log('Form submitted, validating...');
 
             let isValid = true;
 
@@ -320,19 +341,15 @@ document.addEventListener('DOMContentLoaded', function () {
             // Validate each required field
             requiredFields.forEach(field => {
                 const element = document.getElementById(field.id);
-                console.log(`Checking field: ${field.id}`, element, element ? element.value : 'not found');
 
                 if (element && (!element.value || element.value.trim() === '')) {
                     element.classList.add('is-invalid');
                     missingFields.push(field.label);
                     isValid = false;
-                    console.log(`Field ${field.id} is invalid`);
                 }
             });
 
             if (!isValid) {
-                console.log('Form is invalid, showing error');
-
                 // Scroll to first invalid field
                 const firstInvalidField = form.querySelector('.is-invalid');
                 if (firstInvalidField) {
@@ -345,7 +362,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             // If validation passes, show confirmation modal
-            console.log('Form is valid, showing confirmation modal...');
             const confirmationModal = new bootstrap.Modal(document.getElementById('confirmationModal'));
             confirmationModal.show();
         });
@@ -365,8 +381,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
         });
-    } else {
-        console.error('Form not found!');
     }
 
     // Confirm submit button handler
@@ -479,8 +493,6 @@ function collectAdmissionSlipData() {
 async function submitAdmissionSlip() {
     const data = collectAdmissionSlipData();
 
-    console.log('Submitting admission slip data:', data);
-
     try {
         const response = await fetch(`${config.api.baseUrl}/api/v1/admissions`, {
             method: 'POST',
@@ -497,7 +509,6 @@ async function submitAdmissionSlip() {
         }
 
         const result = await response.json();
-        console.log('Admission slip submitted successfully:', result);
 
         showToast('Admission slip submitted successfully!', 'success');
 
@@ -520,8 +531,6 @@ async function submitAdmissionSlip() {
         }, 1500);
 
     } catch (error) {
-        console.error('Admission slip submission error:', error);
-
         // Save to localStorage as backup
         const admissions = JSON.parse(localStorage.getItem('admissions') || '[]');
         admissions.push(data);
@@ -529,7 +538,6 @@ async function submitAdmissionSlip() {
 
         if (error.message.includes('MongoDB') || error.message.includes('timeout') || error.message.includes('connection')) {
             showToast('⚠️ Database is offline. Your admission slip has been saved locally.', 'warning');
-            console.error('MongoDB Connection Error - Please start MongoDB service');
         } else {
             showToast('Admission slip saved locally. It will be submitted when the server is available.', 'warning');
         }

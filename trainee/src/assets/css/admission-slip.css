@@ -76,6 +76,43 @@
     margin-left: 20px;
 }
 
+/* Remove spacing on small mobile devices */
+@media (max-width: 1085.60px) {
+    .reference-inputs {
+        gap: 3px;
+    }
+
+    .reference-input-group:nth-child(2),
+    .reference-input-group:nth-child(4),
+    .reference-input-group:nth-child(6),
+    .reference-input-group:nth-child(8),
+    .reference-input-group:nth-child(11) {
+        margin-left: 0 !important;
+    }
+
+    .reference-input-group input {
+        width: 45px !important;
+        height: 40px !important;
+        font-size: 0.85rem;
+        padding: 0.3rem;
+    }
+}
+
+/* Extra small devices (320px and below) */
+@media (max-width: 320px) {
+    .reference-inputs {
+        gap: 2px;
+    }
+
+    .reference-input-group input {
+        width: 38px !important;
+        height: 36px !important;
+        font-size: 0.75rem;
+        padding: 0.2rem;
+        border-width: 1px !important;
+    }
+}
+
 .reference-input-group input::placeholder {
     color: #9ca3af;
     font-weight: 500;

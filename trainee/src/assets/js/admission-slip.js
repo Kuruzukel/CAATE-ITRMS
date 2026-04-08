@@ -344,16 +344,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 return false;
             }
 
-            // If validation passes, show success
-            console.log('Form is valid!');
-            showToast('Admission slip submitted successfully!', 'success');
-
-            // You can add actual form submission logic here
-            // setTimeout(() => {
-            //     form.reset();
-            //     clearSignature('signatureCanvas1');
-            //     clearSignature('signatureCanvas2');
-            // }, 1500);
+            // If validation passes, collect form data and submit
+            console.log('Form is valid, submitting to database...');
+            submitAdmissionSlip();
         });
 
         // Remove invalid class when user starts typing
@@ -375,3 +368,170 @@ document.addEventListener('DOMContentLoaded', function () {
         console.error('Form not found!');
     }
 });
+
+// Function to collect all form data
+function collectAdmissionSlipData() {
+    const formData = {};
+
+    // Reference Number (16 individual inputs)
+    const referenceNumber = [
+        document.getElementById('referenceQualifiable')?.value || '',
+        document.getElementById('referenceYY1')?.value || '',
+        document.getElementById('referenceYY2')?.value || '',
+        document.getElementById('referenceRegion1')?.value || '',
+        document.getElementById('referenceRegion2')?.value || '',
+        document.getElementById('referenceProvince1')?.value || '',
+        document.getElementById('referenceProvince2')?.value || '',
+        document.getElementById('referenceAC1')?.value || '',
+        document.getElementById('referenceAC2')?.value || '',
+        document.getElementById('referenceAC3')?.value || '',
+        document.getElementById('referenceSeries1')?.value || '',
+        document.getElementById('referenceSeries2')?.value || '',
+        document.getElementById('referenceSeries3')?.value || '',
+        document.getElementById('referenceSeries4')?.value || '',
+        document.getElementById('referenceSeries5')?.value || '',
+        document.getElementById('referenceSeries6')?.value || ''
+    ].join('');
+
+    formData.referenceNumber = referenceNumber;
+
+    // Picture (convert to base64 if exists)
+    const pictureInput = document.getElementById('picture');
+    const picturePreview = document.getElementById('picturePreview');
+    formData.picture = picturePreview?.src || '';
+
+    // Applicant Information
+    formData.applicantName = document.getElementById('applicantName')?.value || '';
+    formData.telNumber = document.getElementById('telNumber')?.value || '';
+    formData.assessmentApplied = document.getElementById('assessmentApplied')?.value || '';
+    formData.orNumber = document.getElementById('orNumber')?.value || '';
+    formData.dateIssued = document.getElementById('dateIssued')?.value || '';
+
+    // Processing Officer Section
+    formData.assessmentCenter = document.getElementById('assessmentCenter')?.value || '';
+
+    // Checkboxes for submitted requirements
+    const checkboxes = document.querySelectorAll('.radio-group.vertical input[type="checkbox"]');
+    formData.submittedRequirements = [];
+    formData.remarks = [];
+
+    checkboxes.forEach((checkbox, index) => {
+        if (checkbox.checked) {
+            const label = checkbox.parentElement.textContent.trim();
+            if (index < 2) {
+                formData.submittedRequirements.push(label);
+            } else {
+                formData.remarks.push(label);
+            }
+        }
+    });
+
+    // Assessment Date and Time
+    const assessmentDateInputs = document.querySelectorAll('input[type="date"]');
+    const assessmentTimeInput = document.querySelector('input[type="time"]');
+
+    if (assessmentDateInputs.length > 1) {
+        formData.assessmentDate = assessmentDateInputs[0]?.value || '';
+    }
+    formData.assessmentTime = assessmentTimeInput?.value || '';
+
+    // Signatures (convert canvas to base64)
+    const signatureCanvas1 = document.getElementById('signatureCanvas1');
+    const signatureCanvas2 = document.getElementById('signatureCanvas2');
+
+    formData.processingOfficerSignature = signatureCanvas1 ? signatureCanvas1.toDataURL() : '';
+    formData.applicantSignature = signatureCanvas2 ? signatureCanvas2.toDataURL() : '';
+
+    // Printed Names and Dates
+    const printedNameInputs = document.querySelectorAll('input[type="text"][placeholder="Enter name"]');
+    const dateInputs = document.querySelectorAll('input[type="date"]');
+
+    formData.processingOfficerPrintedName = printedNameInputs[0]?.value || '';
+    formData.processingOfficerDate = dateInputs[1]?.value || '';
+    formData.applicantPrintedName = document.getElementById('applicantPrintedName')?.value || '';
+    formData.applicantDate = document.getElementById('applicantDate')?.value || '';
+
+    // Add metadata
+    formData.submittedAt = new Date().toISOString();
+    formData.status = 'pending';
+
+    return formData;
+}
+
+// Function to submit admission slip to database
+async function submitAdmissionSlip() {
+    const data = collectAdmissionSlipData();
+
+    console.log('Submitting admission slip data:', data);
+
+    try {
+        const response = await fetch(`${config.api.baseUrl}/api/v1/admissions`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || errorData.error || `Server error: ${response.status}`);
+        }
+
+        const result = await response.json();
+        console.log('Admission slip submitted successfully:', result);
+
+        showToast('Admission slip submitted successfully!', 'success');
+
+        // Reset form after successful submission
+        setTimeout(() => {
+            document.getElementById('admissionSlipForm').reset();
+            clearSignature('signatureCanvas1');
+            clearSignature('signatureCanvas2');
+
+            // Reset picture
+            const pictureInput = document.getElementById('picture');
+            const placeholder = document.getElementById('picturePlaceholder');
+            const previewContainer = document.getElementById('picturePreviewContainer');
+            const preview = document.getElementById('picturePreview');
+
+            if (pictureInput) pictureInput.value = '';
+            if (preview) preview.src = '';
+            if (previewContainer) previewContainer.style.display = 'none';
+            if (placeholder) placeholder.style.display = 'flex';
+        }, 1500);
+
+    } catch (error) {
+        console.error('Admission slip submission error:', error);
+
+        // Save to localStorage as backup
+        const admissions = JSON.parse(localStorage.getItem('admissions') || '[]');
+        admissions.push(data);
+        localStorage.setItem('admissions', JSON.stringify(admissions));
+
+        if (error.message.includes('MongoDB') || error.message.includes('timeout') || error.message.includes('connection')) {
+            showToast('⚠️ Database is offline. Your admission slip has been saved locally.', 'warning');
+            console.error('MongoDB Connection Error - Please start MongoDB service');
+        } else {
+            showToast('Admission slip saved locally. It will be submitted when the server is available.', 'warning');
+        }
+
+        // Still reset form after saving locally
+        setTimeout(() => {
+            document.getElementById('admissionSlipForm').reset();
+            clearSignature('signatureCanvas1');
+            clearSignature('signatureCanvas2');
+
+            const pictureInput = document.getElementById('picture');
+            const placeholder = document.getElementById('picturePlaceholder');
+            const previewContainer = document.getElementById('picturePreviewContainer');
+            const preview = document.getElementById('picturePreview');
+
+            if (pictureInput) pictureInput.value = '';
+            if (preview) preview.src = '';
+            if (previewContainer) previewContainer.style.display = 'none';
+            if (placeholder) placeholder.style.display = 'flex';
+        }, 1500);
+    }
+}

@@ -1,5 +1,3 @@
-
-
 .card input[type="search"],
 .card input[type="text"].form-control,
 .card input[type="email"].form-control,
@@ -875,7 +873,7 @@ input[type="number"] {
 }
 
 .radio-label input[type="checkbox"]:checked::before {
-    content: 'âœ“';
+    content: '✓';
     position: absolute;
     top: 50%;
     left: 50%;

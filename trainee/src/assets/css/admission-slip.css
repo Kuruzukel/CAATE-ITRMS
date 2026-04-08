@@ -1,3 +1,104 @@
+/* Reference Number Inputs */
+.reference-inputs {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.reference-input-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.reference-input-group input {
+    width: 55px !important;
+    height: 45px !important;
+    text-align: center;
+    font-weight: 600;
+    color: #0f2942 !important;
+    font-size: 0.95rem;
+    border: 2px solid #6c757d !important;
+    border-radius: 8px !important;
+    padding: 0.5rem;
+    opacity: 1 !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+}
+
+.reference-input-group:nth-child(1) input {
+    background-color: #9d9b6e !important;
+}
+
+.reference-input-group:nth-child(2) input,
+.reference-input-group:nth-child(3) input {
+    background-color: #b8d4f0 !important;
+}
+
+.reference-input-group:nth-child(4) input,
+.reference-input-group:nth-child(5) input {
+    background-color: #f0c8c8 !important;
+}
+
+.reference-input-group:nth-child(6) input,
+.reference-input-group:nth-child(7) input {
+    background-color: #c8d8a8 !important;
+}
+
+.reference-input-group:nth-child(8) input,
+.reference-input-group:nth-child(9) input,
+.reference-input-group:nth-child(10) input {
+    background-color: #f0d8a8 !important;
+}
+
+.reference-input-group:nth-child(11) input,
+.reference-input-group:nth-child(12) input,
+.reference-input-group:nth-child(13) input,
+.reference-input-group:nth-child(14) input,
+.reference-input-group:nth-child(15) input,
+.reference-input-group:nth-child(16) input {
+    background-color: #c8c8d8 !important;
+}
+
+.reference-input-group:nth-child(2),
+.reference-input-group:nth-child(4),
+.reference-input-group:nth-child(6) {
+    margin-left: 20px;
+}
+
+.reference-input-group:nth-child(8) {
+    margin-left: 20px;
+}
+
+.reference-input-group:nth-child(11) {
+    margin-left: 20px;
+}
+
+.reference-input-group input::placeholder {
+    color: #9ca3af;
+    font-weight: 500;
+}
+
+.reference-input-group input:focus {
+    border-color: #3691bf !important;
+    box-shadow: 0 0 0 0.2rem rgba(54, 145, 191, 0.15);
+    outline: none !important;
+}
+
+.reference-input-group input:focus::placeholder {
+    color: #adb5bd;
+    text-align: center;
+}
+
+.reference-input-group small {
+    font-size: 0.75rem;
+    color: #2c3e50;
+    font-weight: 600;
+    margin-top: 4px;
+}
+
 .picture-container {
     border: 2px dashed #3691bf;
     border-radius: 8px;
@@ -456,4 +557,92 @@ input[type="file"].is-invalid+label {
         transform: translateX(450px) scale(0.9);
         opacity: 0;
     }
+}
+
+
+/* Radio and Checkbox styling */
+.radio-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    cursor: pointer;
+    color: #2c3e50;
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+    line-height: 1.4;
+    width: 100%;
+}
+
+.radio-label span {
+    flex: 1;
+    word-wrap: break-word;
+    word-break: normal;
+    hyphens: auto;
+    line-height: 1.4;
+    margin-top: 0;
+    padding-top: 0;
+    max-width: calc(100% - 24px);
+    white-space: normal;
+    overflow-wrap: break-word;
+}
+
+.radio-label:hover {
+    color: #3691bf;
+}
+
+.radio-label input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    accent-color: #3691bf;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: 2px solid #2c3e50;
+    border-radius: 3px;
+    background-color: transparent;
+    position: relative;
+    transition: all 0.3s ease;
+    margin-right: 8px;
+    flex-shrink: 0;
+}
+
+.radio-label input[type="checkbox"]:checked {
+    background-color: #3691bf;
+    border-color: #3691bf;
+}
+
+.radio-label input[type="checkbox"]:checked::before {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.radio-label input[type="checkbox"]:hover {
+    border-color: #2a7ba8;
+    box-shadow: 0 0 0 3px rgba(54, 145, 191, 0.1);
+}
+
+.radio-label input[type="checkbox"]:focus {
+    outline: none;
+    border-color: #2a7ba8;
+    box-shadow: 0 0 0 3px rgba(54, 145, 191, 0.2);
+}
+
+.radio-group {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.radio-group.vertical {
+    flex-direction: column;
+    gap: 0rem;
 }

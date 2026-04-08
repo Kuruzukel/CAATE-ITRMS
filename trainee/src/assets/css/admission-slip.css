@@ -1,5 +1,5 @@
 .picture-container {
-    border: 2px dashed #3691bf;
+    border: 2px dashed #dc3545;
     border-radius: 8px;
     padding: 1rem;
     text-align: center;
@@ -13,6 +13,10 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+}
+
+.picture-container.has-image {
+    border-color: #3691bf;
 }
 
 .picture-container:hover {
@@ -171,20 +175,61 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 input[required],
 textarea[required],
 select[required] {
-    border-left: 3px solid #ffc107;
+    border: 2px solid #dc3545 !important;
 }
 
 input[required]:focus,
 textarea[required]:focus,
 select[required]:focus {
-    border-left: 3px solid #3691bf;
+    border: 2px solid #3691bf !important;
+    box-shadow: 0 0 0 0.2rem rgba(54, 145, 191, 0.25);
+}
+
+input[required]:valid,
+textarea[required]:valid,
+select[required]:valid {
+    border: 2px solid #d0d5dd !important;
+}
+
+input[required]:valid:focus,
+textarea[required]:valid:focus,
+select[required]:valid:focus {
+    border: 2px solid #3691bf !important;
     box-shadow: 0 0 0 0.2rem rgba(54, 145, 191, 0.25);
 }
 
 input[required].is-invalid,
 textarea[required].is-invalid,
 select[required].is-invalid {
-    border-left: 3px solid #dc3545 !important;
+    border: 2px solid #dc3545 !important;
+}
+
+/* Reference input required styling */
+.reference-input-group input[required] {
+    border: 2px solid #dc3545 !important;
+}
+
+.reference-input-group input[required]:focus {
+    border: 2px solid #3691bf !important;
+    box-shadow: 0 0 0 0.2rem rgba(54, 145, 191, 0.15);
+}
+
+.reference-input-group input[required]:valid {
+    border: 2px solid #6c757d !important;
+}
+
+.reference-input-group input[required]:valid:focus {
+    border: 2px solid #3691bf !important;
+    box-shadow: 0 0 0 0.2rem rgba(54, 145, 191, 0.15);
+}
+
+/* Picture file input required styling */
+input[type="file"][required]+.picture-container {
+    border: 2px dashed #dc3545 !important;
+}
+
+input[type="file"][required]:valid+.picture-container {
+    border: 2px dashed #3691bf !important;
 }
 
 /* Card header styling */
@@ -213,4 +258,104 @@ select[required].is-invalid {
 /* Note section info icon */
 .card-body p i.bx-info-circle {
     color: #3691bf !important;
+}
+
+
+/* Validation error styling */
+.form-control.is-invalid,
+input.is-invalid,
+textarea.is-invalid,
+select.is-invalid {
+    border-color: #dc3545 !important;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+    background-color: rgba(220, 53, 69, 0.05) !important;
+}
+
+.invalid-feedback {
+    display: block !important;
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    color: #dc3545;
+    font-weight: 500;
+}
+
+input[type="number"].is-invalid {
+    border-color: #dc3545 !important;
+    background-image: none !important;
+}
+
+input[type="number"].is-invalid:focus {
+    border-color: #dc3545 !important;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+}
+
+input[type="date"].is-invalid,
+input[type="time"].is-invalid {
+    border-color: #dc3545 !important;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+}
+
+input[type="date"].is-invalid:focus,
+input[type="time"].is-invalid:focus {
+    border-color: #dc3545 !important;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+}
+
+input[type="radio"].is-invalid,
+input[type="checkbox"].is-invalid {
+    border-color: #dc3545 !important;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+}
+
+.radio-label:has(input.is-invalid) {
+    color: #dc3545 !important;
+    font-weight: 600;
+}
+
+.radio-group-error {
+    display: block !important;
+    width: 100%;
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: #dc3545;
+    font-weight: 500;
+    background-color: rgba(220, 53, 69, 0.1);
+    border: 1px solid rgba(220, 53, 69, 0.3);
+    border-radius: 0.25rem;
+    padding: 0.5rem;
+}
+
+.form-control.is-valid {
+    border-color: #28a745 !important;
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25) !important;
+}
+
+.valid-feedback {
+    display: block !important;
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    color: #28a745;
+    font-weight: 500;
+}
+
+.text-danger {
+    color: #dc3545 !important;
+    font-weight: bold;
+}
+
+input[type="file"].is-invalid {
+    border-color: #dc3545 !important;
+}
+
+input[type="file"].is-invalid+label {
+    color: #dc3545 !important;
+    border-color: #dc3545 !important;
+}
+
+/* Reference input validation */
+.reference-input-group input.is-invalid {
+    border-color: #dc3545 !important;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
 }

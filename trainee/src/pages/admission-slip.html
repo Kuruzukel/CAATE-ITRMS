@@ -298,82 +298,82 @@
                                                     <div class="reference-input-group">
                                                         <input type="text" id="referenceQualifiable"
                                                             name="referenceQualifiable" class="form-control"
-                                                            maxlength="1" autocomplete="off" placeholder="Q">
+                                                            maxlength="1" autocomplete="off" placeholder="Q" required>
                                                     </div>
                                                     <div class="reference-input-group">
                                                         <input type="text" id="referenceYY1" name="referenceYY1"
                                                             class="form-control" maxlength="1" autocomplete="off"
-                                                            placeholder="Y">
+                                                            placeholder="Y" required>
                                                     </div>
                                                     <div class="reference-input-group">
                                                         <input type="text" id="referenceYY2" name="referenceYY2"
                                                             class="form-control" maxlength="1" autocomplete="off"
-                                                            placeholder="Y">
+                                                            placeholder="Y" required>
                                                     </div>
                                                     <div class="reference-input-group">
                                                         <input type="text" id="referenceRegion1" name="referenceRegion1"
                                                             class="form-control" maxlength="1" autocomplete="off"
-                                                            placeholder="R">
+                                                            placeholder="R" required>
                                                     </div>
                                                     <div class="reference-input-group">
                                                         <input type="text" id="referenceRegion2" name="referenceRegion2"
                                                             class="form-control" maxlength="1" autocomplete="off"
-                                                            placeholder="R">
+                                                            placeholder="R" required>
                                                     </div>
                                                     <div class="reference-input-group">
                                                         <input type="text" id="referenceProvince1"
                                                             name="referenceProvince1" class="form-control" maxlength="1"
-                                                            autocomplete="off" placeholder="P">
+                                                            autocomplete="off" placeholder="P" required>
                                                     </div>
                                                     <div class="reference-input-group">
                                                         <input type="text" id="referenceProvince2"
                                                             name="referenceProvince2" class="form-control" maxlength="1"
-                                                            autocomplete="off" placeholder="P">
+                                                            autocomplete="off" placeholder="P" required>
                                                     </div>
                                                     <div class="reference-input-group">
                                                         <input type="text" id="referenceAC1" name="referenceAC1"
                                                             class="form-control" maxlength="1" autocomplete="off"
-                                                            placeholder="A">
+                                                            placeholder="A" required>
                                                     </div>
                                                     <div class="reference-input-group">
                                                         <input type="text" id="referenceAC2" name="referenceAC2"
                                                             class="form-control" maxlength="1" autocomplete="off"
-                                                            placeholder="A">
+                                                            placeholder="A" required>
                                                     </div>
                                                     <div class="reference-input-group">
                                                         <input type="text" id="referenceAC3" name="referenceAC3"
                                                             class="form-control" maxlength="1" autocomplete="off"
-                                                            placeholder="A">
+                                                            placeholder="A" required>
                                                     </div>
                                                     <div class="reference-input-group">
                                                         <input type="text" id="referenceSeries1" name="referenceSeries1"
                                                             class="form-control" maxlength="1" autocomplete="off"
-                                                            placeholder="N">
+                                                            placeholder="N" required>
                                                     </div>
                                                     <div class="reference-input-group">
                                                         <input type="text" id="referenceSeries2" name="referenceSeries2"
                                                             class="form-control" maxlength="1" autocomplete="off"
-                                                            placeholder="N">
+                                                            placeholder="N" required>
                                                     </div>
                                                     <div class="reference-input-group">
                                                         <input type="text" id="referenceSeries3" name="referenceSeries3"
                                                             class="form-control" maxlength="1" autocomplete="off"
-                                                            placeholder="N">
+                                                            placeholder="N" required>
                                                     </div>
                                                     <div class="reference-input-group">
                                                         <input type="text" id="referenceSeries4" name="referenceSeries4"
                                                             class="form-control" maxlength="1" autocomplete="off"
-                                                            placeholder="N">
+                                                            placeholder="N" required>
                                                     </div>
                                                     <div class="reference-input-group">
                                                         <input type="text" id="referenceSeries5" name="referenceSeries5"
                                                             class="form-control" maxlength="1" autocomplete="off"
-                                                            placeholder="N">
+                                                            placeholder="N" required>
                                                     </div>
                                                     <div class="reference-input-group">
                                                         <input type="text" id="referenceSeries6" name="referenceSeries6"
                                                             class="form-control" maxlength="1" autocomplete="off"
-                                                            placeholder="N">
+                                                            placeholder="N" required>
                                                         <small></small>
                                                     </div>
                                                 </div>
@@ -381,6 +381,8 @@
 
                                             <div class="mb-3">
                                                 <label class="form-label fw-semibold">PICTURE</label>
+                                                <input type="file" id="picture" name="picture" accept="image/*"
+                                                    style="display: none;" required>
                                                 <div class="picture-container"
                                                     onclick="document.getElementById('picture').click()">
                                                     <div class="picture-placeholder" id="picturePlaceholder">
@@ -394,8 +396,6 @@
                                                         <span>Click To Insert Picture</span>
                                                         <small>colored, passport size (max 2MB)</small>
                                                     </div>
-                                                    <input type="file" id="picture" name="picture" accept="image/*"
-                                                        style="display: none;">
                                                     <div class="picture-preview-container" id="picturePreviewContainer"
                                                         style="display: none;">
                                                         <img id="picturePreview" class="picture-preview">
@@ -559,7 +559,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6 mb-3">
-                                                    <label class="form-label fw-semibold">Applicant's Signature</label>
+                                                    <label class="form-label fw-semibold">Applicant's Signature <span
+                                                            style="color: #6c757d; font-weight: 400; font-size: 0.85rem;">(Optional)</span></label>
                                                     <div class="canvas-wrapper">
                                                         <canvas id="signatureCanvas2" width="400" height="100"></canvas>
                                                     </div>

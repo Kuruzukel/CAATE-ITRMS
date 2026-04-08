@@ -389,6 +389,8 @@ document.addEventListener('DOMContentLoaded', function () {
         confirmSubmitBtn.addEventListener('click', function () {
             const confirmationModal = bootstrap.Modal.getInstance(document.getElementById('confirmationModal'));
             if (confirmationModal) {
+                // Remove focus from button before hiding modal to avoid aria-hidden warning
+                this.blur();
                 confirmationModal.hide();
             }
 

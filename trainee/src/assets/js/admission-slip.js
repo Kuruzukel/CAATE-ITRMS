@@ -241,8 +241,9 @@ document.addEventListener('DOMContentLoaded', function () {
     // Name validation - only letters, spaces, and periods
     const applicantNameField = document.getElementById('applicantName');
     const applicantPrintedNameField = document.getElementById('applicantPrintedName');
+    const processingOfficerPrintedNameField = document.getElementById('processingOfficerPrintedName');
 
-    const nameFields = [applicantNameField, applicantPrintedNameField];
+    const nameFields = [applicantNameField, applicantPrintedNameField, processingOfficerPrintedNameField];
 
     nameFields.forEach(field => {
         if (field) {
@@ -263,6 +264,52 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
     });
+
+    // Text-only validation for Assessment Applied and Assessment Center (letters, spaces, periods, commas, hyphens)
+    const assessmentAppliedField = document.getElementById('assessmentApplied');
+    const assessmentCenterField = document.getElementById('assessmentCenter');
+
+    const textFields = [assessmentAppliedField, assessmentCenterField];
+
+    textFields.forEach(field => {
+        if (field) {
+            field.addEventListener('input', function (e) {
+                // Remove any numbers from the field
+                const cleanValue = e.target.value.replace(/[0-9]/g, '');
+                if (e.target.value !== cleanValue) {
+                    e.target.value = cleanValue;
+                }
+            });
+
+            field.addEventListener('keypress', function (e) {
+                const char = String.fromCharCode(e.which);
+                // Block numbers
+                if (/[0-9]/.test(char)) {
+                    e.preventDefault();
+                }
+            });
+        }
+    });
+
+    // Numbers-only validation for Official Receipt Number
+    const orNumberField = document.getElementById('orNumber');
+    if (orNumberField) {
+        orNumberField.addEventListener('input', function (e) {
+            // Remove any non-numeric characters
+            const cleanValue = e.target.value.replace(/[^0-9]/g, '');
+            if (e.target.value !== cleanValue) {
+                e.target.value = cleanValue;
+            }
+        });
+
+        orNumberField.addEventListener('keypress', function (e) {
+            const char = String.fromCharCode(e.which);
+            // Allow only numbers
+            if (!/[0-9]/.test(char) && e.which !== 8 && e.which !== 0 && e.which !== 46) {
+                e.preventDefault();
+            }
+        });
+    }
 
     // View picture button
     const viewPictureBtn = document.getElementById('viewPictureBtn');

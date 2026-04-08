@@ -391,6 +391,37 @@ async function saveProfileChanges() {
         address: editAddress ? editAddress.value.trim() : ''
     };
 
+    const userData = localStorage.getItem('userData');
+    if (userData) {
+        try {
+            const originalData = JSON.parse(userData);
+
+            const originalPhone = (originalData.phone || originalData.phoneNumber || '').replace(/\s/g, '');
+            const originalDateOfBirth = originalData.dateOfBirth ? new Date(originalData.dateOfBirth).toISOString().split('T')[0] : '';
+
+            const hasChanges =
+                updatedData.username !== (originalData.username || '') ||
+                updatedData.first_name !== (originalData.firstName || '') ||
+                updatedData.second_name !== (originalData.secondName || '') ||
+                updatedData.middle_name !== (originalData.middleName || '') ||
+                updatedData.last_name !== (originalData.lastName || '') ||
+                updatedData.suffix !== (originalData.suffix || '') ||
+                updatedData.date_of_birth !== originalDateOfBirth ||
+                updatedData.phone !== originalPhone ||
+                updatedData.email !== (originalData.email || '') ||
+                updatedData.address !== (originalData.address || '');
+
+            if (!hasChanges) {
+                showToast('No changes detected', 'info');
+                const modal = bootstrap.Modal.getInstance(document.getElementById('editInformationModal'));
+                if (modal) modal.hide();
+                return;
+            }
+        } catch (e) {
+            console.error('Error comparing data:', e);
+        }
+    }
+
     if (!updatedData.first_name || !updatedData.email || !updatedData.username) {
         showToast('First name, username, and email are required.', 'error');
         return;

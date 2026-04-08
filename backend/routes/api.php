@@ -12,6 +12,7 @@ require_once __DIR__ . '/../app/controllers/AppointmentController.php';
 require_once __DIR__ . '/../app/controllers/EnrollmentController.php';
 require_once __DIR__ . '/../app/controllers/RegistrationController.php';
 require_once __DIR__ . '/../app/controllers/ApplicationController.php';
+require_once __DIR__ . '/../app/controllers/AdmissionController.php';
 
 function handleRequest($uri, $method) {
     $uri = preg_replace('#^/CAATE-ITRMS/backend/public#', '', $uri);
@@ -62,6 +63,10 @@ function handleRequest($uri, $method) {
         'GET:/api/v1/applications/{id}' => ['ApplicationController', 'show'],
         'POST:/api/v1/applications' => ['ApplicationController', 'store'],
         'PUT:/api/v1/applications/{id}' => ['ApplicationController', 'update'],
+        'GET:/api/v1/admissions' => ['AdmissionController', 'index'],
+        'GET:/api/v1/admissions/{id}' => ['AdmissionController', 'show'],
+        'POST:/api/v1/admissions' => ['AdmissionController', 'store'],
+        'PUT:/api/v1/admissions/{id}' => ['AdmissionController', 'update'],
         'GET:/api/v1/competencies' => ['CompetencyController', 'index'],
         'GET:/api/v1/competencies/{id}' => ['CompetencyController', 'show'],
         'POST:/api/v1/competencies' => ['CompetencyController', 'store'],

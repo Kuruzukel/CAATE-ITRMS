@@ -344,9 +344,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 return false;
             }
 
-            // If validation passes, collect form data and submit
-            console.log('Form is valid, submitting to database...');
-            submitAdmissionSlip();
+            // If validation passes, show confirmation modal
+            console.log('Form is valid, showing confirmation modal...');
+            const confirmationModal = new bootstrap.Modal(document.getElementById('confirmationModal'));
+            confirmationModal.show();
         });
 
         // Remove invalid class when user starts typing
@@ -366,6 +367,22 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     } else {
         console.error('Form not found!');
+    }
+
+    // Confirm submit button handler
+    const confirmSubmitBtn = document.getElementById('confirmSubmitBtn');
+    if (confirmSubmitBtn) {
+        confirmSubmitBtn.addEventListener('click', function () {
+            const confirmationModal = bootstrap.Modal.getInstance(document.getElementById('confirmationModal'));
+            if (confirmationModal) {
+                confirmationModal.hide();
+            }
+
+            // Submit the form after modal closes
+            setTimeout(() => {
+                submitAdmissionSlip();
+            }, 300);
+        });
     }
 });
 

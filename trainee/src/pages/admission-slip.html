@@ -676,6 +676,50 @@
     </div>
 
 
+    <!-- Confirmation Modal -->
+    <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel"
+        aria-hidden="true" data-bs-backdrop="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border: 2px solid #3691bf; border-radius: 15px;">
+                <div class="modal-header"
+                    style="background: linear-gradient(135deg, #3691bf 0%, #325596 100%); border-radius: 13px 13px 0 0;">
+                    <h5 class="modal-title text-white" id="confirmationModalLabel">
+                        <i class="bx bx-check-circle me-2"></i>Confirm Admission Slip Submission
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body"
+                    style="background: linear-gradient(135deg, rgba(54, 145, 191, 0.1) 0%, rgba(42, 123, 168, 0.1) 100%) !important;">
+                    <div class="text-center py-3">
+                        <i class="bx bx-check-shield" style="font-size: 4rem; color: #3691bf;"></i>
+                        <h5 class="mt-3 mb-2" style="color: #ffffff; font-weight: 700;">Review Your Admission Slip</h5>
+                        <p style="color: #e8f4fc; font-weight: 500;">Please review your admission slip details before
+                            submitting. Make sure all information is correct.</p>
+                    </div>
+                    <div class="alert alert-info"
+                        style="background: linear-gradient(135deg, rgba(54, 145, 191, 0.1) 0%, rgba(50, 85, 150, 0.1) 100%); border: 1px solid rgba(54, 145, 191, 0.4); color: #e8f4fc;">
+                        <div class="d-flex align-items-start">
+                            <i class="bx bx-info-circle me-2" style="font-size: 1.2rem; margin-top: 2px;"></i>
+                            <span>Once submitted, your admission slip will be processed. Remember to bring this slip on
+                                your assessment date.</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-center"
+                    style="background: linear-gradient(135deg, rgba(54, 145, 191, 0.1) 0%, rgba(42, 123, 168, 0.1) 100%) !important; border-top: 1px solid #3691bf;">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bx bx-x me-2"></i>No, Cancel
+                    </button>
+                    <button type="button" class="btn btn-primary" id="confirmSubmitBtn">
+                        <i class="bx bx-check me-2"></i>Yes, Submit
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <div class="modal fade" id="submitModal" tabindex="-1" aria-labelledby="submitModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content" style="border: 2px solid #3691bf; border-radius: 15px;">

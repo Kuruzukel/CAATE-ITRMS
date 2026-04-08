@@ -391,37 +391,6 @@ async function saveProfileChanges() {
         address: editAddress ? editAddress.value.trim() : ''
     };
 
-    const userData = localStorage.getItem('userData');
-    if (userData) {
-        try {
-            const originalData = JSON.parse(userData);
-
-            const originalPhone = (originalData.phone || originalData.phoneNumber || '').replace(/\s/g, '');
-            const originalDateOfBirth = originalData.dateOfBirth ? new Date(originalData.dateOfBirth).toISOString().split('T')[0] : '';
-
-            const hasChanges =
-                updatedData.username !== (originalData.username || '') ||
-                updatedData.first_name !== (originalData.firstName || '') ||
-                updatedData.second_name !== (originalData.secondName || '') ||
-                updatedData.middle_name !== (originalData.middleName || '') ||
-                updatedData.last_name !== (originalData.lastName || '') ||
-                updatedData.suffix !== (originalData.suffix || '') ||
-                updatedData.date_of_birth !== originalDateOfBirth ||
-                updatedData.phone !== originalPhone ||
-                updatedData.email !== (originalData.email || '') ||
-                updatedData.address !== (originalData.address || '');
-
-            if (!hasChanges) {
-                showToast('No changes detected', 'info');
-                const modal = bootstrap.Modal.getInstance(document.getElementById('editInformationModal'));
-                if (modal) modal.hide();
-                return;
-            }
-        } catch (e) {
-            console.error('Error comparing data:', e);
-        }
-    }
-
     if (!updatedData.first_name || !updatedData.email || !updatedData.username) {
         showToast('First name, username, and email are required.', 'error');
         return;
@@ -449,6 +418,36 @@ async function saveProfileChanges() {
             showToast('Please enter a valid 11-digit phone number starting with 09 (e.g., 09XX XXX XXXX).', 'error');
             return;
         }
+    }
+
+    const currentUsername = document.getElementById('personalUsername')?.value || '';
+    const currentFirstName = document.getElementById('personalFirstName')?.value || '';
+    const currentSecondName = document.getElementById('personalSecondName')?.value || '';
+    const currentMiddleName = document.getElementById('personalMiddleName')?.value || '';
+    const currentLastName = document.getElementById('personalLastName')?.value || '';
+    const currentSuffix = document.getElementById('personalSuffix')?.value || '';
+    const currentDateOfBirth = document.getElementById('personalDateOfBirth')?.value || '';
+    const currentPhone = (document.getElementById('personalPhone')?.value || '').replace(/\s/g, '');
+    const currentEmail = document.getElementById('personalEmail')?.value || '';
+    const currentAddress = document.getElementById('personalAddress')?.value || '';
+
+    const hasChanges =
+        updatedData.username !== currentUsername ||
+        updatedData.first_name !== currentFirstName ||
+        updatedData.second_name !== currentSecondName ||
+        updatedData.middle_name !== currentMiddleName ||
+        updatedData.last_name !== currentLastName ||
+        updatedData.suffix !== currentSuffix ||
+        updatedData.date_of_birth !== currentDateOfBirth ||
+        updatedData.phone !== currentPhone ||
+        updatedData.email !== currentEmail ||
+        updatedData.address !== currentAddress;
+
+    if (!hasChanges) {
+        showToast('No changes detected', 'info');
+        const modal = bootstrap.Modal.getInstance(document.getElementById('editInformationModal'));
+        if (modal) modal.hide();
+        return;
     }
 
     try {

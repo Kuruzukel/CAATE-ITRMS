@@ -53,7 +53,20 @@ class Trainee {
     
     public function findById($id) {
         try {
-            $document = $this->collection->findOne(['_id' => new MongoDB\BSON\ObjectId($id)]);
+            // Try to find by MongoDB ObjectId first
+            if (preg_match('/^[a-f0-9]{24}$/i', $id)) {
+                $document = $this->collection->findOne(['_id' => new MongoDB\BSON\ObjectId($id)]);
+                if ($document) {
+                    $trainee = (array)$document;
+                    if (isset($trainee['_id'])) {
+                        $trainee['_id'] = (string)$trainee['_id'];
+                    }
+                    return $trainee;
+                }
+            }
+            
+            // If not found or not a valid ObjectId, try finding by trainee_id field
+            $document = $this->collection->findOne(['trainee_id' => $id]);
             if ($document) {
                 $trainee = (array)$document;
                 if (isset($trainee['_id'])) {
@@ -61,6 +74,7 @@ class Trainee {
                 }
                 return $trainee;
             }
+            
             return null;
         } catch (Exception $e) {
             error_log("Trainee::findById - Exception: " . $e->getMessage());

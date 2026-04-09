@@ -121,8 +121,8 @@ function renderAdmissionsTable(admissions) {
     tbody.innerHTML = admissions.map(adm => {
         const fullName = getFullName(adm);
         const traineeId = adm.trainee_id || adm.userData?.trainee_id || 'N/A';
-        const course = adm.course || adm.assessment_title || 'N/A';
-        const date = formatDate(adm.admission_date || adm.created_at);
+        const course = adm.assessment_applied || adm.course || adm.assessment_title || 'N/A';
+        const date = formatDate(adm.submitted_at || adm.admission_date || adm.created_at);
         const status = adm.status || 'pending';
         const statusBadge = getStatusBadge(status);
         const avatar = getAvatarHtml(adm);
@@ -408,10 +408,10 @@ function applyFilters() {
 
         const matchesStatus = !statusValue || adm.status === statusValue;
 
-        const course = adm.course || adm.assessment_title || '';
+        const course = adm.assessment_applied || adm.course || adm.assessment_title || '';
         const matchesCourse = !courseValue || course.includes(courseValue);
 
-        const matchesDate = !dateValue || formatDateForFilter(adm.admission_date || adm.created_at) === dateValue;
+        const matchesDate = !dateValue || formatDateForFilter(adm.submitted_at || adm.admission_date || adm.created_at) === dateValue;
 
         return matchesSearch && matchesStatus && matchesCourse && matchesDate;
     });

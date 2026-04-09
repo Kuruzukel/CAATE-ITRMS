@@ -731,91 +731,81 @@ input[type="file"].is-invalid+label {
 /* Custom Dropdown Styling for Assessment Applied and Assessment Center */
 #assessmentApplied,
 #assessmentCenter {
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    background-color: #1a2942 !important;
-    color: #ffffff !important;
-    border: 2px solid #3d4f63 !important;
-    border-radius: 8px !important;
-    padding: 0.75rem 2.5rem 0.75rem 1rem !important;
-    font-size: 1rem !important;
-    font-weight: 500 !important;
-    cursor: pointer !important;
-    transition: all 0.3s ease !important;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23ffffff' d='M6 9L1 4h10z'/%3E%3C/svg%3E") !important;
-    background-repeat: no-repeat !important;
-    background-position: right 1rem center !important;
-    background-size: 12px !important;
+    background-color: #1e293b;
+    color: #ffffff;
+    border: 2px solid #475569;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m1 6 7 7 7-7'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 16px 12px;
+    padding-right: 2.5rem;
+    cursor: pointer;
+    font-weight: 500;
+    border-radius: 8px;
+    padding: 0.75rem 2.5rem 0.75rem 1rem;
+    font-size: 1rem;
+    transition: all 0.3s ease;
 }
 
 #assessmentApplied:hover,
 #assessmentCenter:hover {
-    border-color: #5ab3e0 !important;
-    background-color: #243447 !important;
+    background-color: #334155;
+    border-color: #64748b;
 }
 
 #assessmentApplied:focus,
 #assessmentCenter:focus {
-    border-color: #3691bf !important;
-    background-color: #243447 !important;
-    box-shadow: 0 0 0 0.2rem rgba(54, 145, 191, 0.25) !important;
-    outline: none !important;
+    background-color: #334155;
+    border-color: #64748b;
+    color: #ffffff;
+    box-shadow: 0 0 0 0.2rem rgba(100, 116, 139, 0.25);
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m1 6 7 7 7-7'/%3e%3c/svg%3e");
+    outline: none;
 }
 
 /* Dropdown options styling */
 #assessmentApplied option,
 #assessmentCenter option {
-    background-color: #1a2942 !important;
-    color: #ffffff !important;
-    padding: 0.75rem 1rem !important;
-    font-size: 1rem !important;
-    font-weight: 500 !important;
+    background-color: #1e293b;
+    color: #ffffff;
+    padding: 0.5rem;
+    font-weight: 500;
 }
 
 #assessmentApplied option:hover,
-#assessmentCenter option:hover {
-    background-color: #3b82f6 !important;
-    color: #ffffff !important;
+#assessmentApplied option:focus,
+#assessmentCenter option:hover,
+#assessmentCenter option:focus {
+    background-color: #475569;
+    background: #475569;
+    color: #ffffff;
 }
 
 #assessmentApplied option:checked,
 #assessmentCenter option:checked {
-    background-color: #3b82f6 !important;
-    color: #ffffff !important;
+    background-color: #64748b;
+    background: #64748b;
+    color: #ffffff;
 }
 
-#assessmentApplied option:disabled,
-#assessmentCenter option:disabled {
-    color: #6c757d !important;
-    font-style: italic !important;
+#assessmentApplied option[value=""],
+#assessmentCenter option[value=""] {
+    color: #94a3b8;
+    font-style: italic;
 }
 
-/* First option (placeholder) styling */
-#assessmentApplied option:first-child,
-#assessmentCenter option:first-child {
-    color: #b8c5d6 !important;
-    font-style: italic !important;
+/* Force dark background on all option states */
+select#assessmentApplied option,
+select#assessmentCenter option {
+    background: #1e293b !important;
+    background-color: #1e293b !important;
 }
 
-/* Loading indicator styling */
-#assessmentAppliedLoading {
-    color: #b8c5d6 !important;
-}
-
-#assessmentAppliedLoading i {
-    color: #3691bf !important;
-}
-
-/* Label styling for consistency */
-label[for="assessmentApplied"],
-label[for="assessmentCenter"] {
-    color: #ffffff !important;
-    font-weight: 600 !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.5px !important;
-    font-size: 0.875rem !important;
-    margin-bottom: 0.5rem !important;
+/* Webkit browsers (Chrome, Safari, Edge) */
+#assessmentApplied option,
+#assessmentCenter option {
+    background: #1e293b;
+    color: #ffffff;
 }
 
 /* Responsive adjustments */

@@ -96,6 +96,12 @@ async function loadTraineeProfileForNavbar() {
                     profile_image: traineeData.profile_image || traineeData.profileImage || null
                 };
 
+                // Store trainee_id in localStorage for admission slip
+                const traineeId = traineeData._id?.$oid || traineeData._id || traineeData.id;
+                if (traineeId) {
+                    localStorage.setItem('trainee_id', traineeId);
+                }
+
                 traineeDataCache = mappedData;
                 cacheTimestamp = Date.now();
 

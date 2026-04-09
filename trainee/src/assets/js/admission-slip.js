@@ -542,6 +542,12 @@ function collectAdmissionSlipData() {
 async function submitAdmissionSlip() {
     const data = collectAdmissionSlipData();
 
+    // Get trainee ID from session/localStorage
+    const traineeId = localStorage.getItem('trainee_id') || sessionStorage.getItem('trainee_id');
+    if (traineeId) {
+        data.trainee_id = traineeId;
+    }
+
     try {
         const response = await fetch(`${config.api.baseUrl}/api/v1/admissions`, {
             method: 'POST',

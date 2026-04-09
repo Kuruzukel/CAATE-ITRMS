@@ -24,6 +24,7 @@ class AdmissionController {
             }
             
             $admissionData = [
+                'trainee_id' => $input['trainee_id'] ?? null,
                 'reference_number' => $input['referenceNumber'] ?? '',
                 'picture' => $input['picture'] ?? null,
                 'applicant_name' => $input['applicantName'] ?? '',

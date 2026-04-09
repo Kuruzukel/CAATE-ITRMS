@@ -532,6 +532,7 @@ async function saveEditedAdmission(admId) {
 
     // Collect edited data
     const editedData = {
+        trainee_id: document.getElementById('editTraineeId').value || '',
         reference_number: document.getElementById('editReferenceNumber').value || '',
         applicant_name: document.getElementById('editApplicantName').value || '',
         tel_number: document.getElementById('editTelNumber').value || '',

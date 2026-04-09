@@ -81,8 +81,20 @@ async function loadTraineeProfileForNavbar() {
 
                 console.log('Final display name:', displayName);
 
+                // Extract trainee_id properly - handle MongoDB ObjectId format
+                let traineeId = null;
+                if (traineeData._id) {
+                    if (typeof traineeData._id === 'object' && traineeData._id.$oid) {
+                        traineeId = traineeData._id.$oid;
+                    } else if (typeof traineeData._id === 'string') {
+                        traineeId = traineeData._id;
+                    }
+                } else if (traineeData.id) {
+                    traineeId = traineeData.id;
+                }
+
                 const mappedData = {
-                    _id: traineeData._id || traineeData.id,
+                    _id: traineeId,
                     name: displayName,
                     email: traineeData.email || '',
                     username: traineeData.username || traineeData.trainee_id || '',
@@ -97,9 +109,9 @@ async function loadTraineeProfileForNavbar() {
                 };
 
                 // Store trainee_id in localStorage for admission slip
-                const traineeId = traineeData._id?.$oid || traineeData._id || traineeData.id;
                 if (traineeId) {
                     localStorage.setItem('trainee_id', traineeId);
+                    console.log('Stored trainee_id in localStorage:', traineeId);
                 }
 
                 traineeDataCache = mappedData;

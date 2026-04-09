@@ -23,8 +23,19 @@ class AdmissionController {
                 return;
             }
             
+            // Resolve trainee to get the actual trainee_id field (TRN-2026-XXX)
+            $resolvedTrainee = $this->resolveTrainee($input);
+            $trainee = $resolvedTrainee['trainee'];
+            
             $admissionData = [
-                'trainee_id' => $input['trainee_id'] ?? null,
+                'user_id' => $resolvedTrainee['user_id'],
+                'trainee_id' => $trainee['trainee_id'] ?? null,
+                'first_name' => $trainee['first_name'] ?? $trainee['firstName'] ?? '',
+                'second_name' => $trainee['second_name'] ?? $trainee['secondName'] ?? '',
+                'middle_name' => $trainee['middle_name'] ?? $trainee['middleName'] ?? '',
+                'last_name' => $trainee['last_name'] ?? $trainee['lastName'] ?? '',
+                'suffix' => $trainee['suffix'] ?? '',
+                'profile_image' => $trainee['profile_image'] ?? $trainee['profileImage'] ?? null,
                 'reference_number' => $input['referenceNumber'] ?? '',
                 'picture' => $input['picture'] ?? null,
                 'applicant_name' => $input['applicantName'] ?? '',
@@ -73,6 +84,41 @@ class AdmissionController {
                 'message' => 'Error creating admission slip: ' . $e->getMessage()
             ]);
         }
+    }
+    
+    private function convertToObjectId($id) {
+        if (!$id) return null;
+        
+        try {
+            if (is_string($id)) {
+                return new MongoDB\BSON\ObjectId($id);
+            }
+            return $id;
+        } catch (Exception $e) {
+            error_log('Error converting to ObjectId: ' . $e->getMessage());
+            return $id;
+        }
+    }
+    
+    private function resolveTrainee($input) {
+        $traineeModel = new Trainee();
+        $trainee = null;
+        $userId = $input['trainee_id'] ?? null;
+        
+        // If trainee_id is provided, try to find the trainee by MongoDB _id
+        if ($userId) {
+            $trainee = $traineeModel->findById($userId);
+        }
+        
+        // If not found, return empty trainee data
+        if (!$trainee) {
+            $trainee = [];
+        }
+        
+        return [
+            'trainee' => $trainee,
+            'user_id' => $this->convertToObjectId($userId)
+        ];
     }
     
     public function index() {

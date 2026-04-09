@@ -447,7 +447,51 @@ document.addEventListener('DOMContentLoaded', function () {
             }, 300);
         });
     }
+
+    // Load trainee data on page load
+    loadTraineeDataForAdmission();
 });
+
+// Function to load trainee data and auto-populate form
+async function loadTraineeDataForAdmission() {
+    const userId = localStorage.getItem('userId');
+    const token = localStorage.getItem('authToken');
+
+    if (!userId || !token) {
+        return;
+    }
+
+    try {
+        const response = await fetch(`${config.api.baseUrl}/api/v1/trainees/${userId}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            const traineeData = result.data || result;
+
+            // Extract trainee_id and store it
+            let traineeId = null;
+            if (traineeData._id) {
+                if (typeof traineeData._id === 'object' && traineeData._id.$oid) {
+                    traineeId = traineeData._id.$oid;
+                } else if (typeof traineeData._id === 'string') {
+                    traineeId = traineeData._id;
+                }
+            }
+
+            if (traineeId) {
+                localStorage.setItem('trainee_id', traineeId);
+            }
+        }
+    } catch (error) {
+        console.error('Failed to load trainee data:', error);
+    }
+}
 
 // Function to collect all form data
 function collectAdmissionSlipData() {
@@ -543,7 +587,47 @@ async function submitAdmissionSlip() {
     const data = collectAdmissionSlipData();
 
     // Get trainee ID from session/localStorage
-    const traineeId = localStorage.getItem('trainee_id') || sessionStorage.getItem('trainee_id');
+    let traineeId = localStorage.getItem('trainee_id') || sessionStorage.getItem('trainee_id');
+
+    // If trainee_id is not in localStorage, try to fetch it from the API
+    if (!traineeId) {
+        const userId = localStorage.getItem('userId');
+        const token = localStorage.getItem('authToken');
+
+        if (userId && token) {
+            try {
+                const response = await fetch(`${config.api.baseUrl}/api/v1/trainees/${userId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    const traineeData = result.data || result;
+
+                    // Extract trainee_id properly
+                    if (traineeData._id) {
+                        if (typeof traineeData._id === 'object' && traineeData._id.$oid) {
+                            traineeId = traineeData._id.$oid;
+                        } else if (typeof traineeData._id === 'string') {
+                            traineeId = traineeData._id;
+                        }
+                    }
+
+                    // Store it for future use
+                    if (traineeId) {
+                        localStorage.setItem('trainee_id', traineeId);
+                    }
+                }
+            } catch (error) {
+                console.error('Failed to fetch trainee_id:', error);
+            }
+        }
+    }
+
     if (traineeId) {
         data.trainee_id = traineeId;
     }

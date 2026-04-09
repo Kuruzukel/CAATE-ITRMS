@@ -359,8 +359,161 @@ function viewDetails(admId) {
 }
 
 function editDetails(admId) {
-    console.log('Edit details for admission:', admId);
-    // TODO: Implement edit details modal
+    const adm = allAdmissions.find(a => (a._id?.$oid || a._id) === admId);
+    if (!adm) {
+        showError('Admission not found');
+        return;
+    }
+
+    // Store original data for change detection
+    window.originalAdmissionData = {
+        applicant_name: adm.applicant_name || getFullName(adm),
+        trainee_id: adm.trainee_id || '',
+        assessment_applied: adm.assessment_applied || adm.course || adm.assessment_title || '',
+        admission_date: formatDateForInput(adm.submitted_at || adm.admission_date || adm.created_at),
+        status: adm.status || 'pending',
+        admission_type: adm.admission_type || 'regular',
+        notes: adm.notes || adm.admin_notes || ''
+    };
+
+    // Populate edit modal fields
+    const editModal = document.getElementById('editDetailsModal');
+    if (editModal) {
+        // Store admission ID
+        editModal.dataset.admissionId = admId;
+
+        // Find and populate fields in the modal
+        const nameInput = editModal.querySelector('input[value="Anna Cruz"]');
+        const traineeIdInput = editModal.querySelector('input[value="TRN-2026-001"]');
+        const courseSelect = editModal.querySelector('select option[value="beauty-skin"]')?.parentElement;
+        const dateInput = editModal.querySelector('input[value="2026-01-15"]');
+        const statusSelect = editModal.querySelector('select option[value="approved"]')?.parentElement;
+        const typeSelect = editModal.querySelector('select option[value="regular"]')?.parentElement;
+        const notesTextarea = editModal.querySelector('textarea');
+
+        if (nameInput) nameInput.value = window.originalAdmissionData.applicant_name;
+        if (traineeIdInput) traineeIdInput.value = window.originalAdmissionData.trainee_id;
+        if (courseSelect) courseSelect.value = window.originalAdmissionData.assessment_applied;
+        if (dateInput) dateInput.value = window.originalAdmissionData.admission_date;
+        if (statusSelect) statusSelect.value = window.originalAdmissionData.status;
+        if (typeSelect) typeSelect.value = window.originalAdmissionData.admission_type;
+        if (notesTextarea) notesTextarea.value = window.originalAdmissionData.notes;
+
+        // Show modal
+        const modal = new bootstrap.Modal(editModal);
+        modal.show();
+
+        // Attach save handler
+        const saveBtn = editModal.querySelector('.btn-primary');
+        if (saveBtn) {
+            saveBtn.onclick = () => saveEditedAdmission(admId);
+        }
+    }
+}
+
+async function saveEditedAdmission(admId) {
+    const editModal = document.getElementById('editDetailsModal');
+    if (!editModal) return;
+
+    // Get current values from modal
+    const nameInput = editModal.querySelector('input[value]');
+    const courseSelect = editModal.querySelector('select option[selected]')?.parentElement;
+    const dateInput = editModal.querySelector('input[type="date"]');
+    const statusSelect = editModal.querySelectorAll('select')[1];
+    const typeSelect = editModal.querySelectorAll('select')[2];
+    const notesTextarea = editModal.querySelector('textarea');
+
+    const currentData = {
+        applicant_name: nameInput?.value.trim() || '',
+        assessment_applied: courseSelect?.value || '',
+        admission_date: dateInput?.value || '',
+        status: statusSelect?.value || 'pending',
+        admission_type: typeSelect?.value || 'regular',
+        notes: notesTextarea?.value.trim() || ''
+    };
+
+    // Change detection
+    if (window.originalAdmissionData) {
+        let hasChanges = false;
+        for (const key in currentData) {
+            const originalValue = String(window.originalAdmissionData[key] || '');
+            const currentValue = String(currentData[key] || '');
+
+            if (originalValue !== currentValue) {
+                hasChanges = true;
+                break;
+            }
+        }
+
+        if (!hasChanges) {
+            showInfo('No changes were made to the admission');
+            return;
+        }
+    }
+
+    // Prepare update data
+    const updatedData = {
+        applicant_name: currentData.applicant_name,
+        assessment_applied: currentData.assessment_applied,
+        admission_date: currentData.admission_date,
+        status: currentData.status,
+        admission_type: currentData.admission_type,
+        notes: currentData.notes
+    };
+
+    try {
+        const response = await fetch(`${config.api.baseUrl}/api/v1/admissions/${admId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updatedData)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            showSuccess('Admission updated successfully');
+
+            const modal = bootstrap.Modal.getInstance(editModal);
+            if (modal) {
+                modal.hide();
+            }
+
+            await loadAdmissions();
+        } else {
+            showError('Failed to update admission: ' + result.message);
+        }
+    } catch (error) {
+        console.error('Error updating admission:', error);
+        showError('Failed to update admission: ' + error.message);
+    }
+}
+
+function formatDateForInput(dateValue) {
+    if (!dateValue) return '';
+
+    try {
+        let date;
+        if (dateValue.$date) {
+            date = new Date(dateValue.$date);
+        } else if (dateValue.$numberLong) {
+            date = new Date(parseInt(dateValue.$numberLong));
+        } else {
+            date = new Date(dateValue);
+        }
+
+        if (isNaN(date.getTime())) {
+            return '';
+        }
+
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    } catch (error) {
+        return '';
+    }
 }
 
 async function deleteAdmission(admId) {
@@ -450,11 +603,43 @@ function filterAdmissionsByDate(dateString) {
 }
 
 function showSuccess(message) {
-    console.log('Success:', message);
-    // TODO: Implement toast notification
+    showToast(message, 'success');
 }
 
 function showError(message) {
-    console.error('Error:', message);
-    // TODO: Implement toast notification
+    showToast(message, 'error');
+}
+
+function showToast(message, type = 'success') {
+    const container = document.getElementById('toastContainer');
+    if (!container) return;
+
+    const toast = document.createElement('div');
+    toast.className = `toast-notification ${type}`;
+
+    const icon = type === 'success' ? 'bx-check' :
+        type === 'error' ? 'bx-x' :
+            type === 'warning' ? 'bx-error-alt' : 'bxs-info-circle';
+
+    toast.innerHTML = `
+        <i class="bx ${icon} toast-icon"></i>
+        <div class="toast-content">
+            <div class="toast-message">${message}</div>
+        </div>
+    `;
+
+    container.appendChild(toast);
+
+    setTimeout(() => {
+        toast.classList.add('hiding');
+        setTimeout(() => toast.remove(), 300);
+    }, 5000);
+}
+
+function showInfo(message) {
+    showToast(message, 'info');
+}
+
+function showWarning(message) {
+    showToast(message, 'warning');
 }

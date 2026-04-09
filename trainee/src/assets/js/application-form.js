@@ -7,8 +7,6 @@ if (typeof window.API_BASE_URL === 'undefined') {
 
 async function loadCoursesForDropdown() {
     const dropdown = document.getElementById('assessmentTitle');
-    const loadingIndicator = document.getElementById('assessmentTitleLoading');
-    const errorIndicator = document.getElementById('assessmentTitleError');
 
     if (!dropdown) {
         console.warn('Assessment title dropdown not found');
@@ -16,9 +14,6 @@ async function loadCoursesForDropdown() {
     }
 
     try {
-        if (loadingIndicator) loadingIndicator.classList.remove('d-none');
-        if (errorIndicator) errorIndicator.classList.add('d-none');
-
         const response = await fetch(`${window.API_BASE_URL}/api/v1/competencies`);
 
         if (!response.ok) {
@@ -36,17 +31,11 @@ async function loadCoursesForDropdown() {
                 option.textContent = course.title || 'Untitled Course';
                 dropdown.appendChild(option);
             });
-
-            if (loadingIndicator) loadingIndicator.classList.add('d-none');
         } else {
             throw new Error('No assessments found');
         }
     } catch (error) {
         console.warn('Could not load assessments, using manual entry:', error.message);
-
-        if (loadingIndicator) loadingIndicator.classList.add('d-none');
-
-        if (errorIndicator) errorIndicator.classList.add('d-none');
 
         dropdown.innerHTML = `
             <option value="">Select an assessment...</option>

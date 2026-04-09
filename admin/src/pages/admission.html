@@ -559,82 +559,197 @@
     </div>
 
     <div class="modal fade" id="editDetailsModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document" style="max-width: 95%;">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title"><i class="bx bx-edit me-2"></i>Edit Admission Details</h5>
+                    <h5 class="modal-title">Edit Admission Details</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <form>
+                <div class="modal-body" style="max-height: 75vh; overflow-y: auto;">
+                    <form id="editAdmissionForm">
+                        <input type="hidden" id="editAdmissionId">
 
-                        <div class="mb-4">
-                            <h6 class="mb-3" style="color: var(--primary-color); font-weight: 600;">
-                                <i class="bx bx-user me-2"></i>Personal Information
-                            </h6>
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Name <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" value="Anna Cruz" required>
+                        <!-- Reference Information -->
+                        <h6 class="mb-3"><i class="bx bx-id-card me-2"></i>Reference Information</h6>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="editTraineeId" class="form-label text-white">Trainee ID</label>
+                                <input type="text" id="editTraineeId" name="traineeId" class="form-control"
+                                    placeholder="Enter trainee ID" readonly>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="editReferenceNumber" class="form-label text-white">Reference Number</label>
+                                <input type="text" id="editReferenceNumber" name="referenceNumber" class="form-control"
+                                    placeholder="Enter 16-digit reference number" maxlength="16">
+                            </div>
+                        </div>
+
+                        <!-- Picture -->
+                        <h6 class="mb-3 mt-3"><i class="bx bx-image me-2"></i>Picture</h6>
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label for="editPicture" class="form-label text-white">Picture</label>
+                                <input type="file" id="editPicture" name="picture" class="form-control"
+                                    accept="image/*">
+                                <small class="text-white-50">Current picture will be displayed in view mode</small>
+                            </div>
+                        </div>
+
+                        <!-- Applicant Information -->
+                        <h6 class="mb-3 mt-3"><i class="bx bx-user me-2"></i>Applicant Information</h6>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="editApplicantName" class="form-label text-white">Name of Applicant</label>
+                                <input type="text" id="editApplicantName" name="applicantName" class="form-control"
+                                    placeholder="Enter full name">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="editTelNumber" class="form-label text-white">Tel. Number</label>
+                                <input type="tel" id="editTelNumber" name="telNumber" class="form-control"
+                                    placeholder="09XX XXX XXXX">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="editAssessmentApplied" class="form-label text-white">Assessment Applied
+                                    for</label>
+                                <select id="editAssessmentApplied" name="assessmentApplied" class="form-select">
+                                    <option value="">Select an assessment...</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="editOrNumber" class="form-label text-white">Official Receipt Number</label>
+                                <input type="text" id="editOrNumber" name="orNumber" class="form-control"
+                                    placeholder="OR Number">
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="editDateIssued" class="form-label text-white">Date Issued</label>
+                                <input type="date" id="editDateIssued" name="dateIssued" class="form-control">
+                            </div>
+                        </div>
+
+                        <!-- Processing Officer Section -->
+                        <h6 class="mb-3 mt-3"><i class="bx bx-clipboard me-2"></i>Processing Officer Section</h6>
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label for="editAssessmentCenter" class="form-label text-white">Name of Assessment
+                                    Center</label>
+                                <select id="editAssessmentCenter" name="assessmentCenter" class="form-select">
+                                    <option value="">Select assessment center...</option>
+                                    <option value="Creative Aesthetic Academy & Technical Education Inc.">
+                                        Creative Aesthetic Academy & Technical Education Inc.
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label text-white">Submitted Requirements</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="editReq1"
+                                        name="submittedRequirements">
+                                    <label class="form-check-label text-white" for="editReq1">
+                                        Accomplished Self-Assessment Guide
+                                    </label>
                                 </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Trainee ID</label>
-                                    <input type="text" class="form-control" value="TRN-2026-001" readonly>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="editReq2"
+                                        name="submittedRequirements">
+                                    <label class="form-check-label text-white" for="editReq2">
+                                        Three (3) pieces colored passport size pictures
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label text-white">Remarks</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="editRemark1" name="remarks">
+                                    <label class="form-check-label text-white" for="editRemark1">
+                                        Bring own Personal Protective Equipment
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="editRemark2" name="remarks">
+                                    <label class="form-check-label text-white" for="editRemark2">
+                                        Others. Pls. specify
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="editAssessmentDate" class="form-label text-white">Assessment Date</label>
+                                <input type="date" id="editAssessmentDate" name="assessmentDate" class="form-control">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="editAssessmentTime" class="form-label text-white">Assessment Time</label>
+                                <input type="time" id="editAssessmentTime" name="assessmentTime" class="form-control">
+                            </div>
+                        </div>
+
+                        <!-- Signatures -->
+                        <h6 class="mb-3 mt-3"><i class="bx bx-pen me-2"></i>Signatures</h6>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label text-white">Processing Officer's Signature</label>
+                                <input type="file" id="editProcessingOfficerSignature" name="processingOfficerSignature"
+                                    class="form-control" accept="image/*">
+                                <small class="text-white-50">Upload new signature or keep existing</small>
+                                <div class="mt-2">
+                                    <label for="editProcessingOfficerPrintedName" class="form-label text-white">Printed
+                                        Name</label>
+                                    <input type="text" id="editProcessingOfficerPrintedName"
+                                        name="processingOfficerPrintedName" class="form-control"
+                                        placeholder="Enter name">
+                                </div>
+                                <div class="mt-2">
+                                    <label for="editProcessingOfficerDate" class="form-label text-white">Date</label>
+                                    <input type="date" id="editProcessingOfficerDate" name="processingOfficerDate"
+                                        class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label text-white">Applicant's Signature</label>
+                                <input type="file" id="editApplicantSignature" name="applicantSignature"
+                                    class="form-control" accept="image/*">
+                                <small class="text-white-50">Upload new signature or keep existing</small>
+                                <div class="mt-2">
+                                    <label for="editApplicantPrintedName" class="form-label text-white">Printed
+                                        Name</label>
+                                    <input type="text" id="editApplicantPrintedName" name="applicantPrintedName"
+                                        class="form-control" placeholder="Enter name">
+                                </div>
+                                <div class="mt-2">
+                                    <label for="editApplicantDate" class="form-label text-white">Date</label>
+                                    <input type="date" id="editApplicantDate" name="applicantDate" class="form-control">
                                 </div>
                             </div>
                         </div>
 
-                        <div class="mb-4">
-                            <h6 class="mb-3" style="color: var(--primary-color); font-weight: 600;">
-                                <i class="bx bx-book-open me-2"></i>Admission Details
-                            </h6>
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Course <span class="text-danger">*</span></label>
-                                    <select class="form-select" required>
-                                        <option value="">Select a course</option>
-                                        <option value="beauty-skin" selected>Beauty Care (Skin Care) NC II</option>
-                                        <option value="beauty-nail">Beauty Care (Nail Care) NC II</option>
-                                        <option value="trainers">Trainers Methodology Level I</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Admission Date <span class="text-danger">*</span></label>
-                                    <input type="date" class="form-control" value="2026-01-15" required>
-                                </div>
+                        <!-- Status -->
+                        <h6 class="mb-3 mt-3"><i class="bx bx-receipt me-2"></i>Admission Status</h6>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="editStatus" class="form-label text-white">Status</label>
+                                <select id="editStatus" name="status" class="form-select">
+                                    <option value="pending">Pending</option>
+                                    <option value="approved">Approved</option>
+                                    <option value="cancelled">Cancelled</option>
+                                </select>
                             </div>
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Status</label>
-                                    <select class="form-select">
-                                        <option value="approved" selected>Approved</option>
-                                        <option value="pending">Pending</option>
-                                        <option value="cancelled">Cancelled</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Admission Type</label>
-                                    <select class="form-select">
-                                        <option value="regular" selected>Regular</option>
-                                        <option value="scholarship">Scholarship</option>
-                                        <option value="transfer">Transfer</option>
-                                    </select>
-                                </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="editSubmittedAt" class="form-label text-white">Submitted At</label>
+                                <input type="text" id="editSubmittedAt" name="submittedAt" class="form-control"
+                                    readonly>
                             </div>
                         </div>
 
-                        <div class="mb-3">
-                            <h6 class="mb-3" style="color: var(--primary-color); font-weight: 600;">
-                                <i class="bx bx-note me-2"></i>Admin Notes (Optional)
-                            </h6>
-                            <textarea class="form-control" rows="3"
-                                placeholder="Add any additional notes...">Admission approved, ready for enrollment.</textarea>
-                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary"><i class="bx bx-save me-2"></i>Save Changes</button>
+                    <button type="button" class="btn btn-primary" id="saveEditBtn"><i class="bx bx-save me-2"></i>Save
+                        Changes</button>
                 </div>
             </div>
         </div>

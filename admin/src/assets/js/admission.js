@@ -33,6 +33,17 @@ document.addEventListener('DOMContentLoaded', function () {
             loadAdmissions();
         });
     }
+
+    // Add event listener for save edit button
+    const saveEditBtn = document.getElementById('saveEditBtn');
+    if (saveEditBtn) {
+        saveEditBtn.addEventListener('click', function () {
+            const admissionId = document.getElementById('editAdmissionId').value;
+            if (admissionId) {
+                saveEditedAdmission(admissionId);
+            }
+        });
+    }
 });
 
 let allAdmissions = [];
@@ -365,83 +376,243 @@ function editDetails(admId) {
         return;
     }
 
-    // Store original data for change detection
-    window.originalAdmissionData = {
-        applicant_name: adm.applicant_name || getFullName(adm),
-        trainee_id: adm.trainee_id || '',
-        assessment_applied: adm.assessment_applied || adm.course || adm.assessment_title || '',
-        admission_date: formatDateForInput(adm.submitted_at || adm.admission_date || adm.created_at),
-        status: adm.status || 'pending',
-        admission_type: adm.admission_type || 'regular',
-        notes: adm.notes || adm.admin_notes || ''
-    };
+    // Load courses for the dropdown
+    loadCoursesForEditModal();
 
-    // Populate edit modal fields
-    const editModal = document.getElementById('editDetailsModal');
-    if (editModal) {
-        // Store admission ID
-        editModal.dataset.admissionId = admId;
+    // Populate the edit modal with admission data
+    populateEditModal(adm);
 
-        // Find and populate fields in the modal
-        const nameInput = editModal.querySelector('input[value="Anna Cruz"]');
-        const traineeIdInput = editModal.querySelector('input[value="TRN-2026-001"]');
-        const courseSelect = editModal.querySelector('select option[value="beauty-skin"]')?.parentElement;
-        const dateInput = editModal.querySelector('input[value="2026-01-15"]');
-        const statusSelect = editModal.querySelector('select option[value="approved"]')?.parentElement;
-        const typeSelect = editModal.querySelector('select option[value="regular"]')?.parentElement;
-        const notesTextarea = editModal.querySelector('textarea');
+    // Show the modal
+    const editModal = new bootstrap.Modal(document.getElementById('editDetailsModal'));
+    editModal.show();
+}
 
-        if (nameInput) nameInput.value = window.originalAdmissionData.applicant_name;
-        if (traineeIdInput) traineeIdInput.value = window.originalAdmissionData.trainee_id;
-        if (courseSelect) courseSelect.value = window.originalAdmissionData.assessment_applied;
-        if (dateInput) dateInput.value = window.originalAdmissionData.admission_date;
-        if (statusSelect) statusSelect.value = window.originalAdmissionData.status;
-        if (typeSelect) typeSelect.value = window.originalAdmissionData.admission_type;
-        if (notesTextarea) notesTextarea.value = window.originalAdmissionData.notes;
+// Load courses for edit modal dropdown
+async function loadCoursesForEditModal() {
+    const dropdown = document.getElementById('editAssessmentApplied');
 
-        // Show modal
-        const modal = new bootstrap.Modal(editModal);
-        modal.show();
+    if (!dropdown) {
+        return;
+    }
 
-        // Attach save handler
-        const saveBtn = editModal.querySelector('.btn-primary');
-        if (saveBtn) {
-            saveBtn.onclick = () => saveEditedAdmission(admId);
+    try {
+        const apiUrl = `${config.api.baseUrl}/api/v1/courses`;
+        const response = await fetch(apiUrl);
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
+
+        const result = await response.json();
+
+        if (result.success && result.data && Array.isArray(result.data)) {
+            dropdown.innerHTML = '<option value="">Select an assessment...</option>';
+
+            if (result.data.length === 0) {
+                const option = document.createElement('option');
+                option.value = '';
+                option.textContent = 'No courses available';
+                option.disabled = true;
+                dropdown.appendChild(option);
+            } else {
+                result.data.forEach((course) => {
+                    const courseTitle = course.title || course.name || '';
+                    if (courseTitle) {
+                        const option = document.createElement('option');
+                        option.value = courseTitle;
+                        option.textContent = courseTitle;
+                        dropdown.appendChild(option);
+                    }
+                });
+            }
+
+            dropdown.disabled = false;
+        }
+    } catch (error) {
+        console.error('Error loading courses:', error);
+    }
+}
+
+// Function to populate edit modal with admission data
+function populateEditModal(admission) {
+    // Store admission ID
+    document.getElementById('editAdmissionId').value = admission._id?.$oid || admission._id;
+
+    // Store original data for change detection
+    window.originalAdmissionData = JSON.parse(JSON.stringify(admission));
+
+    // Trainee ID - handle both traineeId and trainee_id (readonly field)
+    const traineeId = admission.traineeId || admission.trainee_id || '';
+    document.getElementById('editTraineeId').value = traineeId;
+
+    // Reference Number - handle both referenceNumber and reference_number
+    const referenceNumber = admission.referenceNumber || admission.reference_number || '';
+    document.getElementById('editReferenceNumber').value = referenceNumber;
+
+    // Applicant Information - handle both camelCase and snake_case
+    document.getElementById('editApplicantName').value = admission.applicantName || admission.applicant_name || '';
+    document.getElementById('editTelNumber').value = admission.telNumber || admission.tel_number || '';
+    document.getElementById('editAssessmentApplied').value = admission.assessmentApplied || admission.assessment_applied || '';
+    document.getElementById('editOrNumber').value = admission.orNumber || admission.or_number || '';
+    document.getElementById('editDateIssued').value = admission.dateIssued || admission.date_issued || '';
+
+    // Processing Officer Section - handle both camelCase and snake_case
+    document.getElementById('editAssessmentCenter').value = admission.assessmentCenter || admission.assessment_center || '';
+
+    // Submitted Requirements - handle both camelCase and snake_case
+    const submittedReqs = admission.submittedRequirements || admission.submitted_requirements || [];
+    document.getElementById('editReq1').checked = submittedReqs.includes('Accomplished Self-Assessment Guide');
+    document.getElementById('editReq2').checked = submittedReqs.includes('Three (3) pieces colored passport size pictures');
+
+    // Remarks
+    const remarks = admission.remarks || [];
+    document.getElementById('editRemark1').checked = remarks.includes('Bring own Personal Protective Equipment');
+    document.getElementById('editRemark2').checked = remarks.includes('Others. Pls. specify');
+
+    // Assessment Date and Time - handle both camelCase and snake_case
+    document.getElementById('editAssessmentDate').value = admission.assessmentDate || admission.assessment_date || '';
+    document.getElementById('editAssessmentTime').value = admission.assessmentTime || admission.assessment_time || '';
+
+    // Signatures - Printed Names and Dates - handle both camelCase and snake_case
+    document.getElementById('editProcessingOfficerPrintedName').value =
+        admission.processingOfficerPrintedName || admission.processing_officer_printed_name || '';
+    document.getElementById('editProcessingOfficerDate').value =
+        admission.processingOfficerDate || admission.processing_officer_date || '';
+    document.getElementById('editApplicantPrintedName').value =
+        admission.applicantPrintedName || admission.applicant_printed_name || '';
+    document.getElementById('editApplicantDate').value =
+        admission.applicantDate || admission.applicant_date || '';
+
+    // Status
+    document.getElementById('editStatus').value = admission.status || 'pending';
+
+    // Submitted At - handle both camelCase and snake_case
+    const submittedAt = admission.submittedAt || admission.submitted_at || admission.created_at;
+    document.getElementById('editSubmittedAt').value = formatDateForDisplay(submittedAt);
+}
+
+// Function to format date for display
+function formatDateForDisplay(dateValue) {
+    if (!dateValue) return 'N/A';
+
+    try {
+        let date;
+        if (dateValue.$date) {
+            date = new Date(dateValue.$date);
+        } else if (dateValue.$numberLong) {
+            date = new Date(parseInt(dateValue.$numberLong));
+        } else {
+            date = new Date(dateValue);
+        }
+
+        if (isNaN(date.getTime())) {
+            return 'N/A';
+        }
+
+        const options = {
+            year: 'numeric',
+            month: 'short',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit'
+        };
+        return date.toLocaleDateString('en-US', options);
+    } catch (error) {
+        return 'N/A';
     }
 }
 
 async function saveEditedAdmission(admId) {
-    const editModal = document.getElementById('editDetailsModal');
-    if (!editModal) return;
+    const admissionId = document.getElementById('editAdmissionId').value || admId;
 
-    // Get current values from modal
-    const nameInput = editModal.querySelector('input[value]');
-    const courseSelect = editModal.querySelector('select option[selected]')?.parentElement;
-    const dateInput = editModal.querySelector('input[type="date"]');
-    const statusSelect = editModal.querySelectorAll('select')[1];
-    const typeSelect = editModal.querySelectorAll('select')[2];
-    const notesTextarea = editModal.querySelector('textarea');
+    if (!admissionId) {
+        showError('Admission ID not found');
+        return;
+    }
 
-    const currentData = {
-        applicant_name: nameInput?.value.trim() || '',
-        assessment_applied: courseSelect?.value || '',
-        admission_date: dateInput?.value || '',
-        status: statusSelect?.value || 'pending',
-        admission_type: typeSelect?.value || 'regular',
-        notes: notesTextarea?.value.trim() || ''
+    // Collect edited data
+    const editedData = {
+        reference_number: document.getElementById('editReferenceNumber').value || '',
+        applicant_name: document.getElementById('editApplicantName').value || '',
+        tel_number: document.getElementById('editTelNumber').value || '',
+        assessment_applied: document.getElementById('editAssessmentApplied').value || '',
+        or_number: document.getElementById('editOrNumber').value || '',
+        date_issued: document.getElementById('editDateIssued').value || '',
+        assessment_center: document.getElementById('editAssessmentCenter').value || '',
+        assessment_date: document.getElementById('editAssessmentDate').value || '',
+        assessment_time: document.getElementById('editAssessmentTime').value || '',
+        processing_officer_printed_name: document.getElementById('editProcessingOfficerPrintedName').value || '',
+        processing_officer_date: document.getElementById('editProcessingOfficerDate').value || '',
+        applicant_printed_name: document.getElementById('editApplicantPrintedName').value || '',
+        applicant_date: document.getElementById('editApplicantDate').value || '',
+        status: document.getElementById('editStatus').value || 'pending'
     };
+
+    // Submitted Requirements
+    editedData.submitted_requirements = [];
+    if (document.getElementById('editReq1').checked) {
+        editedData.submitted_requirements.push('Accomplished Self-Assessment Guide');
+    }
+    if (document.getElementById('editReq2').checked) {
+        editedData.submitted_requirements.push('Three (3) pieces colored passport size pictures');
+    }
+
+    // Remarks
+    editedData.remarks = [];
+    if (document.getElementById('editRemark1').checked) {
+        editedData.remarks.push('Bring own Personal Protective Equipment');
+    }
+    if (document.getElementById('editRemark2').checked) {
+        editedData.remarks.push('Others. Pls. specify');
+    }
+
+    // Handle file uploads for picture
+    const pictureInput = document.getElementById('editPicture');
+    if (pictureInput && pictureInput.files && pictureInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            editedData.picture = e.target.result;
+        };
+        reader.readAsDataURL(pictureInput.files[0]);
+    }
+
+    // Handle file uploads for signatures
+    const processingOfficerSigInput = document.getElementById('editProcessingOfficerSignature');
+    if (processingOfficerSigInput && processingOfficerSigInput.files && processingOfficerSigInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            editedData.processing_officer_signature = e.target.result;
+        };
+        reader.readAsDataURL(processingOfficerSigInput.files[0]);
+    }
+
+    const applicantSigInput = document.getElementById('editApplicantSignature');
+    if (applicantSigInput && applicantSigInput.files && applicantSigInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            editedData.applicant_signature = e.target.result;
+        };
+        reader.readAsDataURL(applicantSigInput.files[0]);
+    }
 
     // Change detection
     if (window.originalAdmissionData) {
         let hasChanges = false;
-        for (const key in currentData) {
-            const originalValue = String(window.originalAdmissionData[key] || '');
-            const currentValue = String(currentData[key] || '');
-
-            if (originalValue !== currentValue) {
-                hasChanges = true;
-                break;
+        for (const key in editedData) {
+            if (key === 'submitted_requirements' || key === 'remarks') {
+                const originalValue = JSON.stringify(window.originalAdmissionData[key] || []);
+                const newValue = JSON.stringify(editedData[key] || []);
+                if (originalValue !== newValue) {
+                    hasChanges = true;
+                    break;
+                }
+            } else {
+                const originalValue = String(window.originalAdmissionData[key] || '').trim();
+                const newValue = String(editedData[key] || '').trim();
+                if (originalValue !== newValue) {
+                    hasChanges = true;
+                    break;
+                }
             }
         }
 
@@ -451,23 +622,16 @@ async function saveEditedAdmission(admId) {
         }
     }
 
-    // Prepare update data
-    const updatedData = {
-        applicant_name: currentData.applicant_name,
-        assessment_applied: currentData.assessment_applied,
-        admission_date: currentData.admission_date,
-        status: currentData.status,
-        admission_type: currentData.admission_type,
-        notes: currentData.notes
-    };
+    // Add updated timestamp
+    editedData.updated_at = new Date().toISOString();
 
     try {
-        const response = await fetch(`${config.api.baseUrl}/api/v1/admissions/${admId}`, {
+        const response = await fetch(`${config.api.baseUrl}/api/v1/admissions/${admissionId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(updatedData)
+            body: JSON.stringify(editedData)
         });
 
         const result = await response.json();
@@ -475,7 +639,7 @@ async function saveEditedAdmission(admId) {
         if (result.success) {
             showSuccess('Admission updated successfully');
 
-            const modal = bootstrap.Modal.getInstance(editModal);
+            const modal = bootstrap.Modal.getInstance(document.getElementById('editDetailsModal'));
             if (modal) {
                 modal.hide();
             }

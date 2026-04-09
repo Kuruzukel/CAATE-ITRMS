@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     if (searchInput) {
-        searchInput.addEventListener('input', debounce(applyFilters, 500));
+        searchInput.addEventListener('input', debounce(applyFilters, 300));
     }
 
     if (statusFilter) {
@@ -66,8 +66,15 @@ async function loadAdmissions() {
         const result = await response.json();
 
         if (result.success && result.data) {
-            // Enrich admissions with trainee data
+            // Store data immediately first
+            allAdmissions = result.data;
+            console.log('Loaded admissions (before enrichment):', allAdmissions.length);
+
+            // Then enrich with trainee data
             allAdmissions = await enrichAdmissionsWithTraineeData(result.data);
+            console.log('Loaded admissions (after enrichment):', allAdmissions.length);
+            console.log('Sample admission:', allAdmissions[0]);
+
             updateStatistics(allAdmissions);
             renderAdmissionsTable(allAdmissions);
         } else {
@@ -756,14 +763,14 @@ function applyFilters() {
     const courseFilter = document.getElementById('admissionCourseFilter');
     const dateFilter = document.getElementById('admissionDateFilter');
 
-    const searchTerm = searchInput?.value.toLowerCase() || '';
+    const searchTerm = searchInput?.value.toLowerCase().trim() || '';
     const statusValue = statusFilter?.value || '';
     const courseValue = courseFilter?.value || '';
     const dateValue = dateFilter?.value || '';
 
     const filtered = allAdmissions.filter(adm => {
         const fullName = getFullName(adm).toLowerCase();
-        const traineeId = (adm.trainee_id || '').toLowerCase();
+        const traineeId = String(adm.trainee_id || adm.traineeData?.trainee_id || '').toLowerCase();
         const matchesSearch = !searchTerm || fullName.includes(searchTerm) || traineeId.includes(searchTerm);
 
         const matchesStatus = !statusValue || adm.status === statusValue;

@@ -50,13 +50,15 @@
     border: 1px solid rgba(54, 145, 191, 0.15);
 }
 
-/* Date input color scheme */
 .modal input[type="date"],
 .modal input[type="datetime-local"] {
     color-scheme: light !important;
 }
 
-#editSubmittedAt {
+#addSubmittedAt,
+#addUpdatedAt,
+#editSubmittedAt,
+#editUpdatedAt {
     color-scheme: light !important;
 }
 
@@ -64,7 +66,6 @@
     color-scheme: light !important;
 }
 
-/* Form validation styles */
 .form-control.is-invalid,
 .form-select.is-invalid {
     border-color: #dc3545 !important;
@@ -102,7 +103,6 @@
     }
 }
 
-/* Toast Notification Styles */
 .toast-container {
     position: fixed;
     top: 20px;
@@ -351,7 +351,6 @@
     animation: slideOut 0.3s cubic-bezier(0.4, 0, 1, 1) forwards;
 }
 
-/* View detail card styles */
 .view-detail-card {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(54, 145, 191, 0.18);

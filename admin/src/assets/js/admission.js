@@ -1,29 +1,29 @@
 document.addEventListener('DOMContentLoaded', function () {
     loadAdmissions();
+    loadCoursesForFilter(); // Load courses for filter dropdown
 
     const dateFilter = document.getElementById('admissionDateFilter');
-    if (dateFilter) {
-        dateFilter.addEventListener('change', function () {
-            const selectedDate = this.value;
-            filterAdmissionsByDate(selectedDate || null);
-        });
-    }
+    const searchInput = document.getElementById('admissionSearchInput');
+    const statusFilter = document.getElementById('admissionStatusFilter');
+    const courseFilter = document.getElementById('admissionCourseFilter');
+    const resetBtn = document.getElementById('admissionResetBtn');
 
-    const searchInput = document.querySelector('input[placeholder="Name or Trainee ID"]');
-    const statusFilter = document.querySelector('select[class*="form-select"]');
-    const courseFilter = document.querySelectorAll('select[class*="form-select"]')[1];
+    if (dateFilter) {
+        dateFilter.addEventListener('change', applyFilters);
+    }
 
     if (searchInput) {
         searchInput.addEventListener('input', debounce(applyFilters, 500));
     }
+
     if (statusFilter) {
         statusFilter.addEventListener('change', applyFilters);
     }
+
     if (courseFilter) {
         courseFilter.addEventListener('change', applyFilters);
     }
 
-    const resetBtn = document.querySelector('.btn-outline-secondary');
     if (resetBtn) {
         resetBtn.addEventListener('click', function () {
             if (searchInput) searchInput.value = '';
@@ -80,6 +80,48 @@ async function loadAdmissions() {
     }
 }
 
+// Load courses for filter dropdown
+async function loadCoursesForFilter() {
+    const dropdown = document.getElementById('admissionCourseFilter');
+
+    if (!dropdown) {
+        return;
+    }
+
+    try {
+        const apiUrl = `${config.api.baseUrl}/api/v1/courses`;
+        const response = await fetch(apiUrl);
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+
+        if (result.success && result.data && Array.isArray(result.data)) {
+            // Keep the "All Courses" option
+            dropdown.innerHTML = '<option value="">All Courses</option>';
+
+            if (result.data.length > 0) {
+                result.data.forEach((course) => {
+                    const courseTitle = course.title || course.name || '';
+                    if (courseTitle) {
+                        const option = document.createElement('option');
+                        option.value = courseTitle;
+                        option.textContent = courseTitle;
+                        dropdown.appendChild(option);
+                    }
+                });
+            }
+
+            dropdown.disabled = false;
+        }
+    } catch (error) {
+        console.error('Error loading courses for filter:', error);
+        // Keep the default "All Courses" option on error
+    }
+}
+
 async function enrichAdmissionsWithTraineeData(admissions) {
     const enrichedAdmissions = await Promise.all(
         admissions.map(async (adm) => {
@@ -132,7 +174,7 @@ function renderAdmissionsTable(admissions) {
     tbody.innerHTML = admissions.map(adm => {
         const fullName = getFullName(adm);
         const traineeId = adm.trainee_id || adm.userData?.trainee_id || 'N/A';
-        const course = adm.assessment_applied || adm.course || adm.assessment_title || 'N/A';
+        const course = adm.assessment_applied || adm.assessmentApplied || adm.course || adm.assessment_title || adm.assessmentTitle || 'N/A';
         const date = formatDate(adm.submitted_at || adm.admission_date || adm.created_at);
         const status = adm.status || 'pending';
         const statusBadge = getStatusBadge(status);
@@ -709,9 +751,9 @@ async function deleteAdmission(admId) {
 }
 
 function applyFilters() {
-    const searchInput = document.querySelector('input[placeholder="Name or Trainee ID"]');
-    const statusFilter = document.querySelector('select[class*="form-select"]');
-    const courseFilter = document.querySelectorAll('select[class*="form-select"]')[1];
+    const searchInput = document.getElementById('admissionSearchInput');
+    const statusFilter = document.getElementById('admissionStatusFilter');
+    const courseFilter = document.getElementById('admissionCourseFilter');
     const dateFilter = document.getElementById('admissionDateFilter');
 
     const searchTerm = searchInput?.value.toLowerCase() || '';
@@ -726,7 +768,7 @@ function applyFilters() {
 
         const matchesStatus = !statusValue || adm.status === statusValue;
 
-        const course = adm.assessment_applied || adm.course || adm.assessment_title || '';
+        const course = adm.assessment_applied || adm.assessmentApplied || adm.course || adm.assessment_title || adm.assessmentTitle || '';
         const matchesCourse = !courseValue || course.includes(courseValue);
 
         const matchesDate = !dateValue || formatDateForFilter(adm.submitted_at || adm.admission_date || adm.created_at) === dateValue;

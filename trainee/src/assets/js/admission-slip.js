@@ -159,39 +159,25 @@ function confirmPrint() {
 async function loadCourses() {
     const dropdown = document.getElementById('assessmentApplied');
 
-    console.log('=== loadCourses function called ===');
-    console.log('Dropdown element:', dropdown);
-
     if (!dropdown) {
-        console.error('Assessment Applied dropdown not found');
         return;
     }
 
     try {
         const apiUrl = `${config.api.baseUrl}/api/v1/courses`;
-        console.log('API URL:', apiUrl);
-        console.log('Fetching courses...');
-
         const response = await fetch(apiUrl);
-        console.log('Response status:', response.status);
-        console.log('Response OK:', response.ok);
 
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
         const result = await response.json();
-        console.log('=== API Response ===');
-        console.log('Success:', result.success);
-        console.log('Data length:', result.data ? result.data.length : 0);
-        console.log('First 3 courses:', result.data ? result.data.slice(0, 3) : []);
 
         if (result.success && result.data && Array.isArray(result.data)) {
             // Clear existing options
             dropdown.innerHTML = '<option value="">Select an assessment...</option>';
 
             if (result.data.length === 0) {
-                console.warn('No courses found in database');
                 const option = document.createElement('option');
                 option.value = '';
                 option.textContent = 'No courses available';
@@ -199,27 +185,20 @@ async function loadCourses() {
                 dropdown.appendChild(option);
             } else {
                 // Add courses to dropdown
-                let addedCount = 0;
-                result.data.forEach((course, index) => {
+                result.data.forEach((course) => {
                     const courseTitle = course.title || course.name || '';
-                    console.log(`Course ${index + 1}:`, courseTitle);
                     if (courseTitle) {
                         const option = document.createElement('option');
                         option.value = courseTitle;
                         option.textContent = courseTitle;
                         dropdown.appendChild(option);
-                        addedCount++;
                     }
                 });
-
-                console.log(`=== Successfully added ${addedCount} courses to dropdown ===`);
-                console.log('Dropdown options count:', dropdown.options.length);
             }
 
             // Enable dropdown
             dropdown.disabled = false;
         } else {
-            console.error('Invalid API response format:', result);
             dropdown.innerHTML = '<option value="">Select an assessment...</option>';
             const option = document.createElement('option');
             option.value = '';
@@ -229,10 +208,6 @@ async function loadCourses() {
             dropdown.disabled = false;
         }
     } catch (error) {
-        console.error('=== Error loading courses ===');
-        console.error('Error message:', error.message);
-        console.error('Error stack:', error.stack);
-
         // Add error option
         dropdown.innerHTML = '<option value="">Select an assessment...</option>';
         const option = document.createElement('option');
@@ -243,8 +218,6 @@ async function loadCourses() {
         dropdown.disabled = false;
 
         showToast('Failed to load courses. Please refresh the page.', 'error');
-    } finally {
-        console.log('=== loadCourses function completed ===');
     }
 }
 

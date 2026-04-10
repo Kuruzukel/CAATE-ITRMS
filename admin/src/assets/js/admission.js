@@ -917,3 +917,77 @@ function showInfo(message) {
 function showWarning(message) {
     showToast(message, 'warning');
 }
+
+// Export functionality
+document.getElementById('exportAdmissionCsvBtn')?.addEventListener('click', function () {
+    exportAdmissionToCSV();
+});
+
+document.getElementById('exportAdmissionJsonBtn')?.addEventListener('click', function () {
+    exportAdmissionToJSON();
+});
+
+// Add New Admission button handler
+document.getElementById('addAdmissionBtn')?.addEventListener('click', function () {
+    showInfo('Add New Admission feature coming soon!');
+    // TODO: Implement Add New Admission modal
+    // const modal = new bootstrap.Modal(document.getElementById('addAdmissionModal'));
+    // modal.show();
+});
+
+function exportAdmissionToCSV() {
+    if (allAdmissions.length === 0) {
+        showError('No data to export');
+        return;
+    }
+
+    const headers = ['Name', 'Trainee ID', 'Course', 'Date', 'Status', 'Reference Number', 'Assessment Center', 'Assessment Date', 'Assessment Time'];
+    const rows = allAdmissions.map(adm => [
+        getFullName(adm),
+        adm.trainee_id || 'N/A',
+        adm.assessment_applied || adm.assessmentApplied || adm.course || adm.assessment_title || adm.assessmentTitle || 'N/A',
+        formatDate(adm.submitted_at || adm.admission_date || adm.created_at),
+        adm.status || 'pending',
+        adm.reference_number || adm.referenceNumber || 'N/A',
+        adm.assessment_center || adm.assessmentCenter || 'N/A',
+        adm.assessment_date || adm.assessmentDate || 'N/A',
+        adm.assessment_time || adm.assessmentTime || 'N/A'
+    ]);
+
+    let csvContent = headers.join(',') + '\n';
+    rows.forEach(row => {
+        csvContent += row.map(cell => `"${cell}"`).join(',') + '\n';
+    });
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `admissions_${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    showSuccess('Admissions exported to CSV successfully');
+}
+
+function exportAdmissionToJSON() {
+    if (allAdmissions.length === 0) {
+        showError('No data to export');
+        return;
+    }
+
+    const dataStr = JSON.stringify(allAdmissions, null, 2);
+    const blob = new Blob([dataStr], { type: 'application/json' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `admissions_${new Date().toISOString().split('T')[0]}.json`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    showSuccess('Admissions exported to JSON successfully');
+}

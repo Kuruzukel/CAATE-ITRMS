@@ -67,6 +67,7 @@ function handleRequest($uri, $method) {
         'GET:/api/v1/admissions/{id}' => ['AdmissionController', 'show'],
         'POST:/api/v1/admissions' => ['AdmissionController', 'store'],
         'PUT:/api/v1/admissions/{id}' => ['AdmissionController', 'update'],
+        'DELETE:/api/v1/admissions/{id}' => ['AdmissionController', 'destroy'],
         'GET:/api/v1/competencies' => ['CompetencyController', 'index'],
         'GET:/api/v1/competencies/{id}' => ['CompetencyController', 'show'],
         'POST:/api/v1/competencies' => ['CompetencyController', 'store'],

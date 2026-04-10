@@ -68,12 +68,9 @@ async function loadAdmissions() {
         if (result.success && result.data) {
             // Store data immediately first
             allAdmissions = result.data;
-            console.log('Loaded admissions (before enrichment):', allAdmissions.length);
 
             // Then enrich with trainee data
             allAdmissions = await enrichAdmissionsWithTraineeData(result.data);
-            console.log('Loaded admissions (after enrichment):', allAdmissions.length);
-            console.log('Sample admission:', allAdmissions[0]);
 
             updateStatistics(allAdmissions);
             renderAdmissionsTable(allAdmissions);
@@ -414,7 +411,11 @@ async function changeStatus(admId, newStatus) {
 }
 
 function viewDetails(admId) {
-    console.log('View details for admission:', admId);
+    const adm = allAdmissions.find(a => (a._id?.$oid || a._id) === admId);
+    if (!adm) {
+        showError('Admission not found');
+        return;
+    }
     // TODO: Implement view details modal
 }
 
@@ -929,11 +930,191 @@ document.getElementById('exportAdmissionJsonBtn')?.addEventListener('click', fun
 
 // Add New Admission button handler
 document.getElementById('addAdmissionBtn')?.addEventListener('click', function () {
-    showInfo('Add New Admission feature coming soon!');
-    // TODO: Implement Add New Admission modal
-    // const modal = new bootstrap.Modal(document.getElementById('addAdmissionModal'));
-    // modal.show();
+    // Load courses for the dropdown
+    loadCoursesForAddModal();
+
+    // Reset form
+    document.getElementById('addAdmissionForm')?.reset();
+
+    // Show the modal
+    const modal = new bootstrap.Modal(document.getElementById('addAdmissionModal'));
+    modal.show();
 });
+
+// Save Add Admission button handler
+document.getElementById('saveAddAdmissionBtn')?.addEventListener('click', async function () {
+    await saveNewAdmission();
+});
+
+// Load courses for add modal dropdown
+async function loadCoursesForAddModal() {
+    const dropdown = document.getElementById('addAssessmentApplied');
+
+    if (!dropdown) {
+        return;
+    }
+
+    try {
+        const apiUrl = `${config.api.baseUrl}/api/v1/courses`;
+        const response = await fetch(apiUrl);
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+
+        if (result.success && result.data && Array.isArray(result.data)) {
+            dropdown.innerHTML = '<option value="">Select an assessment...</option>';
+
+            if (result.data.length === 0) {
+                const option = document.createElement('option');
+                option.value = '';
+                option.textContent = 'No courses available';
+                option.disabled = true;
+                dropdown.appendChild(option);
+            } else {
+                result.data.forEach((course) => {
+                    const courseTitle = course.title || course.name || '';
+                    if (courseTitle) {
+                        const option = document.createElement('option');
+                        option.value = courseTitle;
+                        option.textContent = courseTitle;
+                        dropdown.appendChild(option);
+                    }
+                });
+            }
+
+            dropdown.disabled = false;
+        }
+    } catch (error) {
+        console.error('Error loading courses:', error);
+    }
+}
+
+// Save new admission
+async function saveNewAdmission() {
+    // Collect form data
+    const newAdmission = {
+        trainee_id: document.getElementById('addTraineeId')?.value || '',
+        reference_number: document.getElementById('addReferenceNumber')?.value || '',
+        applicant_name: document.getElementById('addApplicantName')?.value || '',
+        tel_number: document.getElementById('addTelNumber')?.value || '',
+        assessment_applied: document.getElementById('addAssessmentApplied')?.value || '',
+        or_number: document.getElementById('addOrNumber')?.value || '',
+        date_issued: document.getElementById('addDateIssued')?.value || '',
+        assessment_center: document.getElementById('addAssessmentCenter')?.value || '',
+        assessment_date: document.getElementById('addAssessmentDate')?.value || '',
+        assessment_time: document.getElementById('addAssessmentTime')?.value || '',
+        processing_officer_printed_name: document.getElementById('addProcessingOfficerPrintedName')?.value || '',
+        processing_officer_date: document.getElementById('addProcessingOfficerDate')?.value || '',
+        applicant_printed_name: document.getElementById('addApplicantPrintedName')?.value || '',
+        applicant_date: document.getElementById('addApplicantDate')?.value || '',
+        status: document.getElementById('addStatus')?.value || 'pending'
+    };
+
+    // Validate required fields
+    if (!newAdmission.applicant_name) {
+        showError('Applicant name is required');
+        return;
+    }
+
+    if (!newAdmission.tel_number) {
+        showError('Telephone number is required');
+        return;
+    }
+
+    if (!newAdmission.assessment_applied) {
+        showError('Assessment applied for is required');
+        return;
+    }
+
+    if (!newAdmission.assessment_center) {
+        showError('Assessment center is required');
+        return;
+    }
+
+    // Submitted Requirements
+    newAdmission.submitted_requirements = [];
+    if (document.getElementById('addReq1')?.checked) {
+        newAdmission.submitted_requirements.push('Accomplished Self-Assessment Guide');
+    }
+    if (document.getElementById('addReq2')?.checked) {
+        newAdmission.submitted_requirements.push('Three (3) pieces colored passport size pictures');
+    }
+
+    // Remarks
+    newAdmission.remarks = [];
+    if (document.getElementById('addRemark1')?.checked) {
+        newAdmission.remarks.push('Bring own Personal Protective Equipment');
+    }
+    if (document.getElementById('addRemark2')?.checked) {
+        newAdmission.remarks.push('Others. Pls. specify');
+    }
+
+    // Handle file uploads for picture
+    const pictureInput = document.getElementById('addPicture');
+    if (pictureInput && pictureInput.files && pictureInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            newAdmission.picture = e.target.result;
+        };
+        reader.readAsDataURL(pictureInput.files[0]);
+    }
+
+    // Handle file uploads for signatures
+    const processingOfficerSigInput = document.getElementById('addProcessingOfficerSignature');
+    if (processingOfficerSigInput && processingOfficerSigInput.files && processingOfficerSigInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            newAdmission.processing_officer_signature = e.target.result;
+        };
+        reader.readAsDataURL(processingOfficerSigInput.files[0]);
+    }
+
+    const applicantSigInput = document.getElementById('addApplicantSignature');
+    if (applicantSigInput && applicantSigInput.files && applicantSigInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            newAdmission.applicant_signature = e.target.result;
+        };
+        reader.readAsDataURL(applicantSigInput.files[0]);
+    }
+
+    // Add timestamps
+    newAdmission.submitted_at = new Date().toISOString();
+    newAdmission.created_at = new Date().toISOString();
+
+    try {
+        const response = await fetch(`${config.api.baseUrl}/api/v1/admissions`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newAdmission)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            showSuccess('Admission created successfully');
+
+            // Close modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('addAdmissionModal'));
+            if (modal) {
+                modal.hide();
+            }
+
+            // Reload admissions
+            await loadAdmissions();
+        } else {
+            showError('Failed to create admission: ' + result.message);
+        }
+    } catch (error) {
+        console.error('Error creating admission:', error);
+        showError('Failed to create admission: ' + error.message);
+    }
+}
 
 function exportAdmissionToCSV() {
     if (allAdmissions.length === 0) {

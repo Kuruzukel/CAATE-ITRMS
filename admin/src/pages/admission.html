@@ -1031,6 +1031,195 @@
         </div>
     </div>
 
+    <!-- Add New Admission Modal -->
+    <div class="modal fade" id="addAdmissionModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document" style="max-width: 95%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="bx bx-plus me-2"></i>Add New Admission</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" style="max-height: 75vh; overflow-y: auto;">
+                    <form id="addAdmissionForm">
+
+                        <!-- Reference Information -->
+                        <h6 class="mb-3"><i class="bx bx-id-card me-2"></i>Reference Information</h6>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="addTraineeId" class="form-label text-white">Trainee ID</label>
+                                <input type="text" id="addTraineeId" name="traineeId" class="form-control"
+                                    placeholder="Enter trainee ID">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="addReferenceNumber" class="form-label text-white">Reference Number</label>
+                                <input type="text" id="addReferenceNumber" name="referenceNumber" class="form-control"
+                                    placeholder="Enter 16-digit reference number" maxlength="16">
+                            </div>
+                        </div>
+
+                        <!-- Picture -->
+                        <h6 class="mb-3 mt-3"><i class="bx bx-image me-2"></i>Picture</h6>
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label for="addPicture" class="form-label text-white">Picture</label>
+                                <input type="file" id="addPicture" name="picture" class="form-control" accept="image/*">
+                            </div>
+                        </div>
+
+                        <!-- Applicant Information -->
+                        <h6 class="mb-3 mt-3"><i class="bx bx-user me-2"></i>Applicant Information</h6>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="addApplicantName" class="form-label text-white">Name of Applicant</label>
+                                <input type="text" id="addApplicantName" name="applicantName" class="form-control"
+                                    placeholder="Enter full name" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="addTelNumber" class="form-label text-white">Tel. Number</label>
+                                <input type="tel" id="addTelNumber" name="telNumber" class="form-control"
+                                    placeholder="09XX XXX XXXX" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="addAssessmentApplied" class="form-label text-white">Assessment Applied
+                                    for</label>
+                                <select id="addAssessmentApplied" name="assessmentApplied" class="form-select" required>
+                                    <option value="">Select an assessment...</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="addOrNumber" class="form-label text-white">Official Receipt Number</label>
+                                <input type="text" id="addOrNumber" name="orNumber" class="form-control"
+                                    placeholder="OR Number">
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="addDateIssued" class="form-label text-white">Date Issued</label>
+                                <input type="date" id="addDateIssued" name="dateIssued" class="form-control">
+                            </div>
+                        </div>
+
+                        <!-- Processing Officer Section -->
+                        <h6 class="mb-3 mt-3"><i class="bx bx-clipboard me-2"></i>Processing Officer Section</h6>
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label for="addAssessmentCenter" class="form-label text-white">Name of Assessment
+                                    Center</label>
+                                <select id="addAssessmentCenter" name="assessmentCenter" class="form-select" required>
+                                    <option value="">Select assessment center...</option>
+                                    <option value="Creative Aesthetic Academy & Technical Education Inc.">
+                                        Creative Aesthetic Academy & Technical Education Inc.
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label text-white">Submitted Requirements</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="addReq1"
+                                        name="submittedRequirements">
+                                    <label class="form-check-label text-white" for="addReq1">
+                                        Accomplished Self-Assessment Guide
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="addReq2"
+                                        name="submittedRequirements">
+                                    <label class="form-check-label text-white" for="addReq2">
+                                        Three (3) pieces colored passport size pictures
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label text-white">Remarks</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="addRemark1" name="remarks">
+                                    <label class="form-check-label text-white" for="addRemark1">
+                                        Bring own Personal Protective Equipment
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="addRemark2" name="remarks">
+                                    <label class="form-check-label text-white" for="addRemark2">
+                                        Others. Pls. specify
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="addAssessmentDate" class="form-label text-white">Assessment Date</label>
+                                <input type="date" id="addAssessmentDate" name="assessmentDate" class="form-control">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="addAssessmentTime" class="form-label text-white">Assessment Time</label>
+                                <input type="time" id="addAssessmentTime" name="assessmentTime" class="form-control">
+                            </div>
+                        </div>
+
+                        <!-- Signatures -->
+                        <h6 class="mb-3 mt-3"><i class="bx bx-pen me-2"></i>Signatures</h6>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label text-white">Processing Officer's Signature</label>
+                                <input type="file" id="addProcessingOfficerSignature" name="processingOfficerSignature"
+                                    class="form-control" accept="image/*">
+                                <div class="mt-2">
+                                    <label for="addProcessingOfficerPrintedName" class="form-label text-white">Printed
+                                        Name</label>
+                                    <input type="text" id="addProcessingOfficerPrintedName"
+                                        name="processingOfficerPrintedName" class="form-control"
+                                        placeholder="Enter name">
+                                </div>
+                                <div class="mt-2">
+                                    <label for="addProcessingOfficerDate" class="form-label text-white">Date</label>
+                                    <input type="date" id="addProcessingOfficerDate" name="processingOfficerDate"
+                                        class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label text-white">Applicant's Signature</label>
+                                <input type="file" id="addApplicantSignature" name="applicantSignature"
+                                    class="form-control" accept="image/*">
+                                <div class="mt-2">
+                                    <label for="addApplicantPrintedName" class="form-label text-white">Printed
+                                        Name</label>
+                                    <input type="text" id="addApplicantPrintedName" name="applicantPrintedName"
+                                        class="form-control" placeholder="Enter name">
+                                </div>
+                                <div class="mt-2">
+                                    <label for="addApplicantDate" class="form-label text-white">Date</label>
+                                    <input type="date" id="addApplicantDate" name="applicantDate" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Status -->
+                        <h6 class="mb-3 mt-3"><i class="bx bx-receipt me-2"></i>Admission Status</h6>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="addStatus" class="form-label text-white">Status</label>
+                                <select id="addStatus" name="status" class="form-select">
+                                    <option value="pending" selected>Pending</option>
+                                    <option value="approved">Approved</option>
+                                    <option value="cancelled">Cancelled</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="saveAddAdmissionBtn">
+                        <i class="bx bx-save me-2"></i>Save Admission
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="../assets/vendor/libs/jquery/jquery.js"></script>
     <script src="../assets/vendor/libs/popper/popper.js"></script>
     <script src="../assets/vendor/js/bootstrap.js"></script>

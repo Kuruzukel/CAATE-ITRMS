@@ -460,66 +460,156 @@
     </div>
 
     <div class="modal fade" id="viewProfileModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-dialog modal-xl modal-dialog-centered" role="document" style="max-width: 95%;">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title"><i class="bx bx-user-check me-2"></i>Admission Details</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <form>
+                <div class="modal-body" style="max-height: 75vh; overflow-y: auto;">
 
-                        <div class="mb-4">
-                            <h6 class="mb-3" style="color: var(--primary-color); font-weight: 600;">
-                                <i class="bx bx-user me-2"></i>Personal Information
-                            </h6>
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Name</label>
-                                    <input type="text" class="form-control" value="Anna Cruz" readonly>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Trainee ID</label>
-                                    <input type="text" class="form-control" value="TRN-2026-001" readonly>
-                                </div>
+                    <!-- Reference Information -->
+                    <h6 class="mb-3"><i class="bx bx-id-card me-2"></i>Reference Information</h6>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-white">Trainee ID</label>
+                            <p class="form-control-plaintext text-white" id="viewAdmTraineeId">-</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-white">Reference Number</label>
+                            <p class="form-control-plaintext text-white" id="viewAdmReferenceNumber">-</p>
+                        </div>
+                    </div>
+
+                    <!-- Picture -->
+                    <h6 class="mb-3 mt-3"><i class="bx bx-image me-2"></i>Picture</h6>
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <div id="viewAdmPictureContainer">
+                                <img id="viewAdmPicture" src="" alt="Applicant Picture"
+                                    style="max-width: 200px; max-height: 200px; display: none;" class="img-thumbnail">
+                                <p class="text-white-50" id="viewAdmNoPicture">No picture uploaded</p>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="mb-4">
-                            <h6 class="mb-3" style="color: var(--primary-color); font-weight: 600;">
-                                <i class="bx bx-book-open me-2"></i>Admission Details
-                            </h6>
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Course</label>
-                                    <input type="text" class="form-control" value="Beauty Care (Skin Care) NC II"
-                                        readonly>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Admission Date</label>
-                                    <input type="text" class="form-control" value="Jan 15, 2026" readonly>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Status</label>
-                                    <input type="text" class="form-control" value="Approved" readonly>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Admission Type</label>
-                                    <input type="text" class="form-control" value="Regular" readonly>
-                                </div>
+                    <!-- Applicant Information -->
+                    <h6 class="mb-3 mt-3"><i class="bx bx-user me-2"></i>Applicant Information</h6>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-white">Name of Applicant</label>
+                            <p class="form-control-plaintext text-white" id="viewAdmApplicantName">-</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-white">Tel. Number</label>
+                            <p class="form-control-plaintext text-white" id="viewAdmTelNumber">-</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-white">Assessment Applied for</label>
+                            <p class="form-control-plaintext text-white" id="viewAdmAssessmentApplied">-</p>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label text-white">Official Receipt Number</label>
+                            <p class="form-control-plaintext text-white" id="viewAdmOrNumber">-</p>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label text-white">Date Issued</label>
+                            <p class="form-control-plaintext text-white" id="viewAdmDateIssued">-</p>
+                        </div>
+                    </div>
+
+                    <!-- Processing Officer Section -->
+                    <h6 class="mb-3 mt-3"><i class="bx bx-clipboard me-2"></i>Processing Officer Section</h6>
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label text-white">Name of Assessment Center</label>
+                            <p class="form-control-plaintext text-white" id="viewAdmAssessmentCenter">-</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-white">Submitted Requirements</label>
+                            <div id="viewAdmSubmittedRequirements">
+                                <p class="text-white-50">No requirements submitted</p>
                             </div>
                         </div>
-
-                        <div class="mb-3">
-                            <h6 class="mb-3" style="color: var(--primary-color); font-weight: 600;">
-                                <i class="bx bx-note me-2"></i>Admin Notes
-                            </h6>
-                            <textarea class="form-control" rows="3"
-                                readonly>Admission approved, ready for enrollment.</textarea>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-white">Remarks</label>
+                            <div id="viewAdmRemarks">
+                                <p class="text-white-50">No remarks</p>
+                            </div>
                         </div>
-                    </form>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-white">Assessment Date</label>
+                            <p class="form-control-plaintext text-white" id="viewAdmAssessmentDate">-</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-white">Assessment Time</label>
+                            <p class="form-control-plaintext text-white" id="viewAdmAssessmentTime">-</p>
+                        </div>
+                    </div>
+
+                    <!-- Signatures -->
+                    <h6 class="mb-3 mt-3"><i class="bx bx-pen me-2"></i>Signatures</h6>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-white">Processing Officer's Signature</label>
+                            <div id="viewAdmProcessingOfficerSigContainer">
+                                <img id="viewAdmProcessingOfficerSig" src="" alt="Processing Officer Signature"
+                                    style="max-width: 200px; max-height: 100px; display: none; background-color: white !important; padding: 10px; border: 1px solid #dee2e6;"
+                                    class="img-thumbnail">
+                                <p class="text-white-50" id="viewAdmNoProcessingOfficerSig">No signature uploaded</p>
+                            </div>
+                            <div class="mt-2">
+                                <label class="form-label text-white">Printed Name</label>
+                                <p class="form-control-plaintext text-white" id="viewAdmProcessingOfficerPrintedName">-
+                                </p>
+                            </div>
+                            <div class="mt-2">
+                                <label class="form-label text-white">Date</label>
+                                <p class="form-control-plaintext text-white" id="viewAdmProcessingOfficerDate">-</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-white">Applicant's Signature</label>
+                            <div id="viewAdmApplicantSigContainer">
+                                <img id="viewAdmApplicantSig" src="" alt="Applicant Signature"
+                                    style="max-width: 200px; max-height: 100px; display: none; background-color: white !important; padding: 10px; border: 1px solid #dee2e6;"
+                                    class="img-thumbnail">
+                                <p class="text-white-50" id="viewAdmNoApplicantSig">No signature uploaded</p>
+                            </div>
+                            <div class="mt-2">
+                                <label class="form-label text-white">Printed Name</label>
+                                <p class="form-control-plaintext text-white" id="viewAdmApplicantPrintedName">-</p>
+                            </div>
+                            <div class="mt-2">
+                                <label class="form-label text-white">Date</label>
+                                <p class="form-control-plaintext text-white" id="viewAdmApplicantDate">-</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Status -->
+                    <h6 class="mb-3 mt-3"><i class="bx bx-receipt me-2"></i>Admission Status</h6>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label text-white">Status</label>
+                            <p class="form-control-plaintext text-white" id="viewAdmStatus">-</p>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label text-white">Submitted At</label>
+                            <p class="form-control-plaintext text-white" id="viewAdmSubmittedAt">-</p>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label text-white">Last Updated</label>
+                            <p class="form-control-plaintext text-white" id="viewAdmUpdatedAt">-</p>
+                        </div>
+                    </div>
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>

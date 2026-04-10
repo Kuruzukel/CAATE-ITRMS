@@ -416,7 +416,101 @@ function viewDetails(admId) {
         showError('Admission not found');
         return;
     }
-    // TODO: Implement view details modal
+
+    // Populate Reference Information
+    document.getElementById('viewAdmTraineeId').textContent = adm.trainee_id || adm.traineeId || 'N/A';
+    document.getElementById('viewAdmReferenceNumber').textContent = adm.reference_number || adm.referenceNumber || 'N/A';
+
+    // Handle Picture
+    const pictureImg = document.getElementById('viewAdmPicture');
+    const noPictureText = document.getElementById('viewAdmNoPicture');
+    if (adm.picture) {
+        pictureImg.src = adm.picture;
+        pictureImg.style.display = 'block';
+        noPictureText.style.display = 'none';
+    } else {
+        pictureImg.style.display = 'none';
+        noPictureText.style.display = 'block';
+    }
+
+    // Populate Applicant Information
+    document.getElementById('viewAdmApplicantName').textContent = adm.applicant_name || adm.applicantName || 'N/A';
+    document.getElementById('viewAdmTelNumber').textContent = adm.tel_number || adm.telNumber || 'N/A';
+    document.getElementById('viewAdmAssessmentApplied').textContent = adm.assessment_applied || adm.assessmentApplied || 'N/A';
+    document.getElementById('viewAdmOrNumber').textContent = adm.or_number || adm.orNumber || 'N/A';
+    document.getElementById('viewAdmDateIssued').textContent = adm.date_issued || adm.dateIssued || 'N/A';
+
+    // Populate Processing Officer Section
+    document.getElementById('viewAdmAssessmentCenter').textContent = adm.assessment_center || adm.assessmentCenter || 'N/A';
+
+    // Handle Submitted Requirements
+    const submittedReqs = adm.submitted_requirements || adm.submittedRequirements || [];
+    const reqsContainer = document.getElementById('viewAdmSubmittedRequirements');
+    if (submittedReqs.length > 0) {
+        reqsContainer.innerHTML = submittedReqs.map(req =>
+            `<div class="form-check"><input class="form-check-input" type="checkbox" checked disabled><label class="form-check-label text-white">${req}</label></div>`
+        ).join('');
+    } else {
+        reqsContainer.innerHTML = '<p class="text-white-50">No requirements submitted</p>';
+    }
+
+    // Handle Remarks
+    const remarks = adm.remarks || [];
+    const remarksContainer = document.getElementById('viewAdmRemarks');
+    if (remarks.length > 0) {
+        remarksContainer.innerHTML = remarks.map(remark =>
+            `<div class="form-check"><input class="form-check-input" type="checkbox" checked disabled><label class="form-check-label text-white">${remark}</label></div>`
+        ).join('');
+    } else {
+        remarksContainer.innerHTML = '<p class="text-white-50">No remarks</p>';
+    }
+
+    document.getElementById('viewAdmAssessmentDate').textContent = adm.assessment_date || adm.assessmentDate || 'N/A';
+    document.getElementById('viewAdmAssessmentTime').textContent = adm.assessment_time || adm.assessmentTime || 'N/A';
+
+    // Handle Processing Officer Signature
+    const processingOfficerSigImg = document.getElementById('viewAdmProcessingOfficerSig');
+    const noProcessingOfficerSigText = document.getElementById('viewAdmNoProcessingOfficerSig');
+    if (adm.processing_officer_signature || adm.processingOfficerSignature) {
+        processingOfficerSigImg.src = adm.processing_officer_signature || adm.processingOfficerSignature;
+        processingOfficerSigImg.style.display = 'block';
+        noProcessingOfficerSigText.style.display = 'none';
+    } else {
+        processingOfficerSigImg.style.display = 'none';
+        noProcessingOfficerSigText.style.display = 'block';
+    }
+
+    document.getElementById('viewAdmProcessingOfficerPrintedName').textContent =
+        adm.processing_officer_printed_name || adm.processingOfficerPrintedName || 'N/A';
+    document.getElementById('viewAdmProcessingOfficerDate').textContent =
+        adm.processing_officer_date || adm.processingOfficerDate || 'N/A';
+
+    // Handle Applicant Signature
+    const applicantSigImg = document.getElementById('viewAdmApplicantSig');
+    const noApplicantSigText = document.getElementById('viewAdmNoApplicantSig');
+    if (adm.applicant_signature || adm.applicantSignature) {
+        applicantSigImg.src = adm.applicant_signature || adm.applicantSignature;
+        applicantSigImg.style.display = 'block';
+        noApplicantSigText.style.display = 'none';
+    } else {
+        applicantSigImg.style.display = 'none';
+        noApplicantSigText.style.display = 'block';
+    }
+
+    document.getElementById('viewAdmApplicantPrintedName').textContent =
+        adm.applicant_printed_name || adm.applicantPrintedName || 'N/A';
+    document.getElementById('viewAdmApplicantDate').textContent =
+        adm.applicant_date || adm.applicantDate || 'N/A';
+
+    // Populate Status
+    const statusBadge = getStatusBadge(adm.status);
+    document.getElementById('viewAdmStatus').innerHTML = statusBadge;
+    document.getElementById('viewAdmSubmittedAt').textContent = formatDate(adm.submitted_at || adm.submittedAt || adm.created_at);
+    document.getElementById('viewAdmUpdatedAt').textContent = formatDate(adm.updated_at || adm.updatedAt);
+
+    // Show modal
+    const modal = new bootstrap.Modal(document.getElementById('viewProfileModal'));
+    modal.show();
 }
 
 function editDetails(admId) {

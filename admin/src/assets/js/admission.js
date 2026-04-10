@@ -44,6 +44,12 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
+
+    // Add event listener for confirm delete button
+    const confirmDeleteAdmBtn = document.getElementById('confirmDeleteAdmBtn');
+    if (confirmDeleteAdmBtn) {
+        confirmDeleteAdmBtn.addEventListener('click', confirmDeleteAdmission);
+    }
 });
 
 let allAdmissions = [];
@@ -127,23 +133,35 @@ async function loadCoursesForFilter() {
 }
 
 async function enrichAdmissionsWithTraineeData(admissions) {
+    // Option 1: Disable enrichment to avoid 404 errors
+    // Simply return admissions without enrichment
+    return admissions;
+
+    /* Option 2: Keep enrichment but handle errors silently
     const enrichedAdmissions = await Promise.all(
         admissions.map(async (adm) => {
             // If trainee_id exists, fetch trainee details
             if (adm.trainee_id) {
                 try {
                     const traineeResponse = await fetch(`${config.api.baseUrl}/api/v1/trainees/${adm.trainee_id}`);
-                    const traineeResult = await traineeResponse.json();
 
-                    if (traineeResult.success && traineeResult.data) {
-                        // Add trainee data to admission object
-                        return {
-                            ...adm,
-                            traineeData: traineeResult.data
-                        };
+                    // Check if response is ok (status 200-299)
+                    if (traineeResponse.ok) {
+                        const traineeResult = await traineeResponse.json();
+
+                        if (traineeResult.success && traineeResult.data) {
+                            // Add trainee data to admission object
+                            return {
+                                ...adm,
+                                traineeData: traineeResult.data
+                            };
+                        }
                     }
+                    // For any non-ok response (including 404), just return admission without trainee data
+                    return adm;
                 } catch (error) {
-                    console.warn(`Failed to fetch trainee data for ${adm.trainee_id}:`, error);
+                    // Network error or other issues, silently continue
+                    return adm;
                 }
             }
             return adm;
@@ -151,6 +169,7 @@ async function enrichAdmissionsWithTraineeData(admissions) {
     );
 
     return enrichedAdmissions;
+    */
 }
 
 function updateStatistics(admissions) {
@@ -825,8 +844,33 @@ function formatDateForInput(dateValue) {
     }
 }
 
-async function deleteAdmission(admId) {
-    if (!confirm('Are you sure you want to delete this admission record?')) {
+function deleteAdmission(admId) {
+    const adm = allAdmissions.find(a => (a._id?.$oid || a._id) === admId);
+    if (!adm) {
+        showError('Admission not found');
+        return;
+    }
+
+    // Store the admission ID in hidden field
+    document.getElementById('deleteAdmissionId').value = admId;
+
+    // Populate the modal with admission details
+    document.getElementById('deleteAdmFullName').textContent = getFullName(adm);
+    document.getElementById('deleteAdmTraineeId').textContent = adm.trainee_id || adm.traineeId || 'N/A';
+    document.getElementById('deleteAdmCourse').textContent = adm.assessment_applied || adm.assessmentApplied || adm.course || adm.assessment_title || adm.assessmentTitle || 'N/A';
+    document.getElementById('deleteAdmDate').textContent = formatDate(adm.submitted_at || adm.admission_date || adm.created_at);
+
+    // Show the modal
+    const modal = new bootstrap.Modal(document.getElementById('deleteModal'));
+    modal.show();
+}
+
+async function confirmDeleteAdmission() {
+    const admId = document.getElementById('deleteAdmissionId').value;
+    const confirmText = document.getElementById('deleteAdmConfirmText').value;
+
+    if (confirmText.toLowerCase() !== 'delete') {
+        showError('Please type "delete" to confirm');
         return;
     }
 
@@ -841,14 +885,23 @@ async function deleteAdmission(admId) {
         const result = await response.json();
 
         if (result.success) {
-            await loadAdmissions();
             showSuccess('Admission record deleted successfully');
+
+            // Close modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('deleteModal'));
+            modal.hide();
+
+            // Clear confirmation text
+            document.getElementById('deleteAdmConfirmText').value = '';
+
+            // Reload admissions
+            await loadAdmissions();
         } else {
             showError('Failed to delete admission: ' + result.message);
         }
     } catch (error) {
         console.error('Error deleting admission:', error);
-        showError('Error deleting admission');
+        showError('Failed to delete admission: ' + error.message);
     }
 }
 

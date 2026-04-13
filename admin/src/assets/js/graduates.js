@@ -386,6 +386,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         if (allGraduateCards.length === 0) {
+            updateShowingText();
             return;
         }
 
@@ -409,6 +410,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         updatePaginationButtons();
+        updateShowingText();
     }
 
     // Render pagination buttons
@@ -507,6 +509,22 @@ document.addEventListener('DOMContentLoaded', function () {
                 btn.parentElement.classList.remove('active');
             }
         });
+    }
+
+    // Update showing text
+    function updateShowingText() {
+        const showingText = document.querySelector('.showing-text');
+        if (!showingText) return;
+
+        const totalGraduates = allGraduateCards.length;
+
+        if (totalGraduates === 0) {
+            showingText.textContent = 'Showing 0 to 0 of 0 graduates';
+        } else {
+            const startIndex = (currentPage - 1) * cardsPerPage + 1;
+            const endIndex = Math.min(currentPage * cardsPerPage, totalGraduates);
+            showingText.textContent = `Showing ${startIndex} to ${endIndex} of ${totalGraduates} graduates`;
+        }
     }
 
     // Initialize pagination on page load
@@ -884,6 +902,26 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 if (card) {
                     card.remove();
+
+                    // Check if there are any graduates left
+                    const graduatesGrid = document.getElementById('graduatesGrid');
+                    const remainingCards = graduatesGrid.querySelectorAll('.col');
+
+                    if (remainingCards.length === 0) {
+                        // Show empty state
+                        graduatesGrid.style.justifyContent = 'center';
+                        graduatesGrid.style.alignItems = 'center';
+
+                        graduatesGrid.innerHTML = `
+                            <div class="col-12" style="display: flex; justify-content: center; align-items: center; width: 100%;">
+                                <div style="text-align: center;">
+                                    <i class="bx bxs-graduation" style="font-size: 4rem; opacity: 0.3; color: #697a8d; display: block; margin: 0 auto 15px;"></i>
+                                    <h5 style="margin-bottom: 10px; color: #697a8d;">No Graduates Yet</h5>
+                                    <p style="margin: 5px 0 0 0; font-size: 0.9rem; opacity: 0.7; color: #697a8d;">Click "Add New Graduate" to create your first graduate record.</p>
+                                </div>
+                            </div>
+                        `;
+                    }
 
                     // Re-initialize pagination after deletion
                     initializePagination();

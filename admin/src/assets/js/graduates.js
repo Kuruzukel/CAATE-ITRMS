@@ -4,6 +4,62 @@ document.addEventListener('DOMContentLoaded', function () {
     let currentPage = 1;
     let allGraduateCards = [];
 
+    // Load certifications from courses API
+    async function loadCertifications() {
+        try {
+            const response = await fetch(`${config.api.baseUrl}/api/v1/courses`);
+            const result = await response.json();
+
+            if (result.success && result.data && Array.isArray(result.data)) {
+                const addCertSelect = document.getElementById('addGraduateCertification');
+                const editCertSelect = document.getElementById('editGraduateCertification');
+
+                // Clear existing options except the first one
+                if (addCertSelect) {
+                    addCertSelect.innerHTML = '<option value="">Select Certification</option>';
+                }
+                if (editCertSelect) {
+                    editCertSelect.innerHTML = '<option value="">Select Certification</option>';
+                }
+
+                // Get unique badges/certifications from courses
+                const certifications = new Set();
+                result.data.forEach(course => {
+                    const badge = course.badge || course.course_code;
+                    if (badge) {
+                        certifications.add(badge);
+                    }
+                });
+
+                // Convert to array and sort
+                const sortedCertifications = Array.from(certifications).sort();
+
+                // Add options to both dropdowns
+                sortedCertifications.forEach(cert => {
+                    if (addCertSelect) {
+                        const option = document.createElement('option');
+                        option.value = cert;
+                        option.textContent = cert;
+                        addCertSelect.appendChild(option);
+                    }
+                    if (editCertSelect) {
+                        const option = document.createElement('option');
+                        option.value = cert;
+                        option.textContent = cert;
+                        editCertSelect.appendChild(option);
+                    }
+                });
+
+                console.log('Loaded certifications:', sortedCertifications);
+            }
+        } catch (error) {
+            console.error('Error loading certifications:', error);
+        }
+    }
+
+    // Load certifications on page load
+    loadCertifications();
+
     // Initialize pagination
     function initializePagination() {
         // Get the specific graduates grid container
@@ -144,6 +200,139 @@ document.addEventListener('DOMContentLoaded', function () {
     // Initialize pagination on page load
     initializePagination();
 
+    // Export as CSV button
+    document.getElementById('exportGraduatesCsvBtn')?.addEventListener('click', function () {
+        exportGraduatesToCSV();
+    });
+
+    // Export as JSON button
+    document.getElementById('exportGraduatesJsonBtn')?.addEventListener('click', function () {
+        exportGraduatesToJSON();
+    });
+
+    // Add Graduate button
+    document.getElementById('addGraduateBtn')?.addEventListener('click', function () {
+        // Reset form
+        document.getElementById('addGraduateForm')?.reset();
+        document.getElementById('addGraduateImagePreview').src = '../assets/images/DEFAULT_AVATAR.png';
+
+        // Open add graduate modal
+        const modal = new bootstrap.Modal(document.getElementById('addGraduateModal'));
+        modal.show();
+    });
+
+    // Handle image upload preview for add graduate
+    document.getElementById('addGraduateImageInput')?.addEventListener('change', function (e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                document.getElementById('addGraduateImagePreview').src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Save new graduate button
+    document.getElementById('saveNewGraduateBtn')?.addEventListener('click', function () {
+        const form = document.getElementById('addGraduateForm');
+        if (form.checkValidity()) {
+            // Get form values
+            const certification = document.getElementById('addGraduateCertification').value;
+            const name = document.getElementById('addGraduateName').value;
+            const id = document.getElementById('addGraduateId').value;
+            const course = document.getElementById('addGraduateCourse').value;
+            const graduated = document.getElementById('addGraduateDate').value;
+            const email = document.getElementById('addGraduateEmail').value;
+            const image = document.getElementById('addGraduateImagePreview').src;
+
+            // Here you would typically send this data to your backend API
+            // For now, we'll just show a success message
+            alert('Graduate added successfully!\n\nName: ' + name + '\nID: ' + id + '\nCertification: ' + certification + '\nCourse: ' + course);
+
+            // Close modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('addGraduateModal'));
+            modal.hide();
+
+            // TODO: Add the new graduate card to the page dynamically
+            // or reload the graduates list from the API
+        } else {
+            form.reportValidity();
+        }
+    });
+
+    // Export to CSV function
+    function exportGraduatesToCSV() {
+        const csvData = [
+            ['Name', 'Student ID', 'Course', 'Certification', 'Graduation Date', 'Email']
+        ];
+
+        document.querySelectorAll('.view-graduate-btn').forEach(btn => {
+            const name = btn.getAttribute('data-name');
+            const id = btn.getAttribute('data-id');
+            const course = btn.getAttribute('data-course');
+            const graduated = btn.getAttribute('data-graduated');
+            const email = btn.getAttribute('data-email');
+            const certification = btn.getAttribute('data-certification') || 'NC II - SOCBCN220';
+
+            csvData.push([name, id, course, certification, graduated, email]);
+        });
+
+        if (csvData.length === 1) {
+            alert('No graduates to export.');
+            return;
+        }
+
+        const csvContent = csvData.map(row => row.map(cell => `"${cell}"`).join(',')).join('\n');
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', `graduates_${new Date().toISOString().split('T')[0]}.csv`);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        alert('Graduates exported to CSV successfully! (' + (csvData.length - 1) + ' records)');
+    }
+
+    // Export to JSON function
+    function exportGraduatesToJSON() {
+        const graduatesData = [];
+
+        document.querySelectorAll('.view-graduate-btn').forEach(btn => {
+            const graduate = {
+                name: btn.getAttribute('data-name'),
+                id: btn.getAttribute('data-id'),
+                course: btn.getAttribute('data-course'),
+                certification: btn.getAttribute('data-certification') || 'NC II - SOCBCN220',
+                graduated: btn.getAttribute('data-graduated'),
+                email: btn.getAttribute('data-email'),
+                image: btn.getAttribute('data-image')
+            };
+            graduatesData.push(graduate);
+        });
+
+        if (graduatesData.length === 0) {
+            alert('No graduates to export.');
+            return;
+        }
+
+        const jsonContent = JSON.stringify(graduatesData, null, 2);
+        const blob = new Blob([jsonContent], { type: 'application/json' });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', `graduates_${new Date().toISOString().split('T')[0]}.json`);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        alert('Graduates exported to JSON successfully! (' + graduatesData.length + ' records)');
+    }
+
     document.querySelectorAll('.view-graduate-btn').forEach(button => {
         button.addEventListener('click', function () {
             const name = this.getAttribute('data-name');
@@ -172,7 +361,12 @@ document.addEventListener('DOMContentLoaded', function () {
             const certification = this.getAttribute('data-certification');
             const image = this.getAttribute('data-image');
 
-            document.getElementById('editGraduateBadge').textContent = certification || 'NC II - SOCBCN220';
+            // Set certification dropdown value
+            const certSelect = document.getElementById('editGraduateCertification');
+            if (certSelect) {
+                certSelect.value = certification || 'NC II - SOCBCN220';
+            }
+
             document.getElementById('editGraduateName').value = name;
             document.getElementById('editGraduateId').value = id;
             document.getElementById('editGraduateCourse').value = course;

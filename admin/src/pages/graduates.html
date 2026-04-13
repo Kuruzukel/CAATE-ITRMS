@@ -357,10 +357,25 @@
                                 <div class="card">
                                     <div class="card-header d-flex justify-content-between align-items-center">
                                         <h5 class="mb-0">All Graduates</h5>
-                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                            data-bs-target="#exportModal">
-                                            <i class="bx bx-download"></i> Export List
-                                        </button>
+                                        <div class="d-flex gap-2">
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-primary dropdown-toggle"
+                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="bx bx-download"></i> Export
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li><a class="dropdown-item" href="javascript:void(0);"
+                                                            id="exportGraduatesCsvBtn"><i
+                                                                class="bx bx-file me-2"></i>Export as CSV</a></li>
+                                                    <li><a class="dropdown-item" href="javascript:void(0);"
+                                                            id="exportGraduatesJsonBtn"><i
+                                                                class="bx bx-code-alt me-2"></i>Export as JSON</a></li>
+                                                </ul>
+                                            </div>
+                                            <button type="button" class="btn btn-primary" id="addGraduateBtn">
+                                                <i class="bx bx-plus"></i> Add New Graduate
+                                            </button>
+                                        </div>
                                     </div>
                                     <div class="card-body">
 
@@ -1655,6 +1670,105 @@
     </div>
 
 
+    <!-- Add New Graduate Modal -->
+    <div class="modal fade" id="addGraduateModal" tabindex="-1" aria-labelledby="addGraduateModalLabel">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addGraduateModalLabel"><i class="bx bx-plus me-2"></i>Add New Graduate
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="text-center">
+                                <img id="addGraduateImagePreview" src="../assets/images/DEFAULT_AVATAR.png"
+                                    alt="Graduate Photo" class="img-fluid mb-3"
+                                    style="width: 100%; max-width: 400px; height: auto; object-fit: cover; border-radius: 8px;">
+                                <input type="file" id="addGraduateImageInput" accept="image/*" style="display: none;">
+                                <button type="button" class="btn btn-sm btn-outline-primary"
+                                    onclick="document.getElementById('addGraduateImageInput').click()">
+                                    <i class="bx bx-upload"></i> Upload Photo
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <form id="addGraduateForm">
+                                <div class="mb-3">
+                                    <label for="addGraduateCertification" class="form-label">CERTIFICATION</label>
+                                    <select class="form-select" id="addGraduateCertification" required>
+                                        <option value="">Select Certification</option>
+                                        <!-- Options will be loaded dynamically from courses API -->
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="addGraduateName" class="form-label">Full Name</label>
+                                    <input type="text" class="form-control" id="addGraduateName"
+                                        placeholder="Enter full name" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="addGraduateId" class="form-label">Trainee ID</label>
+                                    <input type="text" class="form-control" id="addGraduateId" placeholder="TRN-0000-00"
+                                        required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="addGraduateCourse" class="form-label">Course</label>
+                                    <select class="form-select" id="addGraduateCourse" required>
+                                        <option value="">Select Course</option>
+                                        <option value="Beauty Care (Nail Care) NC II">Beauty Care (Nail Care) NC II
+                                        </option>
+                                        <option value="Beauty Care (Skin Care) NC II">Beauty Care (Skin Care) NC II
+                                        </option>
+                                        <option value="Trainers Methodology Level I">Trainers Methodology Level I
+                                        </option>
+                                        <option value="Eyelash and Eyebrow Services Level III">Eyelash and Eyebrow
+                                            Services Level III</option>
+                                        <option value="Aesthetic Services Level II">Aesthetic Services Level II</option>
+                                        <option value="Aesthetic Services Level III">Aesthetic Services Level III
+                                        </option>
+                                        <option value="Advanced Skin Care Services Level III">Advanced Skin Care
+                                            Services Level III</option>
+                                        <option value="Permanent Make-Up Tattoo Services Level III">Permanent Make-Up
+                                            Tattoo Services Level III</option>
+                                        <option value="Perform Collagen Induction Therapy & Hair Loss Treatment">Perform
+                                            Collagen Induction Therapy & Hair Loss Treatment</option>
+                                        <option value="Perform Advanced Facial Treatment & Chemical Skin Peeling">
+                                            Perform Advanced Facial Treatment & Chemical Skin Peeling</option>
+                                        <option value="Perform Light Therapy & Heat Therapy">Perform Light Therapy &
+                                            Heat Therapy</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="addGraduateDate" class="form-label">Graduation Date</label>
+                                    <input type="text" class="form-control" id="addGraduateDate"
+                                        placeholder="e.g., Jan 2026" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="addGraduateEmail" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="addGraduateEmail"
+                                        placeholder="graduate@email.com" required>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="saveNewGraduateBtn">
+                        <i class="bx bx-save"></i> Add Graduate
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Graduate Modal -->
     <div class="modal fade" id="editGraduateModal" tabindex="-1" aria-labelledby="editGraduateModalLabel">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
@@ -1676,11 +1790,11 @@
                         <div class="col-md-6">
                             <form id="editGraduateForm">
                                 <div class="mb-3">
-                                    <label class="form-label">CERTIFICATION</label>
-                                    <div>
-                                        <span class="badge" id="editGraduateBadge"
-                                            style="background-color: #5bc0de; color: #ffffff;">NC II - SOCBCN220</span>
-                                    </div>
+                                    <label for="editGraduateCertification" class="form-label">CERTIFICATION</label>
+                                    <select class="form-select" id="editGraduateCertification" required>
+                                        <option value="">Select Certification</option>
+                                        <!-- Options will be loaded dynamically from courses API -->
+                                    </select>
                                 </div>
 
                                 <div class="mb-3">

@@ -400,6 +400,71 @@
         <div class="layout-overlay"></div>
     </div>
 
+    <!-- View Trainee Details Modal -->
+    <div class="modal fade" id="viewTraineeModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="bx bx-user me-2"></i>Trainee Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-3">
+                        <div class="col-md-12 text-center mb-4">
+                            <div id="viewTraineeAvatar" class="avatar avatar-xl mx-auto" style="width: 100px; height: 100px; background: linear-gradient(135deg, rgba(54, 145, 191, 0.1) 0%, rgba(50, 85, 150, 0.1) 100%); 
+                                backdrop-filter: blur(10px) saturate(180%); 
+                                -webkit-backdrop-filter: blur(10px) saturate(180%); 
+                                border: 1px solid rgba(54, 145, 191, 0.4); 
+                                box-shadow: 0 4px 12px rgba(22, 56, 86, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3); 
+                                color: white; 
+                                display: flex; 
+                                align-items: center; 
+                                justify-content: center; 
+                                border-radius: 50%; 
+                                font-size: 2rem;
+                                font-weight: 600;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <h6 class="mb-3"><i class="bx bx-id-card me-2"></i>Personal Information</h6>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-white">Full Name</label>
+                            <p class="form-control-plaintext text-white" id="viewTraineeName">-</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-white">Trainee ID</label>
+                            <p class="form-control-plaintext text-white" id="viewTraineeId">-</p>
+                        </div>
+                    </div>
+
+                    <h6 class="mb-3 mt-3"><i class="bx bx-book-open me-2"></i>Course Information</h6>
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label text-white">Enrolled Course</label>
+                            <p class="form-control-plaintext text-white" id="viewTraineeCourse">-</p>
+                        </div>
+                    </div>
+
+                    <h6 class="mb-3 mt-3"><i class="bx bx-envelope me-2"></i>Contact Information</h6>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-white">Email</label>
+                            <p class="form-control-plaintext text-white" id="viewTraineeEmail">-</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-white">Phone</label>
+                            <p class="form-control-plaintext text-white" id="viewTraineePhone">-</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
     <script src="../assets/vendor/libs/jquery/jquery.js"></script>
@@ -414,9 +479,6 @@
 
 
     <script src="../assets/js/class-roster.js"></script>
-</body>
-
-</html>
 </body>
 
 </html>

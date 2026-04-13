@@ -508,9 +508,51 @@ async function populateCourseFilter() {
 
 function viewTraineeDetails(traineeId) {
     const trainee = filteredTrainees.find(t => t.id === traineeId);
-    if (trainee) {
-        alert(`Viewing details for: ${trainee.name}\nTrainee ID: ${trainee.traineeId}\nCourse: ${trainee.course}\nEmail: ${trainee.email}\nPhone: ${trainee.phone}`);
+    if (!trainee) {
+        alert('Trainee not found');
+        return;
     }
+
+    // Populate modal with trainee data
+    document.getElementById('viewTraineeName').textContent = trainee.name || 'Unknown';
+    document.getElementById('viewTraineeId').textContent = trainee.traineeId || 'N/A';
+    document.getElementById('viewTraineeCourse').textContent = trainee.course || 'N/A';
+    document.getElementById('viewTraineeEmail').textContent = trainee.email || 'N/A';
+    document.getElementById('viewTraineePhone').textContent = trainee.phone || 'N/A';
+
+    // Handle avatar
+    const avatarContainer = document.getElementById('viewTraineeAvatar');
+    if (trainee.profileImage) {
+        avatarContainer.innerHTML = `
+            <img src="${trainee.profileImage}" 
+                 alt="${trainee.name}" 
+                 class="rounded-circle" 
+                 style="width: 100px; height: 100px; object-fit: cover;"
+                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="avatar-fallback" 
+                 style="display: none; background: linear-gradient(135deg, rgba(54, 145, 191, 0.1) 0%, rgba(50, 85, 150, 0.1) 100%); 
+                 backdrop-filter: blur(10px) saturate(180%); 
+                 -webkit-backdrop-filter: blur(10px) saturate(180%); 
+                 border: 1px solid rgba(54, 145, 191, 0.4); 
+                 box-shadow: 0 4px 12px rgba(22, 56, 86, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3); 
+                 color: white; 
+                 align-items: center; 
+                 justify-content: center; 
+                 border-radius: 50%; 
+                 width: 100px; 
+                 height: 100px; 
+                 font-size: 2rem;
+                 font-weight: 600;">
+                ${trainee.initials}
+            </div>`;
+    } else {
+        avatarContainer.innerHTML = trainee.initials;
+        avatarContainer.style.display = 'flex';
+    }
+
+    // Show modal
+    const modal = new bootstrap.Modal(document.getElementById('viewTraineeModal'));
+    modal.show();
 }
 
 function showError(message) {

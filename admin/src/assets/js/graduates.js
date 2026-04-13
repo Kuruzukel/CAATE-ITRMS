@@ -11,11 +11,25 @@ document.addEventListener('DOMContentLoaded', function () {
             const result = await response.json();
 
             if (result.success && result.data && Array.isArray(result.data)) {
-                const graduatesGrid = document.querySelector('.row.row-cols-1.row-cols-md-2.row-cols-lg-3.row-cols-xl-4');
+                const graduatesGrid = document.getElementById('graduatesGrid');
+                const emptyState = document.getElementById('emptyState');
 
                 if (graduatesGrid) {
                     // Clear existing cards before loading from database
                     graduatesGrid.innerHTML = '';
+
+                    // Check if there are any graduates
+                    if (result.data.length === 0) {
+                        // Show empty state
+                        graduatesGrid.innerHTML = `
+                            <div class="col-12 text-center py-5">
+                                <i class="bx bxs-graduation" style="font-size: 80px; color: #b8c5d6; opacity: 0.5;"></i>
+                                <h5 class="mt-3" style="color: #b8c5d6;">No Graduates Yet</h5>
+                                <p class="text-muted">Start by adding your first graduate using the button above.</p>
+                            </div>
+                        `;
+                        return;
+                    }
 
                     // Add each graduate from database
                     result.data.forEach(graduate => {

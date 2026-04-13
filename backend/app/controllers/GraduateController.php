@@ -50,7 +50,8 @@ class GraduateController {
                 $uploadPath = $uploadDir . $fileName;
                 
                 if (move_uploaded_file($_FILES['image']['tmp_name'], $uploadPath)) {
-                    $imageUrl = '/uploads/graduates/' . $fileName;
+                    // Return the absolute URL path
+                    $imageUrl = 'http://localhost/CAATE-ITRMS/backend/public/uploads/graduates/' . $fileName;
                 }
             }
             

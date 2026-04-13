@@ -4,6 +4,135 @@ document.addEventListener('DOMContentLoaded', function () {
     let currentPage = 1;
     let allGraduateCards = [];
 
+    // Fetch and display graduates from database
+    async function loadGraduates() {
+        try {
+            const response = await fetch(`${config.api.baseUrl}/api/v1/graduates`);
+            const result = await response.json();
+
+            if (result.success && result.data && Array.isArray(result.data)) {
+                const graduatesGrid = document.querySelector('.row.row-cols-1.row-cols-md-2.row-cols-lg-3.row-cols-xl-4');
+
+                if (graduatesGrid) {
+                    // Clear existing cards (keep only hardcoded ones or clear all)
+                    // graduatesGrid.innerHTML = ''; // Uncomment to clear all cards
+
+                    // Add each graduate from database
+                    result.data.forEach(graduate => {
+                        const graduateData = graduate;
+                        const name = graduateData.name || 'Unknown';
+                        const id = graduateData.trainee_id || 'N/A';
+                        const course = graduateData.course || 'N/A';
+                        const certification = graduateData.certification || 'N/A';
+                        const email = graduateData.email || 'N/A';
+                        const imageUrl = graduateData.image_url || '../assets/images/DEFAULT_AVATAR.png';
+
+                        // Format graduation date
+                        let graduatedFormatted = 'N/A';
+                        if (graduateData.graduation_date) {
+                            const dateObj = new Date(graduateData.graduation_date);
+                            const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                            graduatedFormatted = `${monthNames[dateObj.getMonth()]} ${dateObj.getFullYear()}`;
+                        }
+
+                        // Create card
+                        const newCard = document.createElement('div');
+                        newCard.className = 'col';
+                        newCard.innerHTML = `
+                            <div class="card h-100">
+                                <div class="position-relative">
+                                    <img src="${imageUrl}" class="card-img-top" alt="${name}" style="height: 200px; object-fit: cover;">
+                                    <button class="btn btn-danger position-absolute top-0 end-0 m-2 delete-graduate-btn rounded-circle p-0"
+                                        data-bs-toggle="modal" data-bs-target="#deleteGraduateModal"
+                                        data-name="${name}" data-id="${id}"
+                                        style="width: 38px; height: 28px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">
+                                        <i class="bx bx-trash" style="font-size: 14px;"></i>
+                                    </button>
+                                </div>
+                                <div class="card-body">
+                                    <span class="badge mb-2" style="background-color: #5bc0de; color: #ffffff;">${certification}</span>
+                                    <h5 class="card-title mb-2">${name}</h5>
+                                    <p class="text-muted small mb-2">ID: ${id}</p>
+                                    <p class="card-text small mb-2">
+                                        <i class="bx bx-book-open me-1"></i>${course}
+                                    </p>
+                                    <p class="card-text small mb-2">
+                                        <i class="bx bx-calendar me-1"></i>Graduated: ${graduatedFormatted}
+                                    </p>
+                                    <p class="card-text small mb-3">
+                                        <i class="bx bx-envelope me-1"></i>${email}
+                                    </p>
+                                    <div class="d-flex gap-2">
+                                        <button class="btn btn-sm btn-outline-primary flex-fill view-graduate-btn" 
+                                            data-bs-toggle="modal" data-bs-target="#viewGraduateModal"
+                                            data-name="${name}" data-id="${id}" data-course="${course}" 
+                                            data-graduated="${graduatedFormatted}" data-email="${email}" 
+                                            data-certification="${certification}" data-image="${imageUrl}">
+                                            <i class="bx bx-show"></i> View
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-secondary flex-fill edit-graduate-btn" 
+                                            data-bs-toggle="modal" data-bs-target="#editGraduateModal"
+                                            data-name="${name}" data-id="${id}" data-course="${course}" 
+                                            data-graduated="${graduatedFormatted}" data-email="${email}" 
+                                            data-certification="${certification}" data-image="${imageUrl}">
+                                            <i class="bx bx-edit"></i> Edit
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+
+                        graduatesGrid.appendChild(newCard);
+
+                        // Add event listeners
+                        const deleteBtn = newCard.querySelector('.delete-graduate-btn');
+                        const viewBtn = newCard.querySelector('.view-graduate-btn');
+                        const editBtn = newCard.querySelector('.edit-graduate-btn');
+
+                        if (deleteBtn) {
+                            deleteBtn.addEventListener('click', function () {
+                                graduateToDelete = { name, id, button: deleteBtn };
+                                document.getElementById('deleteGraduateName').textContent = name;
+                                document.getElementById('deleteGraduateId').textContent = 'ID: ' + id;
+                            });
+                        }
+
+                        if (viewBtn) {
+                            viewBtn.addEventListener('click', function () {
+                                document.getElementById('modalGraduateName').value = name;
+                                document.getElementById('modalGraduateId').value = id;
+                                document.getElementById('modalGraduateCourse').value = course;
+                                document.getElementById('modalGraduateDate').value = graduatedFormatted;
+                                document.getElementById('modalGraduateEmail').value = email;
+                                document.getElementById('modalGraduateImage').src = imageUrl;
+                            });
+                        }
+
+                        if (editBtn) {
+                            editBtn.addEventListener('click', function () {
+                                document.getElementById('editGraduateName').value = name;
+                                document.getElementById('editGraduateId').value = id;
+                                document.getElementById('editGraduateCourse').value = course;
+                                document.getElementById('editGraduateDate').value = graduateData.graduation_date;
+                                document.getElementById('editGraduateEmail').value = email;
+                                document.getElementById('editGraduateCertification').value = certification;
+                                document.getElementById('editGraduateImage').src = imageUrl;
+                            });
+                        }
+                    });
+
+                    // Initialize pagination after loading
+                    initializePagination();
+                }
+            }
+        } catch (error) {
+            console.error('Error loading graduates:', error);
+        }
+    }
+
+    // Load graduates on page load
+    loadGraduates();
+
     // Load certifications from courses API
     async function loadCertifications() {
         try {
@@ -486,106 +615,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 const result = await response.json();
 
                 if (result.success) {
-                    // Format the graduation date (convert from YYYY-MM-DD to "Month Year")
-                    const dateObj = new Date(graduatedDate);
-                    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-                    const graduatedFormatted = `${monthNames[dateObj.getMonth()]} ${dateObj.getFullYear()}`;
-
-                    // Use the image URL from the server response, or fallback to preview
-                    const imageUrl = result.data?.image_url || imagePreview;
-
-                    // Create new graduate card
-                    const newCard = document.createElement('div');
-                    newCard.className = 'col';
-                    newCard.innerHTML = `
-                        <div class="card h-100">
-                            <div class="position-relative">
-                                <img src="${imageUrl}" class="card-img-top" alt="${name}" style="height: 200px; object-fit: cover;">
-                                <button class="btn btn-danger position-absolute top-0 end-0 m-2 delete-graduate-btn rounded-circle p-0"
-                                    data-bs-toggle="modal" data-bs-target="#deleteGraduateModal"
-                                    data-name="${name}" data-id="${id}"
-                                    style="width: 38px; height: 28px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">
-                                    <i class="bx bx-trash" style="font-size: 14px;"></i>
-                                </button>
-                            </div>
-                            <div class="card-body">
-                                <span class="badge mb-2" style="background-color: #5bc0de; color: #ffffff;">${certification}</span>
-                                <h5 class="card-title mb-2">${name}</h5>
-                                <p class="text-muted small mb-2">ID: ${id}</p>
-                                <p class="card-text small mb-2">
-                                    <i class="bx bx-book-open me-1"></i>${course}
-                                </p>
-                                <p class="card-text small mb-2">
-                                    <i class="bx bx-calendar me-1"></i>Graduated: ${graduatedFormatted}
-                                </p>
-                                <p class="card-text small mb-3">
-                                    <i class="bx bx-envelope me-1"></i>${email}
-                                </p>
-                                <div class="d-flex gap-2">
-                                    <button class="btn btn-sm btn-outline-primary flex-fill view-graduate-btn" 
-                                        data-bs-toggle="modal" data-bs-target="#viewGraduateModal"
-                                        data-name="${name}" data-id="${id}" data-course="${course}" 
-                                        data-graduated="${graduatedFormatted}" data-email="${email}" 
-                                        data-certification="${certification}" data-image="${imageUrl}">
-                                        <i class="bx bx-show"></i> View
-                                    </button>
-                                    <button class="btn btn-sm btn-outline-secondary flex-fill edit-graduate-btn" 
-                                        data-bs-toggle="modal" data-bs-target="#editGraduateModal"
-                                        data-name="${name}" data-id="${id}" data-course="${course}" 
-                                        data-graduated="${graduatedFormatted}" data-email="${email}" 
-                                        data-certification="${certification}" data-image="${imageUrl}">
-                                        <i class="bx bx-edit"></i> Edit
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-
-                    // Add the new card to the graduates grid
-                    const graduatesGrid = document.querySelector('.row.row-cols-1.row-cols-md-2.row-cols-lg-3.row-cols-xl-4');
-                    if (graduatesGrid) {
-                        graduatesGrid.appendChild(newCard);
-
-                        // Re-initialize pagination to include the new card
-                        initializePagination();
-
-                        // Add event listeners to the new buttons
-                        const viewBtn = newCard.querySelector('.view-graduate-btn');
-                        const editBtn = newCard.querySelector('.edit-graduate-btn');
-                        const deleteBtn = newCard.querySelector('.delete-graduate-btn');
-
-                        if (viewBtn) {
-                            viewBtn.addEventListener('click', function () {
-                                document.getElementById('modalGraduateName').value = name;
-                                document.getElementById('modalGraduateId').value = id;
-                                document.getElementById('modalGraduateCourse').value = course;
-                                document.getElementById('modalGraduateDate').value = graduatedFormatted;
-                                document.getElementById('modalGraduateEmail').value = email;
-                                document.getElementById('modalGraduateImage').src = imageUrl;
-                            });
-                        }
-
-                        if (editBtn) {
-                            editBtn.addEventListener('click', function () {
-                                document.getElementById('editGraduateName').value = name;
-                                document.getElementById('editGraduateId').value = id;
-                                document.getElementById('editGraduateCourse').value = course;
-                                document.getElementById('editGraduateDate').value = graduatedDate;
-                                document.getElementById('editGraduateEmail').value = email;
-                                document.getElementById('editGraduateCertification').value = certification;
-                                document.getElementById('editGraduateImage').src = imageUrl;
-                            });
-                        }
-
-                        if (deleteBtn) {
-                            deleteBtn.addEventListener('click', function () {
-                                graduateToDelete = { name, id, button: deleteBtn };
-                                document.getElementById('deleteGraduateName').textContent = name;
-                                document.getElementById('deleteGraduateId').textContent = 'ID: ' + id;
-                            });
-                        }
-                    }
-
                     alert('Graduate added successfully and saved to database!');
 
                     // Close modal
@@ -595,6 +624,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     // Reset form
                     form.reset();
                     document.getElementById('addGraduateImagePreview').src = '../assets/images/DEFAULT_AVATAR.png';
+
+                    // Reload graduates from database to show the new one
+                    location.reload();
                 } else {
                     alert('Error saving graduate: ' + (result.message || 'Unknown error'));
                 }

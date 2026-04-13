@@ -221,6 +221,46 @@ document.addEventListener('DOMContentLoaded', function () {
         modal.show();
     });
 
+    // Handle modal cleanup when closed
+    const addGraduateModal = document.getElementById('addGraduateModal');
+    if (addGraduateModal) {
+        addGraduateModal.addEventListener('hidden.bs.modal', function () {
+            // Remove any lingering backdrops
+            const backdrops = document.querySelectorAll('.modal-backdrop');
+            backdrops.forEach(backdrop => backdrop.remove());
+            // Remove modal-open class from body
+            document.body.classList.remove('modal-open');
+            document.body.style.overflow = '';
+            document.body.style.paddingRight = '';
+        });
+    }
+
+    const editGraduateModal = document.getElementById('editGraduateModal');
+    if (editGraduateModal) {
+        editGraduateModal.addEventListener('hidden.bs.modal', function () {
+            // Remove any lingering backdrops
+            const backdrops = document.querySelectorAll('.modal-backdrop');
+            backdrops.forEach(backdrop => backdrop.remove());
+            // Remove modal-open class from body
+            document.body.classList.remove('modal-open');
+            document.body.style.overflow = '';
+            document.body.style.paddingRight = '';
+        });
+    }
+
+    const viewGraduateModal = document.getElementById('viewGraduateModal');
+    if (viewGraduateModal) {
+        viewGraduateModal.addEventListener('hidden.bs.modal', function () {
+            // Remove any lingering backdrops
+            const backdrops = document.querySelectorAll('.modal-backdrop');
+            backdrops.forEach(backdrop => backdrop.remove());
+            // Remove modal-open class from body
+            document.body.classList.remove('modal-open');
+            document.body.style.overflow = '';
+            document.body.style.paddingRight = '';
+        });
+    }
+
     // Handle image upload preview for add graduate
     document.getElementById('addGraduateImageInput')?.addEventListener('change', function (e) {
         const file = e.target.files[0];

@@ -145,6 +145,67 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // Add delete buttons to all existing graduate cards that don't have them
+    function addDeleteButtonsToExistingCards() {
+        const graduateCards = document.querySelectorAll('.row.row-cols-1.row-cols-md-2.row-cols-lg-3.row-cols-xl-4 .col');
+
+        graduateCards.forEach(col => {
+            const card = col.querySelector('.card');
+            if (!card) return;
+
+            // Check if delete button already exists
+            if (card.querySelector('.delete-graduate-btn')) return;
+
+            // Find the image container
+            let imageContainer = card.querySelector('.position-relative');
+            const image = card.querySelector('.card-img-top');
+
+            if (!image) return;
+
+            // If no position-relative container, wrap the image
+            if (!imageContainer) {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'position-relative';
+                image.parentNode.insertBefore(wrapper, image);
+                wrapper.appendChild(image);
+                imageContainer = wrapper;
+            }
+
+            // Get graduate data from view button
+            const viewBtn = card.querySelector('.view-graduate-btn');
+            if (!viewBtn) return;
+
+            const name = viewBtn.getAttribute('data-name');
+            const id = viewBtn.getAttribute('data-id');
+
+            // Create delete button
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'btn btn-danger position-absolute top-0 end-0 m-2 delete-graduate-btn rounded-circle p-0';
+            deleteBtn.setAttribute('data-bs-toggle', 'modal');
+            deleteBtn.setAttribute('data-bs-target', '#deleteGraduateModal');
+            deleteBtn.setAttribute('data-name', name);
+            deleteBtn.setAttribute('data-id', id);
+            deleteBtn.style.cssText = 'width: 38px; height: 28px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.3);';
+
+            const icon = document.createElement('i');
+            icon.className = 'bx bx-trash';
+            icon.style.fontSize = '14px';
+
+            deleteBtn.appendChild(icon);
+            imageContainer.appendChild(deleteBtn);
+
+            // Add event listener
+            deleteBtn.addEventListener('click', function () {
+                graduateToDelete = { name, id, button: deleteBtn };
+                document.getElementById('deleteGraduateName').textContent = name;
+                document.getElementById('deleteGraduateId').textContent = 'ID: ' + id;
+            });
+        });
+    }
+
+    // Call the function to add delete buttons to existing cards
+    addDeleteButtonsToExistingCards();
+
     // Initialize pagination
     function initializePagination() {
         // Get the specific graduates grid container

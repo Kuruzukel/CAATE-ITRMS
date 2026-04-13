@@ -362,7 +362,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         if (allGraduateCards.length === 0) {
-            console.warn('No graduate cards found');
             return;
         }
 
@@ -646,17 +645,17 @@ document.addEventListener('DOMContentLoaded', function () {
                         form.reset();
                         document.getElementById('addGraduateImagePreview').src = '../assets/images/DEFAULT_AVATAR.png';
 
-                        // Show success message and reload page
-                        alert('Graduate added successfully!');
-                        window.location.reload();
+                        // Show success toast and reload page
+                        showSuccess('Graduate added successfully!');
+                        setTimeout(() => window.location.reload(), 1000);
                     } else {
-                        alert('Error saving graduate: ' + (result.message || 'Unknown error'));
+                        showError('Error saving graduate: ' + (result.message || 'Unknown error'));
                         saveNewGraduateBtn.disabled = false;
                         saveNewGraduateBtn.innerHTML = '<i class="bx bx-user-plus"></i> Save';
                     }
                 } catch (error) {
                     console.error('Error saving graduate:', error);
-                    alert('Error saving graduate to database. Please try again.');
+                    showError('Error saving graduate to database. Please try again.');
                     saveNewGraduateBtn.disabled = false;
                     saveNewGraduateBtn.innerHTML = '<i class="bx bx-user-plus"></i> Save';
                 }
@@ -756,6 +755,9 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    // Store original values for change detection
+    let originalGraduateData = {};
+
     document.querySelectorAll('.edit-graduate-btn').forEach(button => {
         button.addEventListener('click', function () {
             const name = this.getAttribute('data-name');
@@ -765,6 +767,17 @@ document.addEventListener('DOMContentLoaded', function () {
             const email = this.getAttribute('data-email');
             const certification = this.getAttribute('data-certification');
             const image = this.getAttribute('data-image');
+
+            // Store original values for comparison
+            originalGraduateData = {
+                name,
+                id,
+                course,
+                graduated,
+                email,
+                certification: certification || 'NC II - SOCBCN220',
+                image
+            };
 
             // Set certification dropdown value
             const certSelect = document.getElementById('editGraduateCertification');
@@ -817,13 +830,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 const modal = bootstrap.Modal.getInstance(document.getElementById('deleteGraduateModal'));
                 modal.hide();
 
-                alert('Graduate deleted successfully!');
+                showSuccess('Graduate deleted successfully!');
             }
 
             graduateToDelete = null;
         } catch (error) {
             console.error('Error deleting graduate:', error);
-            alert('Error deleting graduate. Please try again.');
+            showError('Error deleting graduate. Please try again.');
         }
     });
 
@@ -885,8 +898,31 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('saveGraduateBtn').addEventListener('click', function () {
         const form = document.getElementById('editGraduateForm');
         if (form.checkValidity()) {
+            // Get current values
+            const currentData = {
+                name: document.getElementById('editGraduateName').value,
+                id: document.getElementById('editGraduateId').value,
+                course: document.getElementById('editGraduateCourse').value,
+                graduated: document.getElementById('editGraduateDate').value,
+                email: document.getElementById('editGraduateEmail').value,
+                certification: document.getElementById('editGraduateCertification').value
+            };
 
-            alert('Graduate information updated successfully!');
+            // Check if any changes were made
+            const hasChanges =
+                currentData.name !== originalGraduateData.name ||
+                currentData.id !== originalGraduateData.id ||
+                currentData.course !== originalGraduateData.course ||
+                currentData.graduated !== originalGraduateData.graduated ||
+                currentData.email !== originalGraduateData.email ||
+                currentData.certification !== originalGraduateData.certification;
+
+            if (!hasChanges) {
+                showInfo('No changes detected');
+                return;
+            }
+
+            showSuccess('Graduate information updated successfully!');
 
             const modal = bootstrap.Modal.getInstance(document.getElementById('editGraduateModal'));
             modal.hide();
@@ -912,3 +948,47 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
 });
+
+
+// Toast Notification Functions
+function showSuccess(message) {
+    showToast(message, 'success');
+}
+
+function showError(message) {
+    showToast(message, 'error');
+}
+
+function showInfo(message) {
+    showToast(message, 'info');
+}
+
+function showWarning(message) {
+    showToast(message, 'warning');
+}
+
+function showToast(message, type = 'success') {
+    const container = document.getElementById('toastContainer');
+    if (!container) return;
+
+    const toast = document.createElement('div');
+    toast.className = `toast-notification ${type}`;
+
+    const icon = type === 'success' ? 'bx-check' :
+        type === 'error' ? 'bx-x' :
+            type === 'warning' ? 'bx-error-alt' : 'bxs-info-circle';
+
+    toast.innerHTML = `
+        <i class="bx ${icon} toast-icon"></i>
+        <div class="toast-content">
+            <div class="toast-message">${message}</div>
+        </div>
+    `;
+
+    container.appendChild(toast);
+
+    setTimeout(() => {
+        toast.classList.add('hiding');
+        setTimeout(() => toast.remove(), 300);
+    }, 5000);
+}

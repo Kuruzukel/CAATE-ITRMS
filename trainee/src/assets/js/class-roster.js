@@ -1,7 +1,7 @@
-let allTrainees = [];
 let allApplications = [];
 let allRegistrations = [];
 let filteredTrainees = [];
+let displayTrainees = [];
 
 function getInitials(name) {
     if (!name) return '??';
@@ -14,15 +14,6 @@ function getInitials(name) {
 
 async function fetchAllData() {
     try {
-        const traineesResponse = await fetch(`${config.api.baseUrl}/api/v1/trainees`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-        const traineesResult = await traineesResponse.json();
-        allTrainees = traineesResult.data || [];
-
         const applicationsResponse = await fetch(`${config.api.baseUrl}/api/v1/applications`, {
             method: 'GET',
             headers: {
@@ -31,6 +22,8 @@ async function fetchAllData() {
         });
         const applicationsResult = await applicationsResponse.json();
         allApplications = applicationsResult.data || [];
+        console.log('Fetched applications:', allApplications.length);
+        console.log('Approved applications:', allApplications.filter(app => (app.status || '').toLowerCase() === 'approved').length);
 
         const registrationsResponse = await fetch(`${config.api.baseUrl}/api/v1/registrations`, {
             method: 'GET',
@@ -40,6 +33,8 @@ async function fetchAllData() {
         });
         const registrationsResult = await registrationsResponse.json();
         allRegistrations = registrationsResult.data || [];
+        console.log('Fetched registrations:', allRegistrations.length);
+        console.log('Approved registrations:', allRegistrations.filter(reg => (reg.status || '').toLowerCase() === 'approved').length);
 
         await populateCourseFilter();
 
@@ -54,8 +49,18 @@ async function fetchAllData() {
 async function processTraineesData() {
     const combinedData = [];
 
-    const approvedApps = allApplications.filter(app => app.status === 'approved');
+    // Filter for approved applications (case-insensitive)
+    const approvedApps = allApplications.filter(app => {
+        const status = (app.status || '').toLowerCase();
+        return status === 'approved';
+    });
 
+    console.log('Processing approved applications:', approvedApps.length);
+    if (approvedApps.length > 0) {
+        console.log('Sample approved application:', approvedApps[0]);
+    }
+
+    // Process approved applications
     for (const application of approvedApps) {
         let appTraineeId = application.trainee_id || application.user_id || 'N/A';
 
@@ -106,7 +111,83 @@ async function processTraineesData() {
         });
     }
 
+    // Filter for approved registrations (case-insensitive)
+    const approvedRegs = allRegistrations.filter(reg => {
+        const status = (reg.status || '').toLowerCase();
+        return status === 'approved';
+    });
+
+    console.log('Processing approved registrations:', approvedRegs.length);
+    if (approvedRegs.length > 0) {
+        console.log('Sample approved registration:', approvedRegs[0]);
+        console.log('Registration fields:', {
+            traineeId: approvedRegs[0].traineeId,
+            trainee_id: approvedRegs[0].trainee_id,
+            userId: approvedRegs[0].userId,
+            user_id: approvedRegs[0].user_id,
+            firstName: approvedRegs[0].firstName,
+            lastName: approvedRegs[0].lastName,
+            selectedCourse: approvedRegs[0].selectedCourse,
+            courseQualification: approvedRegs[0].courseQualification
+        });
+    }
+
+    // Process approved registrations
+    for (const registration of approvedRegs) {
+        let regTraineeId = registration.traineeId || registration.trainee_id || registration.userId || registration.user_id || 'N/A';
+
+        if (regTraineeId && typeof regTraineeId === 'object') {
+            regTraineeId = regTraineeId.$oid || regTraineeId._id || 'N/A';
+        }
+
+        // Build full name from registration data
+        let fullName = 'Unknown';
+        const firstName = registration.firstName || registration.first_name || '';
+        const middleName = registration.middleName || registration.middle_name || '';
+        const lastName = registration.lastName || registration.last_name || '';
+
+        fullName = [firstName, middleName, lastName]
+            .filter(part => part && part.trim())
+            .join(' ');
+
+        let profileImage = null;
+        let userId = registration.userId || registration.user_id;
+
+        if (userId && typeof userId === 'object') {
+            userId = userId.$oid || userId._id || null;
+        }
+
+        if (userId && typeof userId === 'string') {
+            try {
+                const traineeResponse = await fetch(`${config.api.baseUrl}/api/v1/trainees/${userId}`);
+                const traineeData = await traineeResponse.json();
+                if (traineeData.success && traineeData.data && traineeData.data.profile_image) {
+                    profileImage = traineeData.data.profile_image;
+                }
+            } catch (error) {
+            }
+        }
+
+        const traineeData = {
+            id: registration._id?.$oid || registration._id,
+            traineeId: regTraineeId,
+            name: fullName || 'Unknown',
+            initials: getInitials(fullName),
+            profileImage: profileImage,
+            course: registration.selectedCourse || registration.courseQualification || 'N/A',
+            email: registration.emailFacebook || 'N/A',
+            phone: registration.contactNo || 'N/A'
+        };
+
+        console.log('Adding trainee from registration:', traineeData);
+        combinedData.push(traineeData);
+    }
+
+    console.log('Total combined data:', combinedData.length);
+    console.log('Combined data:', combinedData);
+
     filteredTrainees = combinedData;
+    displayTrainees = combinedData;
     renderTraineesTable();
 }
 
@@ -120,18 +201,31 @@ function updateStatistics() {
     const activeCourses = uniqueCourses.length;
     document.getElementById('activeCourses').textContent = activeCourses;
 
-    // My Courses (get current user's enrolled courses)
+    // My Courses (get current user's enrolled courses from both applications and registrations)
     const currentUserId = localStorage.getItem('userId');
     let myCourses = 0;
     if (currentUserId) {
+        // Check applications
         const myApplications = allApplications.filter(app => {
             let userId = app.user_id || app.userId;
             if (userId && typeof userId === 'object') {
                 userId = userId.$oid || userId._id;
             }
-            return userId === currentUserId && app.status === 'approved';
+            return userId === currentUserId && (app.status || '').toLowerCase() === 'approved';
         });
-        const myUniqueCourses = [...new Set(myApplications.map(app => app.assessment_title || app.course))];
+
+        // Check registrations
+        const myRegistrations = allRegistrations.filter(reg => {
+            let userId = reg.userId || reg.user_id;
+            if (userId && typeof userId === 'object') {
+                userId = userId.$oid || userId._id;
+            }
+            return userId === currentUserId && (reg.status || '').toLowerCase() === 'approved';
+        });
+
+        const myAppCourses = myApplications.map(app => app.assessment_title || app.course);
+        const myRegCourses = myRegistrations.map(reg => reg.selectedCourse || reg.courseQualification);
+        const myUniqueCourses = [...new Set([...myAppCourses, ...myRegCourses])];
         myCourses = myUniqueCourses.length;
     }
     document.getElementById('myCourses').textContent = myCourses;
@@ -156,10 +250,10 @@ function renderTraineesTable() {
 
     tbody.innerHTML = '';
 
-    // Update statistics based on filtered data
+    // Update statistics based on display data
     updateStatistics();
 
-    if (filteredTrainees.length === 0) {
+    if (displayTrainees.length === 0) {
         const searchTerm = document.getElementById('searchTraineeInput').value;
         const courseFilter = document.getElementById('courseFilter').value;
 
@@ -187,7 +281,7 @@ function renderTraineesTable() {
         return;
     }
 
-    filteredTrainees.forEach(trainee => {
+    displayTrainees.forEach(trainee => {
         const row = document.createElement('tr');
 
         const profileImage = trainee.profileImage;
@@ -262,45 +356,8 @@ function applyFilters() {
     const searchTerm = document.getElementById('searchTraineeInput').value.toLowerCase();
     const courseFilter = document.getElementById('courseFilter').value.toLowerCase();
 
-    const approvedApps = allApplications.filter(app => app.status === 'approved');
-    const combinedData = [];
-
-    approvedApps.forEach(application => {
-        let appTraineeId = application.trainee_id || application.user_id || 'N/A';
-
-        if (appTraineeId && typeof appTraineeId === 'object') {
-            appTraineeId = appTraineeId.$oid || appTraineeId._id || 'N/A';
-        }
-
-        let fullName = 'Unknown';
-        if (application.name) {
-            const firstName = application.name.first_name || '';
-            const secondName = application.name.second_name || '';
-            const middleName = application.name.middle_name || '';
-            const surname = application.name.surname || '';
-            const extension = application.name.name_extension || '';
-
-            fullName = [firstName, secondName, middleName, surname, extension]
-                .filter(part => part && part.trim())
-                .join(' ');
-        }
-
-        const existingTrainee = filteredTrainees.find(t => t.id === (application._id?.$oid || application._id));
-        const profileImage = existingTrainee ? existingTrainee.profileImage : null;
-
-        combinedData.push({
-            id: application._id?.$oid || application._id,
-            traineeId: appTraineeId,
-            name: fullName || 'Unknown',
-            initials: getInitials(fullName),
-            profileImage: profileImage,
-            course: application.assessment_title || application.course || 'N/A',
-            email: 'N/A',
-            phone: 'N/A'
-        });
-    });
-
-    filteredTrainees = combinedData.filter(trainee => {
+    // Filter from the full dataset (filteredTrainees) which has all profile images
+    displayTrainees = filteredTrainees.filter(trainee => {
         const matchesSearch = !searchTerm ||
             trainee.name.toLowerCase().includes(searchTerm) ||
             trainee.traineeId.toLowerCase().includes(searchTerm);
@@ -403,9 +460,20 @@ async function populateCourseFilter() {
                 courseFilter.appendChild(option);
             });
         } else {
-            // Fallback to unique courses from applications
-            const approvedApplications = allApplications.filter(app => app.status === 'approved');
-            const uniqueCourses = [...new Set(approvedApplications.map(app => app.assessment_title || app.course).filter(c => c))];
+            // Fallback to unique courses from APPROVED applications and registrations
+            const approvedApplications = allApplications.filter(app => {
+                const status = (app.status || '').toLowerCase();
+                return status === 'approved';
+            });
+            const approvedRegistrations = allRegistrations.filter(reg => {
+                const status = (reg.status || '').toLowerCase();
+                return status === 'approved';
+            });
+
+            const appCourses = approvedApplications.map(app => app.assessment_title || app.course).filter(c => c);
+            const regCourses = approvedRegistrations.map(reg => reg.selectedCourse || reg.courseQualification).filter(c => c);
+            const uniqueCourses = [...new Set([...appCourses, ...regCourses])];
+
             uniqueCourses.forEach(course => {
                 const option = document.createElement('option');
                 option.value = course.toLowerCase();
@@ -415,9 +483,20 @@ async function populateCourseFilter() {
         }
     } catch (error) {
         console.error('Error fetching courses:', error);
-        // Fallback to unique courses from applications
-        const approvedApplications = allApplications.filter(app => app.status === 'approved');
-        const uniqueCourses = [...new Set(approvedApplications.map(app => app.assessment_title || app.course).filter(c => c))];
+        // Fallback to unique courses from APPROVED applications and registrations
+        const approvedApplications = allApplications.filter(app => {
+            const status = (app.status || '').toLowerCase();
+            return status === 'approved';
+        });
+        const approvedRegistrations = allRegistrations.filter(reg => {
+            const status = (reg.status || '').toLowerCase();
+            return status === 'approved';
+        });
+
+        const appCourses = approvedApplications.map(app => app.assessment_title || app.course).filter(c => c);
+        const regCourses = approvedRegistrations.map(reg => reg.selectedCourse || reg.courseQualification).filter(c => c);
+        const uniqueCourses = [...new Set([...appCourses, ...regCourses])];
+
         uniqueCourses.forEach(course => {
             const option = document.createElement('option');
             option.value = course.toLowerCase();

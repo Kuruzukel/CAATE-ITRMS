@@ -59,6 +59,36 @@ document.addEventListener('DOMContentLoaded', function () {
     // Load certifications on page load
     loadCertifications();
 
+    // Load courses for filter dropdown
+    async function loadCoursesFilter() {
+        try {
+            const response = await fetch(`${config.api.baseUrl}/api/v1/courses`);
+            const result = await response.json();
+
+            if (result.success && result.data && Array.isArray(result.data)) {
+                const courseFilter = document.getElementById('graduateCourseFilter');
+
+                if (courseFilter) {
+                    // Keep the "All Courses" option
+                    courseFilter.innerHTML = '<option value="">All Courses</option>';
+
+                    // Add each course as an option
+                    result.data.forEach(course => {
+                        const option = document.createElement('option');
+                        option.value = course.course_name || course.title;
+                        option.textContent = course.course_name || course.title;
+                        courseFilter.appendChild(option);
+                    });
+                }
+            }
+        } catch (error) {
+            console.error('Error loading courses for filter:', error);
+        }
+    }
+
+    // Load courses on page load
+    loadCoursesFilter();
+
     // Initialize pagination
     function initializePagination() {
         // Get the specific graduates grid container

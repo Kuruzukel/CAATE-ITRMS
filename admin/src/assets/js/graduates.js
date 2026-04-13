@@ -447,7 +447,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('confirmExportBtn').addEventListener('click', function () {
 
         const selectedCourses = Array.from(document.querySelectorAll('.export-course-filter:checked')).map(cb => cb.value);
-        const selectedYears = Array.from(document.querySelectorAll('.export-year-filter:checked')).map(cb => cb.value);
+        const selectedDate = document.getElementById('graduationDateFilter')?.value;
 
         const csvData = [
             ['Name', 'Student ID', 'Course', 'Certification', 'Graduation Date', 'Email']
@@ -459,14 +459,19 @@ document.addEventListener('DOMContentLoaded', function () {
             const course = btn.getAttribute('data-course');
             const graduated = btn.getAttribute('data-graduated');
             const email = btn.getAttribute('data-email');
-            const certification = 'NC II - SOCBCN220';
-
-            const graduatedYear = graduated.split(' ')[1];
+            const certification = btn.getAttribute('data-certification') || 'NC II - SOCBCN220';
 
             const courseMatch = selectedCourses.length === 0 || selectedCourses.includes(course);
-            const yearMatch = selectedYears.length === 0 || selectedYears.includes(graduatedYear);
 
-            if (courseMatch && yearMatch) {
+            // Check if graduation date matches selected date
+            let dateMatch = true;
+            if (selectedDate) {
+                // Compare the graduation date with selected date
+                // Assuming graduated is in format like "June 2026" or a date string
+                dateMatch = graduated.includes(selectedDate) || graduated === selectedDate;
+            }
+
+            if (courseMatch && dateMatch) {
                 csvData.push([name, id, course, certification, graduated, email]);
             }
         });

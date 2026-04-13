@@ -420,14 +420,10 @@
                                                     </div>
                                                     <div class="col-md-3">
                                                         <label class="form-label" style="color: #b8c5d6;">Graduation
-                                                            Year</label>
-                                                        <select class="form-select"
-                                                            style="background-color: #243447; border: 1px solid #3d4f63; color: #b8c5d6;">
-                                                            <option value="">All Years</option>
-                                                            <option value="2026">2026</option>
-                                                            <option value="2025">2025</option>
-                                                            <option value="2024">2024</option>
-                                                        </select>
+                                                            Date</label>
+                                                        <input type="date" class="form-control"
+                                                            id="graduationDateFilterMain"
+                                                            style="background-color: #243447; border: 1px solid #3d4f63; color: #b8c5d6; color-scheme: dark;">
                                                     </div>
                                                     <div class="col-md-1 d-flex align-items-end">
                                                         <button type="button" class="btn btn-outline-secondary w-100"
@@ -1633,30 +1629,9 @@
 
 
                     <div class="mb-4">
-                        <label class="form-label fw-semibold">Graduation Year</label>
-                        <div class="row g-2">
-                            <div class="col-md-4">
-                                <div class="form-check">
-                                    <input class="form-check-input export-year-filter" type="checkbox" value="2026"
-                                        id="year1">
-                                    <label class="form-check-label" for="year1">2025</label>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-check">
-                                    <input class="form-check-input export-year-filter" type="checkbox" value="2025"
-                                        id="year2">
-                                    <label class="form-check-label" for="year2">2026</label>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-check">
-                                    <input class="form-check-input export-year-filter" type="checkbox" value="2024"
-                                        id="year3">
-                                    <label class="form-check-label" for="year3">2027</label>
-                                </div>
-                            </div>
-                        </div>
+                        <label class="form-label fw-semibold">Graduation Date</label>
+                        <input type="date" class="form-control" id="graduationDateFilter"
+                            style="background-color: #fff; border: 1px solid #d9dee3; color: #697a8d;">
                     </div>
                 </div>
                 <div class="modal-footer">

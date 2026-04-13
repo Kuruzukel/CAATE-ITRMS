@@ -153,8 +153,6 @@ document.addEventListener('DOMContentLoaded', function () {
                                     certification: certification
                                 };
 
-                                console.log('Edit button clicked - Original data stored:', window.originalGraduateData);
-
                                 document.getElementById('editGraduateName').value = name;
                                 document.getElementById('editGraduateId').value = traineeId;
                                 document.getElementById('editGraduateCourse').value = course;
@@ -988,10 +986,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     certification: document.getElementById('editGraduateCertification').value
                 };
 
-                // Debug: Log the values
-                console.log('Original Data:', window.originalGraduateData);
-                console.log('Current Data:', currentData);
-
                 // Check if original data exists
                 if (!window.originalGraduateData) {
                     showError('Error: Original data not found. Please close and reopen the edit modal.');
@@ -1006,8 +1000,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     currentData.graduationDate !== window.originalGraduateData.graduationDate ||
                     currentData.email !== window.originalGraduateData.email ||
                     currentData.certification !== window.originalGraduateData.certification;
-
-                console.log('Has Changes:', hasChanges);
 
                 if (!hasChanges) {
                     showInfo('No changes detected');

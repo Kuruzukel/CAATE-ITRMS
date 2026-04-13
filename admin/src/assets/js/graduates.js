@@ -50,7 +50,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 });
 
-                console.log('Loaded certifications:', sortedCertifications);
             }
         } catch (error) {
             console.error('Error loading certifications:', error);
@@ -74,8 +73,6 @@ document.addEventListener('DOMContentLoaded', function () {
             console.warn('No graduate cards found');
             return;
         }
-
-        console.log('Total graduate cards found:', allGraduateCards.length);
 
         const totalPages = Math.ceil(allGraduateCards.length / cardsPerPage);
         renderPagination(totalPages);

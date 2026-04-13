@@ -196,7 +196,8 @@ function renderAdmissionsTable(admissions) {
 
     tbody.innerHTML = admissions.map(adm => {
         const fullName = getFullName(adm);
-        const traineeId = adm.trainee_id || adm.userData?.trainee_id || 'N/A';
+        // Show trainee_id if available, otherwise show reference_number, otherwise "Not Assigned"
+        const traineeId = adm.trainee_id || adm.userData?.trainee_id || adm.reference_number || adm.referenceNumber || 'Not Assigned';
         const course = adm.assessment_applied || adm.assessmentApplied || adm.course || adm.assessment_title || adm.assessmentTitle || 'N/A';
         const date = formatDate(adm.submitted_at || adm.admission_date || adm.created_at);
         const status = adm.status || 'pending';
@@ -264,6 +265,12 @@ function renderAdmissionsTable(admissions) {
 }
 
 function getFullName(adm) {
+    // Check for applicant_name first (from admissions collection) - most common for new admissions
+    // Backend stores as applicant_name but may return as applicantName
+    if (adm.applicant_name || adm.applicantName) {
+        return adm.applicant_name || adm.applicantName;
+    }
+
     // Check for trainee data from trainees collection
     if (adm.traineeData) {
         const parts = [
@@ -279,22 +286,23 @@ function getFullName(adm) {
         }
     }
 
-    // Check for applicant_name (from admissions collection)
-    if (adm.applicant_name) {
-        return adm.applicant_name;
+    // Check for full_name
+    if (adm.full_name) {
+        return adm.full_name;
     }
 
+    // Check for name object
     if (adm.name) {
         const parts = [
             adm.name.first_name || adm.name.firstName,
             adm.name.middle_name || adm.name.middleName,
             adm.name.surname || adm.name.last_name
         ].filter(Boolean);
-        return parts.join(' ') || 'Unknown';
+        if (parts.length > 0) {
+            return parts.join(' ');
+        }
     }
-    if (adm.full_name) {
-        return adm.full_name;
-    }
+
     return 'Unknown';
 }
 
@@ -437,7 +445,9 @@ function viewDetails(admId) {
     }
 
     // Populate Reference Information
-    document.getElementById('viewAdmTraineeId').textContent = adm.trainee_id || adm.traineeId || 'N/A';
+    // Show trainee_id if available, otherwise show reference number, otherwise "Not Assigned"
+    const displayTraineeId = adm.trainee_id || adm.traineeId || adm.reference_number || adm.referenceNumber || 'Not Assigned';
+    document.getElementById('viewAdmTraineeId').textContent = displayTraineeId;
     document.getElementById('viewAdmReferenceNumber').textContent = adm.reference_number || adm.referenceNumber || 'N/A';
 
     // Handle Picture
@@ -1141,53 +1151,53 @@ async function loadCoursesForAddModal() {
 
 // Save new admission
 async function saveNewAdmission() {
-    // Collect form data
+    // Collect form data - using camelCase to match backend expectations
     const newAdmission = {
-        trainee_id: document.getElementById('addTraineeId')?.value || '',
-        reference_number: document.getElementById('addReferenceNumber')?.value || '',
-        applicant_name: document.getElementById('addApplicantName')?.value || '',
-        tel_number: document.getElementById('addTelNumber')?.value || '',
-        assessment_applied: document.getElementById('addAssessmentApplied')?.value || '',
-        or_number: document.getElementById('addOrNumber')?.value || '',
-        date_issued: document.getElementById('addDateIssued')?.value || '',
-        assessment_center: document.getElementById('addAssessmentCenter')?.value || '',
-        assessment_date: document.getElementById('addAssessmentDate')?.value || '',
-        assessment_time: document.getElementById('addAssessmentTime')?.value || '',
-        processing_officer_printed_name: document.getElementById('addProcessingOfficerPrintedName')?.value || '',
-        processing_officer_date: document.getElementById('addProcessingOfficerDate')?.value || '',
-        applicant_printed_name: document.getElementById('addApplicantPrintedName')?.value || '',
-        applicant_date: document.getElementById('addApplicantDate')?.value || '',
+        trainee_id: document.getElementById('addTraineeId')?.value.trim() || '',
+        referenceNumber: document.getElementById('addReferenceNumber')?.value.trim() || '',
+        applicantName: document.getElementById('addApplicantName')?.value.trim() || '',
+        telNumber: document.getElementById('addTelNumber')?.value.trim() || '',
+        assessmentApplied: document.getElementById('addAssessmentApplied')?.value || '',
+        orNumber: document.getElementById('addOrNumber')?.value.trim() || '',
+        dateIssued: document.getElementById('addDateIssued')?.value || '',
+        assessmentCenter: document.getElementById('addAssessmentCenter')?.value || '',
+        assessmentDate: document.getElementById('addAssessmentDate')?.value || '',
+        assessmentTime: document.getElementById('addAssessmentTime')?.value || '',
+        processingOfficerPrintedName: document.getElementById('addProcessingOfficerPrintedName')?.value.trim() || '',
+        processingOfficerDate: document.getElementById('addProcessingOfficerDate')?.value || '',
+        applicantPrintedName: document.getElementById('addApplicantPrintedName')?.value.trim() || '',
+        applicantDate: document.getElementById('addApplicantDate')?.value || '',
         status: document.getElementById('addStatus')?.value || 'pending'
     };
 
     // Validate required fields
-    if (!newAdmission.applicant_name) {
+    if (!newAdmission.applicantName) {
         showError('Applicant name is required');
         return;
     }
 
-    if (!newAdmission.tel_number) {
+    if (!newAdmission.telNumber) {
         showError('Telephone number is required');
         return;
     }
 
-    if (!newAdmission.assessment_applied) {
+    if (!newAdmission.assessmentApplied) {
         showError('Assessment applied for is required');
         return;
     }
 
-    if (!newAdmission.assessment_center) {
+    if (!newAdmission.assessmentCenter) {
         showError('Assessment center is required');
         return;
     }
 
     // Submitted Requirements
-    newAdmission.submitted_requirements = [];
+    newAdmission.submittedRequirements = [];
     if (document.getElementById('addReq1')?.checked) {
-        newAdmission.submitted_requirements.push('Accomplished Self-Assessment Guide');
+        newAdmission.submittedRequirements.push('Accomplished Self-Assessment Guide');
     }
     if (document.getElementById('addReq2')?.checked) {
-        newAdmission.submitted_requirements.push('Three (3) pieces colored passport size pictures');
+        newAdmission.submittedRequirements.push('Three (3) pieces colored passport size pictures');
     }
 
     // Remarks
@@ -1199,40 +1209,38 @@ async function saveNewAdmission() {
         newAdmission.remarks.push('Others. Pls. specify');
     }
 
-    // Handle file uploads for picture
-    const pictureInput = document.getElementById('addPicture');
-    if (pictureInput && pictureInput.files && pictureInput.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            newAdmission.picture = e.target.result;
-        };
-        reader.readAsDataURL(pictureInput.files[0]);
-    }
-
-    // Handle file uploads for signatures
-    const processingOfficerSigInput = document.getElementById('addProcessingOfficerSignature');
-    if (processingOfficerSigInput && processingOfficerSigInput.files && processingOfficerSigInput.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            newAdmission.processing_officer_signature = e.target.result;
-        };
-        reader.readAsDataURL(processingOfficerSigInput.files[0]);
-    }
-
-    const applicantSigInput = document.getElementById('addApplicantSignature');
-    if (applicantSigInput && applicantSigInput.files && applicantSigInput.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            newAdmission.applicant_signature = e.target.result;
-        };
-        reader.readAsDataURL(applicantSigInput.files[0]);
-    }
-
-    // Add timestamps
-    newAdmission.submitted_at = new Date().toISOString();
-    newAdmission.created_at = new Date().toISOString();
+    // Helper function to read file as data URL
+    const readFileAsDataURL = (file) => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = (e) => resolve(e.target.result);
+            reader.onerror = (e) => reject(e);
+            reader.readAsDataURL(file);
+        });
+    };
 
     try {
+        // Handle file uploads for picture
+        const pictureInput = document.getElementById('addPicture');
+        if (pictureInput && pictureInput.files && pictureInput.files[0]) {
+            newAdmission.picture = await readFileAsDataURL(pictureInput.files[0]);
+        }
+
+        // Handle file uploads for signatures
+        const processingOfficerSigInput = document.getElementById('addProcessingOfficerSignature');
+        if (processingOfficerSigInput && processingOfficerSigInput.files && processingOfficerSigInput.files[0]) {
+            newAdmission.processingOfficerSignature = await readFileAsDataURL(processingOfficerSigInput.files[0]);
+        }
+
+        const applicantSigInput = document.getElementById('addApplicantSignature');
+        if (applicantSigInput && applicantSigInput.files && applicantSigInput.files[0]) {
+            newAdmission.applicantSignature = await readFileAsDataURL(applicantSigInput.files[0]);
+        }
+
+        // Add timestamps
+        newAdmission.submittedAt = new Date().toISOString();
+        newAdmission.created_at = new Date().toISOString();
+
         const response = await fetch(`${config.api.baseUrl}/api/v1/admissions`, {
             method: 'POST',
             headers: {

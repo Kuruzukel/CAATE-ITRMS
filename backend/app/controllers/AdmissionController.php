@@ -23,13 +23,19 @@ class AdmissionController {
                 return;
             }
             
-            // Resolve trainee to get the actual trainee_id field (TRN-2026-XXX)
+            // Get the trainee_id from input (can be a text ID like TRN-2026-XXX or MongoDB ObjectId)
+            $inputTraineeId = $input['trainee_id'] ?? null;
+            
+            // Try to resolve trainee if trainee_id looks like a MongoDB ObjectId
             $resolvedTrainee = $this->resolveTrainee($input);
             $trainee = $resolvedTrainee['trainee'];
             
+            // If trainee was found, use their trainee_id, otherwise use the input trainee_id as-is
+            $finalTraineeId = $trainee['trainee_id'] ?? $inputTraineeId;
+            
             $admissionData = [
                 'user_id' => $resolvedTrainee['user_id'],
-                'trainee_id' => $trainee['trainee_id'] ?? null,
+                'trainee_id' => $finalTraineeId, // Store the actual trainee ID text
                 'first_name' => $trainee['first_name'] ?? $trainee['firstName'] ?? '',
                 'second_name' => $trainee['second_name'] ?? $trainee['secondName'] ?? '',
                 'middle_name' => $trainee['middle_name'] ?? $trainee['middleName'] ?? '',

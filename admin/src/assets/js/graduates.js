@@ -47,8 +47,11 @@ document.addEventListener('DOMContentLoaded', function () {
                         let graduatedFormatted = 'N/A';
                         if (graduateData.graduation_date) {
                             const dateObj = new Date(graduateData.graduation_date);
-                            const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-                            graduatedFormatted = `${monthNames[dateObj.getMonth()]} ${dateObj.getFullYear()}`;
+                            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+                            const day = dateObj.getDate();
+                            const month = monthNames[dateObj.getMonth()];
+                            const year = dateObj.getFullYear();
+                            graduatedFormatted = `${month} ${day}, ${year}`;
                         }
 
                         // Create card
@@ -597,70 +600,97 @@ document.addEventListener('DOMContentLoaded', function () {
     if (saveNewGraduateBtn && !saveNewGraduateBtn.dataset.listenerAttached) {
         saveNewGraduateBtn.dataset.listenerAttached = 'true';
         saveNewGraduateBtn.addEventListener('click', async function () {
-            const form = document.getElementById('addGraduateForm');
-            if (form.checkValidity()) {
-                // Disable button to prevent double submission
-                if (saveNewGraduateBtn.disabled) return;
-                saveNewGraduateBtn.disabled = true;
-                saveNewGraduateBtn.innerHTML = '<i class="bx bx-loader bx-spin"></i> Saving...';
+            // Get form values
+            const certification = document.getElementById('addGraduateCertification').value;
+            const name = document.getElementById('addGraduateName').value.trim();
+            const id = document.getElementById('addGraduateId').value.trim();
+            const course = document.getElementById('addGraduateCourse').value;
+            const graduatedDate = document.getElementById('addGraduateDate').value;
+            const email = document.getElementById('addGraduateEmail').value.trim();
+            const imageFile = document.getElementById('addGraduateImageInput').files[0];
 
-                // Get form values
-                const certification = document.getElementById('addGraduateCertification').value;
-                const name = document.getElementById('addGraduateName').value;
-                const id = document.getElementById('addGraduateId').value;
-                const course = document.getElementById('addGraduateCourse').value;
-                const graduatedDate = document.getElementById('addGraduateDate').value;
-                const email = document.getElementById('addGraduateEmail').value;
-                const imageFile = document.getElementById('addGraduateImageInput').files[0];
+            // Custom validation with toast notifications
+            if (!certification) {
+                showError('Please select a certification');
+                return;
+            }
+            if (!name) {
+                showError('Please enter the full name');
+                return;
+            }
+            if (!id) {
+                showError('Please enter the trainee ID');
+                return;
+            }
+            if (!course) {
+                showError('Please select a course');
+                return;
+            }
+            if (!graduatedDate) {
+                showError('Please select the graduation date');
+                return;
+            }
+            if (!email) {
+                showError('Please enter the email address');
+                return;
+            }
+            // Validate email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showError('Please enter a valid email address');
+                return;
+            }
 
-                try {
-                    // Prepare form data for API
-                    const formData = new FormData();
-                    formData.append('name', name);
-                    formData.append('trainee_id', id);
-                    formData.append('course', course);
-                    formData.append('certification', certification);
-                    formData.append('graduation_date', graduatedDate);
-                    formData.append('email', email);
+            // Disable button to prevent double submission
+            if (saveNewGraduateBtn.disabled) return;
+            saveNewGraduateBtn.disabled = true;
+            saveNewGraduateBtn.innerHTML = '<i class="bx bx-loader bx-spin"></i> Saving...';
 
-                    // Add image if uploaded
-                    if (imageFile) {
-                        formData.append('image', imageFile);
-                    }
+            try {
+                // Prepare form data for API
+                const formData = new FormData();
+                formData.append('name', name);
+                formData.append('trainee_id', id);
+                formData.append('course', course);
+                formData.append('certification', certification);
+                formData.append('graduation_date', graduatedDate);
+                formData.append('email', email);
 
-                    // Send to backend API
-                    const response = await fetch(`${config.api.baseUrl}/api/v1/graduates`, {
-                        method: 'POST',
-                        body: formData
-                    });
-
-                    const result = await response.json();
-
-                    if (result.success) {
-                        // Close modal
-                        const modal = bootstrap.Modal.getInstance(document.getElementById('addGraduateModal'));
-                        modal.hide();
-
-                        // Reset form
-                        form.reset();
-                        document.getElementById('addGraduateImagePreview').src = '../assets/images/DEFAULT_AVATAR.png';
-
-                        // Show success toast and reload page
-                        showSuccess('Graduate added successfully!');
-                        setTimeout(() => window.location.reload(), 1000);
-                    } else {
-                        showError('Error saving graduate: ' + (result.message || 'Unknown error'));
-                        saveNewGraduateBtn.disabled = false;
-                        saveNewGraduateBtn.innerHTML = '<i class="bx bx-user-plus"></i> Save';
-                    }
-                } catch (error) {
-                    console.error('Error saving graduate:', error);
-                    showError('Error saving graduate to database. Please try again.');
-                    saveNewGraduateBtn.disabled = false;
-                    saveNewGraduateBtn.innerHTML = '<i class="bx bx-user-plus"></i> Save';
+                // Add image if uploaded
+                if (imageFile) {
+                    formData.append('image', imageFile);
                 }
-            } else {
-                form.reportValidity();
+
+                // Send to backend API
+                const response = await fetch(`${config.api.baseUrl}/api/v1/graduates`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    // Close modal
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('addGraduateModal'));
+                    modal.hide();
+
+                    // Reset form
+                    document.getElementById('addGraduateForm').reset();
+                    document.getElementById('addGraduateImagePreview').src = '../assets/images/DEFAULT_AVATAR.png';
+
+                    // Show success toast and reload page
+                    showSuccess('Graduate added successfully!');
+                    setTimeout(() => window.location.reload(), 1000);
+                } else {
+                    showError('Error saving graduate: ' + (result.message || 'Unknown error'));
+                    saveNewGraduateBtn.disabled = false;
+                    saveNewGraduateBtn.innerHTML = '<i class="bx bx-user-plus"></i> Add Graduate';
+                }
+            } catch (error) {
+                console.error('Error saving graduate:', error);
+                showError('Error saving graduate to database. Please try again.');
+                saveNewGraduateBtn.disabled = false;
+                saveNewGraduateBtn.innerHTML = '<i class="bx bx-user-plus"></i> Add Graduate';
             }
         });
     }

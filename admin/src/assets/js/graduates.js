@@ -22,10 +22,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (result.data.length === 0) {
                         // Show empty state
                         graduatesGrid.innerHTML = `
-                            <div class="col-12 text-center py-5">
-                                <i class="bx bxs-graduation" style="font-size: 80px; color: #b8c5d6; opacity: 0.5;"></i>
-                                <h5 class="mt-3" style="color: #b8c5d6;">No Graduates Yet</h5>
-                                <p class="text-muted">Start by adding your first graduate using the button above.</p>
+                            <div class="col-12" style="display: flex; justify-content: center; align-items: center; min-height: 350px;">
+                                <div style="text-align: center;">
+                                    <i class="bx bxs-graduation" style="font-size: 4rem; opacity: 0.3; color: #697a8d; display: block; margin: 0 auto 15px;"></i>
+                                    <h5 style="margin-bottom: 10px; color: #697a8d;">No Graduates Yet</h5>
+                                    <p style="margin: 5px 0 0 0; font-size: 0.9rem; opacity: 0.7; color: #697a8d;">Click "Add New Graduate" to create your first graduate record.</p>
+                                </div>
                             </div>
                         `;
                         return;

@@ -2,11 +2,30 @@
 .edit-graduate-btn {
     border-radius: var(--border-radius-sm) !important;
 }
+
 .card-body .badge.bg-primary {
     background-color: var(--primary-blue) !important;
     color: #ffffff !important;
     font-weight: 500;
 }
+
 .pagination .page-link {
     transition: all 0.3s ease !important;
+}
+
+/* Date input calendar icon styling */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.7);
+    cursor: pointer;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+    filter: invert(0.9);
+}
+
+
+/* Upload Photo button icon styling */
+#addGraduateModal .btn-outline-primary .bx-upload,
+#editGraduateModal .btn-outline-primary .bx-upload {
+    color: #b8c5d6 !important;
 }

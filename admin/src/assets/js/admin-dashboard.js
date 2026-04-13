@@ -479,16 +479,18 @@ async function fetchRecentEnrollmentActivity() {
         for (const enrollment of enrollmentsData.data) {
             let profileImage = null;
 
-            // Handle different possible field name formats for trainee ID
-            const traineeId = enrollment.traineeId || enrollment.trainee_id || enrollment.trainee?.id;
+            // Get user_id (MongoDB ObjectId) for API lookup
+            const userId = enrollment.userId || enrollment.user_id || enrollment.trainee?.userId;
 
-            // Fetch trainee profile image if traineeId exists
-            if (traineeId) {
+            // Fetch trainee profile image if userId exists and is a valid MongoDB ObjectId
+            if (userId && typeof userId === 'string' && /^[a-f\d]{24}$/i.test(userId)) {
                 try {
-                    const traineeResponse = await fetch(`${config.api.baseUrl}/api/v1/trainees/${traineeId}`);
-                    const traineeData = await traineeResponse.json();
-                    if (traineeData.success && traineeData.data && traineeData.data.profile_image) {
-                        profileImage = traineeData.data.profile_image;
+                    const traineeResponse = await fetch(`${config.api.baseUrl}/api/v1/trainees/${userId}`);
+                    if (traineeResponse.ok) {
+                        const traineeData = await traineeResponse.json();
+                        if (traineeData.success && traineeData.data && traineeData.data.profile_image) {
+                            profileImage = traineeData.data.profile_image;
+                        }
                     }
                 } catch (error) {
                     console.log('Could not fetch trainee profile:', error);

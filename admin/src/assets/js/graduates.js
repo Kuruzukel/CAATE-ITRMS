@@ -14,8 +14,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 const graduatesGrid = document.querySelector('.row.row-cols-1.row-cols-md-2.row-cols-lg-3.row-cols-xl-4');
 
                 if (graduatesGrid) {
-                    // Clear existing cards (keep only hardcoded ones or clear all)
-                    // graduatesGrid.innerHTML = ''; // Uncomment to clear all cards
+                    // Clear existing cards before loading from database
+                    graduatesGrid.innerHTML = '';
 
                     // Add each graduate from database
                     result.data.forEach(graduate => {
@@ -577,67 +577,78 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Save new graduate button
-    document.getElementById('saveNewGraduateBtn')?.addEventListener('click', async function () {
-        const form = document.getElementById('addGraduateForm');
-        if (form.checkValidity()) {
-            // Get form values
-            const certification = document.getElementById('addGraduateCertification').value;
-            const name = document.getElementById('addGraduateName').value;
-            const id = document.getElementById('addGraduateId').value;
-            const course = document.getElementById('addGraduateCourse').value;
-            const graduatedDate = document.getElementById('addGraduateDate').value;
-            const email = document.getElementById('addGraduateEmail').value;
-            const imageFile = document.getElementById('addGraduateImageInput').files[0];
-            const imagePreview = document.getElementById('addGraduateImagePreview').src;
+    // Save new graduate button (use once to prevent multiple listeners)
+    const saveNewGraduateBtn = document.getElementById('saveNewGraduateBtn');
+    if (saveNewGraduateBtn && !saveNewGraduateBtn.dataset.listenerAttached) {
+        saveNewGraduateBtn.dataset.listenerAttached = 'true';
+        saveNewGraduateBtn.addEventListener('click', async function () {
+            const form = document.getElementById('addGraduateForm');
+            if (form.checkValidity()) {
+                // Disable button to prevent double submission
+                if (saveNewGraduateBtn.disabled) return;
+                saveNewGraduateBtn.disabled = true;
+                saveNewGraduateBtn.innerHTML = '<i class="bx bx-loader bx-spin"></i> Saving...';
 
-            try {
-                // Prepare form data for API
-                const formData = new FormData();
-                formData.append('name', name);
-                formData.append('trainee_id', id);
-                formData.append('course', course);
-                formData.append('certification', certification);
-                formData.append('graduation_date', graduatedDate);
-                formData.append('email', email);
+                // Get form values
+                const certification = document.getElementById('addGraduateCertification').value;
+                const name = document.getElementById('addGraduateName').value;
+                const id = document.getElementById('addGraduateId').value;
+                const course = document.getElementById('addGraduateCourse').value;
+                const graduatedDate = document.getElementById('addGraduateDate').value;
+                const email = document.getElementById('addGraduateEmail').value;
+                const imageFile = document.getElementById('addGraduateImageInput').files[0];
 
-                // Add image if uploaded
-                if (imageFile) {
-                    formData.append('image', imageFile);
+                try {
+                    // Prepare form data for API
+                    const formData = new FormData();
+                    formData.append('name', name);
+                    formData.append('trainee_id', id);
+                    formData.append('course', course);
+                    formData.append('certification', certification);
+                    formData.append('graduation_date', graduatedDate);
+                    formData.append('email', email);
+
+                    // Add image if uploaded
+                    if (imageFile) {
+                        formData.append('image', imageFile);
+                    }
+
+                    // Send to backend API
+                    const response = await fetch(`${config.api.baseUrl}/api/v1/graduates`, {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const result = await response.json();
+
+                    if (result.success) {
+                        // Close modal
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('addGraduateModal'));
+                        modal.hide();
+
+                        // Reset form
+                        form.reset();
+                        document.getElementById('addGraduateImagePreview').src = '../assets/images/DEFAULT_AVATAR.png';
+
+                        // Show success message and reload page
+                        alert('Graduate added successfully!');
+                        window.location.reload();
+                    } else {
+                        alert('Error saving graduate: ' + (result.message || 'Unknown error'));
+                        saveNewGraduateBtn.disabled = false;
+                        saveNewGraduateBtn.innerHTML = '<i class="bx bx-user-plus"></i> Save';
+                    }
+                } catch (error) {
+                    console.error('Error saving graduate:', error);
+                    alert('Error saving graduate to database. Please try again.');
+                    saveNewGraduateBtn.disabled = false;
+                    saveNewGraduateBtn.innerHTML = '<i class="bx bx-user-plus"></i> Save';
                 }
-
-                // Send to backend API
-                const response = await fetch(`${config.api.baseUrl}/api/v1/graduates`, {
-                    method: 'POST',
-                    body: formData
-                });
-
-                const result = await response.json();
-
-                if (result.success) {
-                    alert('Graduate added successfully and saved to database!');
-
-                    // Close modal
-                    const modal = bootstrap.Modal.getInstance(document.getElementById('addGraduateModal'));
-                    modal.hide();
-
-                    // Reset form
-                    form.reset();
-                    document.getElementById('addGraduateImagePreview').src = '../assets/images/DEFAULT_AVATAR.png';
-
-                    // Reload graduates from database to show the new one
-                    location.reload();
-                } else {
-                    alert('Error saving graduate: ' + (result.message || 'Unknown error'));
-                }
-            } catch (error) {
-                console.error('Error saving graduate:', error);
-                alert('Error saving graduate to database. Please try again.');
+            } else {
+                form.reportValidity();
             }
-        } else {
-            form.reportValidity();
-        }
-    });
+        });
+    }
 
     // Export to CSV function
     function exportGraduatesToCSV() {

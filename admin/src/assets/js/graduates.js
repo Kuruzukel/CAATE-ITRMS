@@ -72,8 +72,8 @@ document.addEventListener('DOMContentLoaded', function () {
                                     <span class="badge mb-2" style="background-color: #5bc0de; color: #ffffff;">${certification}</span>
                                     <h5 class="card-title mb-2">${name}</h5>
                                     <p class="text-muted small mb-2">ID: ${id}</p>
-                                    <p class="card-text small mb-2">
-                                        <i class="bx bx-book-open me-1"></i>${course}
+                                    <p class="card-text small mb-2 graduate-course-text">
+                                        <i class="bx bx-book-open me-1"></i><span class="course-name">${course}</span>
                                     </p>
                                     <p class="card-text small mb-2">
                                         <i class="bx bx-calendar me-1"></i>Graduated: ${graduatedFormatted}

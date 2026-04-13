@@ -396,20 +396,99 @@ document.addEventListener('DOMContentLoaded', function () {
             const name = document.getElementById('addGraduateName').value;
             const id = document.getElementById('addGraduateId').value;
             const course = document.getElementById('addGraduateCourse').value;
-            const graduated = document.getElementById('addGraduateDate').value;
+            const graduatedDate = document.getElementById('addGraduateDate').value;
             const email = document.getElementById('addGraduateEmail').value;
             const image = document.getElementById('addGraduateImagePreview').src;
 
-            // Here you would typically send this data to your backend API
-            // For now, we'll just show a success message
-            alert('Graduate added successfully!\n\nName: ' + name + '\nID: ' + id + '\nCertification: ' + certification + '\nCourse: ' + course);
+            // Format the graduation date (convert from YYYY-MM-DD to "Month Year")
+            const dateObj = new Date(graduatedDate);
+            const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            const graduatedFormatted = `${monthNames[dateObj.getMonth()]} ${dateObj.getFullYear()}`;
+
+            // Create new graduate card
+            const newCard = document.createElement('div');
+            newCard.className = 'col';
+            newCard.innerHTML = `
+                <div class="card h-100">
+                    <img src="${image}" class="card-img-top" alt="${name}" style="height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        <span class="badge mb-2" style="background-color: #5bc0de; color: #ffffff;">${certification}</span>
+                        <h5 class="card-title mb-2">${name}</h5>
+                        <p class="text-muted small mb-2">ID: ${id}</p>
+                        <p class="card-text small mb-2">
+                            <i class="bx bx-book-open me-1"></i>${course}
+                        </p>
+                        <p class="card-text small mb-2">
+                            <i class="bx bx-calendar me-1"></i>Graduated: ${graduatedFormatted}
+                        </p>
+                        <p class="card-text small mb-3">
+                            <i class="bx bx-envelope me-1"></i>${email}
+                        </p>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-sm btn-outline-primary flex-fill view-graduate-btn" 
+                                data-bs-toggle="modal" data-bs-target="#viewGraduateModal"
+                                data-name="${name}" data-id="${id}" data-course="${course}" 
+                                data-graduated="${graduatedFormatted}" data-email="${email}" 
+                                data-certification="${certification}" data-image="${image}">
+                                <i class="bx bx-show"></i> View
+                            </button>
+                            <button class="btn btn-sm btn-outline-secondary flex-fill edit-graduate-btn" 
+                                data-bs-toggle="modal" data-bs-target="#editGraduateModal"
+                                data-name="${name}" data-id="${id}" data-course="${course}" 
+                                data-graduated="${graduatedFormatted}" data-email="${email}" 
+                                data-certification="${certification}" data-image="${image}">
+                                <i class="bx bx-edit"></i> Edit
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Add the new card to the graduates grid
+            const graduatesGrid = document.querySelector('.row.row-cols-1.row-cols-md-2.row-cols-lg-3.row-cols-xl-4');
+            if (graduatesGrid) {
+                graduatesGrid.appendChild(newCard);
+
+                // Re-initialize pagination to include the new card
+                initializePagination();
+
+                // Add event listeners to the new buttons
+                const viewBtn = newCard.querySelector('.view-graduate-btn');
+                const editBtn = newCard.querySelector('.edit-graduate-btn');
+
+                if (viewBtn) {
+                    viewBtn.addEventListener('click', function () {
+                        document.getElementById('modalGraduateName').value = name;
+                        document.getElementById('modalGraduateId').value = id;
+                        document.getElementById('modalGraduateCourse').value = course;
+                        document.getElementById('modalGraduateDate').value = graduatedFormatted;
+                        document.getElementById('modalGraduateEmail').value = email;
+                        document.getElementById('modalGraduateImage').src = image;
+                    });
+                }
+
+                if (editBtn) {
+                    editBtn.addEventListener('click', function () {
+                        document.getElementById('editGraduateName').value = name;
+                        document.getElementById('editGraduateId').value = id;
+                        document.getElementById('editGraduateCourse').value = course;
+                        document.getElementById('editGraduateDate').value = graduatedDate;
+                        document.getElementById('editGraduateEmail').value = email;
+                        document.getElementById('editGraduateCertification').value = certification;
+                        document.getElementById('editGraduateImage').src = image;
+                    });
+                }
+            }
+
+            alert('Graduate added successfully!');
 
             // Close modal
             const modal = bootstrap.Modal.getInstance(document.getElementById('addGraduateModal'));
             modal.hide();
 
-            // TODO: Add the new graduate card to the page dynamically
-            // or reload the graduates list from the API
+            // Reset form
+            form.reset();
+            document.getElementById('addGraduateImagePreview').src = '../assets/images/DEFAULT_AVATAR.png';
         } else {
             form.reportValidity();
         }

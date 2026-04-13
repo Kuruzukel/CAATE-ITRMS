@@ -71,7 +71,7 @@ class EnrollmentController {
             $db = getMongoConnection();
             $registrationCollection = $db->registrations;
             $applicationCollection = $db->applications;
-            $admissionCollection = $db->admissions;
+            // Removed admissionCollection - admissions will not be included
             $coursesCollection = $db->courses;
             $traineesCollection = $db->trainees;
             
@@ -193,70 +193,6 @@ class EnrollmentController {
                     'status' => $status,
                     'enrollmentDate' => $createdAt,
                     'type' => 'application'
-                ];
-            }
-            
-            // Fetch all admissions (all statuses)
-            $admissions = $admissionCollection->find(
-                [],
-                [
-                    'sort' => ['created_at' => -1],
-                    'limit' => $limit
-                ]
-            )->toArray();
-            
-            foreach ($admissions as $admission) {
-                // Admissions use 'user_id' instead of 'trainee_id'
-                $traineeId = $admission['user_id'] ?? ($admission['trainee_id'] ?? '');
-                
-                // Admissions don't have course_id, they have assessment_applied
-                $courseId = $admission['course_id'] ?? '';
-                
-                $course = null;
-                if ($courseId) {
-                    try {
-                        $course = $coursesCollection->findOne(['_id' => new MongoDB\BSON\ObjectId($courseId)]);
-                    } catch (Exception $e) {
-                        // Try finding by string ID if ObjectId fails
-                        $course = $coursesCollection->findOne(['_id' => $courseId]);
-                    }
-                }
-                
-                $trainee = null;
-                if ($traineeId) {
-                    try {
-                        if ($traineeId instanceof MongoDB\BSON\ObjectId) {
-                            $trainee = $traineesCollection->findOne(['_id' => $traineeId]);
-                        } else {
-                            $trainee = $traineesCollection->findOne(['_id' => new MongoDB\BSON\ObjectId($traineeId)]);
-                        }
-                    } catch (Exception $e) {
-                        // Try finding by string ID if ObjectId fails
-                        $trainee = $traineesCollection->findOne(['_id' => $traineeId]);
-                    }
-                }
-                
-                $traineeName = $this->extractTraineeName($admission, $trainee);
-                $courseName = $course['title'] ?? ($admission['assessment_applied'] ?? ($admission['course_name'] ?? 'Unknown Course'));
-                $status = $admission['status'] ?? 'pending';
-                
-                $createdAt = null;
-                if (isset($admission['created_at'])) {
-                    if ($admission['created_at'] instanceof MongoDB\BSON\UTCDateTime) {
-                        $createdAt = $admission['created_at']->toDateTime()->format('Y-m-d H:i:s');
-                    } else {
-                        $createdAt = $admission['created_at'];
-                    }
-                }
-                
-                $recentEnrollments[] = [
-                    'id' => (string)$admission['_id'],
-                    'traineeName' => $traineeName,
-                    'traineeId' => is_object($traineeId) ? (string)$traineeId : $traineeId,
-                    'courseName' => $courseName,
-                    'status' => $status,
-                    'enrollmentDate' => $createdAt,
-                    'type' => 'admission'
                 ];
             }
             

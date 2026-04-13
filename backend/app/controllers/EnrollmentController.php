@@ -6,6 +6,61 @@ require_once __DIR__ . '/../models/Trainee.php';
 
 class EnrollmentController {
     
+    private function extractTraineeName($record, $trainee = null) {
+        // First, try to get name from trainee lookup
+        if ($trainee) {
+            $firstName = $trainee['first_name'] ?? '';
+            $lastName = $trainee['last_name'] ?? '';
+            $fullName = trim($firstName . ' ' . $lastName);
+            if (!empty($fullName)) {
+                return $fullName;
+            }
+            if (isset($trainee['name']) && !empty($trainee['name'])) {
+                return $trainee['name'];
+            }
+        }
+        
+        // Try direct fields in record
+        if (isset($record['first_name']) && isset($record['last_name'])) {
+            $firstName = $record['first_name'] ?? '';
+            $middleName = $record['middle_name'] ?? '';
+            $lastName = $record['last_name'] ?? '';
+            $fullName = trim($firstName . ' ' . $middleName . ' ' . $lastName);
+            if (!empty($fullName) && $fullName !== '  ') {
+                return $fullName;
+            }
+        }
+        
+        // Try nested name object (for applications)
+        if (isset($record['name']) && is_array($record['name'])) {
+            $firstName = $record['name']['first_name'] ?? ($record['name']['firstName'] ?? '');
+            $middleName = $record['name']['middle_name'] ?? ($record['name']['middleName'] ?? '');
+            $lastName = $record['name']['last_name'] ?? ($record['name']['lastName'] ?? '');
+            $fullName = trim($firstName . ' ' . $middleName . ' ' . $lastName);
+            if (!empty($fullName) && $fullName !== '  ') {
+                return $fullName;
+            }
+        }
+        
+        // Try other possible name fields
+        $possibleNameFields = [
+            'applicant_name',
+            'trainee_name',
+            'traineeFullName',
+            'full_name',
+            'fullName',
+            'name'
+        ];
+        
+        foreach ($possibleNameFields as $field) {
+            if (isset($record[$field]) && !empty($record[$field]) && is_string($record[$field])) {
+                return $record[$field];
+            }
+        }
+        
+        return 'Unknown';
+    }
+    
     public function getRecentEnrollments() {
         header('Content-Type: application/json');
         header('Access-Control-Allow-Origin: *');
@@ -40,6 +95,8 @@ class EnrollmentController {
                     try {
                         $course = $coursesCollection->findOne(['_id' => new MongoDB\BSON\ObjectId($courseId)]);
                     } catch (Exception $e) {
+                        // Try finding by string ID if ObjectId fails
+                        $course = $coursesCollection->findOne(['_id' => $courseId]);
                     }
                 }
                 
@@ -48,19 +105,13 @@ class EnrollmentController {
                     try {
                         $trainee = $traineesCollection->findOne(['_id' => new MongoDB\BSON\ObjectId($traineeId)]);
                     } catch (Exception $e) {
+                        // Try finding by string ID if ObjectId fails
+                        $trainee = $traineesCollection->findOne(['_id' => $traineeId]);
                     }
                 }
                 
-                $traineeName = 'Unknown';
-                if ($trainee) {
-                    $firstName = $trainee['first_name'] ?? '';
-                    $lastName = $trainee['last_name'] ?? '';
-                    $traineeName = trim($firstName . ' ' . $lastName);
-                } else if (isset($registration['traineeFullName'])) {
-                    $traineeName = $registration['traineeFullName'];
-                }
-                
-                $courseName = $course['title'] ?? ($registration['selectedCourse'] ?? 'Unknown Course');
+                $traineeName = $this->extractTraineeName($registration, $trainee);
+                $courseName = $course['title'] ?? ($registration['selectedCourse'] ?? ($registration['course_name'] ?? 'Unknown Course'));
                 $status = $registration['status'] ?? 'pending';
                 
                 $createdAt = null;
@@ -93,33 +144,36 @@ class EnrollmentController {
             )->toArray();
             
             foreach ($applications as $application) {
+                // Applications use 'user_id' instead of 'trainee_id'
+                $traineeId = $application['user_id'] ?? ($application['trainee_id'] ?? '');
                 $courseId = $application['course_id'] ?? '';
-                $traineeId = $application['trainee_id'] ?? '';
                 
                 $course = null;
                 if ($courseId) {
                     try {
                         $course = $coursesCollection->findOne(['_id' => new MongoDB\BSON\ObjectId($courseId)]);
                     } catch (Exception $e) {
+                        // Try finding by string ID if ObjectId fails
+                        $course = $coursesCollection->findOne(['_id' => $courseId]);
                     }
                 }
                 
                 $trainee = null;
                 if ($traineeId) {
                     try {
-                        $trainee = $traineesCollection->findOne(['_id' => new MongoDB\BSON\ObjectId($traineeId)]);
+                        if ($traineeId instanceof MongoDB\BSON\ObjectId) {
+                            $trainee = $traineesCollection->findOne(['_id' => $traineeId]);
+                        } else {
+                            $trainee = $traineesCollection->findOne(['_id' => new MongoDB\BSON\ObjectId($traineeId)]);
+                        }
                     } catch (Exception $e) {
+                        // Try finding by string ID if ObjectId fails
+                        $trainee = $traineesCollection->findOne(['_id' => $traineeId]);
                     }
                 }
                 
-                $traineeName = 'Unknown';
-                if ($trainee) {
-                    $firstName = $trainee['first_name'] ?? '';
-                    $lastName = $trainee['last_name'] ?? '';
-                    $traineeName = trim($firstName . ' ' . $lastName);
-                }
-                
-                $courseName = $course['title'] ?? 'Unknown Course';
+                $traineeName = $this->extractTraineeName($application, $trainee);
+                $courseName = $course['title'] ?? ($application['assessment_title'] ?? ($application['course_name'] ?? 'Unknown Course'));
                 $status = $application['status'] ?? 'pending';
                 
                 $createdAt = null;
@@ -134,7 +188,7 @@ class EnrollmentController {
                 $recentEnrollments[] = [
                     'id' => (string)$application['_id'],
                     'traineeName' => $traineeName,
-                    'traineeId' => $traineeId,
+                    'traineeId' => is_object($traineeId) ? (string)$traineeId : $traineeId,
                     'courseName' => $courseName,
                     'status' => $status,
                     'enrollmentDate' => $createdAt,
@@ -152,33 +206,38 @@ class EnrollmentController {
             )->toArray();
             
             foreach ($admissions as $admission) {
+                // Admissions use 'user_id' instead of 'trainee_id'
+                $traineeId = $admission['user_id'] ?? ($admission['trainee_id'] ?? '');
+                
+                // Admissions don't have course_id, they have assessment_applied
                 $courseId = $admission['course_id'] ?? '';
-                $traineeId = $admission['trainee_id'] ?? '';
                 
                 $course = null;
                 if ($courseId) {
                     try {
                         $course = $coursesCollection->findOne(['_id' => new MongoDB\BSON\ObjectId($courseId)]);
                     } catch (Exception $e) {
+                        // Try finding by string ID if ObjectId fails
+                        $course = $coursesCollection->findOne(['_id' => $courseId]);
                     }
                 }
                 
                 $trainee = null;
                 if ($traineeId) {
                     try {
-                        $trainee = $traineesCollection->findOne(['_id' => new MongoDB\BSON\ObjectId($traineeId)]);
+                        if ($traineeId instanceof MongoDB\BSON\ObjectId) {
+                            $trainee = $traineesCollection->findOne(['_id' => $traineeId]);
+                        } else {
+                            $trainee = $traineesCollection->findOne(['_id' => new MongoDB\BSON\ObjectId($traineeId)]);
+                        }
                     } catch (Exception $e) {
+                        // Try finding by string ID if ObjectId fails
+                        $trainee = $traineesCollection->findOne(['_id' => $traineeId]);
                     }
                 }
                 
-                $traineeName = 'Unknown';
-                if ($trainee) {
-                    $firstName = $trainee['first_name'] ?? '';
-                    $lastName = $trainee['last_name'] ?? '';
-                    $traineeName = trim($firstName . ' ' . $lastName);
-                }
-                
-                $courseName = $course['title'] ?? 'Unknown Course';
+                $traineeName = $this->extractTraineeName($admission, $trainee);
+                $courseName = $course['title'] ?? ($admission['assessment_applied'] ?? ($admission['course_name'] ?? 'Unknown Course'));
                 $status = $admission['status'] ?? 'pending';
                 
                 $createdAt = null;
@@ -193,7 +252,7 @@ class EnrollmentController {
                 $recentEnrollments[] = [
                     'id' => (string)$admission['_id'],
                     'traineeName' => $traineeName,
-                    'traineeId' => $traineeId,
+                    'traineeId' => is_object($traineeId) ? (string)$traineeId : $traineeId,
                     'courseName' => $courseName,
                     'status' => $status,
                     'enrollmentDate' => $createdAt,

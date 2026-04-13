@@ -479,10 +479,13 @@ async function fetchRecentEnrollmentActivity() {
         for (const enrollment of enrollmentsData.data) {
             let profileImage = null;
 
+            // Handle different possible field name formats for trainee ID
+            const traineeId = enrollment.traineeId || enrollment.trainee_id || enrollment.trainee?.id;
+
             // Fetch trainee profile image if traineeId exists
-            if (enrollment.traineeId) {
+            if (traineeId) {
                 try {
-                    const traineeResponse = await fetch(`${config.api.baseUrl}/api/v1/trainees/${enrollment.traineeId}`);
+                    const traineeResponse = await fetch(`${config.api.baseUrl}/api/v1/trainees/${traineeId}`);
                     const traineeData = await traineeResponse.json();
                     if (traineeData.success && traineeData.data && traineeData.data.profile_image) {
                         profileImage = traineeData.data.profile_image;
@@ -492,11 +495,27 @@ async function fetchRecentEnrollmentActivity() {
                 }
             }
 
+            // Handle different possible field name formats
+            const traineeName = enrollment.traineeName
+                || enrollment.trainee_name
+                || enrollment.trainee?.name
+                || enrollment.trainee?.full_name
+                || (enrollment.trainee?.first_name && enrollment.trainee?.last_name
+                    ? `${enrollment.trainee.first_name} ${enrollment.trainee.last_name}`
+                    : null)
+                || 'Unknown';
+
+            const courseName = enrollment.courseName
+                || enrollment.course_name
+                || enrollment.course?.name
+                || enrollment.course?.title
+                || 'Unknown Course';
+
             activities.push({
-                traineeName: enrollment.traineeName || 'Unknown',
-                courseName: enrollment.courseName || 'No Course Selected',
+                traineeName: traineeName,
+                courseName: courseName,
                 status: enrollment.status || 'pending',
-                createdAt: enrollment.enrollmentDate || new Date().toISOString(),
+                createdAt: enrollment.enrollmentDate || enrollment.enrollment_date || enrollment.created_at || new Date().toISOString(),
                 profileImage: profileImage,
                 type: enrollment.type || 'enrollment'
             });

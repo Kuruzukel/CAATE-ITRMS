@@ -67,6 +67,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (result.success && result.data && Array.isArray(result.data)) {
                 const courseFilter = document.getElementById('graduateCourseFilter');
+                const certificationFilter = document.getElementById('graduateCertificationFilter');
 
                 if (courseFilter) {
                     // Keep the "All Courses" option
@@ -78,6 +79,31 @@ document.addEventListener('DOMContentLoaded', function () {
                         option.value = course.course_name || course.title;
                         option.textContent = course.course_name || course.title;
                         courseFilter.appendChild(option);
+                    });
+                }
+
+                if (certificationFilter) {
+                    // Keep the "All Certifications" option
+                    certificationFilter.innerHTML = '<option value="">All Certifications</option>';
+
+                    // Get unique certifications from courses
+                    const certifications = new Set();
+                    result.data.forEach(course => {
+                        const badge = course.badge || course.course_code;
+                        if (badge) {
+                            certifications.add(badge);
+                        }
+                    });
+
+                    // Convert to array and sort
+                    const sortedCertifications = Array.from(certifications).sort();
+
+                    // Add each certification as an option
+                    sortedCertifications.forEach(cert => {
+                        const option = document.createElement('option');
+                        option.value = cert;
+                        option.textContent = cert;
+                        certificationFilter.appendChild(option);
                     });
                 }
             }

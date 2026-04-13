@@ -288,64 +288,65 @@
 
                         <div class="row">
                             <div class="col-lg-3 col-md-6 col-6 mb-4">
-                                <div class="card">
+                                <div class="card" id="graduatesTotalCard">
                                     <div class="card-body">
                                         <div class="card-title d-flex align-items-start justify-content-between">
                                             <div class="avatar shrink-0">
-                                                <i class="bx bx-user-plus" style="font-size: 2rem; color: #10b981;"></i>
+                                                <i class="bx bxs-graduation"
+                                                    style="font-size: 2rem; color: #10b981;"></i>
                                             </div>
                                         </div>
                                         <span class="fw-semibold d-block mb-1">Total Graduates</span>
-                                        <h3 class="card-title mb-2">700</h3>
+                                        <h3 class="card-title mb-2">0</h3>
                                         <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i>
-                                            +12.5%</small>
+                                            +0%</small>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-lg-3 col-md-6 col-6 mb-4">
-                                <div class="card">
+                                <div class="card" id="graduatesThisYearCard">
                                     <div class="card-body">
                                         <div class="card-title d-flex align-items-start justify-content-between">
                                             <div class="avatar shrink-0">
-                                                <i class="bx bx-check-circle"
+                                                <i class="bx bx-calendar-event"
                                                     style="font-size: 2rem; color: #3b82f6;"></i>
                                             </div>
                                         </div>
                                         <span class="fw-semibold d-block mb-1">This Year</span>
-                                        <h3 class="card-title mb-2">245</h3>
+                                        <h3 class="card-title mb-2">0</h3>
                                         <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i>
-                                            +42.9%</small>
+                                            +0%</small>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-lg-3 col-md-6 col-6 mb-4">
-                                <div class="card">
+                                <div class="card" id="graduatesThisMonthCard">
                                     <div class="card-body">
                                         <div class="card-title d-flex align-items-start justify-content-between">
                                             <div class="avatar shrink-0">
-                                                <i class="bx bx-time-five" style="font-size: 2rem; color: #f59e0b;"></i>
+                                                <i class="bx bx-calendar-check"
+                                                    style="font-size: 2rem; color: #f59e0b;"></i>
                                             </div>
                                         </div>
                                         <span class="d-block mb-1">This Month</span>
-                                        <h3 class="card-title text-nowrap mb-2">32</h3>
+                                        <h3 class="card-title text-nowrap mb-2">0</h3>
                                         <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i>
-                                            +15%</small>
+                                            +0%</small>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-lg-3 col-md-6 col-6 mb-4">
-                                <div class="card">
+                                <div class="card" id="graduatesCertifiedCard">
                                     <div class="card-body">
                                         <div class="card-title d-flex align-items-start justify-content-between">
                                             <div class="avatar shrink-0">
-                                                <i class="bx bx-certification"
-                                                    style="font-size: 2rem; color: #8b5cf6;"></i>
+                                                <i class="bx bxs-award" style="font-size: 2rem; color: #8b5cf6;"></i>
                                             </div>
                                         </div>
                                         <span class="fw-semibold d-block mb-1">Certified NC II</span>
-                                        <h3 class="card-title mb-2">20</h3>
+                                        <h3 class="card-title mb-2">0</h3>
                                         <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i>
-                                            +100%</small>
+                                            +0%</small>
                                     </div>
                                 </div>
                             </div>
@@ -389,7 +390,7 @@
                                                             placeholder="Name or Trainee ID"
                                                             style="background-color: #243447; border: 1px solid #3d4f63; color: #b8c5d6;">
                                                     </div>
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-3">
                                                         <label class="form-label" style="color: #b8c5d6;">Course</label>
                                                         <select class="form-select" id="graduateCourseFilter"
                                                             style="background-color: #243447; border: 1px solid #3d4f63; color: #b8c5d6;">
@@ -397,7 +398,16 @@
                                                             <!-- Courses will be loaded dynamically from API -->
                                                         </select>
                                                     </div>
-                                                    <div class="col-md-3">
+                                                    <div class="col-md-2">
+                                                        <label class="form-label"
+                                                            style="color: #b8c5d6;">Certification</label>
+                                                        <select class="form-select" id="graduateCertificationFilter"
+                                                            style="background-color: #243447; border: 1px solid #3d4f63; color: #b8c5d6;">
+                                                            <option value="">All Certifications</option>
+                                                            <!-- Certifications will be loaded dynamically from API -->
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-2">
                                                         <label class="form-label" style="color: #b8c5d6;">Graduation
                                                             Date</label>
                                                         <input type="date" class="form-control"

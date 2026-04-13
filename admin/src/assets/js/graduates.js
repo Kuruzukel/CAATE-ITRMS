@@ -388,7 +388,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // Save new graduate button
-    document.getElementById('saveNewGraduateBtn')?.addEventListener('click', function () {
+    document.getElementById('saveNewGraduateBtn')?.addEventListener('click', async function () {
         const form = document.getElementById('addGraduateForm');
         if (form.checkValidity()) {
             // Get form values
@@ -398,97 +398,132 @@ document.addEventListener('DOMContentLoaded', function () {
             const course = document.getElementById('addGraduateCourse').value;
             const graduatedDate = document.getElementById('addGraduateDate').value;
             const email = document.getElementById('addGraduateEmail').value;
-            const image = document.getElementById('addGraduateImagePreview').src;
+            const imageFile = document.getElementById('addGraduateImageInput').files[0];
+            const imagePreview = document.getElementById('addGraduateImagePreview').src;
 
-            // Format the graduation date (convert from YYYY-MM-DD to "Month Year")
-            const dateObj = new Date(graduatedDate);
-            const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-            const graduatedFormatted = `${monthNames[dateObj.getMonth()]} ${dateObj.getFullYear()}`;
+            try {
+                // Prepare form data for API
+                const formData = new FormData();
+                formData.append('name', name);
+                formData.append('trainee_id', id);
+                formData.append('course', course);
+                formData.append('certification', certification);
+                formData.append('graduation_date', graduatedDate);
+                formData.append('email', email);
 
-            // Create new graduate card
-            const newCard = document.createElement('div');
-            newCard.className = 'col';
-            newCard.innerHTML = `
-                <div class="card h-100">
-                    <img src="${image}" class="card-img-top" alt="${name}" style="height: 200px; object-fit: cover;">
-                    <div class="card-body">
-                        <span class="badge mb-2" style="background-color: #5bc0de; color: #ffffff;">${certification}</span>
-                        <h5 class="card-title mb-2">${name}</h5>
-                        <p class="text-muted small mb-2">ID: ${id}</p>
-                        <p class="card-text small mb-2">
-                            <i class="bx bx-book-open me-1"></i>${course}
-                        </p>
-                        <p class="card-text small mb-2">
-                            <i class="bx bx-calendar me-1"></i>Graduated: ${graduatedFormatted}
-                        </p>
-                        <p class="card-text small mb-3">
-                            <i class="bx bx-envelope me-1"></i>${email}
-                        </p>
-                        <div class="d-flex gap-2">
-                            <button class="btn btn-sm btn-outline-primary flex-fill view-graduate-btn" 
-                                data-bs-toggle="modal" data-bs-target="#viewGraduateModal"
-                                data-name="${name}" data-id="${id}" data-course="${course}" 
-                                data-graduated="${graduatedFormatted}" data-email="${email}" 
-                                data-certification="${certification}" data-image="${image}">
-                                <i class="bx bx-show"></i> View
-                            </button>
-                            <button class="btn btn-sm btn-outline-secondary flex-fill edit-graduate-btn" 
-                                data-bs-toggle="modal" data-bs-target="#editGraduateModal"
-                                data-name="${name}" data-id="${id}" data-course="${course}" 
-                                data-graduated="${graduatedFormatted}" data-email="${email}" 
-                                data-certification="${certification}" data-image="${image}">
-                                <i class="bx bx-edit"></i> Edit
-                            </button>
+                // Add image if uploaded
+                if (imageFile) {
+                    formData.append('image', imageFile);
+                }
+
+                // Send to backend API
+                const response = await fetch(`${config.api.baseUrl}/api/v1/graduates`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    // Format the graduation date (convert from YYYY-MM-DD to "Month Year")
+                    const dateObj = new Date(graduatedDate);
+                    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                    const graduatedFormatted = `${monthNames[dateObj.getMonth()]} ${dateObj.getFullYear()}`;
+
+                    // Use the image URL from the server response, or fallback to preview
+                    const imageUrl = result.data?.image_url || imagePreview;
+
+                    // Create new graduate card
+                    const newCard = document.createElement('div');
+                    newCard.className = 'col';
+                    newCard.innerHTML = `
+                        <div class="card h-100">
+                            <img src="${imageUrl}" class="card-img-top" alt="${name}" style="height: 200px; object-fit: cover;">
+                            <div class="card-body">
+                                <span class="badge mb-2" style="background-color: #5bc0de; color: #ffffff;">${certification}</span>
+                                <h5 class="card-title mb-2">${name}</h5>
+                                <p class="text-muted small mb-2">ID: ${id}</p>
+                                <p class="card-text small mb-2">
+                                    <i class="bx bx-book-open me-1"></i>${course}
+                                </p>
+                                <p class="card-text small mb-2">
+                                    <i class="bx bx-calendar me-1"></i>Graduated: ${graduatedFormatted}
+                                </p>
+                                <p class="card-text small mb-3">
+                                    <i class="bx bx-envelope me-1"></i>${email}
+                                </p>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-sm btn-outline-primary flex-fill view-graduate-btn" 
+                                        data-bs-toggle="modal" data-bs-target="#viewGraduateModal"
+                                        data-name="${name}" data-id="${id}" data-course="${course}" 
+                                        data-graduated="${graduatedFormatted}" data-email="${email}" 
+                                        data-certification="${certification}" data-image="${imageUrl}">
+                                        <i class="bx bx-show"></i> View
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-secondary flex-fill edit-graduate-btn" 
+                                        data-bs-toggle="modal" data-bs-target="#editGraduateModal"
+                                        data-name="${name}" data-id="${id}" data-course="${course}" 
+                                        data-graduated="${graduatedFormatted}" data-email="${email}" 
+                                        data-certification="${certification}" data-image="${imageUrl}">
+                                        <i class="bx bx-edit"></i> Edit
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-            `;
+                    `;
 
-            // Add the new card to the graduates grid
-            const graduatesGrid = document.querySelector('.row.row-cols-1.row-cols-md-2.row-cols-lg-3.row-cols-xl-4');
-            if (graduatesGrid) {
-                graduatesGrid.appendChild(newCard);
+                    // Add the new card to the graduates grid
+                    const graduatesGrid = document.querySelector('.row.row-cols-1.row-cols-md-2.row-cols-lg-3.row-cols-xl-4');
+                    if (graduatesGrid) {
+                        graduatesGrid.appendChild(newCard);
 
-                // Re-initialize pagination to include the new card
-                initializePagination();
+                        // Re-initialize pagination to include the new card
+                        initializePagination();
 
-                // Add event listeners to the new buttons
-                const viewBtn = newCard.querySelector('.view-graduate-btn');
-                const editBtn = newCard.querySelector('.edit-graduate-btn');
+                        // Add event listeners to the new buttons
+                        const viewBtn = newCard.querySelector('.view-graduate-btn');
+                        const editBtn = newCard.querySelector('.edit-graduate-btn');
 
-                if (viewBtn) {
-                    viewBtn.addEventListener('click', function () {
-                        document.getElementById('modalGraduateName').value = name;
-                        document.getElementById('modalGraduateId').value = id;
-                        document.getElementById('modalGraduateCourse').value = course;
-                        document.getElementById('modalGraduateDate').value = graduatedFormatted;
-                        document.getElementById('modalGraduateEmail').value = email;
-                        document.getElementById('modalGraduateImage').src = image;
-                    });
+                        if (viewBtn) {
+                            viewBtn.addEventListener('click', function () {
+                                document.getElementById('modalGraduateName').value = name;
+                                document.getElementById('modalGraduateId').value = id;
+                                document.getElementById('modalGraduateCourse').value = course;
+                                document.getElementById('modalGraduateDate').value = graduatedFormatted;
+                                document.getElementById('modalGraduateEmail').value = email;
+                                document.getElementById('modalGraduateImage').src = imageUrl;
+                            });
+                        }
+
+                        if (editBtn) {
+                            editBtn.addEventListener('click', function () {
+                                document.getElementById('editGraduateName').value = name;
+                                document.getElementById('editGraduateId').value = id;
+                                document.getElementById('editGraduateCourse').value = course;
+                                document.getElementById('editGraduateDate').value = graduatedDate;
+                                document.getElementById('editGraduateEmail').value = email;
+                                document.getElementById('editGraduateCertification').value = certification;
+                                document.getElementById('editGraduateImage').src = imageUrl;
+                            });
+                        }
+                    }
+
+                    alert('Graduate added successfully and saved to database!');
+
+                    // Close modal
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('addGraduateModal'));
+                    modal.hide();
+
+                    // Reset form
+                    form.reset();
+                    document.getElementById('addGraduateImagePreview').src = '../assets/images/DEFAULT_AVATAR.png';
+                } else {
+                    alert('Error saving graduate: ' + (result.message || 'Unknown error'));
                 }
-
-                if (editBtn) {
-                    editBtn.addEventListener('click', function () {
-                        document.getElementById('editGraduateName').value = name;
-                        document.getElementById('editGraduateId').value = id;
-                        document.getElementById('editGraduateCourse').value = course;
-                        document.getElementById('editGraduateDate').value = graduatedDate;
-                        document.getElementById('editGraduateEmail').value = email;
-                        document.getElementById('editGraduateCertification').value = certification;
-                        document.getElementById('editGraduateImage').src = image;
-                    });
-                }
+            } catch (error) {
+                console.error('Error saving graduate:', error);
+                alert('Error saving graduate to database. Please try again.');
             }
-
-            alert('Graduate added successfully!');
-
-            // Close modal
-            const modal = bootstrap.Modal.getInstance(document.getElementById('addGraduateModal'));
-            modal.hide();
-
-            // Reset form
-            form.reset();
-            document.getElementById('addGraduateImagePreview').src = '../assets/images/DEFAULT_AVATAR.png';
         } else {
             form.reportValidity();
         }

@@ -10,8 +10,8 @@ class Graduate {
         $this->collection = $db->graduates;
     }
     
-    public function all() {
-        $cursor = $this->collection->find();
+    public function getAll() {
+        $cursor = $this->collection->find([], ['sort' => ['created_at' => -1]]);
         return iterator_to_array($cursor);
     }
     
@@ -24,7 +24,9 @@ class Graduate {
     }
     
     public function create($data) {
-        $data['graduation_date'] = new MongoDB\BSON\UTCDateTime();
+        $data['created_at'] = new MongoDB\BSON\UTCDateTime();
+        $data['updated_at'] = new MongoDB\BSON\UTCDateTime();
+        
         $result = $this->collection->insertOne($data);
         return (string)$result->getInsertedId();
     }

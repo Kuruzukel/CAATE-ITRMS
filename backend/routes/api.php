@@ -13,6 +13,7 @@ require_once __DIR__ . '/../app/controllers/EnrollmentController.php';
 require_once __DIR__ . '/../app/controllers/RegistrationController.php';
 require_once __DIR__ . '/../app/controllers/ApplicationController.php';
 require_once __DIR__ . '/../app/controllers/AdmissionController.php';
+require_once __DIR__ . '/../app/controllers/GraduateController.php';
 
 function handleRequest($uri, $method) {
     $uri = preg_replace('#^/CAATE-ITRMS/backend/public#', '', $uri);
@@ -86,6 +87,11 @@ function handleRequest($uri, $method) {
         'POST:/api/v1/appointments' => ['AppointmentController', 'store'],
         'PUT:/api/v1/appointments/{id}' => ['AppointmentController', 'update'],
         'DELETE:/api/v1/appointments/{id}' => ['AppointmentController', 'destroy'],
+        'GET:/api/v1/graduates' => ['GraduateController', 'index'],
+        'GET:/api/v1/graduates/{id}' => ['GraduateController', 'show'],
+        'POST:/api/v1/graduates' => ['GraduateController', 'store'],
+        'PUT:/api/v1/graduates/{id}' => ['GraduateController', 'update'],
+        'DELETE:/api/v1/graduates/{id}' => ['GraduateController', 'destroy'],
     ];
     
     foreach ($routes as $route => $handler) {

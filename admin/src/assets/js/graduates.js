@@ -115,6 +115,36 @@ document.addEventListener('DOMContentLoaded', function () {
     // Load courses on page load
     loadCoursesFilter();
 
+    // Update certification card when filter changes
+    const certificationFilter = document.getElementById('graduateCertificationFilter');
+    if (certificationFilter) {
+        certificationFilter.addEventListener('change', function () {
+            const selectedCert = this.value;
+            const certLabel = document.getElementById('certificationCardLabel');
+            const certCount = document.getElementById('certificationCardCount');
+
+            if (certLabel) {
+                if (selectedCert) {
+                    certLabel.textContent = selectedCert;
+                } else {
+                    certLabel.textContent = 'All Certifications';
+                }
+            }
+
+            // Count graduates with selected certification
+            if (certCount) {
+                let count = 0;
+                document.querySelectorAll('.view-graduate-btn').forEach(btn => {
+                    const certification = btn.getAttribute('data-certification');
+                    if (!selectedCert || certification === selectedCert) {
+                        count++;
+                    }
+                });
+                certCount.textContent = count;
+            }
+        });
+    }
+
     // Initialize pagination
     function initializePagination() {
         // Get the specific graduates grid container

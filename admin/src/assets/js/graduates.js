@@ -214,13 +214,24 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('addGraduateImagePreview').src = '../assets/images/DEFAULT_AVATAR.png';
 
         // Open add graduate modal
-        const modal = new bootstrap.Modal(document.getElementById('addGraduateModal'));
+        const modalElement = document.getElementById('addGraduateModal');
+        const modal = new bootstrap.Modal(modalElement);
         modal.show();
     });
 
     // Handle modal cleanup when closed
     const addGraduateModal = document.getElementById('addGraduateModal');
     if (addGraduateModal) {
+        // Move focus away BEFORE Bootstrap sets aria-hidden during hide transition
+        addGraduateModal.addEventListener('hide.bs.modal', function () {
+            // Blur any focused element inside the modal
+            if (document.activeElement && addGraduateModal.contains(document.activeElement)) {
+                document.activeElement.blur();
+            }
+            // Move focus to body
+            document.body.focus();
+        });
+
         addGraduateModal.addEventListener('hidden.bs.modal', function () {
             // Remove any lingering backdrops
             const backdrops = document.querySelectorAll('.modal-backdrop');
@@ -234,6 +245,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const editGraduateModal = document.getElementById('editGraduateModal');
     if (editGraduateModal) {
+        // Move focus away BEFORE Bootstrap sets aria-hidden during hide transition
+        editGraduateModal.addEventListener('hide.bs.modal', function () {
+            // Blur any focused element inside the modal
+            if (document.activeElement && editGraduateModal.contains(document.activeElement)) {
+                document.activeElement.blur();
+            }
+            // Move focus to body
+            document.body.focus();
+        });
+
         editGraduateModal.addEventListener('hidden.bs.modal', function () {
             // Remove any lingering backdrops
             const backdrops = document.querySelectorAll('.modal-backdrop');
@@ -247,6 +268,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const viewGraduateModal = document.getElementById('viewGraduateModal');
     if (viewGraduateModal) {
+        // Move focus away BEFORE Bootstrap sets aria-hidden during hide transition
+        viewGraduateModal.addEventListener('hide.bs.modal', function () {
+            // Blur any focused element inside the modal
+            if (document.activeElement && viewGraduateModal.contains(document.activeElement)) {
+                document.activeElement.blur();
+            }
+            // Move focus to body
+            document.body.focus();
+        });
+
         viewGraduateModal.addEventListener('hidden.bs.modal', function () {
             // Remove any lingering backdrops
             const backdrops = document.querySelectorAll('.modal-backdrop');

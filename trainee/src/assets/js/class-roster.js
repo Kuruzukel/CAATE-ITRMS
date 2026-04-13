@@ -192,12 +192,12 @@ async function processTraineesData() {
 }
 
 function updateStatistics() {
-    // Total Classmates (filtered count)
-    const totalClassmates = filteredTrainees.length;
+    // Total Classmates (use displayTrainees to reflect current filters)
+    const totalClassmates = displayTrainees.length;
     document.getElementById('totalClassmates').textContent = totalClassmates;
 
-    // Active Courses (unique courses in filtered data)
-    const uniqueCourses = [...new Set(filteredTrainees.map(t => t.course))];
+    // Active Courses (unique courses in displayed/filtered data)
+    const uniqueCourses = [...new Set(displayTrainees.map(t => t.course))];
     const activeCourses = uniqueCourses.length;
     document.getElementById('activeCourses').textContent = activeCourses;
 

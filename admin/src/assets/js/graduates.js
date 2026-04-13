@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (result.success && result.data && Array.isArray(result.data)) {
                 const graduatesGrid = document.getElementById('graduatesGrid');
-                const emptyState = document.getElementById('emptyState');
 
                 if (graduatesGrid) {
                     // Clear existing cards before loading from database
@@ -20,9 +19,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     // Check if there are any graduates
                     if (result.data.length === 0) {
+                        // Keep center alignment for empty state
+                        graduatesGrid.style.justifyContent = 'center';
+                        graduatesGrid.style.alignItems = 'center';
+
                         // Show empty state
                         graduatesGrid.innerHTML = `
-                            <div class="col-12" style="display: flex; justify-content: center; align-items: center; min-height: 350px;">
+                            <div class="col-12" style="display: flex; justify-content: center; align-items: center; width: 100%;">
                                 <div style="text-align: center;">
                                     <i class="bx bxs-graduation" style="font-size: 4rem; opacity: 0.3; color: #697a8d; display: block; margin: 0 auto 15px;"></i>
                                     <h5 style="margin-bottom: 10px; color: #697a8d;">No Graduates Yet</h5>
@@ -33,11 +36,16 @@ document.addEventListener('DOMContentLoaded', function () {
                         return;
                     }
 
+                    // Reset to flex-start when there are graduates
+                    graduatesGrid.style.justifyContent = 'flex-start';
+                    graduatesGrid.style.alignItems = 'flex-start';
+
                     // Add each graduate from database
                     result.data.forEach(graduate => {
                         const graduateData = graduate;
                         const name = graduateData.name || 'Unknown';
-                        const id = graduateData.trainee_id || 'N/A';
+                        const traineeId = graduateData.trainee_id || 'N/A';
+                        const mongoId = graduateData._id?.$oid || graduateData._id || '';
                         const course = graduateData.course || 'N/A';
                         const certification = graduateData.certification || 'N/A';
                         const email = graduateData.email || 'N/A';
@@ -63,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                     <img src="${imageUrl}" class="card-img-top" alt="${name}" style="height: 200px; object-fit: cover;">
                                     <button class="btn btn-danger position-absolute top-0 end-0 m-2 delete-graduate-btn rounded-circle p-0"
                                         data-bs-toggle="modal" data-bs-target="#deleteGraduateModal"
-                                        data-name="${name}" data-id="${id}"
+                                        data-name="${name}" data-trainee-id="${traineeId}" data-mongo-id="${mongoId}"
                                         style="width: 38px; height: 28px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">
                                         <i class="bx bx-trash" style="font-size: 14px;"></i>
                                     </button>
@@ -71,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                 <div class="card-body">
                                     <span class="badge mb-2" style="background-color: #5bc0de; color: #ffffff;">${certification}</span>
                                     <h5 class="card-title mb-2">${name}</h5>
-                                    <p class="text-muted small mb-2">ID: ${id}</p>
+                                    <p class="text-muted small mb-2">ID: ${traineeId}</p>
                                     <p class="card-text small mb-2 graduate-course-text">
                                         <i class="bx bx-book-open me-1"></i><span class="course-name">${course}</span>
                                     </p>
@@ -84,14 +92,14 @@ document.addEventListener('DOMContentLoaded', function () {
                                     <div class="d-flex gap-2">
                                         <button class="btn btn-sm btn-outline-primary flex-fill view-graduate-btn" 
                                             data-bs-toggle="modal" data-bs-target="#viewGraduateModal"
-                                            data-name="${name}" data-id="${id}" data-course="${course}" 
+                                            data-name="${name}" data-trainee-id="${traineeId}" data-course="${course}" 
                                             data-graduated="${graduatedFormatted}" data-email="${email}" 
                                             data-certification="${certification}" data-image="${imageUrl}">
                                             <i class="bx bx-show"></i> View
                                         </button>
                                         <button class="btn btn-sm btn-outline-secondary flex-fill edit-graduate-btn" 
                                             data-bs-toggle="modal" data-bs-target="#editGraduateModal"
-                                            data-name="${name}" data-id="${id}" data-course="${course}" 
+                                            data-name="${name}" data-trainee-id="${traineeId}" data-mongo-id="${mongoId}" data-course="${course}" 
                                             data-graduated="${graduatedFormatted}" data-email="${email}" 
                                             data-certification="${certification}" data-image="${imageUrl}">
                                             <i class="bx bx-edit"></i> Edit
@@ -110,16 +118,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
                         if (deleteBtn) {
                             deleteBtn.addEventListener('click', function () {
-                                graduateToDelete = { name, id, button: deleteBtn };
+                                graduateToDelete = {
+                                    name,
+                                    traineeId,
+                                    mongoId,
+                                    button: deleteBtn
+                                };
                                 document.getElementById('deleteGraduateName').textContent = name;
-                                document.getElementById('deleteGraduateId').textContent = 'ID: ' + id;
+                                document.getElementById('deleteGraduateId').textContent = 'ID: ' + traineeId;
                             });
                         }
 
                         if (viewBtn) {
                             viewBtn.addEventListener('click', function () {
                                 document.getElementById('modalGraduateName').value = name;
-                                document.getElementById('modalGraduateId').value = id;
+                                document.getElementById('modalGraduateId').value = traineeId;
                                 document.getElementById('modalGraduateCourse').value = course;
                                 document.getElementById('modalGraduateDate').value = graduatedFormatted;
                                 document.getElementById('modalGraduateEmail').value = email;
@@ -130,7 +143,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         if (editBtn) {
                             editBtn.addEventListener('click', function () {
                                 document.getElementById('editGraduateName').value = name;
-                                document.getElementById('editGraduateId').value = id;
+                                document.getElementById('editGraduateId').value = traineeId;
                                 document.getElementById('editGraduateCourse').value = course;
                                 document.getElementById('editGraduateDate').value = graduateData.graduation_date;
                                 document.getElementById('editGraduateEmail').value = email;
@@ -319,12 +332,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 imageContainer = wrapper;
             }
 
-            // Get graduate data from view button
+            // Get graduate data from view or edit button
             const viewBtn = card.querySelector('.view-graduate-btn');
-            if (!viewBtn) return;
+            const editBtn = card.querySelector('.edit-graduate-btn');
+            if (!viewBtn && !editBtn) return;
 
-            const name = viewBtn.getAttribute('data-name');
-            const id = viewBtn.getAttribute('data-id');
+            const name = (viewBtn || editBtn).getAttribute('data-name');
+            const traineeId = (viewBtn || editBtn).getAttribute('data-trainee-id');
+            const mongoId = (editBtn)?.getAttribute('data-mongo-id') || '';
 
             // Create delete button
             const deleteBtn = document.createElement('button');
@@ -332,7 +347,8 @@ document.addEventListener('DOMContentLoaded', function () {
             deleteBtn.setAttribute('data-bs-toggle', 'modal');
             deleteBtn.setAttribute('data-bs-target', '#deleteGraduateModal');
             deleteBtn.setAttribute('data-name', name);
-            deleteBtn.setAttribute('data-id', id);
+            deleteBtn.setAttribute('data-trainee-id', traineeId);
+            deleteBtn.setAttribute('data-mongo-id', mongoId);
             deleteBtn.style.cssText = 'width: 38px; height: 28px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.3);';
 
             const icon = document.createElement('i');
@@ -344,9 +360,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Add event listener
             deleteBtn.addEventListener('click', function () {
-                graduateToDelete = { name, id, button: deleteBtn };
+                graduateToDelete = {
+                    name,
+                    traineeId,
+                    mongoId,
+                    button: deleteBtn
+                };
                 document.getElementById('deleteGraduateName').textContent = name;
-                document.getElementById('deleteGraduateId').textContent = 'ID: ' + id;
+                document.getElementById('deleteGraduateId').textContent = 'ID: ' + traineeId;
             });
         });
     }
@@ -830,14 +851,15 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.delete-graduate-btn').forEach(button => {
         button.addEventListener('click', function () {
             const name = this.getAttribute('data-name');
-            const id = this.getAttribute('data-id');
+            const traineeId = this.getAttribute('data-trainee-id');
+            const mongoId = this.getAttribute('data-mongo-id');
 
             // Store the graduate info for deletion
-            graduateToDelete = { name, id, button: this };
+            graduateToDelete = { name, traineeId, mongoId, button: this };
 
             // Update modal content
             document.getElementById('deleteGraduateName').textContent = name;
-            document.getElementById('deleteGraduateId').textContent = 'ID: ' + id;
+            document.getElementById('deleteGraduateId').textContent = 'ID: ' + traineeId;
         });
     });
 
@@ -846,21 +868,34 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!graduateToDelete) return;
 
         try {
-            // Here you would call the API to delete from database
-            // For now, we'll just remove the card from the DOM
-            const card = graduateToDelete.button.closest('.col');
+            // Call the API to delete from database using MongoDB _id
+            const response = await fetch(`${config.api.baseUrl}/api/v1/graduates/${graduateToDelete.mongoId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
 
-            if (card) {
-                card.remove();
+            const result = await response.json();
 
-                // Re-initialize pagination after deletion
-                initializePagination();
+            if (result.success) {
+                // Remove the card from the DOM after successful deletion
+                const card = graduateToDelete.button.closest('.col');
 
-                // Close the modal
-                const modal = bootstrap.Modal.getInstance(document.getElementById('deleteGraduateModal'));
-                modal.hide();
+                if (card) {
+                    card.remove();
 
-                showSuccess('Graduate deleted successfully!');
+                    // Re-initialize pagination after deletion
+                    initializePagination();
+
+                    // Close the modal
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('deleteGraduateModal'));
+                    modal.hide();
+
+                    showSuccess('Graduate successfully deleted');
+                }
+            } else {
+                showError(result.message || 'Failed to delete graduate from database.');
             }
 
             graduateToDelete = null;

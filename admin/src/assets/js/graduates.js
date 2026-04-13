@@ -142,6 +142,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
                         if (editBtn) {
                             editBtn.addEventListener('click', function () {
+                                // Store original values for comparison (trim to match comparison logic)
+                                window.originalGraduateData = {
+                                    name: name.trim(),
+                                    traineeId: traineeId.trim(),
+                                    mongoId: mongoId,
+                                    course: course,
+                                    graduationDate: graduateData.graduation_date,
+                                    email: email.trim(),
+                                    certification: certification
+                                };
+
+                                console.log('Edit button clicked - Original data stored:', window.originalGraduateData);
+
                                 document.getElementById('editGraduateName').value = name;
                                 document.getElementById('editGraduateId').value = traineeId;
                                 document.getElementById('editGraduateCourse').value = course;
@@ -824,45 +837,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Store original values for change detection
-    let originalGraduateData = {};
-
-    document.querySelectorAll('.edit-graduate-btn').forEach(button => {
-        button.addEventListener('click', function () {
-            const name = this.getAttribute('data-name');
-            const id = this.getAttribute('data-id');
-            const course = this.getAttribute('data-course');
-            const graduated = this.getAttribute('data-graduated');
-            const email = this.getAttribute('data-email');
-            const certification = this.getAttribute('data-certification');
-            const image = this.getAttribute('data-image');
-
-            // Store original values for comparison
-            originalGraduateData = {
-                name,
-                id,
-                course,
-                graduated,
-                email,
-                certification: certification || 'NC II - SOCBCN220',
-                image
-            };
-
-            // Set certification dropdown value
-            const certSelect = document.getElementById('editGraduateCertification');
-            if (certSelect) {
-                certSelect.value = certification || 'NC II - SOCBCN220';
-            }
-
-            document.getElementById('editGraduateName').value = name;
-            document.getElementById('editGraduateId').value = id;
-            document.getElementById('editGraduateCourse').value = course;
-            document.getElementById('editGraduateDate').value = graduated;
-            document.getElementById('editGraduateEmail').value = email;
-            document.getElementById('editGraduateImage').src = image;
-        });
-    });
-
     // Delete graduate button handlers
     let graduateToDelete = null;
 
@@ -998,42 +972,60 @@ document.addEventListener('DOMContentLoaded', function () {
         alert('Graduates list exported successfully! (' + (csvData.length - 1) + ' records)');
     });
 
-    document.getElementById('saveGraduateBtn').addEventListener('click', function () {
-        const form = document.getElementById('editGraduateForm');
-        if (form.checkValidity()) {
-            // Get current values
-            const currentData = {
-                name: document.getElementById('editGraduateName').value,
-                id: document.getElementById('editGraduateId').value,
-                course: document.getElementById('editGraduateCourse').value,
-                graduated: document.getElementById('editGraduateDate').value,
-                email: document.getElementById('editGraduateEmail').value,
-                certification: document.getElementById('editGraduateCertification').value
-            };
+    const saveGraduateBtn = document.getElementById('saveGraduateBtn');
+    if (saveGraduateBtn && !saveGraduateBtn.dataset.listenerAttached) {
+        saveGraduateBtn.dataset.listenerAttached = 'true';
+        saveGraduateBtn.addEventListener('click', function () {
+            const form = document.getElementById('editGraduateForm');
+            if (form.checkValidity()) {
+                // Get current values
+                const currentData = {
+                    name: document.getElementById('editGraduateName').value.trim(),
+                    traineeId: document.getElementById('editGraduateId').value.trim(),
+                    course: document.getElementById('editGraduateCourse').value,
+                    graduationDate: document.getElementById('editGraduateDate').value,
+                    email: document.getElementById('editGraduateEmail').value.trim(),
+                    certification: document.getElementById('editGraduateCertification').value
+                };
 
-            // Check if any changes were made
-            const hasChanges =
-                currentData.name !== originalGraduateData.name ||
-                currentData.id !== originalGraduateData.id ||
-                currentData.course !== originalGraduateData.course ||
-                currentData.graduated !== originalGraduateData.graduated ||
-                currentData.email !== originalGraduateData.email ||
-                currentData.certification !== originalGraduateData.certification;
+                // Debug: Log the values
+                console.log('Original Data:', window.originalGraduateData);
+                console.log('Current Data:', currentData);
 
-            if (!hasChanges) {
-                showInfo('No changes detected');
-                return;
+                // Check if original data exists
+                if (!window.originalGraduateData) {
+                    showError('Error: Original data not found. Please close and reopen the edit modal.');
+                    return;
+                }
+
+                // Check if any changes were made
+                const hasChanges =
+                    currentData.name !== window.originalGraduateData.name ||
+                    currentData.traineeId !== window.originalGraduateData.traineeId ||
+                    currentData.course !== window.originalGraduateData.course ||
+                    currentData.graduationDate !== window.originalGraduateData.graduationDate ||
+                    currentData.email !== window.originalGraduateData.email ||
+                    currentData.certification !== window.originalGraduateData.certification;
+
+                console.log('Has Changes:', hasChanges);
+
+                if (!hasChanges) {
+                    showInfo('No changes detected');
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('editGraduateModal'));
+                    modal.hide();
+                    return;
+                }
+
+                showSuccess('Graduate information updated successfully!');
+
+                const modal = bootstrap.Modal.getInstance(document.getElementById('editGraduateModal'));
+                modal.hide();
+
+            } else {
+                form.reportValidity();
             }
-
-            showSuccess('Graduate information updated successfully!');
-
-            const modal = bootstrap.Modal.getInstance(document.getElementById('editGraduateModal'));
-            modal.hide();
-
-        } else {
-            form.reportValidity();
-        }
-    });
+        });
+    }
 
     const modals = ['viewGraduateModal', 'editGraduateModal', 'exportModal'];
     modals.forEach(modalId => {

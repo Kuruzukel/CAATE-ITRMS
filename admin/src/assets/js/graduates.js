@@ -438,7 +438,15 @@ document.addEventListener('DOMContentLoaded', function () {
                     newCard.className = 'col';
                     newCard.innerHTML = `
                         <div class="card h-100">
-                            <img src="${imageUrl}" class="card-img-top" alt="${name}" style="height: 200px; object-fit: cover;">
+                            <div class="position-relative">
+                                <img src="${imageUrl}" class="card-img-top" alt="${name}" style="height: 200px; object-fit: cover;">
+                                <button class="btn btn-danger position-absolute top-0 end-0 m-2 delete-graduate-btn rounded-circle p-0"
+                                    data-bs-toggle="modal" data-bs-target="#deleteGraduateModal"
+                                    data-name="${name}" data-id="${id}"
+                                    style="width: 38px; height: 28px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">
+                                    <i class="bx bx-trash" style="font-size: 14px;"></i>
+                                </button>
+                            </div>
                             <div class="card-body">
                                 <span class="badge mb-2" style="background-color: #5bc0de; color: #ffffff;">${certification}</span>
                                 <h5 class="card-title mb-2">${name}</h5>
@@ -483,6 +491,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         // Add event listeners to the new buttons
                         const viewBtn = newCard.querySelector('.view-graduate-btn');
                         const editBtn = newCard.querySelector('.edit-graduate-btn');
+                        const deleteBtn = newCard.querySelector('.delete-graduate-btn');
 
                         if (viewBtn) {
                             viewBtn.addEventListener('click', function () {
@@ -504,6 +513,14 @@ document.addEventListener('DOMContentLoaded', function () {
                                 document.getElementById('editGraduateEmail').value = email;
                                 document.getElementById('editGraduateCertification').value = certification;
                                 document.getElementById('editGraduateImage').src = imageUrl;
+                            });
+                        }
+
+                        if (deleteBtn) {
+                            deleteBtn.addEventListener('click', function () {
+                                graduateToDelete = { name, id, button: deleteBtn };
+                                document.getElementById('deleteGraduateName').textContent = name;
+                                document.getElementById('deleteGraduateId').textContent = 'ID: ' + id;
                             });
                         }
                     }
@@ -642,6 +659,52 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('editGraduateEmail').value = email;
             document.getElementById('editGraduateImage').src = image;
         });
+    });
+
+    // Delete graduate button handlers
+    let graduateToDelete = null;
+
+    document.querySelectorAll('.delete-graduate-btn').forEach(button => {
+        button.addEventListener('click', function () {
+            const name = this.getAttribute('data-name');
+            const id = this.getAttribute('data-id');
+
+            // Store the graduate info for deletion
+            graduateToDelete = { name, id, button: this };
+
+            // Update modal content
+            document.getElementById('deleteGraduateName').textContent = name;
+            document.getElementById('deleteGraduateId').textContent = 'ID: ' + id;
+        });
+    });
+
+    // Confirm delete button
+    document.getElementById('confirmDeleteGraduateBtn')?.addEventListener('click', async function () {
+        if (!graduateToDelete) return;
+
+        try {
+            // Here you would call the API to delete from database
+            // For now, we'll just remove the card from the DOM
+            const card = graduateToDelete.button.closest('.col');
+
+            if (card) {
+                card.remove();
+
+                // Re-initialize pagination after deletion
+                initializePagination();
+
+                // Close the modal
+                const modal = bootstrap.Modal.getInstance(document.getElementById('deleteGraduateModal'));
+                modal.hide();
+
+                alert('Graduate deleted successfully!');
+            }
+
+            graduateToDelete = null;
+        } catch (error) {
+            console.error('Error deleting graduate:', error);
+            alert('Error deleting graduate. Please try again.');
+        }
     });
 
     document.getElementById('confirmExportBtn').addEventListener('click', function () {

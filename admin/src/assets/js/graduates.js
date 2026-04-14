@@ -1072,7 +1072,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const saveGraduateBtn = document.getElementById('saveGraduateBtn');
     if (saveGraduateBtn && !saveGraduateBtn.dataset.listenerAttached) {
         saveGraduateBtn.dataset.listenerAttached = 'true';
-        saveGraduateBtn.addEventListener('click', function () {
+        saveGraduateBtn.addEventListener('click', async function () {
             const form = document.getElementById('editGraduateForm');
             if (form.checkValidity()) {
                 // Get current values
@@ -1107,10 +1107,51 @@ document.addEventListener('DOMContentLoaded', function () {
                     return;
                 }
 
-                showSuccess('Graduate information updated successfully!');
+                // Disable button and show loading state
+                saveGraduateBtn.disabled = true;
+                const originalText = saveGraduateBtn.innerHTML;
+                saveGraduateBtn.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i> Saving...';
 
-                const modal = bootstrap.Modal.getInstance(document.getElementById('editGraduateModal'));
-                modal.hide();
+                try {
+                    // Send update to backend API
+                    const response = await fetch(`${config.api.baseUrl}/api/v1/graduates/${window.originalGraduateData.mongoId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            name: currentData.name,
+                            trainee_id: currentData.traineeId,
+                            course: currentData.course,
+                            graduation_date: currentData.graduationDate,
+                            email: currentData.email,
+                            certification: currentData.certification
+                        })
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok && result.success) {
+                        showSuccess('Graduate information updated successfully!');
+
+                        // Close modal
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('editGraduateModal'));
+                        modal.hide();
+
+                        // Reload graduates to show updated data
+                        await loadGraduates();
+                        await updateStatistics();
+                    } else {
+                        showError(result.message || 'Failed to update graduate information');
+                    }
+                } catch (error) {
+                    console.error('Error updating graduate:', error);
+                    showError('An error occurred while updating graduate information');
+                } finally {
+                    // Re-enable button
+                    saveGraduateBtn.disabled = false;
+                    saveGraduateBtn.innerHTML = originalText;
+                }
 
             } else {
                 form.reportValidity();

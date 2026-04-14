@@ -862,7 +862,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         if (csvData.length === 1) {
-            alert('No graduates to export.');
+            showError('No graduates to export.');
             return;
         }
 
@@ -877,7 +877,7 @@ document.addEventListener('DOMContentLoaded', function () {
         link.click();
         document.body.removeChild(link);
 
-        alert('Graduates exported to CSV successfully! (' + (csvData.length - 1) + ' records)');
+        showSuccess('Graduates exported to CSV successfully!');
     }
 
     // Export to JSON function
@@ -898,7 +898,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         if (graduatesData.length === 0) {
-            alert('No graduates to export.');
+            showError('No graduates to export.');
             return;
         }
 
@@ -913,7 +913,7 @@ document.addEventListener('DOMContentLoaded', function () {
         link.click();
         document.body.removeChild(link);
 
-        alert('Graduates exported to JSON successfully! (' + graduatesData.length + ' records)');
+        showSuccess('Graduates exported to JSON successfully!');
     }
 
     document.querySelectorAll('.view-graduate-btn').forEach(button => {

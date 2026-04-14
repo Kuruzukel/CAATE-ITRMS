@@ -4,6 +4,103 @@ document.addEventListener('DOMContentLoaded', function () {
     let currentPage = 1;
     let allGraduateCards = [];
 
+    // Update statistics cards
+    async function updateStatistics() {
+        try {
+            const response = await fetch(`${config.api.baseUrl}/api/v1/graduates`);
+            const result = await response.json();
+
+            if (result.success && result.data && Array.isArray(result.data)) {
+                const graduates = result.data;
+                const now = new Date();
+                const currentYear = now.getFullYear();
+                const currentMonth = now.getMonth();
+
+                // Total graduates
+                const totalGraduates = graduates.length;
+
+                // Graduates this year
+                const graduatesThisYear = graduates.filter(grad => {
+                    if (grad.graduation_date) {
+                        const gradDate = new Date(grad.graduation_date);
+                        return gradDate.getFullYear() === currentYear;
+                    }
+                    return false;
+                }).length;
+
+                // Graduates this month
+                const graduatesThisMonth = graduates.filter(grad => {
+                    if (grad.graduation_date) {
+                        const gradDate = new Date(grad.graduation_date);
+                        return gradDate.getFullYear() === currentYear && gradDate.getMonth() === currentMonth;
+                    }
+                    return false;
+                }).length;
+
+                // Total certifications (count all graduates with certifications)
+                const totalCertifications = graduates.filter(grad => grad.certification).length;
+
+                // Calculate percentage changes (comparing to previous period)
+                const previousYear = currentYear - 1;
+                const graduatesPreviousYear = graduates.filter(grad => {
+                    if (grad.graduation_date) {
+                        const gradDate = new Date(grad.graduation_date);
+                        return gradDate.getFullYear() === previousYear;
+                    }
+                    return false;
+                }).length;
+
+                const previousMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+                const previousMonthYear = currentMonth === 0 ? currentYear - 1 : currentYear;
+                const graduatesPreviousMonth = graduates.filter(grad => {
+                    if (grad.graduation_date) {
+                        const gradDate = new Date(grad.graduation_date);
+                        return gradDate.getFullYear() === previousMonthYear && gradDate.getMonth() === previousMonth;
+                    }
+                    return false;
+                }).length;
+
+                // Calculate percentage changes
+                const yearPercentChange = graduatesPreviousYear > 0
+                    ? Math.round(((graduatesThisYear - graduatesPreviousYear) / graduatesPreviousYear) * 100)
+                    : (graduatesThisYear > 0 ? 100 : 0);
+
+                const monthPercentChange = graduatesPreviousMonth > 0
+                    ? Math.round(((graduatesThisMonth - graduatesPreviousMonth) / graduatesPreviousMonth) * 100)
+                    : (graduatesThisMonth > 0 ? 100 : 0);
+
+                // Update the cards
+                const totalCard = document.querySelector('#graduatesTotalCard .card-title.mb-2');
+                const yearCard = document.querySelector('#graduatesThisYearCard .card-title.mb-2');
+                const monthCard = document.querySelector('#graduatesThisMonthCard .card-title.mb-2');
+                const certCard = document.querySelector('#graduatesCertifiedCard .card-title.mb-2');
+
+                if (totalCard) totalCard.textContent = totalGraduates;
+                if (yearCard) yearCard.textContent = graduatesThisYear;
+                if (monthCard) monthCard.textContent = graduatesThisMonth;
+                if (certCard) certCard.textContent = totalCertifications;
+
+                // Update percentage indicators
+                const yearPercent = document.querySelector('#graduatesThisYearCard small');
+                const monthPercent = document.querySelector('#graduatesThisMonthCard small');
+
+                if (yearPercent) {
+                    const isPositive = yearPercentChange >= 0;
+                    yearPercent.className = isPositive ? 'text-success fw-semibold' : 'text-danger fw-semibold';
+                    yearPercent.innerHTML = `<i class="bx ${isPositive ? 'bx-up-arrow-alt' : 'bx-down-arrow-alt'}"></i> ${isPositive ? '+' : ''}${yearPercentChange}%`;
+                }
+
+                if (monthPercent) {
+                    const isPositive = monthPercentChange >= 0;
+                    monthPercent.className = isPositive ? 'text-success fw-semibold' : 'text-danger fw-semibold';
+                    monthPercent.innerHTML = `<i class="bx ${isPositive ? 'bx-up-arrow-alt' : 'bx-down-arrow-alt'}"></i> ${isPositive ? '+' : ''}${monthPercentChange}%`;
+                }
+            }
+        } catch (error) {
+            console.error('Error updating statistics:', error);
+        }
+    }
+
     // Fetch and display graduates from database
     async function loadGraduates() {
         try {
@@ -173,8 +270,9 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Load graduates on page load
+    // Load graduates and statistics on page load
     loadGraduates();
+    updateStatistics();
 
     // Load certifications from courses API
     async function loadCertifications() {
@@ -303,10 +401,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             }
 
-            // Count graduates with selected certification
+            // Count graduates with selected certification from the actual data
             if (certCount) {
                 let count = 0;
-                document.querySelectorAll('.view-graduate-btn').forEach(btn => {
+                const graduateCards = document.querySelectorAll('.view-graduate-btn');
+                graduateCards.forEach(btn => {
                     const certification = btn.getAttribute('data-certification');
                     if (!selectedCert || certification === selectedCert) {
                         count++;

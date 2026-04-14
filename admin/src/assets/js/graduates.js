@@ -63,11 +63,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Calculate percentage changes
                 const yearPercentChange = graduatesPreviousYear > 0
                     ? Math.round(((graduatesThisYear - graduatesPreviousYear) / graduatesPreviousYear) * 100)
-                    : (graduatesThisYear > 0 ? 100 : 0);
+                    : 0;
 
                 const monthPercentChange = graduatesPreviousMonth > 0
                     ? Math.round(((graduatesThisMonth - graduatesPreviousMonth) / graduatesPreviousMonth) * 100)
-                    : (graduatesThisMonth > 0 ? 100 : 0);
+                    : 0;
 
                 // Update the cards
                 const totalCard = document.querySelector('#graduatesTotalCard .card-title.mb-2');

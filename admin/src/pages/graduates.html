@@ -389,7 +389,7 @@
                                                 <div class="row g-3">
                                                     <div class="col-md-3">
                                                         <label class="form-label" style="color: #b8c5d6;">Search</label>
-                                                        <input type="text" class="form-control"
+                                                        <input type="text" class="form-control" id="graduateSearchInput"
                                                             placeholder="Name or Trainee ID"
                                                             style="background-color: #243447; border: 1px solid #3d4f63; color: #b8c5d6;">
                                                     </div>
@@ -419,6 +419,7 @@
                                                     </div>
                                                     <div class="col-md-1 d-flex align-items-end">
                                                         <button type="button" class="btn btn-outline-secondary w-100"
+                                                            id="graduateResetBtn"
                                                             style="border-color: #3d4f63; color: #b8c5d6;">
                                                             <i class="bx bx-reset"></i>
                                                         </button>
@@ -737,27 +738,7 @@
                                     <label for="addGraduateCourse" class="form-label">Course</label>
                                     <select class="form-select" id="addGraduateCourse">
                                         <option value="">Select Course</option>
-                                        <option value="Beauty Care (Nail Care) NC II">Beauty Care (Nail Care) NC II
-                                        </option>
-                                        <option value="Beauty Care (Skin Care) NC II">Beauty Care (Skin Care) NC II
-                                        </option>
-                                        <option value="Trainers Methodology Level I">Trainers Methodology Level I
-                                        </option>
-                                        <option value="Eyelash and Eyebrow Services Level III">Eyelash and Eyebrow
-                                            Services Level III</option>
-                                        <option value="Aesthetic Services Level II">Aesthetic Services Level II</option>
-                                        <option value="Aesthetic Services Level III">Aesthetic Services Level III
-                                        </option>
-                                        <option value="Advanced Skin Care Services Level III">Advanced Skin Care
-                                            Services Level III</option>
-                                        <option value="Permanent Make-Up Tattoo Services Level III">Permanent Make-Up
-                                            Tattoo Services Level III</option>
-                                        <option value="Perform Collagen Induction Therapy & Hair Loss Treatment">Perform
-                                            Collagen Induction Therapy & Hair Loss Treatment</option>
-                                        <option value="Perform Advanced Facial Treatment & Chemical Skin Peeling">
-                                            Perform Advanced Facial Treatment & Chemical Skin Peeling</option>
-                                        <option value="Perform Light Therapy & Heat Therapy">Perform Light Therapy &
-                                            Heat Therapy</option>
+                                        <!-- Courses will be loaded dynamically from API -->
                                     </select>
                                 </div>
 
@@ -829,27 +810,7 @@
                                     <label for="editGraduateCourse" class="form-label">Course</label>
                                     <select class="form-select" id="editGraduateCourse" required>
                                         <option value="">Select Course</option>
-                                        <option value="Beauty Care (Nail Care) NC II">Beauty Care (Nail Care) NC II
-                                        </option>
-                                        <option value="Beauty Care (Skin Care) NC II">Beauty Care (Skin Care) NC II
-                                        </option>
-                                        <option value="Trainers Methodology Level I">Trainers Methodology Level I
-                                        </option>
-                                        <option value="Eyelash and Eyebrow Services Level III">Eyelash and Eyebrow
-                                            Services Level III</option>
-                                        <option value="Aesthetic Services Level II">Aesthetic Services Level II</option>
-                                        <option value="Aesthetic Services Level III">Aesthetic Services Level III
-                                        </option>
-                                        <option value="Advanced Skin Care Services Level III">Advanced Skin Care
-                                            Services Level III</option>
-                                        <option value="Permanent Make-Up Tattoo Services Level III">Permanent Make-Up
-                                            Tattoo Services Level III</option>
-                                        <option value="Perform Collagen Induction Therapy & Hair Loss Treatment">Perform
-                                            Collagen Induction Therapy & Hair Loss Treatment</option>
-                                        <option value="Perform Advanced Facial Treatment & Chemical Skin Peeling">
-                                            Perform Advanced Facial Treatment & Chemical Skin Peeling</option>
-                                        <option value="Perform Light Therapy & Heat Therapy">Perform Light Therapy &
-                                            Heat Therapy</option>
+                                        <!-- Courses will be loaded dynamically from API -->
                                     </select>
                                 </div>
 

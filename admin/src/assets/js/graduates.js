@@ -3,6 +3,233 @@ document.addEventListener('DOMContentLoaded', function () {
     const cardsPerPage = 8;
     let currentPage = 1;
     let allGraduateCards = [];
+    let allGraduatesData = []; // Store all graduates data for filtering
+
+    // Setup filter event listeners
+    const searchInput = document.getElementById('graduateSearchInput');
+    const courseFilter = document.getElementById('graduateCourseFilter');
+    const certificationFilter = document.getElementById('graduateCertificationFilter');
+    const dateFilter = document.getElementById('graduationDateFilterMain');
+    const resetBtn = document.getElementById('graduateResetBtn');
+
+    if (searchInput) {
+        searchInput.addEventListener('input', debounce(applyGraduateFilters, 300));
+    }
+
+    if (courseFilter) {
+        courseFilter.addEventListener('change', applyGraduateFilters);
+    }
+
+    if (certificationFilter) {
+        certificationFilter.addEventListener('change', applyGraduateFilters);
+    }
+
+    if (dateFilter) {
+        dateFilter.addEventListener('change', applyGraduateFilters);
+    }
+
+    if (resetBtn) {
+        resetBtn.addEventListener('click', function () {
+            if (searchInput) searchInput.value = '';
+            if (courseFilter) courseFilter.value = '';
+            if (certificationFilter) certificationFilter.value = '';
+            if (dateFilter) dateFilter.value = '';
+            applyGraduateFilters();
+        });
+    }
+
+    // Debounce function for search input
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+
+    // Apply filters function
+    function applyGraduateFilters() {
+        const searchTerm = searchInput?.value.toLowerCase().trim() || '';
+        const courseValue = courseFilter?.value || '';
+        const certificationValue = certificationFilter?.value || '';
+        const dateValue = dateFilter?.value || '';
+
+        const graduatesGrid = document.getElementById('graduatesGrid');
+        if (!graduatesGrid) return;
+
+        // Get all graduate cards (exclude empty state messages)
+        const allCards = Array.from(graduatesGrid.querySelectorAll('.col')).filter(el => {
+            return el.querySelector('.view-graduate-btn') !== null;
+        });
+
+        // Remove any existing empty state first - check multiple ways
+        const existingEmptyStates = graduatesGrid.querySelectorAll('.empty-state-message, .col-12');
+        existingEmptyStates.forEach(emptyState => {
+            // Only remove if it doesn't have a view button (meaning it's an empty state, not a graduate card)
+            if (!emptyState.querySelector('.view-graduate-btn') && !emptyState.querySelector('.card')) {
+                emptyState.remove();
+            }
+        });
+
+        // If no filters applied, show all cards
+        if (!searchTerm && !courseValue && !certificationValue && !dateValue) {
+            // Show all cards
+            allCards.forEach(card => {
+                card.style.display = '';
+            });
+
+            graduatesGrid.style.justifyContent = 'flex-start';
+            graduatesGrid.style.alignItems = 'flex-start';
+            allGraduateCards = allCards;
+            clearGraduateHighlights();
+            initializePagination();
+            return;
+        }
+
+        const filteredCards = allCards.filter(card => {
+            const viewBtn = card.querySelector('.view-graduate-btn');
+            if (!viewBtn) return false;
+
+            const name = (viewBtn.getAttribute('data-name') || '').toLowerCase();
+            const traineeId = (viewBtn.getAttribute('data-trainee-id') || '').toLowerCase();
+            const course = viewBtn.getAttribute('data-course') || '';
+            const certification = viewBtn.getAttribute('data-certification') || '';
+            const graduatedDate = viewBtn.getAttribute('data-graduated') || '';
+
+            // Search filter (name or trainee ID)
+            const matchesSearch = !searchTerm || name.includes(searchTerm) || traineeId.includes(searchTerm);
+
+            // Debug search
+            if (searchTerm) {
+                console.log('Search filter:', {
+                    searchTerm,
+                    name,
+                    traineeId,
+                    nameMatch: name.includes(searchTerm),
+                    idMatch: traineeId.includes(searchTerm),
+                    matchesSearch
+                });
+            }
+
+            // Course filter - flexible matching to handle variations like "NC II" vs "Services NC II"
+            let matchesCourse = !courseValue;
+            if (courseValue && course) {
+                // Normalize both strings for comparison
+                const normalizedCourse = course.toLowerCase().replace(/\s+/g, ' ').trim();
+                const normalizedFilter = courseValue.toLowerCase().replace(/\s+/g, ' ').trim();
+
+                console.log('Course matching:', {
+                    graduate: name,
+                    storedCourse: course,
+                    filterCourse: courseValue,
+                    normalizedCourse,
+                    normalizedFilter
+                });
+
+                // Exact match only
+                matchesCourse = normalizedCourse === normalizedFilter;
+            }
+
+            // Certification filter
+            const matchesCertification = !certificationValue || certification === certificationValue;
+
+            // Date filter
+            let matchesDate = true;
+            if (dateValue) {
+                // Convert the graduated date to match format
+                const gradDate = new Date(graduatedDate);
+                const filterDate = new Date(dateValue);
+                if (!isNaN(gradDate.getTime()) && !isNaN(filterDate.getTime())) {
+                    matchesDate = gradDate.toDateString() === filterDate.toDateString();
+                }
+            }
+
+            return matchesSearch && matchesCourse && matchesCertification && matchesDate;
+        });
+
+        // Show/hide cards based on filter
+        allCards.forEach(card => {
+            if (filteredCards.includes(card)) {
+                card.style.display = '';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        // Handle results
+        if (filteredCards.length === 0) {
+            // Show empty state ONLY if no results
+            graduatesGrid.style.justifyContent = 'center';
+            graduatesGrid.style.alignItems = 'center';
+
+            const emptyStateDiv = document.createElement('div');
+            emptyStateDiv.className = 'col-12 empty-state-message';
+            emptyStateDiv.style.cssText = 'display: flex; justify-content: center; align-items: center; width: 100%;';
+            emptyStateDiv.innerHTML = `
+                <div style="text-align: center;">
+                    <i class="bx bx-search-alt" style="font-size: 4rem; opacity: 0.3; color: #697a8d; display: block; margin: 0 auto 15px;"></i>
+                    <h5 style="margin-bottom: 10px; color: #697a8d;">No Graduates Found</h5>
+                    <p style="margin: 5px 0 0 0; font-size: 0.9rem; opacity: 0.7; color: #697a8d;">Try adjusting your filters.</p>
+                </div>
+            `;
+            graduatesGrid.appendChild(emptyStateDiv);
+            allGraduateCards = [];
+        } else {
+            // Restore grid layout when there ARE results
+            graduatesGrid.style.justifyContent = 'flex-start';
+            graduatesGrid.style.alignItems = 'flex-start';
+
+            allGraduateCards = filteredCards;
+
+            // Highlight search results
+            if (searchTerm) {
+                setTimeout(() => {
+                    clearGraduateHighlights();
+                    highlightGraduateSearchResults(searchTerm);
+                }, 50);
+            } else {
+                clearGraduateHighlights();
+            }
+        }
+
+        // Re-initialize pagination with filtered results
+        initializePagination();
+    }
+
+    // Clear highlights
+    function clearGraduateHighlights() {
+        const cards = document.querySelectorAll('#graduatesGrid .col');
+        cards.forEach(card => {
+            card.style.transform = '';
+            card.style.transition = '';
+            card.style.zIndex = '';
+
+            const cardElement = card.querySelector('.card');
+            if (cardElement) {
+                cardElement.style.boxShadow = '';
+                cardElement.style.border = '';
+                cardElement.style.outline = '';
+                cardElement.style.outlineOffset = '';
+                cardElement.style.background = '';
+            }
+            card.classList.remove('graduate-card-highlighted');
+        });
+    }
+
+    // Highlight search results
+    function highlightGraduateSearchResults(searchTerm) {
+        const cards = document.querySelectorAll('#graduatesGrid .col');
+        cards.forEach(card => {
+            const cardText = card.textContent.toLowerCase();
+            if (cardText.includes(searchTerm)) {
+                card.classList.add('graduate-card-highlighted');
+            }
+        });
+    }
 
     // Update statistics cards
     async function updateStatistics() {
@@ -275,6 +502,7 @@ document.addEventListener('DOMContentLoaded', function () {
     updateStatistics();
 
     // Load certifications from courses API
+    // Load certifications and courses from courses API
     async function loadCertifications() {
         try {
             const response = await fetch(`${config.api.baseUrl}/api/v1/courses`);
@@ -283,13 +511,23 @@ document.addEventListener('DOMContentLoaded', function () {
             if (result.success && result.data && Array.isArray(result.data)) {
                 const addCertSelect = document.getElementById('addGraduateCertification');
                 const editCertSelect = document.getElementById('editGraduateCertification');
+                const addCourseSelect = document.getElementById('addGraduateCourse');
+                const editCourseSelect = document.getElementById('editGraduateCourse');
 
-                // Clear existing options except the first one
+                // Clear existing options for certifications
                 if (addCertSelect) {
                     addCertSelect.innerHTML = '<option value="">Select Certification</option>';
                 }
                 if (editCertSelect) {
                     editCertSelect.innerHTML = '<option value="">Select Certification</option>';
+                }
+
+                // Clear existing options for courses
+                if (addCourseSelect) {
+                    addCourseSelect.innerHTML = '<option value="">Select Course</option>';
+                }
+                if (editCourseSelect) {
+                    editCourseSelect.innerHTML = '<option value="">Select Course</option>';
                 }
 
                 // Get unique badges/certifications from courses
@@ -304,7 +542,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Convert to array and sort
                 const sortedCertifications = Array.from(certifications).sort();
 
-                // Add options to both dropdowns
+                // Add certification options to both dropdowns
                 sortedCertifications.forEach(cert => {
                     if (addCertSelect) {
                         const option = document.createElement('option');
@@ -320,13 +558,31 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 });
 
+                // Add course options to both dropdowns
+                result.data.forEach(course => {
+                    const courseName = course.course_name || course.title || course.name;
+
+                    if (addCourseSelect && courseName) {
+                        const option = document.createElement('option');
+                        option.value = courseName;
+                        option.textContent = courseName;
+                        addCourseSelect.appendChild(option);
+                    }
+                    if (editCourseSelect && courseName) {
+                        const option = document.createElement('option');
+                        option.value = courseName;
+                        option.textContent = courseName;
+                        editCourseSelect.appendChild(option);
+                    }
+                });
+
             }
         } catch (error) {
-            console.error('Error loading certifications:', error);
+            console.error('Error loading certifications and courses:', error);
         }
     }
 
-    // Load certifications on page load
+    // Load certifications and courses on page load
     loadCertifications();
 
     // Load courses for filter dropdown
@@ -343,12 +599,17 @@ document.addEventListener('DOMContentLoaded', function () {
                     // Keep the "All Courses" option
                     courseFilter.innerHTML = '<option value="">All Courses</option>';
 
-                    // Add each course as an option
+                    // Add each course as an option - use the same field that's stored in graduates
                     result.data.forEach(course => {
                         const option = document.createElement('option');
-                        option.value = course.course_name || course.title;
-                        option.textContent = course.course_name || course.title;
+                        // Try multiple possible field names to match what's in the graduate data
+                        const courseName = course.course_name || course.title || course.name;
+                        option.value = courseName;
+                        option.textContent = courseName;
                         courseFilter.appendChild(option);
+
+                        // Debug: log course names
+                        console.log('Course option added:', courseName);
                     });
                 }
 
@@ -385,8 +646,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Load courses on page load
     loadCoursesFilter();
 
-    // Update certification card when filter changes
-    const certificationFilter = document.getElementById('graduateCertificationFilter');
+    // Update certification card when filter changes - use existing certificationFilter variable
     if (certificationFilter) {
         certificationFilter.addEventListener('change', function () {
             const selectedCert = this.value;

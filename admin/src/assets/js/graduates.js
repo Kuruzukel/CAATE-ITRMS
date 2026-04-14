@@ -103,32 +103,12 @@ document.addEventListener('DOMContentLoaded', function () {
             // Search filter (name or trainee ID)
             const matchesSearch = !searchTerm || name.includes(searchTerm) || traineeId.includes(searchTerm);
 
-            // Debug search
-            if (searchTerm) {
-                console.log('Search filter:', {
-                    searchTerm,
-                    name,
-                    traineeId,
-                    nameMatch: name.includes(searchTerm),
-                    idMatch: traineeId.includes(searchTerm),
-                    matchesSearch
-                });
-            }
-
             // Course filter - flexible matching to handle variations like "NC II" vs "Services NC II"
             let matchesCourse = !courseValue;
             if (courseValue && course) {
-                // Normalize both strings for comparison
+                // Normalize both strings for comparison - remove extra spaces and make case-insensitive
                 const normalizedCourse = course.toLowerCase().replace(/\s+/g, ' ').trim();
                 const normalizedFilter = courseValue.toLowerCase().replace(/\s+/g, ' ').trim();
-
-                console.log('Course matching:', {
-                    graduate: name,
-                    storedCourse: course,
-                    filterCourse: courseValue,
-                    normalizedCourse,
-                    normalizedFilter
-                });
 
                 // Exact match only
                 matchesCourse = normalizedCourse === normalizedFilter;
@@ -607,9 +587,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         option.value = courseName;
                         option.textContent = courseName;
                         courseFilter.appendChild(option);
-
-                        // Debug: log course names
-                        console.log('Course option added:', courseName);
                     });
                 }
 
@@ -751,8 +728,10 @@ document.addEventListener('DOMContentLoaded', function () {
         const graduatesGrid = document.querySelector('.row.row-cols-1.row-cols-md-2.row-cols-lg-3.row-cols-xl-4');
 
         if (graduatesGrid) {
-            // Get only direct children .col elements from this specific grid
-            allGraduateCards = Array.from(graduatesGrid.children).filter(el => el.classList.contains('col'));
+            // Get only direct children .col elements from this specific grid that are NOT hidden by filters
+            allGraduateCards = Array.from(graduatesGrid.children).filter(el => {
+                return el.classList.contains('col') && el.style.display !== 'none';
+            });
         }
 
         if (allGraduateCards.length === 0) {

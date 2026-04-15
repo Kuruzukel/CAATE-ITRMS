@@ -22,8 +22,6 @@ async function fetchAllData() {
         });
         const applicationsResult = await applicationsResponse.json();
         allApplications = applicationsResult.data || [];
-        console.log('Fetched applications:', allApplications.length);
-        console.log('Approved applications:', allApplications.filter(app => (app.status || '').toLowerCase() === 'approved').length);
 
         const registrationsResponse = await fetch(`${config.api.baseUrl}/api/v1/registrations`, {
             method: 'GET',
@@ -33,8 +31,6 @@ async function fetchAllData() {
         });
         const registrationsResult = await registrationsResponse.json();
         allRegistrations = registrationsResult.data || [];
-        console.log('Fetched registrations:', allRegistrations.length);
-        console.log('Approved registrations:', allRegistrations.filter(reg => (reg.status || '').toLowerCase() === 'approved').length);
 
         await populateCourseFilter();
 
@@ -54,11 +50,6 @@ async function processTraineesData() {
         const status = (app.status || '').toLowerCase();
         return status === 'approved';
     });
-
-    console.log('Processing approved applications:', approvedApps.length);
-    if (approvedApps.length > 0) {
-        console.log('Sample approved application:', approvedApps[0]);
-    }
 
     // Process approved applications
     for (const application of approvedApps) {
@@ -117,92 +108,72 @@ async function processTraineesData() {
             phone: 'N/A'
         });
     }
-}
 
-// Filter for approved registrations (case-insensitive)
-const approvedRegs = allRegistrations.filter(reg => {
-    const status = (reg.status || '').toLowerCase();
-    return status === 'approved';
-});
-
-console.log('Processing approved registrations:', approvedRegs.length);
-if (approvedRegs.length > 0) {
-    console.log('Sample approved registration:', approvedRegs[0]);
-    console.log('Registration fields:', {
-        traineeId: approvedRegs[0].traineeId,
-        trainee_id: approvedRegs[0].trainee_id,
-        userId: approvedRegs[0].userId,
-        user_id: approvedRegs[0].user_id,
-        firstName: approvedRegs[0].firstName,
-        lastName: approvedRegs[0].lastName,
-        selectedCourse: approvedRegs[0].selectedCourse,
-        courseQualification: approvedRegs[0].courseQualification
+    // Filter for approved registrations (case-insensitive)
+    const approvedRegs = allRegistrations.filter(reg => {
+        const status = (reg.status || '').toLowerCase();
+        return status === 'approved';
     });
-}
 
-// Process approved registrations
-for (const registration of approvedRegs) {
-    // Get the trainee_id field (like TRN-2026-XXX) for display
-    let regTraineeId = registration.traineeId || registration.trainee_id || 'N/A';
+    // Process approved registrations
+    for (const registration of approvedRegs) {
+        // Get the trainee_id field (like TRN-2026-XXX) for display
+        let regTraineeId = registration.traineeId || registration.trainee_id || 'N/A';
 
-    if (regTraineeId && typeof regTraineeId === 'object') {
-        regTraineeId = regTraineeId.$oid || regTraineeId._id || 'N/A';
-    }
-
-    // Build full name from registration data
-    let fullName = 'Unknown';
-    const firstName = registration.firstName || registration.first_name || '';
-    const middleName = registration.middleName || registration.middle_name || '';
-    const lastName = registration.lastName || registration.last_name || '';
-
-    fullName = [firstName, middleName, lastName]
-        .filter(part => part && part.trim())
-        .join(' ');
-
-    let profileImage = null;
-    // Get user_id (MongoDB ObjectId) for API lookup
-    let userId = registration.userId || registration.user_id;
-
-    if (userId && typeof userId === 'object') {
-        userId = userId.$oid || userId._id || null;
-    }
-
-    // Only fetch if userId is a valid MongoDB ObjectId format (24 hex characters)
-    if (userId && typeof userId === 'string' && /^[a-f\d]{24}$/i.test(userId)) {
-        try {
-            const traineeResponse = await fetch(`${config.api.baseUrl}/api/v1/trainees/${userId}`);
-            if (traineeResponse.ok) {
-                const traineeData = await traineeResponse.json();
-                if (traineeData.success && traineeData.data && traineeData.data.profile_image) {
-                    profileImage = traineeData.data.profile_image;
-                }
-            }
-        } catch (error) {
-            // Silently handle errors - profile image is optional
+        if (regTraineeId && typeof regTraineeId === 'object') {
+            regTraineeId = regTraineeId.$oid || regTraineeId._id || 'N/A';
         }
+
+        // Build full name from registration data
+        let fullName = 'Unknown';
+        const firstName = registration.firstName || registration.first_name || '';
+        const middleName = registration.middleName || registration.middle_name || '';
+        const lastName = registration.lastName || registration.last_name || '';
+
+        fullName = [firstName, middleName, lastName]
+            .filter(part => part && part.trim())
+            .join(' ');
+
+        let profileImage = null;
+        // Get user_id (MongoDB ObjectId) for API lookup
+        let userId = registration.userId || registration.user_id;
+
+        if (userId && typeof userId === 'object') {
+            userId = userId.$oid || userId._id || null;
+        }
+
+        // Only fetch if userId is a valid MongoDB ObjectId format (24 hex characters)
+        if (userId && typeof userId === 'string' && /^[a-f\d]{24}$/i.test(userId)) {
+            try {
+                const traineeResponse = await fetch(`${config.api.baseUrl}/api/v1/trainees/${userId}`);
+                if (traineeResponse.ok) {
+                    const traineeData = await traineeResponse.json();
+                    if (traineeData.success && traineeData.data && traineeData.data.profile_image) {
+                        profileImage = traineeData.data.profile_image;
+                    }
+                }
+            } catch (error) {
+                // Silently handle errors - profile image is optional
+            }
+        }
+
+        const traineeData = {
+            id: registration._id?.$oid || registration._id,
+            traineeId: regTraineeId,
+            name: fullName || 'Unknown',
+            initials: getInitials(fullName),
+            profileImage: profileImage,
+            course: registration.selectedCourse || registration.courseQualification || 'N/A',
+            email: registration.emailFacebook || 'N/A',
+            phone: registration.contactNo || 'N/A'
+        };
+
+        combinedData.push(traineeData);
     }
 
-    const traineeData = {
-        id: registration._id?.$oid || registration._id,
-        traineeId: regTraineeId,
-        name: fullName || 'Unknown',
-        initials: getInitials(fullName),
-        profileImage: profileImage,
-        course: registration.selectedCourse || registration.courseQualification || 'N/A',
-        email: registration.emailFacebook || 'N/A',
-        phone: registration.contactNo || 'N/A'
-    };
-
-    console.log('Adding trainee from registration:', traineeData);
-    combinedData.push(traineeData);
-}
-
-console.log('Total combined data:', combinedData.length);
-console.log('Combined data:', combinedData);
-
-filteredTrainees = combinedData;
-displayTrainees = combinedData;
-renderTraineesTable();
+    filteredTrainees = combinedData;
+    displayTrainees = combinedData;
+    renderTraineesTable();
 }
 
 function updateStatistics() {

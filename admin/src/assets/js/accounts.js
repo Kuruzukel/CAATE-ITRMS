@@ -220,14 +220,71 @@ async function loadTrainees() {
     showTableLoader();
 
     try {
-        const response = await fetch(`${API_BASE_URL}/trainees`);
-        const result = await response.json();
+        // Fetch trainees, applications, registrations, and admissions in parallel
+        const [traineesResponse, applicationsResponse, registrationsResponse, admissionsResponse] = await Promise.all([
+            fetch(`${API_BASE_URL}/trainees`),
+            fetch(`${API_BASE_URL}/applications`),
+            fetch(`${API_BASE_URL}/registrations`),
+            fetch(`${API_BASE_URL}/admissions`)
+        ]);
 
-        if (result.success) {
-            traineesData = result.data;
+        const traineesResult = await traineesResponse.json();
+        const applicationsResult = applicationsResponse.ok ? await applicationsResponse.json() : { success: false, data: [] };
+        const registrationsResult = registrationsResponse.ok ? await registrationsResponse.json() : { success: false, data: [] };
+        const admissionsResult = admissionsResponse.ok ? await admissionsResponse.json() : { success: false, data: [] };
+
+        if (traineesResult.success) {
+            const trainees = traineesResult.data;
+            const applications = applicationsResult.success ? applicationsResult.data : [];
+            const registrations = registrationsResult.success ? registrationsResult.data : [];
+            const admissions = admissionsResult.success ? admissionsResult.data : [];
+
+            // Merge applications, registrations, and admissions into trainee data
+            traineesData = trainees.map(trainee => {
+                const traineeId = trainee._id?.$oid || trainee._id;
+                const userId = trainee.user_id?.$oid || trainee.user_id;
+
+                // Find related applications
+                const traineeApplications = applications.filter(app => {
+                    const appUserId = app.user_id?.$oid || app.user_id;
+                    return appUserId === userId || appUserId === traineeId;
+                }).map(app => ({
+                    date: app.submittedAt || app.application_date || app.submitted_at || app.created_at || app.createdAt || app.date,
+                    status: app.status,
+                    course: app.assessment_title || app.course
+                }));
+
+                // Find related registrations (enrollments)
+                const traineeRegistrations = registrations.filter(reg => {
+                    const regUserId = reg.userId?.$oid || reg.userId || reg.user_id?.$oid || reg.user_id;
+                    return regUserId === userId || regUserId === traineeId;
+                }).map(reg => ({
+                    date: reg.submittedAt || reg.registration_date || reg.submitted_at || reg.created_at || reg.createdAt || reg.date,
+                    status: reg.status,
+                    course: reg.selectedCourse || reg.courseQualification
+                }));
+
+                // Find related admissions
+                const traineeAdmissions = admissions.filter(adm => {
+                    const admUserId = adm.user_id?.$oid || adm.user_id;
+                    return admUserId === userId || admUserId === traineeId;
+                }).map(adm => ({
+                    date: adm.admission_date || adm.submitted_at || adm.created_at || adm.createdAt || adm.date,
+                    status: adm.status,
+                    course: adm.course
+                }));
+
+                return {
+                    ...trainee,
+                    applications: traineeApplications,
+                    enrollments: traineeRegistrations,
+                    admissions: traineeAdmissions
+                };
+            });
+
             renderTrainees(traineesData);
         } else {
-            console.error('Failed to load trainees:', result.error);
+            console.error('Failed to load trainees:', traineesResult.error);
             showEmptyState('Failed to load trainees data');
         }
     } catch (error) {
@@ -1190,12 +1247,15 @@ function applyFilters() {
     }
 
     if (enrollmentDate) {
-        const filterDate = new Date(enrollmentDate);
         filteredTrainees = filteredTrainees.filter(trainee => {
             return trainee.enrollments && trainee.enrollments.some(e => {
                 if (e.date) {
-                    const enrollDate = new Date(e.date);
-                    return enrollDate.toDateString() === filterDate.toDateString();
+                    const enrollDate = parseMongoDate(e.date);
+                    const filterDate = new Date(enrollmentDate);
+                    // Compare only year, month, and day (ignore time)
+                    return enrollDate.getFullYear() === filterDate.getFullYear() &&
+                        enrollDate.getMonth() === filterDate.getMonth() &&
+                        enrollDate.getDate() === filterDate.getDate();
                 }
                 return false;
             });
@@ -1203,12 +1263,15 @@ function applyFilters() {
     }
 
     if (applicationDate) {
-        const filterDate = new Date(applicationDate);
         filteredTrainees = filteredTrainees.filter(trainee => {
             return trainee.applications && trainee.applications.some(a => {
                 if (a.date) {
-                    const appDate = new Date(a.date);
-                    return appDate.toDateString() === filterDate.toDateString();
+                    const appDate = parseMongoDate(a.date);
+                    const filterDate = new Date(applicationDate);
+                    // Compare only year, month, and day (ignore time)
+                    return appDate.getFullYear() === filterDate.getFullYear() &&
+                        appDate.getMonth() === filterDate.getMonth() &&
+                        appDate.getDate() === filterDate.getDate();
                 }
                 return false;
             });
@@ -1216,12 +1279,15 @@ function applyFilters() {
     }
 
     if (admissionDate) {
-        const filterDate = new Date(admissionDate);
         filteredTrainees = filteredTrainees.filter(trainee => {
             return trainee.admissions && trainee.admissions.some(a => {
                 if (a.date) {
-                    const admDate = new Date(a.date);
-                    return admDate.toDateString() === filterDate.toDateString();
+                    const admDate = parseMongoDate(a.date);
+                    const filterDate = new Date(admissionDate);
+                    // Compare only year, month, and day (ignore time)
+                    return admDate.getFullYear() === filterDate.getFullYear() &&
+                        admDate.getMonth() === filterDate.getMonth() &&
+                        admDate.getDate() === filterDate.getDate();
                 }
                 return false;
             });
@@ -1229,6 +1295,28 @@ function applyFilters() {
     }
 
     renderTrainees(filteredTrainees);
+}
+
+function parseMongoDate(dateValue) {
+    if (!dateValue) return new Date(0);
+
+    try {
+        if (dateValue.$date) {
+            return new Date(dateValue.$date);
+        } else if (dateValue.$numberLong) {
+            return new Date(parseInt(dateValue.$numberLong));
+        } else if (typeof dateValue === 'string') {
+            return new Date(dateValue);
+        } else if (typeof dateValue === 'number') {
+            return new Date(dateValue);
+        } else if (dateValue instanceof Date) {
+            return dateValue;
+        } else {
+            return new Date(dateValue);
+        }
+    } catch (error) {
+        return new Date(0);
+    }
 }
 
 function highlightSearchResults(searchTerm) {

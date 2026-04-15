@@ -239,15 +239,30 @@ async function loadTrainees() {
             const registrations = registrationsResult.success ? registrationsResult.data : [];
             const admissions = admissionsResult.success ? admissionsResult.data : [];
 
+            console.log('Total trainees:', trainees.length);
+            console.log('Total registrations:', registrations.length);
+            console.log('Sample trainee:', trainees[0]);
+            console.log('Sample registration:', registrations[0]);
+
+            // Log all registration IDs for debugging
+            console.log('All registration user IDs and trainee IDs:');
+            registrations.forEach(reg => {
+                const regUserId = reg.userId?.$oid || reg.userId || reg.user_id?.$oid || reg.user_id;
+                const regTraineeId = reg.traineeId || reg.trainee_id;
+                console.log(`  Registration: userId=${regUserId}, traineeId=${regTraineeId}, name=${reg.firstName} ${reg.lastName}`);
+            });
+
             // Merge applications, registrations, and admissions into trainee data
             traineesData = trainees.map(trainee => {
                 const traineeId = trainee._id?.$oid || trainee._id;
                 const userId = trainee.user_id?.$oid || trainee.user_id;
+                const traineeIdString = trainee.trainee_id; // Like TRN-2026-009
 
                 // Find related applications
                 const traineeApplications = applications.filter(app => {
                     const appUserId = app.user_id?.$oid || app.user_id;
-                    return appUserId === userId || appUserId === traineeId;
+                    const appTraineeId = app.trainee_id;
+                    return appUserId === userId || appUserId === traineeId || appTraineeId === traineeIdString;
                 }).map(app => ({
                     date: app.submittedAt || app.application_date || app.submitted_at || app.created_at || app.createdAt || app.date,
                     status: app.status,
@@ -257,7 +272,18 @@ async function loadTrainees() {
                 // Find related registrations (enrollments)
                 const traineeRegistrations = registrations.filter(reg => {
                     const regUserId = reg.userId?.$oid || reg.userId || reg.user_id?.$oid || reg.user_id;
-                    return regUserId === userId || regUserId === traineeId;
+                    const regTraineeId = reg.traineeId || reg.trainee_id;
+
+                    // Enhanced matching logic
+                    const userIdMatch = regUserId === userId || regUserId === traineeId;
+                    const traineeIdMatch = regTraineeId === traineeIdString;
+
+                    // Also check if registration's userId matches trainee's _id as string
+                    const regUserIdString = String(regUserId || '');
+                    const traineeIdAsString = String(traineeId || '');
+                    const userIdStringMatch = regUserIdString === traineeIdAsString;
+
+                    return userIdMatch || traineeIdMatch || userIdStringMatch;
                 }).map(reg => ({
                     date: reg.submittedAt || reg.registration_date || reg.submitted_at || reg.created_at || reg.createdAt || reg.date,
                     status: reg.status,
@@ -267,12 +293,35 @@ async function loadTrainees() {
                 // Find related admissions
                 const traineeAdmissions = admissions.filter(adm => {
                     const admUserId = adm.user_id?.$oid || adm.user_id;
-                    return admUserId === userId || admUserId === traineeId;
+                    const admTraineeId = adm.trainee_id;
+                    return admUserId === userId || admUserId === traineeId || admTraineeId === traineeIdString;
                 }).map(adm => ({
                     date: adm.admission_date || adm.submitted_at || adm.created_at || adm.createdAt || adm.date,
                     status: adm.status,
                     course: adm.course
                 }));
+
+                if (traineeRegistrations.length > 0) {
+                    console.log(`Trainee ${traineeIdString} (ID: ${traineeId}) has ${traineeRegistrations.length} registrations:`, traineeRegistrations);
+                    // Log the raw registration data to see the date format
+                    const rawRegs = registrations.filter(reg => {
+                        const regUserId = reg.userId?.$oid || reg.userId || reg.user_id?.$oid || reg.user_id;
+                        const regTraineeId = reg.traineeId || reg.trainee_id;
+                        const userIdMatch = regUserId === userId || regUserId === traineeId;
+                        const traineeIdMatch = regTraineeId === traineeIdString;
+                        const regUserIdString = String(regUserId || '');
+                        const traineeIdAsString = String(traineeId || '');
+                        const userIdStringMatch = regUserIdString === traineeIdAsString;
+                        return userIdMatch || traineeIdMatch || userIdStringMatch;
+                    });
+                    console.log(`Raw registration data for ${traineeIdString}:`, rawRegs);
+                } else {
+                    console.log(`Trainee ${traineeIdString} (ID: ${traineeId}) has NO registrations. Checked against:`, {
+                        userId,
+                        traineeId,
+                        traineeIdString
+                    });
+                }
 
                 return {
                     ...trainee,
@@ -281,6 +330,9 @@ async function loadTrainees() {
                     admissions: traineeAdmissions
                 };
             });
+
+            console.log('Trainees with data merged:', traineesData.length);
+            console.log('Sample trainee with enrollments:', traineesData.find(t => t.enrollments && t.enrollments.length > 0));
 
             renderTrainees(traineesData);
         } else {
@@ -1169,7 +1221,7 @@ function showToast(message, type = 'success') {
 
 function setupFilters() {
     const searchInput = document.getElementById('searchInput');
-    const enrollmentFilter = document.getElementById('enrollmentFilter');
+    const registrationFilter = document.getElementById('registrationFilter');
     const applicationFilter = document.getElementById('applicationFilter');
     const admissionFilter = document.getElementById('admissionFilter');
     const resetButton = document.getElementById('resetFilters');
@@ -1185,8 +1237,8 @@ function setupFilters() {
         });
     }
 
-    if (enrollmentFilter) {
-        enrollmentFilter.addEventListener('change', applyFilters);
+    if (registrationFilter) {
+        registrationFilter.addEventListener('change', applyFilters);
     }
 
     if (applicationFilter) {
@@ -1204,17 +1256,17 @@ function setupFilters() {
 
 function applyFilters() {
     const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
-    const enrollmentDate = document.getElementById('enrollmentFilter')?.value || '';
+    const registrationDate = document.getElementById('registrationFilter')?.value || '';
     const applicationDate = document.getElementById('applicationFilter')?.value || '';
     const admissionDate = document.getElementById('admissionFilter')?.value || '';
 
-    if (!searchTerm && !enrollmentDate && !applicationDate && !admissionDate) {
+    if (!searchTerm && !registrationDate && !applicationDate && !admissionDate) {
         clearAllHighlights();
         renderTrainees(traineesData);
         return;
     }
 
-    if (searchTerm && !enrollmentDate && !applicationDate && !admissionDate) {
+    if (searchTerm && !registrationDate && !applicationDate && !admissionDate) {
 
         renderTrainees(traineesData);
 
@@ -1246,12 +1298,22 @@ function applyFilters() {
         });
     }
 
-    if (enrollmentDate) {
+    if (registrationDate) {
+        console.log('Filtering by registration date:', registrationDate);
         filteredTrainees = filteredTrainees.filter(trainee => {
-            return trainee.enrollments && trainee.enrollments.some(e => {
+            const hasMatch = trainee.enrollments && trainee.enrollments.some(e => {
                 if (e.date) {
+                    console.log('Raw date value from enrollment:', e.date, 'Type:', typeof e.date);
                     const enrollDate = parseMongoDate(e.date);
-                    const filterDate = new Date(enrollmentDate);
+                    const filterDate = new Date(registrationDate);
+                    console.log(`Comparing registration date ${enrollDate.toDateString()} (valid: ${!isNaN(enrollDate.getTime())}) with filter ${filterDate.toDateString()}`);
+
+                    // Check if date is valid
+                    if (isNaN(enrollDate.getTime())) {
+                        console.warn('Invalid date parsed from:', e.date);
+                        return false;
+                    }
+
                     // Compare only year, month, and day (ignore time)
                     return enrollDate.getFullYear() === filterDate.getFullYear() &&
                         enrollDate.getMonth() === filterDate.getMonth() &&
@@ -1259,7 +1321,12 @@ function applyFilters() {
                 }
                 return false;
             });
+            if (hasMatch) {
+                console.log('Match found for trainee:', trainee.trainee_id, trainee.enrollments);
+            }
+            return hasMatch;
         });
+        console.log('Filtered trainees after registration filter:', filteredTrainees.length);
     }
 
     if (applicationDate) {
@@ -1301,20 +1368,50 @@ function parseMongoDate(dateValue) {
     if (!dateValue) return new Date(0);
 
     try {
+        // Handle MongoDB date object with $date
         if (dateValue.$date) {
-            return new Date(dateValue.$date);
-        } else if (dateValue.$numberLong) {
+            if (typeof dateValue.$date === 'string') {
+                return new Date(dateValue.$date);
+            } else if (typeof dateValue.$date === 'number') {
+                return new Date(dateValue.$date);
+            } else if (dateValue.$date.$numberLong) {
+                return new Date(parseInt(dateValue.$date.$numberLong));
+            }
+        }
+
+        // Handle MongoDB long number
+        if (dateValue.$numberLong) {
             return new Date(parseInt(dateValue.$numberLong));
-        } else if (typeof dateValue === 'string') {
-            return new Date(dateValue);
-        } else if (typeof dateValue === 'number') {
-            return new Date(dateValue);
-        } else if (dateValue instanceof Date) {
-            return dateValue;
-        } else {
+        }
+
+        // Handle ISO string
+        if (typeof dateValue === 'string') {
+            const parsed = new Date(dateValue);
+            if (!isNaN(parsed.getTime())) {
+                return parsed;
+            }
+        }
+
+        // Handle timestamp number
+        if (typeof dateValue === 'number') {
             return new Date(dateValue);
         }
+
+        // Handle Date object
+        if (dateValue instanceof Date) {
+            return dateValue;
+        }
+
+        // Last resort: try to convert to string and parse
+        const parsed = new Date(String(dateValue));
+        if (!isNaN(parsed.getTime())) {
+            return parsed;
+        }
+
+        console.warn('Could not parse date:', dateValue);
+        return new Date(0);
     } catch (error) {
+        console.error('Error parsing date:', dateValue, error);
         return new Date(0);
     }
 }
@@ -1365,11 +1462,11 @@ function highlightSearchResults(searchTerm) {
 
 function resetFilters() {
     document.getElementById('searchInput').value = '';
-    const enrollmentFilter = document.getElementById('enrollmentFilter');
+    const registrationFilter = document.getElementById('registrationFilter');
     const applicationFilter = document.getElementById('applicationFilter');
     const admissionFilter = document.getElementById('admissionFilter');
 
-    if (enrollmentFilter) enrollmentFilter.value = '';
+    if (registrationFilter) registrationFilter.value = '';
     if (applicationFilter) applicationFilter.value = '';
     if (admissionFilter) admissionFilter.value = '';
 

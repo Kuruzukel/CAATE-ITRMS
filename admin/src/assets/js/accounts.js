@@ -239,18 +239,6 @@ async function loadTrainees() {
             const registrations = registrationsResult.success ? registrationsResult.data : [];
             const admissions = admissionsResult.success ? admissionsResult.data : [];
 
-            console.log('Total trainees:', trainees.length);
-            console.log('Total registrations:', registrations.length);
-            console.log('Sample trainee:', trainees[0]);
-            console.log('Sample registration:', registrations[0]);
-
-            // Log all registration IDs for debugging
-            console.log('All registration user IDs and trainee IDs:');
-            registrations.forEach(reg => {
-                const regUserId = reg.userId?.$oid || reg.userId || reg.user_id?.$oid || reg.user_id;
-                const regTraineeId = reg.traineeId || reg.trainee_id;
-                console.log(`  Registration: userId=${regUserId}, traineeId=${regTraineeId}, name=${reg.firstName} ${reg.lastName}`);
-            });
 
             // Merge applications, registrations, and admissions into trainee data
             traineesData = trainees.map(trainee => {
@@ -301,27 +289,6 @@ async function loadTrainees() {
                     course: adm.course
                 }));
 
-                if (traineeRegistrations.length > 0) {
-                    console.log(`Trainee ${traineeIdString} (ID: ${traineeId}) has ${traineeRegistrations.length} registrations:`, traineeRegistrations);
-                    // Log the raw registration data to see the date format
-                    const rawRegs = registrations.filter(reg => {
-                        const regUserId = reg.userId?.$oid || reg.userId || reg.user_id?.$oid || reg.user_id;
-                        const regTraineeId = reg.traineeId || reg.trainee_id;
-                        const userIdMatch = regUserId === userId || regUserId === traineeId;
-                        const traineeIdMatch = regTraineeId === traineeIdString;
-                        const regUserIdString = String(regUserId || '');
-                        const traineeIdAsString = String(traineeId || '');
-                        const userIdStringMatch = regUserIdString === traineeIdAsString;
-                        return userIdMatch || traineeIdMatch || userIdStringMatch;
-                    });
-                    console.log(`Raw registration data for ${traineeIdString}:`, rawRegs);
-                } else {
-                    console.log(`Trainee ${traineeIdString} (ID: ${traineeId}) has NO registrations. Checked against:`, {
-                        userId,
-                        traineeId,
-                        traineeIdString
-                    });
-                }
 
                 return {
                     ...trainee,
@@ -330,9 +297,6 @@ async function loadTrainees() {
                     admissions: traineeAdmissions
                 };
             });
-
-            console.log('Trainees with data merged:', traineesData.length);
-            console.log('Sample trainee with enrollments:', traineesData.find(t => t.enrollments && t.enrollments.length > 0));
 
             renderTrainees(traineesData);
         } else {
@@ -995,7 +959,6 @@ async function generateTraineeId() {
 
         if (result.success) {
             const trainees = result.data;
-            console.log('Total trainees found:', trainees.length);
 
             let maxNumber = 0;
             const traineePattern = /^TRN-\d{4}-(\d+)$/;
@@ -1005,7 +968,6 @@ async function generateTraineeId() {
                     const match = trainee.trainee_id.match(traineePattern);
                     if (match) {
                         const num = parseInt(match[1], 10);
-                        console.log(`Found trainee ID: ${trainee.trainee_id}, number: ${num}`);
                         if (num > maxNumber) {
                             maxNumber = num;
                         }
@@ -1013,21 +975,15 @@ async function generateTraineeId() {
                 }
             });
 
-            console.log('Highest number found:', maxNumber);
-
             const nextNumber = maxNumber + 1;
             const paddedNumber = String(nextNumber).padStart(3, '0');
             const newId = `TRN-${currentYear}-${paddedNumber}`;
 
-            console.log('Generated new trainee ID:', newId);
             return newId;
         } else {
-
-            console.log('API call failed, using default ID');
             return `TRN-${currentYear}-001`;
         }
     } catch (error) {
-        console.error('Error generating trainee ID:', error);
 
         const currentYear = new Date().getFullYear();
         return `TRN-${currentYear}-001`;
@@ -1299,18 +1255,14 @@ function applyFilters() {
     }
 
     if (registrationDate) {
-        console.log('Filtering by registration date:', registrationDate);
         filteredTrainees = filteredTrainees.filter(trainee => {
             const hasMatch = trainee.enrollments && trainee.enrollments.some(e => {
                 if (e.date) {
-                    console.log('Raw date value from enrollment:', e.date, 'Type:', typeof e.date);
                     const enrollDate = parseMongoDate(e.date);
                     const filterDate = new Date(registrationDate);
-                    console.log(`Comparing registration date ${enrollDate.toDateString()} (valid: ${!isNaN(enrollDate.getTime())}) with filter ${filterDate.toDateString()}`);
 
                     // Check if date is valid
                     if (isNaN(enrollDate.getTime())) {
-                        console.warn('Invalid date parsed from:', e.date);
                         return false;
                     }
 
@@ -1321,12 +1273,8 @@ function applyFilters() {
                 }
                 return false;
             });
-            if (hasMatch) {
-                console.log('Match found for trainee:', trainee.trainee_id, trainee.enrollments);
-            }
             return hasMatch;
         });
-        console.log('Filtered trainees after registration filter:', filteredTrainees.length);
     }
 
     if (applicationDate) {
@@ -1370,12 +1318,27 @@ function parseMongoDate(dateValue) {
     try {
         // Handle MongoDB date object with $date
         if (dateValue.$date) {
+            // Check if $date is an object with $numberLong
+            if (dateValue.$date.$numberLong) {
+                return new Date(parseInt(dateValue.$date.$numberLong));
+            }
+            // Check if $date is a string (ISO format)
             if (typeof dateValue.$date === 'string') {
                 return new Date(dateValue.$date);
-            } else if (typeof dateValue.$date === 'number') {
+            }
+            // Check if $date is a number (timestamp)
+            if (typeof dateValue.$date === 'number') {
                 return new Date(dateValue.$date);
-            } else if (dateValue.$date.$numberLong) {
-                return new Date(parseInt(dateValue.$date.$numberLong));
+            }
+            // If $date is an object, try to extract any date-like property
+            if (typeof dateValue.$date === 'object') {
+                // Try common MongoDB date formats
+                if (dateValue.$date.date) {
+                    return new Date(dateValue.$date.date);
+                }
+                if (dateValue.$date.value) {
+                    return new Date(dateValue.$date.value);
+                }
             }
         }
 
@@ -1408,10 +1371,8 @@ function parseMongoDate(dateValue) {
             return parsed;
         }
 
-        console.warn('Could not parse date:', dateValue);
         return new Date(0);
     } catch (error) {
-        console.error('Error parsing date:', dateValue, error);
         return new Date(0);
     }
 }

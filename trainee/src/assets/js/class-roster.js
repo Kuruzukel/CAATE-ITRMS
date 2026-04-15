@@ -116,7 +116,7 @@ async function processTraineesData() {
             email: 'N/A',
             phone: 'N/A'
         });
-    });
+    }
 }
 
 // Filter for approved registrations (case-insensitive)

@@ -9,8 +9,50 @@ if (typeof window.API_BASE_URL === 'undefined') {
 const getApiBaseUrl = () => window.API_BASE_URL;
 
 document.addEventListener('DOMContentLoaded', function () {
+    loadStatistics();
     loadMyCourses();
 });
+
+async function loadStatistics() {
+    try {
+        // Fetch trainees and graduates counts
+        const [traineesResponse, graduatesResponse] = await Promise.all([
+            fetch(`${window.API_BASE_URL}/api/v1/trainees`),
+            fetch(`${window.API_BASE_URL}/api/v1/graduates`)
+        ]);
+
+        let totalTrainees = 0;
+        let totalGraduates = 0;
+
+        if (traineesResponse.ok) {
+            const traineesResult = await traineesResponse.json();
+            if (traineesResult.success && traineesResult.data) {
+                totalTrainees = traineesResult.data.length;
+            }
+        }
+
+        if (graduatesResponse.ok) {
+            const graduatesResult = await graduatesResponse.json();
+            if (graduatesResult.success && graduatesResult.data) {
+                totalGraduates = graduatesResult.data.length;
+            }
+        }
+
+        // Update the UI
+        const totalTraineesElement = document.getElementById('totalTraineesCount');
+        const totalGraduatesElement = document.getElementById('totalGraduatesCount');
+
+        if (totalTraineesElement) {
+            totalTraineesElement.textContent = totalTrainees;
+        }
+
+        if (totalGraduatesElement) {
+            totalGraduatesElement.textContent = totalGraduates;
+        }
+    } catch (error) {
+        console.error('Error loading statistics:', error);
+    }
+}
 
 async function loadMyCourses() {
     const container = document.getElementById('my-courses-container');

@@ -1147,17 +1147,17 @@ function setupFilters() {
 
 function applyFilters() {
     const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
-    const enrollmentYear = document.getElementById('enrollmentFilter')?.value || '';
-    const applicationYear = document.getElementById('applicationFilter')?.value || '';
-    const admissionYear = document.getElementById('admissionFilter')?.value || '';
+    const enrollmentDate = document.getElementById('enrollmentFilter')?.value || '';
+    const applicationDate = document.getElementById('applicationFilter')?.value || '';
+    const admissionDate = document.getElementById('admissionFilter')?.value || '';
 
-    if (!searchTerm && !enrollmentYear && !applicationYear && !admissionYear) {
+    if (!searchTerm && !enrollmentDate && !applicationDate && !admissionDate) {
         clearAllHighlights();
         renderTrainees(traineesData);
         return;
     }
 
-    if (searchTerm && !enrollmentYear && !applicationYear && !admissionYear) {
+    if (searchTerm && !enrollmentDate && !applicationDate && !admissionDate) {
 
         renderTrainees(traineesData);
 
@@ -1189,27 +1189,42 @@ function applyFilters() {
         });
     }
 
-    if (enrollmentYear) {
+    if (enrollmentDate) {
+        const filterDate = new Date(enrollmentDate);
         filteredTrainees = filteredTrainees.filter(trainee => {
-            return trainee.enrollments && trainee.enrollments.some(e =>
-                e.year === enrollmentYear || (e.date && new Date(e.date).getFullYear().toString() === enrollmentYear)
-            );
+            return trainee.enrollments && trainee.enrollments.some(e => {
+                if (e.date) {
+                    const enrollDate = new Date(e.date);
+                    return enrollDate.toDateString() === filterDate.toDateString();
+                }
+                return false;
+            });
         });
     }
 
-    if (applicationYear) {
+    if (applicationDate) {
+        const filterDate = new Date(applicationDate);
         filteredTrainees = filteredTrainees.filter(trainee => {
-            return trainee.applications && trainee.applications.some(a =>
-                a.year === applicationYear || (a.date && new Date(a.date).getFullYear().toString() === applicationYear)
-            );
+            return trainee.applications && trainee.applications.some(a => {
+                if (a.date) {
+                    const appDate = new Date(a.date);
+                    return appDate.toDateString() === filterDate.toDateString();
+                }
+                return false;
+            });
         });
     }
 
-    if (admissionYear) {
+    if (admissionDate) {
+        const filterDate = new Date(admissionDate);
         filteredTrainees = filteredTrainees.filter(trainee => {
-            return trainee.admissions && trainee.admissions.some(a =>
-                a.year === admissionYear || (a.date && new Date(a.date).getFullYear().toString() === admissionYear)
-            );
+            return trainee.admissions && trainee.admissions.some(a => {
+                if (a.date) {
+                    const admDate = new Date(a.date);
+                    return admDate.toDateString() === filterDate.toDateString();
+                }
+                return false;
+            });
         });
     }
 

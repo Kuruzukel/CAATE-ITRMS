@@ -23,7 +23,6 @@ function showToast(message, type = 'success') {
     }, 8000);
 }
 
-// Get token and email from URL parameters
 function getUrlParams() {
     const urlParams = new URLSearchParams(window.location.search);
     return {
@@ -32,7 +31,6 @@ function getUrlParams() {
     };
 }
 
-// Verify token on page load
 async function verifyToken() {
     const { token, email } = getUrlParams();
 
@@ -73,110 +71,77 @@ async function verifyToken() {
     }
 }
 
-// Password toggle functionality
-function setupPasswordToggles() {
-    const toggleNewPassword = document.getElementById('toggleNewPassword');
-    const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
-    const newPasswordInput = document.getElementById('newPassword');
-    const confirmPasswordInput = document.getElementById('confirmPassword');
-    const toggleNewPasswordIcon = document.getElementById('toggleNewPasswordIcon');
-    const toggleConfirmPasswordIcon = document.getElementById('toggleConfirmPasswordIcon');
+document.addEventListener("DOMContentLoaded", function () {
+    async function initializeForm() {
+        const isValid = await verifyToken();
+        if (!isValid) return;
 
-    if (toggleNewPassword && newPasswordInput) {
-        toggleNewPassword.addEventListener('click', function (e) {
+        const form = document.getElementById("formResetPassword");
+
+        form.addEventListener("submit", async function (e) {
             e.preventDefault();
-            const type = newPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-            newPasswordInput.setAttribute('type', type);
-            toggleNewPasswordIcon.classList.toggle('bx-hide');
-            toggleNewPasswordIcon.classList.toggle('bx-show');
-        });
-    }
 
-    if (toggleConfirmPassword && confirmPasswordInput) {
-        toggleConfirmPassword.addEventListener('click', function (e) {
-            e.preventDefault();
-            const type = confirmPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-            confirmPasswordInput.setAttribute('type', type);
-            toggleConfirmPasswordIcon.classList.toggle('bx-hide');
-            toggleConfirmPasswordIcon.classList.toggle('bx-show');
-        });
-    }
-}
+            const { token, email } = getUrlParams();
+            const newPassword = document.getElementById("newPassword").value.trim();
+            const confirmPassword = document.getElementById("confirmPassword").value.trim();
+            const submitBtn = form.querySelector('button[type="submit"]');
 
-document.addEventListener("DOMContentLoaded", async function () {
-    // Verify token first
-    const isValid = await verifyToken();
-    if (!isValid) return;
+            if (!newPassword || !confirmPassword) {
+                showToast('Please fill in all fields', 'error');
+                return;
+            }
 
-    // Setup password toggles
-    setupPasswordToggles();
+            if (newPassword.length < 8) {
+                showToast('Password must be at least 8 characters long', 'error');
+                return;
+            }
 
-    const form = document.getElementById("formResetPassword");
+            if (newPassword !== confirmPassword) {
+                showToast('Passwords do not match', 'error');
+                return;
+            }
 
-    form.addEventListener("submit", async function (e) {
-        e.preventDefault();
+            submitBtn.disabled = true;
+            submitBtn.textContent = "Resetting...";
 
-        const { token, email } = getUrlParams();
-        const newPassword = document.getElementById("newPassword").value.trim();
-        const confirmPassword = document.getElementById("confirmPassword").value.trim();
-        const submitBtn = form.querySelector('button[type="submit"]');
+            try {
+                const response = await fetch(
+                    API_BASE_URL + "/api/v1/auth/reset-password",
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            token: token,
+                            email: email,
+                            newPassword: newPassword
+                        }),
+                    }
+                );
 
-        // Validate passwords
-        if (!newPassword || !confirmPassword) {
-            showToast('Please fill in all fields', 'error');
-            return;
-        }
+                const data = await response.json();
 
-        if (newPassword.length < 8) {
-            showToast('Password must be at least 8 characters long', 'error');
-            return;
-        }
+                if (data.success) {
+                    showToast('Password reset successful! Redirecting to login...', 'success');
+                    form.reset();
 
-        if (newPassword !== confirmPassword) {
-            showToast('Passwords do not match', 'error');
-            return;
-        }
-
-        // Disable button
-        submitBtn.disabled = true;
-        submitBtn.textContent = "Resetting...";
-
-        try {
-            const response = await fetch(
-                API_BASE_URL + "/api/v1/auth/reset-password",
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        token: token,
-                        email: email,
-                        newPassword: newPassword
-                    }),
+                    setTimeout(() => {
+                        window.location.href = "login.html";
+                    }, 3000);
+                } else {
+                    showToast(data.error || 'Failed to reset password. Please try again.', 'error');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = "Reset Password";
                 }
-            );
-
-            const data = await response.json();
-
-            if (data.success) {
-                showToast('Password reset successful! Redirecting to login...', 'success');
-                form.reset();
-
-                // Redirect to login after 3 seconds
-                setTimeout(() => {
-                    window.location.href = "login.html";
-                }, 3000);
-            } else {
-                showToast(data.error || 'Failed to reset password. Please try again.', 'error');
+            } catch (error) {
+                console.error("Error:", error);
+                showToast('Connection error. Please check if the server is running.', 'error');
                 submitBtn.disabled = false;
                 submitBtn.textContent = "Reset Password";
             }
-        } catch (error) {
-            console.error("Error:", error);
-            showToast('Connection error. Please check if the server is running.', 'error');
-            submitBtn.disabled = false;
-            submitBtn.textContent = "Reset Password";
-        }
-    });
+        });
+    }
+
+    initializeForm();
 });

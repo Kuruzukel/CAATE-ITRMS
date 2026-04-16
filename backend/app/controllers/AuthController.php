@@ -495,5 +495,346 @@ class AuthController {
         }
         return null;
     }
+
+    public function forgotPassword() {
+        header('Content-Type: application/json');
+
+        try {
+            $data = json_decode(file_get_contents('php://input'), true);
+
+            if (!isset($data['email'])) {
+                http_response_code(400);
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'Email is required'
+                ]);
+                return;
+            }
+
+            $email = trim($data['email']);
+
+            // Validate email format
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                http_response_code(400);
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'Invalid email format'
+                ]);
+                return;
+            }
+
+            // Search in admins collection
+            $adminModel = new Admin();
+            $user = $adminModel->findByEmail($email);
+            $userType = 'admin';
+
+            // If not found, search in trainees collection
+            if (!$user) {
+                $traineeModel = new Trainee();
+                $user = $traineeModel->findByEmail($email);
+                $userType = 'trainee';
+            }
+
+            // Always return success (security: don't reveal if email exists)
+            if ($user) {
+                // Generate reset token
+                $token = bin2hex(random_bytes(32)); // 64 character string
+                $expiresAt = new MongoDB\BSON\UTCDateTime((time() + 3600) * 1000); // 1 hour
+
+                // Store token in password_resets collection
+                $db = getMongoConnection();
+                $resetCollection = $db->password_resets;
+
+                // Delete any existing tokens for this email
+                $resetCollection->deleteMany(['email' => $email]);
+
+                // Insert new token
+                $resetCollection->insertOne([
+                    'email' => $email,
+                    'token' => $token,
+                    'user_type' => $userType,
+                    'user_id' => $user['_id'],
+                    'expires_at' => $expiresAt,
+                    'created_at' => new MongoDB\BSON\UTCDateTime(),
+                    'used' => false
+                ]);
+
+                // Send email
+                $this->sendResetEmail($email, $token);
+            }
+
+            // Always return success
+            echo json_encode([
+                'success' => true,
+                'message' => 'If an account exists with this email, a password reset link has been sent.'
+            ]);
+
+        } catch (Exception $e) {
+            error_log("ForgotPassword Error: " . $e->getMessage());
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'error' => 'An error occurred. Please try again later.'
+            ]);
+        }
+    }
+
+    private function sendResetEmail($email, $token) {
+        // Base URL - adjust based on your environment
+        $baseUrl = 'http://localhost/CAATE-ITRMS/auth/src/pages';
+        $resetLink = "$baseUrl/reset-password.html?token=$token&email=" . urlencode($email);
+
+        // Log the reset link for development
+        $logDir = __DIR__ . '/../../storage/logs';
+        if (!file_exists($logDir)) {
+            mkdir($logDir, 0777, true);
+        }
+        
+        $logMessage = "\n" . str_repeat('=', 80) . "\n";
+        $logMessage .= "Password Reset Request\n";
+        $logMessage .= str_repeat('=', 80) . "\n";
+        $logMessage .= "Date: " . date('Y-m-d H:i:s') . "\n";
+        $logMessage .= "Email: $email\n";
+        $logMessage .= "Token: $token\n";
+        $logMessage .= "Reset Link: $resetLink\n";
+        $logMessage .= str_repeat('=', 80) . "\n";
+        
+        file_put_contents($logDir . '/password-resets.log', $logMessage, FILE_APPEND);
+        
+        // Try to send email using PHPMailer
+        try {
+            // Check if PHPMailer is installed
+            if (class_exists('PHPMailer\PHPMailer\PHPMailer')) {
+                require_once __DIR__ . '/../../vendor/autoload.php';
+                
+                $mail = new \PHPMailer\PHPMailer\PHPMailer(true);
+                
+                // SMTP Configuration
+                $mail->isSMTP();
+                $mail->Host = getenv('MAIL_HOST') ?: 'smtp.gmail.com';
+                $mail->SMTPAuth = true;
+                $mail->Username = getenv('MAIL_USERNAME') ?: ''; // Your Gmail address
+                $mail->Password = getenv('MAIL_PASSWORD') ?: ''; // Your Gmail App Password
+                $mail->SMTPSecure = \PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS;
+                $mail->Port = getenv('MAIL_PORT') ?: 587;
+                
+                // Only send if credentials are configured
+                if (empty($mail->Username) || empty($mail->Password)) {
+                    error_log("Email not sent: MAIL_USERNAME or MAIL_PASSWORD not configured");
+                    return;
+                }
+                
+                // Email content
+                $mail->setFrom(getenv('MAIL_FROM_ADDRESS') ?: 'noreply@caate.edu.ph', 
+                              getenv('MAIL_FROM_NAME') ?: 'CAATE-ITRMS');
+                $mail->addAddress($email);
+                $mail->isHTML(true);
+                $mail->Subject = 'Password Reset Request - CAATE-ITRMS';
+                
+                $mail->Body = "
+                <html>
+                <head>
+                    <style>
+                        body { font-family: Arial, sans-serif; line-height: 1.6; }
+                        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+                        .button {
+                            display: inline-block;
+                            padding: 12px 24px;
+                            background-color: #007bff;
+                            color: white;
+                            text-decoration: none;
+                            border-radius: 4px;
+                        }
+                        .footer { margin-top: 30px; font-size: 12px; color: #666; }
+                    </style>
+                </head>
+                <body>
+                    <div class='container'>
+                        <h2>Password Reset Request</h2>
+                        <p>Hello,</p>
+                        <p>We received a request to reset your password for your CAATE-ITRMS account.</p>
+                        <p>Click the button below to reset your password:</p>
+                        <p>
+                            <a href='$resetLink' class='button'>Reset Password</a>
+                        </p>
+                        <p>Or copy and paste this link into your browser:</p>
+                        <p><a href='$resetLink'>$resetLink</a></p>
+                        <p><strong>This link will expire in 1 hour.</strong></p>
+                        <p>If you didn't request a password reset, please ignore this email or contact support if you have concerns.</p>
+                        <div class='footer'>
+                            <p>This is an automated email from CAATE-ITRMS. Please do not reply to this email.</p>
+                            <p>Creative Aesthetic Academy & Technical Education Inc.</p>
+                        </div>
+                    </div>
+                </body>
+                </html>
+                ";
+                
+                $mail->AltBody = "Password Reset Request\n\n" .
+                                "Click this link to reset your password: $resetLink\n\n" .
+                                "This link will expire in 1 hour.\n\n" .
+                                "If you didn't request a password reset, please ignore this email.";
+                
+                $mail->send();
+                error_log("Password reset email sent successfully to: $email");
+            } else {
+                error_log("PHPMailer not installed. Email not sent. Install with: composer require phpmailer/phpmailer");
+            }
+        } catch (Exception $e) {
+            error_log("Email sending failed: " . $e->getMessage());
+        }
+    }
+
+    public function verifyResetToken() {
+        header('Content-Type: application/json');
+
+        try {
+            if (!isset($_GET['token'])) {
+                http_response_code(400);
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'Token is required'
+                ]);
+                return;
+            }
+
+            $token = $_GET['token'];
+
+            // Find token in database
+            $db = getMongoConnection();
+            $resetCollection = $db->password_resets;
+
+            $resetRecord = $resetCollection->findOne([
+                'token' => $token,
+                'used' => false
+            ]);
+
+            if (!$resetRecord) {
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'Invalid or expired reset token'
+                ]);
+                return;
+            }
+
+            // Check if token is expired
+            $expiresAt = $resetRecord['expires_at']->toDateTime()->getTimestamp();
+            $now = time();
+
+            if ($now > $expiresAt) {
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'Reset token has expired'
+                ]);
+                return;
+            }
+
+            echo json_encode([
+                'success' => true,
+                'message' => 'Token is valid',
+                'email' => $resetRecord['email']
+            ]);
+
+        } catch (Exception $e) {
+            error_log("VerifyResetToken Error: " . $e->getMessage());
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'error' => 'An error occurred'
+            ]);
+        }
+    }
+
+    public function resetPassword() {
+        header('Content-Type: application/json');
+
+        try {
+            $data = json_decode(file_get_contents('php://input'), true);
+
+            if (!isset($data['token']) || !isset($data['email']) || !isset($data['newPassword'])) {
+                http_response_code(400);
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'Token, email, and new password are required'
+                ]);
+                return;
+            }
+
+            $token = $data['token'];
+            $email = trim($data['email']);
+            $newPassword = trim($data['newPassword']);
+
+            // Validate password strength
+            if (strlen($newPassword) < 8) {
+                http_response_code(400);
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'Password must be at least 8 characters long'
+                ]);
+                return;
+            }
+
+            // Find and validate token
+            $db = getMongoConnection();
+            $resetCollection = $db->password_resets;
+
+            $resetRecord = $resetCollection->findOne([
+                'token' => $token,
+                'email' => $email,
+                'used' => false
+            ]);
+
+            if (!$resetRecord) {
+                http_response_code(400);
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'Invalid reset token'
+                ]);
+                return;
+            }
+
+            // Check if token is expired
+            $expiresAt = $resetRecord['expires_at']->toDateTime()->getTimestamp();
+            if (time() > $expiresAt) {
+                http_response_code(400);
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'Reset token has expired'
+                ]);
+                return;
+            }
+
+            // Update password based on user type
+            $userId = (string)$resetRecord['user_id'];
+            $userType = $resetRecord['user_type'];
+
+            if ($userType === 'admin') {
+                $adminModel = new Admin();
+                $adminModel->update($userId, ['password' => $newPassword]);
+            } else if ($userType === 'trainee') {
+                $traineeModel = new Trainee();
+                $traineeModel->update($userId, ['password' => $newPassword]);
+            }
+
+            // Mark token as used
+            $resetCollection->updateOne(
+                ['_id' => $resetRecord['_id']],
+                ['$set' => ['used' => true]]
+            );
+
+            echo json_encode([
+                'success' => true,
+                'message' => 'Password has been reset successfully'
+            ]);
+
+        } catch (Exception $e) {
+            error_log("ResetPassword Error: " . $e->getMessage());
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'error' => 'An error occurred'
+            ]);
+        }
+    }
     
 }

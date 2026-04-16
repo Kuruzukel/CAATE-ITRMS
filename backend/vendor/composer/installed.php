@@ -3,7 +3,7 @@
         'name' => 'caate/backend',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '9ed66a392e51794f913c5f4e8e52a33b4a0d30e6',
+        'reference' => 'e42c512c3aa692baa68874c5df21102b88963cf5',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'caate/backend' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '9ed66a392e51794f913c5f4e8e52a33b4a0d30e6',
+            'reference' => 'e42c512c3aa692baa68874c5df21102b88963cf5',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

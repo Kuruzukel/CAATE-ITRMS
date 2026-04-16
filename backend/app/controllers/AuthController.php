@@ -632,38 +632,275 @@ class AuthController {
                 $mail->Subject = 'Password Reset Request - CAATE-ITRMS';
                 
                 $mail->Body = "
-                <html>
+                <!DOCTYPE html>
+                <html lang='en'>
                 <head>
+                    <meta charset='UTF-8'>
+                    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
                     <style>
-                        body { font-family: Arial, sans-serif; line-height: 1.6; }
-                        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-                        .button {
+                        * {
+                            margin: 0;
+                            padding: 0;
+                            box-sizing: border-box;
+                        }
+                        
+                        body {
+                            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                            background: linear-gradient(135deg, #0a1f33 0%, #0f2942 50%, #163856 100%);
+                            padding: 40px 20px;
+                            min-height: 100vh;
+                        }
+                        
+                        .email-wrapper {
+                            max-width: 600px;
+                            margin: 0 auto;
+                        }
+                        
+                        .glass-card {
+                            background: linear-gradient(135deg, #0f2942 0%, #0a1f33 100%);
+                            backdrop-filter: blur(20px) saturate(180%);
+                            -webkit-backdrop-filter: blur(20px) saturate(180%);
+                            border-radius: 20px;
+                            border: 1px solid rgba(54, 145, 191, 0.4);
+                            padding: 40px;
+                            box-shadow: 0 10px 40px rgba(22, 56, 86, 0.5),
+                                        0 4px 12px rgba(54, 145, 191, 0.3),
+                                        inset 0 1px 0 rgba(255, 255, 255, 0.15),
+                                        0 0 0 1px rgba(54, 145, 191, 0.1);
+                            transition: all 0.3s ease;
+                        }
+                        
+                        .logo-container {
+                            text-align: center;
+                            margin-bottom: 30px;
+                        }
+                        
+                        .logo-circle {
+                            width: 100px;
+                            height: 100px;
+                            background: linear-gradient(135deg, rgba(54, 145, 191, 0.3) 0%, rgba(50, 85, 150, 0.3) 100%);
+                            backdrop-filter: blur(10px);
+                            border-radius: 50%;
+                            display: inline-flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-size: 48px;
+                            color: white;
+                            border: 2px solid rgba(54, 145, 191, 0.5);
+                            box-shadow: 0 8px 32px rgba(22, 56, 86, 0.4),
+                                        inset 0 2px 0 rgba(255, 255, 255, 0.2);
+                        }
+                        
+                        .content {
+                            color: white;
+                            text-align: center;
+                        }
+                        
+                        h1 {
+                            font-size: 32px;
+                            margin-bottom: 20px;
+                            color: white;
+                            font-weight: 700;
+                            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+                        }
+                        
+                        p {
+                            font-size: 16px;
+                            line-height: 1.8;
+                            margin-bottom: 20px;
+                            color: rgba(255, 255, 255, 0.95);
+                        }
+                        
+                        .button-container {
+                            margin: 40px 0;
+                        }
+                        
+                        .reset-button {
                             display: inline-block;
-                            padding: 12px 24px;
-                            background-color: #007bff;
+                            padding: 18px 50px;
+                            background: linear-gradient(135deg, #3691bf 0%, #325596 100%);
                             color: white;
                             text-decoration: none;
-                            border-radius: 4px;
+                            border-radius: 50px;
+                            font-weight: 700;
+                            font-size: 18px;
+                            box-shadow: 0 10px 40px rgba(54, 145, 191, 0.4),
+                                        0 4px 12px rgba(54, 145, 191, 0.3),
+                                        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+                            transition: all 0.3s ease;
+                            border: 1px solid rgba(54, 145, 191, 0.5);
+                            text-transform: uppercase;
+                            letter-spacing: 1px;
                         }
-                        .footer { margin-top: 30px; font-size: 12px; color: #666; }
+                        
+                        .reset-button:hover {
+                            transform: translateY(-4px);
+                            box-shadow: 0 15px 50px rgba(54, 145, 191, 0.5),
+                                        0 6px 20px rgba(54, 145, 191, 0.4),
+                                        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+                        }
+                        
+                        .link-box {
+                            background: rgba(54, 145, 191, 0.1);
+                            backdrop-filter: blur(10px);
+                            border: 1px solid rgba(54, 145, 191, 0.3);
+                            border-radius: 12px;
+                            padding: 20px;
+                            margin: 30px 0;
+                            word-break: break-all;
+                            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+                        }
+                        
+                        .link-box a {
+                            color: #a8d8ff;
+                            text-decoration: none;
+                            font-size: 14px;
+                            font-weight: 500;
+                        }
+                        
+                        .warning-box {
+                            background: linear-gradient(135deg, rgba(255, 193, 7, 0.15) 0%, rgba(255, 152, 0, 0.15) 100%);
+                            backdrop-filter: blur(10px);
+                            border: 1px solid rgba(255, 193, 7, 0.4);
+                            border-radius: 12px;
+                            padding: 20px;
+                            margin: 30px 0;
+                            box-shadow: 0 4px 12px rgba(255, 193, 7, 0.2),
+                                        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+                        }
+                        
+                        .warning-box p {
+                            color: #ffd54f;
+                            margin: 0;
+                            font-size: 16px;
+                            font-weight: 600;
+                        }
+                        
+                        .info-box {
+                            background: rgba(54, 145, 191, 0.08);
+                            backdrop-filter: blur(10px);
+                            border: 1px solid rgba(54, 145, 191, 0.25);
+                            border-radius: 12px;
+                            padding: 25px;
+                            margin-top: 35px;
+                            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15);
+                        }
+                        
+                        .info-box p {
+                            font-size: 15px;
+                            color: rgba(255, 255, 255, 0.85);
+                            margin-bottom: 0;
+                            line-height: 1.7;
+                        }
+                        
+                        .divider {
+                            height: 1px;
+                            background: linear-gradient(90deg,
+                                transparent 0%,
+                                rgba(54, 145, 191, 0.3) 20%,
+                                rgba(54, 145, 191, 0.5) 50%,
+                                rgba(54, 145, 191, 0.3) 80%,
+                                transparent 100%);
+                            margin: 35px 0;
+                            box-shadow: 0 1px 2px rgba(54, 145, 191, 0.2);
+                        }
+                        
+                        .footer {
+                            text-align: center;
+                            margin-top: 40px;
+                            padding-top: 30px;
+                            border-top: 1px solid rgba(54, 145, 191, 0.2);
+                        }
+                        
+                        .footer p {
+                            font-size: 14px;
+                            color: rgba(255, 255, 255, 0.7);
+                            margin-bottom: 10px;
+                        }
+                        
+                        .brand-name {
+                            font-weight: 700;
+                            color: #3691bf;
+                            text-shadow: 0 2px 4px rgba(54, 145, 191, 0.3);
+                        }
+                        
+                        .security-badge {
+                            display: inline-block;
+                            background: rgba(16, 185, 129, 0.15);
+                            border: 1px solid rgba(16, 185, 129, 0.3);
+                            border-radius: 20px;
+                            padding: 8px 16px;
+                            font-size: 13px;
+                            color: #6ee7b7;
+                            margin-top: 20px;
+                            font-weight: 600;
+                        }
+                        
+                        @media only screen and (max-width: 600px) {
+                            .glass-card {
+                                padding: 30px 20px;
+                            }
+                            
+                            h1 {
+                                font-size: 26px;
+                            }
+                            
+                            .reset-button {
+                                padding: 16px 40px;
+                                font-size: 16px;
+                            }
+                            
+                            .logo-circle {
+                                width: 80px;
+                                height: 80px;
+                                font-size: 40px;
+                            }
+                        }
                     </style>
                 </head>
                 <body>
-                    <div class='container'>
-                        <h2>Password Reset Request</h2>
-                        <p>Hello,</p>
-                        <p>We received a request to reset your password for your CAATE-ITRMS account.</p>
-                        <p>Click the button below to reset your password:</p>
-                        <p>
-                            <a href='$resetLink' class='button'>Reset Password</a>
-                        </p>
-                        <p>Or copy and paste this link into your browser:</p>
-                        <p><a href='$resetLink'>$resetLink</a></p>
-                        <p><strong>This link will expire in 1 hour.</strong></p>
-                        <p>If you didn't request a password reset, please ignore this email or contact support if you have concerns.</p>
-                        <div class='footer'>
-                            <p>This is an automated email from CAATE-ITRMS. Please do not reply to this email.</p>
-                            <p>Creative Aesthetic Academy & Technical Education Inc.</p>
+                    <div class='email-wrapper'>
+                        <div class='glass-card'>
+                            <div class='logo-container'>
+                                <div class='logo-circle'>🔐</div>
+                            </div>
+                            
+                            <div class='content'>
+                                <h1>Password Reset Request</h1>
+                                <p>Hello,</p>
+                                <p>We received a request to reset your password for your <strong class='brand-name'>CAATE-ITRMS</strong> account.</p>
+                                
+                                <div class='button-container'>
+                                    <a href='$resetLink' class='reset-button'>Reset Password</a>
+                                </div>
+                                
+                                <p style='font-size: 14px; color: rgba(255, 255, 255, 0.7); margin-top: 25px;'>Or copy and paste this link into your browser:</p>
+                                
+                                <div class='link-box'>
+                                    <a href='$resetLink'>$resetLink</a>
+                                </div>
+                                
+                                <div class='warning-box'>
+                                    <p>⏰ This link will expire in 1 hour</p>
+                                </div>
+                                
+                                <div class='divider'></div>
+                                
+                                <div class='info-box'>
+                                    <p>If you didn't request a password reset, please ignore this email or contact support if you have concerns about your account security.</p>
+                                </div>
+                                
+                                <div class='security-badge'>
+                                    🛡️ Secure Password Reset
+                                </div>
+                            </div>
+                            
+                            <div class='footer'>
+                                <p>This is an automated email from <span class='brand-name'>CAATE-ITRMS</span></p>
+                                <p style='font-size: 13px;'>Please do not reply to this email</p>
+                                <div class='divider' style='margin: 20px 0;'></div>
+                                <p style='margin-top: 15px; font-weight: 600;'><span class='brand-name'>Creative Aesthetic Academy & Technical Education Inc.</span></p>
+                            </div>
                         </div>
                     </div>
                 </body>

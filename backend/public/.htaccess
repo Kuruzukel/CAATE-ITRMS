@@ -15,3 +15,11 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 </IfModule>
+
+# Email Configuration for Password Reset
+SetEnv MAIL_HOST "smtp.gmail.com"
+SetEnv MAIL_PORT "587"
+SetEnv MAIL_USERNAME "creativeaestheticacademy@gmail.com"
+SetEnv MAIL_PASSWORD "arqv lxzz nzru bojg"
+SetEnv MAIL_FROM_ADDRESS "creativeaestheticacademy@gmail.com"
+SetEnv MAIL_FROM_NAME "CAATE-ITRMS"

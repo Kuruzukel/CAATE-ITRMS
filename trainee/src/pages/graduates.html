@@ -6,35 +6,53 @@
     <meta charset="utf-8" />
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+
     <title>CAATE | Graduates</title>
+
     <meta name="description" content="" />
 
+    <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="../assets/images/CAATE_META_LOGO.png" />
 
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
         href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
         rel="stylesheet" />
 
+    <!-- Icons -->
     <link rel="stylesheet" href="../assets/vendor/fonts/boxicons.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
+    <!-- Core CSS -->
     <link rel="stylesheet" href="../assets/vendor/css/core.css" class="template-customizer-core-css" />
     <link rel="stylesheet" href="../assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
     <link rel="stylesheet" href="../assets/css/demo.css" />
+
+    <!-- Custom Theme -->
     <link rel="stylesheet" href="../assets/css/custom-theme.css" />
 
+    <!-- Page CSS -->
+    <link rel="stylesheet" href="../assets/css/graduates.css" />
+
+    <!-- Vendors CSS -->
     <link rel="stylesheet" href="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
 
+    <!-- Helpers -->
     <script src="../assets/vendor/js/helpers.js"></script>
     <script src="../assets/js/config.js"></script>
+
+    <!-- Navbar -->
     <script src="../assets/js/trainee-navbar.js"></script>
 
+    <!-- Page CSS -->
     <link rel="stylesheet" href="../assets/css/graduates.css" />
 </head>
 
 <body>
+
+    <div class="toast-container" id="toastContainer"></div>
 
     <div class="layout-wrapper layout-content-navbar">
         <div class="layout-container">
@@ -228,61 +246,68 @@
 
                     <div class="container-xxl grow container-p-y">
 
-                        <!-- Statistics Cards -->
-                        <div class="row mb-4">
+                        <div class="row">
                             <div class="col-lg-3 col-md-6 col-6 mb-4">
-                                <div class="card">
+                                <div class="card" id="graduatesTotalCard">
                                     <div class="card-body">
                                         <div class="card-title d-flex align-items-start justify-content-between">
                                             <div class="avatar shrink-0">
-                                                <i class="bx bx-user-check"
-                                                    style="font-size: 2rem; color: #10b981 !important;"></i>
+                                                <i class="bx bxs-graduation"
+                                                    style="font-size: 2rem; color: #10b981;"></i>
                                             </div>
                                         </div>
                                         <span class="fw-semibold d-block mb-1">Total Graduates</span>
-                                        <h3 class="card-title mb-2" id="totalGraduates">0</h3>
+                                        <h3 class="card-title mb-2">0</h3>
+                                        <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i>
+                                            +0%</small>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-lg-3 col-md-6 col-6 mb-4">
-                                <div class="card">
+                                <div class="card" id="graduatesThisYearCard">
+                                    <div class="card-body">
+                                        <div class="card-title d-flex align-items-start justify-content-between">
+                                            <div class="avatar shrink-0">
+                                                <i class="bx bx-calendar-event"
+                                                    style="font-size: 2rem; color: #3b82f6;"></i>
+                                            </div>
+                                        </div>
+                                        <span class="fw-semibold d-block mb-1">This Year</span>
+                                        <h3 class="card-title mb-2">0</h3>
+                                        <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i>
+                                            +0%</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-6 col-6 mb-4">
+                                <div class="card" id="graduatesThisMonthCard">
                                     <div class="card-body">
                                         <div class="card-title d-flex align-items-start justify-content-between">
                                             <div class="avatar shrink-0">
                                                 <i class="bx bx-calendar-check"
-                                                    style="font-size: 2rem; color: #3b82f6 !important;"></i>
-                                            </div>
-                                        </div>
-                                        <span class="fw-semibold d-block mb-1">This Year</span>
-                                        <h3 class="card-title mb-2" id="thisYear">0</h3>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-3 col-md-6 col-6 mb-4">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="card-title d-flex align-items-start justify-content-between">
-                                            <div class="avatar shrink-0">
-                                                <i class="bx bx-time-five"
-                                                    style="font-size: 2rem; color: #f59e0b !important;"></i>
+                                                    style="font-size: 2rem; color: #f59e0b;"></i>
                                             </div>
                                         </div>
                                         <span class="d-block mb-1">This Month</span>
-                                        <h3 class="card-title text-nowrap mb-2" id="thisMonth">0</h3>
+                                        <h3 class="card-title text-nowrap mb-2">0</h3>
+                                        <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i>
+                                            +0%</small>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-lg-3 col-md-6 col-6 mb-4">
-                                <div class="card">
+                                <div class="card" id="graduatesCertifiedCard">
                                     <div class="card-body">
                                         <div class="card-title d-flex align-items-start justify-content-between">
                                             <div class="avatar shrink-0">
-                                                <i class="bx bx-certification"
-                                                    style="font-size: 2rem; color: #8b5cf6 !important;"></i>
+                                                <i class="bx bxs-award" style="font-size: 2rem; color: #8b5cf6;"></i>
                                             </div>
                                         </div>
-                                        <span class="fw-semibold d-block mb-1">Certified NC II</span>
-                                        <h3 class="card-title mb-2" id="certifiedNC2">0</h3>
+                                        <span class="fw-semibold d-block mb-1" id="certificationCardLabel">All
+                                            Certifications</span>
+                                        <h3 class="card-title mb-2" id="certificationCardCount">0</h3>
+                                        <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i>
+                                            +0%</small>
                                     </div>
                                 </div>
                             </div>
@@ -293,7 +318,7 @@
                             <div class="col-12 mb-4">
                                 <div class="card">
                                     <div class="card-header d-flex justify-content-between align-items-center">
-                                        <h5 class="mb-0" style="color: white !important;">All Graduates</h5>
+                                        <h5 class="mb-0">All Graduates</h5>
                                     </div>
                                     <div class="card-body">
 
@@ -304,48 +329,72 @@
                                                 <div class="row g-3">
                                                     <div class="col-md-3">
                                                         <label class="form-label" style="color: #b8c5d6;">Search</label>
-                                                        <input type="text" id="searchGraduateInput" class="form-control"
-                                                            placeholder="Name or Graduate ID"
+                                                        <input type="text" class="form-control" id="graduateSearchInput"
+                                                            placeholder="Name or Trainee ID"
                                                             style="background-color: #243447; border: 1px solid #3d4f63; color: #b8c5d6;">
                                                     </div>
-                                                    <div class="col-md-3">
+                                                    <div class="col-md-4">
                                                         <label class="form-label" style="color: #b8c5d6;">Course</label>
-                                                        <select id="courseFilter" class="form-select"
+                                                        <select class="form-select" id="graduateCourseFilter"
                                                             style="background-color: #243447; border: 1px solid #3d4f63; color: #b8c5d6;">
                                                             <option value="">All Courses</option>
+                                                            <!-- Courses will be loaded dynamically from API -->
                                                         </select>
                                                     </div>
                                                     <div class="col-md-2">
-                                                        <label class="form-label" style="color: #b8c5d6;">Month</label>
-                                                        <select id="monthFilter" class="form-select"
+                                                        <label class="form-label"
+                                                            style="color: #b8c5d6;">Certification</label>
+                                                        <select class="form-select" id="graduateCertificationFilter"
                                                             style="background-color: #243447; border: 1px solid #3d4f63; color: #b8c5d6;">
-                                                            <option value="">All Months</option>
-                                                            <option value="0">January</option>
-                                                            <option value="1">February</option>
-                                                            <option value="2">March</option>
-                                                            <option value="3">April</option>
-                                                            <option value="4">May</option>
-                                                            <option value="5">June</option>
-                                                            <option value="6">July</option>
-                                                            <option value="7">August</option>
-                                                            <option value="8">September</option>
-                                                            <option value="9">October</option>
-                                                            <option value="10">November</option>
-                                                            <option value="11">December</option>
+                                                            <option value="">All Certifications</option>
+                                                            <!-- Certifications will be loaded dynamically from API -->
                                                         </select>
                                                     </div>
                                                     <div class="col-md-2">
-                                                        <label class="form-label" style="color: #b8c5d6;">Year</label>
-                                                        <select id="yearFilter" class="form-select"
-                                                            style="background-color: #243447; border: 1px solid #3d4f63; color: #b8c5d6;">
-                                                            <option value="">All Years</option>
-                                                        </select>
+                                                        <label class="form-label" style="color: #b8c5d6;">
+                                                            Date</label>
+                                                        <input type="date" class="form-control"
+                                                            id="graduationDateFilterMain"
+                                                            style="background-color: #243447; border: 1px solid #3d4f63; color: #b8c5d6; color-scheme: dark;">
                                                     </div>
-                                                    <div class="col-md-2 d-flex align-items-end">
-                                                        <button type="button" id="resetFilters"
-                                                            class="btn btn-outline-secondary w-100">
-                                                            <i class="bx bx-reset"></i> Reset
+                                                    <div class="col-md-1 d-flex align-items-end">
+                                                        <button type="button" class="btn btn-outline-secondary w-100"
+                                                            id="graduateResetBtn"
+                                                            style="border-color: #3d4f63; color: #b8c5d6;">
+                                                            <i class="bx bx-reset"></i>
                                                         </button>
+                                                    </div>
+                                                    <div class="col-md-12 mt-3">
+                                                        <div class="d-flex justify-content-between align-items-center">
+                                                            <div style="color: #b8c5d6;" class="showing-text">
+                                                                Showing 0 to 0 of 0 graduates
+                                                            </div>
+                                                            <nav aria-label="Page navigation">
+                                                                <ul class="pagination mb-0">
+                                                                    <li class="page-item disabled">
+                                                                        <a class="page-link" href="#" tabindex="-1"
+                                                                            style="background-color: #243447 !important; border-color: #3d4f63 !important; color: #b8c5d6 !important;">Previous</a>
+                                                                    </li>
+                                                                    <li class="page-item active"><a
+                                                                            class="page-link page-num" href="#"
+                                                                            data-page="1"
+                                                                            style="background-color: var(--primary-blue) !important; border-color: var(--primary-blue) !important; color: #ffffff !important;">1</a>
+                                                                    </li>
+                                                                    <li class="page-item"><a class="page-link page-num"
+                                                                            href="#" data-page="2"
+                                                                            style="background-color: #243447 !important; border-color: #3d4f63 !important; color: #b8c5d6 !important;">2</a>
+                                                                    </li>
+                                                                    <li class="page-item"><a class="page-link page-num"
+                                                                            href="#" data-page="3"
+                                                                            style="background-color: #243447 !important; border-color: #3d4f63 !important; color: #b8c5d6 !important;">3</a>
+                                                                    </li>
+                                                                    <li class="page-item">
+                                                                        <a class="page-link" href="#"
+                                                                            style="background-color: #243447 !important; border-color: #3d4f63 !important; color: #b8c5d6 !important;">Next</a>
+                                                                    </li>
+                                                                </ul>
+                                                            </nav>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -353,20 +402,22 @@
 
                                         <!-- Graduates Grid -->
                                         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4"
-                                            id="graduatesGrid">
+                                            id="graduatesGrid"
+                                            style="display: flex; justify-content: center; align-items: center; min-height: 350px;">
+                                            <!-- Empty state - default view -->
                                             <div class="col-12"
-                                                style="display: flex; justify-content: center; align-items: center; width: 100%;">
-                                                <div class="d-flex flex-column align-items-center justify-content-center text-center"
-                                                    style="padding: 110px 20px; width: 100%;">
-                                                    <div class="spinner-border text-primary" role="status"
-                                                        style="width: 3rem; height: 3rem;">
-                                                        <span class="visually-hidden">Loading...</span>
-                                                    </div>
-                                                    <p class="mt-3 text-muted"
-                                                        style="color: white !important; margin: 0 auto;">
-                                                        Loading graduates...</p>
+                                                style="display: flex; justify-content: center; align-items: center;">
+                                                <div style="text-align: center;">
+                                                    <i class="bx bxs-graduation"
+                                                        style="font-size: 4rem; opacity: 0.3; color: #697a8d; display: block; margin: 0 auto 15px;"></i>
+                                                    <h5 style="margin-bottom: 10px; color: #697a8d;">No Graduates Yet
+                                                    </h5>
+                                                    <p
+                                                        style="margin: 5px 0 0 0; font-size: 0.9rem; opacity: 0.7; color: #697a8d;">
+                                                        Graduate records will appear here.</p>
                                                 </div>
                                             </div>
+                                            <!-- Graduate cards will be loaded dynamically here -->
                                         </div>
                                     </div>
                                 </div>
@@ -378,27 +429,117 @@
                         <div
                             class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
                             <div class="mb-2 mb-md-0">
-                                © 2026 Creative Aesthetic Academy & Technical Education Inc.
+                                © <span id="currentYear"></span> Creative Aesthetic Academy & Technical Education Inc.
                             </div>
                         </div>
                     </footer>
 
+                    <!-- Content backdrop for loading overlay -->
+                    <div class="content-backdrop fade"></div>
                 </div>
 
             </div>
 
         </div>
 
+        <!-- Layout overlay -->
         <div class="layout-overlay"></div>
     </div>
 
+    <!-- View Graduate Modal -->
+    <div class="modal fade" id="viewGraduateModal" tabindex="-1" aria-labelledby="viewGraduateModalLabel">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="viewGraduateModalLabel">Graduate Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="text-center">
+                                <img id="modalGraduateImage" src="" alt="Graduate Photo" class="img-fluid"
+                                    style="width: 100%; max-width: 400px; height: auto; object-fit: cover; border-radius: 8px;">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">CERTIFICATION</label>
+                                <div>
+                                    <span class="badge" id="modalGraduateBadge"
+                                        style="background-color: #5bc0de; color: #ffffff;">NC II - SOCBCN220</span>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">FULL NAME</label>
+                                <input type="text" class="form-control" id="modalGraduateName" readonly>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">TRAINEE ID</label>
+                                <input type="text" class="form-control" id="modalGraduateId" readonly>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">COURSE</label>
+                                <input type="text" class="form-control" id="modalGraduateCourse" readonly>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">GRADUATION DATE</label>
+                                <input type="text" class="form-control" id="modalGraduateDate" readonly>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">EMAIL</label>
+                                <input type="text" class="form-control" id="modalGraduateEmail" readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Core JS -->
     <script src="../assets/vendor/libs/jquery/jquery.js"></script>
     <script src="../assets/vendor/libs/popper/popper.js"></script>
     <script src="../assets/vendor/js/bootstrap.js"></script>
+
+    <!-- Passive event listeners fix -->
+    <script>
+        (function () {
+            const originalAddEventListener = EventTarget.prototype.addEventListener;
+            EventTarget.prototype.addEventListener = function (type, listener, options) {
+                if (type === 'touchstart' || type === 'touchmove' || type === 'wheel') {
+                    if (typeof options === 'boolean') {
+                        options = { capture: options, passive: true };
+                    } else if (typeof options === 'object' && options.passive === undefined) {
+                        options.passive = true;
+                    } else if (!options) {
+                        options = { passive: true };
+                    }
+                }
+                return originalAddEventListener.call(this, type, listener, options);
+            };
+        })();
+    </script>
+
+    <script src="../assets/js/fix-scrollbar-warnings.js"></script>
     <script src="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
     <script src="../assets/vendor/js/menu.js"></script>
+
+    <!-- Main JS -->
     <script src="../assets/js/main.js"></script>
+
+    <!-- Menu Toggle -->
     <script src="../assets/js/menu-toggle.js"></script>
+
+    <!-- Page JS -->
     <script src="../assets/js/graduates.js"></script>
 </body>
 

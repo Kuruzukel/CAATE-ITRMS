@@ -276,10 +276,11 @@ function viewGraduateDetails(graduateId) {
 function showError(message) {
     const grid = document.getElementById('graduatesGrid');
     grid.innerHTML = `
-        <div class="col-12">
-            <div class="text-center d-flex flex-column align-items-center justify-content-center" style="padding: 60px 20px;">
-                <i class="bx bx-error-circle" style="font-size: 3rem; color: #ff3e1d;"></i>
-                <p class="mt-3 text-danger text-center">${message}</p>
+        <div class="col-12" style="display: flex; justify-content: center; align-items: center;">
+            <div style="text-align: center;">
+                <i class="bx bx-error-circle" style="font-size: 4rem; color: #ef4444; display: block; margin: 0 auto 15px;"></i>
+                <h5 style="margin-bottom: 10px; color: #ef4444;">Error Loading Data</h5>
+                <p style="margin: 5px 0 0 0; font-size: 0.9rem; color: #ef4444;">${message}</p>
             </div>
         </div>
     `;

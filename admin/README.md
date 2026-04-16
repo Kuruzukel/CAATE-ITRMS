@@ -2,6 +2,16 @@
 
 Professional administration dashboard for CAATE (Creative Aesthetic Academy & Technical Education Inc.) Integrated Training & Resource Management System. Provides comprehensive tools for managing courses, trainees, schedules, competencies, and inventory operations.
 
+## Overview
+
+The Admin Dashboard is one of **4 frontend applications** in the CAATE-ITRMS ecosystem:
+
+1. **Admin Dashboard** (this module) - Administrative management interface
+2. **Authentication System** (`/auth`) - Login, registration, and admission workflow
+3. **Landing Page** (`/public`) - Public-facing website with course information
+4. **Trainee Dashboard** (`/trainee`) - Student portal for trainees
+5. **Backend API** (`/backend`) - RESTful API with PHP and MongoDB
+
 ## Folder Structure
 
 ```
@@ -127,85 +137,116 @@ admin/
 
 ## Features
 
-### Dashboard
+The Admin Dashboard provides **15 comprehensive management pages** for complete administrative control:
+
+### Core Management Modules
+
+#### Dashboard
 
 - Overview of key metrics and statistics
 - Quick access to main functions
 - Real-time data visualization
+- Analytics and reporting
 
-### Competencies Management
+#### Competencies Management
 
 - Create and manage competency frameworks
 - Track competency progress
 - Assign competencies to courses
+- Assessment management
 
-### Courses Management
+#### Courses Management
 
-- Add and edit courses
+- Add and edit courses (10+ professional courses)
 - Manage course schedules
 - Track course enrollment
 - Manage course materials
+- Curriculum planning
 
-### Schedule Management
+#### Schedule Management
 
 - Create and manage training schedules
 - View calendar-based schedules
 - Manage instructor assignments
 - Track schedule changes
+- Class timetable management
 
-### Graduates Tracking
+#### Graduates Tracking
 
 - Maintain graduate records
 - Track graduate achievements
 - Generate graduate reports
 - Manage graduate profiles
+- Certificate management
 
-### Accounts Management
+#### Accounts Management
 
 - User account creation and management
-- Role and permission assignment
+- Role and permission assignment (Admin, Staff, Instructor)
 - Account status management
 - User activity tracking
+- Role-based access control
 
-### Attendance Records
+#### Attendance Records
 
-- Record attendance
+- Record daily attendance
 - Generate attendance reports
 - Track attendance patterns
 - Manage attendance exceptions
+- Attendance analytics
 
-### Enrollment Management
+#### Registration & Enrollment Management
 
 - Process enrollments
 - Manage enrollment status
 - Track enrollment history
 - Generate enrollment reports
+- Batch enrollment support
 
-### Application Processing
+#### Admission Processing
 
 - Review applications
 - Process application approvals
 - Manage application status
 - Generate application reports
+- Document verification
+- Admission status tracking
 
-### Inventory Management
+#### Application Management
 
-- Audit Inventory tracking
-- CAATE Inventory management
+- New application processing
+- Application status updates
+- Applicant communication
+- Document management
+
+#### Requests Management
+
+- Trainee request handling
+- Document requests
+- Request tracking system
+- Request status updates
+
+#### Dual Inventory System
+
+- **Audit Inventory** tracking
+- **CAATE Inventory** management
 - Stock level monitoring
 - Inventory reports
+- Equipment and supplies management
 
-### Profile Management
+#### Profile Management
 
 - Update admin profile
 - Manage profile information
 - View profile history
+- Account settings
 
-### Change Password
+#### Change Password
 
 - Secure password change
 - Password strength validation
 - Change history tracking
+- Security recommendations
 
 ## Getting Started
 

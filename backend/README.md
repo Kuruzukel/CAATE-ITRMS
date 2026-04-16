@@ -1,6 +1,36 @@
-# CAATE-ITRMS Backend
+# 🔌 Backend API - CAATE-ITRMS
 
-## Setup
+RESTful API backend for CAATE (Creative Aesthetic Academy & Technical Education Inc.) Integrated Training & Resource Management System. Built with PHP and MongoDB, providing comprehensive data management and business logic for all frontend applications.
+
+## Overview
+
+The Backend API is the **core data layer** for the CAATE-ITRMS ecosystem, serving **4 frontend applications**:
+
+1. **Admin Dashboard** (`/admin`) - Administrative management interface
+2. **Authentication System** (`/auth`) - Login, registration, and admission workflow
+3. **Landing Page** (`/public`) - Public-facing website with course information
+4. **Trainee Dashboard** (`/trainee`) - Student portal for trainees
+5. **Backend API** (this module) - RESTful API with PHP and MongoDB
+
+## Architecture
+
+**Technology Stack:**
+
+- **Language:** PHP 7.4+
+- **Database:** MongoDB 4.0+
+- **Architecture:** RESTful API
+- **Authentication:** JWT (JSON Web Tokens)
+- **Web Server:** Apache with mod_rewrite
+- **Dependency Management:** Composer
+
+**API Structure:**
+
+- **Controllers:** 10 PHP controllers
+- **Models:** 14 data models
+- **Collections:** 12+ MongoDB collections
+- **Routes:** RESTful endpoint routing
+
+## Setup and Installation
 
 ### 1. Install Dependencies
 

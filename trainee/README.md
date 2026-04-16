@@ -2,6 +2,16 @@
 
 Student/trainee dashboard for CAATE (Creative Aesthetic Academy & Technical Education Inc.) Integrated Training & Resource Management System. Provides trainees with access to their courses, admission information, attendance records, competency tracking, profile management, and account settings.
 
+## Overview
+
+The Trainee Dashboard is one of **4 frontend applications** in the CAATE-ITRMS ecosystem:
+
+1. **Admin Dashboard** (`/admin`) - Administrative management interface
+2. **Authentication System** (`/auth`) - Login, registration, and admission workflow
+3. **Landing Page** (`/public`) - Public-facing website with course information
+4. **Trainee Dashboard** (this module) - Student portal for trainees
+5. **Backend API** (`/backend`) - RESTful API with PHP and MongoDB
+
 ## Folder Structure
 
 ```
@@ -41,78 +51,123 @@ trainee/
 
 ## Features
 
-### Dashboard
+The Trainee Dashboard provides **10 comprehensive pages** for student management and tracking:
 
+### Core Student Features
+
+#### Personal Dashboard
+
+- Welcome message with trainee name
 - Overview of enrolled courses
-- Progress tracking
-- Upcoming schedules
-- Important announcements
-- Quick access to key functions
-- Profile summary
+- Enrolled courses summary
+- Progress indicators and tracking
+- Upcoming schedules and classes
+- Important announcements and notifications
+- Quick action buttons
+- Recent activity feed
 
-### Admission Slip
+#### Admission Slip
 
 - View and download admission slip
+- Admission details display
 - Print admission certificate
-- Admission details
-- Important dates and information
+- Printable format
 - QR code for verification
+- Important dates and deadlines
+- Certificate information
+- Download functionality
 
-### Application Form
+#### Application Form
 
 - View submitted application
+- Display submitted application data
 - Edit application information (if allowed)
+- Edit capability based on status
 - Application status tracking
-- Document uploads
-- Application history
+- Status indicators
+- Document uploads and management
+- Submission history
+- Resubmission options
 
-### Attendance
+#### Registration Form
 
-- View attendance records
-- Track attendance percentage
-- View attendance history
-- Mark attendance (if applicable)
-- Attendance reports
+- Course registration
+- Personal information management
+- Contact details
+- Document submission
+- Registration status tracking
+- Course selection
 
-### Change Password
+#### Course Enrollment
 
-- Secure password change
-- Password strength validation
-- Current password verification
-- Change history tracking
-
-### Class Roster
-
-- View classmates and instructors
-- Contact information
-- Class schedules
-- Group assignments
-- Communication tools
-
-### Competencies
-
-- Track competency progress
-- View competency requirements
-- Assessment results
-- Skill development tracking
-- Certification progress
-
-### Courses & Programs
-
-- View enrolled courses
+- List of enrolled courses
+- Enrolled courses overview
 - Course progress tracking
-- Course materials and resources
+- Progress bars and indicators
+- Course materials and resources access
+- Course descriptions
 - Schedule information
 - Instructor contact information
-- Course completion status
+- Instructor details
+- Course completion status and certificates
 
-### Profile Management
+#### Attendance Records
+
+- View attendance records
+- Attendance record display
+- Track attendance percentage
+- Attendance percentage tracking
+- View attendance history
+- Calendar view of attendance
+- Mark attendance (if applicable)
+- Absence notifications and alerts
+- Attendance reports and analytics
+
+#### Competency Tracking
+
+- Track competency progress
+- Competency framework display
+- View competency requirements
+- Progress monitoring and tracking
+- Assessment results and scores
+- Skill development tracking
+- Skill development metrics
+- Certification progress and tracking
+- Achievement badges and recognition
+
+#### Class Roster
+
+- View classmates and instructors
+- Classmate directory
+- Instructor information and contacts
+- Contact information
+- Class schedules and timetables
+- Group assignments
+- Communication tools and features
+
+#### Profile Management
 
 - Update personal information
+- Personal information form
 - Manage contact details
 - Update emergency contacts
+- Emergency contact information
 - Manage profile picture
+- Profile picture upload
+- Address information
+- Educational background
 - View profile history
+- Save and update functionality
+
+#### Password Management
+
+- Secure password change
+- Current password verification
+- New password entry
+- Password confirmation
+- Password strength indicator and validation
+- Security tips and recommendations
+- Change history tracking
 
 ## Getting Started
 

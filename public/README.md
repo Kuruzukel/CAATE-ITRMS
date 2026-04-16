@@ -2,6 +2,16 @@
 
 Professional public-facing website for CAATE (Creative Aesthetic Academy & Technical Education Inc.) Integrated Training & Resource Management System. Showcases training programs, course information, and trainer directory to attract prospective trainees.
 
+## Overview
+
+The Landing Page is one of **4 frontend applications** in the CAATE-ITRMS ecosystem:
+
+1. **Admin Dashboard** (`/admin`) - Administrative management interface
+2. **Authentication System** (`/auth`) - Login, registration, and admission workflow
+3. **Landing Page** (this module) - Public-facing website with course information
+4. **Trainee Dashboard** (`/trainee`) - Student portal for trainees
+5. **Backend API** (`/backend`) - RESTful API with PHP and MongoDB
+
 ## Folder Structure
 
 ```
@@ -29,97 +39,160 @@ public/
 
 ## Features
 
-### Landing Page
+The Landing Page provides **11+ pages** showcasing CAATE's training programs and services:
 
-- Hero section with call-to-action
-- Featured courses showcase
-- About CAATE section
-- Testimonials and success stories
-- Contact information
-- Navigation to course pages
+### Main Landing Page
 
-### Course Pages (10 Courses)
+#### Hero Section
 
-#### 1. Skincare (`skincare.html`)
+- Eye-catching design with professional imagery
+- Clear call-to-action buttons
+- Quick navigation to key sections
+- Responsive hero banner
+- Engaging tagline and mission statement
+
+#### Featured Courses Showcase
+
+- Highlight of popular courses
+- Course thumbnails and brief descriptions
+- Quick links to detailed course pages
+- Visual course catalog
+
+#### About CAATE Section
+
+- Institution overview and history
+- Mission and vision statements
+- TESDA accreditation information
+- Facilities and resources
+- Success stories and achievements
+
+#### Testimonials and Success Stories
+
+- Student testimonials
+- Graduate success stories
+- Industry partnerships
+- Achievement highlights
+
+#### Contact Information
+
+- Contact form
+- Location and address
+- Phone and email
+- Social media links
+- Operating hours
+
+### Course Information Pages (10 Courses)
+
+#### 1. Beauty Care (Skin Care) NC II (`skincare.html`)
 
 - Course overview and objectives
-- Curriculum details
-- Duration and schedule
-- Trainer information
-- Enrollment information
-- Course benefits
+- Curriculum details and modules
+- Duration and schedule information
+- Trainer information and credentials
+- Enrollment information and requirements
+- Course benefits and career opportunities
+- TESDA certification details
 
-#### 2. Nail Care (`nailcare.html`)
+#### 2. Beauty Care (Nail Care) NC II (`nailcare.html`)
 
 - Nail care techniques and practices
-- Course modules
+- Course modules and learning outcomes
 - Tools and materials overview
 - Certification details
-- Enrollment process
+- Enrollment process and requirements
+- Career pathways
 
-#### 3. Advanced Skincare (`advanced-skincare.html`)
+#### 3. Advanced Skin Care Level III (`advanced-skincare.html`)
 
 - Advanced skincare techniques
-- Specialized treatments
-- Prerequisites
-- Advanced modules
-- Professional development
+- Specialized treatments and procedures
+- Prerequisites and requirements
+- Advanced modules and curriculum
+- Professional development opportunities
+- Industry standards and practices
 
-#### 4. Aesthetic Services (`aesthetic.html`)
+#### 4. Aesthetic Services Level III (`aesthetic.html`)
 
 - Aesthetic service offerings
-- Treatment options
-- Professional standards
+- Treatment options and techniques
+- Professional standards and ethics
 - Client care protocols
 - Certification requirements
+- Career advancement opportunities
 
-#### 5. Collagen & Hair Loss (`collagen-hairloss.html`)
+#### 5. Collagen & Hair Loss Treatment (`collagen-hairloss.html`)
 
 - Collagen therapy techniques
-- Hair loss treatments
-- Scientific background
-- Treatment protocols
-- Results and outcomes
+- Hair loss treatment methods
+- Scientific background and research
+- Treatment protocols and procedures
+- Expected results and outcomes
+- Client consultation process
 
-#### 6. Eyelash & Eyebrow (`eyelash-eyebrow.html`)
+#### 6. Eyelash & Eyebrow Services (`eyelash-eyebrow.html`)
 
 - Eyelash extension techniques
 - Eyebrow design and shaping
-- Product information
-- Safety protocols
-- Certification
+- Product information and selection
+- Safety protocols and hygiene
+- Certification and licensing
+- Business opportunities
 
-#### 7. Facial Peeling (`facial-peeling.html`)
+#### 7. Facial Peeling & Treatment (`facial-peeling.html`)
 
 - Chemical peeling techniques
-- Skin types and treatments
-- Safety procedures
+- Skin types and appropriate treatments
+- Safety procedures and protocols
 - Aftercare instructions
 - Professional standards
+- Client assessment
 
 #### 8. Light & Heat Therapy (`light-heat-therapy.html`)
 
-- Light therapy techniques
+- Light therapy techniques and applications
 - Heat therapy applications
-- Equipment overview
+- Equipment overview and operation
 - Treatment protocols
-- Health and safety
+- Health and safety considerations
+- Therapeutic benefits
 
-#### 9. Permanent Makeup (`permanent-makeup.html`)
+#### 9. Permanent Makeup Tattoo (`permanent-makeup.html`)
 
 - Permanent makeup techniques
 - Design and color theory
-- Safety and hygiene
-- Client consultation
-- Certification
+- Safety and hygiene standards
+- Client consultation process
+- Certification requirements
+- Portfolio development
 
-#### 10. Trainers Directory (`trainers.html`)
+#### 10. Trainers Methodology Level I (`trainers.html`)
 
-- Trainer profiles
-- Specializations
-- Experience and credentials
+- Trainer profiles and credentials
+- Specializations and expertise
+- Experience and qualifications
 - Contact information
-- Availability
+- Availability and schedules
+- Teaching methodologies
+
+### Additional Features
+
+#### Navigation
+
+- Responsive navigation menu
+- Quick links to all sections
+- Mobile-friendly hamburger menu
+- Smooth scrolling
+
+#### Technical Features
+
+- Fully responsive design
+- Mobile-first approach
+- SEO optimized with meta tags
+- Fast loading times
+- Cross-browser compatible
+- Progressive Web App (PWA) support
+- Offline functionality
+- Social media integration
 
 ## Getting Started
 

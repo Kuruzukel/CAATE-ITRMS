@@ -2,6 +2,16 @@
 
 Unified authentication system for CAATE (Creative Aesthetic Academy & Technical Education Inc.) Integrated Training & Resource Management System. Handles user login, registration, password recovery, and the complete admission workflow for new trainees.
 
+## Overview
+
+The Authentication System is one of **4 frontend applications** in the CAATE-ITRMS ecosystem:
+
+1. **Admin Dashboard** (`/admin`) - Administrative management interface
+2. **Authentication System** (this module) - Login, registration, and admission workflow
+3. **Landing Page** (`/public`) - Public-facing website with course information
+4. **Trainee Dashboard** (`/trainee`) - Student portal for trainees
+5. **Backend API** (`/backend`) - RESTful API with PHP and MongoDB
+
 ## Folder Structure
 
 ```
@@ -33,25 +43,81 @@ auth/
 
 ## Features
 
-### Authentication
+The Authentication System provides **7+ pages** for secure access and admission management:
 
-- **User Login**: Secure login with credentials validation
-- **User Registration**: New user account creation with validation
-- **Password Recovery**: Forgot password functionality with email verification
-- **Change Password**: Secure password change for authenticated users
+### Authentication Pages
 
-### Admission Workflow
+#### User Login
 
-- **Admission Overview**: Introduction and requirements for admission
-- **Application Form**: Comprehensive application form for new trainees
-- **Appointment Scheduling**: Schedule admission appointment
-- **Consent Form**: Legal consent and agreement forms
+- Secure login with credentials validation
+- Session management
+- Remember me functionality
+- Multi-role support (Admin, Trainee, Staff)
+- Redirect to appropriate dashboard
+
+#### User Registration
+
+- New user account creation with validation
+- Email verification
+- Terms and conditions acceptance
+- Password strength requirements
+- Account type selection
+
+#### Password Recovery
+
+- Forgot password functionality with email verification
+- Secure password reset link generation
+- Email verification process
+- New password creation
+- Password strength validation
+
+### Admission Workflow Pages
+
+#### Admission Overview
+
+- Introduction and requirements for admission
+- Process explanation
+- Document checklist
+- Important dates and deadlines
+- Next steps guidance
+
+#### Application Form
+
+- Comprehensive application form for new trainees
+- Personal information collection
+- Educational background
+- Course selection
+- Contact information
+- Document uploads
+- Form validation and submission
+
+#### Appointment Scheduling
+
+- Schedule admission appointment
+- Date and time selection
+- Appointment type selection
+- Confirmation details
+- Calendar integration
+- Appointment reminders
+
+#### Consent Form
+
+- Legal consent and agreement forms
+- Privacy policy acceptance
+- Terms and conditions
+- Digital signature/confirmation
+- Data processing consent
 
 ### Account Management
 
-- Profile information management
-- Password change functionality
-- Account settings
+#### Change Password
+
+- Secure password change for authenticated users
+- Current password verification
+- New password entry with strength validation
+- Password confirmation
+- Security tips and recommendations
+- Change history tracking
 
 ## Getting Started
 

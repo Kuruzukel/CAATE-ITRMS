@@ -116,7 +116,7 @@
 
 #### 🗂️ Administration & Management
 
-- **Multi-role Administration** - Admin, Trainee, and Public interfaces
+- **4 Frontend Applications** - Admin, Auth, Public, and Trainee interfaces
 - **Course Management** - 10+ professional courses with detailed information
 - **Trainee Management** - Complete lifecycle from admission to graduation
 - **Inventory Tracking** - Audit and CAATE inventory management
@@ -847,43 +847,118 @@ CAATE-ITRMS/
 
 ## Applications
 
-### 1. Admin Dashboard
+The CAATE-ITRMS system consists of **4 frontend applications** and **1 backend API**, providing a complete ecosystem for training management.
+
+### 1. 🔧 Admin Dashboard
 
 Professional administration interface for managing all aspects of the training center.
 
-**Pages:** 15 | **CSS Files:** 16 | **JS Files:** 37 | **Features:** Dashboard, Competencies, Courses, Schedule, Graduates, Accounts, Attendance, Registration, Admission, Applications, Requests, Inventory (Audit & CAATE), Profile, Change Password
+**Location:** `/admin`  
+**Pages:** 15 HTML pages  
+**CSS Files:** 16 stylesheets  
+**JS Files:** 37 scripts
+
+**Key Features:**
+
+- Dashboard with real-time analytics
+- Competencies Management
+- Course Administration
+- Schedule Management
+- Graduate Tracking
+- User Accounts Management
+- Attendance Records
+- Registration & Enrollment
+- Admission Processing
+- Application Management
+- Requests Management
+- Dual Inventory System (Audit & CAATE)
+- Profile & Security Management
 
 [📖 Full Documentation](admin/README.md)
 
-### 2. Authentication System
+### 2. 🔐 Authentication System
 
-Secure authentication and comprehensive admission workflow.
+Secure authentication and comprehensive admission workflow for all user types.
 
-**Pages:** 7+ | **CSS Files:** Multiple | **JS Files:** Multiple | **Features:** Login, Register, Password Recovery, Admission Workflow, Application Form, Appointment Scheduling, Consent Management, Account Settings
+**Location:** `/auth`  
+**Pages:** 7+ HTML pages  
+**Features:** Complete authentication and admission workflow
+
+**Key Features:**
+
+- User Login & Registration
+- Password Recovery
+- Admission Overview
+- Application Form
+- Appointment Scheduling
+- Consent Management
+- Account Settings
 
 [📖 Full Documentation](auth/README.md)
 
-### 3. Landing Page
+### 3. 🌐 Landing Page
 
-Professional public-facing website showcasing courses and training programs.
+Professional public-facing website showcasing CAATE training programs and courses.
 
-**Pages:** 11+ | **CSS Files:** Multiple | **JS Files:** Multiple | **Courses:** 10 professional courses + Trainer Directory
+**Location:** `/public`  
+**Pages:** 11+ HTML pages  
+**Courses:** 10 professional courses
+
+**Key Features:**
+
+- Hero Section & Call-to-Action
+- 10 Course Information Pages
+- Trainer Directory
+- Fully Responsive Design
+- SEO Optimized
+- Fast Loading Times
 
 [📖 Full Documentation](public/README.md)
 
-### 4. Trainee Dashboard
+### 4. 👨‍🎓 Trainee Dashboard
 
-Student dashboard for course management and profile administration.
+Student portal for course management, attendance tracking, and profile administration.
 
-**Pages:** 10 | **CSS Files:** Multiple | **JS Files:** Multiple | **Features:** Dashboard, Admission Slip, Application Form, Registration Form, Courses, Attendance, Competencies, Class Roster, Profile, Password Management
+**Location:** `/trainee`  
+**Pages:** 10 HTML pages
+
+**Key Features:**
+
+- Personal Dashboard
+- Admission Slip
+- Application Form
+- Registration Form
+- Course Enrollment
+- Attendance Records
+- Competency Tracking
+- Class Roster
+- Profile Management
+- Password Management
 
 [📖 Full Documentation](trainee/README.md)
 
-### 5. Backend API
+### 5. 🔌 Backend API
 
-RESTful API built with PHP and MongoDB for data management.
+RESTful API built with PHP and MongoDB for comprehensive data management.
 
-**Technology:** PHP 7.4+ | **Database:** MongoDB | **Architecture:** REST API | **Controllers:** 10 | **Models:** 14 | **Features:** Authentication, Trainee Management, Course Management, Enrollment, Attendance, Competencies, Inventory, Statistics API
+**Location:** `/backend`  
+**Technology:** PHP 7.4+ with MongoDB  
+**Architecture:** RESTful API  
+**Controllers:** 10 PHP controllers  
+**Models:** 14 data models
+
+**Key Features:**
+
+- JWT Authentication
+- Trainee Management
+- Course Management
+- Enrollment Management
+- Attendance Tracking
+- Competency Management
+- Inventory Management
+- Statistics & Analytics API
+- File Upload Support
+- Comprehensive Error Handling
 
 [📖 Full Documentation](backend/README.md)
 
@@ -1068,17 +1143,18 @@ npm run watch
 
 ## Project Statistics
 
-| Metric                  | Count                |
-| ----------------------- | -------------------- |
-| **Total Pages**         | 50+ HTML pages       |
-| **Applications**        | 5 (4 frontend + API) |
-| **CSS Files**           | 50+ stylesheets      |
-| **JavaScript Files**    | 60+ scripts          |
-| **Controllers**         | 10 PHP controllers   |
-| **Models**              | 14 data models       |
-| **Shared Assets**       | 50+ files            |
-| **Documentation Files** | 15+ README files     |
-| **Database**            | MongoDB (NoSQL)      |
+| Metric                  | Count                   |
+| ----------------------- | ----------------------- |
+| **Total Applications**  | 5 (4 frontend + API)    |
+| **Total Pages**         | 50+ HTML pages          |
+| **CSS Files**           | 50+ stylesheets         |
+| **JavaScript Files**    | 60+ scripts             |
+| **Controllers**         | 10 PHP controllers      |
+| **Models**              | 14 data models          |
+| **Shared Assets**       | 50+ files               |
+| **Documentation Files** | 15+ README files        |
+| **Database**            | MongoDB (NoSQL)         |
+| **Courses Offered**     | 10 professional courses |
 
 ---
 

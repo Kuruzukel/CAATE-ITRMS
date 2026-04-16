@@ -10,6 +10,37 @@ function getInitials(name) {
     return name.substring(0, 2).toUpperCase();
 }
 
+// Clear highlights
+function clearGraduateHighlights() {
+    const cards = document.querySelectorAll('#graduatesGrid .col');
+    cards.forEach(card => {
+        card.style.transform = '';
+        card.style.transition = '';
+        card.style.zIndex = '';
+
+        const cardElement = card.querySelector('.card');
+        if (cardElement) {
+            cardElement.style.boxShadow = '';
+            cardElement.style.border = '';
+            cardElement.style.outline = '';
+            cardElement.style.outlineOffset = '';
+            cardElement.style.background = '';
+        }
+        card.classList.remove('graduate-card-highlighted');
+    });
+}
+
+// Highlight search results
+function highlightGraduateSearchResults(searchTerm) {
+    const cards = document.querySelectorAll('#graduatesGrid .col');
+    cards.forEach(card => {
+        const cardText = card.textContent.toLowerCase();
+        if (cardText.includes(searchTerm)) {
+            card.classList.add('graduate-card-highlighted');
+        }
+    });
+}
+
 async function fetchGraduatesData() {
     try {
         // Fetch graduates data from API
@@ -230,6 +261,16 @@ function applyFilters() {
 
     updateStatistics();
     renderGraduatesGrid();
+
+    // Highlight search results
+    if (searchTerm) {
+        setTimeout(() => {
+            clearGraduateHighlights();
+            highlightGraduateSearchResults(searchTerm);
+        }, 50);
+    } else {
+        clearGraduateHighlights();
+    }
 }
 
 function resetFilters() {

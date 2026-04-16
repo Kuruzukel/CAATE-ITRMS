@@ -657,11 +657,11 @@ class AuthController {
                         }
                         
                         .glass-card {
-                            background: linear-gradient(135deg, #0f2942 0%, #0a1f33 100%);
+                            background: linear-gradient(90deg, rgba(15, 41, 66, 0.95) 0%, rgba(10, 31, 51, 0.95) 100%);
                             backdrop-filter: blur(20px) saturate(180%);
                             -webkit-backdrop-filter: blur(20px) saturate(180%);
                             border-radius: 20px;
-                            border: 1px solid rgba(54, 145, 191, 0.4);
+                            border: 1px solid rgba(54, 145, 191, 0.3);
                             padding: 40px;
                             box-shadow: 0 10px 40px rgba(22, 56, 86, 0.5),
                                         0 4px 12px rgba(54, 145, 191, 0.3),
@@ -718,26 +718,34 @@ class AuthController {
                         .reset-button {
                             display: inline-block;
                             padding: 18px 50px;
-                            background: linear-gradient(135deg, #3691bf 0%, #325596 100%);
+                            background: linear-gradient(135deg, rgba(54, 145, 191, 0.35) 0%, rgba(50, 85, 150, 0.3) 100%);
+                            backdrop-filter: blur(25px) saturate(180%);
+                            -webkit-backdrop-filter: blur(25px) saturate(180%);
                             color: white;
                             text-decoration: none;
-                            border-radius: 50px;
-                            font-weight: 700;
+                            border-radius: 12px;
+                            font-weight: 600;
                             font-size: 18px;
-                            box-shadow: 0 10px 40px rgba(54, 145, 191, 0.4),
-                                        0 4px 12px rgba(54, 145, 191, 0.3),
-                                        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+                            box-shadow: 0 8px 32px rgba(22, 56, 86, 0.35),
+                                        inset 0 1px 0 rgba(255, 255, 255, 0.25),
+                                        0 0 0 1px rgba(54, 145, 191, 0.25);
                             transition: all 0.3s ease;
-                            border: 1px solid rgba(54, 145, 191, 0.5);
+                            border: 1.5px solid rgba(54, 145, 191, 0.5);
                             text-transform: uppercase;
-                            letter-spacing: 1px;
+                            letter-spacing: 0.5px;
+                            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
                         }
                         
                         .reset-button:hover {
-                            transform: translateY(-4px);
-                            box-shadow: 0 15px 50px rgba(54, 145, 191, 0.5),
-                                        0 6px 20px rgba(54, 145, 191, 0.4),
-                                        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+                            background: linear-gradient(135deg, rgba(54, 145, 191, 0.55) 0%, rgba(50, 85, 150, 0.5) 100%);
+                            backdrop-filter: blur(30px) saturate(200%);
+                            -webkit-backdrop-filter: blur(30px) saturate(200%);
+                            transform: translateY(-2px) scale(1.02);
+                            box-shadow: 0 12px 40px rgba(22, 56, 86, 0.45),
+                                        inset 0 1px 0 rgba(255, 255, 255, 0.35),
+                                        0 0 30px rgba(54, 145, 191, 0.5),
+                                        0 0 0 1px rgba(54, 145, 191, 0.4);
+                            border: 1.5px solid rgba(54, 145, 191, 0.7);
                         }
                         
                         .link-box {

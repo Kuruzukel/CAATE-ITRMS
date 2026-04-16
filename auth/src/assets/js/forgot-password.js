@@ -72,10 +72,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 // Clear the form
                 form.reset();
 
-                // Redirect to login after 3 seconds
+                // Redirect to login after 8 seconds (matching toast duration)
                 setTimeout(() => {
                     window.location.href = "login.html";
-                }, 3000);
+                }, 8000);
             } else {
                 showToast(data.error || 'An error occurred. Please try again.', 'error');
                 submitBtn.disabled = false;

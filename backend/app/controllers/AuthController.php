@@ -566,7 +566,7 @@ class AuthController {
             // Always return success
             echo json_encode([
                 'success' => true,
-                'message' => 'If an account exists with this email, a password reset link has been sent.'
+                'message' => 'Password reset link sent to email'
             ]);
 
         } catch (Exception $e) {
@@ -639,7 +639,7 @@ class AuthController {
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
 </head>
 <body style='margin: 0; padding: 40px 20px; font-family: Arial, Helvetica, sans-serif; background: linear-gradient(135deg, #0a1f33 0%, #0f2942 50%, #163856 100%); min-height: 100vh;'>
-    <table role='presentation' style='max-width: 600px; margin: 0 auto; width: 100%;' cellpadding='0' cellspacing='0'>
+    <table role='presentation' style='max-width: 950px; margin: 0 auto; width: 100%;' cellpadding='0' cellspacing='0'>
         <tr>
             <td style='background: linear-gradient(90deg, rgba(15, 41, 66, 0.95) 0%, rgba(10, 31, 51, 0.95) 100%); border-radius: 20px; border: 1px solid rgba(54, 145, 191, 0.3); padding: 40px; box-shadow: 0 10px 40px rgba(22, 56, 86, 0.5);'>
                 

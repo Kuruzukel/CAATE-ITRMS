@@ -64,6 +64,7 @@ document.addEventListener('DOMContentLoaded', function () {
             graduatesGrid.style.alignItems = 'flex-start';
             allGraduateCards = allCards;
             clearGraduateHighlights();
+            updateFilteredStatistics(allCards);
             updateCertificationCard('', allCards.length);
             initializePagination();
             return;
@@ -118,6 +119,7 @@ document.addEventListener('DOMContentLoaded', function () {
             `;
             graduatesGrid.appendChild(emptyStateDiv);
             allGraduateCards = [];
+            updateFilteredStatistics([]);
             updateCertificationCard(certificationValue, 0);
         } else {
             graduatesGrid.style.justifyContent = 'flex-start';
@@ -131,6 +133,7 @@ document.addEventListener('DOMContentLoaded', function () {
             } else {
                 clearGraduateHighlights();
             }
+            updateFilteredStatistics(filteredCards);
             updateCertificationCard(certificationValue, filteredCards.length);
         }
         initializePagination();
@@ -174,6 +177,40 @@ document.addEventListener('DOMContentLoaded', function () {
         if (certCount) {
             certCount.textContent = count;
         }
+    }
+    function updateFilteredStatistics(filteredCards) {
+        const now = new Date();
+        const currentYear = now.getFullYear();
+        const currentMonth = now.getMonth();
+
+        const totalGraduates = filteredCards.length;
+
+        let graduatesThisYear = 0;
+        let graduatesThisMonth = 0;
+
+        filteredCards.forEach((card) => {
+            const viewBtn = card.querySelector('.view-graduate-btn');
+            if (viewBtn) {
+                const graduatedDate = viewBtn.getAttribute('data-graduated');
+                if (graduatedDate) {
+                    const gradDate = new Date(graduatedDate);
+                    if (gradDate.getFullYear() === currentYear) {
+                        graduatesThisYear++;
+                        if (gradDate.getMonth() === currentMonth) {
+                            graduatesThisMonth++;
+                        }
+                    }
+                }
+            }
+        });
+
+        const totalCard = document.querySelector('#graduatesTotalCard .card-title.mb-2');
+        const yearCard = document.querySelector('#graduatesThisYearCard .card-title.mb-2');
+        const monthCard = document.querySelector('#graduatesThisMonthCard .card-title.mb-2');
+
+        if (totalCard) totalCard.textContent = totalGraduates;
+        if (yearCard) yearCard.textContent = graduatesThisYear;
+        if (monthCard) monthCard.textContent = graduatesThisMonth;
     }
     async function updateStatistics() {
         try {

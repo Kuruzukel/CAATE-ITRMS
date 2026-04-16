@@ -88,6 +88,10 @@ function renderGraduatesGrid() {
         const courseFilter = document.getElementById('graduateCourseFilter').value;
         const hasActiveFilters = searchTerm || courseFilter;
 
+        // Center the empty state
+        grid.style.justifyContent = 'center';
+        grid.style.alignItems = 'center';
+
         if (hasActiveFilters) {
             grid.innerHTML = `
                 <div class="col-12" style="display: flex; justify-content: center; align-items: center;">

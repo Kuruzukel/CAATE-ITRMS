@@ -79,7 +79,7 @@ function updateStatistics() {
     const currentYear = new Date().getFullYear();
     const currentMonth = new Date().getMonth();
 
-    // Calculate statistics
+    // Calculate statistics based on filtered graduates
     const totalGraduates = filteredGraduates.length;
 
     const thisYearCount = filteredGraduates.filter(grad => {
@@ -92,9 +92,21 @@ function updateStatistics() {
         return gradDate.getFullYear() === currentYear && gradDate.getMonth() === currentMonth;
     }).length;
 
-    const certifiedCount = filteredGraduates.filter(grad =>
-        grad.certification && grad.certification.includes('NC II')
-    ).length;
+    // Count certifications based on current filter
+    const certificationFilterValue = document.getElementById('graduateCertificationFilter')?.value;
+    let certifiedCount;
+
+    if (certificationFilterValue) {
+        // If a specific certification is selected, count only those
+        certifiedCount = filteredGraduates.filter(grad =>
+            grad.certification && grad.certification === certificationFilterValue
+        ).length;
+    } else {
+        // If "All Certifications" is selected, count all graduates with any certification
+        certifiedCount = filteredGraduates.filter(grad =>
+            grad.certification && grad.certification.trim() !== ''
+        ).length;
+    }
 
     // Update the cards using querySelector (matching admin approach)
     const totalCard = document.querySelector('#graduatesTotalCard .card-title.mb-2');
@@ -106,6 +118,16 @@ function updateStatistics() {
     if (yearCard) yearCard.textContent = thisYearCount;
     if (monthCard) monthCard.textContent = thisMonthCount;
     if (certCard) certCard.textContent = certifiedCount;
+
+    // Update certification card label
+    const certLabel = document.getElementById('certificationCardLabel');
+    if (certLabel) {
+        if (certificationFilterValue) {
+            certLabel.textContent = certificationFilterValue;
+        } else {
+            certLabel.textContent = 'All Certifications';
+        }
+    }
 }
 
 function renderGraduatesGrid() {
@@ -232,8 +254,8 @@ function renderGraduatesGrid() {
 
 function applyFilters() {
     const searchTerm = document.getElementById('graduateSearchInput').value.toLowerCase();
-    const courseFilter = document.getElementById('graduateCourseFilter').value.toLowerCase();
-    const certificationFilter = document.getElementById('graduateCertificationFilter').value.toLowerCase();
+    const courseFilter = document.getElementById('graduateCourseFilter').value;
+    const certificationFilter = document.getElementById('graduateCertificationFilter').value;
     const dateFilter = document.getElementById('graduationDateFilterMain').value;
 
     filteredGraduates = allGraduates.filter(graduate => {
@@ -242,11 +264,17 @@ function applyFilters() {
             (graduate.graduate_id && graduate.graduate_id.toLowerCase().includes(searchTerm)) ||
             (graduate.trainee_id && graduate.trainee_id.toLowerCase().includes(searchTerm));
 
-        const matchesCourse = !courseFilter ||
-            (graduate.course && graduate.course.toLowerCase().includes(courseFilter));
+        // Course filter - exact match (case-insensitive)
+        let matchesCourse = !courseFilter;
+        if (courseFilter && graduate.course) {
+            const normalizedCourse = graduate.course.toLowerCase().replace(/\s+/g, ' ').trim();
+            const normalizedFilter = courseFilter.toLowerCase().replace(/\s+/g, ' ').trim();
+            matchesCourse = normalizedCourse === normalizedFilter;
+        }
 
+        // Certification filter - exact match
         const matchesCertification = !certificationFilter ||
-            (graduate.certification && graduate.certification.toLowerCase().includes(certificationFilter));
+            (graduate.certification && graduate.certification === certificationFilter);
 
         let matchesDate = true;
         if (dateFilter && graduate.graduation_date) {
@@ -285,6 +313,8 @@ function resetFilters() {
 
 async function populateCourseFilter() {
     const courseFilter = document.getElementById('graduateCourseFilter');
+    const certificationFilter = document.getElementById('graduateCertificationFilter');
+
     if (!courseFilter) return;
 
     try {
@@ -300,22 +330,55 @@ async function populateCourseFilter() {
             const result = await response.json();
             const courses = result.data || [];
 
-            // Populate dropdown with courses from collection
+            // Populate course dropdown with courses from collection
             courses.forEach(course => {
-                const option = document.createElement('option');
-                option.value = (course.assessment_title || course.name || course.title || '').toLowerCase();
-                option.textContent = course.assessment_title || course.name || course.title || 'Unknown Course';
-                courseFilter.appendChild(option);
+                const courseName = course.course_name || course.assessment_title || course.name || course.title;
+                if (courseName) {
+                    const option = document.createElement('option');
+                    option.value = courseName;
+                    option.textContent = courseName;
+                    courseFilter.appendChild(option);
+                }
             });
+
+            // Populate certification dropdown with unique badges/certifications
+            if (certificationFilter) {
+                const certifications = new Set();
+                courses.forEach(course => {
+                    const badge = course.badge || course.course_code;
+                    if (badge) {
+                        certifications.add(badge);
+                    }
+                });
+
+                const sortedCertifications = Array.from(certifications).sort();
+                sortedCertifications.forEach(cert => {
+                    const option = document.createElement('option');
+                    option.value = cert;
+                    option.textContent = cert;
+                    certificationFilter.appendChild(option);
+                });
+            }
         } else {
             // Fallback to unique courses from graduates data
             const uniqueCourses = [...new Set(allGraduates.map(grad => grad.course).filter(c => c))];
             uniqueCourses.forEach(course => {
                 const option = document.createElement('option');
-                option.value = course.toLowerCase();
+                option.value = course;
                 option.textContent = course;
                 courseFilter.appendChild(option);
             });
+
+            // Fallback to unique certifications from graduates data
+            if (certificationFilter) {
+                const uniqueCerts = [...new Set(allGraduates.map(grad => grad.certification).filter(c => c))];
+                uniqueCerts.sort().forEach(cert => {
+                    const option = document.createElement('option');
+                    option.value = cert;
+                    option.textContent = cert;
+                    certificationFilter.appendChild(option);
+                });
+            }
         }
     } catch (error) {
         console.error('Error fetching courses:', error);
@@ -323,10 +386,21 @@ async function populateCourseFilter() {
         const uniqueCourses = [...new Set(allGraduates.map(grad => grad.course).filter(c => c))];
         uniqueCourses.forEach(course => {
             const option = document.createElement('option');
-            option.value = course.toLowerCase();
+            option.value = course;
             option.textContent = course;
             courseFilter.appendChild(option);
         });
+
+        // Fallback to unique certifications from graduates data
+        if (certificationFilter) {
+            const uniqueCerts = [...new Set(allGraduates.map(grad => grad.certification).filter(c => c))];
+            uniqueCerts.sort().forEach(cert => {
+                const option = document.createElement('option');
+                option.value = cert;
+                option.textContent = cert;
+                certificationFilter.appendChild(option);
+            });
+        }
     }
 }
 

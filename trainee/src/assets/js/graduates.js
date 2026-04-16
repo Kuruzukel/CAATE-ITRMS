@@ -12,8 +12,8 @@ function getInitials(name) {
 
 async function fetchGraduatesData() {
     try {
-        // Fetch trainees data from API (graduates are trainees with graduation_date)
-        const response = await fetch(`${config.api.baseUrl}/api/v1/trainees`, {
+        // Fetch graduates data from API
+        const response = await fetch(`${config.api.baseUrl}/api/v1/graduates`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -25,15 +25,18 @@ async function fetchGraduatesData() {
         }
 
         const result = await response.json();
-        // Filter only trainees who have graduated (have graduation_date)
-        const allTrainees = result.data || [];
-        allGraduates = allTrainees.filter(trainee => trainee.graduation_date);
-        filteredGraduates = [...allGraduates];
 
-        await populateCourseFilter();
-        populateYearFilter();
-        updateStatistics();
-        renderGraduatesGrid();
+        if (result.success && result.data && Array.isArray(result.data)) {
+            allGraduates = result.data;
+            filteredGraduates = [...allGraduates];
+
+            await populateCourseFilter();
+            populateYearFilter();
+            updateStatistics();
+            renderGraduatesGrid();
+        } else {
+            throw new Error('Invalid data format');
+        }
 
     } catch (error) {
         console.error('Error fetching graduates:', error);
@@ -45,54 +48,63 @@ function updateStatistics() {
     const currentYear = new Date().getFullYear();
     const currentMonth = new Date().getMonth();
 
-    // Total Graduates
-    document.getElementById('totalGraduates').textContent = filteredGraduates.length;
+    // Calculate statistics
+    const totalGraduates = filteredGraduates.length;
 
-    // This Year
     const thisYearCount = filteredGraduates.filter(grad => {
         const gradYear = new Date(grad.graduation_date).getFullYear();
         return gradYear === currentYear;
     }).length;
-    document.getElementById('thisYear').textContent = thisYearCount;
 
-    // This Month
     const thisMonthCount = filteredGraduates.filter(grad => {
         const gradDate = new Date(grad.graduation_date);
         return gradDate.getFullYear() === currentYear && gradDate.getMonth() === currentMonth;
     }).length;
-    document.getElementById('thisMonth').textContent = thisMonthCount;
 
-    // Certified NC II
     const certifiedCount = filteredGraduates.filter(grad =>
         grad.certification && grad.certification.includes('NC II')
     ).length;
-    document.getElementById('certifiedNC2').textContent = certifiedCount;
+
+    // Update the cards using querySelector (matching admin approach)
+    const totalCard = document.querySelector('#graduatesTotalCard .card-title.mb-2');
+    const yearCard = document.querySelector('#graduatesThisYearCard .card-title.mb-2');
+    const monthCard = document.querySelector('#graduatesThisMonthCard .card-title.mb-2');
+    const certCard = document.querySelector('#graduatesCertifiedCard .card-title.mb-2');
+
+    if (totalCard) totalCard.textContent = totalGraduates;
+    if (yearCard) yearCard.textContent = thisYearCount;
+    if (monthCard) monthCard.textContent = thisMonthCount;
+    if (certCard) certCard.textContent = certifiedCount;
 }
 
 function renderGraduatesGrid() {
     const grid = document.getElementById('graduatesGrid');
+    if (!grid) return;
+
     grid.innerHTML = '';
 
     if (filteredGraduates.length === 0) {
-        const searchTerm = document.getElementById('searchGraduateInput').value;
-        const courseFilter = document.getElementById('courseFilter').value;
+        const searchTerm = document.getElementById('graduateSearchInput').value;
+        const courseFilter = document.getElementById('graduateCourseFilter').value;
         const hasActiveFilters = searchTerm || courseFilter;
 
         if (hasActiveFilters) {
             grid.innerHTML = `
-                <div class="col-12" style="display: flex; justify-content: center; align-items: center; width: 100%;">
-                    <div class="d-flex flex-column align-items-center justify-content-center text-center" style="padding: 60px 20px; width: 100%;">
-                        <i class="bx bx-search" style="font-size: 3rem; color: #6c757d;"></i>
-                        <p class="mt-3 text-muted" style="color: white !important; margin: 0 auto;">No graduates found matching your filters</p>
+                <div class="col-12" style="display: flex; justify-content: center; align-items: center;">
+                    <div style="text-align: center;">
+                        <i class="bx bx-search-alt" style="font-size: 4rem; opacity: 0.3; color: #697a8d; display: block; margin: 0 auto 15px;"></i>
+                        <h5 style="margin-bottom: 10px; color: #697a8d;">No Graduates Found</h5>
+                        <p style="margin: 5px 0 0 0; font-size: 0.9rem; opacity: 0.7; color: #697a8d;">Try adjusting your filters.</p>
                     </div>
                 </div>
             `;
         } else {
             grid.innerHTML = `
-                <div class="col-12" style="display: flex; justify-content: center; align-items: center; width: 100%;">
-                    <div class="d-flex flex-column align-items-center justify-content-center text-center" style="padding: 110px 20px; width: 100%;">
-                        <i class="bx bx-info-circle" style="font-size: 3rem; color: #6c757d;"></i>
-                        <p class="mt-3 text-muted" style="color: white !important; margin: 0 auto;">No graduates data available</p>
+                <div class="col-12" style="display: flex; justify-content: center; align-items: center;">
+                    <div style="text-align: center;">
+                        <i class="bx bxs-graduation" style="font-size: 4rem; opacity: 0.3; color: #697a8d; display: block; margin: 0 auto 15px;"></i>
+                        <h5 style="margin-bottom: 10px; color: #697a8d;">No Graduates Yet</h5>
+                        <p style="margin: 5px 0 0 0; font-size: 0.9rem; opacity: 0.7; color: #697a8d;">Graduate records will appear here.</p>
                     </div>
                 </div>
             `;
@@ -100,57 +112,94 @@ function renderGraduatesGrid() {
         return;
     }
 
+    // Reset grid alignment when there are graduates
+    grid.style.justifyContent = 'flex-start';
+    grid.style.alignItems = 'flex-start';
+
+    // Render each graduate card
     filteredGraduates.forEach(graduate => {
-        const col = document.createElement('div');
-        col.className = 'col';
+        const graduateData = graduate;
+        const name = graduateData.name || 'Unknown';
+        const traineeId = graduateData.trainee_id || 'N/A';
+        const mongoId = graduateData._id?.$oid || graduateData._id || '';
+        const course = graduateData.course || 'N/A';
+        const certification = graduateData.certification || 'N/A';
+        const email = graduateData.email || 'N/A';
+        const imageUrl = graduateData.image_url || '../assets/images/DEFAULT_AVATAR.png';
 
-        const initials = getInitials(graduate.name || 'Unknown');
-        const profileImage = graduate.profile_image || graduate.image;
-        const graduationDate = graduate.graduation_date ? new Date(graduate.graduation_date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : 'N/A';
-
-        let imageHtml;
-        if (profileImage) {
-            imageHtml = `<img src="${profileImage}" class="card-img-top" alt="${graduate.name}" style="height: 200px; object-fit: cover;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                <div class="card-img-top d-none align-items-center justify-content-center" style="height: 200px; background: linear-gradient(135deg, rgba(54, 145, 191, 0.2) 0%, rgba(50, 85, 150, 0.2) 100%); font-size: 3rem; color: #696cff; font-weight: 600;">
-                    ${initials}
-                </div>`;
-        } else {
-            imageHtml = `<div class="card-img-top d-flex align-items-center justify-content-center" style="height: 200px; background: linear-gradient(135deg, rgba(54, 145, 191, 0.2) 0%, rgba(50, 85, 150, 0.2) 100%); font-size: 3rem; color: #696cff; font-weight: 600;">
-                ${initials}
-            </div>`;
+        // Format graduation date
+        let graduatedFormatted = 'N/A';
+        if (graduateData.graduation_date) {
+            const dateObj = new Date(graduateData.graduation_date);
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            const day = dateObj.getDate();
+            const month = monthNames[dateObj.getMonth()];
+            const year = dateObj.getFullYear();
+            graduatedFormatted = `${month} ${day}, ${year}`;
         }
 
-        col.innerHTML = `
+        // Create card
+        const newCard = document.createElement('div');
+        newCard.className = 'col';
+        newCard.innerHTML = `
             <div class="card h-100">
-                ${imageHtml}
+                <div class="position-relative">
+                    <img src="${imageUrl}" class="card-img-top" alt="${name}" style="height: 200px; object-fit: cover;">
+                </div>
                 <div class="card-body">
-                    <span class="badge mb-2" style="background-color: #5bc0de; color: #ffffff;">${graduate.certification || 'NC II'}</span>
-                    <h5 class="card-title mb-2">${graduate.name || 'Unknown'}</h5>
-                    <p class="text-muted small mb-2">ID: ${graduate.graduate_id || graduate.trainee_id || 'N/A'}</p>
-                    <p class="card-text small mb-2">
-                        <i class="bx bx-book-open me-1"></i>${graduate.course || 'N/A'}
+                    <span class="badge mb-2" style="background-color: #5bc0de; color: #ffffff;">${certification}</span>
+                    <h5 class="card-title mb-2">${name}</h5>
+                    <p class="text-muted small mb-2">ID: ${traineeId}</p>
+                    <p class="card-text small mb-2 graduate-course-text">
+                        <i class="bx bx-book-open me-1"></i><span class="course-name">${course}</span>
                     </p>
                     <p class="card-text small mb-2">
-                        <i class="bx bx-calendar me-1"></i>Graduated: ${graduationDate}
+                        <i class="bx bx-calendar me-1"></i>Graduated: ${graduatedFormatted}
                     </p>
                     <p class="card-text small mb-3">
-                        <i class="bx bx-envelope me-1"></i>${graduate.email || 'N/A'}
+                        <i class="bx bx-envelope me-1"></i>${email}
                     </p>
                     <div class="d-flex gap-2">
-                        <button class="btn btn-sm btn-outline-primary flex-fill" onclick="viewGraduateDetails('${graduate._id || graduate.id}')">
+                        <button class="btn btn-sm btn-outline-primary w-100 view-graduate-btn" 
+                            data-bs-toggle="modal" data-bs-target="#viewGraduateModal"
+                            data-name="${name}" data-trainee-id="${traineeId}" data-course="${course}" 
+                            data-graduated="${graduatedFormatted}" data-email="${email}" 
+                            data-certification="${certification}" data-image="${imageUrl}">
                             <i class="bx bx-show"></i> View
                         </button>
                     </div>
                 </div>
             </div>
         `;
-        grid.appendChild(col);
+
+        grid.appendChild(newCard);
+
+        // Add event listener for view button
+        const viewBtn = newCard.querySelector('.view-graduate-btn');
+        if (viewBtn) {
+            viewBtn.addEventListener('click', function () {
+                document.getElementById('modalGraduateName').value = name;
+                document.getElementById('modalGraduateId').value = traineeId;
+                document.getElementById('modalGraduateCourse').value = course;
+                document.getElementById('modalGraduateDate').value = graduatedFormatted;
+                document.getElementById('modalGraduateEmail').value = email;
+                document.getElementById('modalGraduateImage').src = imageUrl;
+
+                // Update badge
+                const badge = document.getElementById('modalGraduateBadge');
+                if (badge) {
+                    badge.textContent = certification;
+                }
+            });
+        }
     });
 }
 
 function applyFilters() {
-    const searchTerm = document.getElementById('searchGraduateInput').value.toLowerCase();
-    const courseFilter = document.getElementById('courseFilter').value.toLowerCase();
+    const searchTerm = document.getElementById('graduateSearchInput').value.toLowerCase();
+    const courseFilter = document.getElementById('graduateCourseFilter').value.toLowerCase();
+    const certificationFilter = document.getElementById('graduateCertificationFilter').value.toLowerCase();
+    const dateFilter = document.getElementById('graduationDateFilterMain').value;
 
     filteredGraduates = allGraduates.filter(graduate => {
         const matchesSearch = !searchTerm ||
@@ -161,32 +210,18 @@ function applyFilters() {
         const matchesCourse = !courseFilter ||
             (graduate.course && graduate.course.toLowerCase().includes(courseFilter));
 
-        let matchesMonth = true;
-        let matchesYear = true;
+        const matchesCertification = !certificationFilter ||
+            (graduate.certification && graduate.certification.toLowerCase().includes(certificationFilter));
 
-        if (graduate.graduation_date) {
-            const gradDate = new Date(graduate.graduation_date);
-            const monthFilter = document.getElementById('monthFilter').value;
-            const yearFilter = document.getElementById('yearFilter').value;
-
-            if (monthFilter !== '') {
-                matchesMonth = gradDate.getMonth() === parseInt(monthFilter);
-            }
-
-            if (yearFilter !== '') {
-                matchesYear = gradDate.getFullYear() === parseInt(yearFilter);
-            }
-        } else {
-            const monthFilter = document.getElementById('monthFilter').value;
-            const yearFilter = document.getElementById('yearFilter').value;
-            // If no graduation date, exclude from month/year filters
-            if (monthFilter !== '' || yearFilter !== '') {
-                matchesMonth = false;
-                matchesYear = false;
-            }
+        let matchesDate = true;
+        if (dateFilter && graduate.graduation_date) {
+            const gradDate = new Date(graduate.graduation_date).toISOString().split('T')[0];
+            matchesDate = gradDate === dateFilter;
+        } else if (dateFilter && !graduate.graduation_date) {
+            matchesDate = false;
         }
 
-        return matchesSearch && matchesCourse && matchesMonth && matchesYear;
+        return matchesSearch && matchesCourse && matchesCertification && matchesDate;
     });
 
     updateStatistics();
@@ -194,17 +229,18 @@ function applyFilters() {
 }
 
 function resetFilters() {
-    document.getElementById('searchGraduateInput').value = '';
-    document.getElementById('courseFilter').value = '';
-    document.getElementById('monthFilter').value = '';
-    document.getElementById('yearFilter').value = '';
+    document.getElementById('graduateSearchInput').value = '';
+    document.getElementById('graduateCourseFilter').value = '';
+    document.getElementById('graduateCertificationFilter').value = '';
+    document.getElementById('graduationDateFilterMain').value = '';
     filteredGraduates = [...allGraduates];
     updateStatistics();
     renderGraduatesGrid();
 }
 
 async function populateCourseFilter() {
-    const courseFilter = document.getElementById('courseFilter');
+    const courseFilter = document.getElementById('graduateCourseFilter');
+    if (!courseFilter) return;
 
     try {
         // Fetch courses from the courses collection
@@ -250,19 +286,8 @@ async function populateCourseFilter() {
 }
 
 function populateYearFilter() {
-    const yearFilter = document.getElementById('yearFilter');
-    const years = allGraduates
-        .map(grad => grad.graduation_date ? new Date(grad.graduation_date).getFullYear() : null)
-        .filter(year => year !== null);
-
-    const uniqueYears = [...new Set(years)].sort((a, b) => b - a); // Sort descending
-
-    uniqueYears.forEach(year => {
-        const option = document.createElement('option');
-        option.value = year;
-        option.textContent = year;
-        yearFilter.appendChild(option);
-    });
+    // This function is no longer needed since we're using a date picker instead
+    // But keeping it for compatibility
 }
 
 function viewGraduateDetails(graduateId) {
@@ -287,11 +312,24 @@ function showError(message) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
+    // Set current year in footer
+    const currentYearSpan = document.getElementById('currentYear');
+    if (currentYearSpan) {
+        currentYearSpan.textContent = new Date().getFullYear();
+    }
+
     fetchGraduatesData();
 
-    document.getElementById('searchGraduateInput').addEventListener('input', applyFilters);
-    document.getElementById('courseFilter').addEventListener('change', applyFilters);
-    document.getElementById('monthFilter').addEventListener('change', applyFilters);
-    document.getElementById('yearFilter').addEventListener('change', applyFilters);
-    document.getElementById('resetFilters').addEventListener('click', resetFilters);
+    // Add event listeners with null checks
+    const searchInput = document.getElementById('graduateSearchInput');
+    const courseFilter = document.getElementById('graduateCourseFilter');
+    const certificationFilter = document.getElementById('graduateCertificationFilter');
+    const dateFilter = document.getElementById('graduationDateFilterMain');
+    const resetBtn = document.getElementById('graduateResetBtn');
+
+    if (searchInput) searchInput.addEventListener('input', applyFilters);
+    if (courseFilter) courseFilter.addEventListener('change', applyFilters);
+    if (certificationFilter) certificationFilter.addEventListener('change', applyFilters);
+    if (dateFilter) dateFilter.addEventListener('change', applyFilters);
+    if (resetBtn) resetBtn.addEventListener('click', resetFilters);
 });

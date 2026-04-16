@@ -12,3 +12,48 @@
 .pagination .page-link {
     transition: all 0.3s ease !important;
 }
+
+/* Graduate course text scrollbar - hidden by default, visible on hover */
+.graduate-course-text {
+    display: flex;
+    align-items: center;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    max-width: 100%;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.graduate-course-text::-webkit-scrollbar {
+    height: 6px;
+    display: none;
+}
+
+.graduate-course-text:hover {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(54, 145, 191, 0.5) rgba(54, 145, 191, 0.1);
+}
+
+.graduate-course-text:hover::-webkit-scrollbar {
+    display: block;
+}
+
+.graduate-course-text::-webkit-scrollbar-track {
+    background: rgba(54, 145, 191, 0.1);
+    border-radius: 3px;
+}
+
+.graduate-course-text::-webkit-scrollbar-thumb {
+    background: rgba(54, 145, 191, 0.5);
+    border-radius: 3px;
+}
+
+.graduate-course-text::-webkit-scrollbar-thumb:hover {
+    background: rgba(54, 145, 191, 0.7);
+}
+
+.graduate-course-text .course-name {
+    display: inline-block;
+    white-space: nowrap;
+}

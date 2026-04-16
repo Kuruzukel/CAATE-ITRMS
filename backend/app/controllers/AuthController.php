@@ -513,7 +513,6 @@ class AuthController {
 
             $email = trim($data['email']);
 
-            // Validate email format
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 http_response_code(400);
                 echo json_encode([
@@ -523,32 +522,25 @@ class AuthController {
                 return;
             }
 
-            // Search in admins collection
             $adminModel = new Admin();
             $user = $adminModel->findByEmail($email);
             $userType = 'admin';
 
-            // If not found, search in trainees collection
             if (!$user) {
                 $traineeModel = new Trainee();
                 $user = $traineeModel->findByEmail($email);
                 $userType = 'trainee';
             }
 
-            // Always return success (security: don't reveal if email exists)
             if ($user) {
-                // Generate reset token
                 $token = bin2hex(random_bytes(32)); // 64 character string
                 $expiresAt = new MongoDB\BSON\UTCDateTime((time() + 3600) * 1000); // 1 hour
 
-                // Store token in password_resets collection
                 $db = getMongoConnection();
                 $resetCollection = $db->password_resets;
 
-                // Delete any existing tokens for this email
                 $resetCollection->deleteMany(['email' => $email]);
 
-                // Insert new token
                 $resetCollection->insertOne([
                     'email' => $email,
                     'token' => $token,
@@ -559,11 +551,9 @@ class AuthController {
                     'used' => false
                 ]);
 
-                // Send email
                 $this->sendResetEmail($email, $token);
             }
 
-            // Always return success
             echo json_encode([
                 'success' => true,
                 'message' => 'Password reset link sent to email'
@@ -580,11 +570,9 @@ class AuthController {
     }
 
     private function sendResetEmail($email, $token) {
-        // Base URL - adjust based on your environment
         $baseUrl = 'http://localhost/CAATE-ITRMS/auth/src/pages';
         $resetLink = "$baseUrl/reset-password.html?token=$token&email=" . urlencode($email);
 
-        // Log the reset link for development
         $logDir = __DIR__ . '/../../storage/logs';
         if (!file_exists($logDir)) {
             mkdir($logDir, 0777, true);
@@ -601,15 +589,12 @@ class AuthController {
         
         file_put_contents($logDir . '/password-resets.log', $logMessage, FILE_APPEND);
         
-        // Try to send email using PHPMailer
         try {
-            // Check if PHPMailer is installed
             if (class_exists('PHPMailer\PHPMailer\PHPMailer')) {
                 require_once __DIR__ . '/../../vendor/autoload.php';
                 
                 $mail = new \PHPMailer\PHPMailer\PHPMailer(true);
                 
-                // SMTP Configuration
                 $mail->isSMTP();
                 $mail->Host = getenv('MAIL_HOST') ?: 'smtp.gmail.com';
                 $mail->SMTPAuth = true;
@@ -618,13 +603,11 @@ class AuthController {
                 $mail->SMTPSecure = \PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS;
                 $mail->Port = getenv('MAIL_PORT') ?: 587;
                 
-                // Only send if credentials are configured
                 if (empty($mail->Username) || empty($mail->Password)) {
                     error_log("Email not sent: MAIL_USERNAME or MAIL_PASSWORD not configured");
                     return;
                 }
                 
-                // Email content
                 $mail->setFrom(getenv('MAIL_FROM_ADDRESS') ?: 'noreply@caate.edu.ph', 
                               getenv('MAIL_FROM_NAME') ?: 'CAATE-ITRMS');
                 $mail->addAddress($email);
@@ -636,97 +619,87 @@ class AuthController {
 <html lang='en'>
 <head>
     <meta charset='UTF-8'>
-    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+    <meta name='color-scheme' content='light'>
+    <meta name='supported-color-schemes' content='light'>
+    <style>
+        * { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+        body { margin: 0 !important; padding: 0 !important; width: 100% !important; }
+        @media only screen and (max-width: 600px) {
+            .email-container { width: 100% !important; max-width: 100% !important; padding: 20px 10px !important; }
+            .email-card { padding: 20px !important; }
+            .logo-circle { width: 80px !important; height: 80px !important; font-size: 40px !important; }
+            h1 { font-size: 24px !important; }
+            .button { padding: 14px 30px !important; font-size: 16px !important; }
+        }
+    </style>
 </head>
-<body style='margin: 0; padding: 40px 20px; font-family: Arial, Helvetica, sans-serif; background: linear-gradient(135deg, #0a1f33 0%, #0f2942 50%, #163856 100%); min-height: 100vh;'>
-    <table role='presentation' style='max-width: 950px; margin: 0 auto; width: 100%;' cellpadding='0' cellspacing='0'>
+<body style='margin: 0; padding: 0; background-color: #0f2942; width: 100%;'>
+    <table role='presentation' class='email-container' style='width: 100%; max-width: 600px; margin: 0 auto; padding: 20px;' cellpadding='0' cellspacing='0' border='0'>
         <tr>
-            <td style='background: linear-gradient(90deg, rgba(15, 41, 66, 0.95) 0%, rgba(10, 31, 51, 0.95) 100%); border-radius: 20px; border: 1px solid rgba(54, 145, 191, 0.3); padding: 40px; box-shadow: 0 10px 40px rgba(22, 56, 86, 0.5);'>
+            <td class='email-card' style='background: #1a3a52; border-radius: 16px; padding: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.3);'>
                 
-                <!-- Logo -->
-                <table role='presentation' style='width: 100%; margin-bottom: 30px;' cellpadding='0' cellspacing='0'>
+                <table role='presentation' style='width: 100%;' cellpadding='0' cellspacing='0' border='0'>
                     <tr>
-                        <td style='text-align: center;'>
-                            <div style='width: 100px; height: 100px; background: linear-gradient(135deg, rgba(54, 145, 191, 0.3) 0%, rgba(50, 85, 150, 0.3) 100%); border-radius: 50%; display: inline-block; line-height: 100px; font-size: 48px; color: white; border: 2px solid rgba(54, 145, 191, 0.5); box-shadow: 0 8px 32px rgba(22, 56, 86, 0.4);'>
+                        <td style='text-align: center; padding-bottom: 20px;'>
+                            <div class='logo-circle' style='width: 90px; height: 90px; background: rgba(54, 145, 191, 0.3); border-radius: 50%; display: inline-block; line-height: 90px; font-size: 45px; border: 2px solid #3691bf;'>
                                 🔐
                             </div>
                         </td>
                     </tr>
                 </table>
                 
-                <!-- Title -->
-                <h1 style='font-size: 32px; margin: 0 0 20px 0; color: white; font-weight: 700; text-align: center; text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);'>
+                <h1 style='font-size: 28px; margin: 0 0 15px 0; color: #ffffff; font-weight: 700; text-align: center;'>
                     Password Reset Request
                 </h1>
                 
-                <!-- Greeting -->
-                <p style='font-size: 16px; line-height: 1.8; margin: 0 0 20px 0; color: rgba(255, 255, 255, 0.95); text-align: center;'>
+                <p style='font-size: 16px; line-height: 1.6; margin: 0 0 15px 0; color: #ffffff; text-align: center;'>
                     Hello,
                 </p>
                 
-                <!-- Message -->
-                <p style='font-size: 16px; line-height: 1.8; margin: 0 0 20px 0; color: rgba(255, 255, 255, 0.95); text-align: center;'>
-                    We received a request to reset your password for your <strong style='font-weight: 700; color: #3691bf;'>CAATE-ITRMS</strong> account.
+                <p style='font-size: 16px; line-height: 1.6; margin: 0 0 20px 0; color: #ffffff; text-align: center;'>
+                    We received a request to reset your password for your <strong style='color: #5eb3e0;'>CAATE-ITRMS</strong> account.
                 </p>
                 
-                <!-- Button -->
-                <table role='presentation' style='width: 100%; margin: 40px 0;' cellpadding='0' cellspacing='0'>
+                <table role='presentation' style='width: 100%; margin: 25px 0;' cellpadding='0' cellspacing='0' border='0'>
                     <tr>
                         <td style='text-align: center;'>
-                            <a href='$resetLink' style='display: inline-block; padding: 18px 50px; background: linear-gradient(135deg, rgba(54, 145, 191, 0.35) 0%, rgba(50, 85, 150, 0.3) 100%); color: white; text-decoration: none; border-radius: 12px; font-weight: 600; font-size: 18px; border: 1.5px solid rgba(54, 145, 191, 0.5); text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 8px 32px rgba(22, 56, 86, 0.35);'>
+                            <a href='$resetLink' class='button' style='display: inline-block; padding: 16px 40px; background: #3691bf; color: #ffffff; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 17px; text-transform: uppercase; letter-spacing: 0.5px;'>
                                 RESET PASSWORD
                             </a>
                         </td>
                     </tr>
                 </table>
                 
-                <!-- Link instruction -->
-                <p style='font-size: 14px; color: rgba(255, 255, 255, 0.7); margin: 25px 0 20px 0; text-align: center;'>
-                    Or copy and paste this link into your browser:
-                </p>
-                
-                <!-- Link Box -->
-                <div style='background: rgba(54, 145, 191, 0.1); border: 1px solid rgba(54, 145, 191, 0.3); border-radius: 12px; padding: 20px; margin: 30px 0; word-break: break-all;'>
-                    <a href='$resetLink' style='color: #a8d8ff; text-decoration: none; font-size: 14px; font-weight: 500;'>
-                        $resetLink
-                    </a>
-                </div>
-                
-                <!-- Warning Box -->
-                <div style='background: linear-gradient(135deg, rgba(255, 193, 7, 0.15) 0%, rgba(255, 152, 0, 0.15) 100%); border: 1px solid rgba(255, 193, 7, 0.4); border-radius: 12px; padding: 20px; margin: 30px 0; text-align: center;'>
-                    <p style='color: #ffd54f; margin: 0; font-size: 16px; font-weight: 600;'>
+                <div style='background: rgba(255, 193, 7, 0.25); border: 1px solid #ffc107; border-radius: 10px; padding: 15px; margin: 20px 0; text-align: center;'>
+                    <p style='color: #ffffff; margin: 0; font-size: 15px; font-weight: 600;'>
                         ⏰ This link will expire in 1 hour
                     </p>
                 </div>
                 
-                <!-- Divider -->
-                <div style='height: 1px; background: linear-gradient(90deg, transparent 0%, rgba(54, 145, 191, 0.3) 20%, rgba(54, 145, 191, 0.5) 50%, rgba(54, 145, 191, 0.3) 80%, transparent 100%); margin: 35px 0;'></div>
+                <div style='height: 1px; background: rgba(54, 145, 191, 0.4); margin: 25px 0;'></div>
                 
-                <!-- Info Box -->
-                <div style='background: rgba(54, 145, 191, 0.08); border: 1px solid rgba(54, 145, 191, 0.25); border-radius: 12px; padding: 25px; margin-top: 35px;'>
-                    <p style='font-size: 15px; color: rgba(255, 255, 255, 0.85); margin: 0; line-height: 1.7; text-align: center;'>
+                <div style='background: rgba(54, 145, 191, 0.15); border: 1px solid rgba(54, 145, 191, 0.4); border-radius: 10px; padding: 20px; margin: 20px 0;'>
+                    <p style='font-size: 14px; color: #ffffff; margin: 0; line-height: 1.6; text-align: center;'>
                         If you didn't request a password reset, please ignore this email or contact support if you have concerns about your account security.
                     </p>
                 </div>
                 
-                <!-- Security Badge -->
-                <div style='text-align: center; margin-top: 20px;'>
-                    <span style='display: inline-block; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 20px; padding: 8px 16px; font-size: 13px; color: #6ee7b7; font-weight: 600;'>
+                <div style='text-align: center; margin: 20px 0;'>
+                    <span style='display: inline-block; background: rgba(16, 185, 129, 0.25); border: 1px solid #10b981; border-radius: 20px; padding: 8px 16px; font-size: 13px; color: #ffffff; font-weight: 600;'>
                         🛡️ Secure Password Reset
                     </span>
                 </div>
                 
-                <!-- Footer -->
-                <div style='text-align: center; margin-top: 40px; padding-top: 30px; border-top: 1px solid rgba(54, 145, 191, 0.2);'>
-                    <p style='font-size: 14px; color: rgba(255, 255, 255, 0.7); margin: 0 0 10px 0;'>
-                        This is an automated email from <span style='font-weight: 700; color: #3691bf;'>CAATE-ITRMS</span>
+                <div style='text-align: center; margin-top: 30px; padding-top: 25px; border-top: 1px solid rgba(54, 145, 191, 0.4);'>
+                    <p style='font-size: 13px; color: #b0c4d4; margin: 0 0 8px 0;'>
+                        This is an automated email from <strong style='color: #5eb3e0;'>CAATE-ITRMS</strong>
                     </p>
-                    <p style='font-size: 13px; color: rgba(255, 255, 255, 0.7); margin: 0 0 10px 0;'>
+                    <p style='font-size: 12px; color: #b0c4d4; margin: 0 0 15px 0;'>
                         Please do not reply to this email
                     </p>
-                    <div style='height: 1px; background: linear-gradient(90deg, transparent 0%, rgba(54, 145, 191, 0.3) 20%, rgba(54, 145, 191, 0.5) 50%, rgba(54, 145, 191, 0.3) 80%, transparent 100%); margin: 20px 0;'></div>
-                    <p style='margin: 15px 0 0 0; font-weight: 600; font-size: 14px;'>
-                        <span style='color: #3691bf;'>Creative Aesthetic Academy & Technical Education Inc.</span>
+                    <p style='margin: 0; font-weight: 600; font-size: 13px; color: #5eb3e0;'>
+                        Creative Aesthetic Academy & Technical Education Inc.
                     </p>
                 </div>
                 
@@ -740,7 +713,7 @@ class AuthController {
                 $mail->AltBody = "Password Reset Request\n\n" .
                                 "Click this link to reset your password: $resetLink\n\n" .
                                 "This link will expire in 1 hour.\n\n" .
-                                "If you didn't request a password reset, please ignore this email.";
+                                "<span style='color: #e8e8e8 !important;'>If you didn't request a password reset, please ignore this email.";
                 
                 $mail->send();
                 error_log("Password reset email sent successfully to: $email");
@@ -767,7 +740,6 @@ class AuthController {
 
             $token = $_GET['token'];
 
-            // Find token in database
             $db = getMongoConnection();
             $resetCollection = $db->password_resets;
 
@@ -784,7 +756,6 @@ class AuthController {
                 return;
             }
 
-            // Check if token is expired
             $expiresAt = $resetRecord['expires_at']->toDateTime()->getTimestamp();
             $now = time();
 
@@ -831,7 +802,6 @@ class AuthController {
             $email = trim($data['email']);
             $newPassword = trim($data['newPassword']);
 
-            // Validate password strength
             if (strlen($newPassword) < 8) {
                 http_response_code(400);
                 echo json_encode([
@@ -841,7 +811,6 @@ class AuthController {
                 return;
             }
 
-            // Find and validate token
             $db = getMongoConnection();
             $resetCollection = $db->password_resets;
 
@@ -860,7 +829,6 @@ class AuthController {
                 return;
             }
 
-            // Check if token is expired
             $expiresAt = $resetRecord['expires_at']->toDateTime()->getTimestamp();
             if (time() > $expiresAt) {
                 http_response_code(400);
@@ -871,7 +839,6 @@ class AuthController {
                 return;
             }
 
-            // Update password based on user type
             $userId = (string)$resetRecord['user_id'];
             $userType = $resetRecord['user_type'];
 
@@ -883,7 +850,6 @@ class AuthController {
                 $traineeModel->update($userId, ['password' => $newPassword]);
             }
 
-            // Mark token as used
             $resetCollection->updateOne(
                 ['_id' => $resetRecord['_id']],
                 ['$set' => ['used' => true]]
@@ -905,3 +871,6 @@ class AuthController {
     }
     
 }
+
+
+

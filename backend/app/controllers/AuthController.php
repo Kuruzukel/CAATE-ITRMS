@@ -537,7 +537,7 @@ class AuthController {
                 $expiresAt = new MongoDB\BSON\UTCDateTime((time() + 3600) * 1000); // 1 hour
 
                 $db = getMongoConnection();
-                $resetCollection = $db->password_resets;
+                $resetCollection = $db->{'password-resets'};
 
                 $resetCollection->deleteMany(['email' => $email]);
 
@@ -741,7 +741,7 @@ class AuthController {
             $token = $_GET['token'];
 
             $db = getMongoConnection();
-            $resetCollection = $db->password_resets;
+            $resetCollection = $db->{'password-resets'};
 
             $resetRecord = $resetCollection->findOne([
                 'token' => $token,
@@ -812,7 +812,7 @@ class AuthController {
             }
 
             $db = getMongoConnection();
-            $resetCollection = $db->password_resets;
+            $resetCollection = $db->{'password-resets'};
 
             $resetRecord = $resetCollection->findOne([
                 'token' => $token,

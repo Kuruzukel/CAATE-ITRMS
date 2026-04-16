@@ -20,7 +20,7 @@ function showToast(message, type = 'success') {
     setTimeout(() => {
         toast.classList.add('hiding');
         setTimeout(() => toast.remove(), 300);
-    }, 5000);
+    }, 8000); // Changed from 5000 to 8000 (8 seconds)
 }
 
 document.addEventListener("DOMContentLoaded", function () {

@@ -1207,6 +1207,8 @@ async function updateAvailableTimeSlotsForEdit() {
     timeSelect.disabled = true;
 
     try {
+        // Get the original appointment data to preserve its time slot
+        const originalTime = originalAppointmentData ? originalAppointmentData.preferredTime : null;
 
         const bookedSlots = await getBookedTimeSlots(selectedDate, currentAppointmentId);
 
@@ -1214,8 +1216,8 @@ async function updateAvailableTimeSlotsForEdit() {
 
         let availableCount = 0;
         allTimeSlots.forEach(slot => {
-
-            if (!bookedSlots.includes(slot.value)) {
+            // Include the slot if it's not booked OR if it's the original appointment's time
+            if (!bookedSlots.includes(slot.value) || slot.value === originalTime) {
                 const option = document.createElement('option');
                 option.value = slot.value;
                 option.textContent = slot.text;
@@ -1224,8 +1226,11 @@ async function updateAvailableTimeSlotsForEdit() {
             }
         });
 
-        if (currentSelection && !bookedSlots.includes(currentSelection)) {
+        // Set the current selection or original time
+        if (currentSelection) {
             timeSelect.value = currentSelection;
+        } else if (originalTime) {
+            timeSelect.value = originalTime;
         }
 
         timeSelect.disabled = false;

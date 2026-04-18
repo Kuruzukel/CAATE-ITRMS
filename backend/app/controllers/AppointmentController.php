@@ -69,6 +69,15 @@ class AppointmentController {
             $appointmentModel = new Appointment();
             $appointmentId = $appointmentModel->create($data);
             
+            // Send email notification for new appointment with Pending status
+            if ($appointmentId && $data['status'] === 'Pending') {
+                // Get the created appointment data
+                $createdAppointment = $appointmentModel->findById($appointmentId);
+                if ($createdAppointment) {
+                    $this->sendStatusChangeEmail($createdAppointment, 'Pending');
+                }
+            }
+            
             http_response_code(201);
             echo json_encode([
                 'success' => true,
@@ -332,18 +341,7 @@ class AppointmentController {
         $appointmentLink = 'http://localhost/CAATE-ITRMS/auth/src/pages/admission/appointment-form.html';
         
         $buttonHtml = '';
-        if ($status === 'Approved') {
-            $buttonHtml = "
-                <table role='presentation' style='width: 100%; margin: 25px 0;' cellpadding='0' cellspacing='0' border='0'>
-                    <tr>
-                        <td style='text-align: center;'>
-                            <a href='$appointmentLink' class='button' style='display: inline-block; padding: 16px 40px; background: #3691bf; color: #ffffff; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 17px; text-transform: uppercase; letter-spacing: 0.5px;'>
-                                VIEW APPOINTMENT
-                            </a>
-                        </td>
-                    </tr>
-                </table>";
-        }
+        // View Appointment button removed for all statuses
         
         return "<!DOCTYPE html>
 <html lang='en'>

@@ -2,198 +2,240 @@
 
 require_once __DIR__ . '/../models/Appointment.php';
 
-class AppointmentController {
-    
-    public function index() {
+class AppointmentController
+{
+    public function index()
+    {
         header('Content-Type: application/json');
         header('Access-Control-Allow-Origin: *');
-        
+
         try {
             $appointmentModel = new Appointment();
             $appointments = $appointmentModel->all();
-            
+
             echo json_encode(['success' => true, 'data' => $appointments]);
         } catch (Exception $e) {
             http_response_code(500);
             echo json_encode([
                 'success' => false,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
         }
     }
-    
-    public function show($id) {
+
+    public function show($id)
+    {
         header('Content-Type: application/json');
         header('Access-Control-Allow-Origin: *');
-        
+
         try {
             $appointmentModel = new Appointment();
             $appointment = $appointmentModel->findById($id);
-            
+
             if (!$appointment) {
                 http_response_code(404);
-                echo json_encode(['success' => false, 'error' => 'Appointment not found']);
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'Appointment not found',
+                ]);
                 return;
             }
-            
+
             echo json_encode(['success' => true, 'data' => $appointment]);
         } catch (Exception $e) {
             http_response_code(500);
             echo json_encode([
                 'success' => false,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
         }
     }
-    
-    public function store() {
+
+    public function store()
+    {
         header('Content-Type: application/json');
         header('Access-Control-Allow-Origin: *');
-        
+
         try {
             $data = json_decode(file_get_contents('php://input'), true);
-            
+
             if (!$data) {
                 http_response_code(400);
-                echo json_encode(['success' => false, 'error' => 'Invalid JSON data']);
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'Invalid JSON data',
+                ]);
                 return;
             }
-            
+
             if (!isset($data['status'])) {
                 $data['status'] = 'Pending';
             }
-            
+
             $data['createdAt'] = new MongoDB\BSON\UTCDateTime();
             $data['updatedAt'] = new MongoDB\BSON\UTCDateTime();
-            
+
             $appointmentModel = new Appointment();
             $appointmentId = $appointmentModel->create($data);
-            
-            // Send email notification for new appointment with Pending status
+
             if ($appointmentId && $data['status'] === 'Pending') {
-                // Get the created appointment data
-                $createdAppointment = $appointmentModel->findById($appointmentId);
+                $createdAppointment = $appointmentModel->findById(
+                    $appointmentId
+                );
                 if ($createdAppointment) {
-                    $this->sendStatusChangeEmail($createdAppointment, 'Pending');
+                    $this->sendStatusChangeEmail(
+                        $createdAppointment,
+                        'Pending'
+                    );
                 }
             }
-            
+
             http_response_code(201);
             echo json_encode([
                 'success' => true,
                 'message' => 'Appointment created successfully',
-                'id' => $appointmentId
+                'id' => $appointmentId,
             ]);
         } catch (Exception $e) {
             http_response_code(500);
             echo json_encode([
                 'success' => false,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
         }
     }
-    
-    public function update($id) {
+
+    public function update($id)
+    {
         header('Content-Type: application/json');
         header('Access-Control-Allow-Origin: *');
-        
+
         try {
             $data = json_decode(file_get_contents('php://input'), true);
-            
+
             if (!$data) {
                 http_response_code(400);
-                echo json_encode(['success' => false, 'error' => 'Invalid JSON data']);
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'Invalid JSON data',
+                ]);
                 return;
             }
-            
+
             $appointmentModel = new Appointment();
-            
-            // Get the current appointment data before updating
+
             $currentAppointment = $appointmentModel->findById($id);
             if (!$currentAppointment) {
                 http_response_code(404);
-                echo json_encode(['success' => false, 'error' => 'Appointment not found']);
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'Appointment not found',
+                ]);
                 return;
             }
-            
+
             $oldStatus = $currentAppointment['status'] ?? null;
             $newStatus = $data['status'] ?? $oldStatus;
-            
+
             $data['updatedAt'] = new MongoDB\BSON\UTCDateTime();
-            
+
             $result = $appointmentModel->update($id, $data);
-            
+
             if ($result) {
-                // Send email notification if status changed to Pending, Approved, or Cancelled
                 if (isset($data['status']) && $oldStatus !== $newStatus) {
-                    if (in_array($newStatus, ['Pending', 'Approved', 'Cancelled'])) {
-                        // Get updated appointment data
+                    if (
+                        in_array($newStatus, ['Pending', 'Approved', 'Cancelled'])
+                    ) {
                         $updatedAppointment = $appointmentModel->findById($id);
-                        $this->sendStatusChangeEmail($updatedAppointment, $newStatus);
+                        $this->sendStatusChangeEmail(
+                            $updatedAppointment,
+                            $newStatus
+                        );
                     }
                 }
-                
-                echo json_encode(['success' => true, 'message' => 'Appointment updated successfully']);
+
+                echo json_encode([
+                    'success' => true,
+                    'message' => 'Appointment updated successfully',
+                ]);
             } else {
                 http_response_code(404);
-                echo json_encode(['success' => false, 'error' => 'Appointment not found']);
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'Appointment not found',
+                ]);
             }
         } catch (Exception $e) {
             http_response_code(500);
             echo json_encode([
                 'success' => false,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
         }
     }
-    
-    private function sendStatusChangeEmail($appointment, $status) {
+
+    private function sendStatusChangeEmail($appointment, $status)
+    {
         $email = $appointment['email'] ?? null;
-        
+
         if (!$email) {
-            error_log("AppointmentController: Cannot send email - No email address found in appointment");
-            error_log("AppointmentController: Appointment data: " . json_encode($appointment));
+            error_log(
+                'AppointmentController: Cannot send email - No email address found in appointment'
+            );
+            error_log(
+                'AppointmentController: Appointment data: ' .
+                    json_encode($appointment)
+            );
             return;
         }
-        
-        // Validate email format
+
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            error_log("AppointmentController: Invalid email format: $email");
+            error_log(
+                "AppointmentController: Invalid email format: $email"
+            );
             return;
         }
-        
-        error_log("AppointmentController: Preparing to send email to: $email for status: $status");
-        
-        // Build full name
-        $fullName = trim(implode(' ', array_filter([
-            $appointment['firstName'] ?? '',
-            $appointment['secondName'] ?? '',
-            $appointment['middleName'] ?? '',
-            $appointment['lastName'] ?? '',
-            $appointment['suffix'] ?? ''
-        ])));
-        
+
+        error_log(
+            "AppointmentController: Preparing to send email to: $email for status: $status"
+        );
+
+        $fullName = trim(
+            implode(' ', array_filter([
+                $appointment['firstName'] ?? '',
+                $appointment['secondName'] ?? '',
+                $appointment['middleName'] ?? '',
+                $appointment['lastName'] ?? '',
+                $appointment['suffix'] ?? '',
+            ]))
+        );
+
         if (empty($fullName)) {
             $fullName = 'Valued Customer';
         }
-        
-        // Format service information
-        $serviceCategory = $this->formatServiceCategory($appointment['serviceCategory'] ?? '');
-        $serviceType = $this->formatServiceType($appointment['serviceType'] ?? '');
-        
-        // Format date and time
+
+        $serviceCategory = $this->formatServiceCategory(
+            $appointment['serviceCategory'] ?? ''
+        );
+        $serviceType = $this->formatServiceType(
+            $appointment['serviceType'] ?? ''
+        );
+
         $appointmentDate = 'Not set';
         $appointmentTime = 'Not set';
-        
+
         if (!empty($appointment['preferredDate'])) {
             try {
                 $dateObj = new DateTime($appointment['preferredDate']);
                 $appointmentDate = $dateObj->format('F d, Y');
             } catch (Exception $e) {
-                error_log("AppointmentController: Error formatting date: " . $e->getMessage());
+                error_log(
+                    'AppointmentController: Error formatting date: ' .
+                        $e->getMessage()
+                );
             }
         }
-        
+
         if (!empty($appointment['preferredTime'])) {
             $time = $appointment['preferredTime'];
             $timeObj = DateTime::createFromFormat('H:i', $time);
@@ -201,17 +243,16 @@ class AppointmentController {
                 $appointmentTime = $timeObj->format('h:i A');
             }
         }
-        
-        // Log the email details
+
         $logDir = __DIR__ . '/../../storage/logs';
         if (!file_exists($logDir)) {
             mkdir($logDir, 0777, true);
         }
-        
+
         $logMessage = "\n" . str_repeat('=', 80) . "\n";
         $logMessage .= "Appointment Status Change Notification\n";
         $logMessage .= str_repeat('=', 80) . "\n";
-        $logMessage .= "Date: " . date('Y-m-d H:i:s') . "\n";
+        $logMessage .= 'Date: ' . date('Y-m-d H:i:s') . "\n";
         $logMessage .= "Email: $email\n";
         $logMessage .= "Name: $fullName\n";
         $logMessage .= "Status: $status\n";
@@ -219,49 +260,56 @@ class AppointmentController {
         $logMessage .= "Appointment Date: $appointmentDate\n";
         $logMessage .= "Appointment Time: $appointmentTime\n";
         $logMessage .= str_repeat('=', 80) . "\n";
-        
-        file_put_contents($logDir . '/appointment-notifications.log', $logMessage, FILE_APPEND);
-        
-        // Try to send email using PHPMailer
+
+        file_put_contents(
+            $logDir . '/appointment-notifications.log',
+            $logMessage,
+            FILE_APPEND
+        );
+
         try {
             if (!class_exists('PHPMailer\PHPMailer\PHPMailer')) {
-                error_log("AppointmentController: PHPMailer class not found. Please install: composer require phpmailer/phpmailer");
+                error_log(
+                    'AppointmentController: PHPMailer class not found. Please install: composer require phpmailer/phpmailer'
+                );
                 return;
             }
-            
+
             require_once __DIR__ . '/../../vendor/autoload.php';
-            
+
             $mail = new \PHPMailer\PHPMailer\PHPMailer(true);
-            
-            // SMTP Configuration
+
             $mail->isSMTP();
             $mail->Host = getenv('MAIL_HOST') ?: 'smtp.gmail.com';
             $mail->SMTPAuth = true;
             $mail->Username = getenv('MAIL_USERNAME') ?: '';
             $mail->Password = getenv('MAIL_PASSWORD') ?: '';
-            $mail->SMTPSecure = \PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->SMTPSecure =
+                \PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port = getenv('MAIL_PORT') ?: 587;
-            
+
             if (empty($mail->Username) || empty($mail->Password)) {
-                error_log("AppointmentController: Email not sent - MAIL_USERNAME or MAIL_PASSWORD not configured in .env file");
+                error_log(
+                    'AppointmentController: Email not sent - MAIL_USERNAME or MAIL_PASSWORD not configured in .env file'
+                );
                 return;
             }
-            
-            error_log("AppointmentController: SMTP configured - Host: {$mail->Host}, Port: {$mail->Port}, Username: {$mail->Username}");
-            
-            // Email settings
+
+            error_log(
+                "AppointmentController: SMTP configured - Host: {$mail->Host}, Port: {$mail->Port}, Username: {$mail->Username}"
+            );
+
             $mail->setFrom(
-                getenv('MAIL_FROM_ADDRESS') ?: 'noreply@caate.edu.ph', 
+                getenv('MAIL_FROM_ADDRESS') ?: 'noreply@caate.edu.ph',
                 getenv('MAIL_FROM_NAME') ?: 'CAATE-ITRMS'
             );
             $mail->addAddress($email, $fullName);
             $mail->isHTML(true);
-            
-            // Customize subject and content based on status
+
             $statusConfig = $this->getStatusEmailConfig($status);
-            
+
             $mail->Subject = $statusConfig['subject'];
-            
+
             $mail->Body = $this->buildEmailTemplate(
                 $fullName,
                 $status,
@@ -272,7 +320,7 @@ class AppointmentController {
                 $appointmentTime,
                 $appointment['specialNotes'] ?? ''
             );
-            
+
             $mail->AltBody = $this->buildPlainTextEmail(
                 $fullName,
                 $status,
@@ -281,68 +329,99 @@ class AppointmentController {
                 $appointmentDate,
                 $appointmentTime
             );
-            
-            // Send the email
+
             $mail->send();
-            error_log("AppointmentController: Appointment status change email sent successfully to: $email");
-            
-            // Log success
-            $successLog = "SUCCESS: Email sent at " . date('Y-m-d H:i:s') . "\n";
-            file_put_contents($logDir . '/appointment-notifications.log', $successLog, FILE_APPEND);
-            
+            error_log(
+                "AppointmentController: Appointment status change email sent successfully to: $email"
+            );
+
+            $successLog =
+                'SUCCESS: Email sent at ' . date('Y-m-d H:i:s') . "\n";
+            file_put_contents(
+                $logDir . '/appointment-notifications.log',
+                $successLog,
+                FILE_APPEND
+            );
         } catch (Exception $e) {
-            error_log("AppointmentController: Email sending failed - " . $e->getMessage());
-            error_log("AppointmentController: PHPMailer Error Info: " . $mail->ErrorInfo);
-            
-            // Log failure
-            $failLog = "FAILED: " . $e->getMessage() . " at " . date('Y-m-d H:i:s') . "\n";
-            file_put_contents($logDir . '/appointment-notifications.log', $failLog, FILE_APPEND);
+            error_log(
+                'AppointmentController: Email sending failed - ' .
+                    $e->getMessage()
+            );
+            error_log(
+                'AppointmentController: PHPMailer Error Info: ' .
+                    $mail->ErrorInfo
+            );
+
+            $failLog =
+                'FAILED: ' .
+                $e->getMessage() .
+                ' at ' .
+                date('Y-m-d H:i:s') .
+                "\n";
+            file_put_contents(
+                $logDir . '/appointment-notifications.log',
+                $failLog,
+                FILE_APPEND
+            );
         }
     }
-    
-    private function getStatusEmailConfig($status) {
+
+    private function getStatusEmailConfig($status)
+    {
         $configs = [
             'Pending' => [
                 'subject' => 'Appointment Under Review - CAATE-ITRMS',
                 'icon' => '⏳',
                 'color' => '#f59e0b',
                 'title' => 'Appointment Under Review',
-                'message' => 'Your appointment request is currently being reviewed by our team. We will notify you once it has been confirmed.',
+                'message' =>
+                    'Your appointment request is currently being reviewed by our team. We will notify you once it has been confirmed.',
                 'badge' => 'Under Review',
                 'badgeColor' => 'rgba(245, 158, 11, 0.25)',
-                'badgeBorder' => '#f59e0b'
+                'badgeBorder' => '#f59e0b',
             ],
             'Approved' => [
                 'subject' => 'Appointment Confirmed - CAATE-ITRMS',
                 'icon' => '✅',
                 'color' => '#10b981',
                 'title' => 'Appointment Confirmed!',
-                'message' => 'Great news! Your appointment has been confirmed. We look forward to seeing you at the scheduled date and time.',
+                'message' =>
+                    'Great news! Your appointment has been confirmed. We look forward to seeing you at the scheduled date and time.',
                 'badge' => 'Confirmed',
                 'badgeColor' => 'rgba(16, 185, 129, 0.25)',
-                'badgeBorder' => '#10b981'
+                'badgeBorder' => '#10b981',
             ],
             'Cancelled' => [
                 'subject' => 'Appointment Cancelled - CAATE-ITRMS',
                 'icon' => '❌',
                 'color' => '#ef4444',
                 'title' => 'Appointment Cancelled',
-                'message' => 'Your appointment has been cancelled. If you would like to reschedule, please submit a new appointment request.',
+                'message' =>
+                    'Your appointment has been cancelled. If you would like to reschedule, please submit a new appointment request.',
                 'badge' => 'Cancelled',
                 'badgeColor' => 'rgba(239, 68, 68, 0.25)',
-                'badgeBorder' => '#ef4444'
-            ]
+                'badgeBorder' => '#ef4444',
+            ],
         ];
-        
+
         return $configs[$status] ?? $configs['Pending'];
     }
-    
-    private function buildEmailTemplate($fullName, $status, $config, $serviceCategory, $serviceType, $date, $time, $notes) {
-        $appointmentLink = 'http://localhost/CAATE-ITRMS/auth/src/pages/admission/appointment-form.html';
-        
+
+    private function buildEmailTemplate(
+        $fullName,
+        $status,
+        $config,
+        $serviceCategory,
+        $serviceType,
+        $date,
+        $time,
+        $notes
+    ) {
+        $appointmentLink =
+            'http://localhost/CAATE-ITRMS/auth/src/pages/admission/appointment-form.html';
+
         $buttonHtml = '';
-        // View Appointment button removed for all statuses
-        
+
         return "<!DOCTYPE html>
 <html lang='en'>
 <head>
@@ -456,74 +535,93 @@ class AppointmentController {
 </body>
 </html>";
     }
-    
-    private function buildPlainTextEmail($fullName, $status, $serviceCategory, $serviceType, $date, $time) {
+
+    private function buildPlainTextEmail(
+        $fullName,
+        $status,
+        $serviceCategory,
+        $serviceType,
+        $date,
+        $time
+    ) {
         return "Appointment Status Update\n\n" .
-               "Hello $fullName,\n\n" .
-               "Your appointment status has been updated to: $status\n\n" .
-               "Appointment Details:\n" .
-               "Service: $serviceCategory\n" .
-               "Type: $serviceType\n" .
-               "Date: $date\n" .
-               "Time: $time\n" .
-               "Status: $status\n\n" .
-               "If you have any questions, please contact us at creativeaestheticacademy@gmail.com or call 0968 100 2025.\n\n" .
-               "This is an automated email from CAATE-ITRMS. Please do not reply to this email.";
+            "Hello $fullName,\n\n" .
+            "Your appointment status has been updated to: $status\n\n" .
+            "Appointment Details:\n" .
+            "Service: $serviceCategory\n" .
+            "Type: $serviceType\n" .
+            "Date: $date\n" .
+            "Time: $time\n" .
+            "Status: $status\n\n" .
+            "If you have any questions, please contact us at creativeaestheticacademy@gmail.com or call 0968 100 2025.\n\n" .
+            'This is an automated email from CAATE-ITRMS. Please do not reply to this email.';
     }
-    
-    private function formatServiceCategory($category) {
+
+    private function formatServiceCategory($category)
+    {
         $categories = [
             'skincare' => 'Skin Care',
             'haircare' => 'Hair Care',
             'nailcare' => 'Nail Care',
             'bodytreatment' => 'Body Treatment',
-            'aesthetic' => 'Aesthetic Services'
+            'aesthetic' => 'Aesthetic Services',
         ];
         return $categories[$category] ?? $category;
     }
-    
-    private function formatServiceType($type) {
-        if (!$type) return 'N/A';
+
+    private function formatServiceType($type)
+    {
+        if (!$type) {
+            return 'N/A';
+        }
         return ucwords(str_replace('-', ' ', $type));
     }
-    
-    public function destroy($id) {
+
+    public function destroy($id)
+    {
         header('Content-Type: application/json');
         header('Access-Control-Allow-Origin: *');
-        
+
         try {
             $appointmentModel = new Appointment();
             $result = $appointmentModel->delete($id);
-            
+
             if ($result) {
-                echo json_encode(['success' => true, 'message' => 'Appointment deleted successfully']);
+                echo json_encode([
+                    'success' => true,
+                    'message' => 'Appointment deleted successfully',
+                ]);
             } else {
                 http_response_code(404);
-                echo json_encode(['success' => false, 'error' => 'Appointment not found']);
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'Appointment not found',
+                ]);
             }
         } catch (Exception $e) {
             http_response_code(500);
             echo json_encode([
                 'success' => false,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
         }
     }
-    
-    public function statistics() {
+
+    public function statistics()
+    {
         header('Content-Type: application/json');
         header('Access-Control-Allow-Origin: *');
-        
+
         try {
             $appointmentModel = new Appointment();
             $stats = $appointmentModel->getStatistics();
-            
+
             echo json_encode(['success' => true, 'data' => $stats]);
         } catch (Exception $e) {
             http_response_code(500);
             echo json_encode([
                 'success' => false,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
         }
     }

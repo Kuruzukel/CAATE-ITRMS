@@ -142,9 +142,18 @@ class AppointmentController {
         $email = $appointment['email'] ?? null;
         
         if (!$email) {
-            error_log("Cannot send email: No email address found in appointment");
+            error_log("AppointmentController: Cannot send email - No email address found in appointment");
+            error_log("AppointmentController: Appointment data: " . json_encode($appointment));
             return;
         }
+        
+        // Validate email format
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            error_log("AppointmentController: Invalid email format: $email");
+            return;
+        }
+        
+        error_log("AppointmentController: Preparing to send email to: $email for status: $status");
         
         // Build full name
         $fullName = trim(implode(' ', array_filter([
@@ -155,6 +164,10 @@ class AppointmentController {
             $appointment['suffix'] ?? ''
         ])));
         
+        if (empty($fullName)) {
+            $fullName = 'Valued Customer';
+        }
+        
         // Format service information
         $serviceCategory = $this->formatServiceCategory($appointment['serviceCategory'] ?? '');
         $serviceType = $this->formatServiceType($appointment['serviceType'] ?? '');
@@ -164,8 +177,12 @@ class AppointmentController {
         $appointmentTime = 'Not set';
         
         if (!empty($appointment['preferredDate'])) {
-            $dateObj = new DateTime($appointment['preferredDate']);
-            $appointmentDate = $dateObj->format('F d, Y');
+            try {
+                $dateObj = new DateTime($appointment['preferredDate']);
+                $appointmentDate = $dateObj->format('F d, Y');
+            } catch (Exception $e) {
+                error_log("AppointmentController: Error formatting date: " . $e->getMessage());
+            }
         }
         
         if (!empty($appointment['preferredTime'])) {
@@ -198,61 +215,79 @@ class AppointmentController {
         
         // Try to send email using PHPMailer
         try {
-            if (class_exists('PHPMailer\PHPMailer\PHPMailer')) {
-                require_once __DIR__ . '/../../vendor/autoload.php';
-                
-                $mail = new \PHPMailer\PHPMailer\PHPMailer(true);
-                
-                $mail->isSMTP();
-                $mail->Host = getenv('MAIL_HOST') ?: 'smtp.gmail.com';
-                $mail->SMTPAuth = true;
-                $mail->Username = getenv('MAIL_USERNAME') ?: '';
-                $mail->Password = getenv('MAIL_PASSWORD') ?: '';
-                $mail->SMTPSecure = \PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS;
-                $mail->Port = getenv('MAIL_PORT') ?: 587;
-                
-                if (empty($mail->Username) || empty($mail->Password)) {
-                    error_log("Email not sent: MAIL_USERNAME or MAIL_PASSWORD not configured");
-                    return;
-                }
-                
-                $mail->setFrom(getenv('MAIL_FROM_ADDRESS') ?: 'noreply@caate.edu.ph', 
-                              getenv('MAIL_FROM_NAME') ?: 'CAATE-ITRMS');
-                $mail->addAddress($email);
-                $mail->isHTML(true);
-                
-                // Customize subject and content based on status
-                $statusConfig = $this->getStatusEmailConfig($status);
-                
-                $mail->Subject = $statusConfig['subject'];
-                
-                $mail->Body = $this->buildEmailTemplate(
-                    $fullName,
-                    $status,
-                    $statusConfig,
-                    $serviceCategory,
-                    $serviceType,
-                    $appointmentDate,
-                    $appointmentTime,
-                    $appointment['specialNotes'] ?? ''
-                );
-                
-                $mail->AltBody = $this->buildPlainTextEmail(
-                    $fullName,
-                    $status,
-                    $serviceCategory,
-                    $serviceType,
-                    $appointmentDate,
-                    $appointmentTime
-                );
-                
-                $mail->send();
-                error_log("Appointment status change email sent successfully to: $email");
-            } else {
-                error_log("PHPMailer not installed. Email not sent.");
+            if (!class_exists('PHPMailer\PHPMailer\PHPMailer')) {
+                error_log("AppointmentController: PHPMailer class not found. Please install: composer require phpmailer/phpmailer");
+                return;
             }
+            
+            require_once __DIR__ . '/../../vendor/autoload.php';
+            
+            $mail = new \PHPMailer\PHPMailer\PHPMailer(true);
+            
+            // SMTP Configuration
+            $mail->isSMTP();
+            $mail->Host = getenv('MAIL_HOST') ?: 'smtp.gmail.com';
+            $mail->SMTPAuth = true;
+            $mail->Username = getenv('MAIL_USERNAME') ?: '';
+            $mail->Password = getenv('MAIL_PASSWORD') ?: '';
+            $mail->SMTPSecure = \PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Port = getenv('MAIL_PORT') ?: 587;
+            
+            if (empty($mail->Username) || empty($mail->Password)) {
+                error_log("AppointmentController: Email not sent - MAIL_USERNAME or MAIL_PASSWORD not configured in .env file");
+                return;
+            }
+            
+            error_log("AppointmentController: SMTP configured - Host: {$mail->Host}, Port: {$mail->Port}, Username: {$mail->Username}");
+            
+            // Email settings
+            $mail->setFrom(
+                getenv('MAIL_FROM_ADDRESS') ?: 'noreply@caate.edu.ph', 
+                getenv('MAIL_FROM_NAME') ?: 'CAATE-ITRMS'
+            );
+            $mail->addAddress($email, $fullName);
+            $mail->isHTML(true);
+            
+            // Customize subject and content based on status
+            $statusConfig = $this->getStatusEmailConfig($status);
+            
+            $mail->Subject = $statusConfig['subject'];
+            
+            $mail->Body = $this->buildEmailTemplate(
+                $fullName,
+                $status,
+                $statusConfig,
+                $serviceCategory,
+                $serviceType,
+                $appointmentDate,
+                $appointmentTime,
+                $appointment['specialNotes'] ?? ''
+            );
+            
+            $mail->AltBody = $this->buildPlainTextEmail(
+                $fullName,
+                $status,
+                $serviceCategory,
+                $serviceType,
+                $appointmentDate,
+                $appointmentTime
+            );
+            
+            // Send the email
+            $mail->send();
+            error_log("AppointmentController: Appointment status change email sent successfully to: $email");
+            
+            // Log success
+            $successLog = "SUCCESS: Email sent at " . date('Y-m-d H:i:s') . "\n";
+            file_put_contents($logDir . '/appointment-notifications.log', $successLog, FILE_APPEND);
+            
         } catch (Exception $e) {
-            error_log("Email sending failed: " . $e->getMessage());
+            error_log("AppointmentController: Email sending failed - " . $e->getMessage());
+            error_log("AppointmentController: PHPMailer Error Info: " . $mail->ErrorInfo);
+            
+            // Log failure
+            $failLog = "FAILED: " . $e->getMessage() . " at " . date('Y-m-d H:i:s') . "\n";
+            file_put_contents($logDir . '/appointment-notifications.log', $failLog, FILE_APPEND);
         }
     }
     
@@ -296,8 +331,21 @@ class AppointmentController {
     private function buildEmailTemplate($fullName, $status, $config, $serviceCategory, $serviceType, $date, $time, $notes) {
         $appointmentLink = 'http://localhost/CAATE-ITRMS/auth/src/pages/admission/appointment-form.html';
         
-        return "
-<!DOCTYPE html>
+        $buttonHtml = '';
+        if ($status === 'Approved') {
+            $buttonHtml = "
+                <table role='presentation' style='width: 100%; margin: 25px 0;' cellpadding='0' cellspacing='0' border='0'>
+                    <tr>
+                        <td style='text-align: center;'>
+                            <a href='$appointmentLink' class='button' style='display: inline-block; padding: 16px 40px; background: #3691bf; color: #ffffff; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 17px; text-transform: uppercase; letter-spacing: 0.5px;'>
+                                VIEW APPOINTMENT
+                            </a>
+                        </td>
+                    </tr>
+                </table>";
+        }
+        
+        return "<!DOCTYPE html>
 <html lang='en'>
 <head>
     <meta charset='UTF-8'>
@@ -374,17 +422,9 @@ class AppointmentController {
                     </table>
                 </div>
                 
-                " . ($status === 'Approved' ? "
-                <table role='presentation' style='width: 100%; margin: 25px 0;' cellpadding='0' cellspacing='0' border='0'>
-                    <tr>
-                        <td style='text-align: center;'>
-                            <a href='$appointmentLink' class='button' style='display: inline-block; padding: 16px 40px; background: #3691bf; color: #ffffff; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 17px; text-transform: uppercase; letter-spacing: 0.5px;'>
-                                VIEW APPOINTMENT
-                            </a>
-                        </td>
-                    </tr>
-                </table>
-                " : "") . "
+                $buttonHtml
+                
+                <div style='height: 1px; background: rgba(54, 145, 191, 0.4); margin: 25px 0;'></div>
                 
                 <div style='background: rgba(54, 145, 191, 0.15); border: 1px solid rgba(54, 145, 191, 0.4); border-radius: 10px; padding: 20px; margin: 20px 0;'>
                     <p style='font-size: 14px; color: #ffffff; margin: 0; line-height: 1.6; text-align: center;'>
@@ -392,6 +432,12 @@ class AppointmentController {
                         <a href='mailto:creativeaestheticacademy@gmail.com' style='color: #5eb3e0; text-decoration: none;'>creativeaestheticacademy@gmail.com</a>
                         or call <strong style='color: #5eb3e0;'>0968 100 2025</strong>
                     </p>
+                </div>
+                
+                <div style='text-align: center; margin: 20px 0;'>
+                    <span style='display: inline-block; background: rgba(16, 185, 129, 0.25); border: 1px solid #10b981; border-radius: 20px; padding: 8px 16px; font-size: 13px; color: #ffffff; font-weight: 600;'>
+                        🛡️ Secure Notification
+                    </span>
                 </div>
                 
                 <div style='text-align: center; margin-top: 30px; padding-top: 25px; border-top: 1px solid rgba(54, 145, 191, 0.4);'>
@@ -410,8 +456,7 @@ class AppointmentController {
         </tr>
     </table>
 </body>
-</html>
-";
+</html>";
     }
     
     private function buildPlainTextEmail($fullName, $status, $serviceCategory, $serviceType, $date, $time) {

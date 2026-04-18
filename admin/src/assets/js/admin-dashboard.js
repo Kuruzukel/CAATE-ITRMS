@@ -465,9 +465,10 @@ function updateCourseEnrollmentUI(data) {
 
 async function fetchRecentEnrollmentActivity() {
     try {
-        // Fetch all enrollments (all statuses) from the backend
         const response = await fetch(`${config.api.baseUrl}/api/v1/enrollments/recent?limit=10`);
         const enrollmentsData = await response.json();
+
+        console.log('Enrollments Data:', enrollmentsData);
 
         if (!enrollmentsData.success || !enrollmentsData.data) {
             throw new Error('Failed to fetch enrollment data');
@@ -475,29 +476,39 @@ async function fetchRecentEnrollmentActivity() {
 
         const activities = [];
 
-        // Process enrollments and fetch profile images
         for (const enrollment of enrollmentsData.data) {
+            console.log('Processing enrollment:', enrollment);
+
             let profileImage = null;
 
-            // Get user_id (MongoDB ObjectId) for API lookup
-            const userId = enrollment.userId || enrollment.user_id || enrollment.trainee?.userId;
+            const userId = enrollment.userId || enrollment.user_id || enrollment.trainee?.userId || enrollment.traineeId || enrollment.trainee_id;
 
-            // Fetch trainee profile image if userId exists and is a valid MongoDB ObjectId
+            console.log('User ID found:', userId);
+
             if (userId && typeof userId === 'string' && /^[a-f\d]{24}$/i.test(userId)) {
                 try {
-                    const traineeResponse = await fetch(`${config.api.baseUrl}/api/v1/trainees/${userId}`);
+                    const traineeUrl = `${config.api.baseUrl}/api/v1/trainees/${userId}`;
+                    console.log('Fetching trainee from:', traineeUrl);
+
+                    const traineeResponse = await fetch(traineeUrl);
                     if (traineeResponse.ok) {
                         const traineeData = await traineeResponse.json();
-                        if (traineeData.success && traineeData.data && traineeData.data.profile_image) {
-                            profileImage = traineeData.data.profile_image;
+                        console.log('Trainee data received:', traineeData);
+
+                        if (traineeData.success && traineeData.data) {
+                            profileImage = traineeData.data.profile_image || traineeData.data.profileImage;
+                            console.log('Profile image found:', profileImage);
                         }
+                    } else {
+                        console.log('Trainee response not OK:', traineeResponse.status);
                     }
                 } catch (error) {
                     console.log('Could not fetch trainee profile:', error);
                 }
+            } else {
+                console.log('Invalid or missing userId:', userId);
             }
 
-            // Handle different possible field name formats
             const traineeName = enrollment.traineeName
                 || enrollment.trainee_name
                 || enrollment.trainee?.name
@@ -523,7 +534,8 @@ async function fetchRecentEnrollmentActivity() {
             });
         }
 
-        // Sort by date (most recent first)
+        console.log('Final activities array:', activities);
+
         activities.sort((a, b) => {
             const dateA = new Date(a.createdAt);
             const dateB = new Date(b.createdAt);
@@ -603,15 +615,16 @@ function updateRecentEnrollmentActivityUI(activities) {
         const defaultAvatar = '../assets/images/DEFAULT_AVATAR.png';
 
         if (activity.profileImage) {
-
             let imageUrl = activity.profileImage;
 
             if (imageUrl.startsWith('/CAATE-ITRMS/')) {
                 imageUrl = window.location.origin + imageUrl;
-            }
-
-            else if (!imageUrl.startsWith('http')) {
+            } else if (imageUrl.startsWith('uploads/')) {
                 imageUrl = `${config.api.baseUrl}/${imageUrl}`;
+            } else if (!imageUrl.startsWith('http') && !imageUrl.startsWith('/')) {
+                imageUrl = `${config.api.baseUrl}/${imageUrl}`;
+            } else if (imageUrl.startsWith('/') && !imageUrl.startsWith('/CAATE-ITRMS/')) {
+                imageUrl = window.location.origin + imageUrl;
             }
 
             avatarHTML = `

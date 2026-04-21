@@ -152,14 +152,14 @@ The system includes the following MongoDB collections:
 - `trainees` - Student/trainee records
 - `courses` - Course catalog
 - `enrollments` - Trainee course enrollments
-- `schedules` - Class schedules
-- `attendance` - Attendance records
+- `schedules` - Class schedules and appointments
 - `competencies` - Course competencies
-- `applications` - New applications
-- `admissions` - Admission records
+- `applications` - New applications (part of enrollment process)
+- `admissions` - Admission records (part of enrollment process)
+- `appointments` - Appointment scheduling
 - `graduates` - Graduate records
 - `inventory` - Equipment and supplies inventory
-- `requests` - Trainee requests
+- `appointments` - Appointment requests and scheduling
 
 ## Folder Structure
 

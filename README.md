@@ -191,30 +191,20 @@
   - Role-based access control
   - Activity logging
 
-✓ Attendance Records
-  - Daily attendance tracking
-  - Attendance reports & analytics
-  - Absence management
-
-✓ Registration & Enrollment
-  - Trainee registration processing
-  - Enrollment management
+✓ Enrollment Management
+  - Complete enrollment process
+  - Application, registration & admission workflow
+  - Document verification & processing
+  - Enrollment status tracking
   - Batch enrollment support
-
-✓ Admission Processing
-  - Application review & approval
-  - Document verification
-  - Admission status tracking
-
-✓ Application Management
-  - New application processing
-  - Application status updates
   - Applicant communication
 
-✓ Requests Management
-  - Trainee request handling
-  - Document requests
-  - Request tracking system
+✓ Schedule Management (Appointments)
+  - Calendar-based appointment scheduling
+  - View all appointments on calendar
+  - Appointment request handling
+  - Appointment tracking system
+  - Date & time management
 
 ✓ Dual Inventory System
   - Audit Inventory tracking
@@ -364,11 +354,11 @@
   - Course materials access
   - Instructor information
 
-✓ Attendance Records
-  - Attendance history
-  - Attendance percentage
-  - Calendar view
-  - Absence notifications
+✓ Schedule & Appointments
+  - View appointment schedules
+  - Calendar view of appointments
+  - Appointment history
+  - Appointment notifications
 
 ✓ Competency Tracking
   - Competency framework
@@ -806,17 +796,16 @@ CAATE-ITRMS/
 │   │   │   ├── 📂 js/                 # JavaScript files
 │   │   │   ├── 📂 vendor/             # Third-party libraries
 │   │   │   └── README.md
-│   │   └── 📂 pages/                  # 10 HTML pages
+│   │   └── 📂 pages/                  # 9 HTML pages
 │   │       ├── admission-slip.html
-│   │       ├── application-form.html
-│   │       ├── attendance.html
+│   │       ├── enrollment-form.html
+│   │       ├── schedule.html
 │   │       ├── change-password.html
 │   │       ├── class-roster.html
 │   │       ├── competencies.html
 │   │       ├── courses.html
 │   │       ├── dashboard.html
 │   │       ├── manage-profile.html
-│   │       ├── registration-form.html
 │   │       └── README.md
 │   ├── package.json                   # Dependencies & scripts
 │   └── README.md                      # Trainee documentation
@@ -863,14 +852,10 @@ Professional administration interface for managing all aspects of the training c
 - Dashboard with real-time analytics
 - Competencies Management
 - Course Administration
-- Schedule Management
 - Graduate Tracking
 - User Accounts Management
-- Attendance Records
-- Registration & Enrollment
-- Admission Processing
-- Application Management
-- Requests Management
+- Enrollment Management
+- Schedule Management (Appointments)
 - Dual Inventory System (Audit & CAATE)
 - Profile & Security Management
 
@@ -917,19 +902,18 @@ Professional public-facing website showcasing CAATE training programs and course
 
 ### 4. 👨‍🎓 Trainee Dashboard
 
-Student portal for course management, attendance tracking, and profile administration.
+Student portal for course management, schedule & appointment tracking, and profile administration.
 
 **Location:** `/trainee`  
-**Pages:** 10 HTML pages
+**Pages:** 9 HTML pages
 
 **Key Features:**
 
 - Personal Dashboard
 - Admission Slip
-- Application Form
-- Registration Form
+- Enrollment Form
 - Course Enrollment
-- Attendance Records
+- Schedule & Appointments
 - Competency Tracking
 - Class Roster
 - Profile Management
@@ -953,7 +937,7 @@ RESTful API built with PHP and MongoDB for comprehensive data management.
 - Trainee Management
 - Course Management
 - Enrollment Management
-- Attendance Tracking
+- Schedule Management (Appointments)
 - Competency Management
 - Inventory Management
 - Statistics & Analytics API

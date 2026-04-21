@@ -27,7 +27,7 @@
 
 ---
 
-### Admission & Registration
+### Enrollment & Appointments
 
 **admission-slip.html** - Admission slip/certificate
 
@@ -38,17 +38,9 @@
 - Download functionality
 - Certificate information
 
-**application-form.html** - Application form
+**enrollment-form.html** - Complete enrollment form
 
-- Display submitted application data
-- Edit capability (if allowed)
-- Status indicators
-- Document management
-- Submission history
-- Resubmission options
-
-**registration-form.html** - Registration form
-
+- Application, registration & admission combined
 - Personal information
 - Course selection
 - Document uploads
@@ -56,18 +48,18 @@
 - Form validation
 - Submission tracking
 
+**schedule.html** - Appointment scheduling
+
+- View appointment schedules
+- Calendar view of appointments
+- Appointment history
+- Appointment details
+- Upcoming appointments
+- Appointment notifications
+
 ---
 
 ### Academic Tracking
-
-**attendance.html** - Attendance tracking
-
-- Attendance record display
-- Attendance percentage tracking
-- Calendar view of attendance
-- Attendance history
-- Absence notifications
-- Attendance reports
 
 **competencies.html** - Competencies tracking
 
@@ -218,6 +210,6 @@ Each page has:
 
 **Developer:** KEL TO YAHHHH!  
 **Last Updated:** February 2026  
-**Total Pages:** 10  
+**Total Pages:** 9  
 **Status:** Active Development  
 **Part of:** [CAATE-ITRMS Trainee](../../README.md)

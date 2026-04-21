@@ -1,6 +1,6 @@
 # 👨‍🎓 Trainee Dashboard - CAATE-ITRMS
 
-Student/trainee dashboard for CAATE (Creative Aesthetic Academy & Technical Education Inc.) Integrated Training & Resource Management System. Provides trainees with access to their courses, admission information, attendance records, competency tracking, profile management, and account settings.
+Student/trainee dashboard for CAATE (Creative Aesthetic Academy & Technical Education Inc.) Integrated Training & Resource Management System. Provides trainees with access to their courses, admission information, schedule & appointment tracking, competency tracking, profile management, and account settings.
 
 ## Overview
 
@@ -33,17 +33,16 @@ trainee/
 │   │   ├── 📂 js/                      # JavaScript files
 │   │   ├── 📂 vendor/                  # Third-party libraries
 │   │   └── README.md
-│   └── 📂 pages/                       # Trainee pages (10 files)
+│   └── 📂 pages/                       # Trainee pages (9 files)
 │       ├── admission-slip.html
-│       ├── application-form.html
-│       ├── attendance.html
+│       ├── enrollment-form.html
+│       ├── schedule.html
 │       ├── change-password.html
 │       ├── class-roster.html
 │       ├── competencies.html
 │       ├── courses.html
 │       ├── dashboard.html
 │       ├── manage-profile.html
-│       ├── registration-form.html
 │       └── README.md
 ├── package.json                        # Dependencies and scripts
 └── README.md                           # This file
@@ -51,7 +50,7 @@ trainee/
 
 ## Features
 
-The Trainee Dashboard provides **10 comprehensive pages** for student management and tracking:
+The Trainee Dashboard provides **9 comprehensive pages** for student management and tracking:
 
 ### Core Student Features
 
@@ -77,26 +76,24 @@ The Trainee Dashboard provides **10 comprehensive pages** for student management
 - Certificate information
 - Download functionality
 
-#### Application Form
+#### Enrollment Form
 
-- View submitted application
-- Display submitted application data
-- Edit application information (if allowed)
-- Edit capability based on status
-- Application status tracking
-- Status indicators
-- Document uploads and management
-- Submission history
-- Resubmission options
-
-#### Registration Form
-
-- Course registration
+- Complete enrollment process
+- Application, registration & admission in one
 - Personal information management
 - Contact details
 - Document submission
-- Registration status tracking
+- Enrollment status tracking
 - Course selection
+
+#### Schedule & Appointments
+
+- View appointment schedules
+- Calendar view of appointments
+- Appointment history
+- Appointment notifications and alerts
+- Upcoming appointments
+- Appointment details
 
 #### Course Enrollment
 
@@ -110,18 +107,6 @@ The Trainee Dashboard provides **10 comprehensive pages** for student management
 - Instructor contact information
 - Instructor details
 - Course completion status and certificates
-
-#### Attendance Records
-
-- View attendance records
-- Attendance record display
-- Track attendance percentage
-- Attendance percentage tracking
-- View attendance history
-- Calendar view of attendance
-- Mark attendance (if applicable)
-- Absence notifications and alerts
-- Attendance reports and analytics
 
 #### Competency Tracking
 
@@ -249,23 +234,24 @@ Application-specific illustrations are in `src/assets/img/illustrations/`:
 - Download functionality
 - Certificate information
 
-### Application Form (`application-form.html`)
+### Enrollment Form (`enrollment-form.html`)
 
-- Display submitted application data
-- Edit capability (if allowed)
-- Status indicators
-- Document management
-- Submission history
-- Resubmission options
+- Complete enrollment process
+- Application, registration & admission combined
+- Personal information form
+- Document upload and management
+- Enrollment status tracking
+- Course selection
+- Submission confirmation
 
-### Attendance (`attendance.html`)
+### Schedule & Appointments (`schedule.html`)
 
-- Attendance record display
-- Attendance percentage tracking
-- Calendar view of attendance
-- Attendance history
-- Absence notifications
-- Attendance reports
+- View appointment schedules
+- Calendar view of appointments
+- Appointment history
+- Appointment details
+- Upcoming appointments
+- Appointment notifications
 
 ### Change Password (`change-password.html`)
 

@@ -187,44 +187,24 @@ The Admin Dashboard provides **15 comprehensive management pages** for complete 
 - User activity tracking
 - Role-based access control
 
-#### Attendance Records
+#### Enrollment Management
 
-- Record daily attendance
-- Generate attendance reports
-- Track attendance patterns
-- Manage attendance exceptions
-- Attendance analytics
-
-#### Registration & Enrollment Management
-
-- Process enrollments
+- Complete enrollment process
+- Process application, registration & admission
 - Manage enrollment status
 - Track enrollment history
 - Generate enrollment reports
 - Batch enrollment support
-
-#### Admission Processing
-
-- Review applications
-- Process application approvals
-- Manage application status
-- Generate application reports
 - Document verification
-- Admission status tracking
 
-#### Application Management
+#### Schedule Management (Appointments)
 
-- New application processing
-- Application status updates
-- Applicant communication
-- Document management
-
-#### Requests Management
-
-- Trainee request handling
-- Document requests
-- Request tracking system
-- Request status updates
+- Calendar-based appointment scheduling
+- View all appointments on calendar
+- Manage appointment requests
+- Track appointment status
+- Date & time management
+- Appointment notifications
 
 #### Dual Inventory System
 

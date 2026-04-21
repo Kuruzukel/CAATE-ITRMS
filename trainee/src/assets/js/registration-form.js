@@ -341,17 +341,13 @@ class RegistrationFormHandler {
             const result = await response.json();
 
             if (result.success && result.data && result.data.length > 0) {
-                const levelIIICourses = result.data.filter(course => {
-                    const badge = (course.badge || course.course_code || '').toUpperCase();
-                    const enrollmentStatus = course.enrollment_status || '';
-                    return (badge.includes('LEVEL III') || badge.includes('LEVEL 3') || badge.includes('LEVEL-III'))
-                        && enrollmentStatus === 'Open Enrollment';
-                });
+                // Show all courses without filtering
+                const allCourses = result.data;
 
                 dropdown.innerHTML = '<option value="">Select a course...</option>';
 
-                if (levelIIICourses.length > 0) {
-                    levelIIICourses.forEach(course => {
+                if (allCourses.length > 0) {
+                    allCourses.forEach(course => {
                         const option = document.createElement('option');
                         option.value = course.title || 'Untitled Course';
                         option.dataset.courseId = course._id?.$oid || course._id || '';
@@ -359,13 +355,13 @@ class RegistrationFormHandler {
                         dropdown.appendChild(option);
                     });
                 } else {
-                    dropdown.innerHTML = '<option value="">No Level III courses available with open enrollment</option>';
+                    dropdown.innerHTML = '<option value="">No courses available</option>';
                 }
             } else {
                 dropdown.innerHTML = '<option value="">No courses available</option>';
             }
         } catch (error) {
-            console.error('Error loading Level III courses:', error);
+            console.error('Error loading courses:', error);
             dropdown.innerHTML = '<option value="">Error loading courses</option>';
         }
     }

@@ -126,7 +126,7 @@
 
 #### 🎓 Training & Assessment
 
-- **Schedule Management** - Advanced scheduling and calendar features
+- **Appointment Management** - View and manage appointments from landing page
 - **Competency Framework** - Competency tracking and assessment
 - **Secure Authentication** - Comprehensive auth and admission workflow
 - **Responsive Design** - Works seamlessly on all devices
@@ -176,8 +176,8 @@
   - Curriculum planning
   - Course materials organization
 
-✓ Schedule Management
-  - Calendar-based scheduling
+✓ Class Schedule Management
+  - Calendar-based class scheduling
   - Class timetable management
   - Instructor assignments
 
@@ -199,12 +199,13 @@
   - Batch enrollment support
   - Applicant communication
 
-✓ Schedule Management (Appointments)
-  - Calendar-based appointment scheduling
-  - View all appointments on calendar
-  - Appointment request handling
-  - Appointment tracking system
-  - Date & time management
+✓ Appointment Records (from Landing Page)
+  - View appointments submitted via public form
+  - Calendar view of appointment requests
+  - Appointment status management
+  - Appointment history tracking
+  - No internal appointment creation
+  - Appointments originate from landing page only
 
 ✓ Dual Inventory System
   - Audit Inventory tracking
@@ -242,12 +243,12 @@
   - Permanent Makeup Tattoo
   - Trainers Methodology Level I
 
-✓ Appointment Scheduling
-  - Online appointment booking
+✓ Appointment Booking Form
+  - Public appointment request form
   - Date & time selection
   - Course selection
-  - Contact information form
-  - Appointment confirmation
+  - Contact information
+  - Sends to admin for review
 
 ✓ Trainer Directory
   - Trainer profiles & credentials
@@ -861,7 +862,7 @@ Professional administration interface for managing all aspects of the training c
 - Graduate Tracking
 - User Accounts Management
 - Enrollment Management
-- Schedule Management (Appointments)
+- Appointment Records (from Landing Page)
 - Dual Inventory System (Audit & CAATE)
 - Profile & Security Management
 
@@ -900,7 +901,7 @@ Professional public-facing website showcasing CAATE training programs and course
 - Hero Section & Call-to-Action
 - 10 Course Information Pages
 - Trainer Directory
-- Appointment Scheduling
+- **Appointment Booking Form** (sends to admin)
 - Fully Responsive Design
 - SEO Optimized
 - Fast Loading Times
@@ -943,7 +944,7 @@ RESTful API built with PHP and MongoDB for comprehensive data management.
 - Trainee Management
 - Course Management
 - Enrollment Management
-- Schedule Management (Appointments)
+- Appointment Management (from public form)
 - Competency Management
 - Inventory Management
 - Statistics & Analytics API

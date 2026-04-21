@@ -83,12 +83,14 @@ The Landing Page provides **11+ pages** showcasing CAATE's training programs, se
 
 #### Appointment Scheduling
 
-- Online appointment booking form
+- **Public-facing appointment booking form**
 - Date and time selection
 - Course selection dropdown
-- Contact information fields
-- Appointment confirmation
-- Integration with admin appointment management
+- Contact information fields (name, email, phone)
+- Message/notes field
+- Appointment confirmation message
+- **Appointments are sent to admin dashboard for review**
+- Integration with admin appointment records page
 
 ### Course Information Pages (10 Courses)
 

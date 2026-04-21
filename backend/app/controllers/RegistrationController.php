@@ -147,11 +147,7 @@ class RegistrationController
         try {
             $db = getMongoConnection();
 
-            $page = intval($_GET['page'] ?? 1);
-            $limit = intval($_GET['limit'] ?? 10);
             $status = $_GET['status'] ?? null;
-
-            $skip = ($page - 1) * $limit;
 
             $filter = [];
             if ($status) {
@@ -161,23 +157,13 @@ class RegistrationController
             $registrations = $db->registrations->find(
                 $filter,
                 [
-                    'sort' => ['submittedAt' => -1],
-                    'skip' => $skip,
-                    'limit' => $limit
+                    'sort' => ['submittedAt' => -1]
                 ]
             )->toArray();
 
-            $total = $db->registrations->countDocuments($filter);
-
             echo json_encode([
                 'success' => true,
-                'data' => $registrations,
-                'pagination' => [
-                    'page' => $page,
-                    'limit' => $limit,
-                    'total' => $total,
-                    'pages' => ceil($total / $limit)
-                ]
+                'data' => $registrations
             ]);
         } catch (Exception $e) {
             http_response_code(500);

@@ -2,8 +2,6 @@
 
 (function () {
     let registrations = [];
-    let currentPage = 1;
-    const limit = 10;
 
     document.addEventListener('DOMContentLoaded', function () {
         loadRegistrations();
@@ -13,13 +11,7 @@
 
     async function loadRegistrations(filters = {}) {
         try {
-            const queryParams = new URLSearchParams({
-                page: currentPage,
-                limit: limit,
-                ...filters
-            });
-
-            const response = await fetch(`${config.api.baseUrl}/api/v1/registrations?${queryParams}`);
+            const response = await fetch(`${config.api.baseUrl}/api/v1/registrations`);
             const data = await response.json();
 
             if (data.success) {

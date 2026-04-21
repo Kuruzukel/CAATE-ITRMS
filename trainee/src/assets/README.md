@@ -32,7 +32,6 @@ JavaScript files for trainee functionality:
 - Data fetching and display
 - User interactions
 - Profile management
-- Schedule & appointment tracking
 - Competency tracking
 
 ### Images (`images/`)

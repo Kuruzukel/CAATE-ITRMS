@@ -199,12 +199,12 @@ The Admin Dashboard provides **15 comprehensive management pages** for complete 
 
 #### Schedule Management (Appointments)
 
-- Calendar-based appointment scheduling
-- View all appointments on calendar
-- Manage appointment requests
-- Track appointment status
+- View all appointment requests
+- Calendar-based appointment viewing
+- Appointment request management
+- Appointment status tracking
 - Date & time management
-- Appointment notifications
+- Appointment history and records
 
 #### Dual Inventory System
 

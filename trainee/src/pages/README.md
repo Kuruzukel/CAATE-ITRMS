@@ -48,15 +48,6 @@
 - Form validation
 - Submission tracking
 
-**schedule.html** - Appointment scheduling
-
-- View appointment schedules
-- Calendar view of appointments
-- Appointment history
-- Appointment details
-- Upcoming appointments
-- Appointment notifications
-
 ---
 
 ### Academic Tracking
@@ -210,6 +201,6 @@ Each page has:
 
 **Developer:** KEL TO YAHHHH!  
 **Last Updated:** February 2026  
-**Total Pages:** 9  
+**Total Pages:** 8  
 **Status:** Active Development  
 **Part of:** [CAATE-ITRMS Trainee](../../README.md)

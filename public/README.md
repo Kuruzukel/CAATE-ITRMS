@@ -1,6 +1,6 @@
 # 🌐 Landing Page - CAATE-ITRMS
 
-Professional public-facing website for CAATE (Creative Aesthetic Academy & Technical Education Inc.) Integrated Training & Resource Management System. Showcases training programs, course information, and trainer directory to attract prospective trainees.
+Professional public-facing website for CAATE (Creative Aesthetic Academy & Technical Education Inc.) Integrated Training & Resource Management System. Showcases training programs, course information, trainer directory, and provides online appointment scheduling to attract prospective trainees.
 
 ## Overview
 
@@ -39,7 +39,7 @@ public/
 
 ## Features
 
-The Landing Page provides **11+ pages** showcasing CAATE's training programs and services:
+The Landing Page provides **11+ pages** showcasing CAATE's training programs, services, and appointment scheduling:
 
 ### Main Landing Page
 
@@ -80,6 +80,15 @@ The Landing Page provides **11+ pages** showcasing CAATE's training programs and
 - Phone and email
 - Social media links
 - Operating hours
+
+#### Appointment Scheduling
+
+- Online appointment booking form
+- Date and time selection
+- Course selection dropdown
+- Contact information fields
+- Appointment confirmation
+- Integration with admin appointment management
 
 ### Course Information Pages (10 Courses)
 

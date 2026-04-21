@@ -242,6 +242,13 @@
   - Permanent Makeup Tattoo
   - Trainers Methodology Level I
 
+✓ Appointment Scheduling
+  - Online appointment booking
+  - Date & time selection
+  - Course selection
+  - Contact information form
+  - Appointment confirmation
+
 ✓ Trainer Directory
   - Trainer profiles & credentials
   - Specializations
@@ -796,10 +803,9 @@ CAATE-ITRMS/
 │   │   │   ├── 📂 js/                 # JavaScript files
 │   │   │   ├── 📂 vendor/             # Third-party libraries
 │   │   │   └── README.md
-│   │   └── 📂 pages/                  # 9 HTML pages
+│   │   └── 📂 pages/                  # 8 HTML pages
 │   │       ├── admission-slip.html
 │   │       ├── enrollment-form.html
-│   │       ├── schedule.html
 │   │       ├── change-password.html
 │   │       ├── class-roster.html
 │   │       ├── competencies.html
@@ -894,6 +900,7 @@ Professional public-facing website showcasing CAATE training programs and course
 - Hero Section & Call-to-Action
 - 10 Course Information Pages
 - Trainer Directory
+- Appointment Scheduling
 - Fully Responsive Design
 - SEO Optimized
 - Fast Loading Times
@@ -902,10 +909,10 @@ Professional public-facing website showcasing CAATE training programs and course
 
 ### 4. 👨‍🎓 Trainee Dashboard
 
-Student portal for course management, schedule & appointment tracking, and profile administration.
+Student portal for course management, competency tracking, and profile administration.
 
 **Location:** `/trainee`  
-**Pages:** 9 HTML pages
+**Pages:** 8 HTML pages
 
 **Key Features:**
 
@@ -913,7 +920,6 @@ Student portal for course management, schedule & appointment tracking, and profi
 - Admission Slip
 - Enrollment Form
 - Course Enrollment
-- Schedule & Appointments
 - Competency Tracking
 - Class Roster
 - Profile Management

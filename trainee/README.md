@@ -1,6 +1,6 @@
 # 👨‍🎓 Trainee Dashboard - CAATE-ITRMS
 
-Student/trainee dashboard for CAATE (Creative Aesthetic Academy & Technical Education Inc.) Integrated Training & Resource Management System. Provides trainees with access to their courses, admission information, schedule & appointment tracking, competency tracking, profile management, and account settings.
+Student/trainee dashboard for CAATE (Creative Aesthetic Academy & Technical Education Inc.) Integrated Training & Resource Management System. Provides trainees with access to their courses, admission information, competency tracking, profile management, and account settings.
 
 ## Overview
 
@@ -33,10 +33,9 @@ trainee/
 │   │   ├── 📂 js/                      # JavaScript files
 │   │   ├── 📂 vendor/                  # Third-party libraries
 │   │   └── README.md
-│   └── 📂 pages/                       # Trainee pages (9 files)
+│   └── 📂 pages/                       # Trainee pages (8 files)
 │       ├── admission-slip.html
 │       ├── enrollment-form.html
-│       ├── schedule.html
 │       ├── change-password.html
 │       ├── class-roster.html
 │       ├── competencies.html
@@ -50,7 +49,7 @@ trainee/
 
 ## Features
 
-The Trainee Dashboard provides **9 comprehensive pages** for student management and tracking:
+The Trainee Dashboard provides **8 comprehensive pages** for student management and tracking:
 
 ### Core Student Features
 
@@ -85,15 +84,6 @@ The Trainee Dashboard provides **9 comprehensive pages** for student management 
 - Document submission
 - Enrollment status tracking
 - Course selection
-
-#### Schedule & Appointments
-
-- View appointment schedules
-- Calendar view of appointments
-- Appointment history
-- Appointment notifications and alerts
-- Upcoming appointments
-- Appointment details
 
 #### Course Enrollment
 
@@ -243,15 +233,6 @@ Application-specific illustrations are in `src/assets/img/illustrations/`:
 - Enrollment status tracking
 - Course selection
 - Submission confirmation
-
-### Schedule & Appointments (`schedule.html`)
-
-- View appointment schedules
-- Calendar view of appointments
-- Appointment history
-- Appointment details
-- Upcoming appointments
-- Appointment notifications
 
 ### Change Password (`change-password.html`)
 

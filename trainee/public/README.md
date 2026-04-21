@@ -33,7 +33,7 @@ This directory contains static files that are served directly without processing
 - Dashboard page assets
 - Profile management assets
 - Course enrollment assets
-- Schedule & appointment tracking assets
+- Competency tracking assets
 
 ---
 

@@ -50,6 +50,19 @@ backups/
 *.log
 logs/
 storage/logs/
+backend/storage/logs/
+
+# Seeder and utility scripts with default passwords (SECURITY RISK)
+backend/seed-admin.php
+backend/update-admin-passwords.php
+backend/add-trainee-passwords.php
+backend/database/seeders/AddPasswordsToExistingTrainees.php
+backend/database/seeders/AddTraineeAccounts.php
+
+# Security audit reports (contains sensitive information)
+SECURITY_AUDIT_REPORT.md
+security-audit*.md
+security-report*.md
 
 # Vendor dependencies
 vendor/
@@ -79,6 +92,7 @@ temp/
 uploads/
 storage/uploads/
 public/uploads/
+backend/public/uploads/
 
 # Compiled and build files
 *.min.js

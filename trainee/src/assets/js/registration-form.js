@@ -589,8 +589,6 @@ class RegistrationFormHandler {
 
     async submitToDatabase(data) {
         try {
-            console.log('Submitting registration data:', data);
-
             const response = await fetch(`${config.api.baseUrl}/api/v1/registrations`, {
                 method: 'POST',
                 headers: {
@@ -600,10 +598,7 @@ class RegistrationFormHandler {
                 body: JSON.stringify(data)
             });
 
-            console.log('Response status:', response.status);
-
             const result = await response.json();
-            console.log('Response data:', result);
 
             if (!response.ok) {
                 throw new Error(result.message || `HTTP error! status: ${response.status}`);

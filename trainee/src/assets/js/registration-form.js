@@ -472,8 +472,6 @@ class RegistrationFormHandler {
             'birthCity',
             'birthProvince',
             'birthRegion',
-            'parentName',
-            'parentAddress',
             'courseQualification'
         ];
 

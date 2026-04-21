@@ -479,6 +479,7 @@ class RegistrationFormHandler {
 
         const missingFields = [];
         const fieldLabels = {
+            'lastName': 'Last Name',
             'firstName': 'First Name',
             'numberStreet': 'Number, Street',
             'barangay': 'Barangay',

@@ -558,7 +558,6 @@ class RegistrationFormHandler {
         }
 
         if (missingFields.length > 0) {
-            console.log('Validation failed - showing simple message');
             this.showToast('Please complete all required fields.', 'error');
             return false;
         }

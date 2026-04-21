@@ -468,8 +468,6 @@ async function fetchRecentEnrollmentActivity() {
         const response = await fetch(`${config.api.baseUrl}/api/v1/enrollments/recent?limit=10`);
         const enrollmentsData = await response.json();
 
-        console.log('Enrollments Data:', enrollmentsData);
-
         if (!enrollmentsData.success || !enrollmentsData.data) {
             throw new Error('Failed to fetch enrollment data');
         }
@@ -477,36 +475,25 @@ async function fetchRecentEnrollmentActivity() {
         const activities = [];
 
         for (const enrollment of enrollmentsData.data) {
-            console.log('Processing enrollment:', enrollment);
-
             let profileImage = null;
 
             const userId = enrollment.userId || enrollment.user_id || enrollment.trainee?.userId || enrollment.traineeId || enrollment.trainee_id;
 
-            console.log('User ID found:', userId);
-
             if (userId && typeof userId === 'string' && /^[a-f\d]{24}$/i.test(userId)) {
                 try {
                     const traineeUrl = `${config.api.baseUrl}/api/v1/trainees/${userId}`;
-                    console.log('Fetching trainee from:', traineeUrl);
 
                     const traineeResponse = await fetch(traineeUrl);
                     if (traineeResponse.ok) {
                         const traineeData = await traineeResponse.json();
-                        console.log('Trainee data received:', traineeData);
 
                         if (traineeData.success && traineeData.data) {
                             profileImage = traineeData.data.profile_image || traineeData.data.profileImage;
-                            console.log('Profile image found:', profileImage);
                         }
-                    } else {
-                        console.log('Trainee response not OK:', traineeResponse.status);
                     }
                 } catch (error) {
-                    console.log('Could not fetch trainee profile:', error);
+                    // Silently handle trainee profile fetch errors
                 }
-            } else {
-                console.log('Invalid or missing userId:', userId);
             }
 
             const traineeName = enrollment.traineeName
@@ -533,8 +520,6 @@ async function fetchRecentEnrollmentActivity() {
                 type: enrollment.type || 'enrollment'
             });
         }
-
-        console.log('Final activities array:', activities);
 
         activities.sort((a, b) => {
             const dateA = new Date(a.createdAt);

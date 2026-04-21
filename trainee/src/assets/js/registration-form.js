@@ -464,7 +464,6 @@ class RegistrationFormHandler {
             'sex',
             'civilStatus',
             'employmentStatus',
-            'education',
             'birthMonth',
             'birthDay',
             'birthYear',

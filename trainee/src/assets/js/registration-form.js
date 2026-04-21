@@ -522,11 +522,7 @@ class RegistrationFormHandler {
             }
         });
 
-        const clientClassifications = document.querySelectorAll('input[name="clientClassification"]:checked');
-        if (clientClassifications.length === 0) {
-            this.showRadioGroupRedBorder('clientClassification');
-            isValid = false;
-        }
+        // Client classification validation removed - now optional
 
         if (data.employmentStatus && (data.employmentStatus === 'wage' || data.employmentStatus === 'underemployed')) {
             if (!data.employmentType || data.employmentType.toString().trim() === '') {

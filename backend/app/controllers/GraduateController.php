@@ -128,30 +128,73 @@ class GraduateController {
     public function update($id) {
         header('Content-Type: application/json');
         header('Access-Control-Allow-Origin: *');
-        header('Access-Control-Allow-Methods: PUT');
+        header('Access-Control-Allow-Methods: PUT, POST');
+        header('Access-Control-Allow-Headers: Content-Type');
         
         try {
-            $rawInput = file_get_contents('php://input');
-            $input = json_decode($rawInput, true);
+            // Check if this is a FormData request (POST with _method=PUT)
+            $isFormData = !empty($_POST) || !empty($_FILES);
             
-            if (!$input) {
-                http_response_code(400);
-                echo json_encode([
-                    'success' => false,
-                    'message' => 'Invalid JSON input'
-                ]);
-                return;
+            $updateData = [];
+            $imageUrl = null;
+            
+            if ($isFormData) {
+                // Handle FormData (with potential file upload)
+                // Handle file upload if present
+                if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+                    $uploadDir = __DIR__ . '/../../public/uploads/graduates/';
+                    
+                    if (!is_dir($uploadDir)) {
+                        mkdir($uploadDir, 0777, true);
+                    }
+                    
+                    $fileExtension = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
+                    $fileName = uniqid('graduate_') . '.' . $fileExtension;
+                    $uploadPath = $uploadDir . $fileName;
+                    
+                    if (move_uploaded_file($_FILES['image']['tmp_name'], $uploadPath)) {
+                        $imageUrl = 'http://localhost/CAATE-ITRMS/backend/public/uploads/graduates/' . $fileName;
+                    }
+                }
+                
+                $updateData = [
+                    'name' => $_POST['name'] ?? '',
+                    'trainee_id' => $_POST['trainee_id'] ?? '',
+                    'course' => $_POST['course'] ?? '',
+                    'certification' => $_POST['certification'] ?? '',
+                    'graduation_date' => $_POST['graduation_date'] ?? '',
+                    'email' => $_POST['email'] ?? '',
+                    'updated_at' => new MongoDB\BSON\UTCDateTime()
+                ];
+                
+                if ($imageUrl) {
+                    $updateData['image_url'] = $imageUrl;
+                }
+                
+            } else {
+                // Handle JSON input (text-only update)
+                $rawInput = file_get_contents('php://input');
+                $input = json_decode($rawInput, true);
+                
+                if (!$input) {
+                    http_response_code(400);
+                    echo json_encode([
+                        'success' => false,
+                        'message' => 'Invalid input'
+                    ]);
+                    return;
+                }
+                
+                $updateData = [
+                    'name' => $input['name'] ?? '',
+                    'trainee_id' => $input['trainee_id'] ?? '',
+                    'course' => $input['course'] ?? '',
+                    'certification' => $input['certification'] ?? '',
+                    'graduation_date' => $input['graduation_date'] ?? '',
+                    'email' => $input['email'] ?? '',
+                    'updated_at' => new MongoDB\BSON\UTCDateTime()
+                ];
             }
-            
-            $updateData = [
-                'name' => $input['name'] ?? '',
-                'trainee_id' => $input['trainee_id'] ?? '',
-                'course' => $input['course'] ?? '',
-                'certification' => $input['certification'] ?? '',
-                'graduation_date' => $input['graduation_date'] ?? '',
-                'email' => $input['email'] ?? '',
-                'updated_at' => new MongoDB\BSON\UTCDateTime()
-            ];
             
             $graduateModel = new Graduate();
             $updated = $graduateModel->update($id, $updateData);
@@ -160,7 +203,10 @@ class GraduateController {
                 http_response_code(200);
                 echo json_encode([
                     'success' => true,
-                    'message' => 'Graduate updated successfully'
+                    'message' => 'Graduate updated successfully',
+                    'data' => [
+                        'image_url' => $imageUrl
+                    ]
                 ]);
             } else {
                 http_response_code(404);

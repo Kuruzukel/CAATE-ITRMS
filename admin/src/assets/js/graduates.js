@@ -804,6 +804,16 @@ document.addEventListener('DOMContentLoaded', function () {
             reader.readAsDataURL(file);
         }
     });
+    document.getElementById('editGraduateImageInput')?.addEventListener('change', function (e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                document.getElementById('editGraduateImage').src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
     const saveNewGraduateBtn = document.getElementById('saveNewGraduateBtn');
     if (saveNewGraduateBtn && !saveNewGraduateBtn.dataset.listenerAttached) {
         saveNewGraduateBtn.dataset.listenerAttached = 'true';
@@ -1071,6 +1081,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     email: document.getElementById('editGraduateEmail').value.trim(),
                     certification: document.getElementById('editGraduateCertification').value,
                 };
+                const imageFile = document.getElementById('editGraduateImageInput').files[0];
                 if (!window.originalGraduateData) {
                     showError('Error: Original data not found. Please close and reopen the edit modal.');
                     return;
@@ -1081,7 +1092,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     currentData.course !== window.originalGraduateData.course ||
                     currentData.graduationDate !== window.originalGraduateData.graduationDate ||
                     currentData.email !== window.originalGraduateData.email ||
-                    currentData.certification !== window.originalGraduateData.certification;
+                    currentData.certification !== window.originalGraduateData.certification ||
+                    imageFile;
                 if (!hasChanges) {
                     showInfo('No changes detected');
                     const modal = bootstrap.Modal.getInstance(document.getElementById('editGraduateModal'));
@@ -1092,21 +1104,22 @@ document.addEventListener('DOMContentLoaded', function () {
                 const originalText = saveGraduateBtn.innerHTML;
                 saveGraduateBtn.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i> Saving...';
                 try {
+                    const formData = new FormData();
+                    formData.append('name', currentData.name);
+                    formData.append('trainee_id', currentData.traineeId);
+                    formData.append('course', currentData.course);
+                    formData.append('graduation_date', currentData.graduationDate);
+                    formData.append('email', currentData.email);
+                    formData.append('certification', currentData.certification);
+                    formData.append('_method', 'PUT');
+                    if (imageFile) {
+                        formData.append('image', imageFile);
+                    }
                     const response = await fetch(
                         `${config.api.baseUrl}/api/v1/graduates/${window.originalGraduateData.mongoId}`,
                         {
-                            method: 'PUT',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({
-                                name: currentData.name,
-                                trainee_id: currentData.traineeId,
-                                course: currentData.course,
-                                graduation_date: currentData.graduationDate,
-                                email: currentData.email,
-                                certification: currentData.certification,
-                            }),
+                            method: 'POST',
+                            body: formData,
                         },
                     );
                     const result = await response.json();

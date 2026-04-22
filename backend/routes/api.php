@@ -93,6 +93,7 @@ function handleRequest($uri, $method) {
         'GET:/api/v1/graduates' => ['GraduateController', 'index'],
         'GET:/api/v1/graduates/{id}' => ['GraduateController', 'show'],
         'POST:/api/v1/graduates' => ['GraduateController', 'store'],
+        'POST:/api/v1/graduates/{id}' => ['GraduateController', 'update'],
         'PUT:/api/v1/graduates/{id}' => ['GraduateController', 'update'],
         'DELETE:/api/v1/graduates/{id}' => ['GraduateController', 'destroy'],
     ];

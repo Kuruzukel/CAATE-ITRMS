@@ -1,5 +1,8 @@
 let allGraduates = [];
 let filteredGraduates = [];
+const cardsPerPage = 8;
+let currentPage = 1;
+let allGraduateCards = [];
 
 function getInitials(name) {
     if (!name) return '??';
@@ -166,6 +169,7 @@ function renderGraduatesGrid() {
                 </div>
             `;
         }
+        initializePagination();
         return;
     }
 
@@ -250,6 +254,8 @@ function renderGraduatesGrid() {
             });
         }
     });
+
+    initializePagination();
 }
 
 function applyFilters() {
@@ -452,3 +458,132 @@ document.addEventListener('DOMContentLoaded', function () {
     if (dateFilter) dateFilter.addEventListener('change', applyFilters);
     if (resetBtn) resetBtn.addEventListener('click', resetFilters);
 });
+
+// Pagination functions
+function initializePagination() {
+    const graduatesGrid = document.querySelector(
+        '.row.row-cols-1.row-cols-md-2.row-cols-lg-3.row-cols-xl-4',
+    );
+    if (graduatesGrid) {
+        allGraduateCards = Array.from(graduatesGrid.children).filter((el) => {
+            return el.classList.contains('col') && el.style.display !== 'none';
+        });
+    }
+    if (allGraduateCards.length === 0) {
+        updateShowingText();
+        return;
+    }
+    const totalPages = Math.ceil(allGraduateCards.length / cardsPerPage);
+    renderPagination(totalPages);
+    showPage(1);
+}
+
+function showPage(pageNum) {
+    currentPage = pageNum;
+    const startIndex = (pageNum - 1) * cardsPerPage;
+    const endIndex = startIndex + cardsPerPage;
+    allGraduateCards.forEach((card, index) => {
+        if (index >= startIndex && index < endIndex) {
+            card.style.display = '';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+    updatePaginationButtons();
+    updateShowingText();
+}
+
+function renderPagination(totalPages) {
+    const paginationContainer = document.querySelector('.pagination');
+    if (!paginationContainer) return;
+    let paginationHTML = `
+        <li class="page-item" id="prevPage">
+            <a class="page-link" href="#" tabindex="-1" 
+               style="background-color: #243447 !important; border-color: #3d4f63 !important; color: #b8c5d6 !important;">
+                Previous
+            </a>
+        </li>
+    `;
+    for (let i = 1; i <= totalPages; i++) {
+        paginationHTML += `
+            <li class="page-item">
+                <a class="page-link page-num" href="#" data-page="${i}" 
+                   style="background-color: #243447 !important; border-color: #3d4f63 !important; color: #b8c5d6 !important;">
+                    ${i}
+                </a>
+            </li>
+        `;
+    }
+    paginationHTML += `
+        <li class="page-item" id="nextPage">
+            <a class="page-link" href="#" 
+               style="background-color: #243447 !important; border-color: #3d4f63 !important; color: #b8c5d6 !important;">
+                Next
+            </a>
+        </li>
+    `;
+    paginationContainer.innerHTML = paginationHTML;
+    document.querySelectorAll('.page-num').forEach((btn) => {
+        btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            const page = parseInt(this.getAttribute('data-page'));
+            showPage(page);
+        });
+    });
+    document.getElementById('prevPage').addEventListener('click', function (e) {
+        e.preventDefault();
+        if (currentPage > 1) {
+            showPage(currentPage - 1);
+        }
+    });
+    document.getElementById('nextPage').addEventListener('click', function (e) {
+        e.preventDefault();
+        const totalPages = Math.ceil(allGraduateCards.length / cardsPerPage);
+        if (currentPage < totalPages) {
+            showPage(currentPage + 1);
+        }
+    });
+}
+
+function updatePaginationButtons() {
+    const totalPages = Math.ceil(allGraduateCards.length / cardsPerPage);
+    const prevBtn = document.getElementById('prevPage');
+    const nextBtn = document.getElementById('nextPage');
+    if (currentPage === 1) {
+        prevBtn.classList.add('disabled');
+    } else {
+        prevBtn.classList.remove('disabled');
+    }
+    if (currentPage === totalPages) {
+        nextBtn.classList.add('disabled');
+    } else {
+        nextBtn.classList.remove('disabled');
+    }
+    document.querySelectorAll('.page-num').forEach((btn) => {
+        const page = parseInt(btn.getAttribute('data-page'));
+        if (page === currentPage) {
+            btn.style.backgroundColor = 'var(--primary-blue) !important';
+            btn.style.borderColor = 'var(--primary-blue) !important';
+            btn.style.color = '#ffffff !important';
+            btn.parentElement.classList.add('active');
+        } else {
+            btn.style.backgroundColor = '#243447 !important';
+            btn.style.borderColor = '#3d4f63 !important';
+            btn.style.color = '#b8c5d6 !important';
+            btn.parentElement.classList.remove('active');
+        }
+    });
+}
+
+function updateShowingText() {
+    const showingText = document.querySelector('.showing-text');
+    if (!showingText) return;
+    const totalGraduates = allGraduateCards.length;
+    if (totalGraduates === 0) {
+        showingText.textContent = 'Showing 0 to 0 of 0 graduates';
+    } else {
+        const startIndex = (currentPage - 1) * cardsPerPage + 1;
+        const endIndex = Math.min(currentPage * cardsPerPage, totalGraduates);
+        showingText.textContent = `Showing ${startIndex} to ${endIndex} of ${totalGraduates} graduates`;
+    }
+}

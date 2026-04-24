@@ -12,13 +12,11 @@ async function migrateNotificationsToDatabase() {
         // Get notifications from localStorage
         const stored = localStorage.getItem('admin_notifications');
         if (!stored) {
-            console.log('No notifications to migrate');
             return { success: true, message: 'No notifications to migrate', migrated: 0 };
         }
 
         const notifications = JSON.parse(stored);
         if (notifications.length === 0) {
-            console.log('No notifications to migrate');
             return { success: true, message: 'No notifications to migrate', migrated: 0 };
         }
 
@@ -29,7 +27,6 @@ async function migrateNotificationsToDatabase() {
         for (const notification of notifications) {
             // Skip if it already has a MongoDB ObjectId format
             if (/^[a-f\d]{24}$/i.test(notification.id)) {
-                console.log(`Skipping notification ${notification.id} - already migrated`);
                 continue;
             }
 
@@ -57,7 +54,6 @@ async function migrateNotificationsToDatabase() {
                         // Update the notification ID with the MongoDB ID
                         notification.id = result.data.id;
                         migratedCount++;
-                        console.log(`Migrated notification: ${notification.title}`);
                     } else {
                         failedCount++;
                         console.error(`Failed to migrate notification: ${notification.title}`, result);
@@ -76,7 +72,6 @@ async function migrateNotificationsToDatabase() {
         localStorage.setItem('admin_notifications', JSON.stringify(notifications));
 
         const message = `Migration complete: ${migratedCount} migrated, ${failedCount} failed`;
-        console.log(message);
 
         return {
             success: true,
@@ -100,12 +95,10 @@ document.addEventListener('DOMContentLoaded', function () {
     const migrationRun = localStorage.getItem('notifications_migration_run');
 
     if (!migrationRun) {
-        console.log('Running notification migration...');
         migrateNotificationsToDatabase().then(result => {
             if (result.success) {
                 // Mark migration as complete
                 localStorage.setItem('notifications_migration_run', 'true');
-                console.log('Migration completed successfully');
             }
         });
     }

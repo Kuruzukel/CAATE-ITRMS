@@ -643,6 +643,11 @@ class NotificationManager {
 let notificationManager;
 
 document.addEventListener('DOMContentLoaded', function () {
+    // Prevent double initialization
+    if (window.notificationManager) {
+        return;
+    }
+
     notificationManager = new NotificationManager();
 
     // Make it globally accessible

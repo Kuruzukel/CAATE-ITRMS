@@ -14,6 +14,7 @@ require_once __DIR__ . '/../app/controllers/RegistrationController.php';
 require_once __DIR__ . '/../app/controllers/ApplicationController.php';
 require_once __DIR__ . '/../app/controllers/AdmissionController.php';
 require_once __DIR__ . '/../app/controllers/GraduateController.php';
+require_once __DIR__ . '/../app/controllers/NotificationController.php';
 
 function handleRequest($uri, $method) {
     $uri = preg_replace('#^/CAATE-ITRMS/backend/public#', '', $uri);
@@ -96,6 +97,13 @@ function handleRequest($uri, $method) {
         'POST:/api/v1/graduates/{id}' => ['GraduateController', 'update'],
         'PUT:/api/v1/graduates/{id}' => ['GraduateController', 'update'],
         'DELETE:/api/v1/graduates/{id}' => ['GraduateController', 'destroy'],
+        'GET:/api/v1/notifications' => ['NotificationController', 'index'],
+        'GET:/api/v1/notifications/new' => ['NotificationController', 'getNew'],
+        'POST:/api/v1/notifications' => ['NotificationController', 'store'],
+        'PUT:/api/v1/notifications/{id}/read' => ['NotificationController', 'markAsRead'],
+        'PUT:/api/v1/notifications/mark-all-read' => ['NotificationController', 'markAllAsRead'],
+        'DELETE:/api/v1/notifications/{id}' => ['NotificationController', 'destroy'],
+        'DELETE:/api/v1/notifications/clear-all' => ['NotificationController', 'clearAll'],
     ];
     
     foreach ($routes as $route => $handler) {

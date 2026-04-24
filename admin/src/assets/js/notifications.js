@@ -4,7 +4,7 @@ var API_BASE_URL_NOTIFICATIONS = window.location.origin.includes('localhost')
     : '/CAATE-ITRMS/backend/public';
 
 // Feature flag: Set to true when backend API is implemented
-const USE_NOTIFICATIONS_API = false;
+const USE_NOTIFICATIONS_API = true;
 
 class NotificationManager {
     constructor() {
@@ -101,14 +101,11 @@ class NotificationManager {
 
             // If API is enabled and available, fetch from backend
             if (USE_NOTIFICATIONS_API) {
-                const token = localStorage.getItem('authToken');
-
-                if (token && this.userId) {
+                if (this.userId) {
                     try {
                         const response = await fetch(`${API_BASE_URL_NOTIFICATIONS}/api/v1/notifications?userId=${this.userId}`, {
                             method: 'GET',
                             headers: {
-                                'Authorization': `Bearer ${token}`,
                                 'Content-Type': 'application/json'
                             }
                         });
@@ -291,11 +288,9 @@ class NotificationManager {
         // Save to database if API is enabled
         if (USE_NOTIFICATIONS_API) {
             try {
-                const token = localStorage.getItem('authToken');
                 const response = await fetch(`${API_BASE_URL_NOTIFICATIONS}/api/v1/notifications`, {
                     method: 'POST',
                     headers: {
-                        'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify(newNotification)
@@ -304,7 +299,7 @@ class NotificationManager {
                 if (response.ok) {
                     const result = await response.json();
                     if (result.success && result.data) {
-                        newNotification.id = result.data._id || result.data.id;
+                        newNotification.id = result.data.id;
                     }
                 }
             } catch (error) {
@@ -333,14 +328,12 @@ class NotificationManager {
             notification.read = true;
             this.unreadCount = Math.max(0, this.unreadCount - 1);
 
-            // Update in database if API is enabled
-            if (USE_NOTIFICATIONS_API) {
+            // Update in database if API is enabled and ID is a valid MongoDB ObjectId
+            if (USE_NOTIFICATIONS_API && this.isValidMongoId(notificationId)) {
                 try {
-                    const token = localStorage.getItem('authToken');
                     await fetch(`${API_BASE_URL_NOTIFICATIONS}/api/v1/notifications/${notificationId}/read`, {
                         method: 'PUT',
                         headers: {
-                            'Authorization': `Bearer ${token}`,
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify({ read: true })
@@ -356,6 +349,11 @@ class NotificationManager {
         }
     }
 
+    isValidMongoId(id) {
+        // Check if ID is a valid MongoDB ObjectId (24 hex characters)
+        return /^[a-f\d]{24}$/i.test(id);
+    }
+
     async markAllAsRead() {
         this.notifications.forEach(n => n.read = true);
         this.unreadCount = 0;
@@ -363,11 +361,9 @@ class NotificationManager {
         // Update all in database if API is enabled
         if (USE_NOTIFICATIONS_API) {
             try {
-                const token = localStorage.getItem('authToken');
                 await fetch(`${API_BASE_URL_NOTIFICATIONS}/api/v1/notifications/mark-all-read`, {
                     method: 'PUT',
                     headers: {
-                        'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({ userId: this.userId })
@@ -390,11 +386,9 @@ class NotificationManager {
                 // Delete all from database if API is enabled
                 if (USE_NOTIFICATIONS_API) {
                     try {
-                        const token = localStorage.getItem('authToken');
                         await fetch(`${API_BASE_URL_NOTIFICATIONS}/api/v1/notifications/clear-all`, {
                             method: 'DELETE',
                             headers: {
-                                'Authorization': `Bearer ${token}`,
                                 'Content-Type': 'application/json'
                             },
                             body: JSON.stringify({ userId: this.userId })
@@ -525,9 +519,7 @@ class NotificationManager {
         if (!USE_NOTIFICATIONS_API) return;
 
         try {
-            const token = localStorage.getItem('authToken');
-
-            if (!token || !this.userId) {
+            if (!this.userId) {
                 return;
             }
 
@@ -540,7 +532,6 @@ class NotificationManager {
             const response = await fetch(`${API_BASE_URL_NOTIFICATIONS}/api/v1/notifications/new?userId=${this.userId}&since=${lastTimestamp}`, {
                 method: 'GET',
                 headers: {
-                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 }
             });

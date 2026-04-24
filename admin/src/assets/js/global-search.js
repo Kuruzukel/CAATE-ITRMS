@@ -1,28 +1,17 @@
-/**
- * Global Search Functionality
- * Searches across trainees in applications, registrations, admissions, and accounts collections
- */
-
 (function () {
     'use strict';
 
-    // Configuration
     const API_BASE_URL = config.api.baseUrl + '/api/v1';
-    const SEARCH_DEBOUNCE_DELAY = 300; // milliseconds
+    const SEARCH_DEBOUNCE_DELAY = 300;
 
-    // DOM Elements
     let searchInput;
     let suggestionsDropdown;
     let debounceTimer;
 
-    // Initialize when DOM is ready
     document.addEventListener('DOMContentLoaded', function () {
         initializeGlobalSearch();
     });
 
-    /**
-     * Initialize the global search functionality
-     */
     function initializeGlobalSearch() {
         searchInput = document.getElementById('globalSearchInput');
         suggestionsDropdown = document.getElementById('searchSuggestionsDropdown');
@@ -32,30 +21,23 @@
             return;
         }
 
-        // Add event listeners
         searchInput.addEventListener('input', handleSearchInput);
         searchInput.addEventListener('focus', handleSearchFocus);
 
-        // Close dropdown when clicking outside
         document.addEventListener('click', function (e) {
             if (!searchInput.contains(e.target) && !suggestionsDropdown.contains(e.target)) {
                 hideSuggestions();
             }
         });
 
-        // Prevent dropdown from closing when clicking inside it
         suggestionsDropdown.addEventListener('click', function (e) {
             e.stopPropagation();
         });
     }
 
-    /**
-     * Handle search input with debouncing
-     */
     function handleSearchInput(e) {
         const query = e.target.value.trim();
 
-        // Clear previous timer
         clearTimeout(debounceTimer);
 
         if (query.length === 0) {
@@ -68,18 +50,13 @@
             return;
         }
 
-        // Show loading state
         showLoading();
 
-        // Debounce the search
         debounceTimer = setTimeout(() => {
             performSearch(query);
         }, SEARCH_DEBOUNCE_DELAY);
     }
 
-    /**
-     * Handle search input focus
-     */
     function handleSearchFocus(e) {
         const query = e.target.value.trim();
         if (query.length >= 2) {
@@ -87,14 +64,10 @@
         }
     }
 
-    /**
-     * Perform the actual search across all collections
-     */
     async function performSearch(query) {
         try {
             showLoading();
 
-            // Search across all collections in parallel
             const [trainees, applications, registrations, admissions] = await Promise.all([
                 searchCollection('trainees', query),
                 searchCollection('applications', query),
@@ -102,9 +75,8 @@
                 searchCollection('admissions', query)
             ]);
 
-            // Combine and process results
             const results = processSearchResults({
-                accounts: trainees,  // Map trainees to accounts for display
+                accounts: trainees,
                 applications,
                 registrations,
                 admissions
@@ -118,9 +90,6 @@
         }
     }
 
-    /**
-     * Search a specific collection
-     */
     async function searchCollection(collectionName, query) {
         try {
             const token = localStorage.getItem('token');
@@ -146,7 +115,6 @@
 
             const data = await response.json();
 
-            // Handle different response structures
             let items = [];
             if (data.success && data.data) {
                 items = data.data;
@@ -156,7 +124,6 @@
                 items = data[collectionName];
             }
 
-            // Filter results based on name match
             return items.filter(item => {
                 const fullName = getFullName(item);
                 return fullName.toLowerCase().includes(query.toLowerCase());
@@ -168,16 +135,11 @@
         }
     }
 
-    /**
-     * Get full name from item (handles different field structures)
-     */
     function getFullName(item) {
-        // Try different name field combinations
         if (item.fullName) return item.fullName;
         if (item.full_name) return item.full_name;
         if (item.name) return item.name;
 
-        // Construct from first, middle, last names
         const firstName = item.firstName || item.first_name || '';
         const middleName = item.middleName || item.middle_name || '';
         const lastName = item.lastName || item.last_name || '';
@@ -185,13 +147,9 @@
         return `${firstName} ${middleName} ${lastName}`.trim();
     }
 
-    /**
-     * Process search results and group by trainee
-     */
     function processSearchResults(collections, query) {
         const traineeMap = new Map();
 
-        // Process each collection
         Object.entries(collections).forEach(([collectionName, items]) => {
             items.forEach(item => {
                 const fullName = getFullName(item);
@@ -211,20 +169,14 @@
             });
         });
 
-        // Convert map to array and sort by relevance
         return Array.from(traineeMap.values()).sort((a, b) => {
-            // Sort by number of collections (more matches = more relevant)
             if (a.collections.size !== b.collections.size) {
                 return b.collections.size - a.collections.size;
             }
-            // Then alphabetically
             return a.name.localeCompare(b.name);
         });
     }
 
-    /**
-     * Display search results
-     */
     function displayResults(results) {
         if (results.length === 0) {
             showNoResults();
@@ -245,13 +197,9 @@
         showSuggestions();
     }
 
-    /**
-     * Create HTML for a single result item
-     */
     function createResultItem(result) {
         const actions = [];
 
-        // Add action buttons ONLY for collections where the trainee has records
         if (result.collections.has('accounts')) {
             actions.push({
                 label: 'View Account',
@@ -305,9 +253,6 @@
     `;
     }
 
-    /**
-     * Highlight matching text in the result
-     */
     function highlightMatch(text, query) {
         if (!query) return text;
 
@@ -315,16 +260,10 @@
         return text.replace(regex, '<span class="search-highlight">$1</span>');
     }
 
-    /**
-     * Escape special regex characters
-     */
     function escapeRegex(string) {
         return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     }
 
-    /**
-     * Show loading state
-     */
     function showLoading() {
         suggestionsDropdown.innerHTML = `
       <div class="search-loading">
@@ -337,9 +276,6 @@
         showSuggestions();
     }
 
-    /**
-     * Show no results message
-     */
     function showNoResults() {
         suggestionsDropdown.innerHTML = `
       <div class="search-no-results">
@@ -350,9 +286,6 @@
         showSuggestions();
     }
 
-    /**
-     * Show custom message
-     */
     function showMessage(message) {
         suggestionsDropdown.innerHTML = `
       <div class="search-no-results">
@@ -362,16 +295,10 @@
         showSuggestions();
     }
 
-    /**
-     * Show suggestions dropdown
-     */
     function showSuggestions() {
         suggestionsDropdown.classList.add('show');
     }
 
-    /**
-     * Hide suggestions dropdown
-     */
     function hideSuggestions() {
         suggestionsDropdown.classList.remove('show');
     }

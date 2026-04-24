@@ -45,6 +45,7 @@
   <link rel="stylesheet" href="../assets/css/admin-dashboard.css" />
   <link rel="stylesheet" href="../assets/css/admin-dashboard-scrollbar.css" />
   <link rel="stylesheet" href="../assets/css/global-search.css" />
+  <link rel="stylesheet" href="../assets/css/dashboard-layout-fix.css" />
 
 
   <link rel="stylesheet" href="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
@@ -383,7 +384,8 @@
                 <div class="card">
                   <div class="row row-bordered g-0">
                     <div class="col-md-8">
-                      <h5 class="card-header m-0 me-2 pb-3">Monthly Trainee Enrollment <span id="chartYearTitle"></span>
+                      <h5 class="card-header m-0 me-2 pb-3">Monthly Trainee Enrollment (<span
+                          id="chartYearTitle">2026</span>)
                       </h5>
                       <div id="totalRevenueChart" class="px-2"></div>
                     </div>
@@ -403,7 +405,8 @@
                         </div>
                       </div>
                       <div id="growthChart"></div>
-                      <div class="text-center fw-semibold pt-3 mb-2">0% Enrollment Growth</div>
+                      <div class="text-center fw-semibold pt-3 mb-2"><span id="growthPercentageText">0</span>%
+                        Enrollment Growth</div>
 
                       <div class="d-flex px-xxl-4 px-lg-2 p-4 gap-xxl-3 gap-lg-1 gap-3 justify-content-between">
                         <div class="d-flex">
@@ -412,7 +415,7 @@
                                 class="bx bx-calendar-check text-primary"></i></span>
                           </div>
                           <div class="d-flex flex-column">
-                            <small id="currentYearLabel"></small>
+                            <small id="currentYearLabel">2026</small>
                             <h6 class="mb-0" id="currentYearCount">0</h6>
                           </div>
                         </div>
@@ -421,7 +424,7 @@
                             <span class="badge bg-label-info p-2"><i class="bx bx-calendar-event text-info"></i></span>
                           </div>
                           <div class="d-flex flex-column">
-                            <small id="previousYearLabel"></small>
+                            <small id="previousYearLabel">2025</small>
                             <h6 class="mb-0" id="previousYearCount">0</h6>
                           </div>
                         </div>

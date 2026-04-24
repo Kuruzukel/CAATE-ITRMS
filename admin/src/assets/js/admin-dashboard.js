@@ -7,6 +7,8 @@ let selectedYear = new Date().getFullYear();
 let pendingGrowthData = null;
 
 function updateYearLabels(year) {
+    // Update the global selectedYear variable
+    selectedYear = year;
 
     const chartTitle = document.querySelector('#chartYearTitle');
     if (chartTitle) {
@@ -24,16 +26,18 @@ function updateYearLabels(year) {
         previousYearLabel.textContent = year - 1;
     }
 
+    // Update chart series names only, don't reset data to zeros
     if (window.totalRevenueChartInstance) {
+        const currentSeries = window.totalRevenueChartInstance.w.config.series;
         window.totalRevenueChartInstance.updateOptions({
             series: [
                 {
                     name: year.toString(),
-                    data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                    data: currentSeries[0]?.data || [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
                 },
                 {
                     name: (year - 1).toString(),
-                    data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                    data: currentSeries[1]?.data || [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
                 }
             ]
         });
@@ -55,7 +59,7 @@ async function fetchDashboardStatistics(year = selectedYear) {
             updateDashboardUI(result.data);
         }
     } catch (error) {
-
+        // Silent error handling
     }
 }
 
@@ -64,7 +68,7 @@ function showErrorMessage(message) {
 }
 
 function updateDashboardUI(data) {
-
+    // Always show total trainees regardless of year filter
     const totalTraineesElement = document.querySelector('.col-sm-5 h2.mb-2');
     if (totalTraineesElement) {
         totalTraineesElement.textContent = data.total.toLocaleString();
@@ -107,6 +111,7 @@ function updateDashboardUI(data) {
         }
     }
 
+    // Show total approved enrollments, not filtered by year
     const approvedCard = document.querySelector('.avatar .bx-check-circle');
     if (approvedCard) {
         const approvedCountElement = approvedCard.closest('.card-body').querySelector('h3.card-title');
@@ -180,9 +185,9 @@ function updateDashboardUI(data) {
         activityTrendPercentage.innerHTML = `<i class="bx ${icon}"></i> ${Math.abs(data.monthPercentageIncrease)}%`;
     }
 
-    const growthTextElement = document.querySelector('.text-center.fw-semibold.pt-3.mb-2');
-    if (growthTextElement && data.yearGrowthPercentage !== undefined) {
-        growthTextElement.textContent = `${data.yearGrowthPercentage}% Enrollment Growth`;
+    const growthPercentageElement = document.getElementById('growthPercentageText');
+    if (growthPercentageElement && data.yearGrowthPercentage !== undefined) {
+        growthPercentageElement.textContent = data.yearGrowthPercentage;
     }
 
     const updateGrowthChart = () => {
@@ -202,7 +207,9 @@ function updateDashboardUI(data) {
     const previousYearCount = document.getElementById('previousYearCount');
 
     if (currentYearCount) {
-        currentYearCount.textContent = data.currentYearEnrollments || 0;
+        // If current year has no data, show total enrollments instead
+        const displayCount = data.currentYearEnrollments > 0 ? data.currentYearEnrollments : data.totalEnrollment;
+        currentYearCount.textContent = displayCount || 0;
     }
 
     if (previousYearCount) {
@@ -210,8 +217,8 @@ function updateDashboardUI(data) {
     }
 
     if (window.totalRevenueChartInstance && data.monthly_enrollments) {
-
-        const previousYearData = Array(12).fill(0);
+        // Use previous year data if available, otherwise use zeros
+        const previousYearData = data.previous_year_monthly_enrollments || Array(12).fill(0);
 
         window.totalRevenueChartInstance.updateOptions({
             series: [
@@ -318,20 +325,25 @@ function populateYearDropdown(years) {
 
         item.addEventListener('click', function (e) {
             e.preventDefault();
-            const selectedYear = parseInt(this.getAttribute('data-year'));
+            const clickedYear = parseInt(this.getAttribute('data-year'));
 
-            if (!isNaN(selectedYear)) {
-                window.selectedYear = selectedYear;
+            if (!isNaN(clickedYear)) {
+                // Update global selectedYear variable
+                selectedYear = clickedYear;
 
                 if (yearTextElement) {
-                    yearTextElement.textContent = selectedYear;
+                    yearTextElement.textContent = clickedYear;
                 }
 
-                updateYearLabels(selectedYear);
-                fetchDashboardStatistics(selectedYear);
-
+                // Update active state in dropdown
                 yearMenu.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('active'));
                 this.classList.add('active');
+
+                // Update labels first
+                updateYearLabels(clickedYear);
+
+                // Then fetch new data for the selected year
+                fetchDashboardStatistics(clickedYear);
             }
         });
 
@@ -398,7 +410,7 @@ async function fetchCourseEnrollmentStatistics() {
             updateCourseEnrollmentUI(result.data);
         }
     } catch (error) {
-        console.error('Error fetching course enrollment statistics:', error);
+        // Silent error handling
     }
 }
 
@@ -529,8 +541,7 @@ async function fetchRecentEnrollmentActivity() {
 
         updateRecentEnrollmentActivityUI(activities);
     } catch (error) {
-        console.error('Error fetching recent enrollment activity:', error);
-
+        // Silent error handling
         const activityList = document.getElementById('recentEnrollmentActivityList');
         if (activityList) {
             activityList.innerHTML = `

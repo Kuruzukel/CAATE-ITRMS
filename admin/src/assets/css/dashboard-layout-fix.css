@@ -1,0 +1,58 @@
+/* Dashboard Layout Fix - Ensure proper navbar display */
+
+/* Prevent navbar from appearing as mobile menu on desktop */
+@media (min-width: 1200px) {
+    .layout-navbar {
+        position: sticky !important;
+        top: 0;
+        z-index: 1000;
+    }
+
+    .layout-menu-toggle {
+        display: flex !important;
+    }
+
+    #globalSearchInput {
+        min-width: 300px;
+    }
+}
+
+/* Ensure sidebar doesn't overlap content */
+.layout-page {
+    width: 100%;
+    min-height: 100vh;
+}
+
+/* Fix navbar positioning */
+.layout-navbar {
+    background: var(--bs-navbar-bg, #1a2942) !important;
+    padding: 0.75rem 1.5rem;
+}
+
+/* Ensure search bar stays in navbar */
+.navbar-nav-right {
+    width: 100%;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+}
+
+/* Fix for search input */
+#globalSearchInput {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(54, 145, 191, 0.3) !important;
+    border-radius: 8px;
+    padding: 0.5rem 0.75rem 0.5rem 40px !important;
+}
+
+#globalSearchInput::placeholder {
+    color: rgba(255, 255, 255, 0.6) !important;
+}
+
+#globalSearchInput:focus {
+    background-color: rgba(255, 255, 255, 0.15) !important;
+    border-color: rgba(54, 145, 191, 0.6) !important;
+    box-shadow: 0 0 0 0.2rem rgba(54, 145, 191, 0.25) !important;
+    outline: none;
+}

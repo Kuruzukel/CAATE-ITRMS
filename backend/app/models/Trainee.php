@@ -196,10 +196,18 @@ class Trainee {
             $todayEnd = new MongoDB\BSON\UTCDateTime(strtotime('tomorrow') * 1000);
             
             $todayRegistrations = $registrationCollection->countDocuments([
-                'created_at' => ['$gte' => $todayStart, '$lt' => $todayEnd]
+                '$or' => [
+                    ['created_at' => ['$gte' => $todayStart, '$lt' => $todayEnd]],
+                    ['createdAt' => ['$gte' => $todayStart, '$lt' => $todayEnd]],
+                    ['submittedAt' => ['$gte' => $todayStart, '$lt' => $todayEnd]]
+                ]
             ]);
             $todayApplications = $applicationCollection->countDocuments([
-                'created_at' => ['$gte' => $todayStart, '$lt' => $todayEnd]
+                '$or' => [
+                    ['created_at' => ['$gte' => $todayStart, '$lt' => $todayEnd]],
+                    ['createdAt' => ['$gte' => $todayStart, '$lt' => $todayEnd]],
+                    ['submittedAt' => ['$gte' => $todayStart, '$lt' => $todayEnd]]
+                ]
             ]);
             $todayEnrollments = $todayRegistrations + $todayApplications;
             
@@ -207,10 +215,18 @@ class Trainee {
             $yesterdayEnd = new MongoDB\BSON\UTCDateTime(strtotime('today') * 1000);
             
             $yesterdayRegistrations = $registrationCollection->countDocuments([
-                'created_at' => ['$gte' => $yesterdayStart, '$lt' => $yesterdayEnd]
+                '$or' => [
+                    ['created_at' => ['$gte' => $yesterdayStart, '$lt' => $yesterdayEnd]],
+                    ['createdAt' => ['$gte' => $yesterdayStart, '$lt' => $yesterdayEnd]],
+                    ['submittedAt' => ['$gte' => $yesterdayStart, '$lt' => $yesterdayEnd]]
+                ]
             ]);
             $yesterdayApplications = $applicationCollection->countDocuments([
-                'created_at' => ['$gte' => $yesterdayStart, '$lt' => $yesterdayEnd]
+                '$or' => [
+                    ['created_at' => ['$gte' => $yesterdayStart, '$lt' => $yesterdayEnd]],
+                    ['createdAt' => ['$gte' => $yesterdayStart, '$lt' => $yesterdayEnd]],
+                    ['submittedAt' => ['$gte' => $yesterdayStart, '$lt' => $yesterdayEnd]]
+                ]
             ]);
             $yesterdayEnrollments = $yesterdayRegistrations + $yesterdayApplications;
             
@@ -245,10 +261,18 @@ class Trainee {
             $monthEnd = new MongoDB\BSON\UTCDateTime(strtotime('first day of next month') * 1000);
             
             $monthRegistrations = $registrationCollection->countDocuments([
-                'created_at' => ['$gte' => $monthStart, '$lt' => $monthEnd]
+                '$or' => [
+                    ['created_at' => ['$gte' => $monthStart, '$lt' => $monthEnd]],
+                    ['createdAt' => ['$gte' => $monthStart, '$lt' => $monthEnd]],
+                    ['submittedAt' => ['$gte' => $monthStart, '$lt' => $monthEnd]]
+                ]
             ]);
             $monthApplications = $applicationCollection->countDocuments([
-                'created_at' => ['$gte' => $monthStart, '$lt' => $monthEnd]
+                '$or' => [
+                    ['created_at' => ['$gte' => $monthStart, '$lt' => $monthEnd]],
+                    ['createdAt' => ['$gte' => $monthStart, '$lt' => $monthEnd]],
+                    ['submittedAt' => ['$gte' => $monthStart, '$lt' => $monthEnd]]
+                ]
             ]);
             $monthEnrollments = $monthRegistrations + $monthApplications;
             
@@ -256,10 +280,18 @@ class Trainee {
             $lastMonthEnd = new MongoDB\BSON\UTCDateTime(strtotime('first day of this month') * 1000);
             
             $lastMonthRegistrations = $registrationCollection->countDocuments([
-                'created_at' => ['$gte' => $lastMonthStart, '$lt' => $lastMonthEnd]
+                '$or' => [
+                    ['created_at' => ['$gte' => $lastMonthStart, '$lt' => $lastMonthEnd]],
+                    ['createdAt' => ['$gte' => $lastMonthStart, '$lt' => $lastMonthEnd]],
+                    ['submittedAt' => ['$gte' => $lastMonthStart, '$lt' => $lastMonthEnd]]
+                ]
             ]);
             $lastMonthApplications = $applicationCollection->countDocuments([
-                'created_at' => ['$gte' => $lastMonthStart, '$lt' => $lastMonthEnd]
+                '$or' => [
+                    ['created_at' => ['$gte' => $lastMonthStart, '$lt' => $lastMonthEnd]],
+                    ['createdAt' => ['$gte' => $lastMonthStart, '$lt' => $lastMonthEnd]],
+                    ['submittedAt' => ['$gte' => $lastMonthStart, '$lt' => $lastMonthEnd]]
+                ]
             ]);
             $lastMonthEnrollments = $lastMonthRegistrations + $lastMonthApplications;
             
@@ -272,11 +304,19 @@ class Trainee {
             
             $lastMonthPendingRegs = $registrationCollection->countDocuments([
                 'status' => 'pending',
-                'created_at' => ['$gte' => $lastMonthStart, '$lt' => $lastMonthEnd]
+                '$or' => [
+                    ['created_at' => ['$gte' => $lastMonthStart, '$lt' => $lastMonthEnd]],
+                    ['createdAt' => ['$gte' => $lastMonthStart, '$lt' => $lastMonthEnd]],
+                    ['submittedAt' => ['$gte' => $lastMonthStart, '$lt' => $lastMonthEnd]]
+                ]
             ]);
             $lastMonthPendingApps = $applicationCollection->countDocuments([
                 'status' => 'pending',
-                'created_at' => ['$gte' => $lastMonthStart, '$lt' => $lastMonthEnd]
+                '$or' => [
+                    ['created_at' => ['$gte' => $lastMonthStart, '$lt' => $lastMonthEnd]],
+                    ['createdAt' => ['$gte' => $lastMonthStart, '$lt' => $lastMonthEnd]],
+                    ['submittedAt' => ['$gte' => $lastMonthStart, '$lt' => $lastMonthEnd]]
+                ]
             ]);
             $lastMonthPending = $lastMonthPendingRegs + $lastMonthPendingApps;
             
@@ -289,11 +329,19 @@ class Trainee {
             
             $lastMonthCancelledRegs = $registrationCollection->countDocuments([
                 'status' => ['$in' => ['cancelled', 'rejected']],
-                'created_at' => ['$gte' => $lastMonthStart, '$lt' => $lastMonthEnd]
+                '$or' => [
+                    ['created_at' => ['$gte' => $lastMonthStart, '$lt' => $lastMonthEnd]],
+                    ['createdAt' => ['$gte' => $lastMonthStart, '$lt' => $lastMonthEnd]],
+                    ['submittedAt' => ['$gte' => $lastMonthStart, '$lt' => $lastMonthEnd]]
+                ]
             ]);
             $lastMonthCancelledApps = $applicationCollection->countDocuments([
                 'status' => ['$in' => ['cancelled', 'rejected']],
-                'created_at' => ['$gte' => $lastMonthStart, '$lt' => $lastMonthEnd]
+                '$or' => [
+                    ['created_at' => ['$gte' => $lastMonthStart, '$lt' => $lastMonthEnd]],
+                    ['createdAt' => ['$gte' => $lastMonthStart, '$lt' => $lastMonthEnd]],
+                    ['submittedAt' => ['$gte' => $lastMonthStart, '$lt' => $lastMonthEnd]]
+                ]
             ]);
             $lastMonthCancelled = $lastMonthCancelledRegs + $lastMonthCancelledApps;
             
@@ -308,10 +356,18 @@ class Trainee {
             $yearEnd = new MongoDB\BSON\UTCDateTime(strtotime(($year + 1) . "-01-01") * 1000);
             
             $currentYearRegistrations = $registrationCollection->countDocuments([
-                'created_at' => ['$gte' => $yearStart, '$lt' => $yearEnd]
+                '$or' => [
+                    ['created_at' => ['$gte' => $yearStart, '$lt' => $yearEnd]],
+                    ['createdAt' => ['$gte' => $yearStart, '$lt' => $yearEnd]],
+                    ['submittedAt' => ['$gte' => $yearStart, '$lt' => $yearEnd]]
+                ]
             ]);
             $currentYearApplications = $applicationCollection->countDocuments([
-                'created_at' => ['$gte' => $yearStart, '$lt' => $yearEnd]
+                '$or' => [
+                    ['created_at' => ['$gte' => $yearStart, '$lt' => $yearEnd]],
+                    ['createdAt' => ['$gte' => $yearStart, '$lt' => $yearEnd]],
+                    ['submittedAt' => ['$gte' => $yearStart, '$lt' => $yearEnd]]
+                ]
             ]);
             $currentYearEnrollments = $currentYearRegistrations + $currentYearApplications;
             
@@ -319,10 +375,18 @@ class Trainee {
             $prevYearEnd = new MongoDB\BSON\UTCDateTime(strtotime("$year-01-01") * 1000);
             
             $prevYearRegistrations = $registrationCollection->countDocuments([
-                'created_at' => ['$gte' => $prevYearStart, '$lt' => $prevYearEnd]
+                '$or' => [
+                    ['created_at' => ['$gte' => $prevYearStart, '$lt' => $prevYearEnd]],
+                    ['createdAt' => ['$gte' => $prevYearStart, '$lt' => $prevYearEnd]],
+                    ['submittedAt' => ['$gte' => $prevYearStart, '$lt' => $prevYearEnd]]
+                ]
             ]);
             $prevYearApplications = $applicationCollection->countDocuments([
-                'created_at' => ['$gte' => $prevYearStart, '$lt' => $prevYearEnd]
+                '$or' => [
+                    ['created_at' => ['$gte' => $prevYearStart, '$lt' => $prevYearEnd]],
+                    ['createdAt' => ['$gte' => $prevYearStart, '$lt' => $prevYearEnd]],
+                    ['submittedAt' => ['$gte' => $prevYearStart, '$lt' => $prevYearEnd]]
+                ]
             ]);
             $previousYearEnrollments = $prevYearRegistrations + $prevYearApplications;
             
@@ -341,10 +405,18 @@ class Trainee {
                 $monthEndDate = new MongoDB\BSON\UTCDateTime(strtotime("$nextYear-$nextMonth-01") * 1000);
                 
                 $monthRegs = $registrationCollection->countDocuments([
-                    'created_at' => ['$gte' => $monthStartDate, '$lt' => $monthEndDate]
+                    '$or' => [
+                        ['created_at' => ['$gte' => $monthStartDate, '$lt' => $monthEndDate]],
+                        ['createdAt' => ['$gte' => $monthStartDate, '$lt' => $monthEndDate]],
+                        ['submittedAt' => ['$gte' => $monthStartDate, '$lt' => $monthEndDate]]
+                    ]
                 ]);
                 $monthApps = $applicationCollection->countDocuments([
-                    'created_at' => ['$gte' => $monthStartDate, '$lt' => $monthEndDate]
+                    '$or' => [
+                        ['created_at' => ['$gte' => $monthStartDate, '$lt' => $monthEndDate]],
+                        ['createdAt' => ['$gte' => $monthStartDate, '$lt' => $monthEndDate]],
+                        ['submittedAt' => ['$gte' => $monthStartDate, '$lt' => $monthEndDate]]
+                    ]
                 ]);
                 
                 $monthlyEnrollments[$month - 1] = $monthRegs + $monthApps;
@@ -358,10 +430,18 @@ class Trainee {
                 $monthEndDate = new MongoDB\BSON\UTCDateTime(strtotime("$nextYear-$nextMonth-01") * 1000);
                 
                 $monthRegs = $registrationCollection->countDocuments([
-                    'created_at' => ['$gte' => $monthStartDate, '$lt' => $monthEndDate]
+                    '$or' => [
+                        ['created_at' => ['$gte' => $monthStartDate, '$lt' => $monthEndDate]],
+                        ['createdAt' => ['$gte' => $monthStartDate, '$lt' => $monthEndDate]],
+                        ['submittedAt' => ['$gte' => $monthStartDate, '$lt' => $monthEndDate]]
+                    ]
                 ]);
                 $monthApps = $applicationCollection->countDocuments([
-                    'created_at' => ['$gte' => $monthStartDate, '$lt' => $monthEndDate]
+                    '$or' => [
+                        ['created_at' => ['$gte' => $monthStartDate, '$lt' => $monthEndDate]],
+                        ['createdAt' => ['$gte' => $monthStartDate, '$lt' => $monthEndDate]],
+                        ['submittedAt' => ['$gte' => $monthStartDate, '$lt' => $monthEndDate]]
+                    ]
                 ]);
                 
                 $previousYearMonthlyEnrollments[$month - 1] = $monthRegs + $monthApps;

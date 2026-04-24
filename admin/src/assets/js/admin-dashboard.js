@@ -1,542 +1,597 @@
-var API_BASE_URL_DASHBOARD = window.location.origin.includes('localhost')
-    ? 'http://localhost/CAATE-ITRMS/backend/public'
-    : '/CAATE-ITRMS/backend/public';
+// Prevent double execution - wrap everything in IIFE with guard
+(function () {
+    'use strict';
 
-let selectedYear = new Date().getFullYear();
-
-let pendingGrowthData = null;
-
-function updateYearLabels(year) {
-    // Update the global selectedYear variable
-    selectedYear = year;
-
-    const chartTitle = document.querySelector('#chartYearTitle');
-    if (chartTitle) {
-        chartTitle.textContent = year;
+    // Check if already initialized
+    if (window.adminDashboardInitialized) {
+        return; // Exit early if already initialized
     }
 
-    const currentYearLabel = document.getElementById('currentYearLabel');
-    const previousYearLabel = document.getElementById('previousYearLabel');
+    // Mark as initialized immediately
+    window.adminDashboardInitialized = true;
 
-    if (currentYearLabel) {
-        currentYearLabel.textContent = year;
+    var API_BASE_URL_DASHBOARD = window.location.origin.includes('localhost')
+        ? 'http://localhost/CAATE-ITRMS/backend/public'
+        : '/CAATE-ITRMS/backend/public';
+
+    let selectedYear = new Date().getFullYear();
+
+    let pendingGrowthData = null;
+
+    function updateYearLabels(year) {
+        // Update the global selectedYear variable
+        selectedYear = year;
+
+        const chartTitle = document.querySelector('#chartYearTitle');
+        if (chartTitle) {
+            chartTitle.textContent = year;
+        }
+
+        const currentYearLabel = document.getElementById('currentYearLabel');
+        const previousYearLabel = document.getElementById('previousYearLabel');
+
+        if (currentYearLabel) {
+            currentYearLabel.textContent = year;
+        }
+
+        if (previousYearLabel) {
+            previousYearLabel.textContent = year - 1;
+        }
+
+        // Update chart series names only, don't reset data to zeros
+        if (window.totalRevenueChartInstance) {
+            const currentSeries = window.totalRevenueChartInstance.w.config.series;
+            window.totalRevenueChartInstance.updateOptions({
+                series: [
+                    {
+                        name: year.toString(),
+                        data: currentSeries[0]?.data || [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                    },
+                    {
+                        name: (year - 1).toString(),
+                        data: currentSeries[1]?.data || [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                    }
+                ]
+            });
+        }
     }
 
-    if (previousYearLabel) {
-        previousYearLabel.textContent = year - 1;
+    async function fetchDashboardStatistics(year = selectedYear) {
+        try {
+            const response = await fetch(`${API_BASE_URL_DASHBOARD}/api/v1/trainees/statistics?year=${year}`);
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const text = await response.text();
+            const result = JSON.parse(text);
+
+            if (result.success) {
+                // Fetch additional enrollment status data
+                await fetchEnrollmentStatusCounts(result.data);
+                updateDashboardUI(result.data);
+            }
+        } catch (error) {
+            // Silent error handling
+            console.error('Error fetching dashboard statistics:', error);
+        }
     }
 
-    // Update chart series names only, don't reset data to zeros
-    if (window.totalRevenueChartInstance) {
-        const currentSeries = window.totalRevenueChartInstance.w.config.series;
-        window.totalRevenueChartInstance.updateOptions({
-            series: [
-                {
-                    name: year.toString(),
-                    data: currentSeries[0]?.data || [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-                },
-                {
-                    name: (year - 1).toString(),
-                    data: currentSeries[1]?.data || [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    async function fetchEnrollmentStatusCounts(data) {
+        try {
+            const token = localStorage.getItem('authToken');
+
+            // Fetch registrations and applications to get real status counts
+            const [registrationsRes, applicationsRes] = await Promise.all([
+                fetch(`${API_BASE_URL_DASHBOARD}/api/v1/registrations`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                }),
+                fetch(`${API_BASE_URL_DASHBOARD}/api/v1/applications`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                })
+            ]);
+
+            let pendingCount = 0;
+            let cancelledCount = 0;
+            let approvedCount = 0;
+
+            // Count registrations by status
+            if (registrationsRes.ok) {
+                const regData = await registrationsRes.json();
+                const registrations = regData.success ? regData.data : (Array.isArray(regData) ? regData : []);
+
+                registrations.forEach(reg => {
+                    const status = (reg.status || '').toLowerCase().trim();
+                    if (status.includes('pending')) pendingCount++;
+                    else if (status.includes('cancelled') || status.includes('rejected')) cancelledCount++;
+                    else if (status.includes('approved')) approvedCount++;
+                });
+            } else {
+                console.error('Failed to fetch registrations:', registrationsRes.status);
+            }
+
+            // Count applications by status
+            if (applicationsRes.ok) {
+                const appData = await applicationsRes.json();
+                const applications = appData.success ? appData.data : (Array.isArray(appData) ? appData : []);
+
+                applications.forEach(app => {
+                    const status = (app.status || '').toLowerCase().trim();
+                    if (status.includes('pending')) pendingCount++;
+                    else if (status.includes('cancelled') || status.includes('rejected')) cancelledCount++;
+                    else if (status.includes('approved')) approvedCount++;
+                });
+            } else {
+                console.error('Failed to fetch applications:', applicationsRes.status);
+            }
+
+            // Update data object with real counts
+            data.pendingEnrollments = pendingCount;
+            data.cancelledEnrollments = cancelledCount;
+
+            // If API didn't provide approved count, use our calculated one
+            if (!data.approvedEnrollments) {
+                data.approvedEnrollments = approvedCount;
+            }
+
+            // Calculate percentage changes (mock data for now, should come from comparing with previous period)
+            data.pendingPercentageChange = data.pendingPercentageChange || 0;
+            data.cancelledPercentageChange = data.cancelledPercentageChange || 0;
+
+        } catch (error) {
+            console.error('Error fetching enrollment status counts:', error);
+        }
+    }
+
+    function showErrorMessage(message) {
+
+    }
+
+    function updateDashboardUI(data) {
+        // Always show total trainees regardless of year filter
+        const totalTraineesElement = document.querySelector('.col-sm-5 h2.mb-2');
+        if (totalTraineesElement) {
+            totalTraineesElement.textContent = data.total.toLocaleString();
+        }
+
+        const totalEnrollments = data.approvedEnrollments + data.pendingEnrollments + data.cancelledEnrollments;
+        const approvedPercentage = totalEnrollments > 0
+            ? Math.round((data.approvedEnrollments / totalEnrollments) * 100)
+            : 0;
+        const pendingPercentage = totalEnrollments > 0
+            ? Math.round((data.pendingEnrollments / totalEnrollments) * 100)
+            : 0;
+        const cancelledPercentage = totalEnrollments > 0
+            ? Math.round((data.cancelledEnrollments / totalEnrollments) * 100)
+            : 0;
+
+        updateWelcomeChart(approvedPercentage, pendingPercentage, cancelledPercentage);
+
+        const percentageTextElement = document.querySelector('.col-sm-7 .fw-bold');
+        if (percentageTextElement && data.todayPercentageIncrease !== undefined) {
+            percentageTextElement.textContent = Math.abs(data.todayPercentageIncrease) + '%';
+        }
+
+        const todayEnrollmentsCard = document.querySelector('.profit-card-gradient');
+        if (todayEnrollmentsCard) {
+            const todayCountElement = todayEnrollmentsCard.querySelector('h3.card-title');
+            const todayPercentageElement = todayEnrollmentsCard.querySelector('small.fw-semibold');
+
+            if (todayCountElement) {
+                todayCountElement.textContent = data.todayEnrollments || 0;
+            }
+
+            if (todayPercentageElement && data.todayPercentageIncrease !== undefined) {
+                const isPositive = data.todayPercentageIncrease >= 0;
+                const icon = isPositive ? 'bx-up-arrow-alt' : 'bx-down-arrow-alt';
+                const colorClass = isPositive ? 'text-success' : 'text-danger';
+
+                todayPercentageElement.className = `fw-semibold ${colorClass}`;
+                todayPercentageElement.innerHTML = `<i class="bx ${icon}"></i> ${isPositive ? '+' : ''}${data.todayPercentageIncrease}%`;
+            }
+        }
+
+        // Show total approved enrollments, not filtered by year
+        const approvedCard = document.querySelector('.avatar .bx-check-circle');
+        if (approvedCard) {
+            const approvedCountElement = approvedCard.closest('.card-body').querySelector('h3.card-title');
+            const approvedPercentageElement = approvedCard.closest('.card-body').querySelector('small.fw-semibold');
+
+            if (approvedCountElement) {
+                approvedCountElement.textContent = data.approvedEnrollments.toLocaleString();
+            }
+
+            if (approvedPercentageElement && data.monthPercentageIncrease !== undefined) {
+                const isPositive = data.monthPercentageIncrease >= 0;
+                const icon = isPositive ? 'bx-up-arrow-alt' : 'bx-down-arrow-alt';
+                const colorClass = isPositive ? 'text-success' : 'text-danger';
+
+                approvedPercentageElement.className = `fw-semibold ${colorClass}`;
+                approvedPercentageElement.innerHTML = `<i class="bx ${icon}"></i> ${isPositive ? '+' : ''}${data.monthPercentageIncrease}%`;
+            }
+        }
+
+        // Find pending enrollments card by searching for the text "Pending Enrollments"
+        const allSpans = document.querySelectorAll('span.d-block.mb-1');
+        let pendingCard = null;
+
+        for (const span of allSpans) {
+            if (span.textContent.trim() === 'Pending Enrollments') {
+                pendingCard = span.closest('.card');
+                break;
+            }
+        }
+
+        if (pendingCard) {
+            const cardBody = pendingCard.querySelector('.card-body');
+            if (cardBody) {
+                // Find the h3 that displays the count
+                const allH3 = cardBody.querySelectorAll('h3.card-title');
+                // The count h3 should be the one with just a number
+                let pendingCountElement = null;
+                for (const h3 of allH3) {
+                    if (h3.textContent.trim().match(/^\d+$/)) {
+                        pendingCountElement = h3;
+                        break;
+                    }
                 }
-            ]
-        });
-    }
-}
 
-async function fetchDashboardStatistics(year = selectedYear) {
-    try {
-        const response = await fetch(`${API_BASE_URL_DASHBOARD}/api/v1/trainees/statistics?year=${year}`);
+                const pendingPercentageElement = cardBody.querySelector('h3.card-title + small.fw-semibold');
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+                if (pendingCountElement) {
+                    pendingCountElement.textContent = data.pendingEnrollments || 0;
+                }
+
+                if (pendingPercentageElement && data.pendingPercentageChange !== undefined) {
+                    const isPositive = data.pendingPercentageChange >= 0;
+                    const icon = isPositive ? 'bx-up-arrow-alt' : 'bx-down-arrow-alt';
+                    const colorClass = isPositive ? 'text-danger' : 'text-success';
+
+                    pendingPercentageElement.className = `fw-semibold ${colorClass}`;
+                    pendingPercentageElement.innerHTML = `<i class="bx ${icon}"></i> ${isPositive ? '+' : ''}${data.pendingPercentageChange}%`;
+                }
+            }
         }
 
-        const text = await response.text();
-        const result = JSON.parse(text);
+        // Find cancelled enrollments card by searching for the text "Cancelled Enrollments"
+        const allSpansCancelled = document.querySelectorAll('span.fw-semibold.d-block.mb-1');
+        let cancelledCard = null;
 
-        if (result.success) {
-            // Fetch additional enrollment status data
-            await fetchEnrollmentStatusCounts(result.data);
-            updateDashboardUI(result.data);
-        }
-    } catch (error) {
-        // Silent error handling
-        console.error('Error fetching dashboard statistics:', error);
-    }
-}
-
-async function fetchEnrollmentStatusCounts(data) {
-    try {
-        const token = localStorage.getItem('authToken');
-
-        // Fetch registrations and applications to get real status counts
-        const [registrationsRes, applicationsRes] = await Promise.all([
-            fetch(`${API_BASE_URL_DASHBOARD}/api/v1/registrations`, {
-                headers: { 'Authorization': `Bearer ${token}` }
-            }),
-            fetch(`${API_BASE_URL_DASHBOARD}/api/v1/applications`, {
-                headers: { 'Authorization': `Bearer ${token}` }
-            })
-        ]);
-
-        let pendingCount = 0;
-        let cancelledCount = 0;
-        let approvedCount = 0;
-
-        // Count registrations by status
-        if (registrationsRes.ok) {
-            const regData = await registrationsRes.json();
-            const registrations = regData.success ? regData.data : (Array.isArray(regData) ? regData : []);
-
-            registrations.forEach(reg => {
-                const status = (reg.status || '').toLowerCase();
-                if (status === 'pending') pendingCount++;
-                else if (status === 'cancelled' || status === 'rejected') cancelledCount++;
-                else if (status === 'approved') approvedCount++;
-            });
+        for (const span of allSpansCancelled) {
+            if (span.textContent.trim() === 'Cancelled Enrollments') {
+                cancelledCard = span.closest('.card');
+                break;
+            }
         }
 
-        // Count applications by status
-        if (applicationsRes.ok) {
-            const appData = await applicationsRes.json();
-            const applications = appData.success ? appData.data : (Array.isArray(appData) ? appData : []);
+        if (cancelledCard) {
+            const cardBody = cancelledCard.querySelector('.card-body');
+            if (cardBody) {
+                // Find the h3 that displays the count
+                const allH3 = cardBody.querySelectorAll('h3.card-title');
+                let cancelledCountElement = null;
+                for (const h3 of allH3) {
+                    if (h3.textContent.trim().match(/^\d+$/)) {
+                        cancelledCountElement = h3;
+                        break;
+                    }
+                }
 
-            applications.forEach(app => {
-                const status = (app.status || '').toLowerCase();
-                if (status === 'pending') pendingCount++;
-                else if (status === 'cancelled' || status === 'rejected') cancelledCount++;
-                else if (status === 'approved') approvedCount++;
-            });
+                const cancelledPercentageElement = cardBody.querySelector('h3.card-title + small.fw-semibold');
+
+                if (cancelledCountElement) {
+                    cancelledCountElement.textContent = data.cancelledEnrollments || 0;
+                }
+
+                if (cancelledPercentageElement && data.cancelledPercentageChange !== undefined) {
+                    const isPositive = data.cancelledPercentageChange >= 0;
+                    const icon = isPositive ? 'bx-up-arrow-alt' : 'bx-down-arrow-alt';
+                    const colorClass = isPositive ? 'text-danger' : 'text-success';
+
+                    cancelledPercentageElement.className = `fw-semibold ${colorClass}`;
+                    cancelledPercentageElement.innerHTML = `<i class="bx ${icon}"></i> ${isPositive ? '+' : ''}${data.cancelledPercentageChange}%`;
+                }
+            }
         }
 
-        // Update data object with real counts
-        data.pendingEnrollments = pendingCount;
-        data.cancelledEnrollments = cancelledCount;
+        const activityTrendCount = document.getElementById('activityTrendCount');
+        const activityTrendPercentage = document.getElementById('activityTrendPercentage');
 
-        // If API didn't provide approved count, use our calculated one
-        if (!data.approvedEnrollments) {
-            data.approvedEnrollments = approvedCount;
+        if (activityTrendCount) {
+            activityTrendCount.textContent = data.monthEnrollments || 0;
         }
 
-        // Calculate percentage changes (mock data for now, should come from comparing with previous period)
-        data.pendingPercentageChange = data.pendingPercentageChange || 0;
-        data.cancelledPercentageChange = data.cancelledPercentageChange || 0;
-
-    } catch (error) {
-        console.error('Error fetching enrollment status counts:', error);
-    }
-}
-
-function showErrorMessage(message) {
-
-}
-
-function updateDashboardUI(data) {
-    // Always show total trainees regardless of year filter
-    const totalTraineesElement = document.querySelector('.col-sm-5 h2.mb-2');
-    if (totalTraineesElement) {
-        totalTraineesElement.textContent = data.total.toLocaleString();
-    }
-
-    const totalEnrollments = data.approvedEnrollments + data.pendingEnrollments + data.cancelledEnrollments;
-    const approvedPercentage = totalEnrollments > 0
-        ? Math.round((data.approvedEnrollments / totalEnrollments) * 100)
-        : 0;
-    const pendingPercentage = totalEnrollments > 0
-        ? Math.round((data.pendingEnrollments / totalEnrollments) * 100)
-        : 0;
-    const cancelledPercentage = totalEnrollments > 0
-        ? Math.round((data.cancelledEnrollments / totalEnrollments) * 100)
-        : 0;
-
-    updateWelcomeChart(approvedPercentage, pendingPercentage, cancelledPercentage);
-
-    const percentageTextElement = document.querySelector('.col-sm-7 .fw-bold');
-    if (percentageTextElement && data.todayPercentageIncrease !== undefined) {
-        percentageTextElement.textContent = Math.abs(data.todayPercentageIncrease) + '%';
-    }
-
-    const todayEnrollmentsCard = document.querySelector('.profit-card-gradient');
-    if (todayEnrollmentsCard) {
-        const todayCountElement = todayEnrollmentsCard.querySelector('h3.card-title');
-        const todayPercentageElement = todayEnrollmentsCard.querySelector('small.fw-semibold');
-
-        if (todayCountElement) {
-            todayCountElement.textContent = data.todayEnrollments || 0;
-        }
-
-        if (todayPercentageElement && data.todayPercentageIncrease !== undefined) {
-            const isPositive = data.todayPercentageIncrease >= 0;
-            const icon = isPositive ? 'bx-up-arrow-alt' : 'bx-down-arrow-alt';
-            const colorClass = isPositive ? 'text-success' : 'text-danger';
-
-            todayPercentageElement.className = `fw-semibold ${colorClass}`;
-            todayPercentageElement.innerHTML = `<i class="bx ${icon}"></i> ${isPositive ? '+' : ''}${data.todayPercentageIncrease}%`;
-        }
-    }
-
-    // Show total approved enrollments, not filtered by year
-    const approvedCard = document.querySelector('.avatar .bx-check-circle');
-    if (approvedCard) {
-        const approvedCountElement = approvedCard.closest('.card-body').querySelector('h3.card-title');
-        const approvedPercentageElement = approvedCard.closest('.card-body').querySelector('small.fw-semibold');
-
-        if (approvedCountElement) {
-            approvedCountElement.textContent = data.approvedEnrollments.toLocaleString();
-        }
-
-        if (approvedPercentageElement && data.monthPercentageIncrease !== undefined) {
+        if (activityTrendPercentage && data.monthPercentageIncrease !== undefined) {
             const isPositive = data.monthPercentageIncrease >= 0;
-            const icon = isPositive ? 'bx-up-arrow-alt' : 'bx-down-arrow-alt';
+            const icon = isPositive ? 'bx-chevron-up' : 'bx-chevron-down';
             const colorClass = isPositive ? 'text-success' : 'text-danger';
 
-            approvedPercentageElement.className = `fw-semibold ${colorClass}`;
-            approvedPercentageElement.innerHTML = `<i class="bx ${icon}"></i> ${isPositive ? '+' : ''}${data.monthPercentageIncrease}%`;
+            activityTrendPercentage.className = `text-nowrap fw-semibold ${colorClass}`;
+            activityTrendPercentage.innerHTML = `<i class="bx ${icon}"></i> ${Math.abs(data.monthPercentageIncrease)}%`;
+        }
+
+        const growthPercentageElement = document.getElementById('growthPercentageText');
+        if (growthPercentageElement && data.yearGrowthPercentage !== undefined) {
+            growthPercentageElement.textContent = data.yearGrowthPercentage;
+        }
+
+        const updateGrowthChart = () => {
+            if (window.growthChartInstance && data.yearGrowthPercentage !== undefined && data.yearGrowthPercentage !== null) {
+                const growthValue = isNaN(data.yearGrowthPercentage) ? 0 : Math.max(0, Math.min(100, data.yearGrowthPercentage));
+                window.growthChartInstance.updateSeries([growthValue]);
+                pendingGrowthData = null;
+            } else if (data.yearGrowthPercentage !== undefined) {
+
+                pendingGrowthData = data.yearGrowthPercentage;
+                setTimeout(updateGrowthChart, 100);
+            }
+        };
+        updateGrowthChart();
+
+        const currentYearCount = document.getElementById('currentYearCount');
+        const previousYearCount = document.getElementById('previousYearCount');
+
+        if (currentYearCount) {
+            // If current year has no data, show total enrollments instead
+            const displayCount = data.currentYearEnrollments > 0 ? data.currentYearEnrollments : data.totalEnrollment;
+            currentYearCount.textContent = displayCount || 0;
+        }
+
+        if (previousYearCount) {
+            previousYearCount.textContent = data.previousYearEnrollments || 0;
+        }
+
+        if (window.totalRevenueChartInstance && data.monthly_enrollments) {
+            // Use previous year data if available, otherwise use zeros
+            const previousYearData = data.previous_year_monthly_enrollments || Array(12).fill(0);
+
+            window.totalRevenueChartInstance.updateOptions({
+                series: [
+                    {
+                        name: data.year.toString(),
+                        data: data.monthly_enrollments
+                    },
+                    {
+                        name: (data.year - 1).toString(),
+                        data: previousYearData
+                    }
+                ]
+            });
         }
     }
 
-    const pendingCard = document.querySelector('.bx-time-five');
-    if (pendingCard) {
-        const cardBody = pendingCard.closest('.card-body');
-        if (cardBody) {
-            const pendingCountElement = cardBody.querySelector('h3.card-title');
-            const pendingPercentageElement = cardBody.querySelector('small.fw-semibold');
+    function stylePresentBadges() {
+        const badges = document.querySelectorAll('.badge');
 
-            if (pendingCountElement) {
-                pendingCountElement.textContent = data.pendingEnrollments || 0;
+        badges.forEach(badge => {
+            if (badge.textContent.trim() === 'Present') {
+                badge.style.backgroundColor = '#10b981';
+                badge.style.color = '#ffffff';
+                badge.classList.add('present-status');
             }
-
-            if (pendingPercentageElement && data.pendingPercentageChange !== undefined) {
-                const isPositive = data.pendingPercentageChange >= 0;
-                const icon = isPositive ? 'bx-up-arrow-alt' : 'bx-down-arrow-alt';
-                const colorClass = isPositive ? 'text-danger' : 'text-success';
-
-                pendingPercentageElement.className = `fw-semibold ${colorClass}`;
-                pendingPercentageElement.innerHTML = `<i class="bx ${icon}"></i> ${isPositive ? '+' : ''}${data.pendingPercentageChange}%`;
-            }
-        }
-    }
-
-    const cancelledCard = document.querySelector('.bx-x-circle');
-    if (cancelledCard) {
-        const cardBody = cancelledCard.closest('.card-body');
-        if (cardBody) {
-            const cancelledCountElement = cardBody.querySelector('h3.card-title');
-            const cancelledPercentageElement = cardBody.querySelector('small.fw-semibold');
-
-            if (cancelledCountElement) {
-                cancelledCountElement.textContent = data.cancelledEnrollments || 0;
-            }
-
-            if (cancelledPercentageElement && data.cancelledPercentageChange !== undefined) {
-                const isPositive = data.cancelledPercentageChange >= 0;
-                const icon = isPositive ? 'bx-up-arrow-alt' : 'bx-down-arrow-alt';
-                const colorClass = isPositive ? 'text-danger' : 'text-success';
-
-                cancelledPercentageElement.className = `fw-semibold ${colorClass}`;
-                cancelledPercentageElement.innerHTML = `<i class="bx ${icon}"></i> ${isPositive ? '+' : ''}${data.cancelledPercentageChange}%`;
-            }
-        }
-    }
-
-    const activityTrendCount = document.getElementById('activityTrendCount');
-    const activityTrendPercentage = document.getElementById('activityTrendPercentage');
-
-    if (activityTrendCount) {
-        activityTrendCount.textContent = data.monthEnrollments || 0;
-    }
-
-    if (activityTrendPercentage && data.monthPercentageIncrease !== undefined) {
-        const isPositive = data.monthPercentageIncrease >= 0;
-        const icon = isPositive ? 'bx-chevron-up' : 'bx-chevron-down';
-        const colorClass = isPositive ? 'text-success' : 'text-danger';
-
-        activityTrendPercentage.className = `text-nowrap fw-semibold ${colorClass}`;
-        activityTrendPercentage.innerHTML = `<i class="bx ${icon}"></i> ${Math.abs(data.monthPercentageIncrease)}%`;
-    }
-
-    const growthPercentageElement = document.getElementById('growthPercentageText');
-    if (growthPercentageElement && data.yearGrowthPercentage !== undefined) {
-        growthPercentageElement.textContent = data.yearGrowthPercentage;
-    }
-
-    const updateGrowthChart = () => {
-        if (window.growthChartInstance && data.yearGrowthPercentage !== undefined && data.yearGrowthPercentage !== null) {
-            const growthValue = isNaN(data.yearGrowthPercentage) ? 0 : Math.max(0, Math.min(100, data.yearGrowthPercentage));
-            window.growthChartInstance.updateSeries([growthValue]);
-            pendingGrowthData = null;
-        } else if (data.yearGrowthPercentage !== undefined) {
-
-            pendingGrowthData = data.yearGrowthPercentage;
-            setTimeout(updateGrowthChart, 100);
-        }
-    };
-    updateGrowthChart();
-
-    const currentYearCount = document.getElementById('currentYearCount');
-    const previousYearCount = document.getElementById('previousYearCount');
-
-    if (currentYearCount) {
-        // If current year has no data, show total enrollments instead
-        const displayCount = data.currentYearEnrollments > 0 ? data.currentYearEnrollments : data.totalEnrollment;
-        currentYearCount.textContent = displayCount || 0;
-    }
-
-    if (previousYearCount) {
-        previousYearCount.textContent = data.previousYearEnrollments || 0;
-    }
-
-    if (window.totalRevenueChartInstance && data.monthly_enrollments) {
-        // Use previous year data if available, otherwise use zeros
-        const previousYearData = data.previous_year_monthly_enrollments || Array(12).fill(0);
-
-        window.totalRevenueChartInstance.updateOptions({
-            series: [
-                {
-                    name: data.year.toString(),
-                    data: data.monthly_enrollments
-                },
-                {
-                    name: (data.year - 1).toString(),
-                    data: previousYearData
-                }
-            ]
         });
     }
-}
 
-function stylePresentBadges() {
-    const badges = document.querySelectorAll('.badge');
+    function stylePresentTodayElements() {
+        const elements = document.querySelectorAll('*');
 
-    badges.forEach(badge => {
-        if (badge.textContent.trim() === 'Present') {
-            badge.style.backgroundColor = '#10b981';
+        elements.forEach(element => {
+            if (element.textContent && element.textContent.includes('Present Today')) {
+                element.style.color = '#28a745';
+                element.style.fontWeight = 'bold';
+            }
+        });
+    }
+
+    function ensureSuccessBadgeStyling() {
+        const successBadges = document.querySelectorAll('.badge.bg-success');
+
+        successBadges.forEach(badge => {
+            badge.style.backgroundColor = '#28a745';
             badge.style.color = '#ffffff';
-            badge.classList.add('present-status');
-        }
-    });
-}
+        });
+    }
 
-function stylePresentTodayElements() {
-    const elements = document.querySelectorAll('*');
+    function initYearFilter() {
 
-    elements.forEach(element => {
-        if (element.textContent && element.textContent.includes('Present Today')) {
-            element.style.color = '#28a745';
-            element.style.fontWeight = 'bold';
-        }
-    });
-}
+        fetchAndPopulateYears();
+    }
 
-function ensureSuccessBadgeStyling() {
-    const successBadges = document.querySelectorAll('.badge.bg-success');
+    async function fetchAndPopulateYears() {
+        try {
+            const response = await fetch(`${API_BASE_URL_DASHBOARD}/get-available-years.php`);
 
-    successBadges.forEach(badge => {
-        badge.style.backgroundColor = '#28a745';
-        badge.style.color = '#ffffff';
-    });
-}
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
 
-function initYearFilter() {
+            const result = await response.json();
 
-    fetchAndPopulateYears();
-}
+            if (result.success && result.years && result.years.length > 0) {
+                populateYearDropdown(result.years);
+            } else {
 
-async function fetchAndPopulateYears() {
-    try {
-        const response = await fetch(`${API_BASE_URL_DASHBOARD}/get-available-years.php`);
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const result = await response.json();
-
-        if (result.success && result.years && result.years.length > 0) {
-            populateYearDropdown(result.years);
-        } else {
+                populateYearDropdown([new Date().getFullYear()]);
+            }
+        } catch (error) {
 
             populateYearDropdown([new Date().getFullYear()]);
         }
-    } catch (error) {
-
-        populateYearDropdown([new Date().getFullYear()]);
-    }
-}
-
-function populateYearDropdown(years) {
-    const yearMenu = document.getElementById('growthReportYearMenu');
-    const yearTextElement = document.getElementById('selectedYearText');
-    if (!yearMenu) return;
-
-    const currentYear = new Date().getFullYear();
-
-    if (!years.includes(currentYear)) {
-        years.unshift(currentYear);
-        years.sort((a, b) => b - a);
     }
 
-    if (yearTextElement) {
-        yearTextElement.textContent = currentYear;
-    }
+    function populateYearDropdown(years) {
+        const yearMenu = document.getElementById('growthReportYearMenu');
+        const yearTextElement = document.getElementById('selectedYearText');
+        if (!yearMenu) return;
 
-    yearMenu.innerHTML = '';
+        const currentYear = new Date().getFullYear();
 
-    years.forEach(year => {
-        const item = document.createElement('a');
-        item.className = 'dropdown-item';
-        item.href = 'javascript:void(0);';
-        item.setAttribute('data-year', year);
-        item.textContent = year;
-
-        if (year === currentYear) {
-            item.classList.add('active');
+        if (!years.includes(currentYear)) {
+            years.unshift(currentYear);
+            years.sort((a, b) => b - a);
         }
 
-        item.addEventListener('click', function (e) {
-            e.preventDefault();
-            const clickedYear = parseInt(this.getAttribute('data-year'));
+        if (yearTextElement) {
+            yearTextElement.textContent = currentYear;
+        }
 
-            if (!isNaN(clickedYear)) {
-                // Update global selectedYear variable
-                selectedYear = clickedYear;
+        yearMenu.innerHTML = '';
 
-                if (yearTextElement) {
-                    yearTextElement.textContent = clickedYear;
-                }
+        years.forEach(year => {
+            const item = document.createElement('a');
+            item.className = 'dropdown-item';
+            item.href = 'javascript:void(0);';
+            item.setAttribute('data-year', year);
+            item.textContent = year;
 
-                // Update active state in dropdown
-                yearMenu.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('active'));
-                this.classList.add('active');
-
-                // Update labels first
-                updateYearLabels(clickedYear);
-
-                // Then fetch new data for the selected year
-                fetchDashboardStatistics(clickedYear);
+            if (year === currentYear) {
+                item.classList.add('active');
             }
+
+            item.addEventListener('click', function (e) {
+                e.preventDefault();
+                const clickedYear = parseInt(this.getAttribute('data-year'));
+
+                if (!isNaN(clickedYear)) {
+                    // Update global selectedYear variable
+                    selectedYear = clickedYear;
+
+                    if (yearTextElement) {
+                        yearTextElement.textContent = clickedYear;
+                    }
+
+                    // Update active state in dropdown
+                    yearMenu.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+
+                    // Update labels first
+                    updateYearLabels(clickedYear);
+
+                    // Then fetch new data for the selected year
+                    fetchDashboardStatistics(clickedYear);
+                }
+            });
+
+            yearMenu.appendChild(item);
         });
-
-        yearMenu.appendChild(item);
-    });
-}
-
-function updateWelcomeChart(approvedPercentage, pendingPercentage, cancelledPercentage) {
-
-    if (typeof ApexCharts === 'undefined') {
-        setTimeout(() => updateWelcomeChart(approvedPercentage, pendingPercentage, cancelledPercentage), 500);
-        return;
     }
 
-    const chartElement = document.querySelector('#welcomeStatisticsChart');
-    if (!chartElement) return;
+    function updateWelcomeChart(approvedPercentage, pendingPercentage, cancelledPercentage) {
 
-    // Ensure all values are valid numbers, default to 0
-    const approved = isNaN(approvedPercentage) || approvedPercentage === null || approvedPercentage === undefined ? 0 : Number(approvedPercentage);
-    const pending = isNaN(pendingPercentage) || pendingPercentage === null || pendingPercentage === undefined ? 0 : Number(pendingPercentage);
-    const cancelled = isNaN(cancelledPercentage) || cancelledPercentage === null || cancelledPercentage === undefined ? 0 : Number(cancelledPercentage);
+        if (typeof ApexCharts === 'undefined') {
+            setTimeout(() => updateWelcomeChart(approvedPercentage, pendingPercentage, cancelledPercentage), 500);
+            return;
+        }
 
-    if (!window.welcomeChartInstance) {
+        const chartElement = document.querySelector('#welcomeStatisticsChart');
+        if (!chartElement) return;
 
-        window.welcomeChartData = {
-            enrolled: approved,
-            pending: pending,
-            completed: cancelled
-        };
-        return;
-    }
+        // Ensure all values are valid numbers, default to 0
+        const approved = isNaN(approvedPercentage) || approvedPercentage === null || approvedPercentage === undefined ? 0 : Number(approvedPercentage);
+        const pending = isNaN(pendingPercentage) || pendingPercentage === null || pendingPercentage === undefined ? 0 : Number(pendingPercentage);
+        const cancelled = isNaN(cancelledPercentage) || cancelledPercentage === null || cancelledPercentage === undefined ? 0 : Number(cancelledPercentage);
 
-    // Only update if chart instance exists and values are valid
-    try {
-        window.welcomeChartInstance.updateOptions({
-            series: [approved, pending, cancelled],
-            labels: ['Approved', 'Pending', 'Cancelled'],
-            colors: [config.colors.success, config.colors.warning, config.colors.danger],
-            plotOptions: {
-                pie: {
-                    donut: {
-                        labels: {
-                            total: {
-                                label: 'Approved',
-                                formatter: function (w) {
-                                    return approved + '%';
+        if (!window.welcomeChartInstance) {
+
+            window.welcomeChartData = {
+                enrolled: approved,
+                pending: pending,
+                completed: cancelled
+            };
+            return;
+        }
+
+        // Only update if chart instance exists and values are valid
+        try {
+            window.welcomeChartInstance.updateOptions({
+                series: [approved, pending, cancelled],
+                labels: ['Approved', 'Pending', 'Cancelled'],
+                colors: [config.colors.success, config.colors.warning, config.colors.danger],
+                plotOptions: {
+                    pie: {
+                        donut: {
+                            labels: {
+                                total: {
+                                    label: 'Approved',
+                                    formatter: function (w) {
+                                        return approved + '%';
+                                    }
                                 }
                             }
                         }
                     }
                 }
+            });
+        } catch (error) {
+            console.error('Error updating welcome chart:', error);
+        }
+    }
+
+    async function fetchCourseEnrollmentStatistics() {
+        try {
+            const response = await fetch(`${API_BASE_URL_DASHBOARD}/api/v1/courses/enrollment-statistics`);
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
-        });
-    } catch (error) {
-        console.error('Error updating welcome chart:', error);
+
+            const result = await response.json();
+
+            if (result.success) {
+                updateCourseEnrollmentUI(result.data);
+            }
+        } catch (error) {
+            // Silent error handling
+        }
     }
-}
 
-async function fetchCourseEnrollmentStatistics() {
-    try {
-        const response = await fetch(`${API_BASE_URL_DASHBOARD}/api/v1/courses/enrollment-statistics`);
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+    function updateCourseEnrollmentUI(data) {
+        const coursesList = document.getElementById('topEnrolledCoursesList');
+        if (!coursesList) {
+            return;
         }
 
-        const result = await response.json();
-
-        if (result.success) {
-            updateCourseEnrollmentUI(result.data);
-        }
-    } catch (error) {
-        // Silent error handling
-    }
-}
-
-function updateCourseEnrollmentUI(data) {
-    const coursesList = document.getElementById('topEnrolledCoursesList');
-    if (!coursesList) {
-        return;
-    }
-
-    if (!data.topCourses || data.topCourses.length === 0) {
-        coursesList.innerHTML = `
+        if (!data.topCourses || data.topCourses.length === 0) {
+            coursesList.innerHTML = `
             <li class="d-flex justify-content-center align-items-center py-3">
                 <p class="text-muted small">No enrollment data available</p>
             </li>
         `;
-        return;
-    }
-
-    coursesList.innerHTML = '';
-
-    data.topCourses.forEach((course, index) => {
-        const isLast = index === data.topCourses.length - 1;
-        const li = document.createElement('li');
-        li.className = isLast ? 'd-flex' : 'd-flex mb-4 pb-1';
-
-        const avatarDiv = document.createElement('div');
-        avatarDiv.className = 'avatar shrink-0 me-3';
-
-        const img = document.createElement('img');
-        img.alt = course.name;
-        img.className = 'rounded course-image';
-        img.style.cssText = 'width: 40px; height: 40px; object-fit: cover;';
-        img.setAttribute('data-course-id', course.id);
-
-        if (course.image && course.image.trim() !== '') {
-            img.src = course.image;
-            img.onerror = function () {
-                this.src = '../assets/images/DEFAULT_AVATAR.png';
-            };
-        } else {
-            img.src = '../assets/images/DEFAULT_AVATAR.png';
+            return;
         }
 
-        avatarDiv.appendChild(img);
+        coursesList.innerHTML = '';
 
-        const contentDiv = document.createElement('div');
-        contentDiv.className = 'd-flex w-100 flex-wrap align-items-center justify-content-between gap-2';
+        data.topCourses.forEach((course, index) => {
+            const isLast = index === data.topCourses.length - 1;
+            const li = document.createElement('li');
+            li.className = isLast ? 'd-flex' : 'd-flex mb-4 pb-1';
 
-        contentDiv.innerHTML = `
+            const avatarDiv = document.createElement('div');
+            avatarDiv.className = 'avatar shrink-0 me-3';
+
+            const img = document.createElement('img');
+            img.alt = course.name;
+            img.className = 'rounded course-image';
+            img.style.cssText = 'width: 40px; height: 40px; object-fit: cover;';
+            img.setAttribute('data-course-id', course.id);
+
+            if (course.image && course.image.trim() !== '') {
+                img.src = course.image;
+                img.onerror = function () {
+                    this.src = '../assets/images/DEFAULT_AVATAR.png';
+                };
+            } else {
+                img.src = '../assets/images/DEFAULT_AVATAR.png';
+            }
+
+            avatarDiv.appendChild(img);
+
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'd-flex w-100 flex-wrap align-items-center justify-content-between gap-2';
+
+            contentDiv.innerHTML = `
             <div class="me-2">
                 <h6 class="mb-0">${course.name}</h6>
                 <small class="text-muted d-block">${course.hours}</small>
@@ -546,171 +601,171 @@ function updateCourseEnrollmentUI(data) {
             </div>
         `;
 
-        li.appendChild(avatarDiv);
-        li.appendChild(contentDiv);
-        coursesList.appendChild(li);
-    });
-}
+            li.appendChild(avatarDiv);
+            li.appendChild(contentDiv);
+            coursesList.appendChild(li);
+        });
+    }
 
-async function fetchRecentEnrollmentActivity() {
-    try {
-        const response = await fetch(`${config.api.baseUrl}/api/v1/enrollments/recent?limit=10`);
-        const enrollmentsData = await response.json();
+    async function fetchRecentEnrollmentActivity() {
+        try {
+            const response = await fetch(`${config.api.baseUrl}/api/v1/enrollments/recent?limit=10`);
+            const enrollmentsData = await response.json();
 
-        if (!enrollmentsData.success || !enrollmentsData.data) {
-            throw new Error('Failed to fetch enrollment data');
-        }
-
-        const activities = [];
-
-        for (const enrollment of enrollmentsData.data) {
-            let profileImage = null;
-
-            const userId = enrollment.userId || enrollment.user_id || enrollment.trainee?.userId || enrollment.traineeId || enrollment.trainee_id;
-
-            if (userId && typeof userId === 'string' && /^[a-f\d]{24}$/i.test(userId)) {
-                try {
-                    const traineeUrl = `${config.api.baseUrl}/api/v1/trainees/${userId}`;
-
-                    const traineeResponse = await fetch(traineeUrl);
-                    if (traineeResponse.ok) {
-                        const traineeData = await traineeResponse.json();
-
-                        if (traineeData.success && traineeData.data) {
-                            profileImage = traineeData.data.profile_image || traineeData.data.profileImage;
-                        }
-                    }
-                } catch (error) {
-                    // Silently handle trainee profile fetch errors
-                }
+            if (!enrollmentsData.success || !enrollmentsData.data) {
+                throw new Error('Failed to fetch enrollment data');
             }
 
-            const traineeName = enrollment.traineeName
-                || enrollment.trainee_name
-                || enrollment.trainee?.name
-                || enrollment.trainee?.full_name
-                || (enrollment.trainee?.first_name && enrollment.trainee?.last_name
-                    ? `${enrollment.trainee.first_name} ${enrollment.trainee.last_name}`
-                    : null)
-                || 'Unknown';
+            const activities = [];
 
-            const courseName = enrollment.courseName
-                || enrollment.course_name
-                || enrollment.course?.name
-                || enrollment.course?.title
-                || 'Unknown Course';
+            for (const enrollment of enrollmentsData.data) {
+                let profileImage = null;
 
-            activities.push({
-                traineeName: traineeName,
-                courseName: courseName,
-                status: enrollment.status || 'pending',
-                createdAt: enrollment.enrollmentDate || enrollment.enrollment_date || enrollment.created_at || new Date().toISOString(),
-                profileImage: profileImage,
-                type: enrollment.type || 'enrollment'
+                const userId = enrollment.userId || enrollment.user_id || enrollment.trainee?.userId || enrollment.traineeId || enrollment.trainee_id;
+
+                if (userId && typeof userId === 'string' && /^[a-f\d]{24}$/i.test(userId)) {
+                    try {
+                        const traineeUrl = `${config.api.baseUrl}/api/v1/trainees/${userId}`;
+
+                        const traineeResponse = await fetch(traineeUrl);
+                        if (traineeResponse.ok) {
+                            const traineeData = await traineeResponse.json();
+
+                            if (traineeData.success && traineeData.data) {
+                                profileImage = traineeData.data.profile_image || traineeData.data.profileImage;
+                            }
+                        }
+                    } catch (error) {
+                        // Silently handle trainee profile fetch errors
+                    }
+                }
+
+                const traineeName = enrollment.traineeName
+                    || enrollment.trainee_name
+                    || enrollment.trainee?.name
+                    || enrollment.trainee?.full_name
+                    || (enrollment.trainee?.first_name && enrollment.trainee?.last_name
+                        ? `${enrollment.trainee.first_name} ${enrollment.trainee.last_name}`
+                        : null)
+                    || 'Unknown';
+
+                const courseName = enrollment.courseName
+                    || enrollment.course_name
+                    || enrollment.course?.name
+                    || enrollment.course?.title
+                    || 'Unknown Course';
+
+                activities.push({
+                    traineeName: traineeName,
+                    courseName: courseName,
+                    status: enrollment.status || 'pending',
+                    createdAt: enrollment.enrollmentDate || enrollment.enrollment_date || enrollment.created_at || new Date().toISOString(),
+                    profileImage: profileImage,
+                    type: enrollment.type || 'enrollment'
+                });
+            }
+
+            activities.sort((a, b) => {
+                const dateA = new Date(a.createdAt);
+                const dateB = new Date(b.createdAt);
+                return dateB - dateA;
             });
-        }
 
-        activities.sort((a, b) => {
-            const dateA = new Date(a.createdAt);
-            const dateB = new Date(b.createdAt);
-            return dateB - dateA;
-        });
-
-        updateRecentEnrollmentActivityUI(activities);
-    } catch (error) {
-        // Silent error handling
-        const activityList = document.getElementById('recentEnrollmentActivityList');
-        if (activityList) {
-            activityList.innerHTML = `
+            updateRecentEnrollmentActivityUI(activities);
+        } catch (error) {
+            // Silent error handling
+            const activityList = document.getElementById('recentEnrollmentActivityList');
+            if (activityList) {
+                activityList.innerHTML = `
                 <li class="d-flex justify-content-center align-items-center py-5">
                     <p class="text-muted">Unable to load enrollment activity</p>
                 </li>
             `;
+            }
         }
     }
-}
 
-function updateRecentEnrollmentActivityUI(activities) {
-    const activityList = document.getElementById('recentEnrollmentActivityList');
-    if (!activityList) return;
+    function updateRecentEnrollmentActivityUI(activities) {
+        const activityList = document.getElementById('recentEnrollmentActivityList');
+        if (!activityList) return;
 
-    if (!activities || activities.length === 0) {
-        activityList.innerHTML = `
+        if (!activities || activities.length === 0) {
+            activityList.innerHTML = `
             <li class="d-flex justify-content-center align-items-center py-5">
                 <p class="text-muted">No recent enrollment activity</p>
             </li>
         `;
-        return;
-    }
-
-    activityList.innerHTML = '';
-
-    activities.forEach((activity, index) => {
-        const isLast = index === activities.length - 1;
-        const li = document.createElement('li');
-        li.className = isLast ? 'd-flex' : 'd-flex mb-4 pb-1';
-
-        let badgeClass = 'bg-secondary';
-        let badgeText = 'Unknown';
-        let iconColor = 'label-secondary';
-
-        const status = (activity.status || '').toLowerCase();
-
-        switch (status) {
-            case 'approved':
-            case 'enrolled':
-                badgeClass = 'bg-success';
-                badgeText = 'Approved';
-                iconColor = 'label-success';
-                break;
-            case 'pending':
-                badgeClass = 'bg-warning';
-                badgeText = 'Pending';
-                iconColor = 'label-warning';
-                break;
-            case 'cancelled':
-            case 'rejected':
-            case 'withdrawn':
-                badgeClass = 'bg-danger';
-                badgeText = 'Cancelled';
-                iconColor = 'label-danger';
-                break;
-            case 'completed':
-                badgeClass = 'bg-primary';
-                badgeText = 'Completed';
-                iconColor = 'label-primary';
-                break;
+            return;
         }
 
-        const traineeName = activity.traineeName || 'Unknown';
+        activityList.innerHTML = '';
 
-        let avatarHTML = '';
-        const defaultAvatar = '../assets/images/DEFAULT_AVATAR.png';
+        activities.forEach((activity, index) => {
+            const isLast = index === activities.length - 1;
+            const li = document.createElement('li');
+            li.className = isLast ? 'd-flex' : 'd-flex mb-4 pb-1';
 
-        if (activity.profileImage) {
-            let imageUrl = activity.profileImage;
+            let badgeClass = 'bg-secondary';
+            let badgeText = 'Unknown';
+            let iconColor = 'label-secondary';
 
-            if (imageUrl.startsWith('/CAATE-ITRMS/')) {
-                imageUrl = window.location.origin + imageUrl;
-            } else if (imageUrl.startsWith('uploads/')) {
-                imageUrl = `${config.api.baseUrl}/${imageUrl}`;
-            } else if (!imageUrl.startsWith('http') && !imageUrl.startsWith('/')) {
-                imageUrl = `${config.api.baseUrl}/${imageUrl}`;
-            } else if (imageUrl.startsWith('/') && !imageUrl.startsWith('/CAATE-ITRMS/')) {
-                imageUrl = window.location.origin + imageUrl;
+            const status = (activity.status || '').toLowerCase();
+
+            switch (status) {
+                case 'approved':
+                case 'enrolled':
+                    badgeClass = 'bg-success';
+                    badgeText = 'Approved';
+                    iconColor = 'label-success';
+                    break;
+                case 'pending':
+                    badgeClass = 'bg-warning';
+                    badgeText = 'Pending';
+                    iconColor = 'label-warning';
+                    break;
+                case 'cancelled':
+                case 'rejected':
+                case 'withdrawn':
+                    badgeClass = 'bg-danger';
+                    badgeText = 'Cancelled';
+                    iconColor = 'label-danger';
+                    break;
+                case 'completed':
+                    badgeClass = 'bg-primary';
+                    badgeText = 'Completed';
+                    iconColor = 'label-primary';
+                    break;
             }
 
-            avatarHTML = `
+            const traineeName = activity.traineeName || 'Unknown';
+
+            let avatarHTML = '';
+            const defaultAvatar = '../assets/images/DEFAULT_AVATAR.png';
+
+            if (activity.profileImage) {
+                let imageUrl = activity.profileImage;
+
+                if (imageUrl.startsWith('/CAATE-ITRMS/')) {
+                    imageUrl = window.location.origin + imageUrl;
+                } else if (imageUrl.startsWith('uploads/')) {
+                    imageUrl = `${config.api.baseUrl}/${imageUrl}`;
+                } else if (!imageUrl.startsWith('http') && !imageUrl.startsWith('/')) {
+                    imageUrl = `${config.api.baseUrl}/${imageUrl}`;
+                } else if (imageUrl.startsWith('/') && !imageUrl.startsWith('/CAATE-ITRMS/')) {
+                    imageUrl = window.location.origin + imageUrl;
+                }
+
+                avatarHTML = `
                 <img src="${imageUrl}" alt="${traineeName}" class="rounded-circle" style="width: 38px; height: 38px; object-fit: cover;" 
                      onerror="this.src='${defaultAvatar}';">
             `;
-        } else {
-            avatarHTML = `
+            } else {
+                avatarHTML = `
                 <img src="${defaultAvatar}" alt="${traineeName}" class="rounded-circle" style="width: 38px; height: 38px; object-fit: cover;">
             `;
-        }
+            }
 
-        li.innerHTML = `
+            li.innerHTML = `
             <div class="avatar shrink-0 me-3">
                 ${avatarHTML}
             </div>
@@ -725,28 +780,28 @@ function updateRecentEnrollmentActivityUI(activities) {
             </div>
         `;
 
-        activityList.appendChild(li);
-    });
-}
+            activityList.appendChild(li);
+        });
+    }
 
-function updateRecentEnrollmentUI(enrollments) {
-    const listElement = document.getElementById('recentEnrollmentActivityList');
-    if (!listElement) return;
+    function updateRecentEnrollmentUI(enrollments) {
+        const listElement = document.getElementById('recentEnrollmentActivityList');
+        if (!listElement) return;
 
-    if (!enrollments || enrollments.length === 0) {
-        listElement.innerHTML = `
+        if (!enrollments || enrollments.length === 0) {
+            listElement.innerHTML = `
             <li class="d-flex justify-content-center align-items-center py-5">
                 <p class="text-muted">No recent enrollment activity</p>
             </li>
         `;
-        return;
-    }
+            return;
+        }
 
-    listElement.innerHTML = enrollments.map((enrollment, index) => {
-        const statusConfig = getStatusConfig(enrollment.status);
-        const isLast = index === enrollments.length - 1;
+        listElement.innerHTML = enrollments.map((enrollment, index) => {
+            const statusConfig = getStatusConfig(enrollment.status);
+            const isLast = index === enrollments.length - 1;
 
-        return `
+            return `
             <li class="d-flex ${isLast ? '' : 'mb-4 pb-1'}">
                 <div class="avatar shrink-0 me-3">
                     <span class="avatar-initial rounded-circle bg-label-${statusConfig.color}">
@@ -764,55 +819,57 @@ function updateRecentEnrollmentUI(enrollments) {
                 </div>
             </li>
         `;
-    }).join('');
-}
+        }).join('');
+    }
 
-function getStatusConfig(status) {
-    const statusLower = (status || '').toLowerCase();
-    const statusMap = {
-        'approved': { color: 'success', label: 'Approved' },
-        'enrolled': { color: 'success', label: 'Approved' },
-        'pending': { color: 'warning', label: 'Pending' },
-        'cancelled': { color: 'danger', label: 'Cancelled' },
-        'rejected': { color: 'danger', label: 'Cancelled' },
-        'withdrawn': { color: 'danger', label: 'Cancelled' },
-        'completed': { color: 'primary', label: 'Completed' }
-    };
+    function getStatusConfig(status) {
+        const statusLower = (status || '').toLowerCase();
+        const statusMap = {
+            'approved': { color: 'success', label: 'Approved' },
+            'enrolled': { color: 'success', label: 'Approved' },
+            'pending': { color: 'warning', label: 'Pending' },
+            'cancelled': { color: 'danger', label: 'Cancelled' },
+            'rejected': { color: 'danger', label: 'Cancelled' },
+            'withdrawn': { color: 'danger', label: 'Cancelled' },
+            'completed': { color: 'primary', label: 'Completed' }
+        };
 
-    return statusMap[statusLower] || { color: 'secondary', label: status || 'Unknown' };
-}
+        return statusMap[statusLower] || { color: 'secondary', label: status || 'Unknown' };
+    }
 
-document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function () {
 
-    updateYearLabels(selectedYear);
+        updateYearLabels(selectedYear);
 
-    initYearFilter();
+        initYearFilter();
 
-    fetchDashboardStatistics();
-    fetchRecentEnrollmentActivity();
-    fetchCourseEnrollmentStatistics();
-
-    stylePresentBadges();
-    stylePresentTodayElements();
-    ensureSuccessBadgeStyling();
-
-    const observer = new MutationObserver(function (mutations) {
-        mutations.forEach(function (mutation) {
-            if (mutation.type === 'childList') {
-                stylePresentBadges();
-                ensureSuccessBadgeStyling();
-            }
-        });
-    });
-
-    observer.observe(document.body, {
-        childList: true,
-        subtree: true
-    });
-
-    setInterval(() => {
-        fetchDashboardStatistics(selectedYear);
+        fetchDashboardStatistics();
         fetchRecentEnrollmentActivity();
         fetchCourseEnrollmentStatistics();
-    }, 30000);
-});
+
+        stylePresentBadges();
+        stylePresentTodayElements();
+        ensureSuccessBadgeStyling();
+
+        const observer = new MutationObserver(function (mutations) {
+            mutations.forEach(function (mutation) {
+                if (mutation.type === 'childList') {
+                    stylePresentBadges();
+                    ensureSuccessBadgeStyling();
+                }
+            });
+        });
+
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+
+        setInterval(() => {
+            fetchDashboardStatistics(selectedYear);
+            fetchRecentEnrollmentActivity();
+            fetchCourseEnrollmentStatistics();
+        }, 30000);
+    });
+
+})(); // End of IIFE - Prevent double execution

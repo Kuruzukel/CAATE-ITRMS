@@ -3,6 +3,9 @@ var API_BASE_URL_NOTIFICATIONS = window.location.origin.includes('localhost')
     ? 'http://localhost/CAATE-ITRMS/backend/public'
     : '/CAATE-ITRMS/backend/public';
 
+// Feature flag: Set to true when backend API is implemented
+const USE_NOTIFICATIONS_API = false;
+
 class NotificationManager {
     constructor() {
         this.notifications = [];
@@ -88,54 +91,38 @@ class NotificationManager {
 
     async loadNotifications() {
         try {
-            const token = localStorage.getItem('authToken');
-
-            if (!token || !this.userId) {
-                console.warn('Authentication required for notifications');
-                // Load from localStorage as fallback
-                const stored = localStorage.getItem('admin_notifications');
-                if (stored) {
-                    this.notifications = JSON.parse(stored);
-                    this.unreadCount = this.notifications.filter(n => !n.read).length;
-                    this.updateBadge();
-                    this.renderNotifications();
-                }
-                return;
+            // Load from localStorage (API not implemented yet)
+            const stored = localStorage.getItem('admin_notifications');
+            if (stored) {
+                this.notifications = JSON.parse(stored);
+            } else {
+                this.notifications = [];
             }
 
-            // Fetch notifications from API
-            const response = await fetch(`${API_BASE_URL_NOTIFICATIONS}/api/v1/notifications?userId=${this.userId}`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
-            });
+            // If API is enabled and available, fetch from backend
+            if (USE_NOTIFICATIONS_API) {
+                const token = localStorage.getItem('authToken');
 
-            if (response.ok) {
-                const result = await response.json();
+                if (token && this.userId) {
+                    try {
+                        const response = await fetch(`${API_BASE_URL_NOTIFICATIONS}/api/v1/notifications?userId=${this.userId}`, {
+                            method: 'GET',
+                            headers: {
+                                'Authorization': `Bearer ${token}`,
+                                'Content-Type': 'application/json'
+                            }
+                        });
 
-                if (result.success && result.data) {
-                    this.notifications = result.data;
-                } else {
-                    this.notifications = [];
-                }
-            } else if (response.status === 404) {
-                // API endpoint not implemented yet, use localStorage
-                console.info('Notifications API not available, using localStorage');
-                const stored = localStorage.getItem('admin_notifications');
-                if (stored) {
-                    this.notifications = JSON.parse(stored);
-                } else {
-                    this.notifications = [];
-                }
-            } else {
-                // Fallback to localStorage if API fails
-                const stored = localStorage.getItem('admin_notifications');
-                if (stored) {
-                    this.notifications = JSON.parse(stored);
-                } else {
-                    this.notifications = [];
+                        if (response.ok) {
+                            const result = await response.json();
+                            if (result.success && result.data) {
+                                this.notifications = result.data;
+                            }
+                        }
+                    } catch (error) {
+                        // Silently fail and use localStorage data
+                        console.debug('API not available, using localStorage');
+                    }
                 }
             }
 
@@ -145,20 +132,11 @@ class NotificationManager {
             this.updateBadge();
             this.renderNotifications();
         } catch (error) {
-            console.warn('Error loading notifications, using localStorage fallback:', error.message);
-
-            // Fallback to localStorage
-            try {
-                const stored = localStorage.getItem('admin_notifications');
-                if (stored) {
-                    this.notifications = JSON.parse(stored);
-                    this.unreadCount = this.notifications.filter(n => !n.read).length;
-                    this.updateBadge();
-                    this.renderNotifications();
-                }
-            } catch (e) {
-                console.error('Error loading from localStorage:', e);
-            }
+            console.error('Error loading notifications:', error);
+            this.notifications = [];
+            this.unreadCount = 0;
+            this.updateBadge();
+            this.renderNotifications();
         }
     }
 
@@ -304,44 +282,40 @@ class NotificationManager {
         const newNotification = {
             userId: this.userId,
             ...notification,
+            id: this.generateId(),
             timestamp: notification.timestamp || new Date().toISOString(),
             read: false,
             createdAt: new Date().toISOString()
         };
 
-        try {
-            const token = localStorage.getItem('authToken');
+        // Save to database if API is enabled
+        if (USE_NOTIFICATIONS_API) {
+            try {
+                const token = localStorage.getItem('authToken');
+                const response = await fetch(`${API_BASE_URL_NOTIFICATIONS}/api/v1/notifications`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(newNotification)
+                });
 
-            // Save to database
-            const response = await fetch(`${API_BASE_URL_NOTIFICATIONS}/api/v1/notifications`, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(newNotification)
-            });
-
-            if (response.ok) {
-                const result = await response.json();
-                if (result.success && result.data) {
-                    // Use the notification with ID from database
-                    newNotification.id = result.data._id || result.data.id;
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result.success && result.data) {
+                        newNotification.id = result.data._id || result.data.id;
+                    }
                 }
-            } else {
-                // Generate local ID if API fails
-                newNotification.id = this.generateId();
+            } catch (error) {
+                console.debug('API not available, using localStorage only');
             }
-        } catch (error) {
-            console.error('Error saving notification to database:', error);
-            // Generate local ID if API fails
-            newNotification.id = this.generateId();
         }
 
         this.notifications.unshift(newNotification);
         this.unreadCount++;
 
-        // Also save to localStorage as backup
+        // Save to localStorage
         this.saveNotifications();
         this.updateBadge();
 
@@ -359,20 +333,21 @@ class NotificationManager {
             notification.read = true;
             this.unreadCount = Math.max(0, this.unreadCount - 1);
 
-            try {
-                const token = localStorage.getItem('authToken');
-
-                // Update in database
-                await fetch(`${API_BASE_URL_NOTIFICATIONS}/api/v1/notifications/${notificationId}/read`, {
-                    method: 'PUT',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ read: true })
-                });
-            } catch (error) {
-                console.error('Error updating notification in database:', error);
+            // Update in database if API is enabled
+            if (USE_NOTIFICATIONS_API) {
+                try {
+                    const token = localStorage.getItem('authToken');
+                    await fetch(`${API_BASE_URL_NOTIFICATIONS}/api/v1/notifications/${notificationId}/read`, {
+                        method: 'PUT',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ read: true })
+                    });
+                } catch (error) {
+                    console.debug('API not available, using localStorage only');
+                }
             }
 
             this.saveNotifications();
@@ -385,20 +360,21 @@ class NotificationManager {
         this.notifications.forEach(n => n.read = true);
         this.unreadCount = 0;
 
-        try {
-            const token = localStorage.getItem('authToken');
-
-            // Update all in database
-            await fetch(`${API_BASE_URL_NOTIFICATIONS}/api/v1/notifications/mark-all-read`, {
-                method: 'PUT',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ userId: this.userId })
-            });
-        } catch (error) {
-            console.error('Error marking all as read in database:', error);
+        // Update all in database if API is enabled
+        if (USE_NOTIFICATIONS_API) {
+            try {
+                const token = localStorage.getItem('authToken');
+                await fetch(`${API_BASE_URL_NOTIFICATIONS}/api/v1/notifications/mark-all-read`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ userId: this.userId })
+                });
+            } catch (error) {
+                console.debug('API not available, using localStorage only');
+            }
         }
 
         this.saveNotifications();
@@ -411,20 +387,21 @@ class NotificationManager {
             'Clear All Notifications',
             'Are you sure you want to clear all notifications? This action cannot be undone.',
             async () => {
-                try {
-                    const token = localStorage.getItem('authToken');
-
-                    // Delete all from database
-                    await fetch(`${API_BASE_URL_NOTIFICATIONS}/api/v1/notifications/clear-all`, {
-                        method: 'DELETE',
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ userId: this.userId })
-                    });
-                } catch (error) {
-                    console.error('Error clearing notifications from database:', error);
+                // Delete all from database if API is enabled
+                if (USE_NOTIFICATIONS_API) {
+                    try {
+                        const token = localStorage.getItem('authToken');
+                        await fetch(`${API_BASE_URL_NOTIFICATIONS}/api/v1/notifications/clear-all`, {
+                            method: 'DELETE',
+                            headers: {
+                                'Authorization': `Bearer ${token}`,
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ userId: this.userId })
+                        });
+                    } catch (error) {
+                        console.debug('API not available, using localStorage only');
+                    }
                 }
 
                 this.notifications = [];
@@ -437,78 +414,58 @@ class NotificationManager {
     }
 
     showConfirmationModal(title, message, onConfirm) {
-        // Create modal overlay
-        const overlay = document.createElement('div');
-        overlay.className = 'notification-modal-overlay';
+        // Create modal overlay using Bootstrap modal structure
+        const modalId = 'clearNotificationsModal';
 
-        overlay.innerHTML = `
-            <div class="notification-modal">
-                <div class="notification-modal-header">
-                    <div class="notification-modal-icon">
-                        <i class="bx bx-error-circle"></i>
+        // Remove existing modal if any
+        const existingModal = document.getElementById(modalId);
+        if (existingModal) {
+            existingModal.remove();
+        }
+
+        const modalHTML = `
+            <div class="modal fade" id="${modalId}" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content" style="background-color: #2b3544; border: 1px solid #3d4f63;">
+                        <div class="modal-header" style="border-bottom: 1px solid #3d4f63;">
+                            <h5 class="modal-title" style="color: #fff;">${title}</h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="alert alert-danger" style="background-color: rgba(220, 53, 69, 0.1); border-color: #dc3545; color: #ff6b6b;">
+                                <i class="bx bx-error-circle me-2"></i>
+                                <strong>Warning:</strong> ${message}
+                            </div>
+                        </div>
+                        <div class="modal-footer" style="border-top: 1px solid #3d4f63;">
+                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-danger" id="confirmClearBtn">
+                                <i class="bx bx-trash me-1"></i> Clear All
+                            </button>
+                        </div>
                     </div>
-                    <div class="notification-modal-title">
-                        <h5>${title}</h5>
-                    </div>
-                    <button class="notification-modal-close" onclick="this.closest('.notification-modal-overlay').remove()">
-                        <i class="bx bx-x"></i>
-                    </button>
-                </div>
-                <div class="notification-modal-body">
-                    <p class="notification-modal-message">${message}</p>
-                </div>
-                <div class="notification-modal-footer">
-                    <button class="notification-modal-btn notification-modal-btn-cancel">
-                        <i class="bx bx-x"></i>
-                        Cancel
-                    </button>
-                    <button class="notification-modal-btn notification-modal-btn-confirm">
-                        <i class="bx bx-check"></i>
-                        Confirm
-                    </button>
                 </div>
             </div>
         `;
 
-        document.body.appendChild(overlay);
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
 
-        // Show modal with animation
-        setTimeout(() => overlay.classList.add('show'), 10);
+        const modalElement = document.getElementById(modalId);
+        const modal = new bootstrap.Modal(modalElement);
 
-        // Handle cancel
-        const cancelBtn = overlay.querySelector('.notification-modal-btn-cancel');
-        const closeBtn = overlay.querySelector('.notification-modal-close');
-
-        const closeModal = () => {
-            overlay.classList.remove('show');
-            setTimeout(() => overlay.remove(), 300);
-        };
-
-        cancelBtn.addEventListener('click', closeModal);
-        closeBtn.addEventListener('click', closeModal);
-
-        // Handle confirm
-        const confirmBtn = overlay.querySelector('.notification-modal-btn-confirm');
+        // Handle confirm button
+        const confirmBtn = document.getElementById('confirmClearBtn');
         confirmBtn.addEventListener('click', () => {
             onConfirm();
-            closeModal();
+            modal.hide();
         });
 
-        // Close on overlay click
-        overlay.addEventListener('click', (e) => {
-            if (e.target === overlay) {
-                closeModal();
-            }
+        // Clean up modal after it's hidden
+        modalElement.addEventListener('hidden.bs.modal', () => {
+            modalElement.remove();
         });
 
-        // Close on Escape key
-        const escapeHandler = (e) => {
-            if (e.key === 'Escape') {
-                closeModal();
-                document.removeEventListener('keydown', escapeHandler);
-            }
-        };
-        document.addEventListener('keydown', escapeHandler);
+        modal.show();
     }
 
     saveNotifications() {
@@ -555,13 +512,18 @@ class NotificationManager {
     }
 
     startPolling() {
-        // Poll for new notifications every 30 seconds
-        setInterval(() => {
-            this.checkForNewNotifications();
-        }, 30000);
+        // Only poll if API is enabled
+        if (USE_NOTIFICATIONS_API) {
+            // Poll for new notifications every 30 seconds
+            setInterval(() => {
+                this.checkForNewNotifications();
+            }, 30000);
+        }
     }
 
     async checkForNewNotifications() {
+        if (!USE_NOTIFICATIONS_API) return;
+
         try {
             const token = localStorage.getItem('authToken');
 
@@ -606,7 +568,7 @@ class NotificationManager {
                 }
             }
         } catch (error) {
-            console.error('Error checking for new notifications:', error);
+            console.debug('Error checking for new notifications:', error);
         }
     }
 

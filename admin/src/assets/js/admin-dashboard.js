@@ -361,9 +361,10 @@ function updateWelcomeChart(approvedPercentage, pendingPercentage, cancelledPerc
     const chartElement = document.querySelector('#welcomeStatisticsChart');
     if (!chartElement) return;
 
-    const approved = isNaN(approvedPercentage) || approvedPercentage === null || approvedPercentage === undefined ? 0 : approvedPercentage;
-    const pending = isNaN(pendingPercentage) || pendingPercentage === null || pendingPercentage === undefined ? 0 : pendingPercentage;
-    const cancelled = isNaN(cancelledPercentage) || cancelledPercentage === null || cancelledPercentage === undefined ? 0 : cancelledPercentage;
+    // Ensure all values are valid numbers, default to 0
+    const approved = isNaN(approvedPercentage) || approvedPercentage === null || approvedPercentage === undefined ? 0 : Number(approvedPercentage);
+    const pending = isNaN(pendingPercentage) || pendingPercentage === null || pendingPercentage === undefined ? 0 : Number(pendingPercentage);
+    const cancelled = isNaN(cancelledPercentage) || cancelledPercentage === null || cancelledPercentage === undefined ? 0 : Number(cancelledPercentage);
 
     if (!window.welcomeChartInstance) {
 
@@ -375,25 +376,30 @@ function updateWelcomeChart(approvedPercentage, pendingPercentage, cancelledPerc
         return;
     }
 
-    window.welcomeChartInstance.updateOptions({
-        series: [approved, pending, cancelled],
-        labels: ['Approved', 'Pending', 'Cancelled'],
-        colors: [config.colors.success, config.colors.warning, config.colors.danger],
-        plotOptions: {
-            pie: {
-                donut: {
-                    labels: {
-                        total: {
-                            label: 'Approved',
-                            formatter: function (w) {
-                                return approved + '%';
+    // Only update if chart instance exists and values are valid
+    try {
+        window.welcomeChartInstance.updateOptions({
+            series: [approved, pending, cancelled],
+            labels: ['Approved', 'Pending', 'Cancelled'],
+            colors: [config.colors.success, config.colors.warning, config.colors.danger],
+            plotOptions: {
+                pie: {
+                    donut: {
+                        labels: {
+                            total: {
+                                label: 'Approved',
+                                formatter: function (w) {
+                                    return approved + '%';
+                                }
                             }
                         }
                     }
                 }
             }
-        }
-    });
+        });
+    } catch (error) {
+        console.error('Error updating welcome chart:', error);
+    }
 }
 
 async function fetchCourseEnrollmentStatistics() {

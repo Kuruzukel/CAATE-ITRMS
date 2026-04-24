@@ -44,6 +44,7 @@
 
   <link rel="stylesheet" href="../assets/css/admin-dashboard.css" />
   <link rel="stylesheet" href="../assets/css/admin-dashboard-scrollbar.css" />
+  <link rel="stylesheet" href="../assets/css/global-search.css" />
 
 
   <link rel="stylesheet" href="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
@@ -254,8 +255,10 @@
             <div class="navbar-nav align-items-center">
               <div class="nav-item d-flex align-items-center position-relative">
                 <i class="bx bx-search fs-4 lh-0 position-absolute" style="left: 12px; z-index: 10;"></i>
-                <input type="text" class="form-control border-0 shadow-none" placeholder="Search..."
-                  aria-label="Search..." style="padding-left: 40px;" />
+                <input type="text" id="globalSearchInput" class="form-control border-0 shadow-none"
+                  placeholder="Search trainees..." aria-label="Search..." style="padding-left: 40px;"
+                  autocomplete="off" />
+                <div id="searchSuggestionsDropdown" class="search-suggestions-dropdown"></div>
               </div>
             </div>
 
@@ -587,6 +590,9 @@
 
 
   <script src="../assets/js/admin-dashboard.js?v=<?php echo time(); ?>"></script>
+
+  <!-- Global Search Script -->
+  <script src="../assets/js/global-search.js"></script>
 
 
   <script>

@@ -21,4 +21,18 @@
             window.location.replace(baseUrl + '/auth/src/pages/login.html');
         }
     }
+
+    // Track login activity
+    const lastLoginNotified = sessionStorage.getItem('loginNotified');
+    if (!lastLoginNotified) {
+        // Wait for notification manager to be ready
+        document.addEventListener('DOMContentLoaded', function () {
+            setTimeout(() => {
+                if (window.notificationManager) {
+                    window.notificationManager.notifyLogin();
+                    sessionStorage.setItem('loginNotified', 'true');
+                }
+            }, 1000);
+        });
+    }
 })();

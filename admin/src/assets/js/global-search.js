@@ -7,7 +7,7 @@
     'use strict';
 
     // Configuration
-    const API_BASE_URL = config.api.baseUrl;
+    const API_BASE_URL = config.api.baseUrl + '/api/v1';
     const SEARCH_DEBOUNCE_DELAY = 300; // milliseconds
 
     // DOM Elements
@@ -95,19 +95,19 @@
             showLoading();
 
             // Search across all collections in parallel
-            const [applications, registrations, admissions, accounts] = await Promise.all([
+            const [trainees, applications, registrations, admissions] = await Promise.all([
+                searchCollection('trainees', query),
                 searchCollection('applications', query),
                 searchCollection('registrations', query),
-                searchCollection('admissions', query),
-                searchCollection('accounts', query)
+                searchCollection('admissions', query)
             ]);
 
             // Combine and process results
             const results = processSearchResults({
+                accounts: trainees,  // Map trainees to accounts for display
                 applications,
                 registrations,
-                admissions,
-                accounts
+                admissions
             }, query);
 
             displayResults(results);
@@ -125,7 +125,7 @@
         try {
             const token = localStorage.getItem('token');
 
-            const response = await fetch(`${API_BASE_URL}/api/v1/${collectionName}`, {
+            const response = await fetch(`${API_BASE_URL}/${collectionName}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -134,13 +134,29 @@
             });
 
             if (!response.ok) {
-                throw new Error(`Failed to fetch ${collectionName}`);
+                console.warn(`Failed to fetch ${collectionName}: ${response.status}`);
+                return [];
+            }
+
+            const contentType = response.headers.get('content-type');
+            if (!contentType || !contentType.includes('application/json')) {
+                console.warn(`${collectionName} returned non-JSON response`);
+                return [];
             }
 
             const data = await response.json();
 
+            // Handle different response structures
+            let items = [];
+            if (data.success && data.data) {
+                items = data.data;
+            } else if (Array.isArray(data)) {
+                items = data;
+            } else if (data[collectionName]) {
+                items = data[collectionName];
+            }
+
             // Filter results based on name match
-            const items = data.data || data[collectionName] || [];
             return items.filter(item => {
                 const fullName = getFullName(item);
                 return fullName.toLowerCase().includes(query.toLowerCase());
@@ -235,7 +251,7 @@
     function createResultItem(result) {
         const actions = [];
 
-        // Add action buttons based on which collections the trainee appears in
+        // Add action buttons ONLY for collections where the trainee has records
         if (result.collections.has('accounts')) {
             actions.push({
                 label: 'View Account',
@@ -269,16 +285,6 @@
                 icon: 'bx-check-circle',
                 page: 'admission.html',
                 color: '#71dd37'
-            });
-        }
-
-        // Also add requests option if they have any records
-        if (result.collections.size > 0) {
-            actions.push({
-                label: 'View Requests',
-                icon: 'bx-calendar',
-                page: 'requests.html',
-                color: '#8592a3'
             });
         }
 

@@ -1,9 +1,7 @@
-// Notification System for Admin Dashboard
 var API_BASE_URL_NOTIFICATIONS = window.location.origin.includes('localhost')
     ? 'http://localhost/CAATE-ITRMS/backend/public'
     : '/CAATE-ITRMS/backend/public';
 
-// Feature flag: Set to true when backend API is implemented
 const USE_NOTIFICATIONS_API = true;
 
 class NotificationManager {
@@ -16,7 +14,6 @@ class NotificationManager {
     }
 
     init() {
-        // Get user ID from localStorage
         this.userId = localStorage.getItem('userId');
 
         if (!this.userId) {
@@ -30,7 +27,6 @@ class NotificationManager {
     }
 
     setupEventListeners() {
-        // Notification bell click
         const notificationBell = document.querySelector('.notification-bell');
         if (notificationBell) {
             notificationBell.addEventListener('click', (e) => {
@@ -40,7 +36,6 @@ class NotificationManager {
             });
         }
 
-        // Close dropdown when clicking outside
         document.addEventListener('click', (e) => {
             const dropdown = document.getElementById('notificationDropdown');
             const bell = document.querySelector('.notification-bell');
@@ -50,7 +45,6 @@ class NotificationManager {
             }
         });
 
-        // Mark all as read button
         document.addEventListener('click', (e) => {
             if (e.target.closest('.mark-all-read-btn')) {
                 e.preventDefault();
@@ -58,7 +52,6 @@ class NotificationManager {
             }
         });
 
-        // Clear all notifications button
         document.addEventListener('click', (e) => {
             if (e.target.closest('.clear-all-notifications-btn')) {
                 e.preventDefault();
@@ -91,7 +84,6 @@ class NotificationManager {
 
     async loadNotifications() {
         try {
-            // Load from localStorage (API not implemented yet)
             const stored = localStorage.getItem('admin_notifications');
             if (stored) {
                 this.notifications = JSON.parse(stored);
@@ -99,7 +91,6 @@ class NotificationManager {
                 this.notifications = [];
             }
 
-            // If API is enabled and available, fetch from backend
             if (USE_NOTIFICATIONS_API) {
                 if (this.userId) {
                     try {
@@ -117,13 +108,11 @@ class NotificationManager {
                             }
                         }
                     } catch (error) {
-                        // Silently fail and use localStorage data
                         console.debug('API not available, using localStorage');
                     }
                 }
             }
 
-            // Calculate unread count
             this.unreadCount = this.notifications.filter(n => !n.read).length;
 
             this.updateBadge();
@@ -142,7 +131,6 @@ class NotificationManager {
         if (badge) {
             badge.textContent = this.unreadCount;
 
-            // Hide badge if no unread notifications
             if (this.unreadCount === 0) {
                 badge.style.display = 'none';
             } else {
@@ -150,7 +138,6 @@ class NotificationManager {
             }
         }
 
-        // Update action buttons state
         this.updateActionButtons();
     }
 
@@ -184,7 +171,6 @@ class NotificationManager {
             return;
         }
 
-        // Sort by date (newest first)
         const sortedNotifications = [...this.notifications].sort((a, b) =>
             new Date(b.timestamp) - new Date(a.timestamp)
         );
@@ -193,7 +179,6 @@ class NotificationManager {
             this.renderNotificationItem(notification)
         ).join('');
 
-        // Add click handlers for individual notifications
         container.querySelectorAll('.notification-item').forEach((item, index) => {
             item.addEventListener('click', () => {
                 const notificationId = item.dataset.notificationId;
@@ -242,12 +227,10 @@ class NotificationManager {
     }
 
     getNotificationIconColor(type, status) {
-        // Status-based colors
         if (status === 'approved') return 'rgba(16, 185, 129, 0.1)';
         if (status === 'pending') return 'rgba(245, 158, 11, 0.1)';
         if (status === 'cancelled' || status === 'rejected') return 'rgba(239, 68, 68, 0.1)';
 
-        // Type-based colors
         const colors = {
             'registration': 'rgba(59, 130, 246, 0.1)',
             'application': 'rgba(139, 92, 246, 0.1)',
@@ -285,7 +268,6 @@ class NotificationManager {
             createdAt: new Date().toISOString()
         };
 
-        // Save to database if API is enabled
         if (USE_NOTIFICATIONS_API) {
             try {
                 const response = await fetch(`${API_BASE_URL_NOTIFICATIONS}/api/v1/notifications`, {
@@ -310,7 +292,6 @@ class NotificationManager {
         this.notifications.unshift(newNotification);
         this.unreadCount++;
 
-        // Save to localStorage
         this.saveNotifications();
         this.updateBadge();
 
@@ -318,7 +299,6 @@ class NotificationManager {
             this.renderNotifications();
         }
 
-        // Show toast notification
         this.showToast(newNotification);
     }
 
@@ -328,7 +308,6 @@ class NotificationManager {
             notification.read = true;
             this.unreadCount = Math.max(0, this.unreadCount - 1);
 
-            // Update in database if API is enabled and ID is a valid MongoDB ObjectId
             if (USE_NOTIFICATIONS_API && this.isValidMongoId(notificationId)) {
                 try {
                     await fetch(`${API_BASE_URL_NOTIFICATIONS}/api/v1/notifications/${notificationId}/read`, {
@@ -350,7 +329,6 @@ class NotificationManager {
     }
 
     isValidMongoId(id) {
-        // Check if ID is a valid MongoDB ObjectId (24 hex characters)
         return /^[a-f\d]{24}$/i.test(id);
     }
 
@@ -358,7 +336,6 @@ class NotificationManager {
         this.notifications.forEach(n => n.read = true);
         this.unreadCount = 0;
 
-        // Update all in database if API is enabled
         if (USE_NOTIFICATIONS_API) {
             try {
                 await fetch(`${API_BASE_URL_NOTIFICATIONS}/api/v1/notifications/mark-all-read`, {
@@ -383,7 +360,6 @@ class NotificationManager {
             'Clear All Notifications',
             'Are you sure you want to clear all notifications? This action cannot be undone.',
             async () => {
-                // Delete all from database if API is enabled
                 if (USE_NOTIFICATIONS_API) {
                     try {
                         await fetch(`${API_BASE_URL_NOTIFICATIONS}/api/v1/notifications/clear-all`, {
@@ -408,10 +384,8 @@ class NotificationManager {
     }
 
     showConfirmationModal(title, message, onConfirm) {
-        // Create modal overlay using Bootstrap modal structure
         const modalId = 'clearNotificationsModal';
 
-        // Remove existing modal if any
         const existingModal = document.getElementById(modalId);
         if (existingModal) {
             existingModal.remove();
@@ -447,14 +421,12 @@ class NotificationManager {
         const modalElement = document.getElementById(modalId);
         const modal = new bootstrap.Modal(modalElement);
 
-        // Handle confirm button
         const confirmBtn = document.getElementById('confirmClearBtn');
         confirmBtn.addEventListener('click', () => {
             onConfirm();
             modal.hide();
         });
 
-        // Clean up modal after it's hidden
         modalElement.addEventListener('hidden.bs.modal', () => {
             modalElement.remove();
         });
@@ -475,7 +447,6 @@ class NotificationManager {
     }
 
     showToast(notification) {
-        // Create toast element
         const toast = document.createElement('div');
         toast.className = 'notification-toast';
         const typeClass = `type-${notification.type}`;
@@ -495,10 +466,8 @@ class NotificationManager {
 
         document.body.appendChild(toast);
 
-        // Animate in
         setTimeout(() => toast.classList.add('show'), 100);
 
-        // Auto remove after 5 seconds
         setTimeout(() => {
             toast.classList.remove('show');
             setTimeout(() => toast.remove(), 300);
@@ -506,9 +475,7 @@ class NotificationManager {
     }
 
     startPolling() {
-        // Only poll if API is enabled
         if (USE_NOTIFICATIONS_API) {
-            // Poll for new notifications every 30 seconds
             setInterval(() => {
                 this.checkForNewNotifications();
             }, 30000);
@@ -523,12 +490,10 @@ class NotificationManager {
                 return;
             }
 
-            // Get the timestamp of the most recent notification
             const lastTimestamp = this.notifications.length > 0
                 ? this.notifications[0].timestamp
                 : new Date(0).toISOString();
 
-            // Fetch new notifications since last check
             const response = await fetch(`${API_BASE_URL_NOTIFICATIONS}/api/v1/notifications/new?userId=${this.userId}&since=${lastTimestamp}`, {
                 method: 'GET',
                 headers: {
@@ -540,13 +505,11 @@ class NotificationManager {
                 const result = await response.json();
 
                 if (result.success && result.data && result.data.length > 0) {
-                    // Add new notifications to the beginning
                     result.data.reverse().forEach(notification => {
                         this.notifications.unshift(notification);
                         if (!notification.read) {
                             this.unreadCount++;
                         }
-                        // Show toast for new notification
                         this.showToast(notification);
                     });
 
@@ -563,7 +526,6 @@ class NotificationManager {
         }
     }
 
-    // Public methods for external use
     async notifyRegistrationStatus(data) {
         await this.addNotification({
             type: 'registration',
@@ -630,22 +592,18 @@ class NotificationManager {
     }
 }
 
-// Initialize notification manager
 let notificationManager;
 
 document.addEventListener('DOMContentLoaded', function () {
-    // Prevent double initialization
     if (window.notificationManager) {
         return;
     }
 
     notificationManager = new NotificationManager();
 
-    // Make it globally accessible
     window.notificationManager = notificationManager;
 });
 
-// Export for use in other scripts
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = NotificationManager;
 }

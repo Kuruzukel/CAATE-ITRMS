@@ -1,13 +1,10 @@
-// Prevent double execution - wrap everything in IIFE with guard
 (function () {
     'use strict';
 
-    // Check if already initialized
     if (window.adminDashboardInitialized) {
-        return; // Exit early if already initialized
+        return;
     }
 
-    // Mark as initialized immediately
     window.adminDashboardInitialized = true;
 
     var API_BASE_URL_DASHBOARD = window.location.origin.includes('localhost')
@@ -19,7 +16,6 @@
     let pendingGrowthData = null;
 
     function updateYearLabels(year) {
-        // Update the global selectedYear variable
         selectedYear = year;
 
         const chartTitle = document.querySelector('#chartYearTitle');
@@ -38,7 +34,6 @@
             previousYearLabel.textContent = year - 1;
         }
 
-        // Update chart series names only, don't reset data to zeros
         if (window.totalRevenueChartInstance) {
             const currentSeries = window.totalRevenueChartInstance.w.config.series;
             window.totalRevenueChartInstance.updateOptions({
@@ -68,12 +63,10 @@
             const result = JSON.parse(text);
 
             if (result.success) {
-                // Fetch additional enrollment status data
                 await fetchEnrollmentStatusCounts(result.data);
                 updateDashboardUI(result.data);
             }
         } catch (error) {
-            // Silent error handling
             console.error('Error fetching dashboard statistics:', error);
         }
     }
@@ -82,7 +75,6 @@
         try {
             const token = localStorage.getItem('authToken');
 
-            // Fetch registrations and applications to get real status counts
             const [registrationsRes, applicationsRes] = await Promise.all([
                 fetch(`${API_BASE_URL_DASHBOARD}/api/v1/registrations`, {
                     headers: { 'Authorization': `Bearer ${token}` }
@@ -96,7 +88,6 @@
             let cancelledCount = 0;
             let approvedCount = 0;
 
-            // Count registrations by status
             if (registrationsRes.ok) {
                 const regData = await registrationsRes.json();
                 const registrations = regData.success ? regData.data : (Array.isArray(regData) ? regData : []);
@@ -111,7 +102,6 @@
                 console.error('Failed to fetch registrations:', registrationsRes.status);
             }
 
-            // Count applications by status
             if (applicationsRes.ok) {
                 const appData = await applicationsRes.json();
                 const applications = appData.success ? appData.data : (Array.isArray(appData) ? appData : []);
@@ -126,16 +116,13 @@
                 console.error('Failed to fetch applications:', applicationsRes.status);
             }
 
-            // Update data object with real counts
             data.pendingEnrollments = pendingCount;
             data.cancelledEnrollments = cancelledCount;
 
-            // If API didn't provide approved count, use our calculated one
             if (!data.approvedEnrollments) {
                 data.approvedEnrollments = approvedCount;
             }
 
-            // Calculate percentage changes (mock data for now, should come from comparing with previous period)
             data.pendingPercentageChange = data.pendingPercentageChange || 0;
             data.cancelledPercentageChange = data.cancelledPercentageChange || 0;
 
@@ -149,7 +136,6 @@
     }
 
     function updateDashboardUI(data) {
-        // Always show total trainees regardless of year filter
         const totalTraineesElement = document.querySelector('.col-sm-5 h2.mb-2');
         if (totalTraineesElement) {
             totalTraineesElement.textContent = data.total.toLocaleString();
@@ -192,7 +178,6 @@
             }
         }
 
-        // Show total approved enrollments, not filtered by year
         const approvedCard = document.querySelector('.avatar .bx-check-circle');
         if (approvedCard) {
             const approvedCountElement = approvedCard.closest('.card-body').querySelector('h3.card-title');
@@ -212,7 +197,6 @@
             }
         }
 
-        // Find pending enrollments card by searching for the text "Pending Enrollments"
         const allSpans = document.querySelectorAll('span.d-block.mb-1');
         let pendingCard = null;
 
@@ -226,9 +210,7 @@
         if (pendingCard) {
             const cardBody = pendingCard.querySelector('.card-body');
             if (cardBody) {
-                // Find the h3 that displays the count
                 const allH3 = cardBody.querySelectorAll('h3.card-title');
-                // The count h3 should be the one with just a number
                 let pendingCountElement = null;
                 for (const h3 of allH3) {
                     if (h3.textContent.trim().match(/^\d+$/)) {
@@ -254,7 +236,6 @@
             }
         }
 
-        // Find cancelled enrollments card by searching for the text "Cancelled Enrollments"
         const allSpansCancelled = document.querySelectorAll('span.fw-semibold.d-block.mb-1');
         let cancelledCard = null;
 
@@ -268,7 +249,6 @@
         if (cancelledCard) {
             const cardBody = cancelledCard.querySelector('.card-body');
             if (cardBody) {
-                // Find the h3 that displays the count
                 const allH3 = cardBody.querySelectorAll('h3.card-title');
                 let cancelledCountElement = null;
                 for (const h3 of allH3) {
@@ -333,7 +313,6 @@
         const previousYearCount = document.getElementById('previousYearCount');
 
         if (currentYearCount) {
-            // If current year has no data, show total enrollments instead
             const displayCount = data.currentYearEnrollments > 0 ? data.currentYearEnrollments : data.totalEnrollment;
             currentYearCount.textContent = displayCount || 0;
         }
@@ -343,7 +322,6 @@
         }
 
         if (window.totalRevenueChartInstance && data.monthly_enrollments) {
-            // Use previous year data if available, otherwise use zeros
             const previousYearData = data.previous_year_monthly_enrollments || Array(12).fill(0);
 
             window.totalRevenueChartInstance.updateOptions({
@@ -454,21 +432,17 @@
                 const clickedYear = parseInt(this.getAttribute('data-year'));
 
                 if (!isNaN(clickedYear)) {
-                    // Update global selectedYear variable
                     selectedYear = clickedYear;
 
                     if (yearTextElement) {
                         yearTextElement.textContent = clickedYear;
                     }
 
-                    // Update active state in dropdown
                     yearMenu.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('active'));
                     this.classList.add('active');
 
-                    // Update labels first
                     updateYearLabels(clickedYear);
 
-                    // Then fetch new data for the selected year
                     fetchDashboardStatistics(clickedYear);
                 }
             });
@@ -487,7 +461,6 @@
         const chartElement = document.querySelector('#welcomeStatisticsChart');
         if (!chartElement) return;
 
-        // Ensure all values are valid numbers, default to 0
         const approved = isNaN(approvedPercentage) || approvedPercentage === null || approvedPercentage === undefined ? 0 : Number(approvedPercentage);
         const pending = isNaN(pendingPercentage) || pendingPercentage === null || pendingPercentage === undefined ? 0 : Number(pendingPercentage);
         const cancelled = isNaN(cancelledPercentage) || cancelledPercentage === null || cancelledPercentage === undefined ? 0 : Number(cancelledPercentage);
@@ -502,7 +475,6 @@
             return;
         }
 
-        // Only update if chart instance exists and values are valid
         try {
             window.welcomeChartInstance.updateOptions({
                 series: [approved, pending, cancelled],
@@ -542,7 +514,6 @@
                 updateCourseEnrollmentUI(result.data);
             }
         } catch (error) {
-            // Silent error handling
         }
     }
 
@@ -636,7 +607,6 @@
                             }
                         }
                     } catch (error) {
-                        // Silently handle trainee profile fetch errors
                     }
                 }
 
@@ -673,7 +643,6 @@
 
             updateRecentEnrollmentActivityUI(activities);
         } catch (error) {
-            // Silent error handling
             const activityList = document.getElementById('recentEnrollmentActivityList');
             if (activityList) {
                 activityList.innerHTML = `
@@ -872,4 +841,4 @@
         }, 30000);
     });
 
-})(); // End of IIFE - Prevent double execution
+})();

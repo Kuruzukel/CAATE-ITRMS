@@ -241,12 +241,37 @@
                             style="flex-shrink: 0; margin-left: auto;">
 
                             <!-- Notification Icon -->
-                            <li class="nav-item me-3">
-                                <a class="nav-link" href="javascript:void(0);" style="position: relative;">
+                            <li class="nav-item me-3" style="position: relative;">
+                                <a class="nav-link notification-bell" href="javascript:void(0);">
                                     <i class="bx bx-bell fs-4"></i>
                                     <span class="badge bg-danger badge-notifications"
                                         style="position: absolute; top: 5px; right: -5px; font-size: 0.65rem; padding: 0.25rem 0.4rem; border-radius: 50%;">0</span>
                                 </a>
+
+                                <!-- Notification Dropdown -->
+                                <div class="notification-dropdown" id="notificationDropdown">
+                                    <div class="notification-header">
+                                        <h6>Notifications</h6>
+                                        <div class="notification-actions">
+                                            <button class="notification-action-btn mark-all-read-btn"
+                                                title="Mark all as read">
+                                                <i class="bx bx-check-double"></i>
+                                            </button>
+                                            <button class="notification-action-btn clear-all-notifications-btn"
+                                                title="Clear all">
+                                                <i class="bx bx-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="notification-list" id="notificationList">
+                                        <!-- Notifications will be dynamically loaded here -->
+                                        <div class="notification-empty">
+                                            <i class="bx bx-bell-off"
+                                                style="font-size: 3rem; color: #a1acb8; margin-bottom: 1rem;"></i>
+                                            <p class="text-muted">No notifications yet</p>
+                                        </div>
+                                    </div>
+                                </div>
                             </li>
 
                             <li class="nav-item navbar-dropdown dropdown-user dropdown">

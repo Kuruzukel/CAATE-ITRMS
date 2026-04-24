@@ -68,18 +68,20 @@
         try {
             showLoading();
 
-            const [trainees, applications, registrations, admissions] = await Promise.all([
+            const [trainees, applications, registrations, admissions, appointments] = await Promise.all([
                 searchCollection('trainees', query),
                 searchCollection('applications', query),
                 searchCollection('registrations', query),
-                searchCollection('admissions', query)
+                searchCollection('admissions', query),
+                searchCollection('appointments', query)
             ]);
 
             const results = processSearchResults({
                 accounts: trainees,
                 applications,
                 registrations,
-                admissions
+                admissions,
+                appointments
             }, query);
 
             displayResults(results);
@@ -233,6 +235,15 @@
                 icon: 'bx-check-circle',
                 page: 'admission.html',
                 color: '#71dd37'
+            });
+        }
+
+        if (result.collections.has('appointments')) {
+            actions.push({
+                label: 'View Appointment',
+                icon: 'bx-calendar',
+                page: 'requests.html',
+                color: '#ff3e1d'
             });
         }
 

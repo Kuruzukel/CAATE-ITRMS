@@ -88,12 +88,55 @@ class NotificationManager {
 
     async loadNotifications() {
         try {
-            // Load from localStorage for now (will be replaced with API calls)
-            const stored = localStorage.getItem('admin_notifications');
-            if (stored) {
-                this.notifications = JSON.parse(stored);
+            const token = localStorage.getItem('authToken');
+
+            if (!token || !this.userId) {
+                console.warn('Authentication required for notifications');
+                // Load from localStorage as fallback
+                const stored = localStorage.getItem('admin_notifications');
+                if (stored) {
+                    this.notifications = JSON.parse(stored);
+                    this.unreadCount = this.notifications.filter(n => !n.read).length;
+                    this.updateBadge();
+                    this.renderNotifications();
+                }
+                return;
+            }
+
+            // Fetch notifications from API
+            const response = await fetch(`${API_BASE_URL_NOTIFICATIONS}/api/v1/notifications?userId=${this.userId}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+
+                if (result.success && result.data) {
+                    this.notifications = result.data;
+                } else {
+                    this.notifications = [];
+                }
+            } else if (response.status === 404) {
+                // API endpoint not implemented yet, use localStorage
+                console.info('Notifications API not available, using localStorage');
+                const stored = localStorage.getItem('admin_notifications');
+                if (stored) {
+                    this.notifications = JSON.parse(stored);
+                } else {
+                    this.notifications = [];
+                }
             } else {
-                this.notifications = [];
+                // Fallback to localStorage if API fails
+                const stored = localStorage.getItem('admin_notifications');
+                if (stored) {
+                    this.notifications = JSON.parse(stored);
+                } else {
+                    this.notifications = [];
+                }
             }
 
             // Calculate unread count
@@ -102,7 +145,20 @@ class NotificationManager {
             this.updateBadge();
             this.renderNotifications();
         } catch (error) {
-            console.error('Error loading notifications:', error);
+            console.warn('Error loading notifications, using localStorage fallback:', error.message);
+
+            // Fallback to localStorage
+            try {
+                const stored = localStorage.getItem('admin_notifications');
+                if (stored) {
+                    this.notifications = JSON.parse(stored);
+                    this.unreadCount = this.notifications.filter(n => !n.read).length;
+                    this.updateBadge();
+                    this.renderNotifications();
+                }
+            } catch (e) {
+                console.error('Error loading from localStorage:', e);
+            }
         }
     }
 
@@ -244,17 +300,48 @@ class NotificationManager {
         return notificationTime.toLocaleDateString();
     }
 
-    addNotification(notification) {
+    async addNotification(notification) {
         const newNotification = {
-            id: this.generateId(),
+            userId: this.userId,
             ...notification,
             timestamp: notification.timestamp || new Date().toISOString(),
-            read: false
+            read: false,
+            createdAt: new Date().toISOString()
         };
+
+        try {
+            const token = localStorage.getItem('authToken');
+
+            // Save to database
+            const response = await fetch(`${API_BASE_URL_NOTIFICATIONS}/api/v1/notifications`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newNotification)
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                if (result.success && result.data) {
+                    // Use the notification with ID from database
+                    newNotification.id = result.data._id || result.data.id;
+                }
+            } else {
+                // Generate local ID if API fails
+                newNotification.id = this.generateId();
+            }
+        } catch (error) {
+            console.error('Error saving notification to database:', error);
+            // Generate local ID if API fails
+            newNotification.id = this.generateId();
+        }
 
         this.notifications.unshift(newNotification);
         this.unreadCount++;
 
+        // Also save to localStorage as backup
         this.saveNotifications();
         this.updateBadge();
 
@@ -266,20 +353,54 @@ class NotificationManager {
         this.showToast(newNotification);
     }
 
-    markAsRead(notificationId) {
+    async markAsRead(notificationId) {
         const notification = this.notifications.find(n => n.id === notificationId);
         if (notification && !notification.read) {
             notification.read = true;
             this.unreadCount = Math.max(0, this.unreadCount - 1);
+
+            try {
+                const token = localStorage.getItem('authToken');
+
+                // Update in database
+                await fetch(`${API_BASE_URL_NOTIFICATIONS}/api/v1/notifications/${notificationId}/read`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ read: true })
+                });
+            } catch (error) {
+                console.error('Error updating notification in database:', error);
+            }
+
             this.saveNotifications();
             this.updateBadge();
             this.renderNotifications();
         }
     }
 
-    markAllAsRead() {
+    async markAllAsRead() {
         this.notifications.forEach(n => n.read = true);
         this.unreadCount = 0;
+
+        try {
+            const token = localStorage.getItem('authToken');
+
+            // Update all in database
+            await fetch(`${API_BASE_URL_NOTIFICATIONS}/api/v1/notifications/mark-all-read`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ userId: this.userId })
+            });
+        } catch (error) {
+            console.error('Error marking all as read in database:', error);
+        }
+
         this.saveNotifications();
         this.updateBadge();
         this.renderNotifications();
@@ -289,7 +410,23 @@ class NotificationManager {
         this.showConfirmationModal(
             'Clear All Notifications',
             'Are you sure you want to clear all notifications? This action cannot be undone.',
-            () => {
+            async () => {
+                try {
+                    const token = localStorage.getItem('authToken');
+
+                    // Delete all from database
+                    await fetch(`${API_BASE_URL_NOTIFICATIONS}/api/v1/notifications/clear-all`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ userId: this.userId })
+                    });
+                } catch (error) {
+                    console.error('Error clearing notifications from database:', error);
+                }
+
                 this.notifications = [];
                 this.unreadCount = 0;
                 this.saveNotifications();
@@ -425,13 +562,57 @@ class NotificationManager {
     }
 
     async checkForNewNotifications() {
-        // This will be implemented with actual API calls
-        // For now, it's a placeholder
+        try {
+            const token = localStorage.getItem('authToken');
+
+            if (!token || !this.userId) {
+                return;
+            }
+
+            // Get the timestamp of the most recent notification
+            const lastTimestamp = this.notifications.length > 0
+                ? this.notifications[0].timestamp
+                : new Date(0).toISOString();
+
+            // Fetch new notifications since last check
+            const response = await fetch(`${API_BASE_URL_NOTIFICATIONS}/api/v1/notifications/new?userId=${this.userId}&since=${lastTimestamp}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+
+                if (result.success && result.data && result.data.length > 0) {
+                    // Add new notifications to the beginning
+                    result.data.reverse().forEach(notification => {
+                        this.notifications.unshift(notification);
+                        if (!notification.read) {
+                            this.unreadCount++;
+                        }
+                        // Show toast for new notification
+                        this.showToast(notification);
+                    });
+
+                    this.saveNotifications();
+                    this.updateBadge();
+
+                    if (this.isDropdownOpen) {
+                        this.renderNotifications();
+                    }
+                }
+            }
+        } catch (error) {
+            console.error('Error checking for new notifications:', error);
+        }
     }
 
     // Public methods for external use
-    notifyRegistrationStatus(data) {
-        this.addNotification({
+    async notifyRegistrationStatus(data) {
+        await this.addNotification({
             type: 'registration',
             status: data.status,
             title: 'Registration Update',
@@ -439,8 +620,8 @@ class NotificationManager {
         });
     }
 
-    notifyApplicationStatus(data) {
-        this.addNotification({
+    async notifyApplicationStatus(data) {
+        await this.addNotification({
             type: 'application',
             status: data.status,
             title: 'Application Update',
@@ -448,8 +629,8 @@ class NotificationManager {
         });
     }
 
-    notifyAdmissionStatus(data) {
-        this.addNotification({
+    async notifyAdmissionStatus(data) {
+        await this.addNotification({
             type: 'admission',
             status: data.status,
             title: 'Admission Update',
@@ -457,8 +638,8 @@ class NotificationManager {
         });
     }
 
-    notifyAppointmentStatus(data) {
-        this.addNotification({
+    async notifyAppointmentStatus(data) {
+        await this.addNotification({
             type: 'appointment',
             status: data.status,
             title: 'Appointment Update',
@@ -466,8 +647,8 @@ class NotificationManager {
         });
     }
 
-    notifyPasswordChange() {
-        this.addNotification({
+    async notifyPasswordChange() {
+        await this.addNotification({
             type: 'password',
             status: 'success',
             title: 'Password Changed',
@@ -475,9 +656,9 @@ class NotificationManager {
         });
     }
 
-    notifyLogin() {
+    async notifyLogin() {
         const now = new Date();
-        this.addNotification({
+        await this.addNotification({
             type: 'login',
             status: 'success',
             title: 'Login Activity',
@@ -485,9 +666,9 @@ class NotificationManager {
         });
     }
 
-    notifyLogout() {
+    async notifyLogout() {
         const now = new Date();
-        this.addNotification({
+        await this.addNotification({
             type: 'logout',
             status: 'info',
             title: 'Logout Activity',

@@ -221,7 +221,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 // Add notification for password change
                 if (window.notificationManager) {
-                    window.notificationManager.notifyPasswordChange();
+                    await window.notificationManager.notifyPasswordChange();
                 }
 
                 document.getElementById('changePasswordForm').reset();

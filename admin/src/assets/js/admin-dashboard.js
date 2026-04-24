@@ -56,10 +56,75 @@ async function fetchDashboardStatistics(year = selectedYear) {
         const result = JSON.parse(text);
 
         if (result.success) {
+            // Fetch additional enrollment status data
+            await fetchEnrollmentStatusCounts(result.data);
             updateDashboardUI(result.data);
         }
     } catch (error) {
         // Silent error handling
+        console.error('Error fetching dashboard statistics:', error);
+    }
+}
+
+async function fetchEnrollmentStatusCounts(data) {
+    try {
+        const token = localStorage.getItem('authToken');
+
+        // Fetch registrations and applications to get real status counts
+        const [registrationsRes, applicationsRes] = await Promise.all([
+            fetch(`${API_BASE_URL_DASHBOARD}/api/v1/registrations`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            }),
+            fetch(`${API_BASE_URL_DASHBOARD}/api/v1/applications`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            })
+        ]);
+
+        let pendingCount = 0;
+        let cancelledCount = 0;
+        let approvedCount = 0;
+
+        // Count registrations by status
+        if (registrationsRes.ok) {
+            const regData = await registrationsRes.json();
+            const registrations = regData.success ? regData.data : (Array.isArray(regData) ? regData : []);
+
+            registrations.forEach(reg => {
+                const status = (reg.status || '').toLowerCase();
+                if (status === 'pending') pendingCount++;
+                else if (status === 'cancelled' || status === 'rejected') cancelledCount++;
+                else if (status === 'approved') approvedCount++;
+            });
+        }
+
+        // Count applications by status
+        if (applicationsRes.ok) {
+            const appData = await applicationsRes.json();
+            const applications = appData.success ? appData.data : (Array.isArray(appData) ? appData : []);
+
+            applications.forEach(app => {
+                const status = (app.status || '').toLowerCase();
+                if (status === 'pending') pendingCount++;
+                else if (status === 'cancelled' || status === 'rejected') cancelledCount++;
+                else if (status === 'approved') approvedCount++;
+            });
+        }
+
+        // Update data object with real counts
+        data.pendingEnrollments = pendingCount;
+        data.cancelledEnrollments = cancelledCount;
+
+        // If API didn't provide approved count, use our calculated one
+        if (!data.approvedEnrollments) {
+            data.approvedEnrollments = approvedCount;
+        }
+
+        // Calculate percentage changes (mock data for now, should come from comparing with previous period)
+        data.pendingPercentageChange = data.pendingPercentageChange || 0;
+        data.cancelledPercentageChange = data.cancelledPercentageChange || 0;
+
+    } catch (error) {
+        console.error('Error fetching enrollment status counts:', error);
     }
 }
 
@@ -133,39 +198,45 @@ function updateDashboardUI(data) {
 
     const pendingCard = document.querySelector('.bx-time-five');
     if (pendingCard) {
-        const pendingCountElement = pendingCard.closest('.card-body').querySelector('h3.card-title');
-        const pendingPercentageElement = pendingCard.closest('.card-body').querySelector('small.fw-semibold');
+        const cardBody = pendingCard.closest('.card-body');
+        if (cardBody) {
+            const pendingCountElement = cardBody.querySelector('h3.card-title');
+            const pendingPercentageElement = cardBody.querySelector('small.fw-semibold');
 
-        if (pendingCountElement) {
-            pendingCountElement.textContent = data.pendingEnrollments || 0;
-        }
+            if (pendingCountElement) {
+                pendingCountElement.textContent = data.pendingEnrollments || 0;
+            }
 
-        if (pendingPercentageElement && data.pendingPercentageChange !== undefined) {
-            const isPositive = data.pendingPercentageChange >= 0;
-            const icon = isPositive ? 'bx-up-arrow-alt' : 'bx-down-arrow-alt';
-            const colorClass = isPositive ? 'text-danger' : 'text-success';
+            if (pendingPercentageElement && data.pendingPercentageChange !== undefined) {
+                const isPositive = data.pendingPercentageChange >= 0;
+                const icon = isPositive ? 'bx-up-arrow-alt' : 'bx-down-arrow-alt';
+                const colorClass = isPositive ? 'text-danger' : 'text-success';
 
-            pendingPercentageElement.className = `fw-semibold ${colorClass}`;
-            pendingPercentageElement.innerHTML = `<i class="bx ${icon}"></i> ${isPositive ? '+' : ''}${data.pendingPercentageChange}%`;
+                pendingPercentageElement.className = `fw-semibold ${colorClass}`;
+                pendingPercentageElement.innerHTML = `<i class="bx ${icon}"></i> ${isPositive ? '+' : ''}${data.pendingPercentageChange}%`;
+            }
         }
     }
 
     const cancelledCard = document.querySelector('.bx-x-circle');
     if (cancelledCard) {
-        const cancelledCountElement = cancelledCard.closest('.card-body').querySelector('h3.card-title');
-        const cancelledPercentageElement = cancelledCard.closest('.card-body').querySelector('small.fw-semibold');
+        const cardBody = cancelledCard.closest('.card-body');
+        if (cardBody) {
+            const cancelledCountElement = cardBody.querySelector('h3.card-title');
+            const cancelledPercentageElement = cardBody.querySelector('small.fw-semibold');
 
-        if (cancelledCountElement) {
-            cancelledCountElement.textContent = data.cancelledEnrollments || 0;
-        }
+            if (cancelledCountElement) {
+                cancelledCountElement.textContent = data.cancelledEnrollments || 0;
+            }
 
-        if (cancelledPercentageElement && data.cancelledPercentageChange !== undefined) {
-            const isPositive = data.cancelledPercentageChange >= 0;
-            const icon = isPositive ? 'bx-up-arrow-alt' : 'bx-down-arrow-alt';
-            const colorClass = isPositive ? 'text-danger' : 'text-success';
+            if (cancelledPercentageElement && data.cancelledPercentageChange !== undefined) {
+                const isPositive = data.cancelledPercentageChange >= 0;
+                const icon = isPositive ? 'bx-up-arrow-alt' : 'bx-down-arrow-alt';
+                const colorClass = isPositive ? 'text-danger' : 'text-success';
 
-            cancelledPercentageElement.className = `fw-semibold ${colorClass}`;
-            cancelledPercentageElement.innerHTML = `<i class="bx ${icon}"></i> ${isPositive ? '+' : ''}${data.cancelledPercentageChange}%`;
+                cancelledPercentageElement.className = `fw-semibold ${colorClass}`;
+                cancelledPercentageElement.innerHTML = `<i class="bx ${icon}"></i> ${isPositive ? '+' : ''}${data.cancelledPercentageChange}%`;
+            }
         }
     }
 

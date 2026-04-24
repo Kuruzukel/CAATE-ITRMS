@@ -1,12 +1,12 @@
 // Logout Handler with Notification
-function handleLogout(event) {
+async function handleLogout(event) {
     if (event) {
         event.preventDefault();
     }
 
     // Add logout notification
     if (window.notificationManager) {
-        window.notificationManager.notifyLogout();
+        await window.notificationManager.notifyLogout();
     }
 
     // Clear session

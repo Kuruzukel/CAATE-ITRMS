@@ -27,9 +27,9 @@
     if (!lastLoginNotified) {
         // Wait for notification manager to be ready
         document.addEventListener('DOMContentLoaded', function () {
-            setTimeout(() => {
+            setTimeout(async () => {
                 if (window.notificationManager) {
-                    window.notificationManager.notifyLogin();
+                    await window.notificationManager.notifyLogin();
                     sessionStorage.setItem('loginNotified', 'true');
                 }
             }, 1000);

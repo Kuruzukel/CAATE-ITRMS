@@ -219,11 +219,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 showToast('Your password has been changed successfully', 'success');
 
-                // Add notification for password change
-                if (window.notificationManager) {
-                    await window.notificationManager.notifyPasswordChange();
-                }
-
                 document.getElementById('changePasswordForm').reset();
                 document.getElementById('strengthBar').className = 'password-strength-bar';
                 document.getElementById('strengthText').textContent = '';

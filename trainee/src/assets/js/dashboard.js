@@ -15,8 +15,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
 async function loadStatistics() {
     try {
-        // Fetch trainees and graduates counts
-        const [traineesResponse, graduatesResponse] = await Promise.all([
+        const userId = localStorage.getItem('userId');
+        if (!userId) {
+            console.error('User ID not found');
+            return;
+        }
+
+        // Fetch all data needed to determine user's enrolled courses
+        const [applicationsResponse, registrationsResponse, traineesResponse, graduatesResponse] = await Promise.all([
+            fetch(`${window.API_BASE_URL}/api/v1/applications`),
+            fetch(`${window.API_BASE_URL}/api/v1/registrations`),
             fetch(`${window.API_BASE_URL}/api/v1/trainees`),
             fetch(`${window.API_BASE_URL}/api/v1/graduates`)
         ]);
@@ -24,17 +32,81 @@ async function loadStatistics() {
         let totalTrainees = 0;
         let totalGraduates = 0;
 
-        if (traineesResponse.ok) {
-            const traineesResult = await traineesResponse.json();
-            if (traineesResult.success && traineesResult.data) {
-                totalTrainees = traineesResult.data.length;
-            }
-        }
+        if (applicationsResponse.ok && registrationsResponse.ok) {
+            const applicationsResult = await applicationsResponse.json();
+            const registrationsResult = await registrationsResponse.json();
 
-        if (graduatesResponse.ok) {
-            const graduatesResult = await graduatesResponse.json();
-            if (graduatesResult.success && graduatesResult.data) {
-                totalGraduates = graduatesResult.data.length;
+            const applications = applicationsResult.success ? applicationsResult.data : [];
+            const registrations = registrationsResult.success ? registrationsResult.data : [];
+
+            // Get current user's enrolled courses
+            const userApplications = applications.filter(app => {
+                let appUserId = app.user_id || app.userId;
+                if (appUserId && typeof appUserId === 'object') {
+                    appUserId = appUserId.$oid || appUserId._id;
+                }
+                const isApproved = (app.status || '').toLowerCase() === 'approved';
+                return appUserId === userId && isApproved;
+            });
+
+            const userRegistrations = registrations.filter(reg => {
+                let regUserId = reg.userId || reg.user_id;
+                if (regUserId && typeof regUserId === 'object') {
+                    regUserId = regUserId.$oid || regUserId._id;
+                }
+                const isApproved = (reg.status || '').toLowerCase() === 'approved';
+                return regUserId === userId && isApproved;
+            });
+
+            // Collect user's enrolled courses
+            const userCourses = new Set();
+            userApplications.forEach(app => {
+                const courseName = app.assessment_title || app.course;
+                if (courseName) userCourses.add(courseName.toLowerCase());
+            });
+            userRegistrations.forEach(reg => {
+                const courseName = reg.selectedCourse || reg.courseQualification;
+                if (courseName) userCourses.add(courseName.toLowerCase());
+            });
+
+            // Only count trainees and graduates if user has enrolled courses
+            if (userCourses.size > 0) {
+                // Count trainees in the same courses
+                if (traineesResponse.ok) {
+                    const traineesResult = await traineesResponse.json();
+                    if (traineesResult.success && traineesResult.data) {
+                        const allTrainees = traineesResult.data;
+
+                        // Filter trainees who are in the same courses
+                        const sameCoursesTrainees = applications.filter(app => {
+                            const courseName = app.assessment_title || app.course;
+                            const isApproved = (app.status || '').toLowerCase() === 'approved';
+                            return courseName && userCourses.has(courseName.toLowerCase()) && isApproved;
+                        });
+
+                        const sameCoursesRegs = registrations.filter(reg => {
+                            const courseName = reg.selectedCourse || reg.courseQualification;
+                            const isApproved = (reg.status || '').toLowerCase() === 'approved';
+                            return courseName && userCourses.has(courseName.toLowerCase()) && isApproved;
+                        });
+
+                        totalTrainees = sameCoursesTrainees.length + sameCoursesRegs.length;
+                    }
+                }
+
+                // Count graduates in the same courses
+                if (graduatesResponse.ok) {
+                    const graduatesResult = await graduatesResponse.json();
+                    if (graduatesResult.success && graduatesResult.data) {
+                        const allGraduates = graduatesResult.data;
+
+                        // Filter graduates who are in the same courses
+                        totalGraduates = allGraduates.filter(grad => {
+                            const courseName = grad.course || grad.assessment_title || grad.selectedCourse;
+                            return courseName && userCourses.has(courseName.toLowerCase());
+                        }).length;
+                    }
+                }
             }
         }
 

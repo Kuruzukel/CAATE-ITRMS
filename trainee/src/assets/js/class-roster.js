@@ -45,10 +45,59 @@ async function fetchAllData() {
 async function processTraineesData() {
     const combinedData = [];
 
-    // Filter for approved applications (case-insensitive)
+    // Get current user's enrolled courses first
+    const currentUserId = localStorage.getItem('userId');
+    if (!currentUserId) {
+        console.error('User ID not found');
+        filteredTrainees = [];
+        displayTrainees = [];
+        renderTraineesTable();
+        return;
+    }
+
+    // Get current user's enrolled courses
+    const userApplications = allApplications.filter(app => {
+        let appUserId = app.user_id || app.userId;
+        if (appUserId && typeof appUserId === 'object') {
+            appUserId = appUserId.$oid || appUserId._id;
+        }
+        const isApproved = (app.status || '').toLowerCase() === 'approved';
+        return appUserId === currentUserId && isApproved;
+    });
+
+    const userRegistrations = allRegistrations.filter(reg => {
+        let regUserId = reg.userId || reg.user_id;
+        if (regUserId && typeof regUserId === 'object') {
+            regUserId = regUserId.$oid || regUserId._id;
+        }
+        const isApproved = (reg.status || '').toLowerCase() === 'approved';
+        return regUserId === currentUserId && isApproved;
+    });
+
+    // Collect user's enrolled courses
+    const userCourses = new Set();
+    userApplications.forEach(app => {
+        const courseName = app.assessment_title || app.course;
+        if (courseName) userCourses.add(courseName.toLowerCase());
+    });
+    userRegistrations.forEach(reg => {
+        const courseName = reg.selectedCourse || reg.courseQualification;
+        if (courseName) userCourses.add(courseName.toLowerCase());
+    });
+
+    // If user has no enrolled courses, show empty state
+    if (userCourses.size === 0) {
+        filteredTrainees = [];
+        displayTrainees = [];
+        renderTraineesTable();
+        return;
+    }
+
+    // Filter for approved applications in the same courses as current user
     const approvedApps = allApplications.filter(app => {
         const status = (app.status || '').toLowerCase();
-        return status === 'approved';
+        const courseName = app.assessment_title || app.course;
+        return status === 'approved' && courseName && userCourses.has(courseName.toLowerCase());
     });
 
     // Process approved applications
@@ -109,10 +158,11 @@ async function processTraineesData() {
         });
     }
 
-    // Filter for approved registrations (case-insensitive)
+    // Filter for approved registrations in the same courses as current user
     const approvedRegs = allRegistrations.filter(reg => {
         const status = (reg.status || '').toLowerCase();
-        return status === 'approved';
+        const courseName = reg.selectedCourse || reg.courseQualification;
+        return status === 'approved' && courseName && userCourses.has(courseName.toLowerCase());
     });
 
     // Process approved registrations
@@ -254,14 +304,44 @@ function renderTraineesTable() {
                 </tr>
             `;
         } else {
-            tbody.innerHTML = `
-                <tr>
-                    <td colspan="4" class="text-center" style="padding: 110px 20px;">
-                        <i class="bx bx-info-circle" style="font-size: 3rem; color: #6c757d;"></i>
-                        <p class="mt-3 text-muted" style="color: white !important;">No approved trainees enrolled yet</p>
-                    </td>
-                </tr>
-            `;
+            // Check if user has enrolled courses
+            const currentUserId = localStorage.getItem('userId');
+            const userHasEnrolledCourses = allApplications.some(app => {
+                let appUserId = app.user_id || app.userId;
+                if (appUserId && typeof appUserId === 'object') {
+                    appUserId = appUserId.$oid || appUserId._id;
+                }
+                const isApproved = (app.status || '').toLowerCase() === 'approved';
+                return appUserId === currentUserId && isApproved;
+            }) || allRegistrations.some(reg => {
+                let regUserId = reg.userId || reg.user_id;
+                if (regUserId && typeof regUserId === 'object') {
+                    regUserId = regUserId.$oid || regUserId._id;
+                }
+                const isApproved = (reg.status || '').toLowerCase() === 'approved';
+                return regUserId === currentUserId && isApproved;
+            });
+
+            if (!userHasEnrolledCourses) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="4" class="text-center" style="padding: 110px 20px;">
+                            <i class="bx bx-book-open" style="font-size: 3rem; color: #6c757d;"></i>
+                            <p class="mt-3 text-muted" style="color: white !important;">You haven't enrolled in any courses yet</p>
+                            <p class="text-muted" style="color: white !important;">Enroll in a course to see your classmates</p>
+                        </td>
+                    </tr>
+                `;
+            } else {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="4" class="text-center" style="padding: 110px 20px;">
+                            <i class="bx bx-info-circle" style="font-size: 3rem; color: #6c757d;"></i>
+                            <p class="mt-3 text-muted" style="color: white !important;">No classmates in your enrolled courses yet</p>
+                        </td>
+                    </tr>
+                `;
+            }
         }
         return;
     }
@@ -423,71 +503,49 @@ function resetFilters() {
 
 async function populateCourseFilter() {
     const courseFilter = document.getElementById('courseFilter');
+    const currentUserId = localStorage.getItem('userId');
 
     try {
-        // Fetch courses from the courses collection
-        const response = await fetch(`${config.api.baseUrl}/api/v1/courses`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
+        // Get current user's enrolled courses first
+        const userApplications = allApplications.filter(app => {
+            let appUserId = app.user_id || app.userId;
+            if (appUserId && typeof appUserId === 'object') {
+                appUserId = appUserId.$oid || appUserId._id;
             }
+            const isApproved = (app.status || '').toLowerCase() === 'approved';
+            return appUserId === currentUserId && isApproved;
         });
 
-        if (response.ok) {
-            const result = await response.json();
-            const courses = result.data || [];
-
-            // Populate dropdown with courses from collection
-            courses.forEach(course => {
-                const option = document.createElement('option');
-                option.value = (course.assessment_title || course.name || course.title || '').toLowerCase();
-                option.textContent = course.assessment_title || course.name || course.title || 'Unknown Course';
-                courseFilter.appendChild(option);
-            });
-        } else {
-            // Fallback to unique courses from APPROVED applications and registrations
-            const approvedApplications = allApplications.filter(app => {
-                const status = (app.status || '').toLowerCase();
-                return status === 'approved';
-            });
-            const approvedRegistrations = allRegistrations.filter(reg => {
-                const status = (reg.status || '').toLowerCase();
-                return status === 'approved';
-            });
-
-            const appCourses = approvedApplications.map(app => app.assessment_title || app.course).filter(c => c);
-            const regCourses = approvedRegistrations.map(reg => reg.selectedCourse || reg.courseQualification).filter(c => c);
-            const uniqueCourses = [...new Set([...appCourses, ...regCourses])];
-
-            uniqueCourses.forEach(course => {
-                const option = document.createElement('option');
-                option.value = course.toLowerCase();
-                option.textContent = course;
-                courseFilter.appendChild(option);
-            });
-        }
-    } catch (error) {
-        console.error('Error fetching courses:', error);
-        // Fallback to unique courses from APPROVED applications and registrations
-        const approvedApplications = allApplications.filter(app => {
-            const status = (app.status || '').toLowerCase();
-            return status === 'approved';
-        });
-        const approvedRegistrations = allRegistrations.filter(reg => {
-            const status = (reg.status || '').toLowerCase();
-            return status === 'approved';
+        const userRegistrations = allRegistrations.filter(reg => {
+            let regUserId = reg.userId || reg.user_id;
+            if (regUserId && typeof regUserId === 'object') {
+                regUserId = regUserId.$oid || regUserId._id;
+            }
+            const isApproved = (reg.status || '').toLowerCase() === 'approved';
+            return regUserId === currentUserId && isApproved;
         });
 
-        const appCourses = approvedApplications.map(app => app.assessment_title || app.course).filter(c => c);
-        const regCourses = approvedRegistrations.map(reg => reg.selectedCourse || reg.courseQualification).filter(c => c);
-        const uniqueCourses = [...new Set([...appCourses, ...regCourses])];
+        // Collect user's enrolled courses
+        const userCourses = new Set();
+        userApplications.forEach(app => {
+            const courseName = app.assessment_title || app.course;
+            if (courseName) userCourses.add(courseName);
+        });
+        userRegistrations.forEach(reg => {
+            const courseName = reg.selectedCourse || reg.courseQualification;
+            if (courseName) userCourses.add(courseName);
+        });
 
-        uniqueCourses.forEach(course => {
+        // Populate dropdown with only user's enrolled courses
+        const sortedCourses = Array.from(userCourses).sort();
+        sortedCourses.forEach(course => {
             const option = document.createElement('option');
             option.value = course.toLowerCase();
             option.textContent = course;
             courseFilter.appendChild(option);
         });
+    } catch (error) {
+        console.error('Error populating course filter:', error);
     }
 }
 

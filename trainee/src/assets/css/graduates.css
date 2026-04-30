@@ -1,3 +1,20 @@
+/* Statistics Card Icon Colors - Override white color */
+.col-lg-3.col-md-6.col-6.mb-4 .card .avatar i.bx.bxs-graduation {
+    color: #10b981 !important;
+}
+
+.col-lg-3.col-md-6.col-6.mb-4 .card .avatar i.bx.bx-calendar-event {
+    color: #3b82f6 !important;
+}
+
+.col-lg-3.col-md-6.col-6.mb-4 .card .avatar i.bx.bx-calendar-check {
+    color: #f59e0b !important;
+}
+
+.col-lg-3.col-md-6.col-6.mb-4 .card .avatar i.bx.bxs-award {
+    color: #8b5cf6 !important;
+}
+
 .view-graduate-btn,
 .edit-graduate-btn {
     border-radius: var(--border-radius-sm) !important;

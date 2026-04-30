@@ -110,6 +110,45 @@ document.addEventListener('DOMContentLoaded', function () {
                     localStorage.setItem('userId', result.user.id || result.user._id);
                     localStorage.setItem('userData', JSON.stringify(result.user));
 
+                    // Create login notification
+                    const userId = result.user.id || result.user._id;
+                    const now = new Date();
+                    const loginNotification = {
+                        userId: userId,
+                        type: 'login',
+                        status: 'success',
+                        title: 'Login Activity',
+                        message: `You logged in at ${now.toLocaleString()}`,
+                        id: 'notif_' + Date.now() + '_' + Math.random().toString(36).substring(2, 11),
+                        timestamp: now.toISOString(),
+                        read: false,
+                        createdAt: now.toISOString()
+                    };
+
+                    // Save to localStorage
+                    try {
+                        const existingNotifications = JSON.parse(localStorage.getItem('admin_notifications') || '[]');
+                        existingNotifications.unshift(loginNotification);
+                        localStorage.setItem('admin_notifications', JSON.stringify(existingNotifications));
+
+                        // Also try to save to API if available
+                        const API_BASE_URL_NOTIFICATIONS = window.location.origin.includes('localhost')
+                            ? 'http://localhost/CAATE-ITRMS/backend/public'
+                            : '/CAATE-ITRMS/backend/public';
+
+                        fetch(`${API_BASE_URL_NOTIFICATIONS}/api/v1/notifications`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(loginNotification)
+                        }).catch(() => {
+                            // Silently fail if API is not available
+                        });
+                    } catch (error) {
+                        console.error('Error saving login notification:', error);
+                    }
+
                     const baseUrl = window.location.origin + '/CAATE-ITRMS';
 
                     if (result.role === 'admin') {

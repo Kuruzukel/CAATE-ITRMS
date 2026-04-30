@@ -9,9 +9,6 @@ async function handleLogout(event) {
         await window.notificationManager.notifyLogout();
     }
 
-    // Clear session
-    sessionStorage.removeItem('loginNotified');
-
     // Small delay to ensure notification is saved
     setTimeout(() => {
         localStorage.clear();
